@@ -163,7 +163,7 @@ class FtpConnection extends BaseFtpConnection {
 
         // and abort any data connection
         mDataConnection.closeDataSocket();
-        out.write(mFtpStatus.getResponse(226, request, mUser, null));
+        out.write(mFtpStatus.getResponse(225, request, mUser, null));
     }
 
 
@@ -269,11 +269,11 @@ class FtpConnection extends BaseFtpConnection {
 
         // change directory
         if(mUser.getVirtualDirectory().changeDirectory("..")) {
-             String args[] = {mUser.getVirtualDirectory().getCurrentDirectory()};
-            out.write(mFtpStatus.getResponse(200, request, mUser, args));
+            String args[] = {mUser.getVirtualDirectory().getCurrentDirectory()};
+            out.write(mFtpStatus.getResponse(250, request, mUser, args));
         }
         else {
-            out.write(mFtpStatus.getResponse(431, request, mUser, null));
+            out.write(mFtpStatus.getResponse(550, request, mUser, null));
         }
     }
 
@@ -300,11 +300,11 @@ class FtpConnection extends BaseFtpConnection {
 
         // change directory
         if(mUser.getVirtualDirectory().changeDirectory(dirName)) {
-             String args[] = {mUser.getVirtualDirectory().getCurrentDirectory()};
-            out.write(mFtpStatus.getResponse(200, request, mUser, args));
+            String args[] = {mUser.getVirtualDirectory().getCurrentDirectory()};
+            out.write(mFtpStatus.getResponse(250, request, mUser, args));
         }
         else {
-            out.write(mFtpStatus.getResponse(431, request, mUser, null));
+            out.write(mFtpStatus.getResponse(550, request, mUser, null));
         }
     }
 
@@ -333,6 +333,12 @@ class FtpConnection extends BaseFtpConnection {
         File requestedFile = new File(physicalName);
         String[] args = {fileName};
 
+        // check file existance
+        if( !(requestedFile.exists() && requestedFile.isFile()) ) {
+            out.write(mFtpStatus.getResponse(550, request, mUser, args));
+            return;
+        }
+        
         // check permission
         if(!mUser.getVirtualDirectory().hasWritePermission(physicalName, true)) {
             out.write(mFtpStatus.getResponse(450, request, mUser, args));
