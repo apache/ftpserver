@@ -25,12 +25,12 @@ package org.apache.ftpserver;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-interface ServerInterface {
+interface FtpServer {
 
     /**
      * Service role name. It will be used for RMI binding too.
      */
-    String ROLE = "org.apache.ftpserver.ServerInterface";
+    String ROLE = "org.apache.ftpserver.FtpServer";
 
     /**
      * Ftp server name
