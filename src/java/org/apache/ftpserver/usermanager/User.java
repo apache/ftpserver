@@ -64,12 +64,62 @@ import org.apache.ftpserver.util.VirtualDirectory;
 /**
  * Generic user class. All the application specific user classes will
  * be derived from this.
- *
+ * <ul>
+ *   <li>uid</li>
+ *   <li>userpassword</li>
+ *   <li>objectclass</li>
+ *   <li>enableflag</li>
+ *   <li>homedirectory</li>
+ *   <li>writepermission</li>
+ *   <li>idletime</li>
+ *   <li>uploadrate</li>
+ *   <li>downloadrate</li>
+ * </ul>
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 
 public
 class User implements Serializable {
+
+    /**
+     * uid
+     */
+    public static final String ATTR_LOGIN             = "uid";
+    
+    /**
+     * userpassword
+     */
+    public static final String ATTR_PASSWORD          = "userpassword";
+    
+    /**
+     * homedirectory
+     */
+    public static final String ATTR_HOME              = "homedirectory";
+    
+    /**
+     * writepermission
+     */
+    public static final String ATTR_WRITE_PERM        = "writepermission";
+    
+    /**
+     * enableflag
+     */
+    public static final String ATTR_ENABLE            = "enableflag";
+    
+    /**
+     * idletime
+     */
+    public static final String ATTR_MAX_IDLE_TIME     = "idletime";
+    
+    /**
+     * uploadrate
+     */
+    public static final String ATTR_MAX_UPLOAD_RATE   = "uploadrate";
+    
+    /**
+     * downloadrate
+     */
+    public static final String ATTR_MAX_DOWNLOAD_RATE = "downloadrate";
 
     private String mstUserName    = null;
     private String mstPassword    = null;
