@@ -80,44 +80,13 @@ import org.apache.avalon.framework.context.ContextException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpConfig {
+class FtpConfig extends AbstractFtpConfig {
 
-    private FtpStatus  mStatus                  = null;
-    private ConnectionService mConService       = null;
-    private IpRestrictorInterface mIpRestrictor = null;
-    private UserManagerInterface mUserManager   = null;
+    protected Configuration mConf                 = null;
+    protected Context mContext                    = null;
+    protected Logger mLogger                      = null;
 
-    private InetAddress mServerAddress          = null;
-    private InetAddress mSelfAddress            = null;
-
-    private Configuration mConf                 = null;
-    private Context mContext                    = null;
-    private Logger mLogger                      = null;
-
-    private FtpStatistics mStatistics           = null;
-
-    private RemoteHandler mRemoteHandler        = null;
-
-    private int miServerPort;
-    private int miDataPort[][];
-    private int miRmiPort;
-    private int miMaxLogin;
-    private int miAnonLogin;
-    private int miPollInterval;
-    private int miDefaultIdle;
-    private boolean mbAnonAllowed;
-    private boolean mbCreateHome;
-    private boolean mbRemoteAdminAllowed;
-    private File mDefaultRoot;
-    private AsyncMessageQueue mQueue;
-
-    /**
-     * Default constructor - first step.
-     */
     public FtpConfig() throws IOException {
-        mStatus = new FtpStatus();
-        mQueue  = new AsyncMessageQueue();
-        mQueue.setMaxSize(4096);
     }
 
     /**
@@ -255,10 +224,10 @@ class FtpConfig {
             mServerAddress = mSelfAddress;
         }
 
-        mStatistics = new FtpStatistics(this);
-        mConService = new ConnectionService(this);
+        mStatistics = new FtpStatistics(this, new AvalonFileMonitor(getLogger()));
+        mConService = new ConnectionService(this, new AvalonConnectionMonitor(getLogger()));
         if (mbRemoteAdminAllowed) {
-            mRemoteHandler = new RemoteHandler(this);
+            mRemoteHandler = new RemoteHandler(this, new AvalonFtpRemoteHandlerMonitor(getLogger()));
         }
     }
 
@@ -321,178 +290,6 @@ class FtpConfig {
         return mLogger;
     }
 
-    /**
-     * Get server port.
-     */
-    public int getServerPort()  {
-        return miServerPort;
-    }
-
-    /**
-     * Get context
-     */
-    public Context getContext() {
-        return mContext;
-    }
-
-    /**
-     * Get configuration
-     */
-    public Configuration getConfiguration() {
-        return mConf;
-    }
-
-    /**
-     * Get server bind address.
-     */
-    public InetAddress getServerAddress() {
-        return mServerAddress;
-    }
-
-    /**
-     * Get self address
-     */
-    public InetAddress getSelfAddress() {
-        return mSelfAddress;
-    }
-
-    /**
-     * Check annonymous login support.
-     */
-    public boolean isAnonymousLoginAllowed() {
-        return mbAnonAllowed;
-    }
-
-    /**
-     * Get ftp status resource.
-     */
-    public FtpStatus getStatus() {
-        return mStatus;
-    }
-
-    /**
-     * Get connection service.
-     */
-    public ConnectionService getConnectionService() {
-        return mConService;
-    }
-
-    /**
-     * Get user manager.
-     */
-    public UserManagerInterface getUserManager() {
-        return mUserManager;
-    }
-
-    /**
-     * Get maximum number of connections.
-     */
-    public int getMaxConnections() {
-        return miMaxLogin;
-    }
-
-    /**
-     * Get maximum number of anonymous connections.
-     */
-    public int getMaxAnonymousLogins() {
-        if(!isAnonymousLoginAllowed()) {
-            return 0;
-        }
-        return miAnonLogin;
-    }
-
-    /**
-     * Get poll interval in seconds.
-     */
-    public int getSchedulerInterval() {
-        return miPollInterval;
-    }
-
-    /**
-     * Get default idle time in seconds.
-     */
-    public int getDefaultIdleTime() {
-        return miDefaultIdle;
-    }
-
-    /**
-     * Get default root directory
-     */
-    public File getDefaultRoot() {
-        return mDefaultRoot;
-    }
-
-    /**
-     * Create user home directory if not exist during login
-     */
-    public boolean isCreateHome() {
-        return mbCreateHome;
-    }
-
-    /**
-     * Get rmi port
-     */
-    public int getRemoteAdminPort() {
-        return miRmiPort;
-    }
-
-    /**
-     * Is remote admin allowed
-     */
-    public boolean isRemoteAdminAllowed() {
-        return mbRemoteAdminAllowed;
-    }
-
-    /**
-     * Get base directory
-     */
-    public File getBaseDirectory() {
-        File baseDir = null;
-        try {
-            baseDir = (File) mContext.get("app.home");
-        } 
-        catch (ContextException ex) {
-            mLogger.warn("Unable to retrieve application base directory", ex);
-        }
-        return baseDir;
-    }
-
-    /**
-     * Get IP restrictor object.
-     */
-    public IpRestrictorInterface getIpRestrictor() {
-        return mIpRestrictor;
-    }
-
-    /**
-     * Get global statistics object.
-     */
-    public FtpStatistics getStatistics() {
-        return mStatistics;
-    }
-
-    /**
-     * Get message queue
-     */
-    public AsyncMessageQueue getMessageQueue() {
-        return mQueue;
-    }
-
-
-    /**
-     * Get the system name.
-     */
-    public String getSystemName() {
-        String systemName = System.getProperty("os.name");
-        if(systemName == null) {
-            systemName = "UNKNOWN";
-        }
-        else {
-            systemName = systemName.toUpperCase();
-            systemName = systemName.replace(' ', '-');
-        }
-        return systemName;
-    }
 
     /**
      * Close this config and all the related resources. Ftp server

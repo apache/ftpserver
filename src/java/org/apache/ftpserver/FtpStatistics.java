@@ -61,6 +61,7 @@ import java.util.Date;
 import org.apache.ftpserver.util.Message;
 import org.apache.ftpserver.interfaces.FtpStatisticsListener;
 import org.apache.ftpserver.interfaces.FtpFileListener;
+import org.apache.ftpserver.interfaces.FtpFileMonitor;
 
 /**
  * This class encapsulates all the global statistics.
@@ -72,7 +73,8 @@ class FtpStatistics {
 
     private FtpStatisticsListener mListener = null;
     private FtpFileListener mFileListener   = null;
-    private FtpConfig mConfig               = null;
+    private AbstractFtpConfig mConfig               = null;
+    private FtpFileMonitor ftpFileMonitor;
 
     private Date mStartTime        = new Date();
 
@@ -95,8 +97,9 @@ class FtpStatistics {
     /**
      * Default constructor.
      */
-    public FtpStatistics(FtpConfig cfg) {
+    public FtpStatistics(AbstractFtpConfig cfg, FtpFileMonitor ftpFileMonitor) {
         mConfig = cfg;
+        this.ftpFileMonitor = ftpFileMonitor;
     }
 
 
@@ -193,9 +196,10 @@ class FtpStatistics {
     void setUpload(File fl, FtpUser user, long sz) {
         ++miNbrUpload;
         mlBytesUpload += sz;
-        mConfig.getLogger().info("File upload : " + user.getName() + " - " + fl.getAbsolutePath());
+        ftpFileMonitor.fileUploaded(user, fl);
         notifyUpload(fl, user);
     }
+
 
     /**
      * Increment download count.
@@ -203,18 +207,20 @@ class FtpStatistics {
     void setDownload(File fl, FtpUser user, long sz) {
         ++miNbrDownload;
         mlBytesDownload += sz;
-        mConfig.getLogger().info("File download : " + user.getName() + " - " + fl.getAbsolutePath());
+        ftpFileMonitor.fileDownloaded(user, fl);
         notifyDownload(fl, user);
     }
+
 
     /**
      * Increment delete count.
      */
     void setDelete(File fl, FtpUser user) {
         ++miNbrDelete;
-        mConfig.getLogger().info("File delete : " + user.getName() + " - " + fl.getAbsolutePath());
+        ftpFileMonitor.fileDeleted(user, fl);
         notifyDelete(fl, user);
     }
+
 
     /**
      * New login.

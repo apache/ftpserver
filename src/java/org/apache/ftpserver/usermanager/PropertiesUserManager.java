@@ -74,6 +74,7 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
+import org.apache.ftpserver.UserManagerException;
 
 /**
  * Properties file based <code>UserManager</code>
@@ -95,14 +96,6 @@ public class PropertiesUserManager extends AbstractUserManager {
     private boolean    mbEncrypt;
 
     private long mlLastModified;
-
-    /**
-     * Instantiate user manager - default constructor.
-     *
-     * @param cfg Ftp config object.
-     */
-    public PropertiesUserManager() throws Exception {
-    }
 
     /**
      * Set application context
@@ -139,33 +132,37 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * Save user data. Store the properties.
      */
-    public synchronized void save(User usr) throws IOException {
+    public synchronized void save(User usr) throws UserManagerException {
 
-       // null value check
-       if(usr.getName() == null) {
-           throw new NullPointerException("User name is null.");
-       }
-       String thisPrefix = PREFIX + usr.getName() + '.';
+        try {
+            // null value check
+            if(usr.getName() == null) {
+                throw new NullPointerException("User name is null.");
+            }
+            String thisPrefix = PREFIX + usr.getName() + '.';
 
-       // set other properties
-       mUserData.setProperty(thisPrefix + User.ATTR_PASSWORD,          getPassword(usr));
-       mUserData.setProperty(thisPrefix + User.ATTR_HOME,              usr.getVirtualDirectory().getRootDirectory());
-       mUserData.setProperty(thisPrefix + User.ATTR_ENABLE,            usr.getEnabled());
-       mUserData.setProperty(thisPrefix + User.ATTR_WRITE_PERM,        usr.getVirtualDirectory().getWritePermission());
-       mUserData.setProperty(thisPrefix + User.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-       mUserData.setProperty(thisPrefix + User.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
-       mUserData.setProperty(thisPrefix + User.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
+            // set other properties
+            mUserData.setProperty(thisPrefix + User.ATTR_PASSWORD,          getPassword(usr));
+            mUserData.setProperty(thisPrefix + User.ATTR_HOME,              usr.getVirtualDirectory().getRootDirectory());
+            mUserData.setProperty(thisPrefix + User.ATTR_ENABLE,            usr.getEnabled());
+            mUserData.setProperty(thisPrefix + User.ATTR_WRITE_PERM,        usr.getVirtualDirectory().getWritePermission());
+            mUserData.setProperty(thisPrefix + User.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
+            mUserData.setProperty(thisPrefix + User.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
+            mUserData.setProperty(thisPrefix + User.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
 
-       // save user data
-       FileOutputStream fos = null;
-       try {
-           fos = new FileOutputStream(mUserDataFile);
-           mUserData.store(fos, "Generated file - don't edit (please)");
-           mlLastModified = mUserDataFile.lastModified();
-       }
-       finally {
-           IoUtils.close(fos);
-       }
+            // save user data
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mUserDataFile);
+                mUserData.store(fos, "Generated file - don't edit (please)");
+                mlLastModified = mUserDataFile.lastModified();
+            }
+            finally {
+                IoUtils.close(fos);
+            }
+        } catch (IOException e) {
+            throw new UserManagerException(e);
+        }
     }
 
 
@@ -173,32 +170,36 @@ public class PropertiesUserManager extends AbstractUserManager {
      * Delete an user. Removes all this user entries from the properties.
      * After removing the corresponding from the properties, save the data.
      */
-    public synchronized void delete(String usrName) throws IOException {
+    public synchronized void delete(String usrName) throws UserManagerException {
 
-        // remove entries from properties
-        String thisPrefix = PREFIX + usrName + '.';
-        Enumeration propNames = mUserData.propertyNames();
-        ArrayList remKeys = new ArrayList();
-        while(propNames.hasMoreElements()) {
-            String thisKey = propNames.nextElement().toString();
-            if(thisKey.startsWith(thisPrefix)) {
-                remKeys.add(thisKey);
-            }
-        }
-        Iterator remKeysIt = remKeys.iterator();
-        while (remKeysIt.hasNext()) {
-            mUserData.remove(remKeysIt.next().toString());
-        }
-
-        // save user data
-        FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(mUserDataFile);
-            mUserData.store(fos, "Generated file - don't edit (please)");
-            mlLastModified = mUserDataFile.lastModified();
-        }
-        finally {
-            IoUtils.close(fos);
+            // remove entries from properties
+            String thisPrefix = PREFIX + usrName + '.';
+            Enumeration propNames = mUserData.propertyNames();
+            ArrayList remKeys = new ArrayList();
+            while(propNames.hasMoreElements()) {
+                String thisKey = propNames.nextElement().toString();
+                if(thisKey.startsWith(thisPrefix)) {
+                    remKeys.add(thisKey);
+                }
+            }
+            Iterator remKeysIt = remKeys.iterator();
+            while (remKeysIt.hasNext()) {
+                mUserData.remove(remKeysIt.next().toString());
+            }
+
+            // save user data
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mUserDataFile);
+                mUserData.store(fos, "Generated file - don't edit (please)");
+                mlLastModified = mUserDataFile.lastModified();
+            }
+            finally {
+                IoUtils.close(fos);
+            }
+        } catch (IOException e) {
+            throw new UserManagerException(e);
         }
     }
 
@@ -304,14 +305,18 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * Reload the user data if necessary
      */
-    public synchronized void reload() throws Exception {
-        long lastModified = mUserDataFile.lastModified();
-        if (lastModified > mlLastModified) {
-            FileInputStream fis = new FileInputStream(mUserDataFile);
-            mUserData.load(fis);
-            fis.close();
-            mlLastModified = lastModified;
-            getLogger().info("File modified - loading " + mUserDataFile.getAbsolutePath());
+    public synchronized void reload() throws UserManagerException {
+        try {
+            long lastModified = mUserDataFile.lastModified();
+            if (lastModified > mlLastModified) {
+                FileInputStream fis = new FileInputStream(mUserDataFile);
+                mUserData.load(fis);
+                fis.close();
+                mlLastModified = lastModified;
+                getLogger().info("File modified - loading " + mUserDataFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            throw new UserManagerException(e);
         }
     }
 

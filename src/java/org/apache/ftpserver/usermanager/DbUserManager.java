@@ -69,6 +69,7 @@ import java.util.List;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.ftpserver.util.StringUtils;
+import org.apache.ftpserver.UserManagerException;
 
 /**
  * This is another database based user manager class. I have
@@ -93,15 +94,6 @@ class DbUserManager extends AbstractUserManager {
     private String mUrl      = null;
     private String mUser     = null;
     private String mPassword = null;
-
-
-    /**
-     * Instantiate user manager - default constructor.
-     *
-     * @param cfg Ftp config object.
-     */
-    public DbUserManager() throws Exception {
-    }
 
 
     /**
@@ -175,51 +167,59 @@ class DbUserManager extends AbstractUserManager {
     /**
      * Delete user. Delete the row from the table.
      */
-    public synchronized void delete(String name) throws SQLException {
-        HashMap map = new HashMap();
-        map.put(User.ATTR_LOGIN, name);
-        String sql = StringUtils.replaceString(mDelUserStmt, map);
-        
-        prepareDbConnection();
-        Statement stmt = mDbConnection.createStatement();
-        stmt.executeUpdate(sql);
-        stmt.close();
+    public synchronized void delete(String name) throws UserManagerException {
+        try {
+            HashMap map = new HashMap();
+            map.put(User.ATTR_LOGIN, name);
+            String sql = StringUtils.replaceString(mDelUserStmt, map);
+
+            prepareDbConnection();
+            Statement stmt = mDbConnection.createStatement();
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            throw new UserManagerException(e);
+        }
     }
 
 
     /**
      * Save user. If new insert a new row, else update the existing row.
      */
-    public synchronized void save(User user) throws SQLException {
-        
-        // null value check
-        if(user.getName() == null) {
-            throw new NullPointerException("User name is null.");
-        } 
-        
-        prepareDbConnection();   
-        
-        HashMap map = new HashMap();
-        map.put(User.ATTR_LOGIN, user.getName());
-        map.put(User.ATTR_PASSWORD, getPassword(user));
-        map.put(User.ATTR_HOME, user.getVirtualDirectory().getRootDirectory());
-        map.put(User.ATTR_ENABLE, String.valueOf(user.getEnabled()));
-        map.put(User.ATTR_WRITE_PERM, String.valueOf(user.getVirtualDirectory().getWritePermission()));
-        map.put(User.ATTR_MAX_IDLE_TIME, new Long(user.getMaxIdleTime()));
-        map.put(User.ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()));
-        map.put(User.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate())); 
-        
-        String sql = null;      
-        if( !doesExist(user.getName()) ) {
-            sql = StringUtils.replaceString(mInsUserStmt, map);
+    public synchronized void save(User user) throws UserManagerException {
+
+        try {
+            // null value check
+            if(user.getName() == null) {
+                throw new NullPointerException("User name is null.");
+            }
+
+            prepareDbConnection();
+
+            HashMap map = new HashMap();
+            map.put(User.ATTR_LOGIN, user.getName());
+            map.put(User.ATTR_PASSWORD, getPassword(user));
+            map.put(User.ATTR_HOME, user.getVirtualDirectory().getRootDirectory());
+            map.put(User.ATTR_ENABLE, String.valueOf(user.getEnabled()));
+            map.put(User.ATTR_WRITE_PERM, String.valueOf(user.getVirtualDirectory().getWritePermission()));
+            map.put(User.ATTR_MAX_IDLE_TIME, new Long(user.getMaxIdleTime()));
+            map.put(User.ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()));
+            map.put(User.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()));
+
+            String sql = null;
+            if( !doesExist(user.getName()) ) {
+                sql = StringUtils.replaceString(mInsUserStmt, map);
+            }
+            else {
+                sql = StringUtils.replaceString(mUpdUserStmt, map);
+            }
+
+            Statement stmt = mDbConnection.createStatement();
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            throw new UserManagerException(e);
         }
-        else {
-            sql = StringUtils.replaceString(mUpdUserStmt, map);
-        }
-        
-        Statement stmt = mDbConnection.createStatement();
-        stmt.executeUpdate(sql);
-        stmt.close();
     }
 
 

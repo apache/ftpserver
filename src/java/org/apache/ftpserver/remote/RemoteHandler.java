@@ -56,17 +56,18 @@
  */
 package org.apache.ftpserver.remote;
 
-import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.server.UnicastRemoteObject;
-import java.rmi.server.Unreferenced;
-import java.rmi.server.UID;
-
-import org.apache.ftpserver.usermanager.User;
-import org.apache.ftpserver.usermanager.UserManagerInterface;
+import org.apache.ftpserver.AbstractFtpConfig;
+import org.apache.ftpserver.interfaces.FtpRemoteHandlerMonitor;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
+import org.apache.ftpserver.usermanager.UserManagerInterface;
+
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UID;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.server.Unreferenced;
 
 /**
  * Ftp server remote admin adapter. This is the starting point of remote admin.
@@ -76,14 +77,16 @@ import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 public
 class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
 
-    private FtpConfig mFtpConfig;
+    private RemoteFtpConfig mFtpConfig;
     private String mstAdminSession;
     private Registry mRegistry;
+    private FtpRemoteHandlerMonitor ftpRemoteHandlerMonitor;
 
     /**
      * Constructor - set the actual user config object
      */
-    public RemoteHandler(org.apache.ftpserver.FtpConfig config) throws RemoteException {
+    public RemoteHandler(AbstractFtpConfig config, FtpRemoteHandlerMonitor ftpRemoteHandlerMonitor) throws RemoteException {
+        this.ftpRemoteHandlerMonitor = ftpRemoteHandlerMonitor;
 
         // open registry
         int rmiPort = config.getRemoteAdminPort();
@@ -101,7 +104,7 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
 
         UnicastRemoteObject.exportObject(this);
         mRegistry.rebind(BIND_NAME, this);
-        mFtpConfig = new FtpConfig(config);
+        mFtpConfig = new RemoteFtpConfig(config);
     }
 
     /**
@@ -109,10 +112,11 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
      */
     public synchronized String login(String id, String password) throws Exception {
         try {
-            mFtpConfig.getConfig().getLogger().info("Remote admin login request from " + UnicastRemoteObject.getClientHost());
+            String clientHost = UnicastRemoteObject.getClientHost();
+            ftpRemoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
         }
         catch(Exception ex) {
-            mFtpConfig.getConfig().getLogger().error("RemoteHandler.login()", ex);
+            ftpRemoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
 
         // data validation
@@ -138,14 +142,16 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
         }
 
         try {
-            mFtpConfig.getConfig().getLogger().info("Remote admin login from " + UnicastRemoteObject.getClientHost());
+            String clientHost = UnicastRemoteObject.getClientHost();
+            ftpRemoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
         }
         catch(Exception ex) {
-            mFtpConfig.getConfig().getLogger().error("RemoteHandler.login()", ex);
+            ftpRemoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
         mstAdminSession = new UID().toString();
         return mstAdminSession;
     }
+
 
     /**
      * Remote admin logout
@@ -154,7 +160,7 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
         if( (sessId == null) || (!sessId.equals(mstAdminSession)) ) {
             return false;
         }
-        mFtpConfig.getConfig().getLogger().info("Remote admin logout");
+        ftpRemoteHandlerMonitor.remoteAdminLogout();
         resetObservers();
         mstAdminSession = null;
         return true;
@@ -187,7 +193,7 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
      * Close the remote handler
      */
     public void dispose() {
-        mFtpConfig.getConfig().getLogger().info("Closing remote handler...");
+        ftpRemoteHandlerMonitor.remoteAdminClose();
         resetObservers();
         try {
             if (mRegistry != null) {
@@ -203,7 +209,10 @@ class RemoteHandler implements RemoteHandlerInterface, Unreferenced {
      * Unreferenced - admin user idle timeout
      */
     public synchronized void unreferenced() {
-        mFtpConfig.getConfig().getLogger().info("Remote admin timeout");
+        ftpRemoteHandlerMonitor.remoteAdminTimeout();
         logout(mstAdminSession);
     }
+
+
+
 }

@@ -77,6 +77,7 @@ import javax.naming.directory.ModificationItem;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.ftpserver.util.StringUtils;
+import org.apache.ftpserver.UserManagerException;
 
 /**
  * Ldap based user manager class. Tested using Netscape Directory Server 4.1.
@@ -292,12 +293,16 @@ class LdapUserManager extends AbstractUserManager {
     /**
      * Save user
      */
-    public synchronized void save(User user) throws NamingException {
-        if (doesExist(user.getName())) {
-            update(user);
-        }
-        else {
-            add(user);
+    public synchronized void save(User user) throws UserManagerException {
+        try {
+            if (doesExist(user.getName())) {
+                update(user);
+            }
+            else {
+                add(user);
+            }
+        } catch (NamingException e) {
+            throw new UserManagerException(e);
         }
     }
 
@@ -385,9 +390,13 @@ class LdapUserManager extends AbstractUserManager {
     /**
      * Delete user
      */
-    public synchronized void delete(String userName) throws NamingException {
-        String dn = getDN(userName);
-        mAdminContext.unbind(dn);
+    public synchronized void delete(String userName) throws UserManagerException {
+        try {
+            String dn = getDN(userName);
+            mAdminContext.unbind(dn);
+        } catch (NamingException e) {
+            throw new UserManagerException(e);
+        }
     }
 
 

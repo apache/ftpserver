@@ -56,6 +56,8 @@
  */
 package org.apache.ftpserver.usermanager;
 
+import org.apache.ftpserver.UserManagerException;
+
 import java.util.List;
 
 /**
@@ -74,14 +76,14 @@ interface UserManagerInterface {
      * Save the user. If a new user, create it else update the
      * existing user.
      */
-    void save(User user) throws Exception;
+    void save(User user) throws UserManagerException;
 
     /**
      * Delete the user from the system.
      *
-     * @param name name of the user to be deleted.
+     * @param userName name of the user to be deleted.
      */
-    void delete(String userName) throws Exception;
+    void delete(String userName) throws UserManagerException;
 
     /**
      * Get user by name.
@@ -108,7 +110,7 @@ interface UserManagerInterface {
     /**
      * Load the user data again
      */
-    void reload() throws Exception;
+    void reload() throws UserManagerException;
 
     /**
      * Get admin user name

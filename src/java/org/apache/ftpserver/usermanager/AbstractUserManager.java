@@ -72,6 +72,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
+import org.apache.ftpserver.UserManagerException;
 
 /**
  * Abstract user manager class.
@@ -135,7 +136,7 @@ abstract class AbstractUserManager extends AbstractLogEnabled
     /**
      * Reload user data - dummy implementation.
      */
-    public void reload() throws Exception {
+    public void reload() throws UserManagerException {
     }
 
     /**
