@@ -56,9 +56,16 @@
  */
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.interfaces.FtpDataConnectionMonitor;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.activity.Disposable;
+
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.IOException;
 
 
 /**
@@ -67,9 +74,11 @@ import java.net.Socket;
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-class FtpDataConnection {
+class FtpDataConnection
+                
+        {
 
-    private AvalonFtpConfig mConfig = null;
+    private AbstractFtpConfig mConfig = null;
     private Socket mDataSoc = null;
     private ServerSocket mServSoc = null;
 
@@ -78,13 +87,14 @@ class FtpDataConnection {
 
     private boolean mbPort = false;
     private boolean mbPasv = false;
+    private FtpDataConnectionMonitor ftpDataConnectionMonitor;
 
 
     /**
      * Constructor.
      * @param cfg ftp config object.
      */
-    public FtpDataConnection(AvalonFtpConfig cfg) {
+    public FtpDataConnection(AbstractFtpConfig cfg) {
         mConfig = cfg;
     }
 
@@ -99,8 +109,8 @@ class FtpDataConnection {
             try {
                 mDataSoc.close();
             }
-            catch(Exception ex) {
-                mConfig.getLogger().warn("FtpDataConnection.closeDataSocket()", ex);
+            catch(IOException ex) {
+                ftpDataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
             }
             mDataSoc = null;
         }
@@ -110,8 +120,8 @@ class FtpDataConnection {
             try {
                 mServSoc.close();
             }
-            catch(Exception ex) {
-                mConfig.getLogger().warn("FtpDataConnection.closeDataSocket()", ex);
+            catch(IOException ex) {
+                ftpDataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
             }
             mConfig.releaseDataPort(miPort);
             mServSoc = null;
@@ -149,7 +159,7 @@ class FtpDataConnection {
             // open passive server socket and get parameters
             int port = getPassivePort();
             if(port == -1) {
-                throw new Exception("No available port found for PASV connection.");
+                throw new IOException("No available port found for PASV connection.");
             }
             mServSoc = new ServerSocket(port, 1, mConfig.getSelfAddress());
             mAddress = mConfig.getServerAddress();
@@ -160,9 +170,9 @@ class FtpDataConnection {
             mbPasv = true;
             bRet = true;
         }
-        catch(Exception ex) {
+        catch(IOException ex) {
             mServSoc = null;
-            mConfig.getLogger().warn("FtpDataConnection.setPasvCommand()", ex);
+            ftpDataConnectionMonitor.serverSocketOpenException("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
@@ -199,8 +209,8 @@ class FtpDataConnection {
                 mDataSoc = mServSoc.accept();
             }
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("FtpDataConnection.getDataSocket()", ex);
+        catch(IOException ex) {
+            ftpDataConnectionMonitor.socketException("FtpDataConnection.getDataSocket()", ex);
             mDataSoc = null;
         }
 

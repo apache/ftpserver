@@ -116,7 +116,7 @@ class VirtualDirectory implements Serializable {
     /**
      * Set root directory.
      */
-    public void setRootDirectory(String root) throws IOException {
+    public void setRootDirectory(String root) {
        mstRoot = normalizeSeparateChar(root);
 
        // if not ends with '/' - add one
@@ -189,7 +189,7 @@ class VirtualDirectory implements Serializable {
     /**
      * Change directory. The current directory will never have '/'
      * at the end unless it is '/'.
-     * @param dirName change the current working directory.
+     * @param virtualDir change the current working directory.
      * @return true if success
      */
     public boolean changeDirectory(String virtualDir) {

@@ -56,26 +56,13 @@
  */
 package org.apache.ftpserver;
 
-import java.net.InetAddress;
-import java.net.ServerSocket;
-
 import org.apache.avalon.cornerstone.services.connection.ConnectionHandler;
 import org.apache.avalon.cornerstone.services.connection.ConnectionHandlerFactory;
 import org.apache.avalon.cornerstone.services.connection.ConnectionManager;
-import org.apache.avalon.cornerstone.services.sockets.ServerSocketFactory;
 import org.apache.avalon.cornerstone.services.sockets.SocketManager;
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.service.ServiceException;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
 import org.apache.ftpserver.interfaces.FtpServerInterface;
+
+import java.net.ServerSocket;
 
 
 /**
@@ -90,103 +77,12 @@ import org.apache.ftpserver.interfaces.FtpServerInterface;
  * @author  Paul Hammant <Paul_Hammant@yahoo.com>
  * @version 1.0
  */
-public class FtpServerImpl extends AbstractLogEnabled
-                           implements FtpServerInterface,
-                                      Contextualizable,
-                                      Serviceable,
-                                      Configurable,
-                                      Disposable,
-                                      ConnectionHandlerFactory {
+public class FtpServerImpl implements FtpServerInterface, ConnectionHandlerFactory {
 
-    private ServerSocket mServerSocket    = null;
-    private SocketManager mSocManager     = null;
-    private ConnectionManager mConManager = null;
-    private Context mContext              = null;
-    private AvalonFtpConfig mConfig             = null;
-
-    /**
-     * Default constructor - does nothing.
-     */
-    public FtpServerImpl() {
-    }
-
-    /**
-     * Set application context - first spep.
-     */
-    public void contextualize(Context context) throws ContextException {
-        try {
-            mConfig = new AvalonFtpConfig();
-            mConfig.setLogger(getLogger());
-            mContext = context;
-            mConfig.setContext(mContext);
-        }
-        catch(Exception ex) {
-            getLogger().error("FtpServerImpl.contextualize()", ex);
-            throw new ContextException("FtpServerImpl.contextualize()", ex);
-        }
-    }
-
-
-    /**
-     * Get all managers - second step.
-     * @phoenix:dependency name="org.apache.avalon.cornerstone.services.sockets.SocketManager"
-     * @phoenix:dependency name="org.apache.avalon.cornerstone.services.connection.ConnectionManager"
-     * @phoenix:dependency name="org.apache.ftpserver.usermanager.UserManagerInterface"
-     * @phoenix:dependency name="org.apache.ftpserver.ip.IpRestrictorInterface"
-     *
-     */
-    public void service(ServiceManager serviceManager) throws ServiceException {
-        mConfig.setServiceManager(serviceManager);
-        mSocManager = (SocketManager)serviceManager.lookup(SocketManager.ROLE);
-        mConManager = (ConnectionManager)serviceManager.lookup(ConnectionManager.ROLE);
-    }
-
-
-    /**
-     * Configure the server - third step.
-     *
-     * @param conf the XML configuration block
-     */
-    public void configure(Configuration conf) throws ConfigurationException {
-       try {
-            mConfig.setConfiguration(conf);
-
-            // open server socket
-            ServerSocketFactory factory = mSocManager.getServerSocketFactory("plain");
-            InetAddress serverAddress = mConfig.getSelfAddress();
-            if(serverAddress == null) {
-                mServerSocket = factory.createServerSocket(mConfig.getServerPort(), 5);
-            }
-            else {
-                mServerSocket = factory.createServerSocket(mConfig.getServerPort(), 5, serverAddress);
-            }
-            mConManager.connect(DISPLAY_NAME, mServerSocket, this);
-
-            System.out.println("FTP server ready!");
-            if(mConfig.isRemoteAdminAllowed()) {
-                System.out.println("You can start the remote admin by executing \"java -jar ftp-admin.jar\".");
-            }
-       }
-       catch(Exception ex) {
-           getLogger().error("FtpServerImpl.configure()", ex);
-           throw new ConfigurationException(ex.getMessage(), ex);
-       }
-    }
-
-    /**
-     * Release all resources.
-     */
-    public void dispose() {
-        getLogger().info("Closing Ftp server...");
-        if (mConfig != null) {
-            try {
-                mConfig.dispose();
-            }
-            catch(Exception ex) {
-                getLogger().warn("FtpServerImpl.dispose()", ex);
-            }
-        }
-    }
+    protected ServerSocket mServerSocket;
+    protected SocketManager mSocManager;
+    protected ConnectionManager mConManager;
+    protected AbstractFtpConfig mConfig;
 
     /**
      * Construct an appropriate <code>ConnectionHandler</code>

@@ -63,11 +63,13 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
+import java.io.IOException;
 
 import org.apache.ftpserver.util.StringUtils;
 import org.apache.ftpserver.ip.IpRestrictorInterface;
 import org.apache.ftpserver.usermanager.User;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
+import org.apache.ftpserver.interfaces.FtpCommandHandlerMonitor;
 
 /**
  * Handle ftp site command.
@@ -86,14 +88,15 @@ class SiteCommandHandler {
 
     protected final static Class[] INPUT_SIG = new Class[] {String[].class, FtpRequest.class};
 
-    private AvalonFtpConfig mConfig;
+    private AbstractFtpConfig mConfig;
     private FtpUser mUser;
+    private FtpCommandHandlerMonitor ftpCommandHandlerMonitor;
 
 
     /**
      * Constructor - set the configuration object
      */
-    public SiteCommandHandler(AvalonFtpConfig cfg, FtpUser user) {
+    public SiteCommandHandler(AbstractFtpConfig cfg, FtpUser user) {
         mConfig = cfg;
         mUser = user;
     }
@@ -114,7 +117,7 @@ class SiteCommandHandler {
                     response = (String)actionMet.invoke(this, new Object[] {argArray, request});
                 }
                 catch(Throwable th) {
-                    mConfig.getLogger().warn("SiteCommandHandler.getResponse()", th);
+                    ftpCommandHandlerMonitor.unknownResponseException("SiteCommandHandler.getResponse()", th);
                     response = mConfig.getStatus().getResponse(530, request, mUser, null);
                 }
             }
@@ -178,8 +181,8 @@ class SiteCommandHandler {
             ipRestrictor.save();
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("SiteCommandHandler.doADDIP()", ex);
+        catch(IOException ex) {
+            ftpCommandHandlerMonitor.ipBlockException("SiteCommandHandler.doADDIP()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -212,8 +215,8 @@ class SiteCommandHandler {
             }
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("SiteCommandHandler.doADDUSER()", ex);
+        catch(UserManagerException ex) {
+            ftpCommandHandlerMonitor.addUserException("SiteCommandHandler.doADDUSER()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -235,8 +238,8 @@ class SiteCommandHandler {
             ipRestrictor.save();
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("SiteCommandHandler.doDELIP()", ex);
+        catch(IOException ex) {
+            ftpCommandHandlerMonitor.ipBlockException("SiteCommandHandler.doDELIP()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -256,8 +259,8 @@ class SiteCommandHandler {
             mConfig.getUserManager().delete(args[1]);
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("SiteCommandHandler.doDELUSER()", ex);
+        catch(UserManagerException ex) {
+            ftpCommandHandlerMonitor.deleteUserException("SiteCommandHandler.doDELUSER()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -405,8 +408,8 @@ class SiteCommandHandler {
                 bSuccess = false;
             }
         }
-        catch(Exception ex) {
-            mConfig.getLogger().warn("SiteCommandHandler.doSETATTR()", ex);
+        catch(UserManagerException ex) {
+            ftpCommandHandlerMonitor.setAttrException("SiteCommandHandler.doSETATTR()", ex);
             bSuccess = false;
         }
 

@@ -82,7 +82,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
 
     protected static final Class[] METHOD_INPUT_SIG = new Class[] {FtpRequest.class, FtpWriter.class};
 
-    protected AvalonFtpConfig mConfig                 = null;
+    protected AbstractFtpConfig mConfig                 = null;
     protected FtpStatus mFtpStatus              = null;
     protected FtpDataConnection mDataConnection = null;
     protected FtpUser mUser                     = null;
@@ -96,7 +96,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Set configuration file and the control socket.
      */
-    public BaseFtpConnection(AvalonFtpConfig ftpConfig) {
+    public BaseFtpConnection(AbstractFtpConfig ftpConfig) {
       mConfig = ftpConfig;
       mFtpStatus = mConfig.getStatus();
       mUser = new FtpUser();
@@ -108,7 +108,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     public void handleConnection(final Socket socket) {
         mControlSocket = socket;
         InetAddress clientAddress = mControlSocket.getInetAddress();
-        mConfig.getLogger().info("Handling new request from " + clientAddress.getHostAddress());
+        mObserver.newRequest("Handling new request from " + clientAddress.getHostAddress());
         mDataConnection = new FtpDataConnection(mConfig);
         mUser.setClientAddress(clientAddress);
         mConfig.getConnectionService().newConnection(this);
@@ -182,7 +182,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
                 throw (IOException)th;
              }
              else {
-                mConfig.getLogger().warn("BaseFtpConnection.service()", th);
+                mObserver.unknownServiceException("BaseFtpConnection.service()", th);
              }
          }
          catch(Exception ex) {
@@ -191,7 +191,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
                 throw (IOException)ex;
              }
              else {
-                mConfig.getLogger().warn("BaseFtpConnection.service()", ex);
+                mObserver.unknownServiceException("BaseFtpConnection.service()", ex);
              }
          }
     }
@@ -244,9 +244,9 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
                     try {
                         spy.request(str + '\n');
                     }
-                    catch(Exception ex) {
+                    catch(IOException ex) {
                         mSpy = null;
-                        mConfig.getLogger().error("BaseFtpConnection.spyPrint()", ex);
+                        mObserver.requestError("BaseFtpConnection.spyPrint()", ex);
                     }
                 }
             };
@@ -318,7 +318,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Get config object
      */
-    public AvalonFtpConfig getConfig() {
+    public AbstractFtpConfig getConfig() {
         return mConfig;
     }
 

@@ -57,6 +57,8 @@
 package org.apache.ftpserver.remote.adapter;
 
 import java.rmi.RemoteException;
+import java.io.IOException;
+
 import org.apache.ftpserver.FtpUser;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
 
@@ -137,5 +139,17 @@ class FtpConnectionObserverAdapter implements org.apache.ftpserver.interfaces.Ft
                 mObserver = null;
             }
         }
+    }
+
+    public void requestError(String message, IOException ex) {
+        //TODO
+    }
+
+    public void unknownServiceException(String message, Throwable th) {
+        //TODO
+    }
+
+    public void newRequest(String message) {
+        //TODO
     }
 }

@@ -63,6 +63,7 @@ import java.net.Socket;
 
 import org.apache.ftpserver.util.Message;
 import org.apache.ftpserver.interfaces.SpyConnectionInterface;
+import org.apache.ftpserver.interfaces.FtpWriterMonitor;
 
 /**
  * Writer object used by the server. It has the spying capability.
@@ -74,12 +75,13 @@ class FtpWriter extends Writer {
 
     private OutputStreamWriter mOriginalWriter;
     private SpyConnectionInterface mSpy;
-    private AvalonFtpConfig mConfig;
+    private AbstractFtpConfig mConfig;
+    private FtpWriterMonitor ftpWriterMonitor;
 
     /**
      * Constructor - set the actual writer object
      */
-    public FtpWriter(Socket soc, AvalonFtpConfig config) throws IOException {
+    public FtpWriter(Socket soc, AbstractFtpConfig config) throws IOException {
         mOriginalWriter = new OutputStreamWriter(soc.getOutputStream());
         mConfig = config;
     }
@@ -109,9 +111,9 @@ class FtpWriter extends Writer {
                     try {
                         spy.response(str);
                     }
-                    catch(Exception ex) {
+                    catch(IOException ex) {
                         mSpy = null;
-                        mConfig.getLogger().error("FtpWriter.spyResponse()", ex);
+                        ftpWriterMonitor.responseException("FtpWriter.spyResponse()", ex);
                     }
                 }
             };

@@ -13,7 +13,7 @@ import java.net.InetAddress;
  * @author Paul Hammant
  * @version $Revision$
  */
-public class AbstractFtpConfig {
+public abstract class AbstractFtpConfig {
 
     protected FtpStatus  mStatus                  = null;
     protected ConnectionService mConService       = null;
@@ -201,5 +201,11 @@ public class AbstractFtpConfig {
         }
         return systemName;
     }
+
+    public abstract void releaseDataPort(int miPort);
+
+    public abstract int getDataPort();
+
+    public abstract void dispose();
 
 }

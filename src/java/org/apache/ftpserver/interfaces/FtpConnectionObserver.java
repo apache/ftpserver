@@ -58,6 +58,8 @@ package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.FtpUser;
 
+import java.io.IOException;
+
 /**
  * This observer interface monitors all the ftp connections.
  *
@@ -83,4 +85,11 @@ interface FtpConnectionObserver {
      * @param user updated user object
      */
     void updateConnection(final FtpUser user);
+
+    void requestError(String message, IOException ex);
+
+    void unknownServiceException(String message, Throwable th);
+
+    void newRequest(String message);
+
 }
