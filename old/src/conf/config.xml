@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!--
+                                README!
+
+    All blocks have full defaults so nothing is needed to make them run.
+
+-->
+<config>
+  
+
+  <!-- thread manager configuration -->
+  <thread-manager>
+      <thread-group>
+        <name>default</name>
+
+        <!-- normal priority = 5, max-priority = 10 -->
+        <priority>5</priority> 
+
+        <!-- are threads deamon threads ? -->
+        <is-daemon>false</is-daemon>
+
+        <max-threads>40</max-threads>
+        <!-- these are ignored at the moment but will be fixed in later revisions -->
+        <min-threads>20</min-threads>
+        <min-spare-threads>20</min-spare-threads>
+      </thread-group>
+  </thread-manager>
+
+  
+  <!-- socket configuration -->
+  <sockets>
+      <server-sockets>
+        <factory name="plain" class="org.apache.avalon.cornerstone.blocks.sockets.DefaultServerSocketFactory" />
+      </server-sockets>
+
+      <client-sockets>
+        <factory name="plain" class="org.apache.avalon.cornerstone.blocks.sockets.DefaultSocketFactory" />
+      </client-sockets>
+  </sockets>
+
+
+  <!-- ftp server specific configuration -->
+  <ftp-server>
+    
+    <!-- Ftp server host name
+         The default host is the localhost. It can be used on a multi-homed host.
+         In Linux the localhost IP is always 127.0.0.1. So specify the actual IP.
+    <self-host>127.0.0.1</self-host>
+    -->
+
+    <!-- Behind firewall, we need real inet address that from ISP
+    <server-host>255.255.255.255</server-host>
+    -->
+
+    <!-- FTP port -->
+    <ftp-port>21</ftp-port>
+
+    <!-- Ftp data port numbers to indicate the PASV data ports
+         Default data port is 0 (means any available ports will be used).
+         If the server is behind firewall, these are firewall holes. 
+    <data-port-pool>10022,10023,10024,10025,10026,10027,10028,10029</data-port-pool>
+    -->
+
+    <!-- maximum number of ftp client connections -->
+    <max-connection>20</max-connection>    
+
+    <!-- maximum number of anonymous connections -->
+    <anonymous-max-connection>10</anonymous-max-connection>
+
+    <!-- does it allow anonymous connection -->
+    <anonymous-login-allowed>true</anonymous-login-allowed>    
+
+    <!-- does it allow remote administration -->
+    <remote-admin-allowed>true</remote-admin-allowed>   
+        
+    <!-- create user home is necessary -->
+    <create-user-home>false</create-user-home>
+ 
+    <!-- port number to be used for remote administration --> 
+    <remote-admin-port>1099</remote-admin-port>   
+
+    <!-- poll interval in seconds to kick out idle users and reload user manager if necessary--> 
+    <poll-interval>120</poll-interval>    
+
+    <!-- default idle timeout in second -->
+    <default-idle-time>300</default-idle-time>    
+
+    <!-- default user root directory -->
+    <default-user-root>../</default-user-root>    
+
+  </ftp-server>
+  
+  
+  <!-- the storage block configuration -->
+  <objectstorage>
+      
+      <!-- file object repository -->
+      <repositories>
+        <repository class="org.apache.avalon.cornerstone.blocks.masterstore.File_Persistent_Object_Repository">
+          <protocols>
+            <protocol>file</protocol>
+          </protocols>
+          <types>
+            <type>OBJECT</type>
+          </types>
+          <models>
+            <model>SYNCHRONOUS</model>
+            <model>ASYNCHRONOUS</model>
+            <model>CACHE</model>
+          </models>
+        </repository>
+        
+        <!-- file stream repository -->
+        <repository class="org.apache.avalon.cornerstone.blocks.masterstore.File_Persistent_Stream_Repository">
+          <protocols>
+            <protocol>file</protocol>
+          </protocols>
+          <types>
+            <type>STREAM</type>
+          </types>
+          <models>
+            <model>SYNCHRONOUS</model>
+            <model>ASYNCHRONOUS</model>
+            <model>CACHE</model>
+          </models>
+        </repository>
+      </repositories>
+  </objectstorage>
+
+
+  <!-- user manager configuration -->
+  <user-manager>
+   
+    <!-- admin user name -->
+    <ftp-admin-name>admin</ftp-admin-name>   
+
+    <!-- property file based user manager -->
+    <encrypt>true</encrypt>
+
+    <!-- file object store based user manager
+    <repository destinationURL="file://./FtpUserManagerStore/"
+                type="OBJECT"
+                model="SYNCHRONOUS">
+    </repository>
+    -->
+
+    <!-- Database based user manager
+    <driver>org.gjt.mm.mysql.Driver</driver>
+    <url>jdbc:mysql://localhost/ftpDB</url>
+    <user>root</user>
+    <password>admin</password>
+    <sql-all><![CDATA[SELECT LOGIN_ID FROM FTP_USER ORDER BY LOGIN_ID]]></sql-all>
+    <sql-select><![CDATA[SELECT LOGIN_ID, PASSWORD, HOME_DIR, ENABLED, WRITE_PERM, IDLE_TIME, UPLOAD_RATE, DOWNLOAD_RATE 
+                         FROM FTP_USER 
+                         WHERE LOGIN_ID = '{uid}']]></sql-select>
+    <sql-delete><![CDATA[DELETE FROM FTP_USER WHERE LOGIN_ID = '{uid}']]></sql-delete>
+    <sql-insert><![CDATA[INSERT INTO FTP_USER 
+                         (LOGIN_ID, PASSWORD, HOME_DIR, ENABLED, WRITE_PERM, IDLE_TIME, UPLOAD_RATE, DOWNLOAD_RATE) 
+                         VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate})]]></sql-insert>
+    <sql-update><![CDATA[UPDATE FTP_USER 
+                         SET PASSWORD='{userpassword}', 
+                             HOME_DIR='{homedirectory}', 
+                             ENABLED='{enableflag}', 
+                             WRITE_PERM='{writepermission}', 
+                             IDLE_TIME={idletime}, 
+                             UPLOAD_RATE={uploadrate}, 
+                             DOWNLOAD_RATE={downloadrate} 
+                         WHERE LOGIN_ID='{uid}']]></sql-update>
+    -->
+
+    <!-- LDAP based user manager
+    <url>ldap://localhost:389</url>
+    <admin>cn=Directory Manager</admin>
+    <password>password</password>
+    <authentication>simple</authentication>    
+    <root>ou=people,o=apache.org</root>
+    <prefix>uid=</prefix>
+    <suffix>,ou=people,o=apache.org</suffix>
+    -->
+
+  </user-manager>
+
+  
+  <!-- IP restrictor configuration -->  
+  <ip-restrictor>
+    <allow-ip>false</allow-ip>
+  </ip-restrictor>
+
+</config>

@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>Apache FtpServer</title>
+    <subtitle>FTP server based on Apache Avalon</subtitle>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+    <notice>
+      FtpServer documentation is under construction.  Everything you
+      can find outside this page is to be considered obsolete.
+    </notice>
+  </header>
+  <body>
+    <section><title>Overview</title>
+      <p>
+        FtpServer is a server component for Avalon Phoenix that allows remote FTP client to
+        attach and download files.  The client software can be any type of FTP client
+        written in any language.  The criteria for eligibility is RFC compliance.
+      </p>
+      <p>
+        The server uses several components.  Some of the components have multiple 
+        implementations.  For example user management has implementations that will use
+        LDAP, JDBC and Cornerstone's Store facility for storage.
+      </p>
+      <p>
+        The server has a management console (GUI) that can connect over RMI to the
+        server.
+      </p>
+    </section>
+    <section><title>Documentation</title>
+      <p>
+        Some of the information on this site is currently a bit out of date. We are
+        working hard to fix this. If you come across any inconsistencies or have a
+        problem, please don't hesitate to contact us through the mailing list. 
+        Please use <strong>incubator-general</strong> mailing list for this.
+      </p>
+    </section>
+    <section><title>Features</title>
+        <ol>
+          <li>100% pure Java, free, open source resumable FTP server!!!</li>
+          <li>Multi platform support and multithreaded design.</li>
+          <li>User virtual directory, write permission, idle time-out and upload/download bandwidth limitation support.</li>
+          <li>You can monitor all the user activities.</li>
+          <li>Anonymous login support.</li>
+          <li>Both upload and download files are resumable.</li>
+          <li>Handles both ASCII and binary data transfers.</li>
+          <li>IP restriction support. You can use a limited set of regular expressions (*?[^-]) to specify the allowed/banned IPs.</li>
+          <li>The server reloads the user data at a regular interval if necessary.</li>
+          <li>Database and LDAP can be used to store user data.</li>
+          <li>Default users admin/admin and anonymous will be created by the server when you start it for the first time.</li>
+          <li>New user managers can be added very easily by adding new user manager.</li>
+          <li>Supports SITE commands. Use SITE HELP to get the available commands.</li>               
+        </ol>
+    </section>
+    <section><title>Components</title>
+       <p>
+         The ftp server consists of several components. The component
+         implementations and dependencies are declared in ftp-assembly.xml file.
+       </p>
+       <table>
+        <tr>
+           <th>Name</th>
+           <th>Description</th>
+        </tr>
+        <tr>
+           <td>thread-manager</td>
+           <td>Manages a set of thread pools</td>
+        </tr>
+        <tr>
+           <td>sockets</td>
+           <td>A service to manage the socket factories</td>
+        </tr>
+        <tr>
+           <td>connections</td>
+           <td>This is the service through which connection management occurs.</td>
+        </tr>
+        <tr>
+           <td>objectstorage</td>
+           <td>Manages object repository.</td>
+        </tr>
+        <tr>
+           <td>user-manager</td>
+           <td>Handles all ftp server user management.</td>
+        </tr>
+        <tr>
+           <td>ip-restrictor</td>
+           <td>It allows/bans the specified IPs depending on the configuration.</td>
+        </tr>
+        <tr>
+           <td>ftp-server</td>
+           <td>This is the ftp server starting point.</td>
+        </tr>
+      </table> 
+      <p/>
+      <table>
+        <tr>
+           <th>Name></th>
+           <th>Interfaces</th>
+        </tr>
+        <tr>
+           <td>thread-manager</td>
+           <td>org.apache.avalon.cornerstone.services.threads.ThreadManager</td>
+        </tr>
+        <tr>
+           <td>sockets</td>
+           <td>org.apache.avalon.cornerstone.services.sockets.SocketManager</td>
+        </tr>
+        <tr>
+           <td>connections</td>
+           <td>org.apache.avalon.cornerstone.services.connection.ConnectionManager</td>
+        </tr>
+        <tr>
+           <td>objectstorage</td>
+           <td>org.apache.avalon.cornerstone.services.store.Store</td>
+        </tr>
+        <tr>
+           <td>user-manager</td>
+           <td>org.apache.ftpserver.usermanager.UserManagerInterface</td>
+        </tr>
+        <tr>
+           <td>ip-restrictor</td>
+           <td>org.apache.ftpserver.ip.IpRestrictorInterface</td>
+        </tr>
+        <tr>
+           <td>ftp-server</td>
+           <td>org.apache.ftpserver.ip.FtpServerInterface</td>
+        </tr>
+      </table>
+      <p/>
+      <table>
+        <tr>
+           <th>Name</th>
+           <th>Dependency</th>
+        </tr>
+        <tr>
+           <td>connections</td>
+           <td>thread-manager</td>
+        </tr>
+        <tr>
+           <td>user-manager</td>
+           <td>objectstorage (if we use object store based user manager)</td>
+        </tr>
+        <tr>
+           <td>ftp-server</td>
+           <td>sockets, connections, ip-restrictor, user-manager</td>
+        </tr>
+      </table>
+      <p/>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>FtpServer Remote Admin</title>
+    <subtitle>Introduction</subtitle>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+    <notice>
+      FtpServer documentation is under construction.  Everything you
+      can find outside this page is to be considered obsolete.
+    </notice>
+  </header>
+  <body>
+    <section><title>Overview</title>
+      <p>
+        All the FTP server administrative tasks can be performed using remote admin
+        user interface. We can also use SITE command to do that. You can start the admin
+        console using <strong>java -jar ftp-admin.jar</strong>. 
+      </p>
+      <p>
+        The admin UI uses RMI to connect to the server. It also displays the server 
+        real-time data.
+      </p>
+    </section>
+    <section><title>Login</title>
+      <p>
+        The first step is login. The admin user login/password depends on the user manager
+        implementation. For the default user manager it is configurable. The default value
+        is admin/admin.  
+      </p>
+      <p>
+          <img src="images/ftp_login.png" alt="Login Screenshot"/>
+      </p>
+    </section>
+    <section><title>User Management</title>
+      <p>
+        The basic user management (addition/deletion/modification) can be done using the 
+        remote admin UI. 
+      </p>
+      <p>
+          <img src="images/ftp_usermanager.png" alt="UserManager Screenshot"/>
+      </p>
+    </section>
+    <section><title>FTP Connections</title>
+      <p>
+        Current FTP connections can be monitored remotely. You can close client connections too. 
+      </p>
+      <p>
+          <img src="images/ftp_connections.png" alt="Connection Screenshot"/>
+      </p>
+    </section>
+    <section><title>User Spying</title>
+      <p>
+        Any FTP connection activity can be monitored remotely.
+      </p>
+      <p>
+          <img src="images/ftp_spy.png" alt="Spy Screenshot"/>
+      </p>
+    </section>
+    <section><title>Upload/Download/Delete</title>
+      <p>
+        You can get a list of all uploaded, downloaded and deleted files.
+      </p>
+      <p>
+          <img src="images/ftp_download.png" alt="Download Screenshot"/>
+      </p>
+    </section>
+    <section><title>Global Statistics</title>
+      <p>
+        Finally, you can also get the global statistics information.
+      </p>
+      <p>
+          <img src="images/ftp_stat.png" alt="Statistics Screenshot"/>
+      </p>
+    </section>
+  </body>
+</document>

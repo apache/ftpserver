@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>IP Restriction</title>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section><title>Overview</title>
+      <p>
+        You can either ban or allow IPs to access the FTP server.  
+        You can use a limited set of regular expressions (*?[^-]) to specify the allowed/banned IPs.
+      </p>
+      <p>
+        The IP restrictor component name is <strong>ip-restrictor</strong>.
+        The configuration parameter - <strong>allow-ip</strong> specifies whether to allow/deny 
+        IPs. IP informations are stored in <strong>ip.properties</strong> file.
+      </p>
+    </section>
+    <section><title>Examples</title>
+        <p>If <strong>allow-ip</strong> value is <strong>false</strong>, the server bans all the specified IPs.</p>
+        <ol>
+          <li><strong>123.234.111.*</strong> will ban all IPs from 123.234.111.0 to 123.234.111.255</li>
+          <li><strong>123.234.111.22?</strong> will ban all IPs from 123.234.111.220 to 123.234.111.229</li>
+          <li><strong>123.234.111.2[1-3]1</strong> will ban 123.234.111.211, 123.234.111.221, 123.234.111.231</li>
+          <li><strong>123.234.111.2[^1-7]1</strong> will ban 123.234.111.201, 123.234.111.281, 123.234.111.291</li>
+        </ol>
+        <p>Similarly, <strong>allow-ip=true</strong> will only allow the specified IPs.</p>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>LDAP Support</title>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section><title>Overview</title>
+      <p>
+        The LdapUserManager is an user manager implementation that authenticates against an
+        LDAP server using JNDI login using the ftp server configuration options. You would use
+        the LdapUserManager if your username and credential information are store in an LDAP 
+        server that is accessible using a JNDI LDAP provider.
+      </p>
+      <p>
+        This user manager has been tested using Netscape Directory Server 4.1. 
+        LDAP requires the password to be nonempty for simple authentication. 
+        So instead of using empty string password (&quot;&quot;), we will be using single space (&quot; &quot;).
+        The required LDAP attribute types:        
+      </p>        
+      <ul>
+        <li>memberuid</li>
+        <li>uid</li>
+        <li>cn</li>
+        <li>sn</li>
+        <li>userpassword</li>
+        <li>objectclass</li>
+        <li>enableflag (created by ftp-db.ldif file)</li>
+        <li>homedirectory</li>
+        <li>writepermission (created by ftp-db.ldif file)</li>
+        <li>idletime (created by ftp-db.ldif file)</li>
+        <li>uploadrate (created by ftp-db.ldif file)</li>
+        <li>downloadrate (created by ftp-db.ldif file)</li>
+      </ul>
+      <p>
+        Some of the above mentioned attribute types are created by ftp-db.ldif schema file.
+        The schema file also creates an object class called ftpUsers derived from 
+        inetOrgPerson and have all these attributes. Assumed LDAP objectclass hierarchy:
+      </p>
+      <source>
+        top
+         |
+       person
+         |
+organizationalPerson
+         |
+   inetOrgPerson
+         |
+      ftpUsers
+      </source>
+      <p>
+        Load LDAP schema ftp-db.ldif to add user manager attributes. The commands to load the schema is
+      </p>
+      <source>
+ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;password&gt; -f ftp-db.ldif
+      </source>
+      <p>
+        Please change host, port, user and password parameters.
+      </p>
+    </section>
+    <section><title>Configuration</title>
+        <section><title>ftp-assembly.xml</title>
+          <p>
+             The first step is to make sure that we are using the right user manager implementation. 
+             The fully qualified name of the LDAP based user manager is <em>org.apache.ftpserver.LdapUserManager</em>.
+             So we have to use this class name in <em>ftp-assembly.xml</em> file. The user-manager block should be:
+          </p>
+          <source>
+&lt;!-- user manager block --&gt;
+&lt;block class=&quot;org.apache.ftpserver.usermanager.LdapUserManager&quot; name=&quot;user-manager&quot;/&gt;
+          </source>
+        </section>
+        <section><title>ftp-config.xml</title>
+          <p>
+            The next step is to use appropriate configuration parameters. So we have to modify ftp-config.xml file.
+          </p>
+          <source>
+&lt;!-- LDAP based user manager --&gt;
+&lt;url&gt;ldap://localhost:389&lt;/url&gt;
+&lt;admin&gt;cn=Directory Manager&lt;/admin&gt;
+&lt;password&gt;password&lt;/password&gt;
+&lt;authentication&gt;simple&lt;/authentication&gt;  
+&lt;root&gt;ou=people,o=apache.org&lt;/root&gt;
+&lt;prefix&gt;uid=&lt;/prefix&gt;
+&lt;suffix&gt;,ou=people,o=apache.org&lt;/suffix&gt;
+          </source>  
+        <p>
+           Configuration parameters :
+        </p>
+        <ul>
+          <li><strong>url</strong> : The ldap URL for the LDAP server. 
+              For example, ldap://localhost:389 URL means LDAP has been installed in the local machine and the port is 389.</li>
+          <li><strong>admin</strong> : This is the distinguished name (DN) of the LDAP administrator.</li>
+          <li><strong>password</strong> : LDAP administrator's password.</li>
+          <li><strong>authentication</strong> : Security level to use. This defaults to &quot;simple&quot;.</li>
+          <li><strong>root</strong> : The LDAP root where the ftp users will be stored.</li>
+          <li><strong>prefix</strong> : A prefix to add to the username to form the user distinguished name (DN). 
+              See <em>suffix</em> for more info..</li>
+          <li><strong>suffix</strong> : Suffix to add to the username when forming the user distiguished name (DN). 
+              This is useful if you prompt a user for a username and you don't want the user to have to enter the 
+              fully distinguished name. Using this property and <em>prefix</em> the userDN will be formed as <em>String userDN = prefix + username + suffix;</em></li>
+        </ul>
+      </section>
+    </section>
+  </body>
+</document>

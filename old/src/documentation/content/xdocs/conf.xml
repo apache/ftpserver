@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>FtpServer Configuration</title>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section><title>Overview</title>
+      <p>
+        The configuration file is ftp-config.xml. Each configurable component has a xml element
+        to configure that component. 
+      </p>
+      <section><title>thread-manager</title>
+        <p>
+          As we are using a single thread pool, we have only one default <strong>thread-group</strong> xml element.
+        </p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>name</td>
+            <td>N/A</td>
+            <td>thread pool name (don't change)</td>
+          </tr>
+          <tr>
+            <td>priority</td>
+            <td>5</td>
+            <td>thread priority - normal priority = 5, max-priority = 10 (don't change)</td>
+          </tr>
+          <tr>
+            <td>is-daemon</td>
+            <td>false</td>
+            <td>deamon thread or not (don't change)</td>
+          </tr>
+          <tr>
+            <td>max-threads</td>
+            <td>10</td>
+            <td>maximum number of threads</td>
+          </tr>
+          <tr>
+            <td>min-threads</td>
+            <td>5</td>
+            <td>minimum number of threads</td>
+          </tr>
+          <tr>
+            <td>min-spare-threads</td>
+            <td>maxThreads - minThreads</td>
+            <td>minimum number of spare threads</td>
+          </tr>
+        </table>
+      </section>
+      <section><title>sockets</title>
+        <p>
+          It configures the socket factories (both server and client). So we have two xml elements -
+          one for server socket factory and another for client socket factory. Please don't change anything here. 
+        </p>
+      </section>
+      <section><title>ftp-server</title>
+        <p>
+          This is the ftp server configuration block.
+        </p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ftp-host</td>
+            <td>127.0.0.1</td>
+            <td>server IP. This is required if we want multihome support.</td>
+          </tr>
+          <tr>
+            <td>ftp-port</td>
+            <td>21</td>
+            <td>server port</td>
+          </tr>
+          <tr>
+            <td>max-connection</td>
+            <td>20</td>
+            <td>maximum number of ftp client connections</td>
+          </tr>
+          <tr>
+            <td>anonymous-max-connection</td>
+            <td>10</td>
+            <td>maximum number of anonymous ftp client connections</td>
+          </tr>
+          <tr>
+            <td>anonymous-login-allowed</td>
+            <td>true</td>
+            <td>does it allow anonymous connection</td>
+          </tr>
+          <tr>
+            <td>remote-admin-allowed</td>
+            <td>true</td>
+            <td>does it allow RMI based remote administration</td>
+          </tr>
+          <tr>
+            <td>remote-admin-port</td>
+            <td>1099</td>
+            <td>port number to be used for remote administration</td>
+          </tr>
+          <tr>
+            <td>create-user-home</td>
+            <td>false</td>
+            <td>create user home if necessary (ie. user home does not exist)</td>
+          </tr>
+          <tr>
+            <td>poll-interval</td>
+            <td>120</td>
+            <td>interval in seconds to kick out idle users and reload user manager if necessary</td>
+          </tr>
+          <tr>
+            <td>default-idle-time</td>
+            <td>300</td>
+            <td>default idle timeout in seconds</td>
+          </tr>
+          <tr>
+            <td>default-user-root</td>
+            <td>/</td>
+            <td>default user root directory</td>
+          </tr>
+        </table>
+      </section>
+      <section><title>objectstorage</title>
+        <p>
+          This is used by the file based object repository. This object storage is used
+          by the object store based file manager. As the default file manager is the 
+          properties file based user manager, this is not used normally. Please don't 
+          change anything here.
+        </p>
+      </section>
+      <section><title>user-manager</title>
+        <p>
+          This is used by the user manager component. Currently we have four user manager implementations. 
+          All the user manager implementations are in <strong>org.apache.ftpserver.usermanager</strong> package.
+        </p>
+        <ul>
+          <li>
+            <strong>PropertiesUserManager</strong> - properties file 
+            based user manager. This is the default user manager. 
+          </li>
+          <li>
+            <strong>ObjStoreUserManager</strong> - object store based user manager.
+          </li>
+          <li>
+            <strong>DbUserManager</strong> - databased based user manager. 
+            Please see <link href="site:manual/db">&quot;DB Support&quot;</link> for more details.
+          </li>
+          <li>
+            <strong>LdapUserManager</strong> - LDAP based user manager.
+            Please see <link href="site:manual/ldap">&quot;LDAP Support&quot;</link> for more details.
+          </li>
+        </ul>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ftp-admin-name</td>
+            <td>admin</td>
+            <td>admin user name</td>
+          </tr>
+          <tr>
+            <td>encrypt</td>
+            <td>false</td>
+            <td>password encryption flag - used by the properties file based user manager. The algorithm is MD5.</td>
+          </tr>
+        </table>
+      </section>
+      <section><title>ip-restrictor</title>
+        <p>
+          IP restrictor allows/bans specified IPs. 
+          IPs can be specified using a simplified regular expression (*?[^-]).
+        </p>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>allow-ip</td>
+            <td>false</td>
+            <td>&quot;false&quot; value bans the ftp requests from the specified IPs<br/>
+                and &quot;true&quot; value allows the ftp requests only from the specified Ips.</td>
+          </tr>
+        </table>
+      </section>
+    </section>
+  </body>
+</document>

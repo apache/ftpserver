@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
+
+<document>
+  <header>
+    <title>SITE Command</title>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+  </header>
+  <body>
+    <section><title>Overview</title>
+     <p>SITE command is used by the server to provide services specific to the system. Most of the SITE commands
+        can be used by the admin only. You can get all the available SITE commands by &quot;SITE HELP&quot;.
+     </p>
+     <p>All the server administrative tasks can be performed by the SITE command. So the administrator
+        can monitor, control the server remotely. All the available SITE commands descriptions with sample outputs are as follows:
+     </p>
+    </section>
+    <section><title>SITE HELP</title>
+      <p>
+         This is the only SITE command that can be executed by non-admin user. It returns all the available SITE commands.
+      </p>  
+      <source>
+ftp&gt; quote SITE HELP
+200-
+ADDIP &lt;IP&gt; : add banned IP entry
+ADDUSER &lt;userName&gt; : add user
+DELIP &lt;IP&gt; : delete banned IP entry
+DELUSER &lt;userName&gt; : delete user
+DESCUSER &lt;userName&gt; : describe user
+HELP : display this message
+KICK &lt;userName&gt; : close the connection
+LISTIP : display all banned IPs
+LISTUSER : display all user names
+SETATTR &lt;userName&gt; &lt;attrName&gt; &lt;attrValue&gt; : set user attributes
+STAT : show statistics
+WHO : display all connected users
+200
+ftp&gt;
+      </source>
+    </section>
+
+    <section><title>SITE WHO</title>
+      <p>
+        You can get the list of all the currently connected user by this SITE command. It returns user name, client IP, login time and last access time.  
+        You can disconnect a client connection using SITE KICK &lt;userName&gt;. If an user has logged-in multiple times, all these connections will
+        get disconnected.
+      </p>
+      <source>
+ftp&gt; quote SITE WHO
+200-
+admin           127.0.0.1       10/17 19:45:42  10/17 20:17:37
+admin           127.0.0.1       10/17 19:46:13  10/17 20:17:24
+anonymous       127.0.0.1       10/17 19:46:21  10/17 20:16:45
+anonymous       127.0.0.1       10/17 19:46:42  10/17 20:02:50
+ranab           127.0.0.1       10/17 20:09:39  10/17 20:09:40
+200
+ftp&gt; quote SITE KICK ranab
+200 Command SITE okay
+ftp&gt; quote SITE WHO
+200-
+admin           127.0.0.1       10/17 19:45:42  10/17 20:17:37
+admin           127.0.0.1       10/17 19:46:13  10/17 20:18:33
+anonymous       127.0.0.1       10/17 19:46:21  10/17 20:18:16
+anonymous       127.0.0.1       10/17 19:46:42  10/17 20:02:50
+200
+ftp&gt;
+      </source>
+    </section>
+    <section><title>SITE LISTIP</title>
+      <p>
+        SITE LISTIP returns all the banned/allowed IPs. 
+        New entries can be added by SITE ADDIP &lt;entry&gt;. 
+        Similarly existing entries can be removed by SITE DELIP &lt;entry&gt;.
+      </p>
+      <source>
+ftp&gt; quote SITE LISTIP
+200-
+200
+ftp&gt; quote SITE ADDIP 111.222.*
+200 Command SITE okay
+ftp&gt; quote SITE ADDIP 222.111.100.*
+200 Command SITE okay
+ftp&gt; quote SITE LISTIP
+200-
+111.222.*
+222.111.100.*
+200
+ftp&gt; quote SITE DELIP 111.222.*
+200 Command SITE okay
+ftp&gt; quote SITE LISTIP
+200-
+222.111.100.*
+200
+ftp&gt;
+      </source>
+    </section>
+    <section><title>SITE LISTUSER</title>
+      <p>
+        This command returns all the user names in the user store. 
+        By executing SITE DESCUSER &lt;userName&gt; we can get the user parameters (except password).
+        Existing users can be removed by SITE DELUSER &lt;userName&gt;.
+      </p>
+      <source>
+ftp&gt; quote SITE LISTUSER
+200-
+admin
+anonymous
+ranab
+user1
+200
+ftp&gt; quote SITE DESCUSER user1
+200-
+login : user1
+password : ******
+home : C:/
+writepermission : true
+enable : true
+maxidletime : 1800
+maxuploadrate : 0
+maxdownloadrate : 0
+200
+ftp&gt; quote SITE DELUSER user1
+200 Command SITE okay
+ftp&gt; quote SITE LISTUSER
+200-
+admin
+anonymous
+ranab
+200
+ftp&gt;
+      </source>
+    </section>
+
+    <section><title>SITE ADDUSER</title>
+      <p>
+        New users can be added using this command. 
+        The newly created user will have default parameters. The attributes are : 
+      </p>
+      <ul>
+        <li>password (default - empty string : &quot;&quot;)</li>
+        <li>home (default - configured default root)</li>
+        <li>writepermission (default - false)</li>
+        <li>enable (default - false)</li>
+        <li>maxidletime (default - configured default idle time)</li>
+        <li>maxuploadrate (default - no limit)</li>
+        <li>maxdownloadrate (default - no limit)</li>              
+      </ul>      
+      <p>
+        We can change any user attribute by SITE SETATTR &lt;userName&gt; &lt;attrName&gt; &lt;attrValue&gt; command.
+      </p>
+      <source>
+ftp&gt; quote SITE LISTUSER
+200-
+admin
+anonymous
+ranab
+200
+ftp&gt; quote SITE ADDUSER user2
+200 Command SITE okay
+ftp&gt; quote SITE DESCUSER user2
+200-
+login : user2
+password : ******
+home : C:/
+writepermission : false
+enable : false
+maxidletime : 300
+maxuploadrate : 0
+maxdownloadrate : 0
+200
+ftp&gt; quote SITE SETATTR user2 password userpassword
+200 Command SITE okay
+ftp&gt; quote SITE SETATTR user2 home C:/myCode
+200 Command SITE okay
+ftp&gt; quote SITE SETATTR user2 enable true
+200 Command SITE okay
+ftp&gt; quote SITE SETATTR user2 maxuploadrate 5600
+200 Command SITE okay
+ftp&gt; quote SITE DESCUSER user2
+200-
+login : user2
+password : ******
+home : C:/myCode/
+writepermission : false
+enable : true
+maxidletime : 300
+maxuploadrate : 5600
+maxdownloadrate : 0
+200
+ftp&gt; quote SITE LISTUSER
+200-
+admin
+anonymous
+ranab
+user2
+200
+ftp&gt;
+      </source>
+    </section>
+  </body>
+</document>
