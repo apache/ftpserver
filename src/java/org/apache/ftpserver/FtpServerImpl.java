@@ -102,7 +102,7 @@ public class FtpServerImpl extends AbstractLogEnabled
     private SocketManager mSocManager     = null;
     private ConnectionManager mConManager = null;
     private Context mContext              = null;
-    private FtpConfig mConfig             = null;
+    private AvalonFtpConfig mConfig             = null;
 
     /**
      * Default constructor - does nothing.
@@ -115,7 +115,7 @@ public class FtpServerImpl extends AbstractLogEnabled
      */
     public void contextualize(Context context) throws ContextException {
         try {
-            mConfig = new FtpConfig();
+            mConfig = new AvalonFtpConfig();
             mConfig.setLogger(getLogger());
             mContext = context;
             mConfig.setContext(mContext);

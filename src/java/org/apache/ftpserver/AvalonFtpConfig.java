@@ -56,21 +56,19 @@
  */
 package org.apache.ftpserver;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.StringTokenizer;
-
 import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.ftpserver.ip.IpRestrictorInterface;
 import org.apache.ftpserver.remote.RemoteHandler;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
-import org.apache.ftpserver.util.AsyncMessageQueue;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.StringTokenizer;
 
 /**
  * Ftp configuration class. It has all ftp server configuration
@@ -80,13 +78,13 @@ import org.apache.avalon.framework.context.ContextException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpConfig extends AbstractFtpConfig {
+class AvalonFtpConfig extends AbstractFtpConfig {
 
     protected Configuration mConf                 = null;
     protected Context mContext                    = null;
     protected Logger mLogger                      = null;
 
-    public FtpConfig() throws IOException {
+    public AvalonFtpConfig() throws IOException {
     }
 
     /**

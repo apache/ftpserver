@@ -86,14 +86,14 @@ class SiteCommandHandler {
 
     protected final static Class[] INPUT_SIG = new Class[] {String[].class, FtpRequest.class};
 
-    private FtpConfig mConfig;
+    private AvalonFtpConfig mConfig;
     private FtpUser mUser;
 
 
     /**
      * Constructor - set the configuration object
      */
-    public SiteCommandHandler(FtpConfig cfg, FtpUser user) {
+    public SiteCommandHandler(AvalonFtpConfig cfg, FtpUser user) {
         mConfig = cfg;
         mUser = user;
     }

@@ -110,7 +110,7 @@ class FtpConnection extends BaseFtpConnection {
     /**
      * Set configuration file and the control socket.
      */
-    public FtpConnection(FtpConfig cfg) {
+    public FtpConnection(AvalonFtpConfig cfg) {
         super(cfg);
     }
 

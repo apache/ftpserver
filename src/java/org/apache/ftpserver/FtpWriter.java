@@ -74,12 +74,12 @@ class FtpWriter extends Writer {
 
     private OutputStreamWriter mOriginalWriter;
     private SpyConnectionInterface mSpy;
-    private FtpConfig mConfig;
+    private AvalonFtpConfig mConfig;
 
     /**
      * Constructor - set the actual writer object
      */
-    public FtpWriter(Socket soc, FtpConfig config) throws IOException {
+    public FtpWriter(Socket soc, AvalonFtpConfig config) throws IOException {
         mOriginalWriter = new OutputStreamWriter(soc.getOutputStream());
         mConfig = config;
     }

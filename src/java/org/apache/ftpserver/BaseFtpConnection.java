@@ -82,7 +82,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
 
     protected static final Class[] METHOD_INPUT_SIG = new Class[] {FtpRequest.class, FtpWriter.class};
 
-    protected FtpConfig mConfig                 = null;
+    protected AvalonFtpConfig mConfig                 = null;
     protected FtpStatus mFtpStatus              = null;
     protected FtpDataConnection mDataConnection = null;
     protected FtpUser mUser                     = null;
@@ -96,7 +96,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Set configuration file and the control socket.
      */
-    public BaseFtpConnection(FtpConfig ftpConfig) {
+    public BaseFtpConnection(AvalonFtpConfig ftpConfig) {
       mConfig = ftpConfig;
       mFtpStatus = mConfig.getStatus();
       mUser = new FtpUser();
@@ -318,7 +318,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Get config object
      */
-    public FtpConfig getConfig() {
+    public AvalonFtpConfig getConfig() {
         return mConfig;
     }
 

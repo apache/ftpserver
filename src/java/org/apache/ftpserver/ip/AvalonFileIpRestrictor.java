@@ -56,6 +56,17 @@
  */
 package org.apache.ftpserver.ip;
 
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.ftpserver.util.IoUtils;
+import org.apache.ftpserver.util.RegularExpr;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -65,13 +76,6 @@ import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Vector;
 
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.ftpserver.util.IoUtils;
-import org.apache.ftpserver.util.RegularExpr;
-
-
-
 /**
  * This class provides IP restriction functionality.
  *
@@ -80,18 +84,22 @@ import org.apache.ftpserver.util.RegularExpr;
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public class FileIpRestrictor extends AbstractIpRestrictor {
+public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Contextualizable, Configurable, LogEnabled {
 
     private static final String LINE_SEP = System.getProperty("line.separator", "\n");
 
     private File mIpFile           = null;
     private Vector mAllEntries     = new Vector();
+    private Logger logger;
+
+    public void enableLogging(Logger logger) {
+        this.logger = logger;
+    }
 
     /**
      * Set application context.
      */
     public void contextualize(Context context) throws ContextException {
-        super.contextualize(context);
         File appDir = (File)context.get("app.home");
         if(!appDir.exists()) {
             appDir.mkdirs();
@@ -101,10 +109,10 @@ public class FileIpRestrictor extends AbstractIpRestrictor {
             reload();
         }
         catch(IOException ex) {
-            getLogger().error("IpRestrictor:contextualize()", ex);
+            logger.error("IpRestrictor:contextualize()", ex);
             throw new ContextException("IpRestrictor:contextualize()", ex);
         }
-        getLogger().info("IP restrictor file = " + mIpFile);
+        logger.info("IP restrictor file = " + mIpFile);
     }
 
     /**
@@ -208,5 +216,18 @@ public class FileIpRestrictor extends AbstractIpRestrictor {
      */
     public void clear() {
        mAllEntries.clear();
+    }
+
+    /**
+     * Configure user manager - third step.
+     */
+    public void configure(Configuration config) throws ConfigurationException {
+
+        // get server address
+        Configuration tmpConf = config.getChild("allow-ip", false);
+        mbAllowIp = false;
+        if(tmpConf != null) {
+            mbAllowIp = tmpConf.getValueAsBoolean(mbAllowIp);
+        }
     }
 }

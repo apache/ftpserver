@@ -28,7 +28,7 @@
   <block class="org.apache.ftpserver.usermanager.PropertiesUserManager" name="user-manager"/>
 
   <!-- ip restrictor block -->
-  <block class="org.apache.ftpserver.ip.FileIpRestrictor" name="ip-restrictor"/>
+  <block class="org.apache.ftpserver.ip.AvalonFileIpRestrictor" name="ip-restrictor"/>
 
   <!-- Ftp server block -->
   <block class="org.apache.ftpserver.FtpServerImpl" name="ftp-server" >

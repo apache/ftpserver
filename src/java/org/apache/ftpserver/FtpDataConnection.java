@@ -69,7 +69,7 @@ import java.net.Socket;
  */
 class FtpDataConnection {
 
-    private FtpConfig mConfig = null;
+    private AvalonFtpConfig mConfig = null;
     private Socket mDataSoc = null;
     private ServerSocket mServSoc = null;
 
@@ -84,7 +84,7 @@ class FtpDataConnection {
      * Constructor.
      * @param cfg ftp config object.
      */
-    public FtpDataConnection(FtpConfig cfg) {
+    public FtpDataConnection(AvalonFtpConfig cfg) {
         mConfig = cfg;
     }
 
