@@ -20,9 +20,9 @@ package org.apache.ftpserver.remote;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Collection;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 
 /**
  * IP Restrictor remotr adapter class. Used by admin GUI.
@@ -30,7 +30,7 @@ import java.rmi.server.UnicastRemoteObject;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class IpRestrictor implements org.apache.ftpserver.remote.interfaces.IpRestrictorInterface{
+class IpRestrictor implements org.apache.ftpserver.remote.interfaces.IpRestrictorInterface {
 
     private org.apache.ftpserver.ip.IpRestrictorInterface mIpRestrictor;
 

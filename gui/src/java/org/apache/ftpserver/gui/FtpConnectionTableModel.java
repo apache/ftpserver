@@ -19,21 +19,19 @@
 
 package org.apache.ftpserver.gui;
 
+import org.apache.ftpserver.User;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.gui.remote.FtpConnectionObserverAdapter;
+import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
+import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
+
+import javax.swing.table.AbstractTableModel;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-
-import javax.swing.table.AbstractTableModel;
-
-import org.apache.ftpserver.User;
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.gui.remote.FtpConnectionObserverAdapter;
-import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
-import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
 
 
 /**
@@ -43,7 +41,7 @@ import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
  */
 public
 class FtpConnectionTableModel extends AbstractTableModel
-                              implements FtpConnectionObserver {
+        implements FtpConnectionObserver {
 
     private static final SimpleDateFormat DATE_FMT = new SimpleDateFormat("MM/dd HH:mm:ss");
 
@@ -68,8 +66,7 @@ class FtpConnectionTableModel extends AbstractTableModel
         try {
             mObserver = new FtpConnectionObserverAdapter(mConService, this);
             reload();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             commonHandler.handleException(ex);
         }
     }
@@ -79,9 +76,9 @@ class FtpConnectionTableModel extends AbstractTableModel
      */
     public UserImpl getUser(int index) {
         UserImpl user = null;
-        synchronized(mConnectedUserList) {
-            if ( (index >= 0) && (index < mConnectedUserList.size()) ) {
-                user = (UserImpl)mConnectedUserList.get(index);
+        synchronized (mConnectedUserList) {
+            if ((index >= 0) && (index < mConnectedUserList.size())) {
+                user = (UserImpl) mConnectedUserList.get(index);
             }
         }
         return user;
@@ -123,15 +120,15 @@ class FtpConnectionTableModel extends AbstractTableModel
         return true;
     }
 
-   /**
-    * Set value at - dummy method
-    */
-   public void setValueAt(Object val, int row, int col) {
-   }
+    /**
+     * Set value at - dummy method
+     */
+    public void setValueAt(Object val, int row, int col) {
+    }
 
-   /**
-    * Get value at.
-    */
+    /**
+     * Get value at.
+     */
     public Object getValueAt(int row, int col) {
 
         // error check
@@ -141,7 +138,7 @@ class FtpConnectionTableModel extends AbstractTableModel
             return retVal;
         }
 
-        switch(col) {
+        switch (col) {
             case 0:
                 retVal = thisUser.getName();
                 if (retVal == null) {
@@ -165,7 +162,7 @@ class FtpConnectionTableModel extends AbstractTableModel
 
             case 3:
                 InetAddress remoteHost = thisUser.getClientAddress();
-                if(remoteHost != null) {
+                if (remoteHost != null) {
                     retVal = remoteHost.getHostAddress();
                 }
                 break;
@@ -184,7 +181,7 @@ class FtpConnectionTableModel extends AbstractTableModel
         }
 
         int sz = -1;
-        synchronized(mConnectedUserList) {
+        synchronized (mConnectedUserList) {
             mConnectedUserList.add(thisUser);
             sz = mConnectedUserList.size();
         }
@@ -204,7 +201,7 @@ class FtpConnectionTableModel extends AbstractTableModel
         }
 
         int index = -1;
-        synchronized(mConnectedUserList) {
+        synchronized (mConnectedUserList) {
             index = mConnectedUserList.indexOf(user);
             if (index != -1) {
                 mConnectedUserList.remove(index);
@@ -225,7 +222,7 @@ class FtpConnectionTableModel extends AbstractTableModel
         }
 
         int index = -1;
-        synchronized(mConnectedUserList) {
+        synchronized (mConnectedUserList) {
             index = mConnectedUserList.indexOf(user);
             if (index != -1) {
                 mConnectedUserList.set(index, user);
@@ -242,7 +239,7 @@ class FtpConnectionTableModel extends AbstractTableModel
      * Reload table model
      */
     public void reload() throws RemoteException {
-        synchronized(mConnectedUserList) {
+        synchronized (mConnectedUserList) {
             mConnectedUserList.clear();
             mConnectedUserList.addAll(mConService.getAllUsers());
         }

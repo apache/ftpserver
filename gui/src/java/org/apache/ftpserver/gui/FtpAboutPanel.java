@@ -19,11 +19,9 @@
 
 package org.apache.ftpserver.gui;
 
+import javax.swing.*;
+import java.awt.*;
 import java.net.URL;
-import java.awt.Component;
-import java.awt.BorderLayout;
-
-import javax.swing.JTree;
 
 /**
  * Displays <a href="about.html">index.html</a> page. Help panel.

@@ -19,19 +19,8 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
+import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -44,7 +33,7 @@ public
 class FtpRootPanel extends PluginPanel {
 
     private JTextField mjHostTxt = null;
-    private JTable mjCfgTbl      = null;
+    private JTable mjCfgTbl = null;
 
     /**
      * Creates new panel for root.
@@ -52,9 +41,8 @@ class FtpRootPanel extends PluginPanel {
     public FtpRootPanel(CommonHandler commonHandler, JTree tree) {
         super(commonHandler, tree);
         try {
-            initComponents ();
-        }
-        catch(Exception ex) {
+            initComponents();
+        } catch (Exception ex) {
             commonHandler.handleException(ex);
         }
     }
@@ -109,8 +97,8 @@ class FtpRootPanel extends PluginPanel {
         mjCfgTbl.setPreferredScrollableViewportSize(new Dimension(420, 200));
         mjCfgTbl.setColumnSelectionAllowed(false);
         JScrollPane bottomPane = new JScrollPane(mjCfgTbl,
-                                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(bottomPane, BorderLayout.CENTER);
     }
 

@@ -18,9 +18,10 @@
  */
 package org.apache.ftpserver.remote.adapter;
 
+import org.apache.ftpserver.remote.interfaces.FtpFileListener;
+
 import java.io.File;
 import java.rmi.RemoteException;
-import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 
 /**
  * Ftp file upload/download/delete listener remote interface.
@@ -30,7 +31,7 @@ import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 public
 class FileListenerAdapter implements org.apache.ftpserver.FileListener {
 
-    private  FtpFileListener mFileListener = null;
+    private FtpFileListener mFileListener = null;
 
     /**
      * Default constructor.
@@ -60,8 +61,7 @@ class FileListenerAdapter implements org.apache.ftpserver.FileListener {
         if (listener != null) {
             try {
                 listener.notifyUpload(file.getAbsolutePath(), sessionId);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mFileListener = null;
             }
         }
@@ -75,8 +75,7 @@ class FileListenerAdapter implements org.apache.ftpserver.FileListener {
         if (listener != null) {
             try {
                 listener.notifyDownload(file.getAbsolutePath(), sessionId);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mFileListener = null;
             }
         }
@@ -85,13 +84,12 @@ class FileListenerAdapter implements org.apache.ftpserver.FileListener {
     /**
      * User file delete notification.
      */
-    public void notifyDelete(final File file,  final String sessionId) {
+    public void notifyDelete(final File file, final String sessionId) {
         FtpFileListener listener = mFileListener;
         if (listener != null) {
             try {
                 listener.notifyDelete(file.getAbsolutePath(), sessionId);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mFileListener = null;
             }
         }

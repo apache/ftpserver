@@ -18,9 +18,10 @@
  */
 package org.apache.ftpserver.remote.adapter;
 
+import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
-import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 
 /**
  * This remote spy user adapter.
@@ -56,11 +57,10 @@ class SpyConnectionAdapter implements org.apache.ftpserver.SpyConnectionInterfac
      */
     public void request(final String msg) throws IOException {
         SpyConnectionInterface spy = mSpy;
-        if(spy != null) {
+        if (spy != null) {
             try {
                 spy.request(msg);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mSpy = null;
             }
         }
@@ -72,11 +72,10 @@ class SpyConnectionAdapter implements org.apache.ftpserver.SpyConnectionInterfac
      */
     public void response(final String msg) throws IOException {
         SpyConnectionInterface spy = mSpy;
-        if(spy != null) {
+        if (spy != null) {
             try {
                 spy.response(msg);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mSpy = null;
             }
         }

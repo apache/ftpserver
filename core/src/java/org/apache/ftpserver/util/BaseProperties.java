@@ -18,10 +18,21 @@
  */
 package org.apache.ftpserver.util;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.text.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.TimeZone;
+import java.util.Vector;
 
 /**
  * This class encapsulates <code>java.util.Properties</code> to
@@ -36,13 +47,13 @@ class BaseProperties extends Properties {
     /**
      * Default constructor.
      */
-    public BaseProperties()  {
+    public BaseProperties() {
     }
 
     /**
      * Load existing property.
      */
-    public BaseProperties(Properties prop)  {
+    public BaseProperties(Properties prop) {
         super(prop);
     }
 
@@ -58,7 +69,7 @@ class BaseProperties extends Properties {
     /**
      * Load properties from <code>InputStream</code>
      */
-    public BaseProperties(InputStream is) throws IOException  {
+    public BaseProperties(InputStream is) throws IOException {
         load(is);
     }
 
@@ -67,7 +78,7 @@ class BaseProperties extends Properties {
      */
     public List getAllKeys() {
         Vector keys = new Vector();
-        for(Enumeration en = propertyNames(); en.hasMoreElements(); ) {
+        for (Enumeration en = propertyNames(); en.hasMoreElements();) {
             keys.add(en.nextElement().toString());
         }
         return keys;
@@ -89,7 +100,7 @@ class BaseProperties extends Properties {
         return str.toLowerCase().equals("true");
     }
 
-    public boolean getBoolean(String str, boolean bol)  {
+    public boolean getBoolean(String str, boolean bol) {
         try {
             return getBoolean(str);
         } catch (PropertiesException ex) {
@@ -101,7 +112,7 @@ class BaseProperties extends Properties {
     /**
      * Get integer value.
      */
-    public int getInteger(String str) throws PropertiesException  {
+    public int getInteger(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -114,7 +125,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public int getInteger(String str, int intVal)  {
+    public int getInteger(String str, int intVal) {
         try {
             return getInteger(str);
         } catch (PropertiesException ex) {
@@ -139,7 +150,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public long getLong(String str, long val)  {
+    public long getLong(String str, long val) {
         try {
             return getLong(str);
         } catch (PropertiesException ex) {
@@ -151,7 +162,7 @@ class BaseProperties extends Properties {
     /**
      * Get double value.
      */
-    public double getDouble(String str) throws PropertiesException  {
+    public double getDouble(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -164,7 +175,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public double getDouble(String str, double doubleVal)  {
+    public double getDouble(String str, double doubleVal) {
         try {
             return getDouble(str);
         } catch (PropertiesException ex) {
@@ -177,14 +188,13 @@ class BaseProperties extends Properties {
      */
     public InetAddress getInetAddress(String str) throws PropertiesException {
         str = getProperty(str);
-        if(str == null) {
+        if (str == null) {
             throw new PropertiesException(str + " : not found");
         }
 
         try {
             return InetAddress.getByName(str);
-        }
-        catch(UnknownHostException ex) {
+        } catch (UnknownHostException ex) {
             throw new PropertiesException("Host " + str + " not found");
         }
     }
@@ -192,8 +202,7 @@ class BaseProperties extends Properties {
     public InetAddress getInetAddress(String str, InetAddress addr) {
         try {
             return getInetAddress(str);
-        }
-        catch(PropertiesException ex) {
+        } catch (PropertiesException ex) {
             return addr;
         }
     }
@@ -201,7 +210,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>File</code> object.
      */
-    public File getFile(String str) throws PropertiesException  {
+    public File getFile(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -209,7 +218,7 @@ class BaseProperties extends Properties {
         return new File(str);
     }
 
-    public File getFile(String str, File fl)  {
+    public File getFile(String str, File fl) {
         try {
             return getFile(str);
         } catch (PropertiesException ex) {
@@ -222,7 +231,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>Class</code> object
      */
-    public Class getClass(String str) throws PropertiesException  {
+    public Class getClass(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -235,7 +244,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public Class getClass(String str, Class cls)  {
+    public Class getClass(String str, Class cls) {
         try {
             return getClass(str);
         } catch (PropertiesException ex) {
@@ -247,7 +256,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>TimeZone</code>
      */
-    public TimeZone getTimeZone(String str) throws PropertiesException  {
+    public TimeZone getTimeZone(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -255,7 +264,7 @@ class BaseProperties extends Properties {
         return TimeZone.getTimeZone(str);
     }
 
-    public TimeZone getTimeZone(String str, TimeZone tz)  {
+    public TimeZone getTimeZone(String str, TimeZone tz) {
         try {
             return getTimeZone(str);
         } catch (PropertiesException ex) {
@@ -267,15 +276,15 @@ class BaseProperties extends Properties {
     /**
      * Get <code>DateFormat</code> object.
      */
-    public SimpleDateFormat getDateFormat(String str) throws PropertiesException  {
+    public SimpleDateFormat getDateFormat(String str) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
-            throw new PropertiesException(str +  " : not found");
+            throw new PropertiesException(str + " : not found");
         }
         return new SimpleDateFormat(str);
     }
 
-    public SimpleDateFormat getDateFormat(String str, SimpleDateFormat fmt)  {
+    public SimpleDateFormat getDateFormat(String str, SimpleDateFormat fmt) {
         try {
             return getDateFormat(str);
         } catch (PropertiesException ex) {
@@ -287,7 +296,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>Date</code> object.
      */
-    public Date getDate(String str, DateFormat fmt) throws PropertiesException  {
+    public Date getDate(String str, DateFormat fmt) throws PropertiesException {
         str = getProperty(str);
         if (str == null) {
             throw new PropertiesException(str + " : not found");
@@ -300,7 +309,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public Date getDate(String str, DateFormat fmt, Date dt)  {
+    public Date getDate(String str, DateFormat fmt, Date dt) {
         try {
             return getDate(str, fmt);
         } catch (PropertiesException ex) {
@@ -315,14 +324,14 @@ class BaseProperties extends Properties {
     /**
      * Set boolean value.
      */
-    public void setProperty(String key, boolean val)  {
+    public void setProperty(String key, boolean val) {
         setProperty(key, String.valueOf(val));
     }
 
     /**
      * Set integer value.
      */
-    public void setProperty(String key, int val)  {
+    public void setProperty(String key, int val) {
         setProperty(key, String.valueOf(val));
     }
 
@@ -330,21 +339,21 @@ class BaseProperties extends Properties {
     /**
      * Set double value.
      */
-    public void setProperty(String key, double val)  {
+    public void setProperty(String key, double val) {
         setProperty(key, String.valueOf(val));
     }
 
     /**
      * Set float value.
      */
-    public void setProperty(String key, float val)  {
+    public void setProperty(String key, float val) {
         setProperty(key, String.valueOf(val));
     }
 
     /**
      * Set long value.
      */
-    public void setProperty(String key, long val)  {
+    public void setProperty(String key, long val) {
         setProperty(key, String.valueOf(val));
     }
 
@@ -358,35 +367,35 @@ class BaseProperties extends Properties {
     /**
      * Set <code>File</code> object.
      */
-    public void setProperty(String key, File val)  {
+    public void setProperty(String key, File val) {
         setProperty(key, val.getAbsolutePath());
     }
 
     /**
      * Set <code>DateFormat</code> object.
      */
-    public void setProperty(String key, SimpleDateFormat val)  {
+    public void setProperty(String key, SimpleDateFormat val) {
         setProperty(key, val.toPattern());
     }
 
     /**
      * Set <code>TimeZone</code> object.
      */
-    public void setProperty(String key, TimeZone val)  {
+    public void setProperty(String key, TimeZone val) {
         setProperty(key, val.getID());
     }
 
     /**
      * Set <code>Date</code> object.
      */
-    public void setProperty(String key, Date val, DateFormat fmt)  {
+    public void setProperty(String key, Date val, DateFormat fmt) {
         setProperty(key, fmt.format(val));
     }
 
     /**
      * Set <code>Class</code> object.
      */
-    public void setProperty(String key, Class val)  {
+    public void setProperty(String key, Class val) {
         setProperty(key, val.getName());
     }
 

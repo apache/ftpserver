@@ -18,8 +18,12 @@
  */
 package org.apache.ftpserver.util;
 
-import java.util.*;
-import java.text.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * This is a timezone conversion utility class.
@@ -77,12 +81,11 @@ public class DateUtils {
         firstPart += dateStr + ' ';
 
         long nowTime = System.currentTimeMillis();
-        if ( Math.abs(nowTime - dateTime) > 183L * 24L * 60L * 60L * 1000L) {
-            DateFormat fmt = (DateFormat)AFTER_SIX.get();
+        if (Math.abs(nowTime - dateTime) > 183L * 24L * 60L * 60L * 1000L) {
+            DateFormat fmt = (DateFormat) AFTER_SIX.get();
             return firstPart + fmt.format(date);
-        }
-        else {
-            DateFormat fmt = (DateFormat)BEFORE_SIX.get();
+        } else {
+            DateFormat fmt = (DateFormat) BEFORE_SIX.get();
             return firstPart + fmt.format(date);
         }
     }
@@ -108,7 +111,7 @@ public class DateUtils {
      * Get date object.
      */
     public static Date getDate(String str, DateFormat df, TimeZone from)
-    throws java.text.ParseException {
+            throws java.text.ParseException {
         df.setTimeZone(from);
         return df.parse(str);
     }
@@ -122,38 +125,35 @@ public class DateUtils {
         int year2 = calendar.get(Calendar.YEAR);
         int day2 = calendar.get(Calendar.DAY_OF_YEAR);
         int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
-        int min2  = calendar.get(Calendar.MINUTE);
+        int min2 = calendar.get(Calendar.MINUTE);
 
         calendar.setTime(d1);
         int year1 = calendar.get(Calendar.YEAR);
         int day1 = calendar.get(Calendar.DAY_OF_YEAR);
         int hour1 = calendar.get(Calendar.HOUR_OF_DAY);
-        int min1  = calendar.get(Calendar.MINUTE);
+        int min1 = calendar.get(Calendar.MINUTE);
 
-        int leftDays = (day1-day2)+(year1-year2)*365;
-        int leftHours = hour1-hour2;
-        int leftMins  = min1 - min2;
+        int leftDays = (day1 - day2) + (year1 - year2) * 365;
+        int leftHours = hour1 - hour2;
+        int leftMins = min1 - min2;
 
-        if(leftMins < 0) {
+        if (leftMins < 0) {
             leftMins += 60;
             --leftHours;
         }
-        if(leftHours < 0) {
+        if (leftHours < 0) {
             leftHours += 24;
             --leftDays;
         }
 
         String interval = "";
-        if(leftDays > 0) {
+        if (leftDays > 0) {
             interval = leftDays + " Days";
-        }
-        else if((leftHours > 0) && (leftDays == 0)) {
+        } else if ((leftHours > 0) && (leftDays == 0)) {
             interval = leftHours + " Hours";
-        }
-        else if((leftMins > 0) && (leftHours == 0) && (leftDays == 0)) {
+        } else if ((leftMins > 0) && (leftHours == 0) && (leftDays == 0)) {
             interval = leftMins + " Minutes";
-        }
-        else {
+        } else {
             interval = "";
         }
         return interval;

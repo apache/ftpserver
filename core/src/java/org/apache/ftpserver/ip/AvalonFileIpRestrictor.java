@@ -41,17 +41,16 @@ import java.util.Vector;
 /**
  * This class provides IP restriction functionality.
  *
+ * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  * @phoenix:block
  * @phoenix:service name="org.apache.ftpserver.ip.IpRestrictorInterface"
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Contextualizable, Configurable, LogEnabled {
 
     private static final String LINE_SEP = System.getProperty("line.separator", "\n");
 
-    private File mIpFile           = null;
-    private Vector mAllEntries     = new Vector();
+    private File mIpFile = null;
+    private Vector mAllEntries = new Vector();
     private Logger logger;
 
     public void enableLogging(Logger logger) {
@@ -62,15 +61,14 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
      * Set application context.
      */
     public void contextualize(Context context) throws ContextException {
-        File appDir = (File)context.get("app.home");
-        if(!appDir.exists()) {
+        File appDir = (File) context.get("app.home");
+        if (!appDir.exists()) {
             appDir.mkdirs();
         }
-        mIpFile = new File(appDir, "ip.properties" );
+        mIpFile = new File(appDir, "ip.properties");
         try {
             reload();
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             logger.error("IpRestrictor:contextualize()", ex);
             throw new ContextException("IpRestrictor:contextualize()", ex);
         }
@@ -87,17 +85,16 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
             if (mIpFile.exists()) {
                 br = IoUtils.getBufferedReader(new FileReader(mIpFile));
                 String line = null;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     line = line.trim();
-                    if(!line.equals("")) {
+                    if (!line.equals("")) {
                         newEntries.add(line);
                     }
                 }
             }
             mAllEntries = newEntries;
-        }
-        finally {
-          IoUtils.close(br);
+        } finally {
+            IoUtils.close(br);
         }
     }
 
@@ -116,12 +113,11 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
         try {
             fw = new FileWriter(mIpFile);
             Object[] entries = mAllEntries.toArray();
-            for(int i=entries.length; --i>=0; ) {
+            for (int i = entries.length; --i >= 0;) {
                 fw.write(entries[i].toString());
                 fw.write(LINE_SEP);
             }
-        }
-        finally {
+        } finally {
             IoUtils.close(fw);
         }
     }
@@ -130,22 +126,21 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
      * Check IP permission. Compare it with all the entries in the list.
      */
     public boolean hasPermission(InetAddress addr) {
-       boolean bMatch = false;
-       Object[] entries = mAllEntries.toArray();
-       for(int i=entries.length; --i>=0; ) {
-           RegularExpr regExp = new RegularExpr(entries[i].toString());
-           bMatch = regExp.isMatch(addr.getHostAddress());
-           if(bMatch) {
-               break;
-           }
-       }
+        boolean bMatch = false;
+        Object[] entries = mAllEntries.toArray();
+        for (int i = entries.length; --i >= 0;) {
+            RegularExpr regExp = new RegularExpr(entries[i].toString());
+            bMatch = regExp.isMatch(addr.getHostAddress());
+            if (bMatch) {
+                break;
+            }
+        }
 
-       if (isAllowIp()) {
-           return bMatch;
-       }
-       else {
-           return !bMatch;
-       }
+        if (isAllowIp()) {
+            return bMatch;
+        } else {
+            return !bMatch;
+        }
     }
 
     /**
@@ -153,7 +148,7 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
      */
     public void addEntry(String entry) {
         entry = entry.trim();
-        if(entry.equals("")) {
+        if (entry.equals("")) {
             return;
         }
         mAllEntries.add(entry);
@@ -170,14 +165,14 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
      * Get all entries
      */
     public Collection getAllEntries() {
-        return (Collection)mAllEntries.clone();
+        return (Collection) mAllEntries.clone();
     }
 
     /**
      * Remove all entries
      */
     public void clear() {
-       mAllEntries.clear();
+        mAllEntries.clear();
     }
 
     /**
@@ -188,7 +183,7 @@ public class AvalonFileIpRestrictor extends AbstractIpRestrictor implements Cont
         // get server address
         Configuration tmpConf = config.getChild("allow-ip", false);
         mbAllowIp = false;
-        if(tmpConf != null) {
+        if (tmpConf != null) {
             mbAllowIp = tmpConf.getValueAsBoolean(mbAllowIp);
         }
     }

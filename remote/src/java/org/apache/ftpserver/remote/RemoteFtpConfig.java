@@ -18,16 +18,16 @@
  */
 package org.apache.ftpserver.remote;
 
+import org.apache.ftpserver.core.AbstractFtpConfig;
+import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
+import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
+import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
+import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
+import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
+
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.net.InetAddress;
-
-import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
-import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
-import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
-import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
-import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
-import org.apache.ftpserver.core.AbstractFtpConfig;
 
 /**
  * Ftp configuration remote adapter. It is used by remote admin GUI.
@@ -50,9 +50,9 @@ class RemoteFtpConfig implements FtpConfigInterface {
     public RemoteFtpConfig(AbstractFtpConfig config) throws RemoteException {
         mConfig = config;
         mIpRestrictor = new IpRestrictor(config.getIpRestrictor());
-        mUserManager  = new UserManager(config.getUserManager());
-        mConService   = new ConnectionService(config.getConnectionService());
-        mStatistics   = new FtpStatistics(config.getStatistics());
+        mUserManager = new UserManager(config.getUserManager());
+        mConService = new ConnectionService(config.getConnectionService());
+        mStatistics = new FtpStatistics(config.getStatistics());
 
         UnicastRemoteObject.exportObject(this);
     }

@@ -19,15 +19,15 @@
 
 package org.apache.ftpserver.gui;
 
-import java.util.Vector;
-import java.awt.Component;
-import javax.swing.JTree;
-import javax.swing.JPanel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.event.TreeModelListener;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
+
+import javax.swing.*;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.util.Vector;
 
 /**
  * This is FTP user interface tree structure.
@@ -75,7 +75,7 @@ class FtpTree extends JTree implements TreeModel {
     private Vector mListenrList;
 
     private Component mTopFrame;
-    private FtpRootPanel  mRootPanel;
+    private FtpRootPanel mRootPanel;
     private PluginPanel[] mPluginPanels;
     private CommonHandler mCommonHandler;
 
@@ -111,9 +111,9 @@ class FtpTree extends JTree implements TreeModel {
         mPluginPanels[2] = new FtpConnectionPanel(mCommonHandler, this);
         mPluginPanels[3] = new FtpSpyContainerPanel(mCommonHandler, this);
         mPluginPanels[4] = new FtpStatisticsPanel(mCommonHandler, this);
-        mPluginPanels[5] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel)mPluginPanels[4]).getUploadModel(),   "Uploaded Files");
-        mPluginPanels[6] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel)mPluginPanels[4]).getDownloadModel(), "Downloaded Files");
-        mPluginPanels[7] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel)mPluginPanels[4]).getDeleteModel(),   "Deleted Files");
+        mPluginPanels[5] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel) mPluginPanels[4]).getUploadModel(), "Uploaded Files");
+        mPluginPanels[6] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel) mPluginPanels[4]).getDownloadModel(), "Downloaded Files");
+        mPluginPanels[7] = new FtpFilePanel(mCommonHandler, this, ((FtpStatisticsPanel) mPluginPanels[4]).getDeleteModel(), "Deleted Files");
         mPluginPanels[8] = new FtpAboutPanel(mCommonHandler, this);
     }
 
@@ -136,7 +136,7 @@ class FtpTree extends JTree implements TreeModel {
      * get child count
      */
     public int getChildCount(Object parent) {
-        if(parent.equals(RemoteHandlerInterface.DISPLAY_NAME)) {
+        if (parent.equals(RemoteHandlerInterface.DISPLAY_NAME)) {
             return CHILDREN.length;
         }
         return 0;
@@ -146,21 +146,21 @@ class FtpTree extends JTree implements TreeModel {
      * is a leaf or node
      */
     public boolean isLeaf(Object node) {
-       return !node.equals(RemoteHandlerInterface.DISPLAY_NAME);
+        return !node.equals(RemoteHandlerInterface.DISPLAY_NAME);
     }
 
     /**
      * get child index
      */
     public int getIndexOfChild(Object parent, Object child) {
-       int childIdx = -1;
-       for(int i=0; i<CHILDREN.length; i++) {
-           if(CHILDREN[i].equals(child)) {
-               childIdx = i;
-               break;
-           }
-       }
-       return childIdx;
+        int childIdx = -1;
+        for (int i = 0; i < CHILDREN.length; i++) {
+            if (CHILDREN[i].equals(child)) {
+                childIdx = i;
+                break;
+            }
+        }
+        return childIdx;
     }
 
     /**
@@ -195,7 +195,7 @@ class FtpTree extends JTree implements TreeModel {
      * Get top frame
      */
     public Component getTopFrame() {
-        if(mTopFrame == null) {
+        if (mTopFrame == null) {
             mTopFrame = GuiUtils.getFrame(this);
         }
         return mTopFrame;
@@ -207,7 +207,7 @@ class FtpTree extends JTree implements TreeModel {
      */
     public PluginPanel getPluginPanel(String panelName) {
         PluginPanel panel = null;
-        for(int i=0; i<CHILDREN.length; i++) {
+        for (int i = 0; i < CHILDREN.length; i++) {
             if (CHILDREN[i].equals(panelName)) {
                 panel = mPluginPanels[i];
                 break;
@@ -224,12 +224,11 @@ class FtpTree extends JTree implements TreeModel {
         Object node = getSelectionPath().getLastPathComponent();
 
         JPanel dispPane = null;
-        if(getRoot().equals(node)) {
+        if (getRoot().equals(node)) {
             dispPane = mRootPanel;
-        }
-        else {
+        } else {
             dispPane = getPluginPanel(node.toString());
-            if ( dispPane == null ) {
+            if (dispPane == null) {
                 dispPane = mRootPanel;
             }
         }
@@ -245,7 +244,7 @@ class FtpTree extends JTree implements TreeModel {
             mRootPanel.close();
         }
 
-        for(int i=mPluginPanels.length; --i>=0; ) {
+        for (int i = mPluginPanels.length; --i >= 0;) {
             PluginPanel panel = mPluginPanels[i];
             if (panel != null) {
                 panel.close();

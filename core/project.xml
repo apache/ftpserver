@@ -17,16 +17,16 @@
  */
  -->
 <project>
-	<extend>${basedir}/../project.xml</extend>
-	<id>apache-ftpserver-core</id>
-	<artifactId>apache-ftpserver-core</artifactId>
-	<name>Apache FTPServer Core Implementation</name>
-	<dependencies>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>apache-ftpserver-api</artifactId>
-			<version>SNAPSHOT</version>
-			<version>${pom.currentVersion}</version>
-		</dependency>
-	</dependencies>
+    <extend>${basedir}/../project.xml</extend>
+    <id>apache-ftpserver-core</id>
+    <artifactId>apache-ftpserver-core</artifactId>
+    <name>Apache FTPServer Core Implementation</name>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>apache-ftpserver-api</artifactId>
+            <version>SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+    </dependencies>
 </project>

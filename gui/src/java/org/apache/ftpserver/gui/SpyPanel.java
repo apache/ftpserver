@@ -19,23 +19,18 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.rmi.RemoteException;
+import org.apache.ftpserver.User;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.gui.remote.SpyConnectionAdapter;
+import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-
-import org.apache.ftpserver.User;
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.gui.remote.SpyConnectionAdapter;
-import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
+import java.awt.*;
+import java.rmi.RemoteException;
 
 
 /**
@@ -46,11 +41,11 @@ import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 public
 class SpyPanel extends JPanel implements SpyConnectionInterface {
 
-    private JTextPane mLogTxt    = null;
+    private JTextPane mLogTxt = null;
 
     private SpyConnectionAdapter mSpyAdapter = null;
-    private CommonHandler mCommonHandler     = null;
-    private UserImpl mUser                    = null;
+    private CommonHandler mCommonHandler = null;
+    private UserImpl mUser = null;
 
     private SimpleAttributeSet mReqAttrs = null;
     private SimpleAttributeSet mResAttrs = null;
@@ -80,8 +75,8 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
         mLogTxt = new JTextPane();
         mLogTxt.setEditable(false);
         JScrollPane txtPane = new JScrollPane(mLogTxt,
-                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(txtPane, BorderLayout.CENTER);
     }
 
@@ -92,7 +87,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
         return mUser;
     }
 
-     /**
+    /**
      * Get connection session id.
      */
     public String getSessionId() {
@@ -106,8 +101,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
         Document doc = mLogTxt.getDocument();
         try {
             doc.insertString(doc.getLength(), msg, mResAttrs);
-        }
-        catch(BadLocationException ex) {
+        } catch (BadLocationException ex) {
             ex.printStackTrace();
         }
     }
@@ -119,8 +113,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
         Document doc = mLogTxt.getDocument();
         try {
             doc.insertString(doc.getLength(), msg, mReqAttrs);
-        }
-        catch(BadLocationException ex) {
+        } catch (BadLocationException ex) {
             ex.printStackTrace();
         }
     }
@@ -147,8 +140,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
         try {
             mSpyAdapter.close();
             mCommonHandler.getConnectionService().closeConnection(mUser.getSessionId());
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             mCommonHandler.handleException(ex);
         }
     }

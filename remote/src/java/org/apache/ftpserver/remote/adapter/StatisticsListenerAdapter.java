@@ -19,8 +19,9 @@
 package org.apache.ftpserver.remote.adapter;
 
 
-import java.rmi.RemoteException;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
+
+import java.rmi.RemoteException;
 
 /**
  * Ftp statistics listener remote interface.
@@ -60,8 +61,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyUpload();
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }
@@ -75,8 +75,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyDownload();
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }
@@ -90,8 +89,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyDelete();
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }
@@ -105,8 +103,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyLogin();
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }
@@ -120,8 +117,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyLogout();
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }
@@ -135,8 +131,7 @@ class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListen
         if (listener != null) {
             try {
                 listener.notifyConnection();
-            }
-            catch(RemoteException ex){
+            } catch (RemoteException ex) {
                 mListener = null;
             }
         }

@@ -19,26 +19,18 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-
-import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.gui.remote.FtpFileListenerAdapter;
 import org.apache.ftpserver.gui.remote.FtpStatisticsListenerAdapter;
 import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
 /**
  * Ftp server global statistics panel. It listenes to the global
@@ -48,7 +40,7 @@ import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
  */
 public
 class FtpStatisticsPanel extends PluginPanel
-                         implements FtpStatisticsListener, FtpFileListener {
+        implements FtpStatisticsListener, FtpFileListener {
 
     private static final String RELOAD_IMG = "org/apache/ftpserver/gui/reload.gif";
     private static final SimpleDateFormat DATE_FMT = new SimpleDateFormat("MM/dd HH:mm:ss");
@@ -96,8 +88,7 @@ class FtpStatisticsPanel extends PluginPanel
             mListener = new FtpStatisticsListenerAdapter(mStat, this);
             reload();
             mjStartTimeTxt.setText(DATE_FMT.format(mStat.getStartTime()));
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             commonHandler.handleException(ex);
         }
     }
@@ -339,9 +330,9 @@ class FtpStatisticsPanel extends PluginPanel
         add(reloadButton, gc);
 
         reloadButton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 reload();
-             }
+            }
         });
     }
 
@@ -370,26 +361,24 @@ class FtpStatisticsPanel extends PluginPanel
      * Upload notification.
      */
     public void notifyUpload() {
-       try {
-           mjUploadNbrTxt.setText(String.valueOf(mStat.getFileUploadNbr()));
-           mjUploadBytesTxt.setText(String.valueOf(mStat.getFileUploadSize()));
-       }
-       catch(Exception ex) {
-           getCommonHandler().handleException(ex);
-       }
+        try {
+            mjUploadNbrTxt.setText(String.valueOf(mStat.getFileUploadNbr()));
+            mjUploadBytesTxt.setText(String.valueOf(mStat.getFileUploadSize()));
+        } catch (Exception ex) {
+            getCommonHandler().handleException(ex);
+        }
     }
 
     /**
      * Download notification.
      */
     public void notifyDownload() {
-       try {
-           mjDownloadNbrTxt.setText(String.valueOf(mStat.getFileDownloadNbr()));
-           mjDownloadBytesTxt.setText(String.valueOf(mStat.getFileDownloadSize()));
-       }
-       catch(Exception ex) {
-           getCommonHandler().handleException(ex);
-       }
+        try {
+            mjDownloadNbrTxt.setText(String.valueOf(mStat.getFileDownloadNbr()));
+            mjDownloadBytesTxt.setText(String.valueOf(mStat.getFileDownloadSize()));
+        } catch (Exception ex) {
+            getCommonHandler().handleException(ex);
+        }
     }
 
 
@@ -397,27 +386,25 @@ class FtpStatisticsPanel extends PluginPanel
      * Delete notification.
      */
     public void notifyDelete() {
-       try {
-           mjDeleteNbrTxt.setText(String.valueOf(mStat.getFileDeleteNbr()));
-       }
-       catch(Exception ex) {
-           getCommonHandler().handleException(ex);
-       }
+        try {
+            mjDeleteNbrTxt.setText(String.valueOf(mStat.getFileDeleteNbr()));
+        } catch (Exception ex) {
+            getCommonHandler().handleException(ex);
+        }
     }
 
     /**
      * User login notification.
      */
     public void notifyLogin() {
-       try {
-           mjLoginNbrTxt.setText(String.valueOf(mStat.getLoginNbr()));
-           mjAnonLoginNbrTxt.setText(String.valueOf(mStat.getAnonLoginNbr()));
-           mjTotalLoginNbrTxt.setText(String.valueOf(mStat.getTotalLoginNbr()));
-           mjTotalAnonLoginNbrTxt.setText(String.valueOf(mStat.getTotalAnonLoginNbr()));
-       }
-       catch(Exception ex) {
-           getCommonHandler().handleException(ex);
-       }
+        try {
+            mjLoginNbrTxt.setText(String.valueOf(mStat.getLoginNbr()));
+            mjAnonLoginNbrTxt.setText(String.valueOf(mStat.getAnonLoginNbr()));
+            mjTotalLoginNbrTxt.setText(String.valueOf(mStat.getTotalLoginNbr()));
+            mjTotalAnonLoginNbrTxt.setText(String.valueOf(mStat.getTotalAnonLoginNbr()));
+        } catch (Exception ex) {
+            getCommonHandler().handleException(ex);
+        }
     }
 
     /**
@@ -431,13 +418,12 @@ class FtpStatisticsPanel extends PluginPanel
      * Notify open/close connection
      */
     public void notifyConnection() {
-       try {
-           mjConNbrTxt.setText(String.valueOf(mStat.getConnectionNbr()));
-           mjTotalConNbrTxt.setText(String.valueOf(mStat.getTotalConnectionNbr()));
-       }
-       catch(Exception ex) {
-           getCommonHandler().handleException(ex);
-       }
+        try {
+            mjConNbrTxt.setText(String.valueOf(mStat.getConnectionNbr()));
+            mjTotalConNbrTxt.setText(String.valueOf(mStat.getTotalConnectionNbr()));
+        } catch (Exception ex) {
+            getCommonHandler().handleException(ex);
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-abstract class AbstractIpRestrictor implements IpRestrictorInterface {
+        abstract class AbstractIpRestrictor implements IpRestrictorInterface {
 
     protected boolean mbAllowIp;
 

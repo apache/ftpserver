@@ -10,9 +10,9 @@ import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 
 /**
  * @author Vladimirov
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Style - Code Templates
  */
 public interface RemoteHandler {
     /**

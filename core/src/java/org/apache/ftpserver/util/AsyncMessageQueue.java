@@ -44,7 +44,7 @@ class AsyncMessageQueue implements Runnable {
      * Add a new message object.
      */
     public void add(Message msg) {
-        if(mbStopRequest) {
+        if (mbStopRequest) {
             throw new IllegalArgumentException("Message queue has been stopped.");
         }
         mMsgQueue.put(msg);
@@ -75,14 +75,14 @@ class AsyncMessageQueue implements Runnable {
      * Thread starting point - get message ant execute.
      */
     public void run() {
-        while(!mbStopRequest) {
-            Message msg = (Message)mMsgQueue.get();
-            if(msg == null) {
+        while (!mbStopRequest) {
+            Message msg = (Message) mMsgQueue.get();
+            if (msg == null) {
                 return;
             }
             try {
                 msg.execute();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -94,7 +94,7 @@ class AsyncMessageQueue implements Runnable {
     public void stop() {
         mbStopRequest = true;
         mMsgQueue.clear();
-        if(mThread != null) {
+        if (mThread != null) {
             mThread.interrupt();
             mThread = null;
         }

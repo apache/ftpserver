@@ -19,21 +19,14 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.WindowEvent;
-import java.rmi.RemoteException;
+import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-
-import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 
 
 /**
@@ -48,8 +41,8 @@ class FtpAdminFrame extends JFrame implements TreeSelectionListener {
 
     private JTabbedPane mjTabPane;
 
-    private FtpTree mjFtpTree   = null;
-    private JPanel mjFtpPane    = null;
+    private FtpTree mjFtpTree = null;
+    private JPanel mjFtpPane = null;
 
     private CommonHandler mCommonHandler = null;
 
@@ -77,8 +70,8 @@ class FtpAdminFrame extends JFrame implements TreeSelectionListener {
         mjFtpTree = new FtpTree(mCommonHandler);
         mjFtpTree.addTreeSelectionListener(this);
         JScrollPane custPane = new JScrollPane(mjFtpTree,
-                                               JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                               JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jSplitPane.setLeftComponent(custPane);
 
         // right pane
@@ -108,12 +101,11 @@ class FtpAdminFrame extends JFrame implements TreeSelectionListener {
     protected void processWindowEvent(WindowEvent e) {
         int id = e.getID();
         if (id == WindowEvent.WINDOW_CLOSING) {
-            if ( !GuiUtils.getConfirmation(mCommonHandler.getTopFrame(), "Do you really want to exit?") ) {
+            if (!GuiUtils.getConfirmation(mCommonHandler.getTopFrame(), "Do you really want to exit?")) {
                 return;
             }
             mCommonHandler.terminate();
-        }
-        else {
+        } else {
             super.processWindowEvent(e);
         }
     }
@@ -123,7 +115,7 @@ class FtpAdminFrame extends JFrame implements TreeSelectionListener {
      */
     public void valueChanged(TreeSelectionEvent e) {
         JPanel dispPane = mjFtpTree.getSelectedPanel();
-        if(dispPane != null) {
+        if (dispPane != null) {
             GuiUtils.showNewPanel(mjFtpPane, dispPane);
         }
     }

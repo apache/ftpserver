@@ -17,22 +17,22 @@
  */
  -->
 <project>
-	<extend>${basedir}/../project.xml</extend>
-	<id>apache-ftpserver-gui</id>
-	<artifactId>apache-ftpserver-gui</artifactId>
-	<name>Apache FTPServer Managment GUI</name>
-	<dependencies>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>apache-ftpserver-api</artifactId>
-			<version>SNAPSHOT</version>
-			<version>${pom.currentVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>apache-ftpserver-core</artifactId>
-			<version>SNAPSHOT</version>
-			<version>${pom.currentVersion}</version>
-		</dependency>
-	</dependencies>
+    <extend>${basedir}/../project.xml</extend>
+    <id>apache-ftpserver-gui</id>
+    <artifactId>apache-ftpserver-gui</artifactId>
+    <name>Apache FTPServer Managment GUI</name>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>apache-ftpserver-api</artifactId>
+            <version>SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>apache-ftpserver-core</artifactId>
+            <version>SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,7 +1,5 @@
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.UserManagerException;
-
 import java.io.IOException;
 
 /**

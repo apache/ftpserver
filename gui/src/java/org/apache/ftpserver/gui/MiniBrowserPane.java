@@ -19,26 +19,19 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
-
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
 
 /**
  * Mini browser panel to display HTML pages.
+ *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
@@ -60,9 +53,10 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
 
     /**
      * Constructor
-     * @param frame Frame component
-     * @param home url, may be null
-     * @param displayUrl display url at the beginning
+     *
+     * @param frame       Frame component
+     * @param home        url, may be null
+     * @param displayUrl  display url at the beginning
      * @param displayHome home button displayed
      */
     public MiniBrowserPane(Component frame, URL home, boolean dispUrl, boolean dispHome) {
@@ -82,7 +76,7 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
     private void initComponents() {
 
         // top pane
-        if(mDisplayUrl) {
+        if (mDisplayUrl) {
             JPanel topPane = new JPanel(new BorderLayout());
             add(topPane, BorderLayout.NORTH);
 
@@ -99,8 +93,7 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
                     URL url = null;
                     try {
                         url = new URL(urlTxt);
-                    }
-                    catch(Exception ex) {
+                    } catch (Exception ex) {
                         GuiUtils.showWarningMessage(mFrame, "Not a valid url : " + urlTxt);
                     }
                     loadURL(url);
@@ -120,7 +113,7 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
 
 
         // bottom pane
-        if(mDisplayHome) {
+        if (mDisplayHome) {
             JPanel bottomPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
             add(bottomPane, BorderLayout.SOUTH);
 
@@ -141,11 +134,10 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
     public void hyperlinkUpdate(HyperlinkEvent e) {
         if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             if (e instanceof HTMLFrameHyperlinkEvent) {
-                HTMLFrameHyperlinkEvent  evt = (HTMLFrameHyperlinkEvent)e;
-                HTMLDocument doc = (HTMLDocument)mjEditorPane.getDocument();
+                HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
+                HTMLDocument doc = (HTMLDocument) mjEditorPane.getDocument();
                 doc.processHTMLFrameHyperlinkEvent(evt);
-            }
-            else {
+            } else {
                 loadURL(e.getURL());
             }
         }
@@ -160,24 +152,22 @@ class MiniBrowserPane extends JPanel implements HyperlinkListener {
         try {
 
             // load blank page
-            if(url == null) {
+            if (url == null) {
                 url = getClass().getClassLoader().getResource(BLANK_PAGE);
-                if(mjUrlField != null) {
+                if (mjUrlField != null) {
                     mjUrlField.setText("");
                 }
-            }
-            else {
-                if(mjUrlField != null) {
+            } else {
+                if (mjUrlField != null) {
                     mjUrlField.setText(url.toString());
                 }
             }
 
             // load URL
-            if(url != null) {
+            if (url != null) {
                 mjEditorPane.setPage(url);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             GuiUtils.showWarningMessage(mFrame, "Cannot load " + url);
         }
     }

@@ -21,15 +21,15 @@ package org.apache.ftpserver.util;
 public
 class PropertiesException extends Exception {
 
-    public PropertiesException()  {
+    public PropertiesException() {
         super();
     }
 
-    public PropertiesException(String msg)  {
+    public PropertiesException(String msg) {
         super(msg);
     }
 
-    public PropertiesException(Exception ex)  {
+    public PropertiesException(Exception ex) {
         super(ex.getMessage());
     }
 }

@@ -27,11 +27,10 @@ import org.apache.ftpserver.UserManagerException;
  * @author Paul Hammant
  */
 public
-abstract class AbstractUserManager
-                                   implements UserManagerInterface {
+        abstract class AbstractUserManager
+        implements UserManagerInterface {
 
     protected String mstAdminName;
-
 
 
     /**

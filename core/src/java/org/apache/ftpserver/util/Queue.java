@@ -23,8 +23,8 @@ import java.util.LinkedList;
 /**
  * Queue (first in first out) implementation. It supports two types of queues.
  * <ul>
- *   <li> Queue is empty : throws NoSuchElementException.</li>
- *   <li> Queue is empty : waits for the new element.</li>
+ * <li> Queue is empty : throws NoSuchElementException.</li>
+ * <li> Queue is empty : waits for the new element.</li>
  * </ul>
  * Null values <b>cannot</b> be inserted.
  *
@@ -40,6 +40,7 @@ class Queue {
 
     /**
      * Constructor.
+     *
      * @param bWait - thread will wait or not
      */
     public Queue(boolean bWait) {
@@ -52,19 +53,17 @@ class Queue {
      * the thread will wait. If interrupted returns null.
      */
     public synchronized Object get() {
-        if(mbWait) {
-            while(mList.size() == 0) {
+        if (mbWait) {
+            while (mList.size() == 0) {
                 try {
-                   wait();
-                }
-                catch(InterruptedException ex) {
+                    wait();
+                } catch (InterruptedException ex) {
                     return null;
                 }
             }
             return mList.removeFirst();
-        }
-        else {
-           return mList.removeFirst();
+        } else {
+            return mList.removeFirst();
         }
     }
 
@@ -73,25 +72,22 @@ class Queue {
      * the thread will wait. If interrupted returns null.
      */
     public synchronized Object get(long waitTimeMillis) {
-        if(mbWait) {
-            if(mList.size() == 0) {
+        if (mbWait) {
+            if (mList.size() == 0) {
                 try {
-                   wait(waitTimeMillis);
-                }
-                catch(InterruptedException ex) {
+                    wait(waitTimeMillis);
+                } catch (InterruptedException ex) {
                     return null;
                 }
             }
 
-            if(mList.size() == 0) {
+            if (mList.size() == 0) {
                 return null;
-            }
-            else {
+            } else {
                 return mList.removeFirst();
             }
-        }
-        else {
-           return mList.removeFirst();
+        } else {
+            return mList.removeFirst();
         }
     }
 
@@ -99,7 +95,7 @@ class Queue {
      * Put an object into the queue and notify the waiting thread.
      */
     public synchronized void put(Object obj) {
-        if(obj == null) {
+        if (obj == null) {
             throw new NullPointerException("Queue element cannot be null");
         }
 
@@ -141,6 +137,6 @@ class Queue {
      * Remove all the elements.
      */
     public synchronized void clear() {
-       mList.clear();
+        mList.clear();
     }
 }

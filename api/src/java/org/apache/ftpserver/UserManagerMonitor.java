@@ -6,5 +6,6 @@ package org.apache.ftpserver;
  */
 public interface UserManagerMonitor {
     void generalError(String message, Exception ex);
+
     void info(String message);
 }

@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.User;
-
 import java.io.IOException;
 
 /**
@@ -33,18 +31,21 @@ interface ConnectionObserver {
 
     /**
      * New connection notification.
+     *
      * @param user new connected user.
      */
     void newConnection(final User user);
 
     /**
      * Close connection notification
+     *
      * @param user closed user object
      */
     void removeConnection(final User user);
 
     /**
      * Update connection notification
+     *
      * @param user updated user object
      */
     void updateConnection(final User user);

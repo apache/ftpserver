@@ -19,10 +19,11 @@
 
 package org.apache.ftpserver.gui.remote;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Ftp file upload/download/delete listener remote interface.
@@ -64,7 +65,7 @@ class FtpFileListenerAdapter implements FtpFileListener {
     /**
      * User file delete notification.
      */
-    public void notifyDelete(final String file, final  String sessionId) throws RemoteException {
+    public void notifyDelete(final String file, final String sessionId) throws RemoteException {
         mListener.notifyDelete(file, sessionId);
     }
 
@@ -75,15 +76,13 @@ class FtpFileListenerAdapter implements FtpFileListener {
         System.out.println("Closing file listener...");
         try {
             mStatistics.setFileListener(null);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
 
         try {
             UnicastRemoteObject.unexportObject(this, true);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
     }

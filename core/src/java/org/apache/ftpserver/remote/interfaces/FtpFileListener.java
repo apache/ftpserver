@@ -42,7 +42,7 @@ interface FtpFileListener extends Remote {
     /**
      * User file delete notification.
      */
-    void notifyDelete(final String file, final  String sessionId) throws RemoteException;
+    void notifyDelete(final String file, final String sessionId) throws RemoteException;
 
 }
 

@@ -19,18 +19,17 @@
 
 package org.apache.ftpserver.gui;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Vector;
-import java.net.InetAddress;
+import javax.swing.table.AbstractTableModel;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import javax.swing.table.AbstractTableModel;
+import java.net.InetAddress;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Vector;
 
 
 /**
@@ -85,9 +84,9 @@ class PropertiesTableModel extends AbstractTableModel {
     protected void initializeTable() {
         mTableKeys.clear();
         Enumeration keyNames = mTableProp.propertyNames();
-        while(keyNames.hasMoreElements()) {
+        while (keyNames.hasMoreElements()) {
             String key = keyNames.nextElement().toString();
-            if(key.trim().equals("")) {
+            if (key.trim().equals("")) {
                 continue;
             }
             mTableKeys.add(key);
@@ -128,10 +127,9 @@ class PropertiesTableModel extends AbstractTableModel {
      * Get value at.
      */
     public Object getValueAt(int row, int col) {
-        if(col == 0) {
+        if (col == 0) {
             return mTableKeys.get(row);
-        }
-        else {
+        } else {
             return mTableProp.getProperty(mTableKeys.get(row).toString());
         }
     }
@@ -143,86 +141,84 @@ class PropertiesTableModel extends AbstractTableModel {
         return true;
     }
 
-   /**
-    * Set value at - does not set value - dummy metod.
-    */
-   public void setValueAt(Object val, int row, int col) {
-   }
+    /**
+     * Set value at - does not set value - dummy metod.
+     */
+    public void setValueAt(Object val, int row, int col) {
+    }
 
-   /**
-    * Find column index.
-    */
-   public int findColumn(String columnName) {
+    /**
+     * Find column index.
+     */
+    public int findColumn(String columnName) {
         int index = -1;
-        for(int i=COL_NAMES.length; --i>=0; ) {
+        for (int i = COL_NAMES.length; --i >= 0;) {
             if (COL_NAMES[i].equals(columnName)) {
                 index = i;
                 break;
             }
         }
         return index;
-   }
+    }
 
-   /**
-    * Reload properties.
-    */
-   public void reload() {
-       initializeTable();
-       fireTableDataChanged();
-   }
+    /**
+     * Reload properties.
+     */
+    public void reload() {
+        initializeTable();
+        fireTableDataChanged();
+    }
 
-   /**
-    * Reload a new properties object.
-    */
-   public void reload(Properties prop) {
-       mTableProp = prop;
-       initializeTable();
-       fireTableDataChanged();
-   }
+    /**
+     * Reload a new properties object.
+     */
+    public void reload(Properties prop) {
+        mTableProp = prop;
+        initializeTable();
+        fireTableDataChanged();
+    }
 
 
-   /**
-    * Create configuration table model.
-    */
-   public static PropertiesTableModel getTableModel(Object obj) throws Exception {
+    /**
+     * Create configuration table model.
+     */
+    public static PropertiesTableModel getTableModel(Object obj) throws Exception {
         Properties prop = new Properties();
         Class clazz = obj.getClass();
         BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
         PropertyDescriptor descriptors[] = beanInfo.getPropertyDescriptors();
 
-        if(descriptors != null) {
-            for(int i=0; i<descriptors.length; ++i) {
+        if (descriptors != null) {
+            for (int i = 0; i < descriptors.length; ++i) {
                 Method met = descriptors[i].getReadMethod();
-                if(met != null) {
+                if (met != null) {
                     Class retType = met.getReturnType();
                     boolean isDisplayable = false;
-                    for(int j=0; j<RETURN_TYPES.length; ++j) {
-                        if(RETURN_TYPES[j].equals(retType)) {
+                    for (int j = 0; j < RETURN_TYPES.length; ++j) {
+                        if (RETURN_TYPES[j].equals(retType)) {
                             isDisplayable = true;
                             break;
                         }
                     }
 
-                    if(!isDisplayable) {
+                    if (!isDisplayable) {
                         continue;
                     }
 
                     Object valObj = null;
                     try {
                         valObj = met.invoke(obj, new Object[0]);
-                    }
-                    catch(InvocationTargetException ex) {
+                    } catch (InvocationTargetException ex) {
                         Throwable th = ex.getCause();
-                        if(th instanceof Exception) {
-                            throw (Exception)th;
-                        }
-                        else if(th instanceof Error) {
-                            throw (Error)th;
+                        if (th instanceof Exception) {
+                            throw (Exception) th;
+                        } else if (th instanceof Error) {
+                            throw (Error) th;
                         }
                     }
 
                     String val = "";
-                    if(valObj != null) {
+                    if (valObj != null) {
                         val = String.valueOf(valObj);
                     }
 
@@ -233,6 +229,6 @@ class PropertiesTableModel extends AbstractTableModel {
             }
         }
         return new PropertiesTableModel(prop);
-   }
+    }
 
 }

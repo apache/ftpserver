@@ -47,20 +47,20 @@ import java.util.Properties;
  * <br>
  * The required LDAP attribute types:
  * <ul>
- *   <li>memberuid</li>
- *   <li>uid</li>
- *   <li>cn</li>
- *   <li>sn</li>
- *   <li>userpassword</li>
- *   <li>objectclass</li>
- *   <li>enableflag (created by ftp-db.ldif file)</li>
- *   <li>homedirectory</li>
- *   <li>writepermission (created by ftp-db.ldif file)</li>
- *   <li>idletime (created by ftp-db.ldif file)</li>
- *   <li>uploadrate (created by ftp-db.ldif file)</li>
- *   <li>downloadrate (created by ftp-db.ldif file)</li>
+ * <li>memberuid</li>
+ * <li>uid</li>
+ * <li>cn</li>
+ * <li>sn</li>
+ * <li>userpassword</li>
+ * <li>objectclass</li>
+ * <li>enableflag (created by ftp-db.ldif file)</li>
+ * <li>homedirectory</li>
+ * <li>writepermission (created by ftp-db.ldif file)</li>
+ * <li>idletime (created by ftp-db.ldif file)</li>
+ * <li>uploadrate (created by ftp-db.ldif file)</li>
+ * <li>downloadrate (created by ftp-db.ldif file)</li>
  * </ul>
- *
+ * <p/>
  * Some of the above mentioned attribute types are created by ftd-db.ldif schema file.
  * The schema file also creates an object class called ftpUsers derived from
  * inetOrgPerson and have all these attributes.<br>
@@ -77,7 +77,6 @@ import java.util.Properties;
  *      ftpUsers
  * </pre>
  *
- *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
@@ -85,10 +84,10 @@ class LdapUserManager extends AbstractUserManager {
 
 
     // LDAP attributes
-    private final static String LOGIN      = "memberuid";
-    private final static String CN         = "cn";
-    private final static String SN         = "sn";
-    protected final static String OBJ_CLASS  = "objectclass";
+    private final static String LOGIN = "memberuid";
+    private final static String CN = "cn";
+    private final static String SN = "sn";
+    protected final static String OBJ_CLASS = "objectclass";
 
     private final static String[] ALL_ATTRS = {
         User.ATTR_LOGIN,
@@ -127,12 +126,11 @@ class LdapUserManager extends AbstractUserManager {
             matchAttrs.put(mObjClassAttr);
             NamingEnumeration answers = mAdminContext.search(mstRoot, matchAttrs, UID_ATTRS);
             while (answers.hasMore()) {
-                SearchResult sr = (SearchResult)answers.next();
+                SearchResult sr = (SearchResult) answers.next();
                 String uid = sr.getAttributes().get(User.ATTR_LOGIN).get().toString();
                 allUsers.add(uid);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             userManagerMonitor.generalError("LdapUserManager.getAllUserNames()", ex);
         }
 
@@ -156,12 +154,11 @@ class LdapUserManager extends AbstractUserManager {
             user.getVirtualDirectory().setRootDirectory(new File(attrs.get(User.ATTR_HOME).get().toString()));
             user.setEnabled(Boolean.TRUE.toString().equals(attrs.get(User.ATTR_ENABLE).get().toString()));
             user.getVirtualDirectory().setWritePermission(Boolean.TRUE.toString().equals(attrs.get(User.ATTR_WRITE_PERM).get().toString()));
-            user.setMaxIdleTime( Integer.parseInt(attrs.get(User.ATTR_MAX_IDLE_TIME).get().toString()) );
-            user.setMaxUploadRate( Integer.parseInt(attrs.get(User.ATTR_MAX_UPLOAD_RATE).get().toString()) );
-            user.setMaxDownloadRate( Integer.parseInt(attrs.get(User.ATTR_MAX_DOWNLOAD_RATE).get().toString()) );
-        }
-        catch(Exception ex) {
-            userManagerMonitor.generalError ("LdapUserManager.getUserByName()", ex);
+            user.setMaxIdleTime(Integer.parseInt(attrs.get(User.ATTR_MAX_IDLE_TIME).get().toString()));
+            user.setMaxUploadRate(Integer.parseInt(attrs.get(User.ATTR_MAX_UPLOAD_RATE).get().toString()));
+            user.setMaxDownloadRate(Integer.parseInt(attrs.get(User.ATTR_MAX_DOWNLOAD_RATE).get().toString()));
+        } catch (Exception ex) {
+            userManagerMonitor.generalError("LdapUserManager.getUserByName()", ex);
             user = null;
         }
 
@@ -183,8 +180,8 @@ class LdapUserManager extends AbstractUserManager {
         }
 
         try {
-            if( doesExist(login) ) {
-                Properties userProp = (Properties)mAdminEnv.clone();
+            if (doesExist(login)) {
+                Properties userProp = (Properties) mAdminEnv.clone();
                 String dn = getDN(login);
                 userProp.setProperty(Context.SECURITY_PRINCIPAL, dn);
                 userProp.setProperty(Context.SECURITY_CREDENTIALS, password);
@@ -193,8 +190,7 @@ class LdapUserManager extends AbstractUserManager {
                 userContext.close();
                 return true;
             }
-        }
-        catch(NamingException ex) {
+        } catch (NamingException ex) {
         }
         return false;
     }
@@ -207,8 +203,7 @@ class LdapUserManager extends AbstractUserManager {
         try {
             if (doesExist(user.getName())) {
                 update(user);
-            }
-            else {
+            } else {
                 add(user);
             }
         } catch (NamingException e) {
@@ -241,11 +236,11 @@ class LdapUserManager extends AbstractUserManager {
 
         attrs.put(mObjClassAttr);
 
-        attrs.put(new BasicAttribute(User.ATTR_ENABLE,            String.valueOf(user.getEnabled())));
-        attrs.put(new BasicAttribute(User.ATTR_HOME,              user.getVirtualDirectory().getRootDirectory()));
-        attrs.put(new BasicAttribute(User.ATTR_WRITE_PERM,        String.valueOf(user.getVirtualDirectory().getWritePermission())));
-        attrs.put(new BasicAttribute(User.ATTR_MAX_IDLE_TIME,     String.valueOf(user.getMaxIdleTime())));
-        attrs.put(new BasicAttribute(User.ATTR_MAX_UPLOAD_RATE,   String.valueOf(user.getMaxUploadRate())));
+        attrs.put(new BasicAttribute(User.ATTR_ENABLE, String.valueOf(user.getEnabled())));
+        attrs.put(new BasicAttribute(User.ATTR_HOME, user.getVirtualDirectory().getRootDirectory()));
+        attrs.put(new BasicAttribute(User.ATTR_WRITE_PERM, String.valueOf(user.getVirtualDirectory().getWritePermission())));
+        attrs.put(new BasicAttribute(User.ATTR_MAX_IDLE_TIME, String.valueOf(user.getMaxIdleTime())));
+        attrs.put(new BasicAttribute(User.ATTR_MAX_UPLOAD_RATE, String.valueOf(user.getMaxUploadRate())));
         attrs.put(new BasicAttribute(User.ATTR_MAX_DOWNLOAD_RATE, String.valueOf(user.getMaxDownloadRate())));
 
         mAdminContext.bind(dn, null, attrs);
@@ -265,17 +260,17 @@ class LdapUserManager extends AbstractUserManager {
             }
             mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_PASSWORD, user.getPassword())));
         }
-        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_ENABLE,            String.valueOf(user.getEnabled()))));
-        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_HOME,              user.getVirtualDirectory().getRootDirectory())));
-        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_WRITE_PERM,        String.valueOf(user.getVirtualDirectory().getWritePermission()))));
-        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_MAX_IDLE_TIME,     String.valueOf(user.getMaxIdleTime()))));
-        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_MAX_UPLOAD_RATE,   String.valueOf(user.getMaxUploadRate()))));
+        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_ENABLE, String.valueOf(user.getEnabled()))));
+        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_HOME, user.getVirtualDirectory().getRootDirectory())));
+        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_WRITE_PERM, String.valueOf(user.getVirtualDirectory().getWritePermission()))));
+        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_MAX_IDLE_TIME, String.valueOf(user.getMaxIdleTime()))));
+        mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_MAX_UPLOAD_RATE, String.valueOf(user.getMaxUploadRate()))));
         mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(User.ATTR_MAX_DOWNLOAD_RATE, String.valueOf(user.getMaxDownloadRate()))));
 
 
         ModificationItem modArr[] = new ModificationItem[mods.size()];
-        for(int i=0; i<modArr.length; i++) {
-            modArr[i] = (ModificationItem)mods.get(i);
+        for (int i = 0; i < modArr.length; i++) {
+            modArr[i] = (ModificationItem) mods.get(i);
         }
         mAdminContext.modifyAttributes(dn, modArr);
     }
@@ -290,8 +285,7 @@ class LdapUserManager extends AbstractUserManager {
             String dn = getDN(name);
             mAdminContext.getAttributes(dn, UID_ATTRS);
             bExist = true;
-        }
-        catch(NamingException ex) {
+        } catch (NamingException ex) {
         }
         return bExist;
     }
@@ -317,8 +311,7 @@ class LdapUserManager extends AbstractUserManager {
         if (mAdminContext != null) {
             try {
                 mAdminContext.close();
-            }
-            catch(NamingException ex) {
+            } catch (NamingException ex) {
             }
             mAdminContext = null;
         }

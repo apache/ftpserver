@@ -19,10 +19,11 @@
 
 package org.apache.ftpserver.gui.remote;
 
+import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
+import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
-import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
 
 /**
  * Ftp statistics listener remote interface.
@@ -97,15 +98,13 @@ class FtpStatisticsListenerAdapter implements FtpStatisticsListener {
         System.out.println("Closing statistics listener...");
         try {
             mStatistics.setListener(null);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
 
         try {
             UnicastRemoteObject.unexportObject(this, true);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
     }

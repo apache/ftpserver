@@ -19,30 +19,17 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
+import org.apache.ftpserver.usermanager.User;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.SwingConstants;
-
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
-import org.apache.ftpserver.usermanager.User;
 
 
 /**
@@ -53,7 +40,7 @@ import org.apache.ftpserver.usermanager.User;
  */
 public
 class FtpUserPanel extends PluginPanel
-                   implements ActionListener {
+        implements ActionListener {
 
     private static final String SAVE_IMG = "org/apache/ftpserver/gui/save.gif";
     private static final String DELETE_IMG = "org/apache/ftpserver/gui/delete.gif";
@@ -64,24 +51,24 @@ class FtpUserPanel extends PluginPanel
     private static final Random PASS_GEN = new Random(System.currentTimeMillis());
 
     private static final Object[] BYTE_RATES = {
-       "No limit",
-       new Integer(1200),
-       new Integer(2400),
-       new Integer(4800),
-       new Integer(9600),
-       new Integer(14400),
-       new Integer(28800),
-       new Integer(57600),
-       new Integer(115200)
+        "No limit",
+        new Integer(1200),
+        new Integer(2400),
+        new Integer(4800),
+        new Integer(9600),
+        new Integer(14400),
+        new Integer(28800),
+        new Integer(57600),
+        new Integer(115200)
     };
 
     private static final Object[] IDLE_SECONDS = {
-       "No limit",
-       new Integer(60),
-       new Integer(300),
-       new Integer(900),
-       new Integer(1800),
-       new Integer(3600)
+        "No limit",
+        new Integer(60),
+        new Integer(300),
+        new Integer(900),
+        new Integer(1800),
+        new Integer(3600)
     };
 
     private UserManagerInterface mUserManager;
@@ -168,9 +155,9 @@ class FtpUserPanel extends PluginPanel
         //JButton jGeneratePassBtn = new JButton("Generate", GuiUtils.createImageIcon(PASSWORD_IMG));
         JButton jGeneratePassBtn = new JButton("Generate");
         jGeneratePassBtn.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent evt) {
-               generatePassword();
-           }
+            public void actionPerformed(ActionEvent evt) {
+                generatePassword();
+            }
         });
         gc.gridx = 2;
         gc.gridy = yindex;
@@ -325,27 +312,27 @@ class FtpUserPanel extends PluginPanel
         // save user
         JButton jSaveBtn = new JButton("Save", GuiUtils.createImageIcon(SAVE_IMG));
         jSaveBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 save();
-             }
+            }
         });
         btnPane.add(jSaveBtn);
 
         // delete user
         JButton jDeleteBtn = new JButton("Delete", GuiUtils.createImageIcon(DELETE_IMG));
         jDeleteBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 delete();
-             }
+            }
         });
         btnPane.add(jDeleteBtn);
 
         // reload user data
         JButton jReloadBtn = new JButton("Reload", GuiUtils.createImageIcon(RELOAD_IMG));
         jReloadBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 refresh();
-             }
+            }
         });
         btnPane.add(jReloadBtn);
 
@@ -364,7 +351,7 @@ class FtpUserPanel extends PluginPanel
 
         // check user name field
         String userName = mjNameTxt.getText().trim();
-        if(userName.equals("")) {
+        if (userName.equals("")) {
             GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), "Please enter an user name");
             return;
         }
@@ -372,19 +359,18 @@ class FtpUserPanel extends PluginPanel
         try {
             UserImpl user = new UserImpl();
             user.setName(userName);
-            if(setPassword(user)) {
-              user.getVirtualDirectory().setRootDirectory(mjDirectoryTxt.getText());
-              user.setEnabled(mjEnabledChkBox.isSelected());
-              user.getVirtualDirectory().setWritePermission(mjWriteChkBox.isSelected());
-              user.setMaxIdleTime(getMaxIdleTime());
-              user.setMaxUploadRate(getBytesTransferRate(mjUploadLst));
-              user.setMaxDownloadRate(getBytesTransferRate(mjDownloadLst));
-              mUserManager.save(user);
-              refresh();
-              GuiUtils.showInformationMessage(getCommonHandler().getTopFrame(), "Saved user: " + userName);
+            if (setPassword(user)) {
+                user.getVirtualDirectory().setRootDirectory(mjDirectoryTxt.getText());
+                user.setEnabled(mjEnabledChkBox.isSelected());
+                user.getVirtualDirectory().setWritePermission(mjWriteChkBox.isSelected());
+                user.setMaxIdleTime(getMaxIdleTime());
+                user.setMaxUploadRate(getBytesTransferRate(mjUploadLst));
+                user.setMaxDownloadRate(getBytesTransferRate(mjDownloadLst));
+                mUserManager.save(user);
+                refresh();
+                GuiUtils.showInformationMessage(getCommonHandler().getTopFrame(), "Saved user: " + userName);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
@@ -395,20 +381,19 @@ class FtpUserPanel extends PluginPanel
      */
     private void delete() {
         Object selVal = mjUserLst.getSelectedItem();
-        if(selVal == null) {
+        if (selVal == null) {
             return;
         }
 
         String userName = selVal.toString();
         boolean bConf = GuiUtils.getConfirmation(getCommonHandler().getTopFrame(), "Do you really want to delete user " + userName + "?");
-        if(!bConf) {
+        if (!bConf) {
             return;
         }
         try {
             mUserManager.delete(userName);
             refresh();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
@@ -420,15 +405,13 @@ class FtpUserPanel extends PluginPanel
         try {
             mjUserLst.removeAllItems();
             List allUsers = mUserManager.getAllUserNames();
-            for(Iterator userIt = allUsers.iterator(); userIt.hasNext(); ) {
+            for (Iterator userIt = allUsers.iterator(); userIt.hasNext();) {
                 mjUserLst.addItem(userIt.next());
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
-
 
 
     /**
@@ -437,13 +420,12 @@ class FtpUserPanel extends PluginPanel
     public void actionPerformed(ActionEvent e) {
         Object selVal = mjUserLst.getSelectedItem();
         try {
-            if(selVal != null) {
+            if (selVal != null) {
                 String userName = selVal.toString();
                 User thisUser = mUserManager.getUserByName(userName);
                 populateFields(thisUser);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
@@ -469,23 +451,23 @@ class FtpUserPanel extends PluginPanel
      */
     private void generatePassword() {
         StringBuffer sb = new StringBuffer(8);
-        for(int i=0; i<8; i++) {
+        for (int i = 0; i < 8; i++) {
             int charType = PASS_GEN.nextInt(3);
             switch (charType) {
 
                 // number
                 case 0:
-                    sb.append( (char)('0' + PASS_GEN.nextInt(10)) );
+                    sb.append((char) ('0' + PASS_GEN.nextInt(10)));
                     break;
 
-                // uppercase character
+                    // uppercase character
                 case 1:
-                    sb.append( (char)('A' + PASS_GEN.nextInt(26)) );
+                    sb.append((char) ('A' + PASS_GEN.nextInt(26)));
                     break;
 
-                // lowercase character
+                    // lowercase character
                 case 2:
-                    sb.append( (char)('a' + PASS_GEN.nextInt(26)) );
+                    sb.append((char) ('a' + PASS_GEN.nextInt(26)));
                     break;
             }
         }
@@ -510,27 +492,25 @@ class FtpUserPanel extends PluginPanel
             String repassword = new String(mjRetypePasswordTxt.getPassword());
 
             // new user
-            if( bNewUser && (!bPassSet) && (!usr.getIsAnonymous()) ) {
+            if (bNewUser && (!bPassSet) && (!usr.getIsAnonymous())) {
                 GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), "New user - password required");
                 return false;
             }
 
             // password set
-            if( bPassSet && (!password.equals(repassword)) && (!usr.getIsAnonymous()) ) {
+            if (bPassSet && (!password.equals(repassword)) && (!usr.getIsAnonymous())) {
                 GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), "Password entries are not equal");
                 return false;
             }
 
             // set password if necessary
-            if(bPassSet && (!usr.getIsAnonymous())) {
+            if (bPassSet && (!usr.getIsAnonymous())) {
                 usr.setPassword(password);
-            }
-            else {
+            } else {
                 usr.setPassword(null);
             }
             return true;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
         return false;
@@ -545,8 +525,7 @@ class FtpUserPanel extends PluginPanel
         if (!selObj.equals(BYTE_RATES[0])) {
             try {
                 rate = Integer.parseInt(selObj.toString());
-            }
-            catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), ex.getMessage());
             }
         }
@@ -563,8 +542,7 @@ class FtpUserPanel extends PluginPanel
         if (!selObj.equals(IDLE_SECONDS[0])) {
             try {
                 sec = Integer.parseInt(selObj.toString());
-            }
-            catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), ex.getMessage());
             }
         }
@@ -588,7 +566,7 @@ class FtpUserPanel extends PluginPanel
      */
     private void setIdleTimeCombo(int idle) {
         Object selItem = new Integer(idle);
-        if (idle == 0){
+        if (idle == 0) {
             selItem = IDLE_SECONDS[0];
         }
         mjIdleLst.setSelectedItem(selItem);

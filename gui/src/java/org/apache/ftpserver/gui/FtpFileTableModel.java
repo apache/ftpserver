@@ -19,11 +19,12 @@
 
 package org.apache.ftpserver.gui;
 
+import org.apache.ftpserver.core.UserImpl;
+
+import javax.swing.table.AbstractTableModel;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
-import java.text.SimpleDateFormat;
-import javax.swing.table.AbstractTableModel;
-import org.apache.ftpserver.core.UserImpl;
 
 /**
  * This table model tracks user file related activities.
@@ -85,13 +86,13 @@ class FtpFileTableModel extends AbstractTableModel {
         return true;
     }
 
-   /**
-    * Set value at - dummy method
-    */
-   public void setValueAt(Object val, int row, int col) {
-   }
+    /**
+     * Set value at - dummy method
+     */
+    public void setValueAt(Object val, int row, int col) {
+    }
 
-   /**
+    /**
      * Get value at.
      */
     public Object getValueAt(int row, int col) {
@@ -99,15 +100,14 @@ class FtpFileTableModel extends AbstractTableModel {
         String retVal = "";
         TableEntry entry = null;
         try {
-            entry = (TableEntry)mEntryList.get(row);
-        }
-        catch(Exception ex) {
+            entry = (TableEntry) mEntryList.get(row);
+        } catch (Exception ex) {
         }
         if (entry == null) {
             return retVal;
         }
 
-        switch(col) {
+        switch (col) {
             case 0:
                 retVal = entry.fileName;
                 break;
@@ -123,19 +123,19 @@ class FtpFileTableModel extends AbstractTableModel {
         return retVal;
     }
 
-   /**
-    * Find column index.
-    */
-   public int findColumn(String columnName) {
+    /**
+     * Find column index.
+     */
+    public int findColumn(String columnName) {
         int index = -1;
-        for(int i=COL_NAMES.length; --i>=0; ) {
+        for (int i = COL_NAMES.length; --i >= 0;) {
             if (COL_NAMES[i].equals(columnName)) {
                 index = i;
                 break;
             }
         }
         return index;
-   }
+    }
 
     /**
      * Add a new user
@@ -148,12 +148,12 @@ class FtpFileTableModel extends AbstractTableModel {
         entry.date = DATE_FMT.format(new Date());
 
         int sz = mEntryList.size();
-        if ( (MAX_SIZE > 0) && (sz >= MAX_SIZE) ) {
+        if ((MAX_SIZE > 0) && (sz >= MAX_SIZE)) {
             reset();
             sz = 0;
         }
 
-        synchronized(mEntryList) {
+        synchronized (mEntryList) {
             mEntryList.add(entry);
             ++sz;
         }

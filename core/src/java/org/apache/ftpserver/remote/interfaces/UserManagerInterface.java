@@ -18,10 +18,11 @@
  */
 package org.apache.ftpserver.remote.interfaces;
 
-import java.util.List;
+import org.apache.ftpserver.usermanager.User;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import org.apache.ftpserver.usermanager.User;
+import java.util.List;
 
 /**
  * This is user manager remote interface. This is used by remote admin GUI.

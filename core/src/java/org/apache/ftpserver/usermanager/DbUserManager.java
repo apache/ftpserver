@@ -20,7 +20,6 @@ package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.UserManagerException;
 import org.apache.ftpserver.UserManagerMonitor;
-import org.apache.ftpserver.UserManagerMonitor;
 import org.apache.ftpserver.util.StringUtils;
 
 import java.io.File;
@@ -37,22 +36,21 @@ import java.util.List;
  * This is another database based user manager class. I have
  * tested it using MySQL and Oracle database. The sql file is <code>ftp-db.sql</code>
  *
- *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class DbUserManager extends AbstractUserManager {
 
-    private Connection mDbConnection       = null;
+    private Connection mDbConnection = null;
 
     protected String mInsUserStmt = null;
     protected String mDelUserStmt = null;
     protected String mSelUserStmt = null;
-    protected String mGetAllStmt  = null;
+    protected String mGetAllStmt = null;
     protected String mUpdUserStmt = null;
 
-    protected String mUrl      = null;
-    protected String mUser     = null;
+    protected String mUrl = null;
+    protected String mUser = null;
     protected String mPassword = null;
 
     private UserManagerMonitor userManagerMonitor;
@@ -70,7 +68,10 @@ class DbUserManager extends AbstractUserManager {
      */
     private void closeDbConnection() {
         if (mDbConnection != null) {
-            try {mDbConnection.close(); } catch(SQLException ex) {}
+            try {
+                mDbConnection.close();
+            } catch (SQLException ex) {
+            }
             mDbConnection = null;
         }
     }
@@ -81,15 +82,14 @@ class DbUserManager extends AbstractUserManager {
     private void prepareDbConnection() throws SQLException {
         boolean closed = false;
         try {
-            if ( (null == mDbConnection) || mDbConnection.isClosed() ) {
+            if ((null == mDbConnection) || mDbConnection.isClosed()) {
                 closed = true;
             }
-        }
-        catch ( final SQLException se ) {
+        } catch (final SQLException se) {
             closed = true;
         }
 
-        if ( closed ) {
+        if (closed) {
             closeDbConnection();
             openDbConnection();
         }
@@ -121,7 +121,7 @@ class DbUserManager extends AbstractUserManager {
 
         try {
             // null value check
-            if(user.getName() == null) {
+            if (user.getName() == null) {
                 throw new NullPointerException("User name is null.");
             }
 
@@ -138,10 +138,9 @@ class DbUserManager extends AbstractUserManager {
             map.put(User.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()));
 
             String sql = null;
-            if( !doesExist(user.getName()) ) {
+            if (!doesExist(user.getName())) {
                 sql = StringUtils.replaceString(mInsUserStmt, map);
-            }
-            else {
+            } else {
                 sql = StringUtils.replaceString(mUpdUserStmt, map);
             }
 
@@ -171,7 +170,7 @@ class DbUserManager extends AbstractUserManager {
             stmt = mDbConnection.createStatement();
             rs = stmt.executeQuery(sql);
 
-            if(rs.next()) {
+            if (rs.next()) {
                 thisUser = new User();
                 thisUser.setName(rs.getString(1));
                 thisUser.getVirtualDirectory().setRootDirectory(new File(rs.getString(3)));
@@ -182,16 +181,20 @@ class DbUserManager extends AbstractUserManager {
                 thisUser.setMaxDownloadRate(rs.getInt(8));
             }
             return thisUser;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             userManagerMonitor.generalError("DbUserManager.getUserByName()", ex);
-        }
-        finally {
-            if(rs != null) {
-                try { rs.close(); } catch(Exception ex) {}
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
             }
-            if(stmt != null) {
-                try { stmt.close(); } catch(Exception ex) {}
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -218,17 +221,21 @@ class DbUserManager extends AbstractUserManager {
             rs = stmt.executeQuery(sql);
             bValid = rs.next();
 
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             bValid = false;
             userManagerMonitor.generalError("DbUserManager.doesExist()", ex);
-        }
-        finally {
-            if(rs != null) {
-                try { rs.close(); } catch(Exception ex) {}
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
             }
-            if(stmt != null) {
-                try { stmt.close(); } catch(Exception ex) {}
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -251,19 +258,23 @@ class DbUserManager extends AbstractUserManager {
             prepareDbConnection();
             stmt = mDbConnection.createStatement();
             rs = stmt.executeQuery(sql);
-            while(rs.next()) {
+            while (rs.next()) {
                 names.add(rs.getString(1));
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             userManagerMonitor.generalError("DbUserManager.getAllUserNames()", ex);
-        }
-        finally {
-            if(rs != null) {
-                try { rs.close(); } catch(Exception ex) {}
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
             }
-            if(stmt != null) {
-                try { stmt.close(); } catch(Exception ex) {}
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception ex) {
+                }
             }
         }
 
@@ -328,8 +339,7 @@ class DbUserManager extends AbstractUserManager {
             }
             rs.close();
             stmt.close();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             userManagerMonitor.generalError("DbUserManager.authenticate()", ex);
             return false;
         }

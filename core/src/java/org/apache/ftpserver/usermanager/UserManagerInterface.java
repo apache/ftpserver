@@ -36,19 +36,16 @@ interface UserManagerInterface {
 
     /**
      * Save the user. If a new user, create it else update the existing user.
-     * 
-     * @throws UnsupportedOperationException
-     *             if this operation is not supported by user manager.
+     *
+     * @throws UnsupportedOperationException if this operation is not supported by user manager.
      */
     void save(User user) throws UserManagerException;
 
     /**
      * Delete the user from the system.
-     * 
+     *
      * @param userName name of the user to be deleted.
-     * 
-     * @throws UnsupportedOperationException
-     *             if this operation is not supported by user manager.
+     * @throws UnsupportedOperationException if this operation is not supported by user manager.
      */
     void delete(String userName) throws UserManagerException;
 

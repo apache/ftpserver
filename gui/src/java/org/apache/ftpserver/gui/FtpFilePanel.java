@@ -19,19 +19,10 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
 
 /**
  * This panel displays all file related activities.
@@ -44,7 +35,7 @@ class FtpFilePanel extends PluginPanel {
     private static final String CLEAR_IMG = "org/apache/ftpserver/gui/clear.gif";
 
     private FtpFileTableModel mModel;
-    private String            mstHeader;
+    private String mstHeader;
 
     /**
      * Instantiate login panel.
@@ -74,8 +65,8 @@ class FtpFilePanel extends PluginPanel {
         fileTable.setPreferredScrollableViewportSize(new Dimension(470, 300));
         fileTable.setColumnSelectionAllowed(false);
         JScrollPane scrollPane = new JScrollPane(fileTable,
-                                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
 
@@ -87,9 +78,9 @@ class FtpFilePanel extends PluginPanel {
 
         // event handler
         jResetBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 mModel.reset();
-             }
+            }
         });
     }
 

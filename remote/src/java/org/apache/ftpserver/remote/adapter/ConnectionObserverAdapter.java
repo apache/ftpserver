@@ -18,11 +18,11 @@
  */
 package org.apache.ftpserver.remote.adapter;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-
 import org.apache.ftpserver.User;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
 
 
 /**
@@ -57,6 +57,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
 
     /**
      * New connection notification.
+     *
      * @param user newly connected user
      */
     public void newConnection(final User user) {
@@ -64,8 +65,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
         if (observer != null) {
             try {
                 observer.newConnection(user);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mObserver = null;
             }
         }
@@ -73,6 +73,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
 
     /**
      * Close connection notification
+     *
      * @param user closed user object.
      */
     public void removeConnection(final User user) {
@@ -80,8 +81,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
         if (observer != null) {
             try {
                 observer.removeConnection(user);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mObserver = null;
             }
         }
@@ -89,6 +89,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
 
     /**
      * Update connection notification
+     *
      * @param user updated user object
      */
     public void updateConnection(final User user) {
@@ -96,8 +97,7 @@ class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserv
         if (observer != null) {
             try {
                 observer.updateConnection(user);
-            }
-            catch(RemoteException ex) {
+            } catch (RemoteException ex) {
                 mObserver = null;
             }
         }

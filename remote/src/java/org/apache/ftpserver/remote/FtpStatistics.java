@@ -18,15 +18,15 @@
  */
 package org.apache.ftpserver.remote;
 
+import org.apache.ftpserver.remote.adapter.FileListenerAdapter;
+import org.apache.ftpserver.remote.adapter.StatisticsListenerAdapter;
+import org.apache.ftpserver.remote.interfaces.FtpFileListener;
+import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
+import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
-
-import org.apache.ftpserver.remote.adapter.FileListenerAdapter;
-import org.apache.ftpserver.remote.adapter.StatisticsListenerAdapter;
-import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
-import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
-import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 
 /**
  * Ftp statistis remote adapter class.
@@ -38,7 +38,7 @@ class FtpStatistics implements FtpStatisticsInterface {
 
     private org.apache.ftpserver.core.FtpStatistics mStatistics;
 
-    private StatisticsListenerAdapter  mStatisticsListener;
+    private StatisticsListenerAdapter mStatisticsListener;
     private FileListenerAdapter mFileListener;
 
     /**
@@ -144,8 +144,7 @@ class FtpStatistics implements FtpStatisticsInterface {
         mStatisticsListener.setStatisticsListener(listener);
         if (listener == null) {
             mStatistics.setListener(null);
-        }
-        else {
+        } else {
             mStatistics.setListener(mStatisticsListener);
         }
     }
@@ -164,8 +163,7 @@ class FtpStatistics implements FtpStatisticsInterface {
         mFileListener.setFileListener(listener);
         if (listener == null) {
             mStatistics.setFileListener(null);
-        }
-        else {
+        } else {
             mStatistics.setFileListener(mFileListener);
         }
     }

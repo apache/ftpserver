@@ -29,12 +29,13 @@ import java.io.OutputStream;
 public
 class AsciiOutputStream extends OutputStream {
 
-    private long    mlActualByteWritten = 0;
-    private boolean mbIgnoreNonAscii    = true;
+    private long mlActualByteWritten = 0;
+    private boolean mbIgnoreNonAscii = true;
     private OutputStream mOutputStream;
 
     /**
      * Constructor.
+     *
      * @param os <code>java.io.OutputStream</code> to be filtered.
      */
     public AsciiOutputStream(OutputStream os) {
@@ -49,7 +50,7 @@ class AsciiOutputStream extends OutputStream {
      */
     public void write(int i) throws IOException {
 
-        if (mbIgnoreNonAscii && (i > 0x7F) ) {
+        if (mbIgnoreNonAscii && (i > 0x7F)) {
             return;
         }
 
@@ -106,7 +107,7 @@ class AsciiOutputStream extends OutputStream {
      * Set non-ascii ignore boolean value.
      */
     public void setIsIgnoreNonAscii(boolean ig) {
-      mbIgnoreNonAscii = ig;
+        mbIgnoreNonAscii = ig;
     }
 
 }

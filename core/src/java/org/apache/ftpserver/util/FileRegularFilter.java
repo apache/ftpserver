@@ -20,7 +20,6 @@ package org.apache.ftpserver.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import org.apache.ftpserver.util.RegularExpr;
 
 /**
  * This is regular expression filename filter.
@@ -34,20 +33,21 @@ class FileRegularFilter implements FilenameFilter {
 
     /**
      * Constructor.
+     *
      * @param pattern regular expression
      */
     public FileRegularFilter(String pattern) {
         if ((pattern == null) || pattern.equals("") || pattern.equals("*")) {
             mRegularExpr = null;
-        }
-        else {
+        } else {
             mRegularExpr = new RegularExpr(pattern);
         }
     }
 
     /**
      * Tests if a specified file should be included in a file list.
-     * @param dir - the directory in which the file was found
+     *
+     * @param dir  - the directory in which the file was found
      * @param name - the name of the file.
      */
     public boolean accept(File dir, String name) {

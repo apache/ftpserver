@@ -18,25 +18,27 @@
  */
 package org.apache.ftpserver.usermanager;
 
+import org.apache.ftpserver.util.VirtualDirectory;
+
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.rmi.server.UID;
-import org.apache.ftpserver.util.VirtualDirectory;
 
 /**
  * Generic user class. All the application specific user classes will
  * be derived from this.
  * <ul>
- *   <li>uid</li>
- *   <li>userpassword</li>
- *   <li>objectclass</li>
- *   <li>enableflag</li>
- *   <li>homedirectory</li>
- *   <li>writepermission</li>
- *   <li>idletime</li>
- *   <li>uploadrate</li>
- *   <li>downloadrate</li>
+ * <li>uid</li>
+ * <li>userpassword</li>
+ * <li>objectclass</li>
+ * <li>enableflag</li>
+ * <li>homedirectory</li>
+ * <li>writepermission</li>
+ * <li>idletime</li>
+ * <li>uploadrate</li>
+ * <li>downloadrate</li>
  * </ul>
+ *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 
@@ -46,58 +48,58 @@ class User implements Serializable {
     /**
      * uid
      */
-    public static final String ATTR_LOGIN             = "uid";
+    public static final String ATTR_LOGIN = "uid";
 
     /**
      * userpassword
      */
-    public static final String ATTR_PASSWORD          = "userpassword";
+    public static final String ATTR_PASSWORD = "userpassword";
 
     /**
      * homedirectory
      */
-    public static final String ATTR_HOME              = "homedirectory";
+    public static final String ATTR_HOME = "homedirectory";
 
     /**
      * writepermission
      */
-    public static final String ATTR_WRITE_PERM        = "writepermission";
+    public static final String ATTR_WRITE_PERM = "writepermission";
 
     /**
      * enableflag
      */
-    public static final String ATTR_ENABLE            = "enableflag";
+    public static final String ATTR_ENABLE = "enableflag";
 
     /**
      * idletime
      */
-    public static final String ATTR_MAX_IDLE_TIME     = "idletime";
+    public static final String ATTR_MAX_IDLE_TIME = "idletime";
 
     /**
      * uploadrate
      */
-    public static final String ATTR_MAX_UPLOAD_RATE   = "uploadrate";
+    public static final String ATTR_MAX_UPLOAD_RATE = "uploadrate";
 
     /**
      * downloadrate
      */
     public static final String ATTR_MAX_DOWNLOAD_RATE = "downloadrate";
 
-    private String mstUserName    = null;
-    private String mstPassword    = null;
+    private String mstUserName = null;
+    private String mstPassword = null;
 
-    private long mlIdleTime          = 0; // no limit
-    private int  miUploadRateLimit   = 0; // no limit
-    private int  miDownloadRateLimit = 0; // no limit
+    private long mlIdleTime = 0; // no limit
+    private int miUploadRateLimit = 0; // no limit
+    private int miDownloadRateLimit = 0; // no limit
 
-    private long mlLoginTime         = 0;
-    private long mlLastAccessTime    = 0;
+    private long mlLoginTime = 0;
+    private long mlLastAccessTime = 0;
 
-    private boolean mbEnabled        = true;
+    private boolean mbEnabled = true;
 
     private VirtualDirectory mUserDirectory = null;
-    private String mstSessionId             = null;
-    private InetAddress mClientAddress      = null;
+    private String mstSessionId = null;
+    private InetAddress mClientAddress = null;
 
     /**
      * Constructor, set session id and default virtual directory object.
@@ -142,14 +144,14 @@ class User implements Serializable {
      * Get the maximum idle time in second.
      */
     public int getMaxIdleTime() {
-        return (int)(mlIdleTime/1000);
+        return (int) (mlIdleTime / 1000);
     }
 
     /**
      * Set the maximum idle time in second.
      */
     public void setMaxIdleTime(int idleSec) {
-        if(idleSec < 0L) {
+        if (idleSec < 0L) {
             mlIdleTime = 0L;
         }
         mlIdleTime = idleSec * 1000L;
@@ -207,14 +209,14 @@ class User implements Serializable {
      * Get client address
      */
     public InetAddress getClientAddress() {
-       return mClientAddress;
+        return mClientAddress;
     }
 
     /**
      * Set client address
      */
     public void setClientAddress(InetAddress clientAddress) {
-       mClientAddress = clientAddress;
+        mClientAddress = clientAddress;
     }
 
 
@@ -229,21 +231,21 @@ class User implements Serializable {
      * Get session id.
      */
     public String getSessionId() {
-       return mstSessionId;
+        return mstSessionId;
     }
 
     /**
      * Get user loglin time.
      */
     public long getLoginTime() {
-       return mlLoginTime;
+        return mlLoginTime;
     }
 
     /**
      * Get last access time
      */
     public long getLastAccessTime() {
-       return mlLastAccessTime;
+        return mlLastAccessTime;
     }
 
     /**
@@ -270,17 +272,17 @@ class User implements Serializable {
 
 
     /**
-      * Is an active user (is removable)?
-      * Compares the last access time with the specified time.
-      */
+     * Is an active user (is removable)?
+     * Compares the last access time with the specified time.
+     */
     public boolean isActive(long currTime) {
-         boolean bActive = true;
-         long maxIdleTime = getMaxIdleTime() * 1000; // milliseconds
-         if(maxIdleTime != 0L) {
+        boolean bActive = true;
+        long maxIdleTime = getMaxIdleTime() * 1000; // milliseconds
+        if (maxIdleTime != 0L) {
             long idleTime = currTime - mlLastAccessTime;
             bActive = maxIdleTime > idleTime;
-         }
-         return bActive;
+        }
+        return bActive;
     }
 
     /**
@@ -295,7 +297,7 @@ class User implements Serializable {
      * Hit user - update last access time
      */
     public void hitUser() {
-       mlLastAccessTime = System.currentTimeMillis();
+        mlLastAccessTime = System.currentTimeMillis();
     }
 
     /**
@@ -303,7 +305,7 @@ class User implements Serializable {
      */
     public boolean equals(Object obj) {
         if (obj instanceof User) {
-            return ((User)obj).mstSessionId.equals(mstSessionId);
+            return ((User) obj).mstSessionId.equals(mstSessionId);
         }
         return false;
     }

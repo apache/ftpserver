@@ -20,7 +20,6 @@ package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.UserManagerException;
 import org.apache.ftpserver.UserManagerMonitor;
-import org.apache.ftpserver.UserManagerMonitor;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
 import org.apache.ftpserver.util.IoUtils;
@@ -40,17 +39,16 @@ import java.util.List;
  * implementation. We use <code>user.properties</code> file
  * to store user data.
  *
- *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class PropertiesUserManager extends AbstractUserManager {
 
-    private static final String PREFIX    = "FtpServer.user.";
+    private static final String PREFIX = "FtpServer.user.";
     protected static final String USER_PROP = "user.properties";
 
     protected BaseProperties mUserData;
-    protected File       mUserDataFile;
-    protected boolean    mbEncrypt;
+    protected File mUserDataFile;
+    protected boolean mbEncrypt;
 
     protected long mlLastModified;
 
@@ -63,18 +61,18 @@ public class PropertiesUserManager extends AbstractUserManager {
 
         try {
             // null value check
-            if(usr.getName() == null) {
+            if (usr.getName() == null) {
                 throw new NullPointerException("User name is null.");
             }
             String thisPrefix = PREFIX + usr.getName() + '.';
 
             // set other properties
-            mUserData.setProperty(thisPrefix + User.ATTR_PASSWORD,          getPassword(usr));
-            mUserData.setProperty(thisPrefix + User.ATTR_HOME,              usr.getVirtualDirectory().getRootDirectory());
-            mUserData.setProperty(thisPrefix + User.ATTR_ENABLE,            usr.getEnabled());
-            mUserData.setProperty(thisPrefix + User.ATTR_WRITE_PERM,        usr.getVirtualDirectory().getWritePermission());
-            mUserData.setProperty(thisPrefix + User.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-            mUserData.setProperty(thisPrefix + User.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
+            mUserData.setProperty(thisPrefix + User.ATTR_PASSWORD, getPassword(usr));
+            mUserData.setProperty(thisPrefix + User.ATTR_HOME, usr.getVirtualDirectory().getRootDirectory());
+            mUserData.setProperty(thisPrefix + User.ATTR_ENABLE, usr.getEnabled());
+            mUserData.setProperty(thisPrefix + User.ATTR_WRITE_PERM, usr.getVirtualDirectory().getWritePermission());
+            mUserData.setProperty(thisPrefix + User.ATTR_MAX_IDLE_TIME, usr.getMaxIdleTime());
+            mUserData.setProperty(thisPrefix + User.ATTR_MAX_UPLOAD_RATE, usr.getMaxUploadRate());
             mUserData.setProperty(thisPrefix + User.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
 
             // save user data
@@ -83,8 +81,7 @@ public class PropertiesUserManager extends AbstractUserManager {
                 fos = new FileOutputStream(mUserDataFile);
                 mUserData.store(fos, "Generated file - don't edit (please)");
                 mlLastModified = mUserDataFile.lastModified();
-            }
-            finally {
+            } finally {
                 IoUtils.close(fos);
             }
         } catch (IOException e) {
@@ -104,9 +101,9 @@ public class PropertiesUserManager extends AbstractUserManager {
             String thisPrefix = PREFIX + usrName + '.';
             Enumeration propNames = mUserData.propertyNames();
             ArrayList remKeys = new ArrayList();
-            while(propNames.hasMoreElements()) {
+            while (propNames.hasMoreElements()) {
                 String thisKey = propNames.nextElement().toString();
-                if(thisKey.startsWith(thisPrefix)) {
+                if (thisKey.startsWith(thisPrefix)) {
                     remKeys.add(thisKey);
                 }
             }
@@ -121,8 +118,7 @@ public class PropertiesUserManager extends AbstractUserManager {
                 fos = new FileOutputStream(mUserDataFile);
                 mUserData.store(fos, "Generated file - don't edit (please)");
                 mlLastModified = mUserDataFile.lastModified();
-            }
-            finally {
+            } finally {
                 IoUtils.close(fos);
             }
         } catch (IOException e) {
@@ -149,8 +145,7 @@ public class PropertiesUserManager extends AbstractUserManager {
             if (mbEncrypt) {
                 password = EncryptUtils.encryptMD5(password);
             }
-        }
-        else if ( doesExist(usr.getName()) ) {
+        } else if (doesExist(usr.getName())) {
             String key = PREFIX + usr.getName() + '.' + User.ATTR_PASSWORD;
             password = mUserData.getProperty(key, "");
         }
@@ -172,9 +167,9 @@ public class PropertiesUserManager extends AbstractUserManager {
         String suffix = '.' + User.ATTR_HOME;
         ArrayList ulst = new ArrayList();
         Enumeration allKeys = mUserData.propertyNames();
-        while(allKeys.hasMoreElements()) {
-            String key = (String)allKeys.nextElement();
-            if(key.endsWith(suffix)) {
+        while (allKeys.hasMoreElements()) {
+            String key = (String) allKeys.nextElement();
+            if (key.endsWith(suffix)) {
                 String name = key.substring(PREFIX.length());
                 int endIndex = name.length() - suffix.length();
                 name = name.substring(0, endIndex);
@@ -200,7 +195,7 @@ public class PropertiesUserManager extends AbstractUserManager {
         User user = new User();
         user.setName(userName);
         user.setEnabled(mUserData.getBoolean(baseKey + User.ATTR_ENABLE, true));
-        user.getVirtualDirectory().setRootDirectory( mUserData.getFile(baseKey + User.ATTR_HOME, new File("/")) );
+        user.getVirtualDirectory().setRootDirectory(mUserData.getFile(baseKey + User.ATTR_HOME, new File("/")));
         user.getVirtualDirectory().setWritePermission(mUserData.getBoolean(baseKey + User.ATTR_WRITE_PERM, false));
         user.setMaxIdleTime(mUserData.getInteger(baseKey + User.ATTR_MAX_IDLE_TIME, 0));
         user.setMaxUploadRate(mUserData.getInteger(baseKey + User.ATTR_MAX_UPLOAD_RATE, 0));

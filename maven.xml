@@ -14,15 +14,15 @@ implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project default="build" xmlns:j="jelly:core" xmlns:maven="jelly:maven" 
-	xmlns:ant="jelly:ant">
-	<preGoal name="xdoc:jelly-transform">
-		<attainGoal name="faq"/>
-	</preGoal>
-	<goal name="build">
-		<maven:reactor basedir="${basedir}" postProcessing="true" 
-			includes="*/project.xml" goals="jar:install" banner="Buildinds" 
-			ignoreFailures="false"/>
-	</goal>
+<project default="build" xmlns:j="jelly:core" xmlns:maven="jelly:maven"
+    xmlns:ant="jelly:ant">
+    <preGoal name="xdoc:jelly-transform">
+        <attainGoal name="faq"/>
+    </preGoal>
+    <goal name="build">
+        <maven:reactor basedir="${basedir}" postProcessing="true"
+            includes="*/project.xml" goals="jar:install" banner="Buildinds"
+            ignoreFailures="false"/>
+    </goal>
 </project>
 

@@ -19,26 +19,17 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.util.IoUtils;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * This panel holds all connection spy panels.
@@ -54,12 +45,12 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
 
     public static final String SPY_PAGE = "org/apache/ftpserver/gui/spy.html";
 
-    private JTabbedPane mjTabbedPane   = null;
+    private JTabbedPane mjTabbedPane = null;
 
-    private JButton mjClearButton      = null;
-    private JButton mjCloseButton      = null;
+    private JButton mjClearButton = null;
+    private JButton mjCloseButton = null;
     private JButton mjDisconnectButton = null;
-    private JScrollPane mjAboutPane    = null;
+    private JScrollPane mjAboutPane = null;
 
 
     /**
@@ -86,25 +77,25 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
         mjClearButton = new JButton("Clear", GuiUtils.createImageIcon(CLEAR_IMG));
         bottomPane.add(mjClearButton);
         mjClearButton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 clearLog();
-             }
+            }
         });
 
         mjDisconnectButton = new JButton("Disconnect", GuiUtils.createImageIcon(DISCONNECT_IMG));
         bottomPane.add(mjDisconnectButton);
         mjDisconnectButton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 disconnectUser();
-             }
+            }
         });
 
         mjCloseButton = new JButton("Close", GuiUtils.createImageIcon(CLOSE_IMG));
         bottomPane.add(mjCloseButton);
         mjCloseButton.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 closePane();
-             }
+            }
         });
         add(bottomPane, BorderLayout.SOUTH);
 
@@ -119,16 +110,14 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
             if (is != null) {
                 editorPane.read(is, null);
             }
-        }
-        catch(IOException ex) {
-        }
-        finally {
+        } catch (IOException ex) {
+        } finally {
             IoUtils.close(is);
         }
 
         mjAboutPane = new JScrollPane(editorPane,
-                            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         mjTabbedPane.addTab("Spy", mjAboutPane);
     }
 
@@ -138,8 +127,8 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
      */
     private void clearLog() {
         Component selComp = mjTabbedPane.getSelectedComponent();
-        if ( (selComp != null) && (selComp != mjAboutPane) ) {
-            ((SpyPanel)selComp).clearLog();
+        if ((selComp != null) && (selComp != mjAboutPane)) {
+            ((SpyPanel) selComp).clearLog();
         }
     }
 
@@ -148,8 +137,8 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
      */
     private void closePane() {
         Component selComp = mjTabbedPane.getSelectedComponent();
-        if ( (selComp != null) && (selComp != mjAboutPane) ) {
-            ((SpyPanel)selComp).close();
+        if ((selComp != null) && (selComp != mjAboutPane)) {
+            ((SpyPanel) selComp).close();
             mjTabbedPane.remove(selComp);
             if (mjTabbedPane.getTabCount() == 0) {
                 mjTabbedPane.addTab("Spy", mjAboutPane);
@@ -162,10 +151,10 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
      */
     private void disconnectUser() {
         Component selComp = mjTabbedPane.getSelectedComponent();
-        if ( (selComp != null) && (selComp != mjAboutPane) ) {
+        if ((selComp != null) && (selComp != mjAboutPane)) {
             boolean bConf = GuiUtils.getConfirmation(getCommonHandler().getTopFrame(), "Do you want to close the connection?");
-            if(bConf) {
-                ((SpyPanel)selComp).disconnect();
+            if (bConf) {
+                ((SpyPanel) selComp).disconnect();
             }
         }
     }
@@ -179,10 +168,10 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
 
         // don't add another tab if already being monitored
         int tabCount = mjTabbedPane.getTabCount();
-        for(int i=0; i<tabCount; i++) {
+        for (int i = 0; i < tabCount; i++) {
             Component selComp = mjTabbedPane.getComponentAt(i);
-            if ( (selComp != null) && (selComp != mjAboutPane) ) {
-                String tabUserSessionId = ((SpyPanel)selComp).getSessionId();
+            if ((selComp != null) && (selComp != mjAboutPane)) {
+                String tabUserSessionId = ((SpyPanel) selComp).getSessionId();
                 if (tabUserSessionId.equals(userSession)) {
                     mjTabbedPane.setTitleAt(i, userName);
                     mjTabbedPane.setSelectedIndex(i);
@@ -197,8 +186,7 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
             mjTabbedPane.remove(mjAboutPane);
             mjTabbedPane.add(userName, spyPane);
             mjTabbedPane.setSelectedComponent(spyPane);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
@@ -234,10 +222,10 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
      */
     public void close() {
         int tabCount = mjTabbedPane.getTabCount();
-        for(int i=tabCount; --i>=0; ) {
+        for (int i = tabCount; --i >= 0;) {
             Component selComp = mjTabbedPane.getComponentAt(i);
-            if ( (selComp != null) && (selComp != mjAboutPane) ) {
-                ((SpyPanel)selComp).close();
+            if ((selComp != null) && (selComp != mjAboutPane)) {
+                ((SpyPanel) selComp).close();
                 mjTabbedPane.remove(selComp);
             }
         }

@@ -59,8 +59,7 @@ class EncryptUtils {
         String result = "";
         try {
             result = encrypt(source, "MD5");
-        }
-        catch(NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         }
         return result;
@@ -77,8 +76,7 @@ class EncryptUtils {
         String result = "";
         try {
             result = encrypt(source, "SHA");
-        }
-        catch(NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         }
         return result;

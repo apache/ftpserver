@@ -19,27 +19,6 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.rmi.Naming;
-import java.rmi.registry.Registry;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
@@ -47,6 +26,14 @@ import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
 import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.rmi.Naming;
+import java.rmi.registry.Registry;
 
 
 /**
@@ -63,20 +50,20 @@ class FtpAdmin extends JFrame implements CommonHandler {
     private static final String CANCEL_IMG = "org/apache/ftpserver/gui/stop.gif";
 
 
-    private String mstSessionId            = null;
-    private JTextField mjHostTxt           = null;
-    private JTextField mjPortTxt           = null;
-    private JTextField mjAdminTxt          = null;
-    private JPasswordField mjPasswordTxt   = null;
+    private String mstSessionId = null;
+    private JTextField mjHostTxt = null;
+    private JTextField mjPortTxt = null;
+    private JTextField mjAdminTxt = null;
+    private JPasswordField mjPasswordTxt = null;
 
-    private FtpAdminFrame mAdminFrame      = null;
+    private FtpAdminFrame mAdminFrame = null;
 
-    private RemoteHandlerInterface mRemote         = null;
-    private FtpConfigInterface mConfig             = null;
-    private FtpStatisticsInterface mStat           = null;
+    private RemoteHandlerInterface mRemote = null;
+    private FtpConfigInterface mConfig = null;
+    private FtpStatisticsInterface mStat = null;
     private ConnectionServiceInterface mConService = null;
-    private IpRestrictorInterface mIpRestrictor    = null;
-    private UserManagerInterface mUserManager      = null;
+    private IpRestrictorInterface mIpRestrictor = null;
+    private UserManagerInterface mUserManager = null;
 
 
     /**
@@ -192,15 +179,15 @@ class FtpAdmin extends JFrame implements CommonHandler {
 
         // event listeners
         jLoginBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 login();
-             }
+            }
         });
 
         jCancelBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 terminate();
-             }
+            }
         });
 
 
@@ -218,8 +205,7 @@ class FtpAdmin extends JFrame implements CommonHandler {
         int id = e.getID();
         if (id == WindowEvent.WINDOW_CLOSING) {
             terminate();
-        }
-        else {
+        } else {
             super.processWindowEvent(e);
         }
     }
@@ -241,14 +227,14 @@ class FtpAdmin extends JFrame implements CommonHandler {
             mjPasswordTxt.setText("");
 
             String url = "rmi://" + host + ":" + port + "/" + RemoteHandlerInterface.BIND_NAME;
-            mRemote = (RemoteHandlerInterface)Naming.lookup(url);
+            mRemote = (RemoteHandlerInterface) Naming.lookup(url);
             mstSessionId = mRemote.login(login, password);
 
-            mConfig       = mRemote.getConfigInterface(mstSessionId);
-            mStat         = mConfig.getStatistics();
-            mConService   = mConfig.getConnectionService();
+            mConfig = mRemote.getConfigInterface(mstSessionId);
+            mStat = mConfig.getStatistics();
+            mConService = mConfig.getConnectionService();
             mIpRestrictor = mConfig.getIpRestrictor();
-            mUserManager  = mConfig.getUserManager();
+            mUserManager = mConfig.getUserManager();
 
             if (mAdminFrame != null) {
                 mAdminFrame.close();
@@ -258,8 +244,7 @@ class FtpAdmin extends JFrame implements CommonHandler {
 
             setVisible(false);
             mAdminFrame.show();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             handleException(ex);
         }
     }
@@ -343,8 +328,7 @@ class FtpAdmin extends JFrame implements CommonHandler {
     public UserImpl getUser(String sessionId) {
         try {
             return mConService.getUser(sessionId);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             handleException(ex);
         }
         return null;
@@ -361,8 +345,7 @@ class FtpAdmin extends JFrame implements CommonHandler {
         if (mRemote != null) {
             try {
                 mRemote.logout(mstSessionId);
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
             }
             mRemote = null;
         }

@@ -19,9 +19,9 @@
 
 package org.apache.ftpserver.remote.interfaces;
 
+import java.net.InetAddress;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.net.InetAddress;
 
 /**
  * Ftp configuration remote interface. It is used by remote admin GUI.

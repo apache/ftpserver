@@ -14,10 +14,10 @@ implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project default="artifact:install" xmlns:j="jelly:core" 
-	xmlns:maven="jelly:maven" xmlns:artifact="jelly:artifact" 
-	xmlns:ant="jelly:ant">
-	<preGoal name="xdoc:jelly-transform">
-		<attainGoal name="faq"/>
-	</preGoal>
+<project default="artifact:install" xmlns:j="jelly:core"
+    xmlns:maven="jelly:maven" xmlns:artifact="jelly:artifact"
+    xmlns:ant="jelly:ant">
+    <preGoal name="xdoc:jelly-transform">
+        <attainGoal name="faq"/>
+    </preGoal>
 </project>

@@ -19,27 +19,15 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-
-import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
 
 /**
  * Ip restrictor panel.
@@ -64,8 +52,7 @@ class FtpIpPanel extends PluginPanel {
         mRestrictor = commonHandler.getIpRestrictor();
         try {
             initComponents();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             commonHandler.handleException(ex);
         }
         refresh();
@@ -83,10 +70,9 @@ class FtpIpPanel extends PluginPanel {
 
         // header
         String headerStr = "";
-        if(mRestrictor.isAllowIp()) {
+        if (mRestrictor.isAllowIp()) {
             headerStr = "Allow IP listed";
-        }
-        else {
+        } else {
             headerStr = "Ban IP listed";
         }
         mHeaderLab = new JTextField();
@@ -105,8 +91,8 @@ class FtpIpPanel extends PluginPanel {
         // text area
         mjIpTxt = new JTextArea();
         JScrollPane txtPane = new JScrollPane(mjIpTxt,
-                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         txtPane.setPreferredSize(new Dimension(150, 250));
         gc.gridx = 0;
         gc.gridy = ++yindex;
@@ -131,15 +117,15 @@ class FtpIpPanel extends PluginPanel {
 
         // event handlers
         jSaveBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 save();
-             }
+            }
         });
 
         jResetBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 refresh();
-             }
+            }
         });
     }
 
@@ -147,16 +133,15 @@ class FtpIpPanel extends PluginPanel {
      * Save IP data
      */
     public void save() {
-        if(mRestrictor != null) {
+        if (mRestrictor != null) {
             try {
                 mRestrictor.clear();
                 StringTokenizer st = new StringTokenizer(mjIpTxt.getText(), "\r\n");
-                while(st.hasMoreTokens()) {
+                while (st.hasMoreTokens()) {
                     mRestrictor.addEntry(st.nextToken());
                 }
                 mRestrictor.save();
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 getCommonHandler().handleException(ex);
             }
         }
@@ -169,12 +154,11 @@ class FtpIpPanel extends PluginPanel {
         try {
             mjIpTxt.setText("");
             Iterator ipRestrictorIt = mRestrictor.getAllEntries().iterator();
-            while(ipRestrictorIt.hasNext()) {
+            while (ipRestrictorIt.hasNext()) {
                 mjIpTxt.append(ipRestrictorIt.next().toString());
                 mjIpTxt.append("\n");
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }

@@ -19,11 +19,12 @@
 
 package org.apache.ftpserver.gui.remote;
 
+import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
+import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
-import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 
 /**
  * This class is used to monitor user activities - remote adapter.
@@ -72,15 +73,13 @@ class SpyConnectionAdapter implements SpyConnectionInterface {
         System.out.println("Closing spy listener...");
         try {
             mConService.setSpyObject(mstSessionId, null);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
 
         try {
             UnicastRemoteObject.unexportObject(this, true);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
     }

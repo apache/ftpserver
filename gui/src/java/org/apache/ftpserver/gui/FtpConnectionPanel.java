@@ -19,21 +19,13 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import org.apache.ftpserver.core.UserImpl;
+
+import javax.swing.*;
+import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
-
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.core.UserImpl;
 
 
 /**
@@ -72,8 +64,8 @@ class FtpConnectionPanel extends PluginPanel {
         mjConnectionTable.setPreferredScrollableViewportSize(new Dimension(470, 320));
         mjConnectionTable.setColumnSelectionAllowed(false);
         JScrollPane bottomPane = new JScrollPane(mjConnectionTable,
-                                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(bottomPane, BorderLayout.CENTER);
 
 
@@ -86,28 +78,28 @@ class FtpConnectionPanel extends PluginPanel {
         JButton jSpyBtn = new JButton("Spy User", GuiUtils.createImageIcon(SPY_IMG));
         btnPane.add(jSpyBtn);
 
-         JButton jReloadBtn = new JButton("Reload", GuiUtils.createImageIcon(RELOAD_IMG));
+        JButton jReloadBtn = new JButton("Reload", GuiUtils.createImageIcon(RELOAD_IMG));
         btnPane.add(jReloadBtn);
 
         add(btnPane, BorderLayout.SOUTH);
 
         // event handlers
         jLogoutBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 closeConnection();
-             }
+            }
         });
 
         jSpyBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 spyUser();
-             }
+            }
         });
 
         jReloadBtn.addActionListener(new ActionListener() {
-             public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 reload();
-             }
+            }
         });
 
     }
@@ -117,25 +109,24 @@ class FtpConnectionPanel extends PluginPanel {
      */
     private void closeConnection() {
         int indices[] = mjConnectionTable.getSelectedRows();
-        if(indices.length == 0) {
+        if (indices.length == 0) {
             GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), "Please select connection(s).");
             return;
         }
 
         boolean response = GuiUtils.getConfirmation(getCommonHandler().getTopFrame(), "Do you really want to close the selected connection(s)?");
-        if(!response) {
+        if (!response) {
             return;
         }
 
         try {
-            for(int i=indices.length; --i>=0; ) {
+            for (int i = indices.length; --i >= 0;) {
                 UserImpl user = mModel.getUser(indices[i]);
-                if(user != null) {
+                if (user != null) {
                     getCommonHandler().getConnectionService().closeConnection(user.getSessionId());
                 }
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }
@@ -145,27 +136,26 @@ class FtpConnectionPanel extends PluginPanel {
      */
     private void spyUser() {
         int indices[] = mjConnectionTable.getSelectedRows();
-        if(indices.length == 0) {
+        if (indices.length == 0) {
             GuiUtils.showErrorMessage(getCommonHandler().getTopFrame(), "Please select connection(s).");
             return;
         }
 
         // monitor all the selected users
         try {
-            for(int i=indices.length; --i>=0; ) {
+            for (int i = indices.length; --i >= 0;) {
                 UserImpl thisUser = mModel.getUser(indices[i]);
                 if (thisUser != null) {
-                    FtpSpyContainerPanel spyPanel = (FtpSpyContainerPanel)((FtpTree)getTree()).getPluginPanel("Spy");
+                    FtpSpyContainerPanel spyPanel = (FtpSpyContainerPanel) ((FtpTree) getTree()).getPluginPanel("Spy");
                     spyPanel.monitorConnection(thisUser);
                 }
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
 
         // select tree spy node
-        Object[] spyPath = new Object[] {
+        Object[] spyPath = new Object[]{
             getTree().getModel().getRoot(), "Spy"
         };
         getTree().setSelectionPath(new TreePath(spyPath));
@@ -178,8 +168,7 @@ class FtpConnectionPanel extends PluginPanel {
     private void reload() {
         try {
             mModel.reload();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getCommonHandler().handleException(ex);
         }
     }

@@ -19,22 +19,13 @@
 
 package org.apache.ftpserver.gui;
 
+import org.apache.ftpserver.util.IoUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.Rectangle;
-import javax.swing.JFileChooser;
-import javax.swing.ImageIcon;
-import javax.swing.JWindow;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * This is the GUI utility class.
@@ -44,10 +35,10 @@ import org.apache.ftpserver.util.IoUtils;
 public
 class GuiUtils {
 
-    private static JFileChooser mDirChoose   = null;
-    private static JFileChooser mFileChoose  = null;
+    private static JFileChooser mDirChoose = null;
+    private static JFileChooser mFileChoose = null;
 
-    private static final GuiUtils SELF_REF   = new GuiUtils();
+    private static final GuiUtils SELF_REF = new GuiUtils();
 
     /**
      * Create image icon.
@@ -61,18 +52,16 @@ class GuiUtils {
                 out = new ByteArrayOutputStream();
                 byte buff[] = new byte[2048];
                 int count = 0;
-                while ( -1 != (count = is.read(buff)) ) {
+                while (-1 != (count = is.read(buff))) {
                     out.write(buff, 0, count);
                 }
                 buff = out.toByteArray();
-                if (buff.length != 0){
-                   return new ImageIcon(buff);
+                if (buff.length != 0) {
+                    return new ImageIcon(buff);
                 }
             }
-        }
-        catch(IOException ex) {
-        }
-        finally {
+        } catch (IOException ex) {
+        } finally {
             IoUtils.close(is);
             IoUtils.close(out);
         }
@@ -107,7 +96,7 @@ class GuiUtils {
      */
     public static Component getFrame(Component comp) {
         Component frameComp = comp;
-        while( (frameComp != null) && !(frameComp instanceof java.awt.Frame) ) {
+        while ((frameComp != null) && !(frameComp instanceof java.awt.Frame)) {
             frameComp = frameComp.getParent();
         }
         return frameComp;
@@ -119,7 +108,7 @@ class GuiUtils {
      */
     public static void showErrorMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Error!",
-                                      JOptionPane.ERROR_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
     }
 
 
@@ -128,7 +117,7 @@ class GuiUtils {
      */
     public static void showWarningMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Warning!",
-                                      JOptionPane.WARNING_MESSAGE);
+                JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -136,9 +125,8 @@ class GuiUtils {
      */
     public static void showInformationMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Information!",
-                                      JOptionPane.INFORMATION_MESSAGE );
+                JOptionPane.INFORMATION_MESSAGE);
     }
-
 
 
     /**
@@ -147,12 +135,11 @@ class GuiUtils {
     public static boolean getConfirmation(Component parent, String str) {
 
         int res = JOptionPane.showConfirmDialog(parent,
-                                                str,
-                                                "Confirmation",
-                                                JOptionPane.YES_NO_OPTION,
-                                                JOptionPane.QUESTION_MESSAGE
-                                               );
-        return(res == JOptionPane.YES_OPTION);
+                str,
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        return (res == JOptionPane.YES_OPTION);
     }
 
 
@@ -213,17 +200,17 @@ class GuiUtils {
     public static void setLocation(Component comp) {
         Dimension cDim = comp.getSize();
         Dimension wDim = Toolkit.getDefaultToolkit().getScreenSize();
-        comp.setLocation((wDim.width - cDim.width)/2, (wDim.height - cDim.height)/2);
+        comp.setLocation((wDim.width - cDim.width) / 2, (wDim.height - cDim.height) / 2);
     }
 
     /**
      * Position with respect to the parent component.
      */
-    public static void setLocation(Component comp, Component parent)  {
+    public static void setLocation(Component comp, Component parent) {
         Dimension cDim = comp.getSize();
         Rectangle pRect = parent.getBounds();
-        int x = pRect.x + (pRect.width - cDim.width)/2;
-        int y = pRect.y + (pRect.height - cDim.height)/2;
+        int x = pRect.x + (pRect.width - cDim.width) / 2;
+        int y = pRect.y + (pRect.height - cDim.height) / 2;
         comp.setLocation(x, y);
     }
 

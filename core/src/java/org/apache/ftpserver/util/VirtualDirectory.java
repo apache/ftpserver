@@ -34,13 +34,13 @@ import java.util.StringTokenizer;
 public
 class VirtualDirectory implements Serializable {
 
-    private static final String NEWLINE  = "\r\n";
-    private static final String DELIM    = " ";
+    private static final String NEWLINE = "\r\n";
+    private static final String DELIM = " ";
 
-    private String mstRoot        = "/";
-    private String mstCurrDir     = "/";
+    private String mstRoot = "/";
+    private String mstCurrDir = "/";
 
-    private boolean mbWritePerm   = false;
+    private boolean mbWritePerm = false;
 
 
     /**
@@ -62,29 +62,29 @@ class VirtualDirectory implements Serializable {
      */
     public void setRootDirectory(File root) {
 
-       if(root == null) {
-           root = new File("/");
-       }
-       mstRoot = normalizeSeparateChar(root.getAbsolutePath());
+        if (root == null) {
+            root = new File("/");
+        }
+        mstRoot = normalizeSeparateChar(root.getAbsolutePath());
 
-       // if not ends with '/' - add one
-       if(mstRoot.charAt(mstRoot.length()-1) != '/') {
-           mstRoot = mstRoot + '/';
-       }
-       mstCurrDir = "/";
+        // if not ends with '/' - add one
+        if (mstRoot.charAt(mstRoot.length() - 1) != '/') {
+            mstRoot = mstRoot + '/';
+        }
+        mstCurrDir = "/";
     }
 
     /**
      * Set root directory.
      */
     public void setRootDirectory(String root) {
-       mstRoot = normalizeSeparateChar(root);
+        mstRoot = normalizeSeparateChar(root);
 
-       // if not ends with '/' - add one
-       if(mstRoot.charAt(mstRoot.length()-1) != '/') {
-           mstRoot = mstRoot + '/';
-       }
-       mstCurrDir = "/";
+        // if not ends with '/' - add one
+        if (mstRoot.charAt(mstRoot.length() - 1) != '/') {
+            mstRoot = mstRoot + '/';
+        }
+        mstCurrDir = "/";
     }
 
     /**
@@ -127,7 +127,7 @@ class VirtualDirectory implements Serializable {
         virtualName = normalizeSeparateChar(virtualName);
         String physicalName = replaceDots(virtualName);
 
-        String absoluteName = physicalName.substring(mstRoot.length()-1).trim();
+        String absoluteName = physicalName.substring(mstRoot.length() - 1).trim();
         return removeLastSlash(absoluteName);
     }
 
@@ -142,7 +142,7 @@ class VirtualDirectory implements Serializable {
             return null;
         }
 
-        String virtualName = physicalName.substring(mstRoot.length()-1).trim();
+        String virtualName = physicalName.substring(mstRoot.length() - 1).trim();
         return removeLastSlash(virtualName);
     }
 
@@ -150,6 +150,7 @@ class VirtualDirectory implements Serializable {
     /**
      * Change directory. The current directory will never have '/'
      * at the end unless it is '/'.
+     *
      * @param virtualDir change the current working directory.
      * @return true if success
      */
@@ -175,14 +176,13 @@ class VirtualDirectory implements Serializable {
      * Check read permission.
      */
     public boolean hasReadPermission(String fileName, boolean bPhysical) {
-        if(bPhysical) {
+        if (bPhysical) {
             fileName = normalizeSeparateChar(fileName);
-        }
-        else {
+        } else {
             fileName = getPhysicalName(fileName);
         }
 
-        if(!fileName.startsWith(mstRoot)) {
+        if (!fileName.startsWith(mstRoot)) {
             return false;
         }
 
@@ -196,19 +196,18 @@ class VirtualDirectory implements Serializable {
     public boolean hasWritePermission(String fileName, boolean bPhysical) {
 
         // no write permission
-        if(!mbWritePerm) {
+        if (!mbWritePerm) {
             return false;
         }
 
         // if virtual name - get the physical name
-        if(bPhysical) {
+        if (bPhysical) {
             fileName = normalizeSeparateChar(fileName);
-        }
-        else {
+        } else {
             fileName = getPhysicalName(fileName);
         }
 
-        if(!fileName.startsWith(mstRoot)) {
+        if (!fileName.startsWith(mstRoot)) {
             return false;
         }
 
@@ -222,15 +221,14 @@ class VirtualDirectory implements Serializable {
     public boolean hasCreatePermission(String fileName, boolean bPhysical) {
 
         // no write permission
-        if(!mbWritePerm) {
+        if (!mbWritePerm) {
             return false;
         }
 
         // if virtual name - get the physical name
-        if(bPhysical) {
+        if (bPhysical) {
             fileName = normalizeSeparateChar(fileName);
-        }
-        else {
+        } else {
             fileName = getPhysicalName(fileName);
         }
 
@@ -243,6 +241,7 @@ class VirtualDirectory implements Serializable {
      * <pre>
      *   -a : display all (including hidden files)
      * </pre>
+     *
      * @return true if success
      */
     public boolean printList(String argument, Writer out) throws IOException {
@@ -251,10 +250,9 @@ class VirtualDirectory implements Serializable {
         File[] flLst = lister.getFiles();
         if (flLst == null) {
             return false;
-        }
-        else {
-            for(int i=0; i<flLst.length; i++) {
-                if ( (!lister.isAll()) && flLst[i].isHidden() ) {
+        } else {
+            for (int i = 0; i < flLst.length; i++) {
+                if ((!lister.isAll()) && flLst[i].isHidden()) {
                     continue;
                 }
                 printLine(flLst[i], out);
@@ -271,6 +269,7 @@ class VirtualDirectory implements Serializable {
      *   -l : detail listing
      *   -a : display all (including hidden files)
      * </pre>
+     *
      * @return true if success
      */
     public boolean printNList(String argument, Writer out) throws IOException {
@@ -279,16 +278,14 @@ class VirtualDirectory implements Serializable {
         File[] flLst = lister.getFiles();
         if (flLst == null) {
             return false;
-        }
-        else {
-            for(int i=0; i<flLst.length; i++) {
-                if ( (!lister.isAll()) && flLst[i].isHidden() ) {
+        } else {
+            for (int i = 0; i < flLst.length; i++) {
+                if ((!lister.isAll()) && flLst[i].isHidden()) {
                     continue;
                 }
-                if(lister.isDetail()) {
+                if (lister.isDetail()) {
                     printLine(flLst[i], out);
-                }
-                else {
+                } else {
                     out.write(getName(flLst[i]));
                 }
                 out.write(NEWLINE);
@@ -317,10 +314,9 @@ class VirtualDirectory implements Serializable {
      * Get link count
      */
     private String getLinkCount(File fl) {
-        if(fl.isDirectory()) {
+        if (fl.isDirectory()) {
             return String.valueOf(3);
-        }
-        else {
+        } else {
             return String.valueOf(1);
         }
     }
@@ -332,11 +328,11 @@ class VirtualDirectory implements Serializable {
     private String getLength(File fl) {
         String initStr = "            ";
         long sz = 0;
-        if(fl.isFile()) {
+        if (fl.isFile()) {
             sz = fl.length();
         }
         String szStr = String.valueOf(sz);
-        if(szStr.length() > initStr.length()) {
+        if (szStr.length() > initStr.length()) {
             return szStr;
         }
         return initStr.substring(0, initStr.length() - szStr.length()) + szStr;
@@ -367,24 +363,21 @@ class VirtualDirectory implements Serializable {
     private String getPermission(File fl) {
 
         StringBuffer sb = new StringBuffer(13);
-        if(fl.isDirectory()) {
+        if (fl.isDirectory()) {
             sb.append('d');
-        }
-        else {
+        } else {
             sb.append('-');
         }
 
         if (fl.canRead()) {
             sb.append('r');
-        }
-        else {
+        } else {
             sb.append('-');
         }
 
         if (mbWritePerm && fl.canWrite()) {
             sb.append('w');
-        }
-        else {
+        } else {
             sb.append('-');
         }
         sb.append("-------");
@@ -396,57 +389,57 @@ class VirtualDirectory implements Serializable {
      * Normalize separate characher. Separate character should be '/' always.
      */
     private String normalizeSeparateChar(String pathName) {
-       pathName = pathName.replace(File.separatorChar, '/');
-       pathName = pathName.replace('\\', '/');
-       return pathName;
+        pathName = pathName.replace(File.separatorChar, '/');
+        pathName = pathName.replace('\\', '/');
+        return pathName;
     }
 
 
     /**
      * Replace dots. Returns physical name.
+     *
      * @param inArg the virtaul name
      */
     private String replaceDots(String inArg) {
 
         // get the starting directory
         String resArg;
-        if(inArg.charAt(0) != '/') {
+        if (inArg.charAt(0) != '/') {
             resArg = mstRoot + mstCurrDir.substring(1);
-        }
-        else {
+        } else {
             resArg = mstRoot;
         }
 
         // strip last '/'
-        if(resArg.charAt(resArg.length() -1) == '/') {
-            resArg = resArg.substring(0, resArg.length()-1);
+        if (resArg.charAt(resArg.length() - 1) == '/') {
+            resArg = resArg.substring(0, resArg.length() - 1);
         }
 
         // replace ., ~ and ..
         StringTokenizer st = new StringTokenizer(inArg, "/");
-        while(st.hasMoreTokens()) {
+        while (st.hasMoreTokens()) {
 
             String tok = st.nextToken().trim();
 
             // . => current directory
-            if(tok.equals(".")) {
+            if (tok.equals(".")) {
                 continue;
             }
 
             // .. => parent directory (if not root)
-            if(tok.equals("..")) {
-                if(resArg.startsWith(mstRoot)) {
-                  int slashIndex = resArg.lastIndexOf('/');
-                  if(slashIndex != -1) {
-                    resArg = resArg.substring(0, slashIndex);
-                  }
+            if (tok.equals("..")) {
+                if (resArg.startsWith(mstRoot)) {
+                    int slashIndex = resArg.lastIndexOf('/');
+                    if (slashIndex != -1) {
+                        resArg = resArg.substring(0, slashIndex);
+                    }
                 }
                 continue;
             }
 
             // ~ => home directory (in this case /)
             if (tok.equals("~")) {
-                resArg = mstRoot.substring(0, mstRoot.length()-1).trim();
+                resArg = mstRoot.substring(0, mstRoot.length() - 1).trim();
                 continue;
             }
 
@@ -454,7 +447,7 @@ class VirtualDirectory implements Serializable {
         }
 
         // add last slash if necessary
-        if( !inArg.equals("") && (inArg.charAt(inArg.length()-1)=='/') ) {
+        if (!inArg.equals("") && (inArg.charAt(inArg.length() - 1) == '/')) {
             resArg = resArg + '/';
         }
 
@@ -492,8 +485,8 @@ class VirtualDirectory implements Serializable {
      * If the string is not '/', remove last slash.
      */
     private String removeLastSlash(String str) {
-        if ( (str.length()>1) && (str.charAt(str.length()-1)=='/') ) {
-            str = str.substring(0, str.length()-1);
+        if ((str.length() > 1) && (str.charAt(str.length() - 1) == '/')) {
+            str = str.substring(0, str.length() - 1);
         }
         return str;
     }
@@ -507,8 +500,8 @@ class VirtualDirectory implements Serializable {
      */
     private class FileComparator implements Comparator {
         public int compare(Object o1, Object o2) {
-            String s1 = ((File)o1).getName();
-            String s2 = ((File)o2).getName();
+            String s1 = ((File) o1).getName();
+            String s2 = ((File) o2).getName();
             return s1.compareTo(s2);
         }
     }
@@ -531,22 +524,21 @@ class VirtualDirectory implements Serializable {
         public FileLister(String argument) {
             String lsDirName = "./";
             String options = "";
-            String pattern   = "*";
+            String pattern = "*";
 
             // get options, directory name and pattern
-            if(argument != null) {
+            if (argument != null) {
                 argument = argument.trim();
                 StringBuffer optionsSb = new StringBuffer(4);
                 StringTokenizer st = new StringTokenizer(argument, " ");
-                while(st.hasMoreTokens()) {
+                while (st.hasMoreTokens()) {
                     String token = st.nextToken();
-                    if(token.charAt(0) == '-') {
+                    if (token.charAt(0) == '-') {
                         if (token.length() > 1) {
                             optionsSb.append(token.substring(1));
                         }
-                    }
-                    else {
-                       lsDirName = token;
+                    } else {
+                        lsDirName = token;
                     }
                 }
                 options = optionsSb.toString();
@@ -559,28 +551,27 @@ class VirtualDirectory implements Serializable {
             // check pattern
             lsDirName = getPhysicalName(lsDirName);
             File lstDirObj = new File(lsDirName);
-            if ( !(lstDirObj.exists() && lstDirObj.isDirectory()) ) {
+            if (!(lstDirObj.exists() && lstDirObj.isDirectory())) {
                 int slashIndex = lsDirName.lastIndexOf('/');
-                if( (slashIndex != -1) && (slashIndex != (lsDirName.length() -1)) ) {
-                    pattern = lsDirName.substring(slashIndex+1);
-                    lsDirName = lsDirName.substring(0, slashIndex+1);
+                if ((slashIndex != -1) && (slashIndex != (lsDirName.length() - 1))) {
+                    pattern = lsDirName.substring(slashIndex + 1);
+                    lsDirName = lsDirName.substring(0, slashIndex + 1);
                 }
             }
 
             // check directory
             lstDirObj = new File(lsDirName);
-            if(!lstDirObj.exists()) {
+            if (!lstDirObj.exists()) {
                 return;
             }
-            if(!lstDirObj.isDirectory()) {
+            if (!lstDirObj.isDirectory()) {
                 return;
             }
 
             // get file list
-            if ( (pattern == null) || pattern.equals("*") || pattern.equals("") ) {
+            if ((pattern == null) || pattern.equals("*") || pattern.equals("")) {
                 files = lstDirObj.listFiles();
-            }
-            else {
+            } else {
                 files = lstDirObj.listFiles(new FileRegularFilter(pattern));
             }
             //Arrays.sort(files, new FileComparator());

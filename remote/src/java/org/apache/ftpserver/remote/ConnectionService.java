@@ -18,18 +18,16 @@
  */
 package org.apache.ftpserver.remote;
 
-import java.util.List;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
-import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.core.BaseFtpConnection;
 import org.apache.ftpserver.core.BaseFtpConnection;
 import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.adapter.ConnectionObserverAdapter;
 import org.apache.ftpserver.remote.adapter.SpyConnectionAdapter;
-import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
+import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 /**
  * Ftp remote user service adapter class - used by remote admin GUI.
@@ -73,8 +71,7 @@ class ConnectionService implements org.apache.ftpserver.remote.interfaces.Connec
         mConnectionObserverAdapter.setConnectionObserver(obsr);
         if (obsr == null) {
             mConnectionService.setObserver(null);
-        }
-        else {
+        } else {
             mConnectionService.setObserver(mConnectionObserverAdapter);
         }
     }
@@ -100,8 +97,7 @@ class ConnectionService implements org.apache.ftpserver.remote.interfaces.Connec
     public void setSpyObject(final String sessId, final SpyConnectionInterface spy) {
         if (spy == null) {
             mConnectionService.setSpyObject(sessId, null);
-        }
-        else {
+        } else {
             SpyConnectionAdapter newAdapter = new SpyConnectionAdapter(spy);
             mConnectionService.setSpyObject(sessId, newAdapter);
         }

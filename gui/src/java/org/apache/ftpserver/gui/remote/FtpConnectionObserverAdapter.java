@@ -19,12 +19,12 @@
 
 package org.apache.ftpserver.gui.remote;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
 import org.apache.ftpserver.User;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Monitor all ftp connections.
@@ -77,15 +77,13 @@ class FtpConnectionObserverAdapter implements FtpConnectionObserver {
         System.out.println("Closing connection listener...");
         try {
             mConService.setObserver(null);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
 
         try {
             UnicastRemoteObject.unexportObject(this, true);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace();
         }
     }

@@ -19,15 +19,15 @@
 
 package org.apache.ftpserver.gui;
 
-import java.awt.Component;
-
 import org.apache.ftpserver.core.UserImpl;
-import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
+import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
-import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
+import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
+
+import java.awt.*;
 
 
 /**

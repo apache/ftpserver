@@ -19,8 +19,7 @@
 
 package org.apache.ftpserver.gui;
 
-import javax.swing.JTree;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * All ftp panels implement this interface.

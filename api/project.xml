@@ -17,8 +17,8 @@
  */
  -->
 <project>
-	<extend>${basedir}/../project.xml</extend>
-	<id>apache-ftpserver-api</id>
-	<artifactId>apache-ftpserver-api</artifactId>
-	<name>Apache FTPServer API</name>
+    <extend>${basedir}/../project.xml</extend>
+    <id>apache-ftpserver-api</id>
+    <artifactId>apache-ftpserver-api</artifactId>
+    <name>Apache FTPServer API</name>
 </project>

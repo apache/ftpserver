@@ -18,8 +18,6 @@
  */
 package org.apache.ftpserver.remote;
 
-import org.apache.ftpserver.core.AbstractFtpConfig;
-import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.ftpserver.core.AbstractFtpConfig;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
@@ -57,13 +55,12 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
         try {
             mRegistry = LocateRegistry.getRegistry(rmiPort);
             mRegistry.list();
-        }
-        catch(RemoteException ex) {
+        } catch (RemoteException ex) {
             mRegistry = null;
         }
 
-        if(mRegistry == null) {
-           mRegistry = LocateRegistry.createRegistry(rmiPort);
+        if (mRegistry == null) {
+            mRegistry = LocateRegistry.createRegistry(rmiPort);
         }
 
         UnicastRemoteObject.exportObject(this);
@@ -78,19 +75,18 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
         try {
             String clientHost = UnicastRemoteObject.getClientHost();
             remoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             remoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
 
         // data validation
-        if(mstAdminSession != null) {
+        if (mstAdminSession != null) {
             throw new Exception("Multiple admin session is not possible.");
         }
-        if(id == null) {
+        if (id == null) {
             throw new Exception("Please specify user Id");
         }
-        if(password == null) {
+        if (password == null) {
             throw new Exception("Please specify password");
         }
 
@@ -98,18 +94,17 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
         UserManagerInterface userManager = mFtpConfig.getConfig().getUserManager();
         String adminName = userManager.getAdminName();
         boolean bSuccess = false;
-        if ( id.equals(adminName) ) {
+        if (id.equals(adminName)) {
             bSuccess = userManager.authenticate(id, password);
         }
-        if(!bSuccess) {
+        if (!bSuccess) {
             throw new Exception("Login failure.");
         }
 
         try {
             String clientHost = UnicastRemoteObject.getClientHost();
             remoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             remoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
         mstAdminSession = new UID().toString();
@@ -121,7 +116,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
      * Remote admin logout
      */
     public synchronized boolean logout(String sessId) {
-        if( (sessId == null) || (!sessId.equals(mstAdminSession)) ) {
+        if ((sessId == null) || (!sessId.equals(mstAdminSession))) {
             return false;
         }
         remoteHandlerMonitor.remoteAdminLogout();
@@ -134,7 +129,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
      * Get configuration interface
      */
     public FtpConfigInterface getConfigInterface(String sessId) {
-        if( (sessId == null) || (!sessId.equals(mstAdminSession)) ) {
+        if ((sessId == null) || (!sessId.equals(mstAdminSession))) {
             return null;
         }
         return mFtpConfig;
@@ -144,11 +139,11 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
      * Reset observers
      */
     private void resetObservers() {
-        ConnectionService conService = (ConnectionService)mFtpConfig.getConnectionService();
+        ConnectionService conService = (ConnectionService) mFtpConfig.getConnectionService();
         conService.setObserver(null);
         conService.getConnectionService().resetAllSpyObjects();
 
-        FtpStatistics statistics = (FtpStatistics)mFtpConfig.getStatistics();
+        FtpStatistics statistics = (FtpStatistics) mFtpConfig.getStatistics();
         statistics.setListener(null);
         statistics.setFileListener(null);
     }
@@ -164,8 +159,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
                 mRegistry.unbind(BIND_NAME);
                 mRegistry = null;
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
         }
     }
 
@@ -176,7 +170,6 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
         remoteHandlerMonitor.remoteAdminTimeout();
         logout(mstAdminSession);
     }
-
 
 
 }

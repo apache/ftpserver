@@ -17,22 +17,22 @@
  */
  -->
 <project>
-	<extend>${basedir}/../project.xml</extend>
-	<id>apache-ftpserver-remote</id>
-	<artifactId>apache-ftpserver-remote</artifactId>
-	<name>Apache FTPServer Remote Managment Service</name>
-	<dependencies>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>apache-ftpserver-api</artifactId>
-			<version>SNAPSHOT</version>
-			<version>${pom.currentVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>apache-ftpserver-core</artifactId>
-			<version>SNAPSHOT</version>
-			<version>${pom.currentVersion}</version>
-		</dependency>
-	</dependencies>
+    <extend>${basedir}/../project.xml</extend>
+    <id>apache-ftpserver-remote</id>
+    <artifactId>apache-ftpserver-remote</artifactId>
+    <name>Apache FTPServer Remote Managment Service</name>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>apache-ftpserver-api</artifactId>
+            <version>SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>apache-ftpserver-core</artifactId>
+            <version>SNAPSHOT</version>
+            <version>${pom.currentVersion}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -20,11 +20,11 @@ package org.apache.ftpserver.usermanager;
 
 import org.apache.avalon.cornerstone.services.store.ObjectRepository;
 import org.apache.avalon.cornerstone.services.store.Store;
+import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 
 import java.util.ArrayList;
@@ -34,13 +34,11 @@ import java.util.List;
 
 
 /**
- *
+ * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  * @phoenix:block
  * @phoenix:service name="org.apache.ftpserver.usermanager.UserManagerInterface"
- *
+ * <p/>
  * File object repository based user manager.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Configurable {
@@ -64,7 +62,7 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Co
         mStoreConfig = conf.getChild("repository");
         Configuration adminConf = conf.getChild("ftp-admin-name", false);
         mstAdminName = "admin";
-        if(adminConf != null) {
+        if (adminConf != null) {
             mstAdminName = adminConf.getValue(mstAdminName);
         }
 
@@ -104,7 +102,7 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Co
     public synchronized List getAllUserNames() {
         ArrayList usrList = new ArrayList();
         Iterator nameIt = mObjectRepository.list();
-        while(nameIt.hasNext()) {
+        while (nameIt.hasNext()) {
             usrList.add(nameIt.next());
         }
 
@@ -117,8 +115,8 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Co
      */
     public synchronized User getUserByName(String userName) {
         User user = null;
-        if(doesExist(userName)) {
-            user = (User)mObjectRepository.get(userName);
+        if (doesExist(userName)) {
+            user = (User) mObjectRepository.get(userName);
         }
         return user;
     }
@@ -133,17 +131,17 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Co
     /**
      * Get user password. Returns the encrypted value.
      * If the password value is not null
-     *    password = new password
+     * password = new password
      * else
-     *   if user does exist
-     *     password = old password
-     *   else
-     *     password = ""
+     * if user does exist
+     * password = old password
+     * else
+     * password = ""
      */
     private String getPassword(User usr) {
         String password = usr.getPassword();
 
-        if ( (password == null) && doesExist(usr.getName()) ) {
+        if ((password == null) && doesExist(usr.getName())) {
             usr = getUserByName(usr.getName());
             password = usr.getPassword();
         }
@@ -161,7 +159,7 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Co
      */
     public boolean authenticate(String userName, String password) {
         User user = getUserByName(userName);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
 
