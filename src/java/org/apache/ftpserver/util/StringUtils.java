@@ -56,7 +56,7 @@
  */
 package org.apache.ftpserver.util;
 
-
+import java.util.Map;
 
 /**
  * String utility methods.
@@ -85,7 +85,88 @@ class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * Replace string
+     */ 
+    public static String replaceString(String source, Object[] args) {
+        int startIndex = 0;
+        int openIndex = source.indexOf('{', startIndex);
+        if (openIndex == -1) {
+            return source;
+        }
+        
+        int closeIndex = source.indexOf('}', startIndex);
+        if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+            return source;
+        }
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append(source.substring(startIndex, openIndex));
+        while(true) {
+            String intStr = source.substring(openIndex+1, closeIndex);
+            int index = Integer.parseInt(intStr);
+            sb.append(args[index]);
+            
+            startIndex = closeIndex + 1;
+            openIndex = source.indexOf('{', startIndex);
+            if (openIndex == -1) {
+                sb.append(source.substring(startIndex));
+                break;
+            }
+            
+            closeIndex = source.indexOf('}', startIndex);
+            if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+               sb.append(source.substring(startIndex));
+               break;
+            }
+            sb.append(source.substring(startIndex, openIndex));
+        }
+        return sb.toString();
+    }
+    
 
+    /**
+     * Replace string
+     */ 
+    public static String replaceString(String source, Map args) {
+        int startIndex = 0;
+        int openIndex = source.indexOf('{', startIndex);
+        if (openIndex == -1) {
+            return source;
+        }
+        
+        int closeIndex = source.indexOf('}', startIndex);
+        if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+            return source;
+        }
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append(source.substring(startIndex, openIndex));
+        while(true) {
+            String key = source.substring(openIndex+1, closeIndex);
+            Object val = args.get(key);
+            if(val != null) {
+                sb.append(val);
+            }
+            
+            startIndex = closeIndex + 1;
+            openIndex = source.indexOf('{', startIndex);
+            if (openIndex == -1) {
+                sb.append(source.substring(startIndex));
+                break;
+            }
+            
+            closeIndex = source.indexOf('}', startIndex);
+            if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+               sb.append(source.substring(startIndex));
+               break;
+            }
+            sb.append(source.substring(startIndex, openIndex));
+        }
+        return sb.toString();
+    }
+    
+    
     /**
      * This method is used to insert HTML block dynamically
      *
