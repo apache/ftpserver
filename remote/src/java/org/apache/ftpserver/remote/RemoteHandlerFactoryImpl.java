@@ -8,7 +8,7 @@ package org.apache.ftpserver.remote;
 
 import java.rmi.RemoteException;
 
-import org.apache.ftpserver.AbstractFtpConfig;
+import org.apache.ftpserver.core.AbstractFtpConfig;
 import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.ftpserver.RemoteHandlerMonitor;
 

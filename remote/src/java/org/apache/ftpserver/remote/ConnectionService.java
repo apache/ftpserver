@@ -22,8 +22,10 @@ import java.util.List;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.ftpserver.UserImpl;
-import org.apache.ftpserver.BaseFtpConnection;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.core.BaseFtpConnection;
+import org.apache.ftpserver.core.BaseFtpConnection;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.adapter.ConnectionObserverAdapter;
 import org.apache.ftpserver.remote.adapter.SpyConnectionAdapter;
 import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
@@ -37,14 +39,14 @@ import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
 public
 class ConnectionService implements org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface {
 
-    private org.apache.ftpserver.ConnectionService mConnectionService;
+    private org.apache.ftpserver.core.ConnectionService mConnectionService;
     private ConnectionObserverAdapter mConnectionObserverAdapter;
 
 
     /**
      * Constructor - sets the actual connection service object
      */
-    public ConnectionService(final org.apache.ftpserver.ConnectionService conService) throws RemoteException {
+    public ConnectionService(final org.apache.ftpserver.core.ConnectionService conService) throws RemoteException {
         mConnectionService = conService;
         mConnectionObserverAdapter = new ConnectionObserverAdapter();
         UnicastRemoteObject.exportObject(this);
@@ -53,7 +55,7 @@ class ConnectionService implements org.apache.ftpserver.remote.interfaces.Connec
     /**
      * Get the actual object.
      */
-    public org.apache.ftpserver.ConnectionService getConnectionService() {
+    public org.apache.ftpserver.core.ConnectionService getConnectionService() {
         return mConnectionService;
     }
 

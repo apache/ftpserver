@@ -37,7 +37,7 @@ import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

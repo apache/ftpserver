@@ -32,7 +32,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.gui.remote.FtpFileListenerAdapter;
 import org.apache.ftpserver.gui.remote.FtpStatisticsListenerAdapter;
 import org.apache.ftpserver.remote.interfaces.FtpFileListener;

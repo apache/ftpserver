@@ -40,7 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
 import org.apache.ftpserver.usermanager.User;
 

@@ -32,7 +32,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.apache.ftpserver.User;
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.gui.remote.SpyConnectionAdapter;
 import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 

@@ -27,7 +27,7 @@ import org.apache.ftpserver.remote.interfaces.IpRestrictorInterface;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
-import org.apache.ftpserver.AbstractFtpConfig;
+import org.apache.ftpserver.core.AbstractFtpConfig;
 
 /**
  * Ftp configuration remote adapter. It is used by remote admin GUI.

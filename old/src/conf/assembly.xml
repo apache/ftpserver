@@ -31,7 +31,7 @@
   <block class="org.apache.ftpserver.ip.AvalonFileIpRestrictor" name="ip-restrictor"/>
 
   <!-- Ftp server block -->
-  <block class="org.apache.ftpserver.ServerImpl" name="ftp-server" >
+  <block class="org.apache.ftpserver.core.ServerImpl" name="ftp-server" >
       <provide name="sockets"       role="org.apache.avalon.cornerstone.services.sockets.SocketManager"/>
       <provide name="connections"   role="org.apache.avalon.cornerstone.services.connection.ConnectionManager" />
       <provide name="ip-restrictor" role="org.apache.ftpserver.ip.IpRestrictorInterface" />

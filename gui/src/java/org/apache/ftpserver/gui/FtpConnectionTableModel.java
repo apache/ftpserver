@@ -29,7 +29,8 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
 import org.apache.ftpserver.User;
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.gui.remote.FtpConnectionObserverAdapter;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;

@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 import javax.swing.table.AbstractTableModel;
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 
 /**
  * This table model tracks user file related activities.

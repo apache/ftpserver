@@ -18,9 +18,10 @@
  */
 package org.apache.ftpserver.remote;
 
-import org.apache.ftpserver.AbstractFtpConfig;
+import org.apache.ftpserver.core.AbstractFtpConfig;
 import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.ftpserver.RemoteHandlerMonitor;
+import org.apache.ftpserver.core.AbstractFtpConfig;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.usermanager.UserManagerInterface;

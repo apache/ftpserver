@@ -36,7 +36,7 @@ import org.apache.ftpserver.remote.interfaces.FtpFileListener;
 public
 class FtpStatistics implements FtpStatisticsInterface {
 
-    private org.apache.ftpserver.FtpStatistics mStatistics;
+    private org.apache.ftpserver.core.FtpStatistics mStatistics;
 
     private StatisticsListenerAdapter  mStatisticsListener;
     private FileListenerAdapter mFileListener;
@@ -44,7 +44,7 @@ class FtpStatistics implements FtpStatisticsInterface {
     /**
      * Constructor - sets the actual statistics object
      */
-    public FtpStatistics(final org.apache.ftpserver.FtpStatistics statistics) throws RemoteException {
+    public FtpStatistics(final org.apache.ftpserver.core.FtpStatistics statistics) throws RemoteException {
         mStatistics = statistics;
 
         mStatisticsListener = new StatisticsListenerAdapter();

@@ -36,7 +36,7 @@ import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
 public
 class FtpConfig implements FtpConfigInterface {
 
-    private org.apache.ftpserver.AbstractFtpConfig mConfig;
+    private org.apache.ftpserver.core.AbstractFtpConfig mConfig;
 
     private IpRestrictor mIpRestrictor;
     private UserManager mUserManager;
@@ -46,7 +46,7 @@ class FtpConfig implements FtpConfigInterface {
     /**
      * Constructor - sets the actual config object.
      */
-    public FtpConfig(org.apache.ftpserver.AbstractFtpConfig config) throws RemoteException {
+    public FtpConfig(org.apache.ftpserver.core.AbstractFtpConfig config) throws RemoteException {
         mConfig = config;
         mIpRestrictor = new IpRestrictor(config.getIpRestrictor());
         mUserManager  = new UserManager(config.getUserManager());
@@ -59,7 +59,7 @@ class FtpConfig implements FtpConfigInterface {
     /**
      * Get config
      */
-    public org.apache.ftpserver.AbstractFtpConfig getConfig() {
+    public org.apache.ftpserver.core.AbstractFtpConfig getConfig() {
         return mConfig;
     }
 

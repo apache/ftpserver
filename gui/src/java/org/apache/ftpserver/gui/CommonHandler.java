@@ -21,7 +21,7 @@ package org.apache.ftpserver.gui;
 
 import java.awt.Component;
 
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;

@@ -5,7 +5,8 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.ftpserver.AvalonUserManagerMonitor;
+import org.apache.ftpserver.core.AvalonUserManagerMonitor;
+import org.apache.ftpserver.core.AvalonUserManagerMonitor;
 
 import javax.naming.NamingException;
 import javax.naming.directory.BasicAttribute;

@@ -39,7 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;

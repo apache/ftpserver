@@ -22,7 +22,7 @@ package org.apache.ftpserver.remote.interfaces;
 import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import org.apache.ftpserver.UserImpl;
+import org.apache.ftpserver.core.UserImpl;
 
 /**
  * Ftp user service interface - used by remote admin GUI.
