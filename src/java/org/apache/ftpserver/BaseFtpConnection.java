@@ -115,7 +115,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
 
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(mControlSocket.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(mControlSocket.getInputStream(), "ASCII"));
             mWriter = new FtpWriter(mControlSocket, mConfig);
 
             // permission check
