@@ -12,6 +12,9 @@
     directory (ends in '/'), in which case /index.html will be added
     -->
 
-    <tab label="Home" dir=""/>
+    <tab label="Home"      dir=""/>
+    <tab label="Apache"    href="http://www.apache.org"/>
+    <tab label="Incubator" href="http://incubator.apache.org"/>
+    <tab label="Avalon"    href="http://avalon.apache.org"/>
 
 </tabs>

@@ -30,6 +30,14 @@
         server.
       </p>
     </section>
+    <section><title>Documentation</title>
+      <p>
+        Some of the information on this site is currently a bit out of date. We are
+        working hard to fix this. If you come across any inconsistencies or have a
+        problem, please don't hesitate to contact us through the mailing list. 
+        Please use <strong>incubator-general</strong> mailing list for this.
+      </p>
+    </section>
     <section><title>Features</title>
         <ol>
           <li>100% pure Java, free, open source resumable FTP server!!!</li>
