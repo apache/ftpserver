@@ -153,23 +153,6 @@
                 <include name="README"/>
             </fileset>
         </copy>
-        <!-- is this necessary ? - PaulH
-        <fixcrlf srcdir="${java.dir}" includes="**/*.java" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${java.dir}" includes="**/*.minfo" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${java.dir}" includes="**/*.xinfo" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${java.dir}" includes="**/*.html" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${xdocs.dir}" includes="**/*.xml" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${conf.dir}" includes="**/*.xml" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="." includes="build.sh" eol="lf"/>
-        <fixcrlf srcdir="." includes="build.bat" eol="crlf"/>
-        <fixcrlf srcdir="." includes="build.xml" eol="lf"/>
-
-        <chmod perm="+x">
-            <fileset dir=".">
-                <include name="build.sh"/>
-            </fileset>
-        </chmod>
-        -->        
     </target>
 
 
