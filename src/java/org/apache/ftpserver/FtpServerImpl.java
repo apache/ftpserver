@@ -74,7 +74,7 @@ import java.net.ServerSocket;
  * @phoenix:service name="org.apache.ftpserver.interfaces.FtpServerInterface"
  *
  * @author  Rana Bhattacharyya <rana_b@yahoo.com>
- * @author  Paul Hammant <Paul_Hammant@yahoo.com>
+ * @author  Paul Hammant
  * @version 1.0
  */
 public class FtpServerImpl implements FtpServerInterface, ConnectionHandlerFactory {

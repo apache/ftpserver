@@ -62,7 +62,7 @@ import org.apache.ftpserver.UserManagerException;
 /**
  * Abstract user manager class.
  *
- * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
+ * @author Paul Hammant
  */
 public
 abstract class AbstractUserManager
