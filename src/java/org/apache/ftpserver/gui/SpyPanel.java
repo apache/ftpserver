@@ -57,11 +57,16 @@
 package org.apache.ftpserver.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.rmi.RemoteException;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.apache.ftpserver.FtpUser;
 import org.apache.ftpserver.gui.remote.SpyConnectionAdapter;
@@ -69,18 +74,21 @@ import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 
 
 /**
- * This panel is used to monitor user activity.
+ * This panel is used to monitor user activities.
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class SpyPanel extends JPanel implements SpyConnectionInterface {
 
-    private JTextArea mLogTxt    = null;
+    private JTextPane mLogTxt    = null;
 
     private SpyConnectionAdapter mSpyAdapter = null;
     private CommonHandler mCommonHandler     = null;
     private FtpUser mUser                    = null;
+
+    private SimpleAttributeSet mReqAttrs = null;
+    private SimpleAttributeSet mResAttrs = null;
 
     /**
      * Instantiate this dialog box
@@ -91,6 +99,12 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
 
         initComponents();
         mSpyAdapter = new SpyConnectionAdapter(commonHandler.getConnectionService(), mUser.getSessionId(), this);
+    
+        mReqAttrs = new SimpleAttributeSet();
+        StyleConstants.setForeground(mReqAttrs, new Color(0xFF, 0x00, 0xFF));
+        
+        mResAttrs = new SimpleAttributeSet();
+        StyleConstants.setForeground(mResAttrs, new Color(0x00, 0x00, 0x8B));
     }
 
     /**
@@ -98,7 +112,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
      */
     private void initComponents() throws RemoteException {
         setLayout(new BorderLayout());
-        mLogTxt = new JTextArea();
+        mLogTxt = new JTextPane();
         mLogTxt.setEditable(false);
         JScrollPane txtPane = new JScrollPane(mLogTxt,
                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -124,14 +138,26 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
      * Write server response.
      */
     public void response(String msg) {
-        mLogTxt.append(msg);
+        Document doc = mLogTxt.getDocument();
+        try {
+            doc.insertString(doc.getLength(), msg, mResAttrs);
+        }
+        catch(BadLocationException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
      * Write user request.
      */
     public void request(String msg) {
-        mLogTxt.append(msg);
+        Document doc = mLogTxt.getDocument();
+        try {
+            doc.insertString(doc.getLength(), msg, mReqAttrs);
+        }
+        catch(BadLocationException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -146,7 +172,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
      */
     public void close() {
         mSpyAdapter.close();
-        mLogTxt.setText("");
+        clearLog();
     }
 
     /**
