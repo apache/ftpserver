@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
@@ -21,9 +20,9 @@
         </p>
         <table>
           <tr>
-            <td><strong>Name</strong></td>
-            <td><strong>Default Value</strong></td>
-            <td><strong>Description</strong></td>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
           </tr>
           <tr>
             <td>name</td>
@@ -69,9 +68,9 @@
         </p>
         <table>
           <tr>
-            <td><strong>Name</strong></td>
-            <td><strong>Default Value</strong></td>
-            <td><strong>Description</strong></td>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
           </tr>
           <tr>
             <td>ftp-host</td>
@@ -153,18 +152,18 @@
           </li>
           <li>
             <strong>DbUserManager</strong> - databased based user manager. 
-            Please see <link href="jdbc.html">&quot;DB Support&quot;</link> for more details.
+            Please see <link href="site:manual/db">&quot;DB Support&quot;</link> for more details.
           </li>
           <li>
             <strong>LdapUserManager</strong> - LDAP based user manager.
-            Please see <link href="ldap.html">&quot;LDAP Support&quot;</link> for more details.
+            Please see <link href="site:manual/ldap">&quot;LDAP Support&quot;</link> for more details.
           </li>
         </ul>
         <table>
           <tr>
-            <td><strong>Name</strong></td>
-            <td><strong>Default Value</strong></td>
-            <td><strong>Description</strong></td>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
           </tr>
           <tr>
             <td>ftp-admin-name</td>
@@ -185,9 +184,9 @@
         </p>
         <table>
           <tr>
-            <td><strong>Name</strong></td>
-            <td><strong>Default Value</strong></td>
-            <td><strong>Description</strong></td>
+            <th>Name</th>
+            <th>Default Value</th>
+            <th>Description</th>
           </tr>
           <tr>
             <td>allow-ip</td>
@@ -199,9 +198,4 @@
       </section>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

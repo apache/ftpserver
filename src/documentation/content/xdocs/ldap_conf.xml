@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
@@ -108,9 +107,4 @@ ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;pas
       </section>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

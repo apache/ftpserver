@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
-    <title>Avalon Applications - FtpServer</title>
-    <subtitle>Introduction</subtitle>
+    <title>Apache FtpServer</title>
+    <subtitle>FTP server based on Apache Avalon</subtitle>
     <authors>
       <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
     </authors>
@@ -17,7 +16,7 @@
   <body>
     <section><title>Overview</title>
       <p>
-        FtpServer is a server component for Pheonix that allows remote FTP client to
+        FtpServer is a server component for Avalon Phoenix that allows remote FTP client to
         attach and download files.  The client software can be any type of FTP client
         written in any language.  The criteria for eligibility is RFC compliance.
       </p>
@@ -55,8 +54,8 @@
        </p>
        <table>
         <tr>
-           <td><strong>Name</strong></td>
-           <td><strong>Description</strong></td>
+           <th>Name</th>
+           <th>Description</th>
         </tr>
         <tr>
            <td>thread-manager</td>
@@ -90,8 +89,8 @@
       <p/>
       <table>
         <tr>
-           <td><strong>Name</strong></td>
-           <td><strong>Interfaces</strong></td>
+           <th>Name></th>
+           <th>Interfaces</th>
         </tr>
         <tr>
            <td>thread-manager</td>
@@ -125,8 +124,8 @@
       <p/>
       <table>
         <tr>
-           <td><strong>Name</strong></td>
-           <td><strong>Dependency</strong></td>
+           <th>Name</th>
+           <th>Dependency</th>
         </tr>
         <tr>
            <td>connections</td>
@@ -144,9 +143,4 @@
       <p/>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

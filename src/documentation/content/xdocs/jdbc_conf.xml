@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
@@ -20,8 +19,8 @@
         All the user informations are stored in FTP_USER table. The SQL file is <em>ftp-db.sql</em>.
       </p>
       <table>
-        <caption><strong>FTP_USER</strong></caption>
-        <tr><td><strong>Name</strong></td><td><strong>Datatype</strong></td></tr>
+        <caption>FTP_USER</caption>
+        <tr><th>Name</th><th>Datatype</th></tr>
         <tr><td>LOGIN_ID</td><td>VARCHAR(64), Primary key</td></tr>
         <tr><td>PASSWORD</td><td>VARCHAR(64)</td></tr>
         <tr><td>HOME_DIR</td><td>VARCHAR(128)</td></tr>
@@ -71,9 +70,4 @@
       </section>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
@@ -32,9 +31,4 @@
         <p>Similarly, <strong>allow-ip=true</strong> will only allow the specified IPs.</p>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

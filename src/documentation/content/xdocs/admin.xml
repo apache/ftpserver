@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
@@ -27,13 +26,10 @@
       </p>
     </section>
     <section><title>Configuration Parameters</title>
+     <fixme author=" ">To be done.</fixme>
     </section>
     <section><title>Screenshots</title>
+     <fixme author=" ">To be done.</fixme>
     </section>
   </body>
-  <footer>
-    <legal>
-      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
-    </legal>
-  </footer>
 </document>

@@ -4,20 +4,24 @@
 
   <about label="About">
     <index label="Overview" href="index.html"/>
-    <!-- <index label="API" href="index.html"/> -->
-    <!-- <index label="Download" href="download.html"/> -->
-    <index label="Administration" href="admin.html"/>
-    <index label="Configurations" href="cond.html"/>
-    <index label="LDAP Support" href="ldap_conf.html"/>
-    <index label="DB Support" href="jdbc_conf.html"/>
-    <index label="SITE Command" href="site_cmd.html"/>    
-    <index label="IP Address Restrictions" href="ip_restr.html"/>
-    <index label="User Manager" href="user_manager.html"/>    
-    <index label="We Are" href="weare.html"/>    
-    <index label="RFC765" href="rfc765.html"/>
-    <faq label="FAQ" href="faq.html"/>
     <changes label="Changes" href="changes.html"/>
     <todo label="Todo" href="todo.html"/>
+    <whoweare label="Who we are" href="weare.html"/>  
+    <!-- <index label="Download" href="download.html"/> -->
   </about>
+  <manual label="Manual">
+    <administration label="Administration" href="admin.html"/>
+    <configurations label="Configurations" href="conf.html"/>
+    <ldap label="LDAP Support" href="ldap_conf.html"/>
+    <db label="DB Support" href="jdbc_conf.html"/>
+    <site label="SITE Command" href="site_cmd.html"/>    
+    <iprestrictions label="IP Address Restrictions" href="ip_restr.html"/>
+    <usermanager label="User Manager" href="user_manager.html"/> 
+  </manual> 
+  <references label="References">
+    <!-- <index label="API" href="index.html"/> -->
+    <rfc765 label="RFC765" href="rfc765.html"/>
+    <!-- <faq label="FAQ" href="faq.html"/> -->
+  </references>
 
 </site>
