@@ -56,78 +56,42 @@
  */
 package org.apache.ftpserver.usermanager;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.context.ContextException;
-
-import org.apache.ftpserver.util.IoUtils;
+import org.apache.ftpserver.UserManagerException;
+import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
-import org.apache.ftpserver.UserManagerException;
+import org.apache.ftpserver.util.IoUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Properties file based <code>UserManager</code>
  * implementation. We use <code>user.properties</code> file
  * to store user data.
  *
- * @phoenix:block
- * @phoenix:service name="org.apache.ftpserver.usermanager.UserManagerInterface"
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class PropertiesUserManager extends AbstractUserManager {
 
     private static final String PREFIX    = "FtpServer.user.";
-    private static final String USER_PROP = "user.properties";
+    protected static final String USER_PROP = "user.properties";
 
-    private BaseProperties mUserData;
-    private File       mUserDataFile;
-    private boolean    mbEncrypt;
+    protected BaseProperties mUserData;
+    protected File       mUserDataFile;
+    protected boolean    mbEncrypt;
 
-    private long mlLastModified;
+    protected long mlLastModified;
 
-    /**
-     * Set application context
-     */
-    public void contextualize(Context context) throws ContextException {
-        super.contextualize(context);
-        try {
-            File appDir = (File)context.get("app.home");
-            if(!appDir.exists()) {
-                appDir.mkdirs();
-            }
-            mUserDataFile = new File(appDir, USER_PROP);
-
-            mUserDataFile.createNewFile();
-            mUserData = new BaseProperties(mUserDataFile);
-            mlLastModified = mUserDataFile.lastModified();
-            getLogger().info("Loaded user data file - " + mUserDataFile);
-        }
-        catch(IOException ex) {
-            getLogger().error(ex.getMessage(), ex);
-            throw new ContextException(ex.getMessage());
-        }
-    }
-
-    /**
-     * Set configuration
-     */
-    public void configure(Configuration conf) throws ConfigurationException {
-        super.configure(conf);
-        mbEncrypt = conf.getChild("encrypt").getValueAsBoolean(false);
-    }
-
+    protected FtpUserManagerMonitor ftpUserManagerMonitor;
 
     /**
      * Save user data. Store the properties.
@@ -313,7 +277,7 @@ public class PropertiesUserManager extends AbstractUserManager {
                 mUserData.load(fis);
                 fis.close();
                 mlLastModified = lastModified;
-                getLogger().info("File modified - loading " + mUserDataFile.getAbsolutePath());
+                ftpUserManagerMonitor.info("File modified - loading " + mUserDataFile.getAbsolutePath());
             }
         } catch (IOException e) {
             throw new UserManagerException(e);
@@ -324,7 +288,6 @@ public class PropertiesUserManager extends AbstractUserManager {
      * Close the user manager - remove existing entries.
      */
     public void dispose() {
-        getLogger().info("Closing properties user manager...");
         if (mUserData != null) {
             mUserData.clear();
             mUserData = null;

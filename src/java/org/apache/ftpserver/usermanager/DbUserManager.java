@@ -56,6 +56,10 @@
  */
 package org.apache.ftpserver.usermanager;
 
+import org.apache.ftpserver.UserManagerException;
+import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
+import org.apache.ftpserver.util.StringUtils;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -66,17 +70,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.ftpserver.util.StringUtils;
-import org.apache.ftpserver.UserManagerException;
-
 /**
  * This is another database based user manager class. I have
  * tested it using MySQL and Oracle database. The sql file is <code>ftp-db.sql</code>
  *
- * @phoenix:block
- * @phoenix:service name="org.apache.ftpserver.usermanager.UserManagerInterface"
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
@@ -85,51 +82,24 @@ class DbUserManager extends AbstractUserManager {
 
     private Connection mDbConnection       = null;
 
-    private String mInsUserStmt = null;
-    private String mDelUserStmt = null;
-    private String mSelUserStmt = null;
-    private String mGetAllStmt  = null;
-    private String mUpdUserStmt = null;
+    protected String mInsUserStmt = null;
+    protected String mDelUserStmt = null;
+    protected String mSelUserStmt = null;
+    protected String mGetAllStmt  = null;
+    protected String mUpdUserStmt = null;
     
-    private String mUrl      = null;
-    private String mUser     = null;
-    private String mPassword = null;
+    protected String mUrl      = null;
+    protected String mUser     = null;
+    protected String mPassword = null;
 
-
-    /**
-     * Set configuration - open database connection
-     */
-    public void configure(Configuration conf) throws ConfigurationException {
-        super.configure(conf);
-
-        String className = conf.getChild("driver").getValue();
-        mUrl          = conf.getChild("url").getValue();
-        mUser         = conf.getChild("user").getValue();
-        mPassword     = conf.getChild("password").getValue();
-        mInsUserStmt  = conf.getChild("sql-insert").getValue();
-        mDelUserStmt  = conf.getChild("sql-delete").getValue();
-        mSelUserStmt  = conf.getChild("sql-select").getValue();
-        mGetAllStmt   = conf.getChild("sql-all").getValue();
-        mUpdUserStmt  = conf.getChild("sql-update").getValue();
-
-        try {
-            Class.forName(className);
-
-            openDbConnection();
-            getLogger().info("Database user manager opened.");
-        }
-        catch(Exception ex) {
-            throw new ConfigurationException("DbUserManager.configure()", ex);
-        }
-    }
+    private FtpUserManagerMonitor ftpUserManagerMonitor;
 
     /**
      * Open connection to database.
      */
-    private void openDbConnection() throws SQLException {
+    protected void openDbConnection() throws SQLException {
         mDbConnection = DriverManager.getConnection(mUrl, mUser, mPassword);
         mDbConnection.setAutoCommit(true);
-        getLogger().info("Connection opened.");
     }
 
     /**
@@ -140,8 +110,6 @@ class DbUserManager extends AbstractUserManager {
             try {mDbConnection.close(); } catch(SQLException ex) {}
             mDbConnection = null;
         }
-
-        getLogger().info("Connection closed.");
     }
 
     /**
@@ -253,7 +221,7 @@ class DbUserManager extends AbstractUserManager {
             return thisUser;
         }
         catch(Exception ex) {
-            getLogger().error("DbUserManager.getUserByName()", ex);
+            ftpUserManagerMonitor.generalError("DbUserManager.getUserByName()", ex);
         }
         finally {
             if(rs != null) {
@@ -290,7 +258,7 @@ class DbUserManager extends AbstractUserManager {
         }
         catch(Exception ex) {
             bValid = false;
-            getLogger().error("DbUserManager.doesExist()", ex);
+            ftpUserManagerMonitor.generalError("DbUserManager.doesExist()", ex);
         }
         finally {
             if(rs != null) {
@@ -325,7 +293,7 @@ class DbUserManager extends AbstractUserManager {
             }
         }
         catch(Exception ex) {
-            getLogger().error("DbUserManager.getAllUserNames()", ex);
+            ftpUserManagerMonitor.generalError("DbUserManager.getAllUserNames()", ex);
         }
         finally {
             if(rs != null) {
@@ -399,7 +367,7 @@ class DbUserManager extends AbstractUserManager {
             stmt.close();
         }
         catch(Exception ex) {
-            getLogger().error("DbUserManager.authenticate()", ex);
+            ftpUserManagerMonitor.generalError("DbUserManager.authenticate()", ex);
             return false;
         }
         

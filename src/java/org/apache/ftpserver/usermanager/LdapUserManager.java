@@ -57,27 +57,26 @@
 package org.apache.ftpserver.usermanager;
 
 
-import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.Collections;
-import javax.naming.NamingException;
+import org.apache.ftpserver.UserManagerException;
+import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
+import org.apache.ftpserver.util.StringUtils;
+
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.SearchResult;
 import javax.naming.directory.ModificationItem;
-
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.ftpserver.util.StringUtils;
-import org.apache.ftpserver.UserManagerException;
+import javax.naming.directory.SearchResult;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Ldap based user manager class. Tested using Netscape Directory Server 4.1.
@@ -116,8 +115,6 @@ import org.apache.ftpserver.UserManagerException;
  *      ftpUsers
  * </pre>
  *
- * @phoenix:block
- * @phoenix:service name="org.apache.ftpserver.usermanager.UserManagerInterface"
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
@@ -129,7 +126,7 @@ class LdapUserManager extends AbstractUserManager {
     private final static String LOGIN      = "memberuid";
     private final static String CN         = "cn";
     private final static String SN         = "sn";
-    private final static String OBJ_CLASS  = "objectclass";
+    protected final static String OBJ_CLASS  = "objectclass";
     
     private final static String[] ALL_ATTRS = {
         User.ATTR_LOGIN,
@@ -148,62 +145,13 @@ class LdapUserManager extends AbstractUserManager {
 
     // Currently we are using only one connection.
     // So all the methods are synchronized.
-    private DirContext mAdminContext;
-    private Properties mAdminEnv;
-    private String mstRoot;
-    private String mstDnPrefix;
-    private String mstDnSuffix;
-    private Attribute mObjClassAttr;
-
-
-    /**
-     * Default constructor
-     */
-    public LdapUserManager() {
-    }
-
-
-    /**
-     * Instantiate <code>UserManager</code> implementation.
-     * Open LDAP connection.
-     */
-    public void configure(Configuration conf) throws ConfigurationException {
-        super.configure(conf);
-
-        // get ldap parameters
-        String url      = conf.getChild("url").getValue();
-        String admin    = conf.getChild("admin").getValue();
-        String password = conf.getChild("password").getValue();
-        String auth     = conf.getChild("authentication").getValue();
-
-        mstRoot     = conf.getChild("root").getValue();
-        mstDnPrefix = conf.getChild("prefix").getValue();
-        mstDnSuffix = conf.getChild("suffix").getValue();
-
-        try {
-            mAdminEnv = new Properties();
-            mAdminEnv.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            mAdminEnv.setProperty(Context.PROVIDER_URL, url);
-            mAdminEnv.setProperty(Context.SECURITY_AUTHENTICATION, auth);
-            mAdminEnv.setProperty(Context.SECURITY_PRINCIPAL, admin);
-            mAdminEnv.setProperty(Context.SECURITY_CREDENTIALS, password);
-            mAdminContext = new InitialDirContext(mAdminEnv);
-
-
-            // create objectClass attribute
-            mObjClassAttr = new BasicAttribute(OBJ_CLASS, false);
-            mObjClassAttr.add("ftpUsers");
-            mObjClassAttr.add("inetOrgPerson");
-            mObjClassAttr.add("organizationalPerson");
-            mObjClassAttr.add("person");
-            mObjClassAttr.add("top");
-
-            getLogger().info("LDAP user manager opened.");
-        }
-        catch(NamingException ex) {
-            throw new ConfigurationException("LdapUserManager.configure()", ex);
-        }
-    }
+    protected DirContext mAdminContext;
+    protected Properties mAdminEnv;
+    protected String mstRoot;
+    protected String mstDnPrefix;
+    protected String mstDnSuffix;
+    protected Attribute mObjClassAttr;
+    protected FtpUserManagerMonitor ftpUserManagerMonitor;
 
 
     /**
@@ -223,7 +171,7 @@ class LdapUserManager extends AbstractUserManager {
             }
         }
         catch(Exception ex) {
-            getLogger().error("LdapUserManager.getAllUserNames()", ex);
+            ftpUserManagerMonitor.generalError("LdapUserManager.getAllUserNames()", ex);
         }
 
         Collections.sort(allUsers);
@@ -251,7 +199,7 @@ class LdapUserManager extends AbstractUserManager {
             user.setMaxDownloadRate( Integer.parseInt(attrs.get(User.ATTR_MAX_DOWNLOAD_RATE).get().toString()) );
         }
         catch(Exception ex) {
-            getLogger().error("LdapUserManager.getUserByName()", ex);
+            ftpUserManagerMonitor.generalError ("LdapUserManager.getUserByName()", ex);
             user = null;
         }
 

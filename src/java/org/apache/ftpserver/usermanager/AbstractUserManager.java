@@ -57,21 +57,6 @@
 package org.apache.ftpserver.usermanager;
 
 
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.activity.Disposable;
-
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-
-import org.apache.avalon.framework.service.Serviceable;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.ServiceException;
-
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
 import org.apache.ftpserver.UserManagerException;
 
 /**
@@ -80,50 +65,11 @@ import org.apache.ftpserver.UserManagerException;
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  */
 public
-abstract class AbstractUserManager extends AbstractLogEnabled
-                                   implements UserManagerInterface,
-                                              Contextualizable,
-                                              Configurable,
-                                              Initializable,
-                                              Disposable {
+abstract class AbstractUserManager
+                                   implements UserManagerInterface {
 
-    protected Configuration mConfig;
-    protected Context mContext;
     protected String mstAdminName;
 
-    /**
-     * Set context object - first step.
-     */
-    public void contextualize(Context context) throws ContextException {
-        mContext = context;
-    }
-
-    /**
-     * Get application context.
-     */
-    public Context getContext() {
-        return mContext;
-    }
-
-    /**
-     * Configure user manager - third step.
-     */
-    public void configure(Configuration config) throws ConfigurationException {
-        mConfig = config;
-
-        Configuration adminConf = mConfig.getChild("ftp-admin-name", false);
-        mstAdminName = "admin";
-        if(adminConf != null) {
-            mstAdminName = adminConf.getValue(mstAdminName);
-        }
-    }
-
-    /**
-     * Get config object.
-     */
-    public Configuration getConfig() {
-        return mConfig;
-    }
 
 
     /**
@@ -147,10 +93,8 @@ abstract class AbstractUserManager extends AbstractLogEnabled
     }
 
     /**
-     * Close user manager - dummy implementation.
+     * Close user manager
      */
-    public void dispose() {
-        getLogger().info("Closing user manager...");
-    }
+    public abstract void dispose();
 
 }

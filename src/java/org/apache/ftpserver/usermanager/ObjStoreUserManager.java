@@ -56,41 +56,56 @@
  */
 package org.apache.ftpserver.usermanager;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Collections;
-import java.util.ArrayList;
-
 import org.apache.avalon.cornerstone.services.store.ObjectRepository;
 import org.apache.avalon.cornerstone.services.store.Store;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.Serviceable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
- * File object repository based user manager.
  *
  * @phoenix:block
  * @phoenix:service name="org.apache.ftpserver.usermanager.UserManagerInterface"
  *
+ * File object repository based user manager.
+ *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class ObjStoreUserManager extends AbstractUserManager implements Serviceable {
+class ObjStoreUserManager extends AbstractUserManager implements Serviceable, Configurable {
 
     protected Configuration mStoreConfig;
     protected Store mStore;
     protected ObjectRepository mObjectRepository;
 
     /**
+     * Initialize object repository.
+     */
+    public void initialize() throws Exception {
+        super.initialize();
+        mObjectRepository = (ObjectRepository) mStore.select(mStoreConfig);
+    }
+
+    /**
      * Configure user manager
      */
     public void configure(Configuration conf) throws ConfigurationException {
-        super.configure(conf);
         mStoreConfig = conf.getChild("repository");
+        Configuration adminConf = conf.getChild("ftp-admin-name", false);
+        mstAdminName = "admin";
+        if(adminConf != null) {
+            mstAdminName = adminConf.getValue(mstAdminName);
+        }
+
     }
 
     /**
@@ -100,14 +115,6 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable {
      */
     public void service(ServiceManager serviceManager) throws ServiceException {
         mStore = (Store) serviceManager.lookup(Store.class.getName());
-    }
-
-    /**
-     * Initialize object repository.
-     */
-    public void initialize() throws Exception {
-        super.initialize();
-        mObjectRepository = (ObjectRepository) mStore.select(mStoreConfig);
     }
 
     /**
@@ -199,4 +206,7 @@ class ObjStoreUserManager extends AbstractUserManager implements Serviceable {
         return password.equals(user.getPassword());
     }
 
+    public void dispose() {
+
+    }
 }
