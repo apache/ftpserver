@@ -57,21 +57,18 @@
 package org.apache.ftpserver.usermanager;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.FileReader;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.ftpserver.util.IoUtils;
+import org.apache.ftpserver.util.StringUtils;
 
 /**
  * This is another database based user manager class. I have
@@ -85,22 +82,17 @@ import org.apache.ftpserver.util.IoUtils;
 public
 class DbUserManager extends AbstractUserManager {
 
-    private static final String GET_ALL_USERS_SQL = "SELECT LOGIN_ID FROM FTP_USER";
-    private static final String GET_USER_SQL      = "SELECT * FROM FTP_USER WHERE LOGIN_ID = ?";
-    private static final String NEW_USER_SQL      = "INSERT INTO FTP_USER VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_USER_SQL   = "UPDATE FTP_USER SET PASSWORD = ?, HOME_DIR = ?, ENABLED = ?, WRITE_PERM = ?, IDLE_TIME = ?, UPLOAD_RATE = ?, DOWNLOAD_RATE = ? WHERE LOGIN_ID = ?";
-    private static final String DELETE_USER_SQL   = "DELETE FROM FTP_USER WHERE LOGIN_ID = ?";
+    private Connection mDbConnection       = null;
 
-    private String m_dbUrl;
-    private String m_dbUser;
-    private String m_dbPassword;
-    private Connection mDbConnection = null;
-
-    private PreparedStatement mNewUserStmt = null;
-    private PreparedStatement mDelUserStmt = null;
-    private PreparedStatement mGetUserStmt = null;
-    private PreparedStatement mGetAllStmt  = null;
-    private PreparedStatement mUpdUserStmt = null;
+    private String mInsUserStmt = null;
+    private String mDelUserStmt = null;
+    private String mSelUserStmt = null;
+    private String mGetAllStmt  = null;
+    private String mUpdUserStmt = null;
+    
+    private String mUrl      = null;
+    private String mUser     = null;
+    private String mPassword = null;
 
 
     /**
@@ -118,11 +110,15 @@ class DbUserManager extends AbstractUserManager {
     public void configure(Configuration conf) throws ConfigurationException {
         super.configure(conf);
 
-        // open database connection
         String className = conf.getChild("driver").getValue();
-        m_dbUrl = conf.getChild("url").getValue();
-        m_dbUser = conf.getChild("user").getValue();
-        m_dbPassword = conf.getChild("password").getValue();
+        mUrl          = conf.getChild("url").getValue();
+        mUser         = conf.getChild("user").getValue();
+        mPassword     = conf.getChild("password").getValue();
+        mInsUserStmt  = conf.getChild("sql-insert").getValue();
+        mDelUserStmt  = conf.getChild("sql-delete").getValue();
+        mSelUserStmt  = conf.getChild("sql-select").getValue();
+        mGetAllStmt   = conf.getChild("sql-all").getValue();
+        mUpdUserStmt  = conf.getChild("sql-update").getValue();
 
         try {
             Class.forName(className);
@@ -138,52 +134,16 @@ class DbUserManager extends AbstractUserManager {
     /**
      * Open connection to database.
      */
-    private void openDbConnection()
-        throws SQLException
-    {
-        mDbConnection = DriverManager.getConnection(m_dbUrl, m_dbUser, m_dbPassword);
+    private void openDbConnection() throws SQLException {
+        mDbConnection = DriverManager.getConnection(mUrl, mUser, mPassword);
         mDbConnection.setAutoCommit(true);
-
-        // prepare statements
-        mGetAllStmt = mDbConnection.prepareStatement( GET_ALL_USERS_SQL );
-        mGetUserStmt = mDbConnection.prepareStatement( GET_USER_SQL );
-        mNewUserStmt = mDbConnection.prepareStatement( NEW_USER_SQL );
-        mUpdUserStmt = mDbConnection.prepareStatement( UPDATE_USER_SQL );
-        mDelUserStmt = mDbConnection.prepareStatement( DELETE_USER_SQL );
-
         getLogger().info("Connection opened.");
     }
 
     /**
      * Close connection to database.
      */
-    private void closeDbConnection()
-    {
-        if (mNewUserStmt != null) {
-            try {mNewUserStmt.close(); } catch(SQLException ex) {}
-            mNewUserStmt = null;
-        }
-
-        if (mDelUserStmt != null) {
-            try {mDelUserStmt.close(); } catch(SQLException ex) {}
-            mDelUserStmt = null;
-        }
-
-        if (mGetUserStmt != null) {
-            try {mGetUserStmt.close(); } catch(SQLException ex) {}
-            mGetUserStmt = null;
-        }
-
-        if (mGetAllStmt != null) {
-            try {mGetAllStmt.close(); } catch(SQLException ex) {}
-            mGetAllStmt = null;
-        }
-
-        if (mUpdUserStmt != null) {
-            try {mUpdUserStmt.close(); } catch(SQLException ex) {}
-            mUpdUserStmt = null;
-        }
-
+    private void closeDbConnection() {
         if (mDbConnection != null) {
             try {mDbConnection.close(); } catch(SQLException ex) {}
             mDbConnection = null;
@@ -195,25 +155,18 @@ class DbUserManager extends AbstractUserManager {
     /**
      * Prepare connection to database.
      */
-    private void prepareDbConnection()
-        throws SQLException
-    {
+    private void prepareDbConnection() throws SQLException {
         boolean closed = false;
-        try
-        {
-            //FIXME: better connection check.
-            if ( null == mDbConnection || mDbConnection.isClosed() )
-            {
+        try {
+            if ( (null == mDbConnection) || mDbConnection.isClosed() ) {
                 closed = true;
             }
         }
-        catch ( final SQLException se )
-        {
+        catch ( final SQLException se ) {
             closed = true;
         }
 
-        if ( closed )
-        {
+        if ( closed ) {
             closeDbConnection();
             openDbConnection();
         }
@@ -223,10 +176,14 @@ class DbUserManager extends AbstractUserManager {
      * Delete user. Delete the row from the table.
      */
     public synchronized void delete(String name) throws SQLException {
+        HashMap map = new HashMap();
+        map.put(User.ATTR_LOGIN, name);
+        String sql = StringUtils.replaceString(mDelUserStmt, map);
+        
         prepareDbConnection();
-
-        mDelUserStmt.setString(1, name);
-        mDelUserStmt.executeUpdate();
+        Statement stmt = mDbConnection.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
 
@@ -234,35 +191,35 @@ class DbUserManager extends AbstractUserManager {
      * Save user. If new insert a new row, else update the existing row.
      */
     public synchronized void save(User user) throws SQLException {
-        prepareDbConnection();
-
+        
         // null value check
         if(user.getName() == null) {
             throw new NullPointerException("User name is null.");
-        }
-
+        } 
+        
+        prepareDbConnection();   
+        
+        HashMap map = new HashMap();
+        map.put(User.ATTR_LOGIN, user.getName());
+        map.put(User.ATTR_PASSWORD, getPassword(user));
+        map.put(User.ATTR_HOME, user.getVirtualDirectory().getRootDirectory());
+        map.put(User.ATTR_ENABLE, String.valueOf(user.getEnabled()));
+        map.put(User.ATTR_WRITE_PERM, String.valueOf(user.getVirtualDirectory().getWritePermission()));
+        map.put(User.ATTR_MAX_IDLE_TIME, new Long(user.getMaxIdleTime()));
+        map.put(User.ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()));
+        map.put(User.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate())); 
+        
+        String sql = null;      
         if( !doesExist(user.getName()) ) {
-            mNewUserStmt.setString(1, user.getName());
-            mNewUserStmt.setString(2, getPassword(user));
-            mNewUserStmt.setString(3, user.getVirtualDirectory().getRootDirectory());
-            mNewUserStmt.setString(4, String.valueOf(user.getEnabled()));
-            mNewUserStmt.setString(5, String.valueOf(user.getVirtualDirectory().getWritePermission()));
-            mNewUserStmt.setInt(6, user.getMaxIdleTime());
-            mNewUserStmt.setInt(7, user.getMaxUploadRate());
-            mNewUserStmt.setInt(8, user.getMaxDownloadRate());
-            mNewUserStmt.executeUpdate();
+            sql = StringUtils.replaceString(mInsUserStmt, map);
         }
         else {
-            mUpdUserStmt.setString(1, getPassword(user));
-            mUpdUserStmt.setString(2, user.getVirtualDirectory().getRootDirectory());
-            mUpdUserStmt.setString(3, String.valueOf(user.getEnabled()));
-            mUpdUserStmt.setString(4, String.valueOf(user.getVirtualDirectory().getWritePermission()));
-            mUpdUserStmt.setInt(5, user.getMaxIdleTime());
-            mUpdUserStmt.setInt(6, user.getMaxUploadRate());
-            mUpdUserStmt.setInt(7, user.getMaxDownloadRate());
-            mUpdUserStmt.setString(8, user.getName());
-            mUpdUserStmt.executeUpdate();
+            sql = StringUtils.replaceString(mUpdUserStmt, map);
         }
+        
+        Statement stmt = mDbConnection.createStatement();
+        stmt.executeUpdate(sql);
+        stmt.close();
     }
 
 
@@ -270,28 +227,43 @@ class DbUserManager extends AbstractUserManager {
      * Get the user object. Fetch the row from the table.
      */
     public synchronized User getUserByName(String name) {
+        
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
-            prepareDbConnection();
-
             User thisUser = null;
-            mGetUserStmt.setString(1, name);
-            ResultSet rs = mGetUserStmt.executeQuery();
+            HashMap map = new HashMap();
+            map.put(User.ATTR_LOGIN, name);
+            String sql = StringUtils.replaceString(mSelUserStmt, map);
+
+            prepareDbConnection();
+            stmt = mDbConnection.createStatement();
+            rs = stmt.executeQuery(sql);
+            
             if(rs.next()) {
                 thisUser = new User();
-                thisUser.setName(rs.getString("LOGIN_ID"));
-                thisUser.getVirtualDirectory().setRootDirectory(new File(rs.getString("HOME_DIR")));
-                thisUser.setEnabled(rs.getString("ENABLED").equals(Boolean.TRUE.toString()));
-                thisUser.getVirtualDirectory().setWritePermission(rs.getString("WRITE_PERM").equals(Boolean.TRUE.toString()));
-                thisUser.setMaxIdleTime(rs.getInt("IDLE_TIME"));
-                thisUser.setMaxUploadRate(rs.getInt("UPLOAD_RATE"));
-                thisUser.setMaxDownloadRate(rs.getInt("DOWNLOAD_RATE"));
+                thisUser.setName(rs.getString(1));
+                thisUser.getVirtualDirectory().setRootDirectory(new File(rs.getString(3)));
+                thisUser.setEnabled(rs.getString(4).equals(Boolean.TRUE.toString()));
+                thisUser.getVirtualDirectory().setWritePermission(rs.getString(5).equals(Boolean.TRUE.toString()));
+                thisUser.setMaxIdleTime(rs.getInt(6));
+                thisUser.setMaxUploadRate(rs.getInt(7));
+                thisUser.setMaxDownloadRate(rs.getInt(8));
             }
-            rs.close();
             return thisUser;
         }
-        catch(SQLException ex) {
+        catch(Exception ex) {
             getLogger().error("DbUserManager.getUserByName()", ex);
         }
+        finally {
+            if(rs != null) {
+                try { rs.close(); } catch(Exception ex) {}
+            }
+            if(stmt != null) {
+                try { stmt.close(); } catch(Exception ex) {}
+            }
+        }
+        
         return null;
     }
 
@@ -300,19 +272,35 @@ class DbUserManager extends AbstractUserManager {
      * User existance check
      */
     public synchronized boolean doesExist(String name) {
-        boolean bValid = false;
-        try {
-            prepareDbConnection();
 
-            mGetUserStmt.setString(1, name);
-            ResultSet rs = mGetUserStmt.executeQuery();
+        boolean bValid = false;
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            HashMap map = new HashMap();
+            map.put(User.ATTR_LOGIN, name);
+            String sql = StringUtils.replaceString(mSelUserStmt, map);
+            
+            prepareDbConnection();
+            stmt = mDbConnection.createStatement();
+            rs = stmt.executeQuery(sql);
             bValid = rs.next();
-            rs.close();
+            
         }
-        catch(SQLException ex) {
+        catch(Exception ex) {
             bValid = false;
             getLogger().error("DbUserManager.doesExist()", ex);
         }
+        finally {
+            if(rs != null) {
+                try { rs.close(); } catch(Exception ex) {}
+            }
+            if(stmt != null) {
+                try { stmt.close(); } catch(Exception ex) {}
+            }
+        }
+        
         return bValid;
     }
 
@@ -321,20 +309,33 @@ class DbUserManager extends AbstractUserManager {
      * Get all user names from the database.
      */
     public synchronized List getAllUserNames() {
+        
         ArrayList names = new ArrayList();
+        Statement stmt = null;
+        ResultSet rs = null;
+        
         try {
+            String sql = mGetAllStmt;
+            
             prepareDbConnection();
-
-            ResultSet rs = mGetAllStmt.executeQuery();
+            stmt = mDbConnection.createStatement();
+            rs = stmt.executeQuery(sql);
             while(rs.next()) {
-                names.add(rs.getString("LOGIN_ID"));
+                names.add(rs.getString(1));
             }
-            rs.close();
         }
-        catch(SQLException ex) {
+        catch(Exception ex) {
             getLogger().error("DbUserManager.getAllUserNames()", ex);
         }
-        Collections.sort(names);
+        finally {
+            if(rs != null) {
+                try { rs.close(); } catch(Exception ex) {}
+            }
+            if(stmt != null) {
+                try { stmt.close(); } catch(Exception ex) {}
+            }
+        }
+        
         return names;
     }
 
@@ -352,19 +353,24 @@ class DbUserManager extends AbstractUserManager {
      * </pre>
      */
     private synchronized String getPassword(User user) throws SQLException {
-        prepareDbConnection();
-
         if (user.getPassword() != null) {
             return user.getPassword();
         }
-
+        
         String password = "";
-        mGetUserStmt.setString(1, user.getName());
-        ResultSet rs = mGetUserStmt.executeQuery();
+        HashMap map = new HashMap();
+        map.put(User.ATTR_LOGIN, user.getName());
+        String sql = StringUtils.replaceString(mSelUserStmt, map);
+        
+        prepareDbConnection();
+        Statement stmt = mDbConnection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
         if (rs.next()) {
-            password = rs.getString("PASSWORD");
+            password = rs.getString(2);
         }
         rs.close();
+        stmt.close();
+        
         if (password == null) {
             password = "";
         }
@@ -375,27 +381,32 @@ class DbUserManager extends AbstractUserManager {
      * User authentication
      */
     public synchronized boolean authenticate(String user, String password) {
+        
         String existPassword = null;
-
+        
         try {
+            HashMap map = new HashMap();
+            map.put(User.ATTR_LOGIN, user);
+            String sql = StringUtils.replaceString(mSelUserStmt, map);
+            
             prepareDbConnection();
-
-            mGetUserStmt.setString(1, user);
-            ResultSet rs = mGetUserStmt.executeQuery();
+            Statement stmt = mDbConnection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                existPassword = rs.getString("PASSWORD");
+                existPassword = rs.getString(2);
             }
             rs.close();
+            stmt.close();
         }
-        catch(SQLException ex) {
+        catch(Exception ex) {
             getLogger().error("DbUserManager.authenticate()", ex);
             return false;
         }
-
+        
         if (existPassword == null) {
             existPassword = "";
         }
-
+        
         return existPassword.equals(password);
     }
 
