@@ -145,13 +145,13 @@ public class PropertiesUserManager extends AbstractUserManager {
        String thisPrefix = PREFIX + usr.getName() + '.';
 
        // set other properties
-       mUserData.setProperty(thisPrefix+"password", getPassword(usr));
-       mUserData.setProperty(thisPrefix+"home",     usr.getVirtualDirectory().getRootDirectory());
-       mUserData.setProperty(thisPrefix+"enabled",  usr.getEnabled());
-       mUserData.setProperty(thisPrefix+"write",    usr.getVirtualDirectory().getWritePermission());
-       mUserData.setProperty(thisPrefix+"idle",     usr.getMaxIdleTime());
-       mUserData.setProperty(thisPrefix+"upload",   usr.getMaxUploadRate());
-       mUserData.setProperty(thisPrefix+"download", usr.getMaxDownloadRate());
+       mUserData.setProperty(thisPrefix + User.ATTR_PASSWORD,          getPassword(usr));
+       mUserData.setProperty(thisPrefix + User.ATTR_HOME,              usr.getVirtualDirectory().getRootDirectory());
+       mUserData.setProperty(thisPrefix + User.ATTR_ENABLE,            usr.getEnabled());
+       mUserData.setProperty(thisPrefix + User.ATTR_WRITE_PERM,        usr.getVirtualDirectory().getWritePermission());
+       mUserData.setProperty(thisPrefix + User.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
+       mUserData.setProperty(thisPrefix + User.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
+       mUserData.setProperty(thisPrefix + User.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
 
        // save user data
        FileOutputStream fos = null;
@@ -202,6 +202,7 @@ public class PropertiesUserManager extends AbstractUserManager {
 
     /**
      * Get user password. Returns the encrypted value.
+     * <pre>
      * If the password value is not null
      *    password = new password
      * else
@@ -209,6 +210,7 @@ public class PropertiesUserManager extends AbstractUserManager {
      *     password = old password
      *   else
      *     password = ""
+     * </pre>
      */
     private String getPassword(User usr) {
         String password = usr.getPassword();
@@ -218,7 +220,7 @@ public class PropertiesUserManager extends AbstractUserManager {
             }
         }
         else if ( doesExist(usr.getName()) ) {
-            String key = PREFIX + usr.getName() + ".password";
+            String key = PREFIX + usr.getName() + '.' + User.ATTR_PASSWORD;
             password = mUserData.getProperty(key, "");
         }
 
@@ -236,13 +238,14 @@ public class PropertiesUserManager extends AbstractUserManager {
     public synchronized List getAllUserNames() {
 
         // get all user names
+        String suffix = '.' + User.ATTR_HOME;
         ArrayList ulst = new ArrayList();
         Enumeration allKeys = mUserData.propertyNames();
         while(allKeys.hasMoreElements()) {
             String key = (String)allKeys.nextElement();
-            if(key.endsWith(".home")) {
+            if(key.endsWith(suffix)) {
                 String name = key.substring(PREFIX.length());
-                int endIndex = name.length() - ".home".length();
+                int endIndex = name.length() - suffix.length();
                 name = name.substring(0, endIndex);
                 ulst.add(name);
             }
@@ -265,12 +268,12 @@ public class PropertiesUserManager extends AbstractUserManager {
         String baseKey = PREFIX + userName + '.';
         User user = new User();
         user.setName(userName);
-        user.setEnabled(mUserData.getBoolean(baseKey + "enabled", true));
-        user.getVirtualDirectory().setRootDirectory( mUserData.getFile(baseKey + "home", new File("/")) );
-        user.getVirtualDirectory().setWritePermission(mUserData.getBoolean(baseKey + "write", false));
-        user.setMaxIdleTime(mUserData.getInteger(baseKey + "idle", 0));
-        user.setMaxUploadRate(mUserData.getInteger(baseKey + "upload", 0));
-        user.setMaxDownloadRate(mUserData.getInteger(baseKey + "download", 0));
+        user.setEnabled(mUserData.getBoolean(baseKey + User.ATTR_ENABLE, true));
+        user.getVirtualDirectory().setRootDirectory( mUserData.getFile(baseKey + User.ATTR_HOME, new File("/")) );
+        user.getVirtualDirectory().setWritePermission(mUserData.getBoolean(baseKey + User.ATTR_WRITE_PERM, false));
+        user.setMaxIdleTime(mUserData.getInteger(baseKey + User.ATTR_MAX_IDLE_TIME, 0));
+        user.setMaxUploadRate(mUserData.getInteger(baseKey + User.ATTR_MAX_UPLOAD_RATE, 0));
+        user.setMaxDownloadRate(mUserData.getInteger(baseKey + User.ATTR_MAX_DOWNLOAD_RATE, 0));
         return user;
     }
 
@@ -279,7 +282,7 @@ public class PropertiesUserManager extends AbstractUserManager {
      * User existance check
      */
     public synchronized boolean doesExist(String name) {
-        String key = PREFIX + name + ".home";
+        String key = PREFIX + name + '.' + User.ATTR_HOME;
         return mUserData.containsKey(key);
     }
 
@@ -288,7 +291,7 @@ public class PropertiesUserManager extends AbstractUserManager {
      * User authenticate method
      */
     public synchronized boolean authenticate(String user, String password) {
-        String passVal = mUserData.getProperty(PREFIX + user + ".password");
+        String passVal = mUserData.getProperty(PREFIX + user + '.' + User.ATTR_PASSWORD);
         if (mbEncrypt) {
             password = EncryptUtils.encryptMD5(password);
         }
