@@ -10,8 +10,7 @@
     <h1 align="center"><font face="Arial" color="#663300"><i>Database Support</i></font></h1>
     
     <p><font face="Arial" size="3"><i>DbUserManager</i> is a JDBC based user manager. You can use this module if you have your FTP
-    username, password and other informations in a JDBC accessible database. To be able to access the database driver either
-    put your JDBC driver in your CLASSPATH or modify the batch files to include it.</font></p>
+    username, password and other informations in a JDBC accessible database.</font></p>
 
     <p align="left"><font face="Arial" size="3">This user manager has been tested using Oracle 8i and mySQL server. 
     All the user informations are stored in <i>FTP_USER</i> table. Database based user manager will try to create 
@@ -56,17 +55,35 @@
    </table>
 
 
-   <p><font face="Arial" size="3">Load the SQL file - <u>&lt;INSTALL_DIR&gt;apps/ftp/conf/ftp-db.sql</u></font>.</p>
-      
+   <p><font face="Arial" size="3">Load the SQL file - <u>src/conf/ftp-db.sql</u></font>.</p>
+   <p><font face="Arial" size="3">
+     The first step is to make sure that we are using the right user manager implementation. 
+     The fully qualified name of the LDAP based user manager is <em>org.apache.ftpserver.DbUserManager</em>.
+     So we have to use this class name in <em>ftp-assembly.xml</em> file. The user-manager block should be:
+   </font></p>
+   <pre><font size="3">
+&lt;!-- user manager block --&gt;
+&lt;block class=&quot;org.apache.ftpserver.usermanager.DbUserManager&quot; name=&quot;user-manager&quot;/&gt;
+   </font></pre>
+  
    <p><font face="Arial" size="3">The JDBC connectivity information is provided as configuration options that are passed
    through to the config object used to create JDBC connection. The standard JDBC properties used include the following:</font></p>
+   <pre><font size="3">
+&lt;!-- Database based user manager --&gt;
+&lt;driver&gt;org.gjt.mm.mysql.Driver&lt;/driver&gt;
+&lt;url&gt;jdbc:mysql://localhost/ftpDB&lt;/url&gt;
+&lt;user&gt;user&lt;/user&gt;
+&lt;password&gt;password&lt;/password&gt;
+   </pre></font>   
+
    <ul>
-     <li><font face="Arial" size="3"><u>FtpServer.server.config.user.manager</u> - set it <i>ranab.server.ftp.usermanager.DbUserManager</i>. This is the fully qualified name of the JDBC based user manager class.</font></li>
-     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.driver</u> - JDBC driver class (fully qualified).</font></li>
-     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.url</u> - JDBC database URL.</font></li>
-     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.user</u> - Database user.</font></li>
-     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.password</u> - Database password.</font></li>
+     <li><font face="Arial" size="3"><u>driver</u> - JDBC driver class (fully qualified).</font></li>
+     <li><font face="Arial" size="3"><u>url</u> - JDBC database URL.</font></li>
+     <li><font face="Arial" size="3"><u>user</u> - Database user.</font></li>
+     <li><font face="Arial" size="3"><u>password</u> - Database password.</font></li>
    </ul>
-  
+   
+   <p><font face="Arial" size="3">Besides these, you need to copy the driver jar file in the lib directory.</font></p>
+
 </body>
 </html>
