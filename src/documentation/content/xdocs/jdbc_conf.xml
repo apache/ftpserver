@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
@@ -10,7 +10,7 @@
     </authors>
   </header>
   <body>
-    <section name="Overview">
+    <section><title>Overview</title>
       <p>
         DbUserManager is a JDBC based user manager. You would use this module if you have your
         username, password and other informations in a JDBC accessible database.
@@ -32,8 +32,8 @@
         <tr><td>DOWNLOAD_RATE</td><td>INT</td></tr>
       </table>      
     </section>
-    <section name="Configurations">
-      <subsection name="ftp-assembly.xml">   
+    <section><title>Configurations</title>
+      <section><title>ftp-assembly.xml</title>
         <p>
           The first step is to make sure that we are using the right user manager implementation. 
           The fully qualified name of the LDAP based user manager is <em>org.apache.ftpserver.DbUserManager</em>.
@@ -43,8 +43,8 @@
 &lt;!-- user manager block --&gt;
 &lt;block class=&quot;org.apache.ftpserver.usermanager.DbUserManager&quot; name=&quot;user-manager&quot;/&gt;
         </source>
-      </subsection>
-      <subsection name="ftp-config.xml">
+      </section>
+      <section><title>ftp-config.xml</title>
         <p>
           The next step is to use appropriate configuration parameters. So we have to modify ftp-config.xml file. 
           The sample block is for MySQL database.
@@ -68,7 +68,7 @@
         <p>
           Besides these, you need to copy the driver jar file in the lib directory.
         </p>
-      </subsection>
+      </section>
     </section>
   </body>
   <footer>

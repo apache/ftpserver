@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
@@ -10,7 +10,7 @@
     </authors>
   </header>
   <body>
-    <section name="Overview">
+    <section><title>Overview</title>
      <p>SITE command is used by the server to provide services specific to the system. Most of the SITE commands
         can be used by the admin only. You can get all the available SITE commands by &quot;SITE HELP&quot;.
      </p>
@@ -18,7 +18,7 @@
         can monitor, control the server remotely. All the available SITE commands descriptions with sample outputs are as follows:
      </p>
     </section>
-    <section name="SITE HELP">
+    <section><title>SITE HELP</title>
       <p>
          This is the only SITE command that can be executed by non-admin user. It returns all the available SITE commands.
       </p>  
@@ -42,7 +42,7 @@ ftp&gt;
       </source>
     </section>
 
-    <section name="SITE WHO">
+    <section><title>SITE WHO</title>
       <p>
         You can get the list of all the currently connected user by this SITE command. It returns user name, client IP, login time and last access time.  
         You can disconnect a client connection using SITE KICK &lt;userName&gt;. If an user has logged-in multiple times, all these connections will
@@ -69,7 +69,7 @@ anonymous       127.0.0.1       10/17 19:46:42  10/17 20:02:50
 ftp&gt;
       </source>
     </section>
-    <section name="SITE LISTIP">
+    <section><title>SITE LISTIP</title>
       <p>
         SITE LISTIP returns all the banned/allowed IPs. 
         New entries can be added by SITE ADDIP &lt;entry&gt;. 
@@ -97,7 +97,7 @@ ftp&gt; quote SITE LISTIP
 ftp&gt;
       </source>
     </section>
-    <section name="SITE LISTUSER">
+    <section><title>SITE LISTUSER</title>
       <p>
         This command returns all the user names in the user store. 
         By executing SITE DESCUSER &lt;userName&gt; we can get the user parameters (except password).
@@ -134,7 +134,7 @@ ftp&gt;
       </source>
     </section>
 
-    <section name="SITE ADDUSER">
+    <section><title>SITE ADDUSER</title>
       <p>
         New users can be added using this command. 
         The newly created user will have default parameters. The attributes are : 

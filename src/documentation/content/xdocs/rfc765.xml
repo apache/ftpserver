@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
-
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 <document>
-
- <properties>
-  <title>RFC765</title>
- </properties>
-
+  <header>
+    <title>RFC 765</title>
+    <authors>
+      <person id="jp" name="J Postel" email=""/>
+      <person id="jr" name="J Reynolds" email=""/>
+    </authors>
+  </header>
 <body>
-<section name="RFC 765">
-<source><![CDATA[ 
+<section><title>RFC 765 text</title>
+<source>
+<![CDATA[ 
                                                                         
 Network Working Group                                          J. Postel
 Request for Comments: 959                                    J. Reynolds
@@ -3871,17 +3874,6 @@ File Transfer Protocol
  
  
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 Postel & Reynolds                                              [Page 68]
  
  
@@ -3905,45 +3897,9 @@ REFERENCES
         ISI, April 1985.
  
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 Postel & Reynolds                                              [Page 69]
  
-
 ]]></source>
-
 </section>
 
 </body>

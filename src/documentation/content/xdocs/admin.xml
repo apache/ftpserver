@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
@@ -15,20 +15,20 @@
     </notice>
   </header>
   <body>
-    <section name="Overview">
+    <section><title>Overview</title>
       <p>
         All the FTP server administrative tasks can be performed using remote admin
         user interface. We can also use SITE command to do that. You can start the admin
-        console using <u>java -jar ftp-admin.jar</u>. 
+        console using <strong>java -jar ftp-admin.jar</strong>. 
       </p>
       <p>
         The admin UI uses RMI to connect to the server. It also displays the server 
         real-time data.
       </p>
     </section>
-    <section name="Configuration Parameters">
+    <section><title>Configuration Parameters</title>
     </section>
-    <section name="Screenshots">
+    <section><title>Screenshots</title>
     </section>
   </body>
   <footer>

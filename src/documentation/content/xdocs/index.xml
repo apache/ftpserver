@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
@@ -15,7 +15,7 @@
     </notice>
   </header>
   <body>
-    <section name="Overview">
+    <section><title>Overview</title>
       <p>
         FtpServer is a server component for Pheonix that allows remote FTP client to
         attach and download files.  The client software can be any type of FTP client
@@ -31,7 +31,7 @@
         server.
       </p>
     </section>
-    <section name="Features">
+    <section><title>Features</title>
         <ol>
           <li>100% pure Java, free, open source resumable FTP server!!!</li>
           <li>Multi platform support and multithreaded design.</li>
@@ -48,7 +48,7 @@
           <li>Supports SITE commands. Use SITE HELP to get the available commands.</li>               
         </ol>
     </section>
-    <section name="Components">
+    <section><title>Components</title>
        <p>
          The ftp server consists of several components. The component
          implementations and dependencies are declared in ftp-assembly.xml file.

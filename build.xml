@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
+
+  <!DOCTYPE project [
+    <!ENTITY forrest-targets SYSTEM "file:./forrest-targets.ent">
+  ]>
+
 <!-- 
   ==============================================================================
   $Id$
@@ -14,8 +19,8 @@
     -->
     <property file=".ant.properties"/>
     <property file="${user.home}/.ant.properties"/>
-    <property name="name" value="ftpserver"/>
-    <property name="Name" value="FtpServer"/>
+    <property file="${basedir}/../default.properties"/>
+    <property file="${basedir}/default.properties"/>    
     <property name="admin.name" value="ftp-admin"/>
     <property name="version" value="1.0"/>
     <property name="year" value="1999-2003"/>
@@ -55,8 +60,6 @@
     <property name="java.dir" value="${src.dir}/java"/>
     <property name="conf.dir" value="${src.dir}/conf"/>
     <property name="manifest.src" value="${src.dir}/manifest"/>
-    <property name="xdocs.dir" value="${src.dir}/xdocs"/>
-    <property name="docs.src" value="${xdocs.dir}"/>
 
     <!--
        Set the properties for the distribution directories
@@ -122,11 +125,9 @@
         <echo message=" available targets are:"/>
         <echo message=""/>
         <echo message="   dist-lite --> generates unpacked distribution "/>
-        <echo message="   website   --> makes all the docs and javadocs"/>
         <echo message="   compile   --> compiles the source code"/>
         <echo message="   dist      --> generates all the ${name} distributions, packed"/>
         <echo message="   clean     --> cleans up the directory"/>
-        <echo message="   xdocs     --> creates the documentaion for the ${name}"/>
         <echo message="   javadocs  --> creates the Javadoc"/>
         <echo message=""/>
         <echo message=" See the comments inside the build.xml file for more details."/>
@@ -266,75 +267,6 @@
         </javadoc>
     </target>
 
-
-    <!--
-       ===================================================================
-                                  Build xdocs
-       ===================================================================
-    -->
-    <target name="xdocs" depends="prepare">
-        <style style="${docs.src}/stylesheets/site.xsl"
-                basedir="${docs.src}/"
-                destdir="${build.docs}/" 
-                includes="**/*.xml" >
-        </style>
-        <copy todir="${build.docs}" filtering="no">
-            <fileset dir="${docs.src}">
-                <include name="**/*.css"/>
-                <include name="**/*.txt"/>
-            </fileset>
-        </copy>
-        <copy todir="${build.docs}/images" filtering="no">
-            <fileset dir="${docs.src}/images">
-                <include name="**/*.gif"/>
-                <include name="**/*.jpeg"/>
-                <include name="**/*.jpg"/>
-                <include name="**/*.png"/>
-            </fileset>
-        </copy>
-        <mkdir dir="${dist.dir}/docs"/>
-        <copy todir="${dist.dir}/docs" filtering="no">
-            <fileset dir="${build.docs}"/>
-        </copy>
-    </target>
-
-
-    <!--
-       ===================================================================
-                                build website 
-       ===================================================================
-    -->
-    <target name="website" depends="xdocs,javadocs">
-        <echo message="preparing website in ${www.dir}"/>
-        <delete>
-            <fileset dir="${www.dir}">
-                <exclude name="CVS/**"/>
-                <exclude name="rfclist/**"/>
-                <exclude name="javadocs/**"/>
-            </fileset>
-        </delete>
-        <mkdir dir="${www.dir}"/>
-        <copy todir="${www.dir}" filtering="no">
-            <fileset dir="${build.docs}"/>
-        </copy>
-        <copy todir="${www.dir}" filtering="no">
-            <fileset dir="${build.dir}">
-                <include name="javadocs/**"/>
-            </fileset>
-        </copy>
-        <fixcrlf srcdir="${www.dir}" includes="**/*.html" eol="lf" tab="remove" tablength="4" />
-        <fixcrlf srcdir="${www.dir}" includes="**/*.css" eol="lf" tab="remove" tablength="4" />
-    </target>
-
-
-    <!--
-       ===================================================================
-                            Build everything
-       ===================================================================
-    -->
-    <target name="everything" depends="clean,website,dist"/>
-
-
     <!--
        ===================================================================
                           Build all distributions
@@ -428,7 +360,7 @@
         <delete file="${dist.binary.dir}/${name}-binary-${version}.tar"/>
     </target>
 
-    <target name="dist-bin-common" depends="dist-lite,xdocs,javadocs">
+    <target name="dist-bin-common" depends="dist-lite,javadocs">
         <echo message ="Building binary distributions"/>
         
         <mkdir dir="${dist.binary.dir}"/>
@@ -491,7 +423,7 @@
         <delete file="${dist.source.dir}/${name}-with-phoenix-${version}-src.tar"/>
     </target>
 
-    <target name="dist-src-common" depends="dist-lite,xdocs,javadocs">
+    <target name="dist-src-common" depends="dist-lite,javadocs">
         <echo message ="Building source distributions"/>
         <mkdir dir="${dist.source.dir}"/>
         <zip zipfile="${dist.source.dir}/${dist.name}-src.zip">
@@ -538,5 +470,7 @@
         <delete dir="${dist.dir}"/>
         <delete dir="${build.dir}"/>
     </target>
+
+    &forrest-targets;
 
 </project>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<status>
+
+  <developers>
+    <person name="Rana Bhattacharyya"      email=""      id="RB" />
+    <person name="Paul Hammant"      email=""      id="PH" />
+  </developers>
+
+  <todo>
+    <!-- Add todo items. @context is an arbitrary string. Eg:
+    <actions priority="high">
+      <action context="docs" dev="JB">
+        Customize this template project with your project's details.  This
+        TODO list is generated from 'status.xml'.
+      </action>
+    </actions>
+    <actions priority="high">
+      <action context="code" dev="SN">
+      </action>
+    </actions>
+    <actions priority="medium">
+      <action context="docs" dev="open">
+      </action>
+    </actions>
+    -->
+  </todo>
+
+  <changes>
+    <!-- Add new releases here -->
+    <release version="0.1" date="2003">
+      <!-- Some action types have associated images. By default, images are
+      defined for 'add', 'fix', 'remove' and 'update'. If you add
+      src/documentation/resources/images/<foo>.jpg images, these will
+        automatically be used for entries of type <foo>. -->
+
+          <action dev="JB" type="add" context="admin">
+            Initial Import
+          </action>
+          <!-- Sample action:
+          <action dev="JB" type="fix" due-to="Joe Contributor"
+            due-to-email="joec@apache.org" fixes-bug="123">
+            Fixed a bug in the Foo class.
+          </action>
+          -->
+        </release>
+      </changes>
+    </status>

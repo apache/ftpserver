@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.1//EN" "document-v11.dtd">
 
 <document>
   <header>
@@ -10,7 +10,7 @@
     </authors>
   </header>
   <body>
-    <section name="Overview">
+    <section><title>Overview</title>
       <p>
         The LdapUserManager is an user manager implementation that authenticates against an
         LDAP server using JNDI login using the ftp server configuration options. You would use
@@ -63,8 +63,8 @@ ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;pas
         Please change host, port, user and password parameters.
       </p>
     </section>
-    <section name="Configuration">
-        <subsection name="ftp-assembly.xml">
+    <section><title>Configuration</title>
+        <section><title>ftp-assembly.xml</title>
           <p>
              The first step is to make sure that we are using the right user manager implementation. 
              The fully qualified name of the LDAP based user manager is <em>org.apache.ftpserver.LdapUserManager</em>.
@@ -74,8 +74,8 @@ ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;pas
 &lt;!-- user manager block --&gt;
 &lt;block class=&quot;org.apache.ftpserver.usermanager.LdapUserManager&quot; name=&quot;user-manager&quot;/&gt;
           </source>
-        </subsection>
-        <subsection name="ftp-config.xml">
+        </section>
+        <section><title>ftp-config.xml</title>
           <p>
             The next step is to use appropriate configuration parameters. So we have to modify ftp-config.xml file.
           </p>
@@ -105,7 +105,7 @@ ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;pas
               This is useful if you prompt a user for a username and you don't want the user to have to enter the 
               fully distinguished name. Using this property and <em>prefix</em> the userDN will be formed as <em>String userDN = prefix + username + suffix;</em></li>
         </ul>
-      </subsection>
+      </section>
     </section>
   </body>
   <footer>
