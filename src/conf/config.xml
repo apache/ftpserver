@@ -135,8 +135,8 @@
     <ftp-admin-name>admin</ftp-admin-name>   
 
     <!-- property file based user manager -->
-    <encrypt>false</encrypt>
-    
+    <encrypt>true</encrypt>
+
     <!-- file object store based user manager
     <repository destinationURL="file://./FtpUserManagerStore/"
                 type="OBJECT"
@@ -149,6 +149,23 @@
     <url>jdbc:mysql://localhost/ftpDB</url>
     <user>root</user>
     <password>admin</password>
+    <sql-all><![CDATA[SELECT LOGIN_ID FROM FTP_USER ORDER BY LOGIN_ID]]></sql-all>
+    <sql-select><![CDATA[SELECT LOGIN_ID, PASSWORD, HOME_DIR, ENABLED, WRITE_PERM, IDLE_TIME, UPLOAD_RATE, DOWNLOAD_RATE 
+                         FROM FTP_USER 
+                         WHERE LOGIN_ID = '{uid}']]></sql-select>
+    <sql-delete><![CDATA[DELETE FROM FTP_USER WHERE LOGIN_ID = '{uid}']]></sql-delete>
+    <sql-insert><![CDATA[INSERT INTO FTP_USER 
+                         (LOGIN_ID, PASSWORD, HOME_DIR, ENABLED, WRITE_PERM, IDLE_TIME, UPLOAD_RATE, DOWNLOAD_RATE) 
+                         VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate})]]></sql-insert>
+    <sql-update><![CDATA[UPDATE FTP_USER 
+                         SET PASSWORD='{userpassword}', 
+                             HOME_DIR='{homedirectory}', 
+                             ENABLED='{enableflag}', 
+                             WRITE_PERM='{writepermission}', 
+                             IDLE_TIME={idletime}, 
+                             UPLOAD_RATE={uploadrate}, 
+                             DOWNLOAD_RATE={downloadrate} 
+                         WHERE LOGIN_ID='{uid}']]></sql-update>
     -->
 
     <!-- LDAP based user manager
@@ -159,7 +176,7 @@
     <root>ou=people,o=apache.org</root>
     <prefix>uid=</prefix>
     <suffix>,ou=people,o=apache.org</suffix>
-    -->    
+    -->
 
   </user-manager>
 
