@@ -275,14 +275,14 @@ class SiteCommandHandler {
         sb.append('\n');
         User user = mConfig.getUserManager().getUserByName(args[1]);
         if(user != null) {
-            sb.append("login : ").append(user.getName()).append('\n');
-            sb.append("password : ").append("******").append('\n');
-            sb.append("home : ").append(user.getVirtualDirectory().getRootDirectory()).append('\n');
-            sb.append("writepermission : ").append(user.getVirtualDirectory().getWritePermission()).append('\n');
-            sb.append("enable : ").append(user.getEnabled()).append('\n');
-            sb.append("maxidletime : ").append(user.getMaxIdleTime()).append('\n');
-            sb.append("maxuploadrate : ").append(user.getMaxUploadRate()).append('\n');
-            sb.append("maxdownloadrate : ").append(user.getMaxDownloadRate()).append('\n');
+            sb.append(User.ATTR_LOGIN).append(" : ").append(user.getName()).append('\n');
+            sb.append(User.ATTR_PASSWORD).append(" : ").append("******").append('\n');
+            sb.append(User.ATTR_HOME).append(" : ").append(user.getVirtualDirectory().getRootDirectory()).append('\n');
+            sb.append(User.ATTR_WRITE_PERM).append(" : ").append(user.getVirtualDirectory().getWritePermission()).append('\n');
+            sb.append(User.ATTR_ENABLE).append(" : ").append(user.getEnabled()).append('\n');
+            sb.append(User.ATTR_MAX_IDLE_TIME).append(" : ").append(user.getMaxIdleTime()).append('\n');
+            sb.append(User.ATTR_MAX_UPLOAD_RATE).append(" : ").append(user.getMaxUploadRate()).append('\n');
+            sb.append(User.ATTR_MAX_DOWNLOAD_RATE).append(" : ").append(user.getMaxDownloadRate()).append('\n');
         }
         sb.append('\n');
         return mConfig.getStatus().processNewLine(sb.toString(), 200);
@@ -372,25 +372,25 @@ class SiteCommandHandler {
             User user = mConfig.getUserManager().getUserByName(args[1]);
             if(user != null) {
 
-                if("password".equals(args[2])) {
+                if ( User.ATTR_PASSWORD.equals(args[2]) ) {
                     user.setPassword(args[3]);
                 }
-                else if("home".equals(args[2])) {
+                else if ( User.ATTR_HOME.equals(args[2]) ) {
                     user.getVirtualDirectory().setRootDirectory(args[3]);
                 }
-                else if("writepermission".equals(args[2])) {
+                else if ( User.ATTR_WRITE_PERM.equals(args[2]) ) {
                     user.getVirtualDirectory().setWritePermission("true".equals(args[3]));
                 }
-                else if("enable".equals(args[2])) {
+                else if ( User.ATTR_ENABLE.equals(args[2]) ) {
                     user.setEnabled("true".equals(args[3]));
                 }
-                else if("maxidletime".equals(args[2])) {
+                else if ( User.ATTR_MAX_IDLE_TIME.equals(args[2]) ) {
                     user.setMaxIdleTime(Integer.parseInt(args[3]));
                 }
-                else if("maxuploadrate".equals(args[2])) {
+                else if ( User.ATTR_MAX_UPLOAD_RATE.equals(args[2]) ) {
                     user.setMaxUploadRate(Integer.parseInt(args[3]));
                 }
-                else if("maxdownloadrate".equals(args[2])) {
+                else if ( User.ATTR_MAX_DOWNLOAD_RATE.equals(args[2]) ) {
                     user.setMaxDownloadRate(Integer.parseInt(args[3]));
                 }
                 else {
