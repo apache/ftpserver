@@ -25,8 +25,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import org.apache.ftpserver.util.Message;
-import org.apache.ftpserver.interfaces.SpyConnectionInterface;
-import org.apache.ftpserver.interfaces.FtpWriterMonitor;
+import org.apache.ftpserver.SpyConnectionInterface;
+import org.apache.ftpserver.WriterMonitor;
 
 /**
  * Writer object used by the server. It has the spying capability.
@@ -39,7 +39,7 @@ class FtpWriter extends Writer {
     private OutputStreamWriter mOriginalWriter;
     private SpyConnectionInterface mSpy;
     private AbstractFtpConfig mConfig;
-    private FtpWriterMonitor ftpWriterMonitor;
+    private WriterMonitor writerMonitor;
 
     /**
      * Constructor - set the actual writer object
@@ -76,7 +76,7 @@ class FtpWriter extends Writer {
                     }
                     catch(IOException ex) {
                         mSpy = null;
-                        ftpWriterMonitor.responseException("FtpWriter.spyResponse()", ex);
+                        writerMonitor.responseException("FtpWriter.spyResponse()", ex);
                     }
                 }
             };

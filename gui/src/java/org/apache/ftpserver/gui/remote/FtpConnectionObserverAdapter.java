@@ -22,7 +22,7 @@ package org.apache.ftpserver.gui.remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.ftpserver.FtpUser;
+import org.apache.ftpserver.User;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
 
@@ -52,21 +52,21 @@ class FtpConnectionObserverAdapter implements FtpConnectionObserver {
     /**
      * New connection notification.
      */
-    public void newConnection(final FtpUser user) throws RemoteException {
+    public void newConnection(final User user) throws RemoteException {
         mObserver.newConnection(user);
     }
 
     /**
      * Close connection notification.
      */
-    public void removeConnection(final FtpUser user) throws RemoteException {
+    public void removeConnection(final User user) throws RemoteException {
         mObserver.removeConnection(user);
     }
 
     /**
      * User update notification.
      */
-    public void updateConnection(final FtpUser user) throws RemoteException {
+    public void updateConnection(final User user) throws RemoteException {
         mObserver.updateConnection(user);
     }
 

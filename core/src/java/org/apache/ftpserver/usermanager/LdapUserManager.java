@@ -20,7 +20,7 @@ package org.apache.ftpserver.usermanager;
 
 
 import org.apache.ftpserver.UserManagerException;
-import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
+import org.apache.ftpserver.UserManagerMonitor;
 import org.apache.ftpserver.util.StringUtils;
 
 import javax.naming.Context;
@@ -113,7 +113,7 @@ class LdapUserManager extends AbstractUserManager {
     protected String mstDnPrefix;
     protected String mstDnSuffix;
     protected Attribute mObjClassAttr;
-    protected FtpUserManagerMonitor ftpUserManagerMonitor;
+    protected UserManagerMonitor userManagerMonitor;
 
 
     /**
@@ -133,7 +133,7 @@ class LdapUserManager extends AbstractUserManager {
             }
         }
         catch(Exception ex) {
-            ftpUserManagerMonitor.generalError("LdapUserManager.getAllUserNames()", ex);
+            userManagerMonitor.generalError("LdapUserManager.getAllUserNames()", ex);
         }
 
         Collections.sort(allUsers);
@@ -161,7 +161,7 @@ class LdapUserManager extends AbstractUserManager {
             user.setMaxDownloadRate( Integer.parseInt(attrs.get(User.ATTR_MAX_DOWNLOAD_RATE).get().toString()) );
         }
         catch(Exception ex) {
-            ftpUserManagerMonitor.generalError ("LdapUserManager.getUserByName()", ex);
+            userManagerMonitor.generalError ("LdapUserManager.getUserByName()", ex);
             user = null;
         }
 

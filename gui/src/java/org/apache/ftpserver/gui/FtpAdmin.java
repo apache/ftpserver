@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
@@ -339,7 +339,7 @@ class FtpAdmin extends JFrame implements CommonHandler {
     /**
      * Get user object from the session id
      */
-    public FtpUserImpl getUser(String sessionId) {
+    public UserImpl getUser(String sessionId) {
         try {
             return mConService.getUser(sessionId);
         }

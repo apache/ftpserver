@@ -5,7 +5,7 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.ftpserver.AvalonFtpUserManagerMonitor;
+import org.apache.ftpserver.AvalonUserManagerMonitor;
 
 import javax.naming.NamingException;
 import javax.naming.directory.BasicAttribute;
@@ -27,7 +27,7 @@ public class AvlalonLdapUserManager extends LdapUserManager implements Configura
 
     public void enableLogging(Logger logger) {
         this.logger = logger;
-        ftpUserManagerMonitor = new AvalonFtpUserManagerMonitor(logger);
+        userManagerMonitor = new AvalonUserManagerMonitor(logger);
     }
 
     /**

@@ -22,7 +22,7 @@ package org.apache.ftpserver.remote.interfaces;
 import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 
 /**
  * Ftp user service interface - used by remote admin GUI.
@@ -60,7 +60,7 @@ interface ConnectionServiceInterface extends Remote {
     /**
      * Get connected user
      */
-    FtpUserImpl getUser(String sessId) throws RemoteException;
+    UserImpl getUser(String sessId) throws RemoteException;
 
     /**
      * Set spy object

@@ -26,10 +26,9 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.apache.ftpserver.util.Message;
-import org.apache.ftpserver.interfaces.FtpConnectionObserver;
-import org.apache.ftpserver.interfaces.SpyConnectionInterface;
-import org.apache.ftpserver.interfaces.FtpConnectionMonitor;
-import org.apache.ftpserver.usermanager.User;
+import org.apache.ftpserver.ConnectionObserver;
+import org.apache.ftpserver.SpyConnectionInterface;
+import org.apache.ftpserver.ConnectionMonitor;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
 
 /**
@@ -40,9 +39,9 @@ import org.apache.ftpserver.usermanager.UserManagerInterface;
 public
 class ConnectionService {
 
-    private FtpConnectionObserver mObserver;
+    private ConnectionObserver mObserver;
     private AbstractFtpConfig mConfig;
-    private FtpConnectionMonitor ftpConnectionMonitor;
+    private ConnectionMonitor connectionMonitor;
     private Timer mTimer;
     private Vector mConList;
 
@@ -50,9 +49,9 @@ class ConnectionService {
     /**
      * Constructor. Start scheduler job.
      */
-    public ConnectionService(AbstractFtpConfig cfg, FtpConnectionMonitor ftpConnectionMonitor) throws UserManagerException {
+    public ConnectionService(AbstractFtpConfig cfg, ConnectionMonitor connectionMonitor) throws UserManagerException {
         mConfig = cfg;
-        this.ftpConnectionMonitor = ftpConnectionMonitor;
+        this.connectionMonitor = connectionMonitor;
         mConList = new Vector();
 
         // default users creation
@@ -78,8 +77,8 @@ class ConnectionService {
         // create admin user
         String adminName = userManager.getAdminName();
         if(!userManager.doesExist(adminName)) {
-            ftpConnectionMonitor.creatingUser(adminName);
-            User adminUser = new User();
+            connectionMonitor.creatingUser(adminName);
+            org.apache.ftpserver.usermanager.User adminUser = new org.apache.ftpserver.usermanager.User();
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
             adminUser.setEnabled(true);
@@ -93,10 +92,10 @@ class ConnectionService {
 
         // create anonymous user
         if (mConfig.isAnonymousLoginAllowed()
-                && !userManager.doesExist(FtpUser.ANONYMOUS)) {
-            ftpConnectionMonitor.creatingUser(FtpUser.ANONYMOUS);
-            User anonUser = new User();
-            anonUser.setName(FtpUser.ANONYMOUS);
+                && !userManager.doesExist(User.ANONYMOUS)) {
+            connectionMonitor.creatingUser(User.ANONYMOUS);
+            org.apache.ftpserver.usermanager.User anonUser = new org.apache.ftpserver.usermanager.User();
+            anonUser.setName(User.ANONYMOUS);
             anonUser.setPassword("");
             anonUser.setEnabled(true);
             anonUser.getVirtualDirectory().setWritePermission(false);
@@ -128,7 +127,7 @@ class ConnectionService {
     /**
      * Set user manager observer.
      */
-    public void setObserver(FtpConnectionObserver obsr ) {
+    public void setObserver(ConnectionObserver obsr ) {
         mObserver = obsr;
         synchronized(mConList) {
             for(Iterator conIt=mConList.iterator(); conIt.hasNext(); ) {
@@ -143,14 +142,14 @@ class ConnectionService {
     /**
      * Get the observer.
      */
-    public FtpConnectionObserver getObserver() {
+    public ConnectionObserver getObserver() {
         return mObserver;
     }
 
     /**
      * User login method. If successfull, populates the user object.
      */
-    public boolean login(final FtpUserImpl thisUser) {
+    public boolean login(final UserImpl thisUser) {
 
         // already logged in
         if(thisUser.hasLoggedIn()) {
@@ -168,7 +167,7 @@ class ConnectionService {
         UserManagerInterface userManager = mConfig.getUserManager();
         boolean bAnonymous = thisUser.getIsAnonymous();
         if ( !(bAnonymous || userManager.authenticate(user, password)) ) {
-            ftpConnectionMonitor.authFailed(user);
+            connectionMonitor.authFailed(user);
             return false;
         }
 
@@ -194,7 +193,7 @@ class ConnectionService {
         if( !createHome(thisUser) ) {
             return false;
         }
-        ftpConnectionMonitor.userLogin(thisUser);
+        connectionMonitor.userLogin(thisUser);
 
         // update global statistics
         mConfig.getStatistics().setLogin(thisUser.getIsAnonymous());
@@ -218,7 +217,7 @@ class ConnectionService {
         if (con != null) {
 
             // logout notification
-            final FtpUserImpl thisUser = con.getUser();
+            final UserImpl thisUser = con.getUser();
             if (thisUser.hasLoggedIn()) {
                 mConfig.getStatistics().setLogout(thisUser.getIsAnonymous());
             }
@@ -229,7 +228,7 @@ class ConnectionService {
             // send message
             Message msg = new Message() {
                 public void execute() {
-                    FtpConnectionObserver observer = mObserver;
+                    ConnectionObserver observer = mObserver;
                     if(observer != null) {
                         observer.removeConnection(thisUser);
                     }
@@ -247,7 +246,7 @@ class ConnectionService {
     public void closeAllConnections() {
         List allUsers = getAllUsers();
         for( Iterator userIt = allUsers.iterator(); userIt.hasNext(); ) {
-            FtpUserImpl user = (FtpUserImpl)userIt.next();
+            UserImpl user = (UserImpl)userIt.next();
             closeConnection(user.getSessionId());
         }
     }
@@ -255,11 +254,11 @@ class ConnectionService {
     /**
      * Populate user properties
      */
-    private boolean populateProperties(FtpUserImpl thisUser, String user) {
+    private boolean populateProperties(UserImpl thisUser, String user) {
 
         // get the existing user
         UserManagerInterface userManager = mConfig.getUserManager();
-        User existUser = userManager.getUserByName(user);
+        org.apache.ftpserver.usermanager.User existUser = userManager.getUserByName(user);
         if(existUser == null) {
             return false;
         }
@@ -277,7 +276,7 @@ class ConnectionService {
     /**
      * Connection limit check.
      */
-    private boolean checkConnection(FtpUserImpl thisUser) {
+    private boolean checkConnection(UserImpl thisUser) {
         int maxLogins = mConfig.getMaxConnections();
         int maxAnonLogins = mConfig.getMaxAnonymousLogins();
         int anonNbr = mConfig.getStatistics().getAnonLoginNbr();
@@ -291,7 +290,7 @@ class ConnectionService {
             if( (anonNbr>=maxAnonLogins) || (totalNbr>=maxLogins) ) {
                return false;
             }
-            ftpConnectionMonitor.anonConnection(thisUser);
+            connectionMonitor.anonConnection(thisUser);
         }
         else {
             if(totalNbr>=maxLogins) {
@@ -305,25 +304,25 @@ class ConnectionService {
     /**
      * Create user home directory if necessary
      */
-    private boolean createHome(FtpUserImpl user) {
+    private boolean createHome(UserImpl user) {
 
         File userHome = new File( user.getVirtualDirectory().getRootDirectory() );
         if( userHome.exists() ) {
             if( !userHome.isDirectory() ) {
-                ftpConnectionMonitor.userHomeNotADir(userHome, user);
+                connectionMonitor.userHomeNotADir(userHome, user);
                 return false;
             }
         }
         else {
             if( mConfig.isCreateHome() ) {
-                ftpConnectionMonitor.creatingHome(userHome, user);
+                connectionMonitor.creatingHome(userHome, user);
                 if( !userHome.mkdirs() ) {
-                    ftpConnectionMonitor.cannotCreateHome(userHome, user);
+                    connectionMonitor.cannotCreateHome(userHome, user);
                     return false;
                 }
             }
             else {
-                ftpConnectionMonitor.cannotFindHome(userHome, user);
+                connectionMonitor.cannotFindHome(userHome, user);
                 return false;
             }
         }
@@ -343,16 +342,16 @@ class ConnectionService {
             return;
         }
 
-        final FtpUserImpl newUser = newCon.getUser();
+        final UserImpl newUser = newCon.getUser();
 
         mConList.add(newCon);
         newUser.setMaxIdleTime(mConfig.getDefaultIdleTime());
         newUser.getVirtualDirectory().setRootDirectory(mConfig.getDefaultRoot());
         newCon.setObserver(mObserver);
-        ftpConnectionMonitor.newConnectionFrom(newUser);
+        connectionMonitor.newConnectionFrom(newUser);
 
         // notify observer about a new connection
-        final FtpConnectionObserver observer = mObserver;
+        final ConnectionObserver observer = mObserver;
         if (observer != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -424,7 +423,7 @@ class ConnectionService {
             for( Iterator conIt=mConList.iterator(); conIt.hasNext(); ) {
                 BaseFtpConnection con = (BaseFtpConnection)conIt.next();
                 if (con != null) {
-                    FtpUserImpl user = con.getUser();
+                    UserImpl user = con.getUser();
                     if (!user.isActive(currTime)) {
                         inactiveUserList.add(user);
                     }
@@ -434,8 +433,8 @@ class ConnectionService {
 
         // remove inactive users
         for( Iterator userIt=inactiveUserList.iterator(); userIt.hasNext(); ) {
-            FtpUserImpl user = (FtpUserImpl)userIt.next();
-            ftpConnectionMonitor.removingIdleUser(user);
+            UserImpl user = (UserImpl)userIt.next();
+            connectionMonitor.removingIdleUser(user);
             closeConnection(user.getSessionId());
         }
 
@@ -445,7 +444,7 @@ class ConnectionService {
             userManager.reload();
         }
         catch(Exception ex) {
-            ftpConnectionMonitor.timerError(ex);
+            connectionMonitor.timerError(ex);
         }
     }
 

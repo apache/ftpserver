@@ -1,10 +1,10 @@
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
 /**
  * @author Paul Hammant
  * @version $Revision$
  */
-public interface FtpUserManagerMonitor {
+public interface UserManagerMonitor {
     void generalError(String message, Exception ex);
     void info(String message);
 }

@@ -198,7 +198,7 @@ class AvalonFtpConfig extends AbstractFtpConfig {
         mConService = new ConnectionService(this, new AvalonConnectionMonitor(getLogger()));
         if (mbRemoteAdminAllowed) {
             mRemoteHandler = mRemoteHandlerFactory.createRemoteHandler(this,
-                    new AvalonFtpRemoteHandlerMonitor(getLogger())); 
+                    new AvalonRemoteHandlerMonitor(getLogger()));
         }
     }
 

@@ -16,7 +16,7 @@
  *
  * $Id$
  */
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
 
 /**
@@ -25,7 +25,7 @@ package org.apache.ftpserver.interfaces;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-interface FtpStatisticsListener {
+interface StatisticsListener {
 
     /**
      * User file upload notification.

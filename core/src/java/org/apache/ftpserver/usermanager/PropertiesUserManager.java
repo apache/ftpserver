@@ -19,7 +19,8 @@
 package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.UserManagerException;
-import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
+import org.apache.ftpserver.UserManagerMonitor;
+import org.apache.ftpserver.UserManagerMonitor;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
 import org.apache.ftpserver.util.IoUtils;
@@ -53,7 +54,7 @@ public class PropertiesUserManager extends AbstractUserManager {
 
     protected long mlLastModified;
 
-    protected FtpUserManagerMonitor ftpUserManagerMonitor;
+    protected UserManagerMonitor userManagerMonitor;
 
     /**
      * Save user data. Store the properties.
@@ -239,7 +240,7 @@ public class PropertiesUserManager extends AbstractUserManager {
                 mUserData.load(fis);
                 fis.close();
                 mlLastModified = lastModified;
-                ftpUserManagerMonitor.info("File modified - loading " + mUserDataFile.getAbsolutePath());
+                userManagerMonitor.info("File modified - loading " + mUserDataFile.getAbsolutePath());
             }
         } catch (IOException e) {
             throw new UserManagerException(e);

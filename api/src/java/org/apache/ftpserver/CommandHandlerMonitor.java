@@ -1,4 +1,4 @@
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
 import org.apache.ftpserver.UserManagerException;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
  * @author Paul Hammant
  * @version $Revision$
  */
-public interface FtpCommandHandlerMonitor {
+public interface CommandHandlerMonitor {
     void unknownResponseException(String message, Throwable th);
 
     void ipBlockException(String message, IOException ex);

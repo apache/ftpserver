@@ -22,8 +22,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 
-import org.apache.ftpserver.remote.adapter.FtpFileListenerAdapter;
-import org.apache.ftpserver.remote.adapter.FtpStatisticsListenerAdapter;
+import org.apache.ftpserver.remote.adapter.FileListenerAdapter;
+import org.apache.ftpserver.remote.adapter.StatisticsListenerAdapter;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
 import org.apache.ftpserver.remote.interfaces.FtpFileListener;
@@ -38,8 +38,8 @@ class FtpStatistics implements FtpStatisticsInterface {
 
     private org.apache.ftpserver.FtpStatistics mStatistics;
 
-    private FtpStatisticsListenerAdapter  mStatisticsListener;
-    private FtpFileListenerAdapter mFileListener;
+    private StatisticsListenerAdapter  mStatisticsListener;
+    private FileListenerAdapter mFileListener;
 
     /**
      * Constructor - sets the actual statistics object
@@ -47,8 +47,8 @@ class FtpStatistics implements FtpStatisticsInterface {
     public FtpStatistics(final org.apache.ftpserver.FtpStatistics statistics) throws RemoteException {
         mStatistics = statistics;
 
-        mStatisticsListener = new FtpStatisticsListenerAdapter();
-        mFileListener = new FtpFileListenerAdapter();
+        mStatisticsListener = new StatisticsListenerAdapter();
+        mFileListener = new FileListenerAdapter();
 
         UnicastRemoteObject.exportObject(this);
     }

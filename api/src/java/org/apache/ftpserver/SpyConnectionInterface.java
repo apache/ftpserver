@@ -16,23 +16,26 @@
  *
  * $Id$
  */
-package org.apache.ftpserver.interfaces;
 
+package org.apache.ftpserver;
+
+import java.io.IOException;
 
 /**
- * Ftp server interface.
+ * This interface is used to monitor user activities;
+ *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-interface FtpServerInterface {
+interface SpyConnectionInterface {
 
     /**
-     * Service role name. It will be used for RMI binding too.
+     * Write user request.
      */
-    String ROLE = "org.apache.ftpserver.interfaces.FtpServerInterface";
+    void request(final String msg) throws IOException;
 
     /**
-     * Ftp server name
+     * Write server response.
      */
-    String DISPLAY_NAME = "Ftp";
+    void response(final String msg) throws IOException;
 }

@@ -23,7 +23,7 @@ import org.apache.avalon.cornerstone.services.connection.ConnectionHandler;
 import org.apache.avalon.cornerstone.services.connection.ConnectionHandlerFactory;
 import org.apache.avalon.cornerstone.services.connection.ConnectionManager;
 import org.apache.avalon.cornerstone.services.sockets.SocketManager;
-import org.apache.ftpserver.interfaces.FtpServerInterface;
+import org.apache.ftpserver.ServerInterface;
 
 import java.net.ServerSocket;
 
@@ -34,13 +34,13 @@ import java.net.ServerSocket;
  * admin.
  *
  * @phoenix:block
- * @phoenix:service name="org.apache.ftpserver.interfaces.FtpServerInterface"
+ * @phoenix:service name="org.apache.ftpserver.ServerInterface"
  *
  * @author  Rana Bhattacharyya <rana_b@yahoo.com>
  * @author  Paul Hammant
  * @version 1.0
  */
-public class FtpServerImpl implements FtpServerInterface, ConnectionHandlerFactory {
+public class ServerImpl implements ServerInterface, ConnectionHandlerFactory {
 
     protected ServerSocket mServerSocket;
     protected SocketManager mSocManager;

@@ -23,7 +23,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.apache.ftpserver.interfaces.FtpDataConnectionMonitor;
+import org.apache.ftpserver.DataConnectionMonitor;
 
 /**
  * We can get the ftp data connection using this class.
@@ -44,7 +44,7 @@ class FtpDataConnection
 
     private boolean mbPort = false;
     private boolean mbPasv = false;
-    private FtpDataConnectionMonitor ftpDataConnectionMonitor;
+    private DataConnectionMonitor dataConnectionMonitor;
 
 
     /**
@@ -67,7 +67,7 @@ class FtpDataConnection
                 mDataSoc.close();
             }
             catch(IOException ex) {
-                ftpDataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
+                dataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
             }
             mDataSoc = null;
         }
@@ -78,7 +78,7 @@ class FtpDataConnection
                 mServSoc.close();
             }
             catch(IOException ex) {
-                ftpDataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
+                dataConnectionMonitor.socketCloseException("FtpDataConnection.closeDataSocket()", ex);
             }
             mConfig.releaseDataPort(miPort);
             mServSoc = null;
@@ -129,7 +129,7 @@ class FtpDataConnection
         }
         catch(IOException ex) {
             mServSoc = null;
-            ftpDataConnectionMonitor.serverSocketOpenException("FtpDataConnection.setPasvCommand()", ex);
+            dataConnectionMonitor.serverSocketOpenException("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
@@ -167,7 +167,7 @@ class FtpDataConnection
             }
         }
         catch(IOException ex) {
-            ftpDataConnectionMonitor.socketException("FtpDataConnection.getDataSocket()", ex);
+            dataConnectionMonitor.socketException("FtpDataConnection.getDataSocket()", ex);
             mDataSoc = null;
         }
 

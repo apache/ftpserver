@@ -9,7 +9,8 @@ package org.apache.ftpserver.remote;
 import java.rmi.RemoteException;
 
 import org.apache.ftpserver.AbstractFtpConfig;
-import org.apache.ftpserver.interfaces.FtpRemoteHandlerMonitor;
+import org.apache.ftpserver.RemoteHandlerMonitor;
+import org.apache.ftpserver.RemoteHandlerMonitor;
 
 /**
  * @author Vladimirov
@@ -19,7 +20,7 @@ import org.apache.ftpserver.interfaces.FtpRemoteHandlerMonitor;
  */
 public class RemoteHandlerFactoryImpl implements RemoteHandlerFactory {
     public RemoteHandler createRemoteHandler(AbstractFtpConfig ftpConfig,
-            FtpRemoteHandlerMonitor remoteHandlerMonitor)
+            RemoteHandlerMonitor remoteHandlerMonitor)
             throws RemoteException {
         return new RemoteHandlerImpl(ftpConfig, remoteHandlerMonitor);
     }

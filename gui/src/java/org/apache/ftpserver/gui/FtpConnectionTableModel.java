@@ -28,8 +28,8 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.ftpserver.FtpUser;
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.User;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.gui.remote.FtpConnectionObserverAdapter;
 import org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
@@ -76,11 +76,11 @@ class FtpConnectionTableModel extends AbstractTableModel
     /**
      * Get user
      */
-    public FtpUserImpl getUser(int index) {
-        FtpUserImpl user = null;
+    public UserImpl getUser(int index) {
+        UserImpl user = null;
         synchronized(mConnectedUserList) {
             if ( (index >= 0) && (index < mConnectedUserList.size()) ) {
-                user = (FtpUserImpl)mConnectedUserList.get(index);
+                user = (UserImpl)mConnectedUserList.get(index);
             }
         }
         return user;
@@ -135,7 +135,7 @@ class FtpConnectionTableModel extends AbstractTableModel
 
         // error check
         String retVal = "";
-        FtpUserImpl thisUser = getUser(row);
+        UserImpl thisUser = getUser(row);
         if (thisUser == null) {
             return retVal;
         }
@@ -177,7 +177,7 @@ class FtpConnectionTableModel extends AbstractTableModel
     /**
      * Add a new user
      */
-    public void newConnection(final FtpUser thisUser) {
+    public void newConnection(final User thisUser) {
         if (thisUser == null) {
             return;
         }
@@ -197,7 +197,7 @@ class FtpConnectionTableModel extends AbstractTableModel
     /**
      * Close .
      */
-    public void removeConnection(final FtpUser user) {
+    public void removeConnection(final User user) {
         if (user == null) {
             return;
         }
@@ -218,7 +218,7 @@ class FtpConnectionTableModel extends AbstractTableModel
     /**
      * Existing connected user update notification.
      */
-    public void updateConnection(final FtpUser user) {
+    public void updateConnection(final User user) {
         if (user == null) {
             return;
         }

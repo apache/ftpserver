@@ -22,7 +22,6 @@ package org.apache.ftpserver;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import org.apache.ftpserver.usermanager.User;
 import org.apache.ftpserver.util.AsciiOutputStream;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -34,7 +33,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpUserImpl extends User implements Serializable, FtpUser {
+class UserImpl extends org.apache.ftpserver.usermanager.User implements Serializable, User {
 
     private char mcDataType    = 'A';
     private char mcStructure   = 'F';
@@ -43,7 +42,7 @@ class FtpUserImpl extends User implements Serializable, FtpUser {
     /**
      * Constructor - does nothing.
      */
-    public FtpUserImpl() {
+    public UserImpl() {
     }
 
     /**

@@ -22,9 +22,9 @@
 import java.io.File;
 import java.util.Date;
 import org.apache.ftpserver.util.Message;
-import org.apache.ftpserver.interfaces.FtpStatisticsListener;
-import org.apache.ftpserver.interfaces.FtpFileListener;
-import org.apache.ftpserver.interfaces.FtpFileMonitor;
+import org.apache.ftpserver.StatisticsListener;
+import org.apache.ftpserver.FileListener;
+import org.apache.ftpserver.FileMonitor;
 
 /**
  * This class encapsulates all the global statistics.
@@ -34,10 +34,10 @@ import org.apache.ftpserver.interfaces.FtpFileMonitor;
 public
 class FtpStatistics {
 
-    private FtpStatisticsListener mListener = null;
-    private FtpFileListener mFileListener   = null;
+    private StatisticsListener mListener = null;
+    private FileListener mFileListener   = null;
     private AbstractFtpConfig mConfig               = null;
-    private FtpFileMonitor ftpFileMonitor;
+    private FileMonitor fileMonitor;
 
     private Date mStartTime        = new Date();
 
@@ -60,9 +60,9 @@ class FtpStatistics {
     /**
      * Default constructor.
      */
-    public FtpStatistics(AbstractFtpConfig cfg, FtpFileMonitor ftpFileMonitor) {
+    public FtpStatistics(AbstractFtpConfig cfg, FileMonitor fileMonitor) {
         mConfig = cfg;
-        this.ftpFileMonitor = ftpFileMonitor;
+        this.fileMonitor = fileMonitor;
     }
 
 
@@ -156,10 +156,10 @@ class FtpStatistics {
     /**
      * Increment upload count.
      */
-    void setUpload(File fl, FtpUserImpl user, long sz) {
+    void setUpload(File fl, UserImpl user, long sz) {
         ++miNbrUpload;
         mlBytesUpload += sz;
-        ftpFileMonitor.fileUploaded(user, fl);
+        fileMonitor.fileUploaded(user, fl);
         notifyUpload(fl, user);
     }
 
@@ -167,10 +167,10 @@ class FtpStatistics {
     /**
      * Increment download count.
      */
-    void setDownload(File fl, FtpUserImpl user, long sz) {
+    void setDownload(File fl, UserImpl user, long sz) {
         ++miNbrDownload;
         mlBytesDownload += sz;
-        ftpFileMonitor.fileDownloaded(user, fl);
+        fileMonitor.fileDownloaded(user, fl);
         notifyDownload(fl, user);
     }
 
@@ -178,9 +178,9 @@ class FtpStatistics {
     /**
      * Increment delete count.
      */
-    void setDelete(File fl, FtpUserImpl user) {
+    void setDelete(File fl, UserImpl user) {
         ++miNbrDelete;
-        ftpFileMonitor.fileDeleted(user, fl);
+        fileMonitor.fileDeleted(user, fl);
         notifyDelete(fl, user);
     }
 
@@ -232,36 +232,36 @@ class FtpStatistics {
     /**
      * Add a listener object.
      */
-    public void setListener(FtpStatisticsListener listener) {
+    public void setListener(StatisticsListener listener) {
         mListener = listener;
     }
 
     /**
      * Get listener object.
      */
-    public FtpStatisticsListener getListener() {
+    public StatisticsListener getListener() {
         return mListener;
     }
 
     /**
      * Get file listener
      */
-    public void setFileListener(FtpFileListener listener) {
+    public void setFileListener(FileListener listener) {
         mFileListener = listener;
     }
 
     /**
      * Set file listener
      */
-    public FtpFileListener getFileListener() {
+    public FileListener getFileListener() {
         return mFileListener;
     }
 
     /**
      * Listener upload notification.
      */
-    private void notifyUpload(final File fl, final FtpUserImpl user) {
-        final FtpStatisticsListener listener = mListener;
+    private void notifyUpload(final File fl, final UserImpl user) {
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -271,7 +271,7 @@ class FtpStatistics {
             mConfig.getMessageQueue().add(msg);
         }
 
-        final FtpFileListener fileListener = mFileListener;
+        final FileListener fileListener = mFileListener;
         if (fileListener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -285,8 +285,8 @@ class FtpStatistics {
     /**
      * Listener download notification.
      */
-    private void notifyDownload(final File fl, final FtpUserImpl user) {
-        final FtpStatisticsListener listener = mListener;
+    private void notifyDownload(final File fl, final UserImpl user) {
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -296,7 +296,7 @@ class FtpStatistics {
             mConfig.getMessageQueue().add(msg);
         }
 
-        final FtpFileListener fileListener = mFileListener;
+        final FileListener fileListener = mFileListener;
         if (fileListener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -310,8 +310,8 @@ class FtpStatistics {
     /**
      * Listener delete notification.
      */
-    private void notifyDelete(final File fl, final FtpUserImpl user) {
-        final FtpStatisticsListener listener = mListener;
+    private void notifyDelete(final File fl, final UserImpl user) {
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -321,7 +321,7 @@ class FtpStatistics {
             mConfig.getMessageQueue().add(msg);
         }
 
-        final FtpFileListener fileListener = mFileListener;
+        final FileListener fileListener = mFileListener;
         if (fileListener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -336,7 +336,7 @@ class FtpStatistics {
      * Listener user login notification.
      */
     private void notifyLogin() {
-        final FtpStatisticsListener listener = mListener;
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -351,7 +351,7 @@ class FtpStatistics {
      * Listener user logout notification.
      */
     private void notifyLogout() {
-        final FtpStatisticsListener listener = mListener;
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {
@@ -366,7 +366,7 @@ class FtpStatistics {
      * Listener user connection open/close notification.
      */
     private void notifyConnection() {
-        final FtpStatisticsListener listener = mListener;
+        final StatisticsListener listener = mListener;
         if (listener != null) {
             Message msg = new Message() {
                 public void execute() {

@@ -21,7 +21,7 @@ package org.apache.ftpserver.gui;
 
 import java.awt.Component;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.FtpStatisticsInterface;
@@ -85,7 +85,7 @@ public interface CommonHandler {
     /**
      * Get user object from the session id
      */
-    FtpUserImpl getUser(String sessionId);
+    UserImpl getUser(String sessionId);
 
     /**
      * Get top frame

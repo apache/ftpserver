@@ -28,14 +28,14 @@ import org.apache.ftpserver.remote.interfaces.FtpStatisticsListener;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpStatisticsListenerAdapter implements org.apache.ftpserver.interfaces.FtpStatisticsListener {
+class StatisticsListenerAdapter implements org.apache.ftpserver.StatisticsListener {
 
     private FtpStatisticsListener mListener = null;
 
     /**
      * Constructor - set the actual listener object
      */
-    public FtpStatisticsListenerAdapter() {
+    public StatisticsListenerAdapter() {
     }
 
     /**

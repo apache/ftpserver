@@ -19,7 +19,8 @@
 package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.UserManagerException;
-import org.apache.ftpserver.interfaces.FtpUserManagerMonitor;
+import org.apache.ftpserver.UserManagerMonitor;
+import org.apache.ftpserver.UserManagerMonitor;
 import org.apache.ftpserver.util.StringUtils;
 
 import java.io.File;
@@ -54,7 +55,7 @@ class DbUserManager extends AbstractUserManager {
     protected String mUser     = null;
     protected String mPassword = null;
 
-    private FtpUserManagerMonitor ftpUserManagerMonitor;
+    private UserManagerMonitor userManagerMonitor;
 
     /**
      * Open connection to database.
@@ -183,7 +184,7 @@ class DbUserManager extends AbstractUserManager {
             return thisUser;
         }
         catch(Exception ex) {
-            ftpUserManagerMonitor.generalError("DbUserManager.getUserByName()", ex);
+            userManagerMonitor.generalError("DbUserManager.getUserByName()", ex);
         }
         finally {
             if(rs != null) {
@@ -220,7 +221,7 @@ class DbUserManager extends AbstractUserManager {
         }
         catch(Exception ex) {
             bValid = false;
-            ftpUserManagerMonitor.generalError("DbUserManager.doesExist()", ex);
+            userManagerMonitor.generalError("DbUserManager.doesExist()", ex);
         }
         finally {
             if(rs != null) {
@@ -255,7 +256,7 @@ class DbUserManager extends AbstractUserManager {
             }
         }
         catch(Exception ex) {
-            ftpUserManagerMonitor.generalError("DbUserManager.getAllUserNames()", ex);
+            userManagerMonitor.generalError("DbUserManager.getAllUserNames()", ex);
         }
         finally {
             if(rs != null) {
@@ -329,7 +330,7 @@ class DbUserManager extends AbstractUserManager {
             stmt.close();
         }
         catch(Exception ex) {
-            ftpUserManagerMonitor.generalError("DbUserManager.authenticate()", ex);
+            userManagerMonitor.generalError("DbUserManager.authenticate()", ex);
             return false;
         }
 

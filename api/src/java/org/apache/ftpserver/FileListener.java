@@ -16,43 +16,31 @@
  *
  * $Id$
  */
+package org.apache.ftpserver;
 
-package org.apache.ftpserver.interfaces;
-
-import org.apache.ftpserver.FtpUser;
-
-import java.io.IOException;
+import java.io.File;
 
 /**
- * This observer interface monitors all the ftp connections.
+ * Ftp file upload/download/delete listener interface.
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-interface FtpConnectionObserver {
+interface FileListener {
 
     /**
-     * New connection notification.
-     * @param user new connected user.
+     * User file upload notification.
      */
-    void newConnection(final FtpUser user);
+    void notifyUpload(final File file, final String sessionId);
 
     /**
-     * Close connection notification
-     * @param user closed user object
+     * User file download notification.
      */
-    void removeConnection(final FtpUser user);
+    void notifyDownload(final File file, final String sessionId);
 
     /**
-     * Update connection notification
-     * @param user updated user object
+     * User file delete notification.
      */
-    void updateConnection(final FtpUser user);
-
-    void requestError(String message, IOException ex);
-
-    void unknownServiceException(String message, Throwable th);
-
-    void newRequest(String message);
-
+    void notifyDelete(final File file, final String sessionId);
 }
+

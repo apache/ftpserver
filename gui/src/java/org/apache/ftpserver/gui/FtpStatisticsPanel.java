@@ -32,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.gui.remote.FtpFileListenerAdapter;
 import org.apache.ftpserver.gui.remote.FtpStatisticsListenerAdapter;
 import org.apache.ftpserver.remote.interfaces.FtpFileListener;
@@ -443,7 +443,7 @@ class FtpStatisticsPanel extends PluginPanel
      * Notify file upload
      */
     public void notifyUpload(final String fl, final String sessId) {
-        FtpUserImpl user = getCommonHandler().getUser(sessId);
+        UserImpl user = getCommonHandler().getUser(sessId);
         if (user != null) {
             mUploadModel.newEntry(fl, user);
         }
@@ -453,7 +453,7 @@ class FtpStatisticsPanel extends PluginPanel
      * Notify file download
      */
     public void notifyDownload(final String fl, final String sessId) {
-        FtpUserImpl user = getCommonHandler().getUser(sessId);
+        UserImpl user = getCommonHandler().getUser(sessId);
         if (user != null) {
             mDownloadModel.newEntry(fl, user);
         }
@@ -463,7 +463,7 @@ class FtpStatisticsPanel extends PluginPanel
      * Notify file delete
      */
     public void notifyDelete(final String fl, final String sessId) {
-        FtpUserImpl user = getCommonHandler().getUser(sessId);
+        UserImpl user = getCommonHandler().getUser(sessId);
         if (user != null) {
             mDeleteModel.newEntry(fl, user);
         }

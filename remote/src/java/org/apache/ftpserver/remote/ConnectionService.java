@@ -22,9 +22,9 @@ import java.util.List;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.BaseFtpConnection;
-import org.apache.ftpserver.remote.adapter.FtpConnectionObserverAdapter;
+import org.apache.ftpserver.remote.adapter.ConnectionObserverAdapter;
 import org.apache.ftpserver.remote.adapter.SpyConnectionAdapter;
 import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
@@ -38,7 +38,7 @@ public
 class ConnectionService implements org.apache.ftpserver.remote.interfaces.ConnectionServiceInterface {
 
     private org.apache.ftpserver.ConnectionService mConnectionService;
-    private FtpConnectionObserverAdapter mConnectionObserverAdapter;
+    private ConnectionObserverAdapter mConnectionObserverAdapter;
 
 
     /**
@@ -46,7 +46,7 @@ class ConnectionService implements org.apache.ftpserver.remote.interfaces.Connec
      */
     public ConnectionService(final org.apache.ftpserver.ConnectionService conService) throws RemoteException {
         mConnectionService = conService;
-        mConnectionObserverAdapter = new FtpConnectionObserverAdapter();
+        mConnectionObserverAdapter = new ConnectionObserverAdapter();
         UnicastRemoteObject.exportObject(this);
     }
 
@@ -87,7 +87,7 @@ class ConnectionService implements org.apache.ftpserver.remote.interfaces.Connec
     /**
      * Get connected user
      */
-    public FtpUserImpl getUser(final String sessId) {
+    public UserImpl getUser(final String sessId) {
         BaseFtpConnection con = mConnectionService.getConnection(sessId);
         return (con != null) ? con.getUser() : null;
     }

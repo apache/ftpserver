@@ -28,14 +28,14 @@ import org.apache.ftpserver.remote.interfaces.FtpFileListener;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpFileListenerAdapter implements org.apache.ftpserver.interfaces.FtpFileListener {
+class FileListenerAdapter implements org.apache.ftpserver.FileListener {
 
     private  FtpFileListener mFileListener = null;
 
     /**
      * Default constructor.
      */
-    public FtpFileListenerAdapter() {
+    public FileListenerAdapter() {
     }
 
     /**

@@ -15,7 +15,7 @@ import java.net.InetAddress;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public interface FtpUser {
+public interface User {
     public static final String ANONYMOUS = "anonymous";
 
     /**

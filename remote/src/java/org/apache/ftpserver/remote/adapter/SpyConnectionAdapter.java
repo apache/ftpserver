@@ -26,7 +26,7 @@ import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
  * This remote spy user adapter.
  */
 public
-class SpyConnectionAdapter implements org.apache.ftpserver.interfaces.SpyConnectionInterface {
+class SpyConnectionAdapter implements org.apache.ftpserver.SpyConnectionInterface {
 
     private SpyConnectionInterface mSpy;
 

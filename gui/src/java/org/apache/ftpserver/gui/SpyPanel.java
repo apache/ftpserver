@@ -31,8 +31,8 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.apache.ftpserver.FtpUser;
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.User;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.gui.remote.SpyConnectionAdapter;
 import org.apache.ftpserver.remote.interfaces.SpyConnectionInterface;
 
@@ -49,7 +49,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
 
     private SpyConnectionAdapter mSpyAdapter = null;
     private CommonHandler mCommonHandler     = null;
-    private FtpUserImpl mUser                    = null;
+    private UserImpl mUser                    = null;
 
     private SimpleAttributeSet mReqAttrs = null;
     private SimpleAttributeSet mResAttrs = null;
@@ -57,7 +57,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
     /**
      * Instantiate this dialog box
      */
-    public SpyPanel(CommonHandler commonHandler, FtpUserImpl user) throws RemoteException {
+    public SpyPanel(CommonHandler commonHandler, UserImpl user) throws RemoteException {
         mUser = user;
         mCommonHandler = commonHandler;
 
@@ -87,7 +87,7 @@ class SpyPanel extends JPanel implements SpyConnectionInterface {
     /**
      * Get user
      */
-    public FtpUser getUser() {
+    public User getUser() {
         return mUser;
     }
 

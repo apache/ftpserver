@@ -21,7 +21,7 @@ package org.apache.ftpserver.remote.interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.apache.ftpserver.FtpUser;
+import org.apache.ftpserver.User;
 
 /**
  * This observer interface monitors all the ftp connections.
@@ -35,17 +35,17 @@ interface FtpConnectionObserver extends Remote {
      * New connection notification.
      * @param user new connected user.
      */
-    void newConnection(final FtpUser user) throws RemoteException;
+    void newConnection(final User user) throws RemoteException;
 
     /**
      * Close connection notification
      * @param user closed user object
      */
-    void removeConnection(final FtpUser user) throws RemoteException;
+    void removeConnection(final User user) throws RemoteException;
 
     /**
      * Update connection notification
      * @param user updated user
      */
-    void updateConnection(final FtpUser user) throws RemoteException;
+    void updateConnection(final User user) throws RemoteException;
 }

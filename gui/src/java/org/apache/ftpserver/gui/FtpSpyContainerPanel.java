@@ -37,7 +37,7 @@ import javax.swing.JTree;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -173,7 +173,7 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
     /**
      * Monitor connection
      */
-    public void monitorConnection(FtpUserImpl user) {
+    public void monitorConnection(UserImpl user) {
         String userName = getCaption(user);
         String userSession = user.getSessionId();
 
@@ -206,7 +206,7 @@ class FtpSpyContainerPanel extends PluginPanel implements ChangeListener {
     /**
      * Get tab caption.
      */
-    private String getCaption(FtpUserImpl user) {
+    private String getCaption(UserImpl user) {
         String name = "";
         if (user != null) {
             name = user.getName();

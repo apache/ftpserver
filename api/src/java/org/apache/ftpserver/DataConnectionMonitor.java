@@ -1,4 +1,4 @@
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import java.io.IOException;
  * @author Paul Hammant
  * @version $Revision$
  */
-public interface FtpDataConnectionMonitor {
+public interface DataConnectionMonitor {
     void socketCloseException(String message, IOException ex);
     void serverSocketOpenException(String message, IOException ex);
     void socketException(String message, IOException ex);

@@ -21,7 +21,7 @@ package org.apache.ftpserver.remote.adapter;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-import org.apache.ftpserver.FtpUser;
+import org.apache.ftpserver.User;
 import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
 
 
@@ -31,14 +31,14 @@ import org.apache.ftpserver.remote.interfaces.FtpConnectionObserver;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpConnectionObserverAdapter implements org.apache.ftpserver.interfaces.FtpConnectionObserver {
+class ConnectionObserverAdapter implements org.apache.ftpserver.ConnectionObserver {
 
     private FtpConnectionObserver mObserver;
 
     /**
      * Default constructor.
      */
-    public FtpConnectionObserverAdapter() {
+    public ConnectionObserverAdapter() {
     }
 
     /**
@@ -59,7 +59,7 @@ class FtpConnectionObserverAdapter implements org.apache.ftpserver.interfaces.Ft
      * New connection notification.
      * @param user newly connected user
      */
-    public void newConnection(final FtpUser user) {
+    public void newConnection(final User user) {
         FtpConnectionObserver observer = mObserver;
         if (observer != null) {
             try {
@@ -75,7 +75,7 @@ class FtpConnectionObserverAdapter implements org.apache.ftpserver.interfaces.Ft
      * Close connection notification
      * @param user closed user object.
      */
-    public void removeConnection(final FtpUser user) {
+    public void removeConnection(final User user) {
         FtpConnectionObserver observer = mObserver;
         if (observer != null) {
             try {
@@ -91,7 +91,7 @@ class FtpConnectionObserverAdapter implements org.apache.ftpserver.interfaces.Ft
      * Update connection notification
      * @param user updated user object
      */
-    public void updateConnection(final FtpUser user) {
+    public void updateConnection(final User user) {
         FtpConnectionObserver observer = mObserver;
         if (observer != null) {
             try {

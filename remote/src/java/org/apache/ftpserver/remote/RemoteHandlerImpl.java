@@ -19,7 +19,8 @@
 package org.apache.ftpserver.remote;
 
 import org.apache.ftpserver.AbstractFtpConfig;
-import org.apache.ftpserver.interfaces.FtpRemoteHandlerMonitor;
+import org.apache.ftpserver.RemoteHandlerMonitor;
+import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.ftpserver.remote.interfaces.FtpConfigInterface;
 import org.apache.ftpserver.remote.interfaces.RemoteHandlerInterface;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
@@ -42,13 +43,13 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
     private RemoteFtpConfig mFtpConfig;
     private String mstAdminSession;
     private Registry mRegistry;
-    private FtpRemoteHandlerMonitor ftpRemoteHandlerMonitor;
+    private RemoteHandlerMonitor remoteHandlerMonitor;
 
     /**
      * Constructor - set the actual user config object
      */
-    public RemoteHandlerImpl(AbstractFtpConfig config, FtpRemoteHandlerMonitor ftpRemoteHandlerMonitor) throws RemoteException {
-        this.ftpRemoteHandlerMonitor = ftpRemoteHandlerMonitor;
+    public RemoteHandlerImpl(AbstractFtpConfig config, RemoteHandlerMonitor remoteHandlerMonitor) throws RemoteException {
+        this.remoteHandlerMonitor = remoteHandlerMonitor;
 
         // open registry
         int rmiPort = config.getRemoteAdminPort();
@@ -75,10 +76,10 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
     public synchronized String login(String id, String password) throws Exception {
         try {
             String clientHost = UnicastRemoteObject.getClientHost();
-            ftpRemoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
+            remoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
         }
         catch(Exception ex) {
-            ftpRemoteHandlerMonitor.remoteAdminLoginRequestError(ex);
+            remoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
 
         // data validation
@@ -105,10 +106,10 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
 
         try {
             String clientHost = UnicastRemoteObject.getClientHost();
-            ftpRemoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
+            remoteHandlerMonitor.remoteLoginAdminRequest(clientHost);
         }
         catch(Exception ex) {
-            ftpRemoteHandlerMonitor.remoteAdminLoginRequestError(ex);
+            remoteHandlerMonitor.remoteAdminLoginRequestError(ex);
         }
         mstAdminSession = new UID().toString();
         return mstAdminSession;
@@ -122,7 +123,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
         if( (sessId == null) || (!sessId.equals(mstAdminSession)) ) {
             return false;
         }
-        ftpRemoteHandlerMonitor.remoteAdminLogout();
+        remoteHandlerMonitor.remoteAdminLogout();
         resetObservers();
         mstAdminSession = null;
         return true;
@@ -155,7 +156,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
      * Close the remote handler
      */
     public void dispose() {
-        ftpRemoteHandlerMonitor.remoteAdminClose();
+        remoteHandlerMonitor.remoteAdminClose();
         resetObservers();
         try {
             if (mRegistry != null) {
@@ -171,7 +172,7 @@ class RemoteHandlerImpl implements RemoteHandlerInterface, Unreferenced, RemoteH
      * Unreferenced - admin user idle timeout
      */
     public synchronized void unreferenced() {
-        ftpRemoteHandlerMonitor.remoteAdminTimeout();
+        remoteHandlerMonitor.remoteAdminTimeout();
         logout(mstAdminSession);
     }
 

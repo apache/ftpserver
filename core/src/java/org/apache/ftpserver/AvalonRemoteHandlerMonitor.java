@@ -1,17 +1,17 @@
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.interfaces.FtpRemoteHandlerMonitor;
+import org.apache.ftpserver.RemoteHandlerMonitor;
 import org.apache.avalon.framework.logger.Logger;
 
 /**
  * @author Paul Hammant
  * @version $Revision$
  */
-public class AvalonFtpRemoteHandlerMonitor implements FtpRemoteHandlerMonitor {
+public class AvalonRemoteHandlerMonitor implements RemoteHandlerMonitor {
 
     Logger logger;
 
-    public AvalonFtpRemoteHandlerMonitor(Logger logger) {
+    public AvalonRemoteHandlerMonitor(Logger logger) {
         this.logger = logger;
     }
 

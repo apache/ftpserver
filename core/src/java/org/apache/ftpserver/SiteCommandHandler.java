@@ -32,7 +32,7 @@ import org.apache.ftpserver.util.StringUtils;
 import org.apache.ftpserver.ip.IpRestrictorInterface;
 import org.apache.ftpserver.usermanager.User;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
-import org.apache.ftpserver.interfaces.FtpCommandHandlerMonitor;
+import org.apache.ftpserver.CommandHandlerMonitor;
 
 /**
  * Handle ftp site command.
@@ -52,14 +52,14 @@ class SiteCommandHandler {
     protected final static Class[] INPUT_SIG = new Class[] {String[].class, FtpRequest.class};
 
     private AbstractFtpConfig mConfig;
-    private FtpUserImpl mUser;
-    private FtpCommandHandlerMonitor ftpCommandHandlerMonitor;
+    private UserImpl mUser;
+    private CommandHandlerMonitor commandHandlerMonitor;
 
 
     /**
      * Constructor - set the configuration object
      */
-    public SiteCommandHandler(AbstractFtpConfig cfg, FtpUserImpl user) {
+    public SiteCommandHandler(AbstractFtpConfig cfg, UserImpl user) {
         mConfig = cfg;
         mUser = user;
     }
@@ -83,7 +83,7 @@ class SiteCommandHandler {
                     response = mConfig.getStatus().processNewLine("", 202);
                 }
                 catch(Throwable th) {
-                    ftpCommandHandlerMonitor.unknownResponseException("SiteCommandHandler.getResponse()", th);
+                    commandHandlerMonitor.unknownResponseException("SiteCommandHandler.getResponse()", th);
                     response = mConfig.getStatus().getResponse(530, request, mUser, null);
                 }
             }
@@ -148,7 +148,7 @@ class SiteCommandHandler {
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
         catch(IOException ex) {
-            ftpCommandHandlerMonitor.ipBlockException("SiteCommandHandler.doADDIP()", ex);
+            commandHandlerMonitor.ipBlockException("SiteCommandHandler.doADDIP()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -182,7 +182,7 @@ class SiteCommandHandler {
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
         catch(UserManagerException ex) {
-            ftpCommandHandlerMonitor.addUserException("SiteCommandHandler.doADDUSER()", ex);
+            commandHandlerMonitor.addUserException("SiteCommandHandler.doADDUSER()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -205,7 +205,7 @@ class SiteCommandHandler {
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
         catch(IOException ex) {
-            ftpCommandHandlerMonitor.ipBlockException("SiteCommandHandler.doDELIP()", ex);
+            commandHandlerMonitor.ipBlockException("SiteCommandHandler.doDELIP()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -226,7 +226,7 @@ class SiteCommandHandler {
             response = mConfig.getStatus().getResponse(200, cmd, mUser, null);
         }
         catch(UserManagerException ex) {
-            ftpCommandHandlerMonitor.deleteUserException("SiteCommandHandler.doDELUSER()", ex);
+            commandHandlerMonitor.deleteUserException("SiteCommandHandler.doDELUSER()", ex);
             response = mConfig.getStatus().getResponse(451, cmd, mUser, null);
         }
         return response;
@@ -290,7 +290,7 @@ class SiteCommandHandler {
         String userName = args[1];
         List allUsers = mConfig.getConnectionService().getAllUsers();
         for(Iterator userIt = allUsers.iterator();userIt.hasNext();) {
-            FtpUserImpl user = (FtpUserImpl)userIt.next();
+            UserImpl user = (UserImpl)userIt.next();
             if(userName.equals(user.getName())) {
                 mConfig.getConnectionService().closeConnection(user.getSessionId());
             }
@@ -375,7 +375,7 @@ class SiteCommandHandler {
             }
         }
         catch(UserManagerException ex) {
-            ftpCommandHandlerMonitor.setAttrException("SiteCommandHandler.doSETATTR()", ex);
+            commandHandlerMonitor.setAttrException("SiteCommandHandler.doSETATTR()", ex);
             bSuccess = false;
         }
 
@@ -424,7 +424,7 @@ class SiteCommandHandler {
 
         sb.append('\n');
         for(Iterator userIt = allUsers.iterator();userIt.hasNext();) {
-            FtpUserImpl user = (FtpUserImpl)userIt.next();
+            UserImpl user = (UserImpl)userIt.next();
             if(!user.hasLoggedIn()) {
                 continue;
             }

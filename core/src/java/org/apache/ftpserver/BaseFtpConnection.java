@@ -28,8 +28,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import org.apache.avalon.cornerstone.services.connection.ConnectionHandler;
-import org.apache.ftpserver.interfaces.FtpConnectionObserver;
-import org.apache.ftpserver.interfaces.SpyConnectionInterface;
+import org.apache.ftpserver.ConnectionObserver;
+import org.apache.ftpserver.SpyConnectionInterface;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.Message;
 import org.apache.ftpserver.util.StreamConnectorObserver;
@@ -49,9 +49,9 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     protected AbstractFtpConfig mConfig                 = null;
     protected FtpStatus mFtpStatus              = null;
     protected FtpDataConnection mDataConnection = null;
-    protected FtpUserImpl mUser                     = null;
+    protected UserImpl mUser                     = null;
     protected SpyConnectionInterface mSpy       = null;
-    protected FtpConnectionObserver mObserver   = null;
+    protected ConnectionObserver mObserver   = null;
     protected Socket mControlSocket             = null;
     protected FtpWriter mWriter                 = null;
     protected boolean mbStopRequest             = false;
@@ -63,7 +63,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     public BaseFtpConnection(AbstractFtpConfig ftpConfig) {
       mConfig = ftpConfig;
       mFtpStatus = mConfig.getStatus();
-      mUser = new FtpUserImpl();
+      mUser = new UserImpl();
     }
 
     /**
@@ -221,7 +221,7 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Get user object
      */
-    public FtpUserImpl getUser() {
+    public UserImpl getUser() {
         return mUser;
     }
 
@@ -243,14 +243,14 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
     /**
      * Get observer
      */
-    public FtpConnectionObserver getObserver() {
+    public ConnectionObserver getObserver() {
         return mObserver;
     }
 
     /**
      * Set observer
      */
-    public void setObserver(FtpConnectionObserver obsr) {
+    public void setObserver(ConnectionObserver obsr) {
         mObserver = obsr;
     }
 
@@ -259,8 +259,8 @@ class BaseFtpConnection implements ConnectionHandler, StreamConnectorObserver {
      */
     public void notifyObserver() {
        mUser.hitUser();
-       final FtpUser thisUser = mUser;
-       final FtpConnectionObserver obsr = mObserver;
+       final User thisUser = mUser;
+       final ConnectionObserver obsr = mObserver;
 
        if (obsr != null) {
             Message msg = new Message() {

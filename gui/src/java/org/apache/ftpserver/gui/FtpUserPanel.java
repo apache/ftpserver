@@ -40,7 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 import org.apache.ftpserver.remote.interfaces.UserManagerInterface;
 import org.apache.ftpserver.usermanager.User;
 
@@ -370,7 +370,7 @@ class FtpUserPanel extends PluginPanel
         }
 
         try {
-            FtpUserImpl user = new FtpUserImpl();
+            UserImpl user = new UserImpl();
             user.setName(userName);
             if(setPassword(user)) {
               user.getVirtualDirectory().setRootDirectory(mjDirectoryTxt.getText());
@@ -500,7 +500,7 @@ class FtpUserPanel extends PluginPanel
     /**
      * Set password if necessary.
      */
-    private boolean setPassword(FtpUserImpl usr) {
+    private boolean setPassword(UserImpl usr) {
 
         try {
             String userName = usr.getName();

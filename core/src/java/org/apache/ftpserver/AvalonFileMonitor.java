@@ -1,6 +1,6 @@
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.interfaces.FtpFileMonitor;
+import org.apache.ftpserver.FileMonitor;
 import org.apache.avalon.framework.logger.Logger;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.File;
  * @author Paul Hammant
  * @version $Revision$
  */
-public class AvalonFileMonitor implements FtpFileMonitor {
+public class AvalonFileMonitor implements FileMonitor {
 
     Logger logger;
 
@@ -17,15 +17,15 @@ public class AvalonFileMonitor implements FtpFileMonitor {
         this.logger = logger;
     }
 
-    public void fileUploaded(FtpUser user, File fl) {
+    public void fileUploaded(User user, File fl) {
         logger.info("File upload : " + user.getName() + " - " + fl.getAbsolutePath());
     }
 
-    public void fileDownloaded(FtpUser user, File fl) {
+    public void fileDownloaded(User user, File fl) {
         logger.info("File download : " + user.getName() + " - " + fl.getAbsolutePath());
     }
 
-    public void fileDeleted(FtpUser user, File fl) {
+    public void fileDeleted(User user, File fl) {
         logger.info("File delete : " + user.getName() + " - " + fl.getAbsolutePath());
     }
 

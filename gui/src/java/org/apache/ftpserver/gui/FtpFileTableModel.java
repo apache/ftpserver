@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 import javax.swing.table.AbstractTableModel;
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 
 /**
  * This table model tracks user file related activities.
@@ -140,7 +140,7 @@ class FtpFileTableModel extends AbstractTableModel {
     /**
      * Add a new user
      */
-    public void newEntry(String file, FtpUserImpl user) {
+    public void newEntry(String file, UserImpl user) {
 
         TableEntry entry = new TableEntry();
         entry.fileName = file;

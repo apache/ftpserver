@@ -84,7 +84,7 @@ class FtpConfigBean extends AbstractFtpConfig {
         mConService = new ConnectionService(this, new AvalonConnectionMonitor(null));
         if (mbRemoteAdminAllowed) {
             mRemoteHandler = mRemoteHandlerFactory.createRemoteHandler(this,
-                    new AvalonFtpRemoteHandlerMonitor(null)); 
+                    new AvalonRemoteHandlerMonitor(null));
         }
     }
 

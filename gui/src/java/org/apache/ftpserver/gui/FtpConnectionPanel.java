@@ -32,7 +32,7 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.apache.ftpserver.FtpUserImpl;
+import org.apache.ftpserver.UserImpl;
 
 
 /**
@@ -128,7 +128,7 @@ class FtpConnectionPanel extends PluginPanel {
 
         try {
             for(int i=indices.length; --i>=0; ) {
-                FtpUserImpl user = mModel.getUser(indices[i]);
+                UserImpl user = mModel.getUser(indices[i]);
                 if(user != null) {
                     getCommonHandler().getConnectionService().closeConnection(user.getSessionId());
                 }
@@ -152,7 +152,7 @@ class FtpConnectionPanel extends PluginPanel {
         // monitor all the selected users
         try {
             for(int i=indices.length; --i>=0; ) {
-                FtpUserImpl thisUser = mModel.getUser(indices[i]);
+                UserImpl thisUser = mModel.getUser(indices[i]);
                 if (thisUser != null) {
                     FtpSpyContainerPanel spyPanel = (FtpSpyContainerPanel)((FtpTree)getTree()).getPluginPanel("Spy");
                     spyPanel.monitorConnection(thisUser);

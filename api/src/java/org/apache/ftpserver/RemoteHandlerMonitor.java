@@ -1,10 +1,10 @@
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
 /**
  * @author Paul Hammant
  * @version $Revision$
  */
-public interface FtpRemoteHandlerMonitor {
+public interface RemoteHandlerMonitor {
 
     void remoteAdminLoginRequestError(Exception ex);
     void remoteLoginAdminRequest(String clientHost);

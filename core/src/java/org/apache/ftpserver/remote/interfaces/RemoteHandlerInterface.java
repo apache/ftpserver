@@ -30,9 +30,9 @@ import java.rmi.RemoteException;
  *    |
  *    +---- FtpConfigInterface
  *          |
- *          +---- FtpStatisticsInterface &lt;- FtpStatisticsListener, FtpFileListener
+ *          +---- FtpStatisticsInterface &lt;- StatisticsListener, FileListener
  *          |
- *          +---- ConnectionServiceInterface &lt;- FtpConnectionObserver
+ *          +---- ConnectionServiceInterface &lt;- ConnectionObserver
  *          |
  *          +---- IpRestrictorInterface
  *          |
