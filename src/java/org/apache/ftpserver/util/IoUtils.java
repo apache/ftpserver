@@ -108,7 +108,7 @@ class IoUtils {
     */
    public static BufferedReader getBufferedReader(Reader rd) {
         BufferedReader br = null;
-        if(br instanceof java.io.BufferedReader) {
+        if(rd instanceof java.io.BufferedReader) {
             br = (BufferedReader)rd;
         }
         else {
