@@ -69,7 +69,8 @@ import org.apache.ftpserver.ip.IpRestrictorInterface;
 import org.apache.ftpserver.remote.RemoteHandler;
 import org.apache.ftpserver.usermanager.UserManagerInterface;
 import org.apache.ftpserver.util.AsyncMessageQueue;
-import org.apache.avalon.phoenix.BlockContext;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
 
 /**
  * Ftp configuration class. It has all ftp server configuration
@@ -90,7 +91,7 @@ class FtpConfig {
     private InetAddress mSelfAddress            = null;
 
     private Configuration mConf                 = null;
-    private BlockContext mContext               = null;
+    private Context mContext                    = null;
     private Logger mLogger                      = null;
 
     private FtpStatistics mStatistics           = null;
@@ -129,7 +130,7 @@ class FtpConfig {
     /**
      * Set context - third step.
      */
-    public void setContext(BlockContext ctx) {
+    public void setContext(Context ctx) {
         mContext = ctx;
     }
 
@@ -330,7 +331,7 @@ class FtpConfig {
     /**
      * Get context
      */
-    public BlockContext getContext() {
+    public Context getContext() {
         return mContext;
     }
 
@@ -446,7 +447,14 @@ class FtpConfig {
      * Get base directory
      */
     public File getBaseDirectory() {
-        return mContext.getBaseDirectory();
+        File baseDir = null;
+        try {
+            baseDir = (File) mContext.get("app.home");
+        } 
+        catch (ContextException ex) {
+            mLogger.warn("Unable to retrieve application base directory", ex);
+        }
+        return baseDir;
     }
 
     /**

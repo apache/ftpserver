@@ -76,7 +76,6 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.ftpserver.interfaces.FtpServerInterface;
-import org.apache.avalon.phoenix.BlockContext;
 
 
 /**
@@ -102,7 +101,7 @@ public class FtpServerImpl extends AbstractLogEnabled
     private ServerSocket mServerSocket    = null;
     private SocketManager mSocManager     = null;
     private ConnectionManager mConManager = null;
-    private BlockContext mContext         = null;
+    private Context mContext              = null;
     private FtpConfig mConfig             = null;
 
     /**
@@ -118,7 +117,7 @@ public class FtpServerImpl extends AbstractLogEnabled
         try {
             mConfig = new FtpConfig();
             mConfig.setLogger(getLogger());
-            mContext = (BlockContext)context;
+            mContext = context;
             mConfig.setContext(mContext);
         }
         catch(Exception ex) {

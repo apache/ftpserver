@@ -71,8 +71,6 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.ContextException;
 
-import org.apache.avalon.phoenix.BlockContext;
-
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
@@ -112,7 +110,12 @@ public class PropertiesUserManager extends AbstractUserManager {
     public void contextualize(Context context) throws ContextException {
         super.contextualize(context);
         try {
-            mUserDataFile = new File(((BlockContext)context).getBaseDirectory(), USER_PROP)   ;
+            File appDir = (File)context.get("app.home");
+            if(!appDir.exists()) {
+                appDir.mkdirs();
+            }
+            mUserDataFile = new File(appDir, USER_PROP);
+
             mUserDataFile.createNewFile();
             mUserData = new BaseProperties(mUserDataFile);
             mlLastModified = mUserDataFile.lastModified();

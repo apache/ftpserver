@@ -68,7 +68,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.phoenix.BlockContext;
+
 
 /**
  * Abstract ip restrictor class.
@@ -84,21 +84,21 @@ abstract class AbstractIpRestrictor extends AbstractLogEnabled
                                                Disposable {
 
     protected Configuration mConfig;
-    protected BlockContext mBlockContext;
+    protected Context mContext;
     protected boolean mbAllowIp;
 
     /**
      * Set context object - first step.
      */
     public void contextualize(Context context) throws ContextException {
-        mBlockContext = (BlockContext) context;
+        mContext = context;
     }
 
     /**
-     * Get block context.
+     * Get application context.
      */
-    public BlockContext getContext() {
-        return mBlockContext;
+    public Context getContext() {
+        return mContext;
     }
 
     /**

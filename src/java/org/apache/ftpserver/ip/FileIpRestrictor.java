@@ -69,7 +69,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.RegularExpr;
-import org.apache.avalon.phoenix.BlockContext;
+
 
 
 /**
@@ -92,7 +92,11 @@ public class FileIpRestrictor extends AbstractIpRestrictor {
      */
     public void contextualize(Context context) throws ContextException {
         super.contextualize(context);
-        mIpFile = new File( ((BlockContext)context).getBaseDirectory(), "ip.properties" );
+        File appDir = (File)context.get("app.home");
+        if(!appDir.exists()) {
+            appDir.mkdirs();
+        }
+        mIpFile = new File(appDir, "ip.properties" );
         try {
             reload();
         }

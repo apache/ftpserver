@@ -56,7 +56,6 @@
  */
 package org.apache.ftpserver.usermanager;
 
-import org.apache.avalon.phoenix.BlockContext;
 
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.activity.Initializable;
@@ -88,21 +87,21 @@ abstract class AbstractUserManager extends AbstractLogEnabled
                                               Disposable {
 
     protected Configuration mConfig;
-    protected BlockContext mBlockContext;
+    protected Context mContext;
     protected String mstAdminName;
 
     /**
      * Set context object - first step.
      */
     public void contextualize(Context context) throws ContextException {
-        mBlockContext = (BlockContext) context;
+        mContext = context;
     }
 
     /**
-     * Get block context.
+     * Get application context.
      */
-    public BlockContext getContext() {
-        return mBlockContext;
+    public Context getContext() {
+        return mContext;
     }
 
     /**
