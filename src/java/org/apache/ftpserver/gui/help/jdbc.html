@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<title>JDBC Support</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+    <h1 align="center"><font face="Arial" color="#663300"><i>Database Support</i></font></h1>
+    
+    <p><font face="Arial" size="3"><i>DbUserManager</i> is a JDBC based user manager. You can use this module if you have your FTP
+    username, password and other informations in a JDBC accessible database. To be able to access the database driver either
+    put your JDBC driver in your CLASSPATH or modify the batch files to include it.</font></p>
+
+    <p align="left"><font face="Arial" size="3">This user manager has been tested using Oracle 8i and mySQL server. 
+    All the user informations are stored in <i>FTP_USER</i> table. Database based user manager will try to create 
+   the user table FTP_USER if not found.</font></p>
+   <table border="1">
+       <tr>
+           <td align="center" bgcolor="#EEEEEE"><font face="Arial" size="3"><b>Column</b></font></td>
+           <td align="center" bgcolor="#EEEEEE"><font face="Arial" size="3"><b>Datatype</b></font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">LOGIN_ID</font></td>
+           <td><font face="Arial" size="3">VARCHAR(64), Primary key</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">PASSWORD</font></td>
+           <td><font face="Arial" size="3">VARCHAR(64)</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">HOME_DIR</font></td>
+           <td><font face="Arial" size="3">VARCHAR(128)</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">ENABLED</font></td>
+           <td><font face="Arial" size="3">VARCHAR(8)</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">WRITE_PERM</font></td>
+           <td>VARCHAR(8)</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">IDLE_TIME</font></td>
+           <td><font face="Arial" size="3">INT</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">UPLOAD_RATE</font></td>
+           <td><font face="Arial" size="3">INT</font></td>
+       </tr>
+       <tr>
+           <td><font face="Arial" size="3">DOWNLOAD_RATE</font></td>
+           <td><font face="Arial" size="3">INT</font></td>
+       </tr>
+   </table>
+
+
+   <p><font face="Arial" size="3">Load the SQL file - <u>&lt;INSTALL_DIR&gt;apps/ftp/conf/ftp-db.sql</u></font>.</p>
+      
+   <p><font face="Arial" size="3">The JDBC connectivity information is provided as configuration options that are passed
+   through to the config object used to create JDBC connection. The standard JDBC properties used include the following:</font></p>
+   <ul>
+     <li><font face="Arial" size="3"><u>FtpServer.server.config.user.manager</u> - set it <i>ranab.server.ftp.usermanager.DbUserManager</i>. This is the fully qualified name of the JDBC based user manager class.</font></li>
+     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.driver</u> - JDBC driver class (fully qualified).</font></li>
+     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.url</u> - JDBC database URL.</font></li>
+     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.user</u> - Database user.</font></li>
+     <li><font face="Arial" size="3"><u>FtpServer.server.config.db.password</u> - Database password.</font></li>
+   </ul>
+  
+</body>
+</html>

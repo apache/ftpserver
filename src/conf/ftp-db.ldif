@@ -1,0 +1,51 @@
+# ldapmodify -v -h localhost -p 389 -D "cn=Directory Manager" -w <password> -f ftp-db.ldif
+
+#
+# Add enable flag attribute type
+#
+dn: cn=schema
+changetype: modify
+add: attributetypes
+attributetypes: ( enableflag-oid NAME 'enableflag' SYNTAX '1.3.6.1.4.1.1466.115.121.1.26' SINGLE-VALUE )
+
+#
+# Add write permission attribute type
+#
+dn: cn=schema
+changetype: modify
+add: attributetypes
+attributetypes: ( writepermission-oid NAME 'writepermission' SYNTAX '1.3.6.1.4.1.1466.115.121.1.26' SINGLE-VALUE )
+
+#
+# Add idle time attribute type
+#
+dn: cn=schema
+changetype: modify
+add: attributetypes
+attributetypes: ( idletime-oid NAME 'idletime' SYNTAX '1.3.6.1.4.1.1466.115.121.1.27' SINGLE-VALUE )
+
+#
+# Add upload rate attribute type
+#
+dn: cn=schema
+changetype: modify
+add: attributetypes
+attributetypes: ( uploadrate-oid NAME 'uploadrate' SYNTAX '1.3.6.1.4.1.1466.115.121.1.27' SINGLE-VALUE )
+
+#
+# Add download rate attribute type
+#
+dn: cn=schema
+changetype: modify
+add: attributetypes
+attributetypes: ( downloadrate-oid NAME 'downloadrate' SYNTAX '1.3.6.1.4.1.1466.115.121.1.27' SINGLE-VALUE )
+
+#
+# Add ftp users object class
+#
+dn: cn=schema
+changetype: modify
+add: objectclasses
+objectclasses: ( ftpusers-oid NAME 'ftpUsers' DESC 'Ftp user class' SUP 'inetOrgPerson' MUST ( memberuid $ enableflag $ homedirectory $ writepermission $ idletime $ uploadrate $ downloadrate ) )
+
+

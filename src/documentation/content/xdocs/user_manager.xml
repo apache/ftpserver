@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<document>
+    <properties>
+        <title>User Manager</title>
+    </properties>
+    <header>
+        <title>IP Restriction</title>
+        <authors>
+            <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+        </authors>
+    </header>
+    <body>
+        <section name="User Manager">
+            <p>
+               The default user manager is properties file based. All the user 
+               informations (login, password, home directory, upload/download rate etc.) are stored in 
+               <u>user.properties</u> file. The default user manager class is <u>org.apache.ftpserver.usermanager.PropertiesUserManager</u>
+               If you want to use different user manager, please change the <u>user-manager</u> block in <u>assembly.xml</u> file.
+            </p>
+            <p>
+               You can encrypt the password in properties based user manager by specifying 
+               <u>encrypt</u> key in <u>config.xml</u> file. The encryption algorithm is MD5.
+            </p>
+            <p>
+               <font color="red">If you are using property file based default user manager, 
+               make sure that the user properties file is not accesible by the FTP users. Otherwise it will be 
+               a security problem. Keep it below the user virtual root directory.</font>
+            </p>
+            <p>
+               You can change the default user manager or even write your own user manager
+               by implementating <u>org.apache.ftpserver.usermanager.UserManagerInterface</u> class. 
+               You have to specify your user manager class (fully qualified) in the assembly file too.
+            </p>
+        </section>
+    </body>
+    <footer>
+        <legal>
+            Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
+        </legal>
+    </footer>
+</document>

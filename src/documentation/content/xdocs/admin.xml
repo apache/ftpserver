@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE document SYSTEM "./dtd/document-v10.dtd">
+
+<document>
+  <header>
+    <title>FtpServer Remote Admin</title>
+    <subtitle>Introduction</subtitle>
+    <authors>
+      <person id="ranab" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+    </authors>
+    <notice>
+      FtpServer documentation is under construction.  Everything you
+      can find outside this page is to be considered obsolete.
+    </notice>
+  </header>
+  <body>
+    <section name="Overview">
+      <p>
+        All the FTP server administrative tasks can be performed using remote admin
+        user interface. We can also use SITE command to do that. You can start the admin
+        console using <u>java -jar ftp-admin.jar</u>. 
+      </p>
+      <p>
+        The admin UI uses RMI to connect to the server. It also displays the server 
+        real-time data.
+      </p>
+    </section>
+    <section name="Configuration Parameters">
+    </section>
+    <section name="Screenshots">
+    </section>
+  </body>
+  <footer>
+    <legal>
+      Copyright (c) 2001-2002 The Apache Organization. All rights reserved.
+    </legal>
+  </footer>
+</document>

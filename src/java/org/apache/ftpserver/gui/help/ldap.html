@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<title>LDAP Support</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+    <h1 align="center"><font face="Arial" color="#663300"><i>LDAP Support</i></font></h1>
+
+    <p><font face="Arial" size="3">The <i>LdapUserManager</i> is an <i>UserManager</i> implementation that authenticates against an
+    LDAP server using JNDI login using the ftp server configuration options. You would use the <i>LdapUserManager</i> if your 
+    username and credential information are store in an LDAP server that is accessible using a JNDI LDAP provider.</font></p>
+
+    <p><font face="Arial" size="3">This user manager has been tested using Netscape Directory Server 4.1. LDAP 
+    requires the password to be nonempty for simple authentication. So instead of using empty string password (&quot;&quot;), 
+    we will be using single space (&quot; &quot;). The required LDAP attribute types:</font></p>
+    <ul>
+      <li><font face="Arial" size="3">memberuid</font></li>
+      <li><font face="Arial" size="3">uid</font></li>
+      <li><font face="Arial" size="3">cn</font></li>
+      <li><font face="Arial" size="3">sn</font></li>
+      <li><font face="Arial" size="3">userpassword</font></li>
+      <li><font face="Arial" size="3">objectclass</font></li>
+      <li><font face="Arial" size="3">enableflag (created by ftp-db.ldif file)</font></li>
+      <li><font face="Arial" size="3">homedirectory</font></li>
+      <li><font face="Arial" size="3">writepermission (created by ftp-db.ldif file)</font></li>
+      <li><font face="Arial" size="3">idletime (created by ftp-db.ldif file)</font></li>
+      <li><font face="Arial" size="3">uploadrate (created by ftp-db.ldif file)</font></li>
+      <li><font face="Arial" size="3">downloadrate (created by ftp-db.ldif file)</font></li>
+    </ul>
+  
+   <p><font face="Arial" size="3">Some of the above mentioned attribute types are created by 
+   <u>&lt;INSTALL_DIR&gt;/apps/ftp/conf/ftp-db.ldif</u> schema file. The schema file also creates an object class called 
+   <i>ftpUsers</i> derived from 
+   <i>inetOrgPerson</i> and have all these attributes.<br>
+   Assumed LDAP objectclass hierarchy:</font></p>
+   <pre><font size="3">
+          top
+           |
+         person
+           |
+   organizationalPerson
+           |
+      inetOrgPerson
+           |
+        ftpUsers
+   </font></pre>
+
+  <p><font face="Arial" size="3">Load LDAP schema <u>&lt;INSTALL_DIR&gt;/apps/ftp/conf/ftp-db.ldif</u> to add user manager 
+  attributes. The commands to load the schema is</font></p>
+  
+  <pre><font face="Arial" size="2">ldapmodify -v -h localhost -p 389 -D &quot;cn=Directory Manager&quot; -w &lt;password&gt; -f ftp-db.ldif</font></pre>
+  <p><font face="Arial" size="3">Please change host, port, user and password parameters.</font></p>
+
+  <p><font face="Arial" size="3">The LDAP connectivity information is provided as configuration options that are passed
+  through to the config object used to create JNDI initial context. The standard LDAP JNDI properties used include the following:</font></p>
+
+  <ul>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.user.manager</u> - set it <code>ranab.server.ftp.usermanager.LdapUserManager</code>. 
+      This is the fully qualified name of the LDAP based user manager.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.url</u> - The ldap URL for the LDAP server. For example, 
+      ldap://localhost:389 URL means LDAP has been installed in the local machine and the port is 389.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.admin</u> - This is the distinguished name (DN) of the LDAP administrator.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.password</u> - LDAP administrator's password.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.authentication</u> - Security level to use. This defaults to &quot;simple&quot;.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.root</u> - The LDAP root where the ftp users will be stored.
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.dn.prefix</u> - A prefix to add to the username to form the user distinguished name (DN). 
+      See FtpServer.server.config.ldap.dn.prefix for more info..
+    </font></li>
+    <li><font face="Arial" size="3">
+      <u>FtpServer.server.config.ldap.dn.suffix</u> - suffix to add to the username when forming the user distiguished name (DN). 
+      This is useful if you prompt a user for a username and you don't want the user to have to enter the fully distinguished name. 
+      Using this property and <code>FtpServer.server.config.ldap.dn.prefix</code> the userDN will be formed as: <br>
+      <i>String userDN = prefix + username + suffix;</i>
+    </font></li>
+</ul>
+
+  
+</body>
+</html>

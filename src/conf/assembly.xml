@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE assembly PUBLIC "-//PHOENIX/Assembly DTD Version 1.0//EN" 
+                  "http://jakarta.apache.org/phoenix/assembly_1_0.dtd">
+
+<!--
+                                README!
+
+    All blocks have full defaults so nothing is needed to make them run.
+
+-->
+<assembly>
+
+  <!-- The ThreadManager block -->
+  <block class="org.apache.avalon.cornerstone.blocks.threads.DefaultThreadManager" name="thread-manager" />
+ 
+  <!-- The Connection Manager block -->
+  <block class="org.apache.avalon.cornerstone.blocks.connection.DefaultConnectionManager" name="connections">
+      <provide name="thread-manager" role="org.apache.avalon.cornerstone.services.threads.ThreadManager" />
+  </block>
+
+  <!-- The Socket Manager block -->
+  <block class="org.apache.avalon.cornerstone.blocks.sockets.DefaultSocketManager" name="sockets"/>
+
+  <!-- The Storage block -->
+  <block class="org.apache.avalon.cornerstone.blocks.masterstore.RepositoryManager" name="objectstorage" />
+  
+  <!-- user manager block -->
+  <block class="org.apache.ftpserver.usermanager.PropertiesUserManager" name="user-manager"/>
+
+  <!-- ip restrictor block -->
+  <block class="org.apache.ftpserver.ip.FileIpRestrictor" name="ip-restrictor"/>
+
+  <!-- Ftp server block -->
+  <block class="org.apache.ftpserver.FtpServerImpl" name="ftp-server" >
+      <provide name="sockets"       role="org.apache.avalon.cornerstone.services.sockets.SocketManager"/>
+      <provide name="connections"   role="org.apache.avalon.cornerstone.services.connection.ConnectionManager" />
+      <provide name="ip-restrictor" role="org.apache.ftpserver.ip.IpRestrictorInterface" />
+      <provide name="user-manager"  role="org.apache.ftpserver.usermanager.UserManagerInterface" />
+  </block>
+
+</assembly>

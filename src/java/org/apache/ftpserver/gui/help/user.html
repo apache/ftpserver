@@ -1,0 +1,31 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<title>Default UserManager</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+    <h1 align="center"><font face="Arial" color="#663300"><i>Default User Manager</i></font></h1>
+
+    <p><font face="Arial" size="3">The default user manager is properties file based. All the user 
+    informations (login, password, home directory, upload/download rate etc.) are stored in 
+    <u>&lt;CONFIG_DATA&gt;/user.properties</u> file. 
+    The default user manager class is <u>ranab.server.ftp.usermanager.PropertiesUserManager</u>
+    </font></p>
+
+    <p><font face="Arial" size="3">You can encrypt the password by specifying 
+    <u>FtpServer.server.config.prop.encrypt</u> key. The encryption algorithm is MD5.</font></p>
+    
+    <p><font face="Arial" size="3" color="red">If you are using property file based default user manager, 
+    make sure that the user properties file is not accesible by the FTP users. Otherwise it will be 
+    a security problem. Keep it below the user virtual root directory.</font>
+
+    <p><font face="Arial" size="3">You can change the default user manager or even write your own user manager
+    by overriding <u>ranab.server.ftp.usermanager.UserManager</u> class. You have to specify your user manager class 
+    (fully qualified) in the configuration file. The configuration parameter is : <u>FtpServer.server.config.user.manager</u>.
+    </font></p>  
+
+</body>
+</html>
