@@ -13,8 +13,9 @@
     username, password and other informations in a JDBC accessible database.</font></p>
 
     <p align="left"><font face="Arial" size="3">This user manager has been tested using Oracle 8i and mySQL server. 
-    All the user informations are stored in <i>FTP_USER</i> table. Database based user manager will try to create 
-   the user table FTP_USER if not found.</font></p>
+    All the user informations are stored in <i>FTP_USER</i> table. You can also use your own database schema by
+    changing the queries in the configuration file.
+    </font></p>
    <table border="1">
        <tr>
            <td align="center" bgcolor="#EEEEEE"><font face="Arial" size="3"><b>Column</b></font></td>
@@ -84,6 +85,25 @@
    </ul>
    
    <p><font face="Arial" size="3">Besides these, you need to copy the driver jar file in the lib directory.</font></p>
-
+   
+   <p><font face="Arial" size="3">If you want to use other database schema, you need to modify the other 
+   configuration parameters. All the users have a few common attributes. These parameters will be replaced in the queries.</font></p>
+   <ul>
+     <li><font face="Arial" size="3"><u>uid</u> - login</font></li>
+     <li><font face="Arial" size="3"><u>userpassword</u> - password</font></li>
+     <li><font face="Arial" size="3"><u>writepermission</u> - write permission</font></li>
+     <li><font face="Arial" size="3"><u>enableflag</u> - enable/disable flag (true/false)</font></li>
+     <li><font face="Arial" size="3"><u>idletime</u> - idle time in seconds after which the user will be logged out</font></li>
+     <li><font face="Arial" size="3"><u>uploadrate</u> - file upload rate in bytes/second</font></li>
+     <li><font face="Arial" size="3"><u>downloadrate</u> - file download rate in bytes/second</font></li>
+   </ul>
+   <p><font face="Arial" size="3">The query configuration parameters are:</font></p>
+   <ul>
+     <li><font face="Arial" size="3"><u>sql-all</u> - returns all login ids</font></li>
+     <li><font face="Arial" size="3"><u>sql-select</u> - returns all the user attributes</font></li>
+     <li><font face="Arial" size="3"><u>sql-delete</u> - delete user</font></li>
+     <li><font face="Arial" size="3"><u>sql-insert</u> - create a new user</font></li>
+     <li><font face="Arial" size="3"><u>sql-update</u> - update existing user</font></li>
+   </ul>
 </body>
 </html>
