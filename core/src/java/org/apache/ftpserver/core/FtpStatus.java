@@ -38,7 +38,7 @@ import java.util.Properties;
 public
 class FtpStatus extends Properties {
 
-    private static final String RESOURCE = "org/apache/ftpserver/FtpStatus.properties";
+    private static final String RESOURCE = "org/apache/ftpserver/core/FtpStatus.properties";
     private static final String PREFIX = "FtpServer.status.";
     private static final String EMPTY = "";
     private static final String CRLF = "\r\n";
