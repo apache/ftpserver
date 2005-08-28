@@ -193,7 +193,7 @@ class FtpStatus extends Properties {
      *
      * @param status ftp status code.
      * @param cmd    ftp request object (may be null).
-     * @param ars    variable arguent list (may be null).
+     * @param args    variable arguent list (may be null).
      */
     public String getResponse(int status, FtpRequest cmd, User user, String[] args) {
         String strRes = getMessage(status, cmd, args);
