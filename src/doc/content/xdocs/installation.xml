@@ -72,7 +72,7 @@ REM CUSTOM_CLASSPATH=
         <section id="build">
             <title>How To Build</title>
             <p>Please download ftpserver-1.0-src.zip file and unzip it.</p>
-            <p>The POI build system requires two components to perform a build. 
+            <p>The FTP Server build system requires two components to perform a build. 
                <a href="http://jakarta.apache.org/ant">Ant</a> and 
                <a href="http://jakarta.apache.org/forrest">Forrest</a>.
             </p>
