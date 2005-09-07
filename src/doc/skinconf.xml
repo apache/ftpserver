@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE skinconfig PUBLIC "-//APACHE//DTD Skin Configuration V0.7-1//EN" "http://forrest.apache.org/dtd/skinconfig-v07-1.dtd">
+<skinconfig>
+  
+  <!-- Do we want to disable the Google search box? -->
+  <disable-search>true</disable-search>
+
+  <!-- Do we want to disable the print link? If enabled, invalid HTML 4.0.1 -->
+  <disable-print-link>false</disable-print-link>  
+  
+  <!-- Do we want to disable the PDF link? -->
+  <disable-pdf-link>false</disable-pdf-link>
+  
+  <!-- Do we want to disable the xml source link? -->
+  <disable-xml-link>true</disable-xml-link>
+  
+  <!-- Do we want to disable w3c compliance links? -->
+  <disable-compliance-links>true</disable-compliance-links>
+  
+  <!-- Whether to render mailto: links unrecognisable by spam harvesters -->
+  <obfuscate-mail-links>true</obfuscate-mail-links>
+  
+  <!-- Do we want to disable w3c compliance links? -->
+  <disable-compliance-links>true</disable-compliance-links>
+
+  <!-- mandatory project logo
+       skin: forrest-site renders it at the top -->
+  <project-name>Ftpserver</project-name>
+  <project-url>http://incubator.apache.org/projects/ftpserver/</project-url>
+  <project-logo>resources/images/project-logo.gif</project-logo>
+
+  <!-- optional group logo
+       skin: forrest-site renders it at the top-left corner -->
+  <group-name>Jakarta</group-name>
+  <group-url>http://jakarta.apache.org</group-url>
+  <group-logo>resources/images/group-logo.gif</group-logo>
+
+  <!-- optional host logo (e.g. sourceforge logo)
+       skin: forrest-site renders it at the bottom-left corner -->
+  <host-url></host-url>
+  <host-logo></host-logo>
+
+  <!-- The following are used to construct a copyright statement -->
+  <year>2002-2005</year>
+  <vendor>The Apache Software Foundation.</vendor>
+
+  <!-- Some skins use this to form a 'breadcrumb trail' of links. If you don't
+  want these, set the attributes to blank. The DTD purposefully requires them.
+  -->
+  <trail>
+    <link1 name="Apache" href="http://www.apache.org/"/>
+    <link2 name="Incubator" href="http://incubator.apache.org/"/>
+    <link3 name="Ftpserver" href="http://incubator.apache.org/ftpserver/"/>
+  </trail>
+
+</skinconfig>

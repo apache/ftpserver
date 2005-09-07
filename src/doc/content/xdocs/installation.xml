@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+    <header> 
+        <title>Apache FTP Server Installation</title> 
+        <authors>
+            <person id="RB" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+        </authors>
+    </header> 
+    <body> 
+        <section id="installation">
+            <title>Installation</title>
+            <p>First of all, download ftpserver-1.0-bin.zip file and unzip it. 
+               You can run the server in two modes - with and without Java Swing UI.
+               The zip file includes sample configuration files (properties and xml).
+            </p>
+            <ul>
+                <li>Properties configuration file : ./res/conf/ftpd.properties</li>
+                <li>XML configuration file : ./res/conf/ftpd.xml</li>
+            </ul>
+            <p>If you want to run it using Swing UI. Execute the script ftpd_ui.bat 
+               (if Windows) or ftpd_ui.sh (if UNIX). This is a very simple script.
+            </p>   
+            <p><strong>ftpd_ui.bat</strong></p>
+            <source>
+@echo off
+REM CUSTOM_CLASSPATH=
+%JAVA_HOME%\bin\java -classpath lib\ftpserver.jar;%CUSTOM_CLASSPATH% org.apache.ftpserver.gui.ServerFrame
+            </source>
+            <img src="images/ftp_run.jpg"/>
+            <br/><br/>
+            <p>Similarly, if you want to start the FTP server without Swing UI, execute
+               ftpd.bat (if Windows) or ftpd.sh (if UNIX). In this case you need to pass
+               the configuration file location.
+            </p>
+            <source>
+Usage: java org.apache.ftpserver.FtpServer &lt;options&gt;
+  &lt;options&gt; := -default |
+               -xml &lt;XML configuration file&gt; |
+               -prop &lt;properties configuration file&gt;
+
+There are three ways to start the FTP server.
+    -default :: default configuration will be used.
+    -xml     :: XML configuration will be used. User has to specify the file.
+    -prop    :: properties configuration will be used. User has to specify the file.
+            </source>
+            <p>These ftpd.bat and ftpd.sh are very simple scripts.</p>
+            <p><strong>ftpd.bat</strong></p>
+            <source>
+@echo off
+REM CUSTOM_CLASSPATH=
+%JAVA_HOME%\bin\java -classpath .\lib\ftpserver.jar;%CUSTOM_CLASSPATH% org.apache.ftpserver.FtpServer %*
+            </source>
+        </section>
+        
+        <section id="build">
+            <title>How To Build</title>
+            <p>Please download ftpserver-1.0-src.zip file and unzip it.</p>
+            <p>The POI build system requires two components to perform a build. 
+               <a href="http://jakarta.apache.org/ant">Ant</a> and 
+               <a href="http://jakarta.apache.org/forrest">Forrest</a>.
+            </p>
+            <p>Specifically the build has been tested to work with Ant version 1.6.1 
+               and Forrest 0.7. To install these products download the distributions 
+               and follow the instructions in their documentation. Make sure you don't 
+               forget to set the environment variables FORREST_HOME and ANT_HOME. 
+               The ANT_HOME/bin directory should be in the path.
+            </p>
+            <p> The main targets of interest to our users are:</p>
+            <table>
+                <tr>
+                    <th>Target</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>usage</td>
+                    <td>Displays the usage information.</td>
+                </tr>
+                <tr>
+                    <td>build</td>
+                    <td>Compiles all java files and copies resources.</td>
+                </tr>
+                <tr>
+                    <td>clean</td>
+                    <td>Removes all temporary files/directories.</td>
+                </tr>
+                <tr>
+                    <td>doc</td>
+                    <td>Generates documentation from xdoc files.</td>
+                </tr>
+                <tr>
+                    <td>javadoc</td>
+                    <td>Generates the javadocs.</td>
+                </tr>
+                <tr>
+                    <td>site</td>
+                    <td>Generates FtpServer web site</td>
+                </tr>
+                <tr>
+                    <td>dist</td>
+                    <td>Generates binary and source distributions.</td>
+                </tr>
+            </table>
+        </section>
+    </body>
+</document>

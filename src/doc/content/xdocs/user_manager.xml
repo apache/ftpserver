@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+    <header> 
+        <title>User Manager</title>
+        <authors>
+            <person id="RB" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
+        </authors> 
+    </header> 
+  <body>
+      <section id="properties">
+          <title>Properties File Based User Manager</title>
+          <p>This is the default user manager. It uses a properties file to store
+             all the user information.
+          </p>
+          <section>
+              <title>Configuration Parameters</title>
+              <table>
+                  <tr>
+                      <th>Configuration Parameter</th>
+                      <th>Description</th>
+                  </tr>
+                  <tr>
+                      <td>config.user-manager.class</td>
+                      <td>org.apache.ftpserver.usermanager.propertiesUserManager</td>
+                  </tr>
+                  <tr>
+                      <td>config.user-manager.admin</td>
+                      <td>Admin user name. The default value is admin.</td>
+                  </tr>
+                  <tr>
+                      <td>config.user-manager.prop-file</td>
+                      <td>The properties file location. The default value is ./res/user.gen</td>
+                  </tr>
+                  <tr>
+                      <td>config.user-manager.prop-password-encrypt</td>
+                      <td>It indicates whether the password will be stored in 
+                          encrypted for or not. The default value is true.
+                      </td>
+                  </tr>
+              </table>
+          </section>
+          <note>If your user properties file is under user home directory. FTP 
+                users will be able to see all the user information.
+          </note>
+      </section>
+  
+      <section id="rdbms_support">
+          <title>RDBMS Support</title>
+            <p>You can store user user information in a database. JDBC is used to
+               access the database. This user manager has been tested using MySQL
+               and FireBird database. All the user informations are stored in 
+               FTP_USER table. The SQL file is &lt;INSTALL_DIR&gt;/res/ftp-db.sql. 
+            </p>
+            
+            <section>
+                <title>FTP_USER Table Structure</title>
+                <table>
+                    <tr>
+                        <th>Column</th><th>Type</th>
+                    </tr>
+                    <tr>
+                        <td>uid</td><td>VARCHAR(64), Primary key</td>
+                    </tr>
+                    <tr>
+                        <td>userpassword</td><td>VARCHAR(64)</td>
+                    </tr>
+                    <tr>
+                        <td>homedirectory</td><td>VARCHAR(128)</td>
+                    </tr>
+                    <tr>
+                        <td>enableflag</td><td>VARCHAR(8)</td>
+                    </tr>
+                    <tr>
+                        <td>writepermission</td><td>VARCHAR(8)</td>
+                    </tr>
+                    <tr>
+                        <td>idletime</td><td>INT</td>
+                    </tr>
+                    <tr>
+                        <td>uploadrate</td><td>INT</td>
+                    </tr>
+                    <tr>
+                        <td>downloadrate</td><td>INT</td>
+                    </tr>
+                </table>
+            </section>
+            
+            <section>
+                <title>Configuration Parameters</title>
+                <table>
+                    <tr>
+                        <th>Configuration Parameter</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.class</td>
+                        <td>org.apache.ftpserver.usermanager.DbUserManager</td>
+                     </tr>
+                     <tr>
+                        <td>config.user-manager.admin</td>
+                        <td>FTP server administrator name. The default value is true.</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.jdbc-driver</td>
+                        <td>JDBC driver class name.</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.jdbc-url</td>
+                        <td>JDBC URL</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.jdbc-user</td>
+                        <td>Database user. The default value is null.</td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.jdbc-password</td>
+                        <td>Database password. The default value is null.</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.sql-user-insert</td>
+                        <td>SQL INSERT statement used to add a new user. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source><![CDATA[
+    INSERT INTO FTP_USER 
+        (uid, userpassword, 
+         homedirectory, enableflag, 
+         writepermission, idletime, 
+         uploadrate, downloadrate) 
+    VALUES ('{uid}', '{userpassword}', 
+            '{homedirectory}', 
+            '{enableflag}', 
+            '{writepermission}', {idletime}, 
+            {uploadrate}, {downloadrate})
+           ]]></source>
+                        </td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.sql-user-update</td>
+                        <td>SQL UPDATE statement used to update an existing user. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source><![CDATA[
+    UPDATE FTP_USER SET 
+        userpassword='{userpassword}',homedirectory='{homedirectory}',
+        enableflag='{enableflag}',writepermission='{writepermission}',
+        idletime={idletime},uploadrate={uploadrate},
+        downloadrate={downloadrate} 
+    WHERE uid='{uid}'
+            ]]></source>
+                        </td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.sql-user-delete</td>
+                        <td>SQL DELETE statement used to delete an existing user. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source>
+    DELETE FROM FTP_USER WHERE uid = '{uid}'
+                            </source>
+                        </td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.sql-user-select</td>
+                        <td>SQL SELECT statement used to select an existing user. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source><![CDATA[
+    SELECT uid, userpassword, homedirectory, 
+           enableflag, writepermission, 
+           idletime, uploadrate, 
+           downloadrate 
+    FROM FTP_USER 
+    WHERE uid = '{uid}'
+            ]]></source>
+                        </td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.sql-user-all</td>
+                        <td>SQL SELECT statement used to select all user ids. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source>
+    SELECT uid FROM FTP_USER ORDER BY uid
+                            </source>
+                        </td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.sql-user-authenticate</td>
+                        <td>SQL SELECT statement used to authenticate user. All the
+                            dynamic values will be replaced during runtime. Sample query:
+                            <source><![CDATA[
+    SELECT uid 
+    FROM FTP_USER 
+    WHERE uid='{uid}' AND userpassword='{userpassword}'
+            ]]></source>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <note>If the sql-user-authenticate SELECT query returns no row, it means
+                  failed authentication. The authenticate() method does not check any
+                  data value. So if you use <br/><br/>
+                  <em>SELECT COUNT(*) from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</em><br/><br/>
+                  the user will be always authenticated. If there is no user for the specified
+                  uid and userpassword, the query will return a single row with value 0. As
+                  there is one row, the user will be always authenticated.
+            </note>
+      </section>
+      
+      <section id="ldap_support">
+          <title>LDAP Support</title>
+          <p>
+               You can store all the user information in your LDAP server. 
+               In this case the user object will be stored in LDAP as java object. 
+               Here the assumption is that the java object schema is available 
+               (RFC 2713). This user manager has been tested using OpenLDAP. 
+            </p>
+            <pre>
+          top
+           |
+        javaObject
+            </pre>
+            <section>
+                <title>Configuration Parameters</title>
+                <table>
+                    <tr>
+                        <th>Configuration Parameter</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.class</td>
+                        <td>org.apache.ftpserver.usermanager.LdapUserManager</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.admin</td>
+                        <td>FTP server administrator name. This is not LDAP 
+                            administrator. It is the FTP server administrator.
+                            The default value is admin.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.ldap-url</td>
+                        <td>LDAP URL (eg. ldap://localhost:389)</td>
+                    </tr>
+                    <tr>
+                        <td>config.user-manager.ldap-admin-dn</td>
+                        <td>LDAP administrator (eg. cn=Directory Manager)</td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.ldap-admin-password</td>
+                        <td>LDAP administrator password</td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.ldap-authentication</td>
+                        <td>LDAP server authentication type. The default value is simple.</td>
+                    </tr>
+                    <tr>   
+                        <td>config.user-manager.ldap-user-base-dn</td>
+                        <td>LDAP server root where all users are stored (eg. ou=people,o=yoursite.com).</td>
+                    </tr>
+                </table>
+            </section>
+            <note>This user manager assumes that the LDAP server supports java schema.
+                  That is javaObject objectClass and javaClassName attribute are 
+                  available in the LDAP schema.  
+            </note>
+      </section>
+      
+      <section>
+          <title>Custom User Manager</title>
+          <p>You can write your own user manager to integrate it with your existing
+             applications. Your custom user manager should implement
+             <em>org.apache.ftpserver.ftplet.UserManager</em> interface. You also 
+             need to specify the fully qualified name of your custom user manager class 
+             in <em>config.user-manager.class</em> configuration parameter. All the 
+             configuration values under <em>config.user-manager</em> will be available
+             to your user manager class.
+          </p>
+      </section>
+      
+      <section>
+          <title>User Manager UI</title>
+          <p>Users can be added, removed or modified using FTP server UI.</p>
+          <img src="images/ftp_user_manager.jpg"/>
+      </section>
+  </body>
+</document>

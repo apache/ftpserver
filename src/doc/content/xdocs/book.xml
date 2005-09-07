@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2004 The Apache Software Foundation. All rights reserved. -->
+<!DOCTYPE book PUBLIC "-//APACHE//DTD Cocoon Documentation Book V1.0//EN" "./dtd/book-cocoon-v10.dtd">
+
+<book software="Ftpserver"
+      title="Apache FTP Server Documentation"
+      copyright="2005 Apache FTP Server"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <menu label="Apache FTP Server">
+        <menu-item label="Welcome" href="index.html"/>
+        <menu-item label="License" href="license.html"/>
+        <menu-item label="Mailing List" href="mailing_list.html"/>
+        <menu-item label="Who We Are" href="who_we_are.html"/>
+        <menu-item label="Download" href="download.html"/>
+    </menu>
+
+    <menu label="Setup">
+        <menu-item label="Installation" href="installation.html"/>
+        <menu-item label="Configuration" href="configuration.html"/>
+        <menu-item label="TLS/SSL Support" href="ssl.html"/>
+        <menu-item label="User Manager" href="user_manager.html"/>
+        <menu-item label="IP Restrictor" href="ip_restrictor.html"/>
+        <menu-item label="Logger" href="logger.html"/>
+        <menu-item label="Messages" href="messages.html"/>
+    </menu>
+
+    <menu label="Advanced">
+        <menu-item label="FTP Commands" href="ftp_commands.html"/>
+        <menu-item label="SITE Commands" href="site_commands.html"/>
+        <menu-item label="Ftplet" href="ftplet.html"/>
+        <menu-item label="Javadoc" href="ext:javadoc"/>
+    </menu>
+
+    <menu label="RFCs">
+        <menu-item label="RFC959" href="rfc959.html"/>
+        <menu-item label="RFC2228" href="rfc2228.html"/>
+        <menu-item label="RFC2389" href="rfc2389.html"/>
+        <menu-item label="RFC2428" href="rfc2428.html"/>
+    </menu>
+</book>
