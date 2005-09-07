@@ -31,10 +31,10 @@
             </p>
             <table>
                 <tr>
-                    <td>Source</td><td><a href="http://incubator.apache.org/ftpserver/ftpserver-1.0-src.zip">ftpserver-1.0-src.zip</a></td>
+                    <td>Source</td><td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0-src.zip">ftpserver-1.0-src.zip</a></td>
                 </tr>
                 <tr>
-                    <td>Binary</td><td><a href="http://incubator.apache.org/ftpserver/ftpserver-1.0-bin.zip">ftpserver-1.0-bin.zip</a></td>
+                    <td>Binary</td><td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0-bin.zip">ftpserver-1.0-bin.zip</a></td>
                 </tr>
             </table>
             <note>This is not the release version. We shall release it soon.
