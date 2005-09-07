@@ -141,9 +141,9 @@
 
     <!-- generate site -->
     <target name="site" depends="init,dist">
-        <mkdir dir="${project.build.site}"/>
-        <copy file="${project.build.dist}/${project.name}-${project.version}-bin.zip" todir="${project.build.site}"/>
-        <copy file="${project.build.dist}/${project.name}-${project.version}-src.zip" todir="${project.build.site}"/>
+        <mkdir dir="${project.build.site}/download"/>
+        <copy file="${project.build.dist}/${project.name}-${project.version}-bin.zip" todir="${project.build.site}/download"/>
+        <copy file="${project.build.dist}/${project.name}-${project.version}-src.zip" todir="${project.build.site}/download"/>
     </target>
     
 </project>
