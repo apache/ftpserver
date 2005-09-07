@@ -74,7 +74,7 @@ REM CUSTOM_CLASSPATH=
             <p>Please download ftpserver-1.0-src.zip file and unzip it.</p>
             <p>The FTP Server build system requires two components to perform a build. 
                <a href="http://jakarta.apache.org/ant">Ant</a> and 
-               <a href="http://jakarta.apache.org/forrest">Forrest</a>.
+               <a href="http://forrest.apache.org/">Forrest</a>.
             </p>
             <p>Specifically the build has been tested to work with Ant version 1.6.1 
                and Forrest 0.7. To install these products download the distributions 
