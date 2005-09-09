@@ -76,7 +76,7 @@ class FtpRequestImpl implements FtpRequest {
     public void setClientAddress(InetAddress addr) {
         m_remoteAddr = addr;
     }
-    
+
     /**
      * Set FTP data connection.
      */
@@ -95,6 +95,17 @@ class FtpRequestImpl implements FtpRequest {
      * Reset temporary state variables.
      */
     public void resetState() {
+        m_renameFrom = null;
+        m_fileOffset = 0L;
+    }
+    
+    /**
+     * Reinitialize request.
+     */
+    public void reinitialize() {
+        m_user = new BaseUser();
+        m_loginTime = 0L;
+        m_fileSystemView = null;
         m_renameFrom = null;
         m_fileOffset = 0L;
     }
