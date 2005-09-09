@@ -75,7 +75,7 @@ class FtpConfigImpl implements IFtpConfig {
             m_connectionManager = (IConnectionManager)    createComponent(conf, "connection-manager",  "org.apache.ftpserver.ConnectionManagerImpl");
             m_ipRestrictor      = (IIpRestrictor)         createComponent(conf, "ip-restrictor",       "org.apache.ftpserver.iprestrictor.FileIpRestrictor");
             m_userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
-            m_fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.OSVirualFileSystemManager");
+            m_fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
             m_statistics        = (IFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
             
             // create composite logger
