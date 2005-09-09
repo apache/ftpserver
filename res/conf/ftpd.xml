@@ -158,7 +158,7 @@
     
     <!--  file system manager configuration block
     <file-system-manager>
-        <class>org.apache.ftpserver.filesystem.OSVirualFileSystemManager</class>
+        <class>org.apache.ftpserver.filesystem.NativeFileSystemManager</class>
         <create-home>false</create-home>
     </file-system-manager>
     -->

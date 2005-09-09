@@ -214,7 +214,7 @@ config
   |
   |---- file-system-manager
   |       |
-  |       |---- <b>class</b> (org.apache.ftpserver.filesystem.OSVirualFileSystemManager)
+  |       |---- <b>class</b> (org.apache.ftpserver.filesystem.NativeFileSystemManager)
   |       |
   |       |---- <b>create-home</b> (false)
   |
@@ -568,7 +568,7 @@ config
               </tr>
               <tr>   
                   <td>config.file-system-manager.class</td>
-                  <td>File system manager implementation class - org.apache.ftpserver.filesystem.OSVirualFileSystemManager</td>
+                  <td>File system manager implementation class - org.apache.ftpserver.filesystem.NativeFileSystemManager</td>
               </tr>
               <tr>   
                   <td>config.file-system-manager.create-home</td>

@@ -16,6 +16,8 @@
  */
 package org.apache.ftpserver.filesystem;
 
+import java.io.File;
+
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
@@ -23,16 +25,14 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
 
-import java.io.File;
-
 /**
- * This is a operating system based virtual root file system manager. 
+ * Native file system manager. It uses the OS file system.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class OSVirualFileSystemManager implements FileSystemManager {  
-    
+class NativeFileSystemManager implements FileSystemManager {
+
     private Logger m_logger;
     private boolean m_createHome;
     
@@ -60,7 +60,7 @@ class OSVirualFileSystemManager implements FileSystemManager {
      * Create the appropriate user file system view.
      */
     public FileSystemView createFileSystemView(User user) throws FtpException {
-        
+
         // create home if does not exist
         if(m_createHome) {
             String homeDirStr = user.getHomeDirectory();
@@ -75,7 +75,8 @@ class OSVirualFileSystemManager implements FileSystemManager {
             }
         }
         
-        OSVirualFileSystemView fsView = new OSVirualFileSystemView(user, m_logger);
+        FileSystemView fsView = new NativeFileSystemView(user);
         return fsView;
-    }   
+    }
+    
 }

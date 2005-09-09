@@ -28,18 +28,24 @@ import java.io.IOException;
 
 /**
  * Get the user file system view.
+ * 
+ * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class OSVirualFileSystemView implements FileSystemView {
 
     private Logger m_logger;
     
+    // root directory will be always absolute (canonical name) and
+    // the path separator will be always '/'. The root directory
+    // will always end with '/'.
     private String m_rootName;
+    
     private FileObject m_currDir;
     private boolean m_hasWritePermission;
     
     /**
-     * Constructor - set the user object.
+     * Constructor - set user and logger objects.
      */
     public OSVirualFileSystemView(User user, Logger logger) throws FtpException {
         m_logger = logger;
@@ -59,7 +65,7 @@ class OSVirualFileSystemView implements FileSystemView {
             throw new FtpException("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
         }
     }
-        
+
     /**
      * Get the user root directory.
      */
@@ -77,10 +83,11 @@ class OSVirualFileSystemView implements FileSystemView {
     /**
      * Change current directory.
      */
-    public boolean changeDirectory(FileObject dir) throws FtpException {
+    public boolean changeDirectory(String dir) throws FtpException {
+        FileObject dirObj = getFileObject(dir);
         boolean retVal = false;
-        if(dir.isDirectory()) {
-            m_currDir = dir;
+        if(dirObj.isDirectory()) {
+            m_currDir = dirObj;
             retVal = true;
         }
         return retVal;
@@ -96,23 +103,20 @@ class OSVirualFileSystemView implements FileSystemView {
             fileStr = OSVirtualFileObject.normalizeSeparateChar(fileStr);
             File physicalFile = null;
             if(fileStr.startsWith("/")) {
-                physicalFile = new File(m_rootName, fileStr);
+                physicalFile = new File(m_rootName, fileStr.substring(1));
             }
             else {
                 File physicalCurrDir = ((OSVirtualFileObject)m_currDir).getPhysicalFile();
                 physicalFile = new File(physicalCurrDir, fileStr);
             }
-            
+
             // get full name of the file
             String physicalFileStr = physicalFile.getCanonicalPath();
             physicalFileStr = OSVirtualFileObject.normalizeSeparateChar(physicalFileStr);
-            if( physicalFile.isDirectory() && (!physicalFileStr.endsWith("/")) ) {
-                physicalFileStr += '/';
-            }
-            
+
             // not under the virtual root - not available
-            FileObject virtualFile = null; 
-            if( physicalFileStr.startsWith(m_rootName) ) {
+            FileObject virtualFile = null;
+            if(m_rootName.regionMatches(0, physicalFileStr, 0, m_rootName.length() - 1)) {
                 virtualFile = new OSVirtualFileObject(physicalFile, m_rootName, m_hasWritePermission);
             }
             return virtualFile;
