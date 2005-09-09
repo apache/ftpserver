@@ -16,6 +16,8 @@
  */
 package org.apache.ftpserver;
 
+import java.util.Date;
+
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -25,9 +27,6 @@ import org.apache.ftpserver.interfaces.FileObserver;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
 import org.apache.ftpserver.interfaces.StatisticsObserver;
-
-import java.net.InetAddress;
-import java.util.Date;
 
 /**
  * This is ftp statistice implementation.
@@ -61,14 +60,11 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private long m_bytesUpload       = 0L;
     private long m_bytesDownload     = 0L;
     
-    private Logger m_logger;
-    
     
     /**
-     * Set the logger object.
+     * Set the logger object - does nothing.
      */
     public void setLogger(Logger logger) {
-        m_logger = logger;
     }
     
     /**
@@ -207,8 +203,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
     public void setUpload(IConnection connection, FileObject file, long size) {
         ++m_uploadCount;
         m_bytesUpload += size;
-        String userName = connection.getRequest().getUser().getName();
-        m_logger.info("File upload : " + userName + " - " + file.getFullName());
         notifyUpload(connection, file, size);
     }
      
@@ -218,8 +212,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
     public void setDownload(IConnection connection, FileObject file, long size) {
         ++m_downloadCount;
         m_bytesDownload += size;
-        String userName = connection.getRequest().getUser().getName();
-        m_logger.info("File download : " + userName + " - " + file.getFullName());
         notifyDownload(connection, file, size);
     }
      
@@ -228,8 +220,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
      */
     public void setDelete(IConnection connection, FileObject file) {
         ++m_deleteCount;
-        String userName = connection.getRequest().getUser().getName();
-        m_logger.info("File delete : " + userName + " - " + file.getFullName());
         notifyDelete(connection, file);
     }
      
@@ -238,8 +228,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
      */
     public void setMkdir(IConnection connection, FileObject file) {
         ++m_mkdirCount;
-        String userName = connection.getRequest().getUser().getName();
-        m_logger.info("Directory create : " + userName + " - " + file.getFullName());
         notifyMkdir(connection, file);
     }
     
@@ -248,8 +236,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
      */
     public void setRmdir(IConnection connection, FileObject file) {
         ++m_rmdirCount;
-        String userName = connection.getRequest().getUser().getName();
-        m_logger.info("Directory remove : " + userName + " - " + file.getFullName());
         notifyRmdir(connection, file);
     }
     
@@ -259,8 +245,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
     public void setOpenConnection(IConnection connection) {
         ++m_currConnections;
         ++m_totalConnections;
-        InetAddress clientAddr = connection.getRequest().getRemoteAddress();
-        m_logger.info("Open connection : " + clientAddr.getHostAddress());
         notifyOpenConnection(connection);
     }
     
@@ -269,9 +253,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
      */
     public void setCloseConnection(IConnection connection) {
         --m_currConnections;
-        String userName = connection.getRequest().getUser().getName();
-        InetAddress clientAddr = connection.getRequest().getRemoteAddress();
-        m_logger.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
         notifyCloseConnection(connection);
     }
     
