@@ -16,8 +16,6 @@
  */
 package org.apache.ftpserver.filesystem;
 
-import org.apache.ftpserver.ftplet.FileObject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+
+import org.apache.ftpserver.ftplet.FileObject;
 
 /**
  * Operating system file.  
@@ -35,11 +35,17 @@ public
 class OSVirtualFileObject implements FileObject {
 
     private File m_file;
-    private String m_rootDir;
     private boolean m_writePermission;
     
+    // root directory will be always absolute (canonical name) and
+    // the path separator will be always '/'. The root directory
+    // will always end with '/'.
+    private String m_rootDir;
+    
+    
     /**
-     * Protected constructor - used only in the <code>OSVirtualFileSystemView</code>.
+     * Protected constructor - used only in the 
+     * <code>OSVirtualFileSystemView</code>.
      */
     protected OSVirtualFileObject(File file, String rootDir, boolean writePerm) {
         m_file = file;
@@ -48,7 +54,11 @@ class OSVirtualFileObject implements FileObject {
     }
 
     /**
-     * Get the fully qualified name.
+     * Get the fully qualified name. Here the name will be 
+     * always with respect to the user root. If the file is 
+     * a directory, the last character will never be '/' except 
+     * the root directory where '/' will be returned. The first 
+     * character will always be '/'.
      */
     public String getFullName() {
         String virtualFileStr = null;
@@ -277,7 +287,7 @@ class OSVirtualFileObject implements FileObject {
     /**
      * Normalize separate characher. Separate character should be '/' always.
      */
-    public static String normalizeSeparateChar(String pathName) {   
+    public final static String normalizeSeparateChar(String pathName) {   
        pathName = pathName.replace(File.separatorChar, '/');
        pathName = pathName.replace('\\', '/');
        return pathName;
