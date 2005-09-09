@@ -16,6 +16,8 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -24,10 +26,9 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
-
-import java.io.IOException;
 
 /**
  * <code>RMD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -98,9 +99,16 @@ class RMD implements Command {
         
         // now delete directory
         if(file.delete()) {
+            out.send(250, "RMD", fileName); 
+            
+            // write log message
+            Logger logger = fconfig.getLogger();
+            String userName = request.getUser().getName();
+            logger.info("Directory remove : " + userName + " - " + fileName);
+            
+            // notify statistics object
             IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
             ftpStat.setRmdir(handler, file);
-            out.send(250, "RMD", fileName); 
             
             // call Ftplet.onRmdirEnd() method
             ftpletRet = ftpletContainer.onRmdirEnd(request, out);

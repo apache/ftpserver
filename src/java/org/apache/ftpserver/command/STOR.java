@@ -24,6 +24,7 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
 import org.apache.ftpserver.util.IoUtils;
@@ -124,6 +125,11 @@ class STOR implements Command {
                 // transfer data
                 int maxRate = handler.getRequest().getUser().getMaxUploadRate();
                 long transSz = handler.transfer(bis, bos, maxRate);
+                
+                // log message
+                String userName = request.getUser().getName();
+                Logger logger = fconfig.getLogger();
+                logger.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
                 IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();

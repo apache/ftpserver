@@ -81,7 +81,7 @@ class LIST implements Command {
                 
                 // transfer data
                 DirectoryLister dirLister = handler.getDirectoryLister();
-                syntaxError = !dirLister.printList(request.getArgument(), writer);
+                syntaxError = !dirLister.doLIST(request.getArgument(), writer);
             }
             catch(SocketException ex) {
                 ex.printStackTrace();
