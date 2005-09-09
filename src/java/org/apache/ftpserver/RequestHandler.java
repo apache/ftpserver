@@ -382,7 +382,8 @@ class RequestHandler implements IConnection {
         cmd.equals("FEAT")            ||
         cmd.equals("PBSZ")            ||
         cmd.equals("PROT")            ||
-        cmd.equals("LANG");
+        cmd.equals("LANG")            ||
+        cmd.equals("QUIT");
     }    
     
     /**
