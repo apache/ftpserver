@@ -16,16 +16,15 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import org.apache.ftpserver.util.DateUtils;
 
 /**
  * <code>MDTM &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -69,69 +68,11 @@ class MDTM implements Command {
         // now print date
         fileName = file.getFullName();
         if(file.doesExist()) {
-            String dateStr = getTimeString( file.getLastModified() );
+            String dateStr = DateUtils.getFtpDate( file.getLastModified() );
             out.send(213, "MDTM", dateStr);
         }
         else {
             out.send(550, "MDTM", fileName);
         }
     } 
-
-    /**
-     * Get time string.
-     */
-    private String getTimeString(long time) {
-        StringBuffer sb = new StringBuffer(18);
-        Calendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(time);
-        
-        // year
-        sb.append(cal.get(Calendar.YEAR));
-        
-        // month
-        int month = cal.get(Calendar.MONTH) + 1;
-        if(month < 10) {
-            sb.append('0');
-        }
-        sb.append(month);
-        
-        // date
-        int date = cal.get(Calendar.DATE);
-        if(date < 10) {
-            sb.append('0');
-        }
-        sb.append(date);
-        
-        // hour
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        if(hour < 10) {
-            sb.append('0');
-        }
-        sb.append(hour);
-        
-        // minute
-        int min = cal.get(Calendar.MINUTE);
-        if(min < 10) {
-            sb.append('0');
-        }
-        sb.append(min);
-        
-        // second
-        int sec = cal.get(Calendar.SECOND);
-        if(sec < 10) {
-            sb.append('0');
-        }
-        sb.append(sec);
-        
-        // millisecond
-        int milli = cal.get(Calendar.MILLISECOND);
-        if(milli < 100) {
-            sb.append('0');
-        }
-        if(milli < 10) {
-            sb.append('0');
-        }
-        sb.append(milli);
-        return sb.toString();
-    }
 }
