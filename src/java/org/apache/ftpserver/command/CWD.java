@@ -16,15 +16,14 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.io.IOException;
 
 /**
  * <code>CWD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -59,17 +58,13 @@ class CWD implements Command {
         // change directory
         FileSystemView fsview = request.getFileSystemView();
         boolean success = false;
-        FileObject dir = null;
         try {
-            dir = fsview.getFileObject(dirName);
-            if(dir != null) {
-                success = fsview.changeDirectory(dir);
-            }
+            success = fsview.changeDirectory(dirName);
         }
         catch(Exception ex) {
         }
         if(success) {
-            dirName = dir.getFullName();
+            dirName = fsview.getCurrentDirectory().getFullName();
             out.send(250, "CWD", dirName);
         }
         else {

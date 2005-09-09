@@ -16,15 +16,14 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.io.IOException;
 
 /**
  * <code>CDUP &lt;CRLF&gt;</code><br>
@@ -53,17 +52,13 @@ class CDUP implements Command {
         // change directory
         FileSystemView fsview = request.getFileSystemView();
         boolean success = false;
-        FileObject dir = null;
         try {
-            dir = fsview.getFileObject("..");
-            if(dir != null) {
-                success = fsview.changeDirectory(dir);
-            }
+            success = fsview.changeDirectory("..");
         }
         catch(Exception ex) {
         }
         if(success) {
-            String dirName = dir.getFullName();
+            String dirName = fsview.getCurrentDirectory().getFullName();
             out.send(250, "CDUP", dirName);
         }
         else {
