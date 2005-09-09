@@ -53,7 +53,7 @@ class GuiUtils {
     /**
      * Display error message.
      */
-    public static void showErrorMessage(Component parent, String str) {
+    public final static void showErrorMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Error!",
                                       JOptionPane.ERROR_MESSAGE);
     }
@@ -61,7 +61,7 @@ class GuiUtils {
     /**
      * Display warning message.
      */
-    public static void showWarningMessage(Component parent, String str) {
+    public final static void showWarningMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Warning!",
                                       JOptionPane.WARNING_MESSAGE);
     }
@@ -69,7 +69,7 @@ class GuiUtils {
     /**
      * Display information.
      */
-    public static void showInformationMessage(Component parent, String str) {
+    public final static void showInformationMessage(Component parent, String str) {
         JOptionPane.showMessageDialog(parent, str, "Information!",
                                       JOptionPane.INFORMATION_MESSAGE );
     }
@@ -77,7 +77,7 @@ class GuiUtils {
     /**
      * Get confirmation.
      */
-    public static boolean getConfirmation(Component parent, String str) {
+    public final static boolean getConfirmation(Component parent, String str) {
 
         int res = JOptionPane.showConfirmDialog(parent, 
                                                 str,

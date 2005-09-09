@@ -27,16 +27,16 @@ import java.util.Random;
 public
 class IoUtils {
     
-   /**
-    * Random number generator to make unique file name
-    */
-   private final static Random RANDOM_GEN = new Random(System.currentTimeMillis());
+    /**
+     * Random number generator to make unique file name
+     */
+    private final static Random RANDOM_GEN = new Random(System.currentTimeMillis());
      
     
-   /**
-    * Get a <code>BufferedInputStream</code>. 
-    */
-   public static BufferedInputStream getBufferedInputStream(InputStream in) {
+    /**
+     * Get a <code>BufferedInputStream</code>. 
+     */
+    public final static BufferedInputStream getBufferedInputStream(InputStream in) {
         BufferedInputStream bin = null;
         if(in instanceof java.io.BufferedInputStream) {
             bin = (BufferedInputStream)in;
@@ -45,13 +45,12 @@ class IoUtils {
             bin = new BufferedInputStream(in);
         }
         return bin;
-   }
+    }
     
-    
-   /**
-    * Get a <code>BufferedOutputStream</code>. 
-    */
-   public static BufferedOutputStream getBufferedOutputStream(OutputStream out) {
+    /**
+     * Get a <code>BufferedOutputStream</code>. 
+     */
+    public final static BufferedOutputStream getBufferedOutputStream(OutputStream out) {
         BufferedOutputStream bout = null;
         if(out instanceof java.io.BufferedOutputStream) {
             bout = (BufferedOutputStream)out;
@@ -60,13 +59,12 @@ class IoUtils {
             bout = new BufferedOutputStream(out);
         }
         return bout;
-   }
+    }
     
-    
-   /**
-    * Get <code>BufferedReader</code>.
-    */
-   public static BufferedReader getBufferedReader(Reader rd) {
+    /**
+     * Get <code>BufferedReader</code>.
+     */
+    public final static BufferedReader getBufferedReader(Reader rd) {
         BufferedReader br = null;
         if(br instanceof java.io.BufferedReader) {
             br = (BufferedReader)rd;
@@ -75,13 +73,13 @@ class IoUtils {
             br = new BufferedReader(rd);
         }
         return br;
-   }
+    }
     
     
-   /**
-    * Get <code>BufferedWriter</code>.
-    */
-   public static BufferedWriter getBufferedWriter(Writer wr) {
+    /**
+     * Get <code>BufferedWriter</code>.
+     */
+    public final static BufferedWriter getBufferedWriter(Writer wr) {
         BufferedWriter bw = null;
         if(wr instanceof java.io.BufferedWriter) {
             bw = (BufferedWriter)wr;
@@ -90,13 +88,12 @@ class IoUtils {
             bw = new BufferedWriter(wr);
         }
         return bw;
-   }
+    }
 
-
-   /**
-    * Get unique file object.
-    */
-   public static File getUniqueFile(File oldFile) {
+    /**
+     * Get unique file object.
+     */
+    public final static File getUniqueFile(File oldFile) {
         File newFile = oldFile;
         while (true) {
             if (!newFile.exists()) {
@@ -105,51 +102,50 @@ class IoUtils {
             newFile = new File(oldFile.getAbsolutePath() + '.' + Math.abs(RANDOM_GEN.nextLong()));
         }
         return newFile;
-   }
+    }
+   
+    /**
+     * No exception <code>InputStream</code> close method.
+     */
+    public final static void close(InputStream is) {
+        if(is != null) {
+            try { is.close(); } catch(Exception ex) {}
+        }
+    } 
+   
+    /**
+     * No exception <code>OutputStream</code> close method.
+     */
+    public final static void close(OutputStream os) {
+        if(os != null) {
+            try { os.close(); } catch(Exception ex) {}
+        }
+    }
+   
+    /**
+     * No exception <code>java.io.Reader</code> close method.
+     */
+    public final static void close(Reader rd) {
+        if(rd != null) {
+            try { rd.close(); } catch(Exception ex) {}
+        }
+    }
    
    
-   /**
-    * No exception <code>InputStream</code> close method.
-    */
-   public static void close(InputStream is) {
-       if(is != null) {
-           try { is.close(); } catch(Exception ex) {}
-       }
-   } 
-   
-   /**
-    * No exception <code>OutputStream</code> close method.
-    */
-   public static void close(OutputStream os) {
-       if(os != null) {
-           try { os.close(); } catch(Exception ex) {}
-       }
-   }
-   
-   /**
-    * No exception <code>java.io.Reader</code> close method.
-    */
-   public static void close(Reader rd) {
-       if(rd != null) {
-           try { rd.close(); } catch(Exception ex) {}
-       }
-   }
-   
-   
-   /**
-    * No exception <code>java.io.Writer</code> close method.
-    */
-   public static void close(Writer wr) {
-       if(wr != null) {
-           try { wr.close(); } catch(Exception ex) {}
-       }
-   }
+    /**
+     * No exception <code>java.io.Writer</code> close method.
+     */
+    public final static void close(Writer wr) {
+        if(wr != null) {
+            try { wr.close(); } catch(Exception ex) {}
+        }
+    }
    
    
     /**
      * Get exception stack trace.
      */
-    public static String getStackTrace(Throwable ex) {
+    public final static String getStackTrace(Throwable ex) {
         String result = "";
         if(ex != null) {
             try  {
@@ -167,12 +163,11 @@ class IoUtils {
         return result;
     }
     
-    
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy(Reader input, Writer output, int bufferSize ) throws IOException {
+    public final static void copy(Reader input, Writer output, int bufferSize ) throws IOException {
         char buffer[] = new char[bufferSize];
         int n = 0;
         while( (n=input.read(buffer)) != -1) {
@@ -184,7 +179,7 @@ class IoUtils {
      * Copy chars from a <code>InputStream</code> to a <code>OutputStream</code>.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy(InputStream input, OutputStream output, int bufferSize ) throws IOException {
+    public final static void copy(InputStream input, OutputStream output, int bufferSize ) throws IOException {
         byte buffer[] = new byte[bufferSize];
         int n = 0;
         while( (n=input.read(buffer)) != -1) {
@@ -195,21 +190,19 @@ class IoUtils {
     /**
      * Read fully from reader
      */
-    public static String readFully(Reader reader) throws IOException {
+    public final static String readFully(Reader reader) throws IOException {
         StringWriter writer = new StringWriter();
         copy(reader, writer, 1024);
         return writer.toString();
     }
     
-    
     /**
      * Read fully from stream
      */ 
-    public static String readFully(InputStream input) throws IOException {
+    public final static String readFully(InputStream input) throws IOException {
         StringWriter writer = new StringWriter();
         InputStreamReader reader = new InputStreamReader(input);
         copy(reader, writer, 1024);
         return writer.toString();
     } 
-    
 }    
