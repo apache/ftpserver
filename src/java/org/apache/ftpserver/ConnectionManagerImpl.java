@@ -263,6 +263,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                     
                     // idle data connectin timeout - close it 
                     if( (currTime - requestTime) > idleTimeMillis ) {
+                        m_logger.info("Removing idle data connection for " + con.getRequest().getUser());
                         dataCon.closeDataSocket();
                     }
                 }
