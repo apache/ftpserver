@@ -31,22 +31,21 @@ import java.io.Writer;
 import java.net.SocketException;
 
 /**
- * <code>NLST [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
+ * <code>MLSD [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
  *
- * This command causes a directory listing to be sent from
- * server to user site.  The pathname should specify a
- * directory or other system-specific file group descriptor; a
- * null argument implies the current directory.  The server
- * will return a stream of names of files and no other
- * information.
+ * This command causes a list to be sent from the server to the
+ * passive DTP.  The pathname must specify a directory and the
+ * server should transfer a list of files in the specified directory.
+ * A null argument implies the user's current working or  default directory.
+ * The data transfer is over the data connection
  * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
+ * @author Birkir A. Barkarson
  */
 public 
-class NLST implements Command {
+class MLSD implements Command {
 
     /**
-     * Execute command
+     * Execute command.
      */
     public void execute(RequestHandler handler, 
                         FtpRequestImpl request, 
@@ -58,13 +57,13 @@ class NLST implements Command {
             request.resetState();
             
             // get data connection
-            out.send(150, "NLST", null);
+            out.send(150, "MLSD", null);
             OutputStream os = null;
             try {
                 os = request.getDataOutputStream();
             }
             catch(IOException ex) {
-                out.send(425, "NLST", null);
+                out.send(425, "MLSD", null);
                 return;
             }
             
@@ -79,15 +78,15 @@ class NLST implements Command {
                 
                 // transfer data
                 DirectoryLister dirLister = handler.getDirectoryLister();
-                syntaxError = !dirLister.doNLST(request.getArgument(), writer);
+                syntaxError = !dirLister.doMLSD(request.getArgument(), writer);
             }
             catch(SocketException ex) {
                 failure = true;
-                out.send(426, "NLST", null);
+                out.send(426, "MLSD", null);
             }
             catch(IOException ex) {
                 failure = true;
-                out.send(551, "NLST", null);
+                out.send(551, "MLSD", null);
             }
             finally {
                 IoUtils.close(writer);
@@ -95,12 +94,12 @@ class NLST implements Command {
             
             // if listing syntax error - send message
             if(syntaxError) {
-                out.send(501, "NLST", null);
+                out.send(501, "MLSD", null);
             }
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "NLST", null);
+                out.send(226, "MLSD", null);
             }
         }
         finally {

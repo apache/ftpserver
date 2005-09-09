@@ -16,19 +16,6 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IFtpStatistics;
-import org.apache.ftpserver.interfaces.IIpRestrictor;
-import org.apache.ftpserver.interfaces.ISsl;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -38,6 +25,20 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.Logger;
+import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IConnectionManager;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.IFtpStatistics;
+import org.apache.ftpserver.interfaces.IIpRestrictor;
+import org.apache.ftpserver.interfaces.ISsl;
+import org.apache.ftpserver.util.IoUtils;
 
 
 /**
@@ -168,9 +169,12 @@ class RequestHandler implements IConnection {
         
         InetAddress clientAddr = m_request.getRemoteAddress();
         IConnectionManager conManager = m_fconfig.getConnectionManager();
-        m_fconfig.getLogger().info("Handling new request from " + clientAddr.getHostAddress());
+        Logger logger = m_fconfig.getLogger();
         
         try {
+            
+            // write log message
+            logger.info("Open connection - " + clientAddr.getHostAddress());
             
             // notify ftp statistics
             IFtpStatistics ftpStat = (IFtpStatistics)m_fconfig.getFtpStatistics();
@@ -237,7 +241,7 @@ class RequestHandler implements IConnection {
             // socket closed - no need to do anything
         }
         catch(Exception ex) {
-            m_fconfig.getLogger().warn("RequestHandler.run()", ex);
+            logger.warn("RequestHandler.run()", ex);
         }
         finally {
             // close all resources if not done already
@@ -300,24 +304,33 @@ class RequestHandler implements IConnection {
         }
         
         // call Ftplet.onDisconnect() method.
+        Logger logger = m_fconfig.getLogger();
         try {
             Ftplet ftpletContainer = m_fconfig.getFtpletContainer();
             ftpletContainer.onDisconnect(m_request, m_writer);
         }
         catch(Exception ex) {
-            m_fconfig.getLogger().warn("RequestHandler.close()", ex);
+            logger.warn("RequestHandler.close()", ex);
         }
-            
+
         // notify statistics object and close request
         IFtpStatistics ftpStat = (IFtpStatistics)m_fconfig.getFtpStatistics();
         FtpRequestImpl request = m_request;
         if(request != null) {
+            
+            // log message
+            String userName = request.getUser().getName();
+            InetAddress clientAddr = request.getRemoteAddress(); 
+            logger.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
+            
+            // logout if necessary and notify statistics
             if(request.isLoggedIn()) {
                 request.setLogout();
                 ftpStat.setLogout(this);
             }
             ftpStat.setCloseConnection(this);
             
+            // clear request
             request.clear();
             request.setObserver(null);
             request.getFtpDataConnection().dispose();
@@ -346,7 +359,7 @@ class RequestHandler implements IConnection {
                 controlSocket.close();
             }
             catch(Exception ex) {
-                m_fconfig.getLogger().warn("RequestHandler.close()", ex);
+                logger.warn("RequestHandler.close()", ex);
             }
             m_controlSocket = null;
         }
@@ -450,10 +463,10 @@ class RequestHandler implements IConnection {
         m_controlSocket = ssoc;
     }
     
-    
     /////////////////////////////////////////////////////////////////////
     static {
         COMMAND_MAP.put("ABOR", new org.apache.ftpserver.command.ABOR());
+        COMMAND_MAP.put("ACCT", new org.apache.ftpserver.command.ACCT());
         COMMAND_MAP.put("APPE", new org.apache.ftpserver.command.APPE());
         COMMAND_MAP.put("AUTH", new org.apache.ftpserver.command.AUTH());
         COMMAND_MAP.put("CDUP", new org.apache.ftpserver.command.CDUP());
@@ -466,10 +479,13 @@ class RequestHandler implements IConnection {
         COMMAND_MAP.put("LANG", new org.apache.ftpserver.command.LANG());
         COMMAND_MAP.put("LIST", new org.apache.ftpserver.command.LIST());
         COMMAND_MAP.put("MDTM", new org.apache.ftpserver.command.MDTM());
+        COMMAND_MAP.put("MLST", new org.apache.ftpserver.command.MLST());
         COMMAND_MAP.put("MKD",  new org.apache.ftpserver.command.MKD());
+        COMMAND_MAP.put("MLSD", new org.apache.ftpserver.command.MLSD());
         COMMAND_MAP.put("MODE", new org.apache.ftpserver.command.MODE());
         COMMAND_MAP.put("NLST", new org.apache.ftpserver.command.NLST());
         COMMAND_MAP.put("NOOP", new org.apache.ftpserver.command.NOOP());
+        COMMAND_MAP.put("OPTS", new org.apache.ftpserver.command.OPTS());
         COMMAND_MAP.put("PASS", new org.apache.ftpserver.command.PASS());
         COMMAND_MAP.put("PASV", new org.apache.ftpserver.command.PASV());
         COMMAND_MAP.put("PBSZ", new org.apache.ftpserver.command.PBSZ());
@@ -477,6 +493,7 @@ class RequestHandler implements IConnection {
         COMMAND_MAP.put("PROT", new org.apache.ftpserver.command.PROT());
         COMMAND_MAP.put("PWD",  new org.apache.ftpserver.command.PWD());
         COMMAND_MAP.put("QUIT", new org.apache.ftpserver.command.QUIT());
+        COMMAND_MAP.put("REIN", new org.apache.ftpserver.command.REIN());
         COMMAND_MAP.put("REST", new org.apache.ftpserver.command.REST());
         COMMAND_MAP.put("RETR", new org.apache.ftpserver.command.RETR());
         COMMAND_MAP.put("RMD",  new org.apache.ftpserver.command.RMD());

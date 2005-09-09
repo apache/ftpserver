@@ -38,7 +38,7 @@ interface FileSystemView {
     /**
      * Change directory.
      */ 
-    boolean changeDirectory(FileObject dir) throws FtpException;
+    boolean changeDirectory(String dir) throws FtpException;
     
     /**
      * Get file object.

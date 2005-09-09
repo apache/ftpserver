@@ -16,26 +16,34 @@
  */
 package org.apache.ftpserver;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.StringTokenizer;
+
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.RegularExpr;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.StringTokenizer;
-
 /**
  * This class prints file listing.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
+ * @author Birkir A. Barkarson
  */
 public 
 class DirectoryLister {
 
     private final static char[] NEWLINE  = {'\r', '\n'};
     private final static char DELIM    = ' ';
+    private final static String[] AVAILABLE_TYPES = {
+        "Size",
+        "Modify",
+        "Type",
+        "Perm"
+    };
+    
     
     private FileSystemView m_fileSystemView;
     
@@ -45,6 +53,8 @@ class DirectoryLister {
     private String m_file;
     private String m_pattern;
     private char m_permission[] = new char[10];
+    
+    private String[] m_selectedTypes = new String[] {"Size", "Modify", "Type"};
     
     
     /**
@@ -58,107 +68,64 @@ class DirectoryLister {
     }
     
     /**
-     * Parse argument.
+     * Get selected types.
      */
-    private boolean parse(String argument) {
-        String lsDirName = "./";
-        String options = "";
-        String pattern = "*";
-        
-        // get different tokens
-        if(argument != null) {
-            argument = argument.trim();
-            StringBuffer optionsSb = new StringBuffer(4);
-            StringTokenizer st = new StringTokenizer(argument, " ");
-            while(st.hasMoreTokens()) {
-                String token = st.nextToken();
-                if(token.charAt(0) == '-') {
-                    if (token.length() > 1) {
-                        optionsSb.append(token.substring(1));
-                    }
-                }
-                else {
-                   lsDirName = token;
-                }
+    public String getSelectedTypes() {
+        StringBuffer sb = new StringBuffer(64);
+        for(int i=0; i<m_selectedTypes.length; ++i) {
+            if(i != 0) {
+                sb.append(';');
             }
-            options = optionsSb.toString();
+            sb.append(m_selectedTypes[i]);
         }
-        m_isAllOption = options.indexOf('a') != -1;
-        m_isDetailOption = options.indexOf('l') != -1;
+        return sb.toString();
+    }
+    
+    /**
+     * Returns true if, and only if, the string passed was
+     * successfully parsed as valid types.
+     */
+    public boolean setSelectedTypes(String types) {
+        StringTokenizer st = new StringTokenizer(types, ";");
+        String[] vaildTokens = new String[st.countTokens()];
         
-        // check regular expression
-        if( !isRegexp(lsDirName) ) {
-            m_pattern = null;
-            m_file = lsDirName;
-            return true;
-        }
-        
-        try {
-            
-            // get the directory part and the egular expression part
-            int slashIndex = lsDirName.lastIndexOf('/');
-            if(slashIndex == -1) {
-                pattern = lsDirName;
-                lsDirName = "./";
+        // compare each selected types
+        int i = 0;
+        while(st.hasMoreTokens()) {
+            boolean bMatch = false;
+            String token = st.nextToken();
+            for(int j=0; j<AVAILABLE_TYPES.length; ++j) {
+                if(AVAILABLE_TYPES[j].equalsIgnoreCase(token)) {
+                    vaildTokens[i++] = AVAILABLE_TYPES[j];
+                    bMatch=true;
+                    break;
+                 }
             }
-            else if( slashIndex != (lsDirName.length() -1) ) {
-                pattern = lsDirName.substring(slashIndex+1);
-                lsDirName = lsDirName.substring(0, slashIndex+1);
-            }
-            else {
-                return false;
-            }
-            
-            // check path
-            FileObject file = m_fileSystemView.getFileObject(lsDirName);
-            if(file == null) {
-                return false;
-            }
-            
-            // parent is not a directory - no need to process
-            if(!file.isDirectory()) {
+            if(!bMatch) {
                 return false;
             }
         }
-        catch(FtpException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-
-        m_file = lsDirName;
-        if(pattern.equals("*") || pattern.equals("")) {
-            m_pattern = null;
-        }
-        else {
-            m_pattern = pattern;
-        }
+        
+        m_selectedTypes = vaildTokens;
         return true;
     }
     
-    
     /**
-     * Is a regular expression?
-     */
-    private boolean isRegexp(String str) {
-        return (str.indexOf('*') != -1) ||
-               (str.indexOf('?') != -1) ||
-               (str.indexOf('[') != -1);
-    }
-    
-    /**
-     * Print file list.
+     * Print file list. The server will return a stream of names of 
+     * files and no other information if detail listing flag is false.
      * <pre>
      *   -l : detail listing
      *   -a : display all (including hidden files)
      * </pre>
      */
-    public boolean printNList(String argument, Writer out) throws IOException {
+    public boolean doNLST(String argument, Writer out) throws IOException {
         
         // parse argument
         if(!parse(argument)) {
             return false;
         }
         
+        // get all the file objects
         FileObject[] files = null;
         try {
             files = m_fileSystemView.listFiles(m_file);
@@ -203,7 +170,7 @@ class DirectoryLister {
      * </pre>
      * @return true if success
      */
-    public boolean printList(String argument, Writer out) throws IOException {
+    public boolean doLIST(String argument, Writer out) throws IOException {
         
         // parse argument
         if(!parse(argument)) {
@@ -239,6 +206,165 @@ class DirectoryLister {
             out.write(NEWLINE);
          }
         out.flush();
+        return true;
+    }
+    
+    /**
+     * Print path info. Machine listing. It prints the listing
+     * information for a single file.
+     *
+     * @return true if success
+     */
+    public boolean doMLST(String argument, Writer out) throws IOException {
+
+        // check argument
+        if(argument == null) {
+            argument = "./";
+        }
+        
+        FileObject file = null;
+        try {
+            file = m_fileSystemView.getFileObject(argument);
+            if(file == null) {
+                return false;
+            }
+            if(!file.doesExist()) {
+                return false;
+            }
+        }
+        catch(FtpException ex) {
+        }
+        if(file == null) {
+            return false;
+        }
+        
+        printMLine(file, out);
+        return true;
+    }
+    
+    /**
+     * Print directory contents. Machine listing.
+     * <pre>
+     *   -a : display all (including hidden files)
+     * </pre>
+     * 
+     * @return true if success
+     */
+    public boolean doMLSD(String argument, Writer out) throws IOException {
+        
+        // parse argument
+        if(!parse(argument)) {
+            return false;
+        }
+        
+        FileObject[] files = null;
+        try {
+            files = m_fileSystemView.listFiles(m_file);
+        }
+        catch(FtpException ex) {
+        }
+        if(files == null) {
+            return false;
+        }
+        
+        // Arrays.sort(files, new FileComparator());
+        RegularExpr regexp = null;
+        if(m_pattern != null) {
+            regexp = new RegularExpr(m_pattern);
+        }
+        for(int i=0; i<files.length; i++) {
+            if(files[i] == null) {
+                continue;
+            }
+            if ( (!m_isAllOption) && files[i].isHidden() ) {
+                continue;
+            }
+            if( (regexp != null) && (!regexp.isMatch(files[i].getShortName())) ) {
+                continue;
+            }
+            printMLine(files[i], out);
+            out.write(NEWLINE);
+         }
+        out.flush();
+        return true;
+    }
+    
+    /**
+     * Parse argument.
+     */
+    private boolean parse(String argument) {
+        String lsFileName = "./";
+        String options = "";
+        String pattern = "*";
+        
+        // find options and file name (may have regular expression)
+        if(argument != null) {
+            argument = argument.trim();
+            StringBuffer optionsSb = new StringBuffer(4);
+            StringTokenizer st = new StringTokenizer(argument, " ");
+            while(st.hasMoreTokens()) {
+                String token = st.nextToken();
+                if(token.charAt(0) == '-') {
+                    if (token.length() > 1) {
+                        optionsSb.append(token.substring(1));
+                    }
+                }
+                else {
+                   lsFileName = token;
+                }
+            }
+            options = optionsSb.toString();
+        }
+        m_isAllOption = options.indexOf('a') != -1;
+        m_isDetailOption = options.indexOf('l') != -1;
+        
+        // check regular expression
+        if( (lsFileName.indexOf('*') == -1) &&
+            (lsFileName.indexOf('?') == -1) &&
+            (lsFileName.indexOf('[') == -1) ) {
+            m_pattern = null;
+            m_file = lsFileName;
+            return true;
+        }
+        
+        // get the directory part and the egular expression part
+        try {
+            int slashIndex = lsFileName.lastIndexOf('/');
+            if(slashIndex == -1) {
+                pattern = lsFileName;
+                lsFileName = "./";
+            }
+            else if( slashIndex != (lsFileName.length() -1) ) {
+                pattern = lsFileName.substring(slashIndex+1);
+                lsFileName = lsFileName.substring(0, slashIndex+1);
+            }
+            else {
+                return false;
+            }
+            
+            // check path
+            FileObject file = m_fileSystemView.getFileObject(lsFileName);
+            if(file == null) {
+                return false;
+            }
+            
+            // parent is not a directory - no need to process
+            if(!file.isDirectory()) {
+                return false;
+            }
+        }
+        catch(FtpException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        m_file = lsFileName;
+        if( "*".equals(pattern) || "".equals(pattern) ) {
+            m_pattern = null;
+        }
+        else {
+            m_pattern = pattern;
+        }
         return true;
     }
     
@@ -295,5 +421,62 @@ class DirectoryLister {
      */
     private String getLastModified(FileObject file) {
         return DateUtils.getUnixDate( file.getLastModified() );
+    }
+    
+    /**
+     * Print each file line.
+     */
+    private void printMLine(FileObject file, Writer out) throws IOException {
+        for(int i=0; i<m_selectedTypes.length; ++i) {
+            String type = m_selectedTypes[i];
+            if(type.equalsIgnoreCase("size")) {
+                out.write("Size=");
+                out.write(String.valueOf(file.getSize()));
+                out.write(';');
+            }
+            else if(type.equalsIgnoreCase("modify")) {
+                String timeStr = DateUtils.getFtpDate( file.getLastModified() );
+                out.write("Modify=");
+                out.write(timeStr);
+                out.write(';');
+            }
+            else if(type.equalsIgnoreCase("type")) {
+                if(file.isFile()) {
+                    out.write("Type=file;");
+                }
+                else if(file.isDirectory()) {
+                    out.write("Type=dir;");
+                }
+            }
+            else if(type.equalsIgnoreCase("perm")) {
+                out.write("Perm=");
+                if(file.hasReadPermission()) {
+                    if(file.isFile()) {
+                        out.write('r');
+                    }
+                    else if(file.isDirectory()) {
+                        out.write('e');
+                        out.write('l');
+                    }
+                }
+                if(file.hasWritePermission()) {
+                    if(file.isFile()) {
+                        out.write('a');
+                        out.write('d');
+                        out.write('f');
+                        out.write('w');
+                    }
+                    else if(file.isDirectory()) {
+                        out.write('f');
+                        out.write('p');
+                        out.write('c');
+                        out.write('m');
+                    }
+                }
+                out.write(';');
+            }
+        }
+        out.write(' ');
+        out.write(file.getShortName());
     }
 }
