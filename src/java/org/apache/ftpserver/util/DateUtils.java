@@ -16,11 +16,8 @@
  */
 package org.apache.ftpserver.util;
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 /**
  * Standard date related utility methods.
@@ -48,7 +45,7 @@ class DateUtils {
     /**
      * Get unix style date string.
      */
-    public static String getUnixDate(long millis) {
+    public final static String getUnixDate(long millis) {
         if (millis < 0) {
             return "------------";
         }
@@ -101,7 +98,7 @@ class DateUtils {
     /**
      * Get ISO 8601 timestamp.
      */
-    public static String getISO8601Date(long millis) {
+    public final static String getISO8601Date(long millis) {
         StringBuffer sb = new StringBuffer(19);
         Calendar cal = new GregorianCalendar();
         cal.setTimeInMillis(millis);
@@ -153,74 +150,61 @@ class DateUtils {
     } 
     
     /**
-     * Get the timezone specific string.
+     * Get FTP date.
      */
-    public static String getString(Date dt, DateFormat df, TimeZone to) {
-        df.setTimeZone(to);
-        return df.format(dt);
-    }
-
-    /**
-     * Get the timezone specific calendar.
-     */
-    public static Calendar getCalendar(Date dt, TimeZone to) {
-        Calendar cal = Calendar.getInstance(to);
-        cal.setTime(dt);
-        return cal;
-    }
-
-    /**
-     * Get date object.
-     */
-    public static Date getDate(String str, DateFormat df, TimeZone from) 
-    throws java.text.ParseException {
-        df.setTimeZone(from);
-        return df.parse(str);
-    }
-    
-    /**
-     * Get date difference => d1 - d2. 
-     */
-    public static String getDifference(Date d1, Date d2) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(d2);
-        int year2 = calendar.get(Calendar.YEAR);
-        int day2 = calendar.get(Calendar.DAY_OF_YEAR);
-        int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
-        int min2  = calendar.get(Calendar.MINUTE);
+    public final static String getFtpDate(long millis) {
+        StringBuffer sb = new StringBuffer(20);
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(millis);
         
-        calendar.setTime(d1);
-        int year1 = calendar.get(Calendar.YEAR);
-        int day1 = calendar.get(Calendar.DAY_OF_YEAR);
-        int hour1 = calendar.get(Calendar.HOUR_OF_DAY);
-        int min1  = calendar.get(Calendar.MINUTE);
+        // year
+        sb.append(cal.get(Calendar.YEAR));
         
-        int leftDays = (day1-day2)+(year1-year2)*365;
-        int leftHours = hour1-hour2;
-        int leftMins  = min1 - min2;
+        // month
+        int month = cal.get(Calendar.MONTH) + 1;
+        if(month < 10) {
+            sb.append('0');
+        }
+        sb.append(month);
         
-        if(leftMins < 0) {
-            leftMins += 60;
-            --leftHours;
+        // date
+        int date = cal.get(Calendar.DATE);
+        if(date < 10) {
+            sb.append('0');
         }
-        if(leftHours < 0) {
-            leftHours += 24;
-            --leftDays;
-        }
+        sb.append(date);
         
-        String interval = "";
-        if(leftDays > 0) {
-            interval = leftDays + " Days";
+        // hour
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        if(hour < 10) {
+            sb.append('0');
         }
-        else if((leftHours > 0) && (leftDays == 0)) {
-            interval = leftHours + " Hours";
+        sb.append(hour);
+        
+        // minute
+        int min = cal.get(Calendar.MINUTE);
+        if(min < 10) {
+            sb.append('0');
         }
-        else if((leftMins > 0) && (leftHours == 0) && (leftDays == 0)) {
-            interval = leftMins + " Minutes";
+        sb.append(min);
+        
+        // second
+        int sec = cal.get(Calendar.SECOND);
+        if(sec < 10) {
+            sb.append('0');
         }
-        else {
-            interval = "";
+        sb.append(sec);
+        
+        // millisecond
+        sb.append('.');
+        int milli = cal.get(Calendar.MILLISECOND);
+        if(milli < 100) {
+            sb.append('0');
         }
-        return interval;
+        if(milli < 10) {
+            sb.append('0');
+        }
+        sb.append(milli);
+        return sb.toString();
     }
 }

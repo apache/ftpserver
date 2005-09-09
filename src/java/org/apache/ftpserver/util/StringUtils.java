@@ -31,7 +31,7 @@ class StringUtils {
     /**
      * This is a string replacement method.
      */
-    public static String replaceString(String source, String oldStr, String newStr) {
+    public final static String replaceString(String source, String oldStr, String newStr) {
         StringBuffer sb = new StringBuffer(source.length());
         int sind = 0;
         int cind = 0;
@@ -48,7 +48,7 @@ class StringUtils {
     /**
      * Replace string
      */ 
-    public static String replaceString(String source, Object[] args) {
+    public final static String replaceString(String source, Object[] args) {
         int startIndex = 0;
         int openIndex = source.indexOf('{', startIndex);
         if (openIndex == -1) {
@@ -86,9 +86,9 @@ class StringUtils {
     
 
     /**
-     * Replace string
+     * Replace string.
      */ 
-    public static String replaceString(String source, Map args) {
+    public final static String replaceString(String source, Map args) {
         int startIndex = 0;
         int openIndex = source.indexOf('{', startIndex);
         if (openIndex == -1) {
@@ -126,7 +126,6 @@ class StringUtils {
         return sb.toString();
     }
 
-
     /**
      * This method is used to insert HTML block dynamically
      *
@@ -136,7 +135,7 @@ class StringUtils {
      *                          '>' will be replaced by &gt;
      * @param bReplaceQuote if true '\"' will be replaced by &quot; 
      */
-    public static String formatHtml(String source, 
+    public final static String formatHtml(String source, 
                                     boolean bReplaceNl, 
                                     boolean bReplaceTag,
                                     boolean bReplaceQuote) {
@@ -188,10 +187,10 @@ class StringUtils {
     /**
      * Pad string object
      */
-    public static String pad(String src, 
-                             char padChar, 
-                             boolean rightPad, 
-                             int totalLength) {
+    public final static String pad(String src, 
+                                   char padChar, 
+                                   boolean rightPad, 
+                                   int totalLength) {
                              
         int srcLength = src.length();
         if (srcLength >= totalLength) {
@@ -215,7 +214,7 @@ class StringUtils {
     /**
      * Get hex string from byte array
      */
-    public static String toHexString(byte[] res) {
+    public final static String toHexString(byte[] res) {
         StringBuffer sb = new StringBuffer(res.length << 1);
         for(int i=0; i<res.length; i++) {
             String digit = Integer.toHexString(0xFF & res[i]);
@@ -230,7 +229,7 @@ class StringUtils {
     /**
      * Get byte array from hex string
      */
-    public static byte[] toByteArray(String hexString) {
+    public final static byte[] toByteArray(String hexString) {
         int arrLength = hexString.length() >> 1;
         byte buff[] = new byte[arrLength];
         for(int i=0; i<arrLength; i++) {
