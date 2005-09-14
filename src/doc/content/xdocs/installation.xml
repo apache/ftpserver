@@ -69,6 +69,57 @@ REM CUSTOM_CLASSPATH=
             </source>
         </section>
         
+        <section>
+            <title>Directory Structure</title>
+            <h3>Source Distribution Hierarchy</h3>
+            <source><![CDATA[
+ <INSTALL_DIR>
+      |
+      |--- src
+      |     |
+      |     |--- java
+      |     |
+      |     |--- bin
+      |     |
+      |     |--- doc
+      |           |
+      |           |--- content
+      |           |      |
+      |           |      |--- xdocs
+      |           |
+      |           |--- resources
+      |           |
+      |           |--- skins
+      |
+      |--- res
+            |
+            |--- conf
+            |
+            |--- home
+            |
+            |--- log
+            ]]></source>
+            
+            <h3>Binary Distribution Hierarchy</h3>
+            <source><![CDATA[
+ <INSTALL_DIR>
+      |
+      |--- lib
+      |
+      |--- doc
+      |     |
+      |     |--- javadoc
+      |
+      |--- res
+            |
+            |--- conf
+            |
+            |--- home
+            |
+            |--- log
+            ]]></source>
+        </section>
+        
         <section id="build">
             <title>How To Build</title>
             <p>Please download ftpserver-1.0-src.zip file and unzip it.</p>

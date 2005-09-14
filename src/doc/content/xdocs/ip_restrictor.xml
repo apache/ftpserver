@@ -16,45 +16,45 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-    <header> 
-        <title>IP Restrictor</title> 
+<document>
+    <header>
+        <title>IP Restrictor</title>
         <authors>
             <person id="RB" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
         </authors>
-    </header> 
-  <body> 
+    </header>
+  <body>
       <section id="ip_restrictor">
           <title>IP Restrictor</title>
             <p>
-                The IP restrictor allows you to restrict access to your FTP server 
-                by IP address. Client IP addresses can be allowed or denied access 
+                The IP restrictor allows you to restrict access to your FTP server
+                by IP address. Client IP addresses can be allowed or denied access
                 according to rules specified.
             </p>
             <p>
-                IP addresses can be specified with wild cards. The following 
+                IP addresses can be specified with wild cards. The following
                 special characters may be used.
             </p>
             <ul>
                 <li>
-                    <strong>*</strong> : A star functions as a wildcard for checking 
-                    the IP address. Any name or number will match that section of 
+                    <strong>*</strong> : A star functions as a wildcard for checking
+                    the IP address. Any name or number will match that section of
                     the rule if it is a star.
                 </li>
                 <li>
-                    <strong>?</strong> : The question mark '?' character functions as 
+                    <strong>?</strong> : The question mark '?' character functions as
                     a wildcard for a single character.
                 </li>
                 <li>
-                    <strong>[-]</strong> : The hyphen '-' character functions as a range 
+                    <strong>[-]</strong> : The hyphen '-' character functions as a range
                     in an IP address.
                 </li>
             </ul>
             <p>
-                The order of the rules is important. When a client contacts the 
-                server, the rules are evaluated from top to bottom in the list 
+                The order of the rules is important. When a client contacts the
+                server, the rules are evaluated from top to bottom in the list
                 of rules. The first matching rule applies and evaluation is stopped.
-                If there is no match, the client is allowed to access the server. 
+                If there is no match, the client is allowed to access the server.
             </p>
       </section>
       <section>
@@ -70,14 +70,14 @@
               </tr>
               <tr>
                   <td>config.ip-restrictor.file</td>
-                  <td>The file where IP restriction information will be stored. 
+                  <td>The file where IP restriction information will be stored.
                       The default value is ./res/ip.gen
                   </td>
               </tr>
-          </table>          
+          </table>
       </section>
       <section>
-          <title>IP Restructor UI</title>
+          <title>IP Restrictor UI</title>
           <p>This IP restriction can be configured using server UI.</p>
           <img src="images/ftp_ip_restrictor.jpg"/>
       </section>
