@@ -16,12 +16,13 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-
-import java.io.IOException;
+import org.apache.ftpserver.interfaces.IMessageResource;
 
 /**
  * <code>HELP [&lt;SP&gt; <string>] &lt;CRLF&gt;</code><br>
@@ -38,7 +39,7 @@ public
 class HELP implements Command {
     
     /**
-     * Execute command
+     * Execute command.
      */
     public void execute(RequestHandler handler,
                         FtpRequestImpl request, 
@@ -53,9 +54,12 @@ class HELP implements Command {
             return;
         }
         
-        // print command specific help
+        // print command specific help if available
         String ftpCmd = request.getArgument().toUpperCase();
+        IMessageResource resource = handler.getConfig().getMessageResource();
+        if(resource.getMessage(214, ftpCmd, request.getLanguage()) == null) {
+            ftpCmd = null;
+        }
         out.send(214, ftpCmd, null);
-        return;
     }
 }

@@ -85,7 +85,7 @@ class PORT implements Command {
             dataAddr = InetAddress.getByName(dataSrvName);
         }
         catch(UnknownHostException ex) {
-            out.send(553, "PORT.host.unknown", null);
+            out.send(553, "PORT.host", null);
             return;
         }
         
@@ -93,7 +93,7 @@ class PORT implements Command {
         if(handler.getConfig().getDataConnectionConfig().isPortIpCheck()) {
             InetAddress clientAddr = handler.getRequest().getRemoteAddress();
             if(!dataAddr.equals(clientAddr)) {
-                out.send(510, "PORT.IP.mismatch", null);
+                out.send(510, "PORT.mismatch", null);
                 return;
             }
         }
@@ -106,7 +106,7 @@ class PORT implements Command {
             dataPort = (hi << 8) | lo;     
         }
         catch(NumberFormatException ex) {
-            out.send(552, "PORT.number.valid", null); 
+            out.send(552, "PORT.invalid", null); 
             return; 
         }
         

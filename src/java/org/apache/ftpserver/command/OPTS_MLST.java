@@ -17,6 +17,7 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.DirectoryLister;
@@ -54,9 +55,16 @@ class OPTS_MLST implements Command {
         }
         String listTypes = argument.substring(spIndex + 1);
         
+        // parse all the type tokens
+        StringTokenizer st = new StringTokenizer(listTypes, ";");
+        String types[] = new String[st.countTokens()];
+        for(int i=0; i<types.length; ++i) {
+            types[i] = st.nextToken();
+        }
+        
         // set the list types
         DirectoryLister dirLister = handler.getDirectoryLister();
-        if(dirLister.setSelectedTypes(listTypes)) {
+        if(dirLister.setSelectedTypes(types)) {
             out.send(200, "OPTS.MLST", listTypes);
         }
         else {

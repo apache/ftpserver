@@ -16,15 +16,6 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
-import org.apache.ftpserver.ftplet.FtpStatistics;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.util.DateUtils;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -32,6 +23,17 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpStatistics;
+import org.apache.ftpserver.ftplet.Logger;
+import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.IMessageResource;
+import org.apache.ftpserver.util.DateUtils;
+import org.apache.ftpserver.util.IoUtils;
 
 /**
  * FTP response object. The server uses this to send server messages
@@ -134,7 +136,14 @@ class FtpWriter implements FtpResponse {
      * Generate and send ftp server response.
      */
     public void send(int code, String subId, String basicMsg) throws IOException {
-        String msg = m_fconfig.getMessageResource().getMessage(code, subId, m_request.getLanguage());
+        IMessageResource resource = m_fconfig.getMessageResource();
+        String lang = m_request.getLanguage();
+        String msg = resource.getMessage(code, subId, lang);
+        if(msg == null) {
+            Logger logger = m_fconfig.getLogger();
+            logger.warn("Message not found : " + code + ',' + subId + ',' + lang);
+            msg = "";
+        }
         msg = replaceVariables(code, basicMsg, msg);
         write(code, msg);
     }

@@ -16,25 +16,25 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-    <header> 
-        <title>Apache FTP Server - Configuration</title> 
+<document>
+    <header>
+        <title>Apache FTP Server - Configuration</title>
         <authors>
             <person id="RB" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
         </authors>
-    </header> 
-  <body> 
+    </header>
+  <body>
       <section id="overview">
           <title>Overview</title>
-          <p>This document explains the Apache FTP Server configuration parameters. 
+          <p>This document explains the Apache FTP Server configuration parameters.
              All the configuration parameters are grouped depending on the component
-             where it has been used. This configuration format is very much open to 
-             suite the user requirements. The server comes with two different 
+             where it has been used. This configuration format is very much open to
+             suite the user requirements. The server comes with two different
              configuration implementations - properties file based and XML file based
-             configurations (./res/ftpd.properties and ./res/ftpd.xml). You can have 
-             your own Configuration implementation. You just need to implement 
-             <em>org.apache.ftpserver.ftplet.Configuration</em> interface. Most of the 
-             configuration parameters have default values. So you do not have to 
+             configurations (./res/ftpd.properties and ./res/ftpd.xml). You can have
+             your own Configuration implementation. You just need to implement
+             <em>org.apache.ftpserver.ftplet.Configuration</em> interface. Most of the
+             configuration parameters have default values. So you do not have to
              specify all the configuration parameters.
           </p>
           <p>The configuration parameters follow a tree hierarchy.</p>
@@ -47,7 +47,7 @@
                |
                |--- n4
           </source>
-          <p>Only the leaf nodes can have configuration values. That is in the above 
+          <p>Only the leaf nodes can have configuration values. That is in the above
              hierarchy only n3 and n4 can have values. If we assume that the value of
              n3 is v3 and the value of n4 is v4.
           </p>
@@ -65,7 +65,7 @@
               </n2>
           <n1>
           ]]></source>
-          <p>We shall use &quot;.&quot; as the configuration path separator. That 
+          <p>We shall use &quot;.&quot; as the configuration path separator. That
              is we shall use <em>n1.n2.n3</em> and <em>n1.n2.n4</em> to identify
              <em>n3</em> and <em>n4</em> configuration parameters.
           </p>
@@ -135,7 +135,9 @@ config
   |       |
   |       |---- <b>class</b> (org.apache.ftpserver.message.MessageResourceImpl)
   |       |
-  |       |---- <b>custom-message-file</b> (./res/messages.gen)
+  |       |---- <b>custom-message-dir</b> (./res)
+  |       |
+  |       |---- <b>languages</b> (&lt;none&gt;)
   |
   |---- connection-manager
   |       |
@@ -150,7 +152,7 @@ config
   |       |---- <b>default-idle-time</b> (60)
   |       |
   |       |---- <b>timeout-poll-inverval</b> (60)
-  |       
+  |
   |---- logger
   |       |
   |       |---- <b>class</b> (org.apache.ftpserver.logger.FileLogger)
@@ -229,7 +231,7 @@ config
                    |---- <b><i>param</i></b>
           </source>
       </section>
-      
+
       <section id="configuration_parameters">
           <title>Configuration Parameters</title>
           <table>
@@ -288,7 +290,7 @@ config
               </tr>
               <tr>
                   <td>config.data-connection.pasv-port</td>
-                  <td>Allowed passive ports (comma separated). 
+                  <td>Allowed passive ports (comma separated).
                       0 means any free port. The default is 0.</td>
               </tr>
               <tr>
@@ -329,7 +331,7 @@ config
               </tr>
               <tr>
                   <td>config.create-default-user</td>
-                  <td>Flag to indicate whether the standard users 
+                  <td>Flag to indicate whether the standard users
                       (admin and anonymous) will be created by default if not found. The
                       admin user password will be same as admin user name.
                       The default is true.
@@ -340,9 +342,15 @@ config
                   <td>org.apache.ftpserver.message.MessageResourceImpl</td>
               </tr>
               <tr>
-                  <td>config.message.custom-message-file</td>
-                  <td>The file where user defined custom FTP server replies will be 
-                      stored. The default value is ./res/messages.gen
+                  <td>config.message.custom-message-dir</td>
+                  <td>The directory where user defined custom FTP server replies will be
+                      stored. The default value is ./res
+                  </td>
+              </tr>
+              <tr>
+                  <td>config.message.languages</td>
+                  <td>Comma separated values of all the languages supported.
+                      The default value is null.
                   </td>
               </tr>
               <tr>
@@ -359,28 +367,28 @@ config
               </tr>
               <tr>
                   <td>config.connection-service.anonymous-login-enabled</td>
-                  <td>Flag to indicate annonymous login support. By default the server 
+                  <td>Flag to indicate annonymous login support. By default the server
                       allows anonymous connections. That is the default value is true.
                   </td>
               </tr>
               <tr>
                   <td>config.connection-service.max-anonymous-login</td>
                   <td>Maximum anonymous simultaneous logins (0 means no limit).
-                      Should be less than or equal to the maximum number of simultaneous 
-                      logins. It will not be used if the sever does not allow anonymous 
+                      Should be less than or equal to the maximum number of simultaneous
+                      logins. It will not be used if the sever does not allow anonymous
                       login. The default value is 10.
                   </td>
               </tr>
               <tr>
                   <td>config.connection-service.default-idle-time</td>
-                  <td>Default idle time in seconds. It is used to close idle 
-                      data connection and non-logged-in connections. The default value 
+                  <td>Default idle time in seconds. It is used to close idle
+                      data connection and non-logged-in connections. The default value
                       is 60.
                   </td>
               </tr>
               <tr>
                   <td>config.connection-service.timeout-poll-interval</td>
-                  <td>Polling interval in seconds to disconnect idle users. The default 
+                  <td>Polling interval in seconds to disconnect idle users. The default
                       value is 60.
                   </td>
               </tr>
@@ -412,7 +420,7 @@ config
                   <td>config.logger.dir</td>
                   <td>The directory where log files will be stored. The default is ./res/log</td>
               </tr>
-              
+
               <tr>
                   <td>config.logger.max-file-size</td>
                   <td>Log file maximum size (0 means no limit) in kbytes. The default is 0.</td>
@@ -427,7 +435,7 @@ config
               </tr>
               <tr>
                   <td>config.ip-restrictor.file</td>
-                  <td>The file where IP restriction information will be stored. 
+                  <td>The file where IP restriction information will be stored.
                       The default is ./res/ip.gen
                   </td>
               </tr>
@@ -443,11 +451,11 @@ config
               </tr>
               <tr>
                   <td>config.user-manager.admin</td>
-                  <td>FTP server administrator name. It is used in properties, database 
+                  <td>FTP server administrator name. It is used in properties, database
                       and LDAP based user managers. The default value is admin.
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.prop-file</td>
                   <td>The properies file location - used in properties file based user manager.
                       The default value is ./res/user.gen
@@ -471,77 +479,77 @@ config
                   <td>config.user-manager.jdbc-user</td>
                   <td>Database user used in database based user manager. The default value is null.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.jdbc-password</td>
                   <td>Database password - used in database based user manager. The default is null.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-insert</td>
                   <td>SQL INSERT statement used to add a new user. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source><![CDATA[
-    INSERT INTO FTP_USER 
-        (uid, userpassword, 
-         homedirectory, enableflag, 
-         writepermission, idletime, 
-         uploadrate, downloadrate) 
-    VALUES ('{uid}', '{userpassword}', 
-            '{homedirectory}', 
-            '{enableflag}', 
-            '{writepermission}', {idletime}, 
+    INSERT INTO FTP_USER
+        (uid, userpassword,
+         homedirectory, enableflag,
+         writepermission, idletime,
+         uploadrate, downloadrate)
+    VALUES ('{uid}', '{userpassword}',
+            '{homedirectory}',
+            '{enableflag}',
+            '{writepermission}', {idletime},
             {uploadrate}, {downloadrate})
    ]]></source>
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-update</td>
                   <td>SQL UPDATE statement used to update an existing user. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source><![CDATA[
-    UPDATE FTP_USER SET 
+    UPDATE FTP_USER SET
         userpassword='{userpassword}',homedirectory='{homedirectory}',
         enableflag='{enableflag}',writepermission='{writepermission}',
         idletime={idletime},uploadrate={uploadrate},
-        downloadrate={downloadrate} 
+        downloadrate={downloadrate}
     WHERE uid='{uid}'
     ]]></source>
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-delete</td>
                   <td>SQL DELETE statement used to delete an existing user. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source>DELETE FROM FTP_USER WHERE uid = '{uid}'</source>
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-select</td>
                   <td>SQL SELECT statement used to select an existing user. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source><![CDATA[
-    SELECT uid, userpassword, homedirectory, 
-           enableflag, writepermission, 
-           idletime, uploadrate, 
-           downloadrate 
-    FROM FTP_USER 
+    SELECT uid, userpassword, homedirectory,
+           enableflag, writepermission,
+           idletime, uploadrate,
+           downloadrate
+    FROM FTP_USER
     WHERE uid = '{uid}'
     ]]></source>
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-all</td>
                   <td>SQL SELECT statement used to select all user ids. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source>SELECT uid FROM FTP_USER ORDER BY uid</source>
                   </td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.sql-user-authenticate</td>
                   <td>SQL SELECT statement used to authenticate user. All the
                       dynamic values will be replaced during runtime. Sample query:
                       <source><![CDATA[
-    SELECT uid 
-    FROM FTP_USER 
+    SELECT uid
+    FROM FTP_USER
     WHERE uid='{uid}' AND userpassword='{userpassword}'
     ]]></source>
                   </td>
@@ -554,35 +562,35 @@ config
                   <td>config.user-manager.ldap-admin-dn</td>
                   <td>LDAP administrator (eg. cn=Directory Manager)</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.ldap-admin-password</td>
                   <td>LDAP administrator password</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.ldap-authentication</td>
                   <td>LDAP server authentication type. The default value is simple.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.user-manager.ldap-user-base-dn</td>
                   <td>LDAP server root where all users are stored (eg. ou=people,o=yoursite.com).</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.file-system-manager.class</td>
                   <td>File system manager implementation class - org.apache.ftpserver.filesystem.NativeFileSystemManager</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.file-system-manager.create-home</td>
                   <td>Flag to indicate whether user home directory will be created if not exists.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.ftplets</td>
                   <td>Comma separated ftplet names.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.ftplet.<i>name</i>.class</td>
                   <td>For each ftplet there must be one configuration parameter. This is ftplet implementation class.</td>
               </tr>
-              <tr>   
+              <tr>
                   <td>config.ftplet.<i>name.param</i></td>
                   <td>Each ftplet can have its own configuration parameters.</td>
               </tr>

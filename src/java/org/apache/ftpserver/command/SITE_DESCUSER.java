@@ -74,7 +74,7 @@ class SITE_DESCUSER implements Command {
         catch(FtpException ex) {
         }
         if(user == null) {
-            out.send(501, "SITE.DESCUSER.not.exist", userName);
+            out.send(501, "SITE.DESCUSER", userName);
             return;
         }
         

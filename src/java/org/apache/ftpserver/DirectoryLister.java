@@ -70,43 +70,40 @@ class DirectoryLister {
     /**
      * Get selected types.
      */
-    public String getSelectedTypes() {
-        StringBuffer sb = new StringBuffer(64);
-        for(int i=0; i<m_selectedTypes.length; ++i) {
-            if(i != 0) {
-                sb.append(';');
-            }
-            sb.append(m_selectedTypes[i]);
-        }
-        return sb.toString();
+    public String[] getSelectedTypes() {
+        String types[] = new String[m_selectedTypes.length];
+        System.arraycopy(m_selectedTypes, 0, types, 0, m_selectedTypes.length);
+        return types;
     }
     
     /**
      * Returns true if, and only if, the string passed was
      * successfully parsed as valid types.
      */
-    public boolean setSelectedTypes(String types) {
-        StringTokenizer st = new StringTokenizer(types, ";");
-        String[] vaildTokens = new String[st.countTokens()];
+    public boolean setSelectedTypes(String types[]) {
         
-        // compare each selected types
-        int i = 0;
-        while(st.hasMoreTokens()) {
+        // ignore null types
+        if(types == null) {
+            return false;
+        }
+        
+        // check all the types
+        for(int i=0; i<types.length; ++i) {
             boolean bMatch = false;
-            String token = st.nextToken();
             for(int j=0; j<AVAILABLE_TYPES.length; ++j) {
-                if(AVAILABLE_TYPES[j].equalsIgnoreCase(token)) {
-                    vaildTokens[i++] = AVAILABLE_TYPES[j];
-                    bMatch=true;
+                if(AVAILABLE_TYPES[j].equals(types[i])) {
+                    bMatch = true;
                     break;
-                 }
+                }
             }
             if(!bMatch) {
                 return false;
             }
         }
         
-        m_selectedTypes = vaildTokens;
+        // set the user types
+        m_selectedTypes = new String[types.length];
+        System.arraycopy(types, 0, m_selectedTypes, 0, types.length);
         return true;
     }
     

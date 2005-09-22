@@ -83,20 +83,20 @@ class RNTO implements Command {
             catch(Exception ex) {
             }
             if(toFile == null) {
-                out.send(553, "RNTO.not.valid", null);
+                out.send(553, "RNTO.invalid", null);
                 return;
             }
             toFileStr = toFile.getFullName();
             
             // check permission
             if( !toFile.hasWritePermission() ) {
-                out.send(553, "RNTO.no.permission", null);
+                out.send(553, "RNTO.permission", null);
                 return;
             }
             
             // check file existance
             if( !frFile.doesExist() ) {
-                out.send(553, "RNTO.file.not.exist", null);
+                out.send(553, "RNTO.missing", null);
                 return;
             }
             

@@ -80,20 +80,20 @@ class RMD implements Command {
         catch(Exception ex) {
         }
         if(file == null) {
-            out.send(550, "RMD.no.permission", fileName);
+            out.send(550, "RMD.permission", fileName);
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasDeletePermission() ) {
-            out.send(450, "RMD.no.permission", fileName);
+            out.send(550, "RMD.permission", fileName);
             return;
         }
         
         // check file
         if(!file.isDirectory()) {
-            out.send(450, "RMD.directory.invalid", fileName);
+            out.send(550, "RMD.invalid", fileName);
             return;
         }
         

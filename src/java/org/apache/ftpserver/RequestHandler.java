@@ -209,7 +209,7 @@ class RequestHandler implements IConnection {
                 }
                 
                 // everything is fine - go ahead 
-                m_writer.send(220, "connection.welcome", null);
+                m_writer.send(220, null, null);
             }
             
             m_reader = new BufferedReader(new InputStreamReader(m_controlSocket.getInputStream(), "UTF-8"));
@@ -228,7 +228,7 @@ class RequestHandler implements IConnection {
                 // parse and check permission
                 m_request.parse(commandLine);
                 if(!hasPermission()) {
-                    m_writer.send(530, "permission.denied", null);
+                    m_writer.send(530, "permission", null);
                     continue;
                 }
 

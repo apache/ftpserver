@@ -90,14 +90,14 @@ class STOR implements Command {
             catch(Exception ex) {
             }
             if(file == null) {
-                out.send(550, "STOR.path.invalid", fileName);
+                out.send(550, "STOR.invalid", fileName);
                 return;
             }
             fileName = file.getFullName();
             
             // get permission
             if( !file.hasWritePermission() ) {
-                out.send(550, "STOR.no.permission", fileName);
+                out.send(550, "STOR.permission", fileName);
                 return;
             }
             

@@ -91,7 +91,7 @@ class PASS implements Command {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
             if( bAnonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.send(421, "PASS.anonymous.limit", null);
+                out.send(421, "PASS.anonymous", null);
                 return;
             }
             
@@ -99,7 +99,7 @@ class PASS implements Command {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(currLogin >= maxLogin) {
-                out.send(421, "PASS.login.limit", null);
+                out.send(421, "PASS.login", null);
                 return;
             }
             

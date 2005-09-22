@@ -60,17 +60,17 @@ class SIZE implements Command {
         catch(Exception ex) {
         }
         if(file == null) {
-            out.send(550, "SIZE.file.not.exist", fileName);
+            out.send(550, "SIZE.missing", fileName);
             return;
         }
         
         // print file size
         fileName = file.getFullName();
         if(!file.doesExist()) {
-            out.send(550, "SIZE.file.not.exist", fileName);
+            out.send(550, "SIZE.missing", fileName);
         }
         else if(!file.isFile()) {
-            out.send(550, "SIZE.file.invalid", fileName);
+            out.send(550, "SIZE.invalid", fileName);
         }
         else {
             String fileLen = String.valueOf(file.getSize());             

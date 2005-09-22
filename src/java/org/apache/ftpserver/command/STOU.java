@@ -89,7 +89,7 @@ class STOU implements Command {
             
             // check permission
             if(!file.hasWritePermission()) {
-                out.send(550, "STOU.no.permission", fileName);
+                out.send(550, "STOU.permission", fileName);
                 return;
             }
             

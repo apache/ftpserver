@@ -89,20 +89,20 @@ class APPE implements Command {
             catch(Exception ex) {
             }
             if(file == null) {
-                out.send(550, "APPE.file.invalid", fileName);
+                out.send(550, "APPE.invalid", fileName);
                 return;
             }
             fileName = file.getFullName();
             
             // check file existance
             if( !(file.doesExist() && file.isFile()) ) {
-                out.send(550, "APPE.file.invalid", fileName);
+                out.send(550, "APPE.invalid", fileName);
                 return;
             }
             
             // check permission
             if( !file.hasWritePermission()) {
-                out.send(550, "APPE.no.permission", fileName);
+                out.send(550, "APPE.permission", fileName);
                 return;
             }
             

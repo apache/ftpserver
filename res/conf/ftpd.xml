@@ -69,7 +69,8 @@
     <!-- Ftp message configuration block
     <message>
         <class>org.apache.ftpserver.message.MessageResourceImpl</class>
-        <custom-message-file>./res/messages.gen</custom-message-file>
+        <custom-message-dir>./res</custom-message-file>
+        <languages>en,zh-tw</languages>
     </message>
     -->
     

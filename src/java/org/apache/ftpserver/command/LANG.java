@@ -23,6 +23,7 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.IMessageResource;
 
 /**
  * A new command "LANG" is added to the FTP command set to allow
@@ -41,8 +42,32 @@ class LANG implements Command {
                         FtpRequestImpl request, 
                         FtpWriter out) throws IOException, FtpException {
         
-        // not yet supported
-        out.send(502, "LANG", null);
+        // reset state
+        request.resetState();
+        
+        // default language
+        String language = request.getArgument();
+        if(language == null) {
+            request.setLanguage(null);
+            out.send(200, "LANG", null);
+            return;
+        }
+        
+        // check and set language
+        language = language.toLowerCase();
+        IMessageResource msgResource = handler.getConfig().getMessageResource();
+        String[] availableLanguages = msgResource.getAvailableLanguages();
+        if(availableLanguages != null) {
+            for(int i=0; i<availableLanguages.length; ++i) {
+                if(availableLanguages[i].equals(language)) {
+                    request.setLanguage(language);
+                    out.send(200, "LANG", null);
+                    return;
+                }
+            }
+        }
+        
+        // not found - send error message
+        out.send(504, "LANG", null);
     }
-    
 }

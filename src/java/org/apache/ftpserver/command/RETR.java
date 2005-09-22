@@ -88,26 +88,26 @@ class RETR implements Command {
             catch(Exception ex) {
             }
             if(file == null) {
-                out.send(550, "RETR.file.not.exist", fileName);
+                out.send(550, "RETR.missing", fileName);
                 return;
             }
             fileName = file.getFullName();
             
             // check file existance
             if(!file.doesExist()) {
-                out.send(550, "RETR.file.not.exist", fileName);
+                out.send(550, "RETR.missing", fileName);
                 return;
             }
             
             // check valid file
             if(!file.isFile()) {
-                out.send(550, "RETR.file.invalid", fileName);
+                out.send(550, "RETR.invalid", fileName);
                 return;
             }
             
             // check permission
             if(!file.hasReadPermission()) {
-                out.send(550, "RETR.no.permission", fileName);
+                out.send(550, "RETR.permission", fileName);
                 return;
             }
             

@@ -16,17 +16,17 @@
   limitations under the License.
 -->
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
-<document> 
-    <header> 
-        <title>FTP Server Messages</title> 
+<document>
+    <header>
+        <title>FTP Server Messages</title>
         <authors>
             <person id="RB" name="Rana Bhattacharyya" email="rana_b@yahoo.com"/>
         </authors>
-    </header> 
-  <body> 
+    </header>
+  <body>
       <section id="messages">
           <title>FTP Server Messages</title>
-          <p>This document explains how to customize all the Apache FTP Server 
+          <p>This document explains how to customize all the Apache FTP Server
              reply messages.
           </p>
           <p>All the server messages are customizable. The default reply messages
@@ -43,15 +43,27 @@
                   <td>org.apache.ftpserver.message.MessageResourceImpl</td>
               </tr>
               <tr>
-                  <td>config.message.custom-message-file</td>
-                  <td>The custom message file location. The default value is ./res/messages.gen</td>
+                  <td>config.message.custom-message-dir</td>
+                  <td>The directory where custom message files will be stored.
+                      The default value is ./res
+                  </td>
+              </tr>
+              <tr>
+                  <td>config.message.languages</td>
+                  <td>Comma separated values of all the languages supported.
+                      The default value is null. The currently supported values are
+                      <ul>
+                          <li>en</li>
+                          <li>zh-tw</li>
+                      </ul>
+                  </td>
               </tr>
           </table>
-          
+
           <section>
               <title>Dynamic Values</title>
-              <p>Dynamic values can be embedded in the server message replies. User can 
-                 specify different variables in message strings. Variables are represented 
+              <p>Dynamic values can be embedded in the server message replies. User can
+                 specify different variables in message strings. Variables are represented
                  by <em>{variable}</em> in the string.
               </p>
               <table>
@@ -173,12 +185,12 @@
                   </tr>
               </table>
           </section>
-          
+
           <section>
               <title>Message UI</title>
               <p>User can customize server replies using FTP server UI.</p>
               <img src="images/ftp_messages.jpg"/>
-          </section>  
+          </section>
       </section>
   </body>
 </document>

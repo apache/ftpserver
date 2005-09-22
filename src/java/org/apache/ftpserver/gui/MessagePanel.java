@@ -21,17 +21,22 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IFtpConfig;
@@ -43,17 +48,20 @@ import org.apache.ftpserver.interfaces.IMessageResource;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class MessagePanel extends PluginPanel implements ActionListener {
+class MessagePanel extends PluginPanel {
 
     private static final long serialVersionUID = -68038181884794057L;
     
     private IFtpConfig m_fconfig;
-    private JTextArea m_txtArea;
     private JComboBox m_comboBox;
     
-    private ArrayList m_messageKeys = new ArrayList();
-    private Properties m_messageProps = new Properties();
-    private int m_oldSelIndex = -1;
+    private JList m_list;
+    private JTextArea m_txtArea;
+    
+    private String[] m_languages;
+    private Vector m_messageKeys;
+    private Properties m_messageProps;
+    private int m_oldKeySelIndex = -1;
     
     /**
      * Constructor - set the container.
@@ -70,22 +78,48 @@ class MessagePanel extends PluginPanel implements ActionListener {
         
         setLayout(new BorderLayout());
         
+        // top panel
         JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(comboPanel, BorderLayout.NORTH);
         
-        // all replies
+        // Language label
+        JLabel label = new JLabel("Language : ");
+        comboPanel.add(label);
+        
+        // all languages
         m_comboBox = new JComboBox();
-        m_comboBox.setPreferredSize(new Dimension(250, 22));
-        m_comboBox.addActionListener(this);
+        m_comboBox.setPreferredSize(new Dimension(100, 22));
+        m_comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                changeLanguage();
+            }
+        });
         comboPanel.add(m_comboBox);
+        
+        // split pane
+        JSplitPane splitPane = new JSplitPane();
+        splitPane.setDividerSize(0);
+        add(splitPane, BorderLayout.CENTER);
+        
+        // message list keys
+        m_list = new JList();
+        m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        m_list.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent evt) {
+                changeKey();
+            }
+        });
+        JScrollPane listScroller = new JScrollPane(m_list);
+        splitPane.setLeftComponent(listScroller);
         
         // message text
         m_txtArea = new JTextArea();
         JScrollPane txtPane = new JScrollPane(m_txtArea, 
                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        add(txtPane, BorderLayout.CENTER);
+        splitPane.setRightComponent(txtPane);
         
+        // button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(buttonPanel, BorderLayout.SOUTH);
         
@@ -102,49 +136,96 @@ class MessagePanel extends PluginPanel implements ActionListener {
         JButton reloadBtn = new JButton("Reload");
         reloadBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                refresh(m_fconfig);
+                changeLanguage();
             }
         });
         buttonPanel.add(reloadBtn);
     }
     
     /**
-     * List selection changed. 
+     * Combo selection changed. 
      */
-    public void actionPerformed(ActionEvent e) {
+    public void changeLanguage() {
+        
+        // get selected language
+        m_oldKeySelIndex = -1;
         int selIdx = m_comboBox.getSelectedIndex();
-        if(selIdx != -1) {
-            Object selVal = m_messageKeys.get(selIdx);
-            String val = m_messageProps.getProperty((String)selVal);
-            if(val == null) {
-                val = "";
-            }
-            
-            // save the last text area value
-            if(m_oldSelIndex != -1) {
-                String oldKey = (String)m_messageKeys.get(m_oldSelIndex);
-                String oldTxt = m_txtArea.getText();
-                m_messageProps.setProperty(oldKey, oldTxt);
-            }
-            
-            // update text area
-            m_txtArea.setText(val);
+        if(selIdx == -1) {
+            return;
         }
-    } 
-
+        String language = null;
+        if(selIdx >= 1) {
+            language = m_languages[selIdx - 1];
+        }
+        
+        // get properties
+        IMessageResource msgRes = m_fconfig.getMessageResource();
+        Properties prop = msgRes.getMessages(language);
+        Vector keyList = new Vector();
+        for(Enumeration keys = prop.propertyNames(); keys.hasMoreElements();) {
+            String key = (String)keys.nextElement();
+            keyList.add(key);
+        }
+        Collections.sort(keyList);
+        m_messageKeys = keyList;
+        m_messageProps = prop;
+        
+        // load list
+        m_list.removeAll();
+        m_list.setListData(keyList);
+        m_list.setSelectedIndex(0);
+    }
+    
+    /**
+     * List selection changed.
+     */
+    public void changeKey() {
+        
+        // get key selection index
+        int selIdx = m_list.getSelectedIndex();
+        if(selIdx == -1) {
+            return;
+        }
+        
+        // save the last text area value
+        if(m_oldKeySelIndex != -1) {
+            String oldKey = (String)m_messageKeys.get(m_oldKeySelIndex);
+            String oldTxt = m_txtArea.getText();
+            m_messageProps.setProperty(oldKey, oldTxt);
+        }
+        m_oldKeySelIndex = selIdx;
+        
+        // update text area
+        String key = (String)m_messageKeys.get(selIdx);
+        String val = m_messageProps.getProperty(key);
+        m_txtArea.setText(val);
+        m_txtArea.setCaretPosition(0);
+    }
+    
     /**
      * Save entered properties 
      */
     private void save() {
         
+        // get the selected language
+        int selIdx = m_comboBox.getSelectedIndex();
+        if(selIdx == -1) {
+            return;
+        }
+        String language = null;
+        if(selIdx >= 1) {
+            language = m_languages[selIdx - 1];
+        }
+        
+        // store existing text value
+        String key = (String)m_comboBox.getSelectedItem();
+        String val = m_txtArea.getText();
+        m_messageProps.setProperty(key, val);
+        
+        
+        // save custom messages
         try {
-            // save the text value
-            String key = (String)m_comboBox.getSelectedItem();
-            String val = m_txtArea.getText();
-            m_messageProps.setProperty(key, val);
-            
-            // save messages
-            getContainer().getFtpConfig().getMessageResource().save(m_messageProps, null);
+            m_fconfig.getMessageResource().save(m_messageProps, language);
         }
         catch(FtpException ex) {
             GuiUtils.showErrorMessage(this, "Cannot save messages.");
@@ -157,28 +238,22 @@ class MessagePanel extends PluginPanel implements ActionListener {
     public void refresh(IFtpConfig ftpConfig) {
         m_fconfig = ftpConfig;
         m_comboBox.removeAllItems();
-        m_txtArea.setText("");
-        m_messageKeys.clear();
-        m_oldSelIndex = -1;
+        m_list.removeAll();
+        m_oldKeySelIndex = -1;
+        if(m_fconfig == null) {
+            return;
+        }
         
-        if(m_fconfig != null) {
-            IMessageResource msgRes = m_fconfig.getMessageResource();
-            m_messageProps = msgRes.getMessages(null);
-            Enumeration props = m_messageProps.propertyNames();
-            while(props.hasMoreElements()) {
-                String key = (String)props.nextElement();
-                m_messageKeys.add(key);
-            }
-            
-            Collections.sort(m_messageKeys);
-            Iterator it = m_messageKeys.iterator();
-            while(it.hasNext()) {
-                m_comboBox.addItem(it.next());
-            }
-            if(!m_messageKeys.isEmpty()) {
-                m_comboBox.setSelectedIndex(0);
+        // populate language list
+        IMessageResource msgRes = m_fconfig.getMessageResource();
+        m_languages = msgRes.getAvailableLanguages();
+        m_comboBox.addItem("<default>");
+        if(m_languages != null) {
+            for(int i=0; i<m_languages.length; ++i) {
+                m_comboBox.addItem(m_languages[i]);
             }
         }
+        m_comboBox.setSelectedIndex(0);
     }
 
     /** 

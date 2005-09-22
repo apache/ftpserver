@@ -73,7 +73,7 @@ class USER implements Command {
                     bSuccess = true;
                 }
                 else {
-                    out.send(530, "USER.user.invalid", null);
+                    out.send(530, "USER.invalid", null);
                 }
                 return;
             }
@@ -81,7 +81,7 @@ class USER implements Command {
             // anonymous login is not enabled
             boolean bAnonymous = userName.equals("anonymous");
             if( bAnonymous && (!conManager.isAnonymousLoginEnabled()) ) {
-                out.send(530, "USER.no.anonymous.support", null);
+                out.send(530, "USER.anonymous", null);
                 return;
             }
             
@@ -89,7 +89,7 @@ class USER implements Command {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
             if( bAnonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.send(421, "USER.anonymous.limit", null);
+                out.send(421, "USER.anonymous", null);
                 return;
             }
             
@@ -97,7 +97,7 @@ class USER implements Command {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(currLogin >= maxLogin) {
-                out.send(421, "USER.login.limit", null);
+                out.send(421, "USER.login", null);
                 return;
             }
             

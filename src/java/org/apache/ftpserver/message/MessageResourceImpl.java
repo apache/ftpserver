@@ -16,39 +16,51 @@
  */
 package org.apache.ftpserver.message;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.IMessageResource;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.StringTokenizer;
+
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.Logger;
+import org.apache.ftpserver.interfaces.IMessageResource;
+import org.apache.ftpserver.util.IoUtils;
+
 
 /**
- * Class to get ftp server reply messages.
+ * Class to get ftp server reply messages. This supports i18n.
+ * Basic message search path is: 
+ * 
+ * Custom Language Specific Messages -> Default Language Specific Messages ->
+ * Custom Common Messages -> Default Common Messages -> null (not found)
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class MessageResourceImpl implements IMessageResource {
 
-    private final static String RESOURCE = "org/apache/ftpserver/message/FtpStatus.properties";
+    private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     
-    private String m_customMessageFile;
-    private Properties m_messages;
-    private Properties m_customMessages;
+    private String[] m_languages;
+    private HashMap m_messages;
+    private String m_customMessageDir;
     private Logger m_logger;
+    
+    private static class PropertiesPair {
+        public Properties m_default = new Properties();
+        public Properties m_custom = new Properties();
+    } 
     
     
     /**
-     * Set logger
+     * Set logger.
      */
     public void setLogger(Logger logger) {
         m_logger = logger;
@@ -59,85 +71,156 @@ class MessageResourceImpl implements IMessageResource {
      */
     public void configure(Configuration config) throws FtpException {
         
-        // load default messages 
+        // get the custom message directory
+        m_customMessageDir = config.getString("custom-message-dir", "./res");
+        
+        // get all the languages
+        String languages = config.getString("languages", null);
+        if(languages != null) {
+            StringTokenizer st = new StringTokenizer(languages, ",; \t");
+            int tokenCount = st.countTokens();
+            m_languages = new String[tokenCount];
+            for(int i=0; i<tokenCount; ++i) {
+                m_languages[i] = st.nextToken().toLowerCase();
+            }
+        }
+        
+        // populate different properties
+        m_messages = new HashMap();
+        if(m_languages != null) {
+            for(int i=0; i<m_languages.length; ++i) {
+                String lang = m_languages[i];
+                PropertiesPair pair = createPropertiesPair(lang);
+                m_messages.put(lang, pair);
+            }
+        }
+        PropertiesPair pair = createPropertiesPair(null);
+        m_messages.put(null, pair);
+    }
+    
+    /**
+     * Create Properties pair object. It stores the default 
+     * and the custom messages.
+     */
+    private PropertiesPair createPropertiesPair(String lang) throws FtpException {
+        PropertiesPair pair = new PropertiesPair();
+        
+        // load default resource
+        String defaultResourceName;
+        if(lang == null) {
+            defaultResourceName = RESOURCE_PATH + "FtpStatus.properties";
+        }
+        else {
+            defaultResourceName = RESOURCE_PATH + "FtpStatus_" + lang + ".properties";
+        }
         InputStream in = null;
         try {
-            in = getClass().getClassLoader().getResourceAsStream(RESOURCE);
-            m_messages = new Properties();
-            m_messages.load(in);
+            in = getClass().getClassLoader().getResourceAsStream(defaultResourceName);
+            if(in != null) {
+                pair.m_default.load(in);
+            }
         }
-        catch(IOException ex) {
-            m_logger.error("MessageResourceImpl.configure()", ex);
-            throw new FtpException("MessageResourceImpl.configure()", ex);
+        catch(Exception ex) {
+            m_logger.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
             IoUtils.close(in);
         }
         
-        // load custom messages
-        m_customMessageFile = config.getString("custom-message-file", "./res/messages.gen");
+        // load custom resource
+        File resourceFile = null;
+        if(lang == null) {
+            resourceFile = new File(m_customMessageDir, "FtpStatus.gen");
+        }
+        else {
+            resourceFile = new File(m_customMessageDir, "FtpStatus_" + lang + ".gen");
+        }
         in = null;
         try {
-            m_customMessages = new Properties();
-            File file = new File(m_customMessageFile);
-            if(file.isFile()) {
-                in = new FileInputStream(m_customMessageFile);
-                m_customMessages.load(in);
+            if(resourceFile.exists()) {
+                in = new FileInputStream(resourceFile);
+                pair.m_custom.load(in);
             }
         }
-        catch(IOException ex) {
-            m_logger.error("MessageResourceImpl.configure()", ex);
-            throw new FtpException("MessageResourceImpl.configure()", ex);
+        catch(Exception ex) {
+            m_logger.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
             IoUtils.close(in);
         }
+        
+        return pair;
     }
     
     /**
      * Get all the available languages.
      */
     public String[] getAvailableLanguages() {
-        return null;
+        return m_languages;
     }
     
     /**
-     * Get the message.
+     * Get the message. If the message not found, it will return null.
      */
     public String getMessage(int code, String subId, String language) {
-        String msg = null;
-        String codeStr = String.valueOf(code);
         
-        // first try to get property for code.subId
+        // find the message key
+        String key = String.valueOf(code);
         if(subId != null) {
-            String key = codeStr + '.' + subId;
-            msg = m_customMessages.getProperty(key);
-            if(msg == null) {
-                msg = m_messages.getProperty(key);
+            key = key + '.' + subId;
+        }
+        
+        // get language specific value
+        String value = null;
+        PropertiesPair pair = null;
+        if(language != null) {
+            language = language.toLowerCase();
+            pair = (PropertiesPair)m_messages.get(language);
+            if(pair != null) {
+                value = pair.m_custom.getProperty(key);
+                if(value == null) {
+                    value = pair.m_default.getProperty(key);
+                }
             }
         }
         
-        // if not found get it for code
-        if(msg == null) {
-            msg = m_customMessages.getProperty(codeStr);
-            if(msg == null) {
-                msg = m_messages.getProperty(codeStr);
+        // if not available get the default value
+        if(value == null) {
+            pair = (PropertiesPair)m_messages.get(null);
+            if(pair != null) {
+                value = pair.m_custom.getProperty(key);
+                if(value == null) {
+                    value = pair.m_default.getProperty(key);
+                }
             }
         }
         
-        // not found return empty string
-        if(msg == null) {
-            msg = "";
-        }
-        return msg;
+        return value;
     }
     
     /**
      * Get all messages.
      */
     public Properties getMessages(String language) {
-        Properties messages = new Properties(m_messages);
-        messages.putAll(m_customMessages);
+        Properties messages = new Properties();
+        
+        // load properties sequentially 
+        // (default,custom,default language,custom language)
+        PropertiesPair pair = (PropertiesPair)m_messages.get(null);
+        if(pair != null) {
+            messages.putAll(pair.m_default);
+            messages.putAll(pair.m_custom);
+        }
+        if(language != null) {
+            language = language.toLowerCase();
+            pair = (PropertiesPair)m_messages.get(language);
+            if(pair != null) {
+                messages.putAll(pair.m_default);
+                messages.putAll(pair.m_custom);
+            }
+        }
         return messages;
     }
     
@@ -145,27 +228,32 @@ class MessageResourceImpl implements IMessageResource {
      * Save properties in file.
      */
     public void save(Properties prop, String language) throws FtpException {
+        
+        // null properties - nothing to save
         if(prop == null) {
             return;
         }
         
-        // get only the new or modified properties
-        Properties customMessages = new Properties();
-        Enumeration props = prop.propertyNames();
-        while( props.hasMoreElements() ) {
-            String key = (String)props.nextElement();
-            String newVal = prop.getProperty(key);
-            String val = m_messages.getProperty(key);
-            if( (val == null) || (!val.equals(newVal)) ) {
-                customMessages.setProperty(key, newVal);
-            }
+        // empty properties - nothing to save
+        if(prop.isEmpty()) {
+            return;
         }
         
-        // save the newly created properties
+        // get custom resource file name
+        File resourceFile = null;
+        if(language == null) {
+            resourceFile = new File(m_customMessageDir, "FtpStatus.gen");
+        }
+        else {
+            language = language.toLowerCase();
+            resourceFile = new File(m_customMessageDir, "FtpStatus_" + language + ".gen");
+        }
+        
+        // save resource file
         OutputStream out = null;
         try {
-            out = new FileOutputStream(m_customMessageFile);
-            customMessages.store(out, "Custom Messages");
+            out = new FileOutputStream(resourceFile);
+            prop.store(out, "Custom Messages");
         }
         catch(IOException ex) {
             m_logger.error("MessageResourceImpl.save()", ex);
@@ -175,21 +263,26 @@ class MessageResourceImpl implements IMessageResource {
             IoUtils.close(out);
         }
         
-        // assign the new custom properties
-        m_customMessages = customMessages;
+        // assign new messages
+        PropertiesPair pair = (PropertiesPair)m_messages.get(language);
+        if(pair == null) {
+            pair = new PropertiesPair();
+            m_messages.put(language, pair);
+        }
+        pair.m_custom = prop;
     }
     
     /**
-     * Dispose component - clear properties.
+     * Dispose component - clear all maps.
      */
     public void dispose() {
-        if(m_messages != null) {
-            m_messages.clear();
-            m_messages = null;
+        Iterator it = m_messages.keySet().iterator();
+        while(it.hasNext()) {
+            String language = (String)it.next();
+            PropertiesPair pair = (PropertiesPair)m_messages.get(language);
+            pair.m_custom.clear();
+            pair.m_default.clear();
         }
-        if(m_customMessages != null) {
-            m_customMessages.clear();
-            m_customMessages = null;
-        }
+        m_messages.clear();
     }
 }

@@ -35,10 +35,10 @@ interface IMessageResource extends Component {
     String[] getAvailableLanguages();
     
     /**
-     * Get the message for the corresponding code and sub id.
+     * Get the message for the corresponding code and sub id. 
+     * If not found it will return null. 
      */
     String getMessage(int code, String subId, String language);
-    
     
     /**
      * Save properties. This properties object contain all the
@@ -46,10 +46,8 @@ interface IMessageResource extends Component {
      */
     void save(Properties prop, String language) throws FtpException;
     
-    
     /**
      * Get all the messages.
      */
     Properties getMessages(String language);
-    
 }

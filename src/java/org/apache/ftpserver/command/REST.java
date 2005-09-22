@@ -61,14 +61,14 @@ class REST implements Command {
             // check offset number
             if(skipLen < 0L) {
                 skipLen = 0L;
-                out.send(501, "REST.number.negetive", null);
+                out.send(501, "REST.negetive", null);
             }
             else {
                 out.send(350, "REST", null);
             }
         }
         catch(NumberFormatException ex) {
-            out.send(501, "REST.number.invalid", null); 
+            out.send(501, "REST.invalid", null); 
         }
         
         request.setFileOffset(skipLen);

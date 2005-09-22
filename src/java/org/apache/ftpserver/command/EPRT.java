@@ -81,7 +81,7 @@ class EPRT implements Command {
             dataAddr = InetAddress.getByName(host);
         }
         catch(UnknownHostException ex) {
-            out.send(553, "EPRT.host.unknown", null);
+            out.send(553, "EPRT.host", null);
             return;
         }
         
@@ -89,7 +89,7 @@ class EPRT implements Command {
         if(handler.getConfig().getDataConnectionConfig().isPortIpCheck()) {
             InetAddress clientAddr = handler.getRequest().getRemoteAddress();
             if(!dataAddr.equals(clientAddr)) {
-                out.send(510, "EPRT.IP.mismatch", null);
+                out.send(510, "EPRT.mismatch", null);
                 return;
             }
         }
@@ -100,7 +100,7 @@ class EPRT implements Command {
             dataPort = Integer.parseInt(port);     
         }
         catch(NumberFormatException ex) {
-            out.send(552, "EPRT.number.valid", null); 
+            out.send(552, "EPRT.invalid", null); 
             return; 
         }
         

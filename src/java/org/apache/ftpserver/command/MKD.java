@@ -80,14 +80,14 @@ class MKD implements Command {
         catch(Exception ex) {
         }
         if(file == null) {
-            out.send(550, "MKD.invalid.file", fileName);
+            out.send(550, "MKD.invalid", fileName);
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasWritePermission() ) {
-            out.send(550, "MKD.no.permission", fileName);
+            out.send(550, "MKD.permission", fileName);
             return;
         }
         

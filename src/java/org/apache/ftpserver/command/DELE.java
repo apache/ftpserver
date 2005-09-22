@@ -76,11 +76,11 @@ class DELE implements Command {
         
         // check file
         if(!file.isFile()) {
-            out.send(550, "DELE.file.invalid", fileName);
+            out.send(550, "DELE.invalid", fileName);
             return;
         }
         if( !file.hasDeletePermission() ) {
-            out.send(450, "DELE.no.permission", fileName);
+            out.send(450, "DELE.permission", fileName);
             return;
         }
         

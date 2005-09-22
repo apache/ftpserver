@@ -42,6 +42,7 @@ class REIN implements Command {
                         FtpWriter out) throws IOException {
         
         request.reinitialize();
+        request.setLanguage(null);
         out.send(220, "REIN", null);
     }   
 }
