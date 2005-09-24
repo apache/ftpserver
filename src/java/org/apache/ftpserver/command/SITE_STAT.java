@@ -47,7 +47,7 @@ class SITE_STAT implements Command {
         
         // only administrator can execute this
         UserManager userManager = handler.getConfig().getUserManager(); 
-        boolean isAdmin = userManager.getAdminName().equals(request.getUser().getName());
+        boolean isAdmin = userManager.isAdmin(request.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
             return;

@@ -38,11 +38,17 @@ interface UserManager extends Component {
     
     /**
      * Delete the user from the system.
+     * 
+     * @throws UnsupportedOperationException
+     *             if UserManager in read-only mode
      */
     void delete(String login) throws FtpException;
     
     /**
      * Save user. If a new user, create it else update the existing user.
+     * 
+     * @throws UnsupportedOperationException
+     *             if UserManager in read-only mode
      */
     void save(User user) throws FtpException;
     
@@ -60,4 +66,9 @@ interface UserManager extends Component {
      * Get admin user name
      */
     String getAdminName() throws FtpException;
+    
+    /**
+     * @return true if user with this login is administrator
+     */
+    boolean isAdmin(String login) throws FtpException;
 }

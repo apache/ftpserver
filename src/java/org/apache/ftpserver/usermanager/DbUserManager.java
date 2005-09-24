@@ -109,6 +109,13 @@ class DbUserManager implements UserManager {
     }
     
     /**
+     * @return true if user with this login is administrator
+     */
+    public boolean isAdmin(String login) throws FtpException {
+        return m_adminName.equals(login);
+    }
+    
+    /**
      * Open connection to database.
      */
     private void openConnection() throws SQLException {

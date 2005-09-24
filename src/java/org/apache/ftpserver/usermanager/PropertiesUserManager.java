@@ -91,6 +91,13 @@ class PropertiesUserManager implements UserManager {
     }
     
     /**
+     * @return true if user with this login is administrator
+     */
+    public boolean isAdmin(String login) throws FtpException {
+        return m_adminName.equals(login);
+    }
+    
+    /**
      * Save user data. Store the properties.
      */
     public synchronized void save(User usr) throws FtpException {
