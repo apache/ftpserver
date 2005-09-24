@@ -325,6 +325,13 @@ class RootPanel extends PluginPanel {
                     path = path.substring(1);
                 }
                 in = getClass().getClassLoader().getResourceAsStream(path);
+                if (in == null) {
+                    GuiUtils.showErrorMessage(RootPanel.this,
+                                    "Configuration file " + path
+                                  + " not found in classpath"
+                                  + " nor inside any of classpath JARs.");
+                    return;
+                }
             }
             
             // create configuration object
