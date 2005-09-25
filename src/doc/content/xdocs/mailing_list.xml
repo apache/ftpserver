@@ -37,7 +37,7 @@
             <table>
                 <tr>
                     <td><b>Name</b></td>
-                    <td>Incubator General : <a href="mailto:general@incubator.apache.org">general@incubator.apache.org</a></td>
+                    <td>Incubator General</td>
                 </tr>
                 <tr>
                     <td><b>Subscribe</b></td>
@@ -46,6 +46,10 @@
                 <tr>
                     <td><b>Unsubscribe</b></td>
                     <td><a href="mailto:general-unsubscribe@incubator.apache.org">general-unsubscribe@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Post</b></td>
+                    <td><a href="mailto:general@incubator.apache.org">general@incubator.apache.org</a></td>
                 </tr>
                 <tr>
                     <td><b>Archive</b></td>
