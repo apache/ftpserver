@@ -64,15 +64,15 @@ class IoUtils {
     /**
      * Get <code>BufferedReader</code>.
      */
-    public final static BufferedReader getBufferedReader(Reader rd) {
-        BufferedReader br = null;
-        if(br instanceof java.io.BufferedReader) {
-            br = (BufferedReader)rd;
-        }
+    public final static BufferedReader getBufferedReader(Reader reader) {
+        BufferedReader buffered = null;
+        if (reader instanceof java.io.BufferedReader) {
+            buffered = (BufferedReader) reader;
+        } 
         else {
-            br = new BufferedReader(rd);
+            buffered = new BufferedReader(reader);
         }
-        return br;
+        return buffered;
     }
     
     
