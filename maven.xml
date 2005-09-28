@@ -1,0 +1,124 @@
+<!--
+Copyright 2004 The Apache Software Foundation
+Licensed  under the  Apache License,  Version 2.0  (the "License");
+you may not use  this file  except in  compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed  under the  License is distributed on an "AS IS" BASIS,
+WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+implied.
+
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project xmlns:j="jelly:core" xmlns:maven="jelly:maven" xmlns:ant="jelly:ant">
+
+    <!-- ============================== -->
+    <!-- Displays the usage information -->
+    <!-- ============================== -->
+    <goal name="ftpserver:usage">
+        <echo/>
+        <echo>ftpserver:usage    - Displays this message.</echo>
+        <echo>ftpserver:build    - Compiles Java files and copies other files.</echo>
+        <echo/>
+        <echo>clean:clean        - Removes all the generated files.</echo>
+        <echo>java:compile       - Compiles all the Java files.</echo>
+        <echo>java:jar-resources - Copies all the resources</echo>
+        <echo>jar:jar            - Generates FTP server jar file.</echo>
+        <echo>site:generate      - Generates FTP server site (including Javadoc).</echo>
+        <echo>dist:build-src     - Generates the source distribution files.</echo>
+        <echo>dist:build-bin     - Generates the binary distribution files.</echo>
+        <echo/>
+    </goal>
+
+
+    <!-- ================================================================ -->
+    <!-- Compiles all the Java files, copies resources and dependent jars -->
+    <!-- ================================================================ -->
+    <goal name="ftpserver:build">
+
+        <!-- Compile Java files -->
+        <attainGoal name="java:compile"/>
+
+        <!-- Copy resources -->
+        <attainGoal name="java:jar-resources"/>
+
+        <!-- Copy all the dependent jar files -->
+        <j:forEach var="lib" items="${pom.artifacts}">
+            <ant:copy file="${lib.path}" todir="${basedir}/lib"/>
+        </j:forEach>
+    </goal>
+
+
+    <!-- ======================================= -->
+    <!-- Copy documents, scripts and fix newline -->
+    <!-- ======================================= -->
+    <postGoal name="dist:prepare-src-filesystem">
+
+        <!-- Create lib directory -->
+        <ant:mkdir dir="${maven.dist.src.assembly.dir}/lib"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}/lib">
+            <ant:fileset dir="${basedir}/lib" includes="*.txt"/>
+        </ant:copy>
+
+        <!-- Copy all the documents -->
+        <ant:mkdir dir="${maven.dist.src.assembly.dir}/xdocs"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}/xdocs">
+            <ant:fileset dir="${maven.docs.src}"/>
+        </ant:copy>
+
+        <!-- Copy all script files -->
+        <ant:copy todir="${maven.dist.src.assembly.dir}">
+            <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
+        </ant:copy>
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="lf" eof="remove" includes="**/*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="crlf" includes="**/*.bat"/>
+
+        <!-- Copy other resources -->
+        <ant:mkdir dir="${maven.dist.src.assembly.dir}/res"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}/res">
+            <ant:fileset dir="${basedir}/res" excludes="**/*.gen"/>
+        </ant:copy>
+    </postGoal>
+
+
+    <!-- ================================================= -->
+    <!-- Copy jars, scripts to the appropriate directories -->
+    <!-- ================================================= -->
+    <postGoal name="dist:prepare-bin-filesystem">
+
+        <!-- Create lib directory -->
+        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/lib"/>
+        <ant:copy todir="${maven.dist.bin.assembly.dir}/lib">
+            <ant:fileset dir="${basedir}/lib" includes="*.txt"/>
+        </ant:copy>
+
+        <!-- Copy the main ftpserver jar file -->
+        <ant:move todir="${maven.dist.bin.assembly.dir}/lib">
+            <ant:fileset dir="${maven.dist.bin.assembly.dir}" includes="*.jar"/>
+        </ant:move>
+
+        <!-- Copy dependent jar files -->
+        <j:forEach var="lib" items="${pom.artifacts}">
+            <ant:copy file="${lib.path}" todir="${maven.dist.bin.assembly.dir}/lib"/>
+        </j:forEach>
+
+        <!-- Copy all the scripts -->
+        <ant:copy todir="${maven.dist.bin.assembly.dir}">
+            <ant:fileset dir="${maven.src.dir}/bin" includes="*.bat,*.sh"/>
+        </ant:copy>
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="lf" eof="remove" includes="**/*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="crlf" includes="**/*.bat"/>
+
+        <!-- Copy other resource files -->
+        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/res"/>
+        <ant:copy todir="${maven.dist.bin.assembly.dir}/res">
+            <ant:fileset dir="${basedir}/res" excludes="**/*.gen"/>
+        </ant:copy>
+    </postGoal>
+
+</project>
+

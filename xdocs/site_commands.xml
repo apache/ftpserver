@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: SITE Commands</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="SITE Commands">
+            <p>This document describes all the FTP SITE commands implemented.</p>
+
+            <subsection name="SITE DESCUSER">
+                <p>It displays the user details.
+                </p>
+                <p><strong>Sample Server Replies:</strong></p>
+                <source>
+            200-
+            uid             : admin
+            userpassword    : ********
+            homedirectory   : C:\
+            writepermission : true
+            enableflag      : true
+            idletime        : 0
+            uploadrate      : 0
+            downloadrate    : 0
+            200
+                </source>
+            </subsection>
+
+            <subsection name="SITE HELP">
+                <p>It displays all the available SITE commands.</p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            200-
+            DESCUSER : display user information.
+            HELP     : display this message.
+            STAT     : show statistics.
+            WHO      : display all connected users.
+            ZONE     : display timezone.
+            200 End of help.
+                </source>
+            </subsection>
+
+            <subsection name="SITE STAT">
+                <p>This command displays different server statistics information.
+                   Only admin user has the permission to execute this.
+                </p>
+                <p><strong>Sample Server Reply:</strong></p>
+                <source>
+            200-
+            Start Time               : 2005-09-01T12:10:11
+            File Upload Number       : 0
+            File Download Number     : 0
+            File Delete Number       : 0
+            File Upload Bytes        : 0
+            File Download Bytes      : 0
+            Directory Create Number  : 0
+            Directory Remove Number  : 0
+            Current Logins           : 1
+            Total Logins             : 1
+            Current Anonymous Logins : 0
+            Total Anonymous Logins   : 0
+            Current Connections      : 1
+            Total Connections        : 1
+            200
+                </source>
+            </subsection>
+
+            <subsection name="SITE WHO">
+                <p>This command displays all currently logged-in user information.
+                   It displays the user name, client IP, login time and last access
+                   time. Only admin user has the permission to execute this.
+                </p>
+                <p><strong>Sample Server Reply:</strong></p>
+                <source>
+            200-
+            admin           127.0.0.1       2005-09-01T12:20:26 2005-09-01T12:20:52
+            anonymous       127.0.0.1       2005-09-01T12:20:37 2005-09-01T12:20:37
+            200
+                </source>
+            </subsection>
+
+            <subsection name="SITE ZONE">
+                <p>This command displays the timezone information of the FTP server
+                   in RFC 822 4-digit time zone format. The format is <br/>
+                   <em>Sign TwoDigitHours TwoDigitMinutes</em>
+                </p>
+                <p><strong>Sample Server Reply:</strong></p>
+                <source>
+            200 +0530
+                </source>
+            </subsection>
+        </section>
+    </body>
+</document>

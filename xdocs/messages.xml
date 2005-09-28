@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: Messages</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="FTP Server Messages">
+            <p>This document explains how to customize all the Apache FTP Server
+             reply messages.
+            </p>
+            <p>All the server messages are customizable. The default reply messages
+               are bundled with the server. The user defined custom messages will be
+               stored separately. This custom message file is configurable.
+            </p>
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>config.message.class</td>
+                    <td>org.apache.ftpserver.message.MessageResourceImpl</td>
+                </tr>
+                <tr>
+                  <td>config.message.custom-message-dir</td>
+                  <td>The directory where custom message files will be stored.
+                      The default value is ./res
+                  </td>
+              </tr>
+              <tr>
+                  <td>config.message.languages</td>
+                  <td>Comma separated values of all the languages supported.
+                      The default value is null. The currently supported values are
+                      <ul>
+                          <li>en</li>
+                          <li>zh-tw</li>
+                      </ul>
+                  </td>
+              </tr>
+            </table>
+
+            <section name="Dynamic Values">
+                <p>Dynamic values can be embedded in the server message replies. User can
+                   specify different variables in message strings. Variables are represented
+                   by <em>{variable}</em> in the string.
+                </p>
+                <table>
+                    <tr>
+                        <th>Variable Name</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>server.ip</td>
+                        <td>Server IP address.</td>
+                    </tr>
+                    <tr>
+                        <td>server.port</td>
+                        <td>Server port.</td>
+                    </tr>
+                    <tr>
+                        <td>client.ip</td>
+                        <td>Client IP address.</td>
+                    </tr>
+                    <tr>
+                        <td>client.con.time</td>
+                        <td>Client connection time. The date format is yyyy-MM-dd'T'HH:mm:ss (ISO8601).</td>
+                    </tr>
+                    <tr>
+                        <td>client.login.time</td>
+                        <td>Client login time. The date format is yyyy-MM-dd'T'HH:mm:ss (ISO8601).</td>
+                    </tr>
+                    <tr>
+                        <td>client.login.name</td>
+                        <td>User login name. If the user has not passed the login name, it will be null.</td>
+                    </tr>
+                    <tr>
+                        <td>client.access.time</td>
+                        <td>Client last access time. The date format is yyyy-MM-ddTHH:mm:ss (ISO8601).</td>
+                    </tr>
+                    <tr>
+                        <td>client.home</td>
+                        <td>User home directory.</td>
+                    </tr>
+                    <tr>
+                        <td>client.dir</td>
+                        <td>User current directory.</td>
+                    </tr>
+                    <tr>
+                        <td>request.line</td>
+                        <td>User request line.</td>
+                    </tr>
+                    <tr>
+                        <td>request.cmd</td>
+                        <td>User FTP command.</td>
+                    </tr>
+                    <tr>
+                        <td>request.arg</td>
+                        <td>User request argument. If there is no argument it will be null.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.start.time</td>
+                        <td>Server start time. The date format is yyyy-MM-ddTHH:mm:ss (ISO8601).</td>
+                    </tr>
+                    <tr>
+                        <td>stat.con.total</td>
+                        <td>Total number of connections after server startup.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.con.curr</td>
+                        <td>Current connection number.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.login.total</td>
+                        <td>Total number of logins after server startup.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.login.curr</td>
+                        <td>Current login number.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.login.anon.total</td>
+                        <td>Total number of anonymous logins after server startup.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.login.anon.curr</td>
+                        <td>Current anonymous login number.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.file.upload.count</td>
+                        <td>Total number of files uploaded.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.file.upload.bytes</td>
+                        <td>Total number of bytes uploaded.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.file.download.count</td>
+                        <td>Total number of files downloaded</td>
+                    </tr>
+                    <tr>
+                        <td>stat.file.download.bytes</td>
+                        <td>Total number of bytes downloaded</td>
+                    </tr>
+                    <tr>
+                        <td>stat.file.delete.count</td>
+                        <td>Total number of files deleted.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.dir.create.count</td>
+                        <td>Total number of directories created.</td>
+                    </tr>
+                    <tr>
+                        <td>stat.dir.delete.count</td>
+                        <td>Total number of directories removed.</td>
+                    </tr>
+                    <tr>
+                        <td>output.code</td>
+                        <td>FTP Server 3 digit reply code.</td>
+                    </tr>
+                    <tr>
+                        <td>output.msg</td>
+                        <td>Basic core message which has to be available in the message.</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section name="Message UI">
+                <p>User can customize server replies using FTP server UI.</p>
+                <img src="images/ftp_messages.jpg"/>
+            </section>
+        </section>
+    </body>
+</document>

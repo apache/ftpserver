@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: Installation</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="Binary Distribution">
+            <p>Download the binary distribution and unzip it.
+               You can run the server in two modes - with and without Java Swing UI.
+               The zip file includes sample configuration files (properties and xml).
+            </p>
+            <ul>
+                <li>Properties configuration file : ./res/conf/ftpd.properties</li>
+                <li>XML configuration file : ./res/conf/ftpd.xml</li>
+            </ul>
+            <p>If you want to use your own jar files, you can put those jar files
+               in system CLASSPATH or copy those jar files in the &lt;INSTALL_DIR&gt;/lib
+               directory.
+            </p>
+            <p>If you want to run it using Swing UI. Execute the script ftpd_ui.bat
+               (if Windows) or ftpd_ui.sh (if UNIX).
+            </p>
+            <img src="images/ftp_run.jpg"/>
+            <br/><br/>
+            <p>Similarly, if you want to start the FTP server without Swing UI, execute
+               ftpd.bat (if Windows) or ftpd.sh (if UNIX). In this case you need to pass
+               the configuration file location.
+            </p>
+            <source>
+Usage: java org.apache.ftpserver.FtpServer &lt;options&gt;
+  &lt;options&gt; := -default |
+               -xml &lt;XML configuration file&gt; |
+               -prop &lt;properties configuration file&gt;
+
+There are three ways to start the FTP server.
+    -default :: default configuration will be used.
+    -xml     :: XML configuration will be used. User has to specify the file.
+    -prop    :: properties configuration will be used. User has to specify the file.
+            </source>
+            <subsection name="Binary Distribution Directory Structure">
+                <source><![CDATA[
+ <INSTALL_DIR>
+      |
+      |--- lib
+      |
+      |--- doc
+      |     |
+      |     |--- javadoc
+      |
+      |--- res
+            |
+            |--- conf
+            |
+            |--- home
+            |
+            |--- log
+                ]]></source>
+            </subsection>
+        </section>
+
+
+        <section name="Source Distribution">
+            <p>Download the source distribution and unzip it. </p>
+            <p>The FTP Server build system requires
+               <a href="http://maven.apache.org">Apache Maven</a> to perform a build.
+            </p>
+            <p>The important Maven goals are:</p>
+            <table>
+                <tr>
+                    <th>Goal</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>ftpserver:usage</td>
+                    <td>Displays the usage information. This is the default goal.</td>
+                </tr>
+                <tr>
+                    <td>ftpserver:build</td>
+                    <td>Compiles the Java files, copies resources. It also
+                        downloads all the dependent Jar files in the lib directory.
+                    </td>
+                </tr>
+                <tr>
+                    <td>clean:clean</td>
+                    <td>Removes all the generated files/directories.</td>
+                </tr>
+                <tr>
+                    <td>java:compile</td>
+                    <td>Compiles all the Java files.</td>
+                </tr>
+                <tr>
+                    <td>java:jar-resources</td>
+                    <td>Copies all the resources.</td>
+                </tr>
+                <tr>
+                    <td>jar:jar</td>
+                    <td>Generates FTP Server jar file.</td>
+                </tr>
+                <tr>
+                    <td>site:generate</td>
+                    <td>Generates FTP server site (including Javadoc).</td>
+                </tr>
+                <tr>
+                    <td>dist:build-src</td>
+                    <td>Generates the source distribution files.</td>
+                </tr>
+                <tr>
+                    <td>dist:build-bin</td>
+                    <td>Generates the binary distribution files.</td>
+                </tr>
+            </table>
+            <source><![CDATA[
+ __  __
+|  \/  |__ _Apache__ ___
+| |\/| / _` \ V / -_) ' \  ~ intelligent projects ~
+|_|  |_\__,_|\_/\___|_||_|  v. 1.1-beta-1
+
+build:start:
+
+ftpserver:usage:
+    [echo]
+    [echo] ftpserver:usage    - Displays this message.
+    [echo] ftpserver:build    - Compiles Java files and copies other files.
+    [echo]
+    [echo] clean:clean        - Removes all the generated files.
+    [echo] java:compile       - Compiles all the Java files.
+    [echo] java:jar-resources - Copies all the resources
+    [echo] jar:jar            - Generates FTP server jar file.
+    [echo] site:generate      - Generates FTP server site (including Javadoc).
+    [echo] dist:build-src     - Generates the source distribution files.
+    [echo] dist:build-bin     - Generates the binary distribution files.
+    [echo]
+BUILD SUCCESSFUL
+Total time   : 2 seconds
+Finished at  : Wednesday, September 28, 2005 3:11:46 PM IST
+            ]]></source>
+            <subsection name="Source Distribution Directory Structure">
+                <source><![CDATA[
+ <INSTALL_DIR>
+      |
+      |--- src
+      |     |
+      |     |--- java
+      |     |
+      |     |--- bin
+      |
+      |----- xdocs
+      |
+      |--- res
+            |
+            |--- conf
+            |
+            |--- home
+            |
+            |--- log
+                ]]></source>
+            </subsection>
+        </section>
+    </body>
+</document>

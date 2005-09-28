@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: IP Restrictor</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="IP Restrictor">
+            <p>The IP restrictor allows you to restrict access to your FTP server
+               by IP address. Client IP addresses can be allowed or denied access
+               according to rules specified.
+            </p>
+            <p>IP addresses can be specified with wild cards. The following
+               special characters may be used.
+            </p>
+            <ul>
+                <li><strong>*</strong> : A star functions as a wildcard for checking
+                    the IP address. Any name or number will match that section of
+                    the rule if it is a star.
+                </li>
+                <li><strong>?</strong> : The question mark '?' character functions as
+                    a wildcard for a single character.
+                </li>
+                <li><strong>[-]</strong> : The hyphen '-' character functions as a range
+                    in an IP address.
+                </li>
+            </ul>
+            <p>The order of the rules is important. When a client contacts the
+               server, the rules are evaluated from top to bottom in the list
+               of rules. The first matching rule applies and evaluation is stopped.
+               If there is no match, the client is allowed to access the server.
+            </p>
+        </section>
+        <section name="Configuration Parameters">
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>config.ip-restrictor.class</td>
+                    <td>org.apache.ftpserver.iprestrictor.FileIpRestrictor</td>
+                </tr>
+                <tr>
+                    <td>config.ip-restrictor.file</td>
+                    <td>The file where IP restriction information will be stored.
+                        The default value is ./res/ip.gen
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section name="IP Restrictor UI">
+            <p>This IP restriction can be configured using server UI.</p>
+            <img src="images/ftp_ip_restrictor.jpg"/>
+        </section>
+    </body>
+</document>

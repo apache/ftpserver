@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="FtpServer" href="http://incubator.apache.org/projects/ftpserver">
+    <title>Apache FTP Server</title>
+    <body>
+        <links>
+            <item name="Apache"              href="http://www.apache.org/"/>
+            <item name="Incubator"           href="http://incubator.apache.org/"/>
+        </links>
+        <menu name="Apache FTP Server">
+            <item name="Welcome"             href="/index.html"/>
+            <item name="License"             href="/license.html"/>
+            <item name="Mailing List"        href="/mail-lists.html"/>
+            <item name="Issue Tracking"      href="http://issues.apache.org/jira/secure/BrowseProject.jspa?id=10571"/>
+            <item name="Who We Are"          href="/team-list.html"/>
+            <item name="Download"            href="/downloads.html"/>
+        </menu>
+        <menu name="Setup">
+            <item name="Installation"        href="/installation.html"/>
+            <item name="Configuration"       href="/configuration.html"/>
+            <item name="TLS/SSL Support"     href="/ssl.html"/>
+            <item name="User Manager"        href="/user_manager.html"/>
+            <item name="IP Restrictor"       href="/ip_restrictor.html"/>
+            <item name="Logger"              href="/logger.html"/>
+            <item name="Messages"            href="/messages.html"/>
+        </menu>
+        <menu name="Advanced">
+            <item name="FTP Commands"        href="/ftp_commands.html"/>
+            <item name="SITE Commands"       href="/site_commands.html"/>
+            <item name="Ftplet"              href="/ftplet.html"/>
+            <item name="Javadoc"             href="/apidocs/index.html"/>
+        </menu>
+        <menu name="RFCs">
+            <item name="RFC959"              href="/rfc959.html"/>
+            <item name="RFC2228"             href="/rfc2228.html"/>
+            <item name="RFC2389"             href="/rfc2389.html"/>
+            <item name="RFC2428"             href="/rfc2428.html"/>
+        </menu>
+    </body>
+</project>

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: FTP Commands</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="FTP Commands">
+            <p>This document describes all the FTP commands implemented.</p>
+
+            <subsection name="ABOR">
+                <p>Aborts the previous FTP service command
+                   and any associated transfer of data.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            226 ABOR command successful.
+                </source>
+            </subsection>
+
+            <subsection name="APPE">
+                <p>Appends data to the end of a file on the remote host.
+                   If the file does not already exist, it is created.
+                   This command must be preceded by a PORT or PASV command.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 Not a plain file.
+            550 Permission denied.
+            150 Opening data connection.
+            425 Cannot open data connection.
+            426 Data connection error.
+            551 Error on output file.
+            226 Transfer complete.
+                </source>
+            </subsection>
+
+            <subsection name="AUTH">
+                <p>Establishes SSL encrypted session. Only SSL type is supported.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            431 Service is unavailable.
+            234 AUTH command okay; starting SSL connection.
+                </source>
+            </subsection>
+
+            <subsection name="CDUP">
+                <p>Change to parent directory.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            250 Command okay.
+            550 No such directory.
+                </source>
+            </subsection>
+
+            <subsection name="CWD">
+                <p>Changes the working directory. If directory name is not
+                   specified, root directory (/) is assumed.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            250 Command okay.
+            550 No such directory.
+                </source>
+            </subsection>
+
+            <subsection name="EPRT">
+                <p>The EPRT command allows for the specification of an extended address
+                   for the data connection.  The extended address MUST consist of the
+                   network protocol as well as the network and transport addresses.  The
+                   format of EPRT is
+                   EPRT |&lt;net-prt&gt;|&lt;net-addr&gt;|&lt;tcp-port&gt;|
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            510 EPRT is disabled.
+            510 Syntax error.
+            553 Host unknown.
+            510 EPRT IP is not same as client IP.
+            552 Not a valid port number.
+            200 EPRT command okay.
+                </source>
+            </subsection>
+
+            <subsection name="EPSV">
+                <p>The EPSV command requests that a server listen on a data port and
+                   wait for a connection.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            425 Cannot open passive connection.
+            229 Entering passive mode (&lt;message&gt;).
+                </source>
+            </subsection>
+
+            <subsection name="FEAT">
+                <p>Displays the feature list.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            221 List of all the extensions supported.
+                </source>
+            </subsection>
+
+            <subsection name="HELP">
+                <p>Displays the help information.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            214 Help information.
+                </source>
+            </subsection>
+
+            <subsection name="LANG">
+                <p>A new command &quot;LANG&quot; is added to the FTP command set to allow
+                   server-FTP process to determine in which language to present server
+                   greetings and the textual part of command responses.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            502 Not yet implemented.
+                </source>
+            </subsection>
+
+            <subsection name="LIST">
+                <p>This command causes a list to be sent from the server to the
+                   passive DTP.  If the pathname specifies a directory or other
+                   group of files, the server should transfer a list of files
+                   in the specified directory.  If the pathname specifies a
+                   file then the server should send current information on the
+                   file.  A null argument implies the user's current working or
+                   default directory.  The data transfer is over the data
+                   connection. This command must be preceded by a PORT or PASV
+                   command.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            150 Opening data connection.
+            425 Cannot open data connection.
+            426 Data connection error.
+            551 File listing failed.
+            501 Syntax error.
+            226 Closing data connection.
+                </source>
+            </subsection>
+
+            <subsection name="MDTM">
+                <p>Returns the date and time of when a file was modified.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 File unavailable.
+            213 &lt;timestamp&gt;
+                </source>
+            </subsection>
+
+            <subsection name="MKD">
+                <p>This command causes the directory specified in the pathname
+                   to be created as a directory (if the pathname is absolute)
+                   or as a subdirectory of the current working directory (if
+                   the pathname is relative).
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 Not a valid file.
+            550 Already exists.
+            550 No permission.
+            250 Directory created.
+            550 Cannot create directory.
+                </source>
+            </subsection>
+
+            <subsection name="MODE">
+                <p>Set data transfer mode. The valid values are S and Z.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            504 Not implemented for this command.
+            200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="NLST">
+                <p>This command causes a directory listing to be sent from
+                   server to user site. The pathname should specify a
+                   directory or other system-specific file group descriptor; a
+                   null argument implies the current directory.  The server
+                   will return a stream of names of files and no other
+                   information.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            150 Opening data connection.
+            425 Cannot open data connection.
+            426 Data connection error.
+            551 File listing failed.
+            501 Syntax error.
+            226 Closing data connection.
+                </source>
+            </subsection>
+
+            <subsection name="NOOP">
+                <p>No operation.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="PASS">
+                <p>The argument field is a Telnet string specifying the user's
+                   password. This command must be immediately preceded by the
+                   USER command.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            503 Login with USER first.
+            202 Already logged-in.
+            421 Maximum anonymous login limit has been reached.
+            421 Maximum login limit has been reached.
+            530 Authentication failed.
+            230 User logged in, proceed.
+                </source>
+            </subsection>
+
+            <subsection name="PASV">
+                <p>This command requests the server-DTP to listen on a data
+                   port (which is not its default data port) and to wait for a
+                   connection rather than initiate one upon receipt of a
+                   transfer command. The response to this command includes the
+                   host and port address this server is listening on.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            425 Cannot open passive connection.
+            227 Entering passive mode (&lt;h1,h2,h3,h4,p1,p2&gt;)
+                </source>
+            </subsection>
+
+            <subsection name="PBSZ">
+                <p>protection buffer size.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="PORT">
+                <p>The argument is a HOST-PORT specification for the data port
+                   to be used in data connection.  There are defaults for both
+                   the user and server data ports, and under normal
+                   circumstances this command and its reply are not needed.  If
+                   this command is used, the argument is the concatenation of a
+                   32-bit internet host address and a 16-bit TCP port address.
+                   This address information is broken into 8-bit fields and the
+                   value of each field is transmitted as a decimal number (in
+                   character string representation).  The fields are separated
+                   by commas.  A port command would be: <br/><br/>
+                   PORT h1,h2,h3,h4,p1,p2
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            510 Syntax error in parameters.
+            510 Port is disabled.
+            553 Host unknown.
+            510 PORT IP mismatch.
+            552 Invalid port number.
+            200 Command PORT okay.
+                </source>
+            </subsection>
+
+            <subsection name="PROT">
+                <p>Data channel protection level. The supported level
+                   values are C, P.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            431 Security is disabled.
+            504 Server does not understand the specified protection level.
+            200 Command PROT okay.
+                </source>
+            </subsection>
+
+            <subsection name="PWD">
+                <p>This command causes the name of the current working
+                   directory to be returned in the reply.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            257 &quot;&lt;current directory&gt;&quot;
+                </source>
+            </subsection>
+
+            <subsection name="QUIT">
+                <p>Closes connection.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            200 Goodbye.
+                </source>
+            </subsection>
+
+            <subsection name="REST">
+                <p>The argument field represents the server marker at which
+                   file transfer is to be restarted.  This command does not
+                   cause file transfer but skips over the file to the specified
+                   data checkpoint.  This command shall be immediately followed
+                   by the appropriate FTP service command which shall cause
+                   file transfer to resume.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            501 Not a valid number.
+            501 Marker cannot be negetive.
+            350 Restarting at &lt;position&gt;. Send STORE or RETRIEVE to initiate transfer.
+                </source>
+            </subsection>
+
+            <subsection name="RETR">
+                <p>This command causes the server-DTP to transfer a copy of the
+                   file, specified in the pathname, to the server- or user-DTP
+                   at the other end of the data connection.  The status and
+                   contents of the file at the server site shall be unaffected.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 No such file or directory.
+            550 Not a plain file.
+            550 Permission denied.
+            150 Opening data connection.
+            425 Cannot open the data connection.
+            426 Data connection error.
+            551 Error on input file.
+            226 Transfer complete.
+                </source>
+            </subsection>
+
+            <subsection name="RMD">
+                <p>This command causes the directory specified in the pathname
+                   to be removed as a directory (if the pathname is absolute)
+                   or as a subdirectory of the current working directory (if
+                   the pathname is relative).
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 No permission.
+            550 Not a valid directory.
+            250 Directory removed.
+            550 Cannot remove directory.
+                </source>
+            </subsection>
+
+            <subsection name="RNFR">
+                <p>This command specifies the old pathname of the file which is
+                   to be renamed.  This command must be immediately followed by
+                   a RNTO command specifying the new file pathname.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 File unavailable.
+            350 Requested file action pending further information.
+                </source>
+            </subsection>
+
+            <subsection name="RNTO">
+                <p>This command specifies the new pathname of the file
+                   specified in the immediately preceding RNFR
+                   command.  Together the two commands cause a file to be
+                   renamed.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            503 Cannot find the file which has to be renamed.
+            553 Not a valid file name.
+            553 No permission.
+            250 Requested file action okay, file renamed.
+            553 Cannot rename file.
+                </source>
+            </subsection>
+
+            <subsection name="SITE">
+                <p>Handle Apache FTP Server specific custom commands. Please see
+                   the <a href="site_commands.html">SITE commands</a> page.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            200 Command SITE okay.
+            502 Command SITE not implemented for this argument.
+            500 Execution failed.
+            530 Access denied.
+                </source>
+            </subsection>
+
+            <subsection name="SIZE">
+                <p>Returns the size of the file in bytes.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 No such file or directory.
+            550 Not a plain file.
+            213 &lt;size&gt;
+                </source>
+            </subsection>
+
+            <subsection name="STAT">
+                <p>This command shall cause a status response to be sent over
+                   the control connection in the form of a reply.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            211 Statistics information.
+                </source>
+            </subsection>
+
+            <subsection name="STOR">
+                <p>This command causes the server-DTP to accept the data
+                   transferred via the data connection and to store the data as
+                   a file at the server site.  If the file specified in the
+                   pathname exists at the server site, then its contents shall
+                   be replaced by the data being transferred.  A new file is
+                   created at the server site if the file specified in the
+                   pathname does not already exist.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            550 Invalid path.
+            550 Permission denied.
+            150 Opening data connection.
+            425 Cannot open the data connection.
+            426 Data connection error.
+            551 Error on output file.
+            226 Transfer complete.
+                </source>
+            </subsection>
+
+            <subsection name="STOU">
+                <p>This command behaves like STOR except that the resultant
+                   file is to be created in the current directory under a name
+                   unique to that directory.  The 250 Transfer Started response
+                   must include the name generated.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            550 Unique file name error.
+            550 Permission denied.
+            150 Opening data connection.
+            425 Cannot open the data connection.
+            250 &lt;file&gt; Transfer started.
+            426 Data connection error.
+            551 Error on output file.
+            226 Transfer complete.
+                </source>
+            </subsection>
+
+            <subsection name="STRU">
+                <p>The argument is a single Telnet character code specifying
+                   file structure. The allowed argument is F.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            504 Command not implemented.
+            200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="SYST">
+                <p>This command is used to find out the type of operating
+                   system at the server.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            215 UNIX Type: Apache FTP Server
+                </source>
+            </subsection>
+
+            <subsection name="TYPE">
+                <p>The argument specifies the representation type.
+                   The allowed types are A and I.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            504 Command not implemented.
+            200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="USER">
+                <p>The argument field is a Telnet string identifying the user.
+                   The user identification is that which is required by the
+                   server for access to its file system.  This command will
+                   normally be the first command transmitted by the user after
+                   the control connections are made.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            501 Syntax error.
+            230 Already logged-in.
+            530 Invalid user name.
+            530 Anonymous connection is not allowed.
+            421 Maximum anonymous login limit has been reached.
+            421 Maximum login limit has been reached.
+            331 Guest login okay, send your complete e-mail address as password.
+            331 User name okay, need password.
+                </source>
+            </subsection>
+
+        </section>
+    </body>
+</document>
