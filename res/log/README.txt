@@ -1,1 +1,1 @@
-All the log are stored here.
+All the log files are stored here.
