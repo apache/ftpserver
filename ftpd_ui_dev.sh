@@ -106,7 +106,12 @@ fi
 #
 # Build classpath
 #
-FTPD_CLASSPATH=$CLASSPATH
+if [ "$cygwin" = "true" ] ; then
+    FTPD_CLASSPATH=$CLASSPATH$S`cygpath -w $FTPD_HOME/target/classes`
+else
+    FTPD_CLASSPATH=$CLASSPATH$S$FTPD_HOME/target/classes
+fi
+
 for i in $FTPD_HOME/lib/*.jar; do
   if [ "$cygwin" = "true" ] ; then
     LIB=`cygpath -w $i`
@@ -121,7 +126,7 @@ done
 #
 # Execute command
 #
-MAIN_CLASS=org.apache.ftpserver.FtpServer
+MAIN_CLASS=org.apache.ftpserver.gui.ServerFrame
 "$JAVACMD" -classpath "$FTPD_CLASSPATH" $MAIN_CLASS $@
 RESULT=$?
 exit $RESULT
