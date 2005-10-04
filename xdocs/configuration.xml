@@ -94,9 +94,9 @@ config
   |               |
   |               |---- <b>keystore-type</b> (JKS)
   |               |
-  |               |---- <b>keystore-protocol</b> (TLS)
-  |               |
   |               |---- <b>keystore-algorithm</b> (SunX509)
+  |               |
+  |               |---- <b>ssl-protocol</b> (TLS)
   |               |
   |               |---- <b>client-authentication</b> (false)
   |               |
@@ -120,9 +120,9 @@ config
   |               |
   |               |---- <b>keystore-type</b> (JKS)
   |               |
-  |               |---- <b>keystore-protocol</b> (TLS)
-  |               |
   |               |---- <b>keystore-algorithm</b> (SunX509)
+  |               |
+  |               |---- <b>ssl-protocol</b> (TLS)
   |               |
   |               |---- <b>client-authentication</b> (false)
   |               |
@@ -267,12 +267,12 @@ config
                     <td>Keystore type. The default value is JKS.</td>
                 </tr>
                 <tr>
-                    <td>config.socket-factory.ssl.keystore-protocol</td>
-                    <td>Keystore protocol. The default value is TLS.</td>
-                </tr>
-                <tr>
                     <td>config.socket-factory.ssl.keystore-algorithm</td>
                     <td>Keystore algorithm. The default value is SunX509.</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default value is TLS.</td>
                 </tr>
                 <tr>
                     <td>config.socket-factory.ssl.client-authentication</td>
@@ -313,12 +313,12 @@ config
                     <td>Keystore type. The default value is JKS.</td>
                 </tr>
                 <tr>
-                    <td>config.data-connection.ssl.keystore-protocol</td>
-                    <td>Keystore protocol. The default value is TLS.</td>
-                </tr>
-                <tr>
                     <td>config.data-connection.ssl.keystore-algorithm</td>
                     <td>Keystore algorithm. The default value is SunX509.</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default value is TLS.</td>
                 </tr>
                 <tr>
                     <td>config.data-connection.ssl.client-authentication</td>

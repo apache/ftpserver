@@ -76,12 +76,12 @@
                     <td>The keystore type. The sample keystore type : JKS</td>
                 </tr>
                 <tr>
-                    <td>config.socket-factory.ssl.keystore-protocol</td>
-                    <td>Keystore protocol. The sample keystore protocol : TLS</td>
-                </tr>
-                <tr>
                     <td>config.socket-factory.ssl.keystore-algorithm</td>
                     <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
                 </tr>
                 <tr>
                     <td>config.socket-factory.ssl.client-authentication</td>
@@ -118,12 +118,12 @@
                     <td>The keystore type. The sample keystore type : JKS</td>
                 </tr>
                 <tr>
-                    <td>config.data-connection.ssl.keystore-protocol</td>
-                    <td>Keystore protocol. The sample keystore protocol : TLS</td>
-                </tr>
-                <tr>
                     <td>config.data-connection.ssl.keystore-algorithm</td>
                     <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
                 </tr>
                 <tr>
                     <td>config.data-connection.ssl.client-authentication</td>
@@ -176,12 +176,12 @@
                     <td>The keystore type. The sample keystore type : JKS</td>
                 </tr>
                 <tr>
-                    <td>config.socket-factory.ssl.keystore-protocol</td>
-                    <td>Keystore protocol. The sample keystore protocol : TLS</td>
-                </tr>
-                <tr>
                     <td>config.socket-factory.ssl.keystore-algorithm</td>
                     <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
                 </tr>
                 <tr>
                     <td>config.socket-factory.ssl.client-authentication</td>

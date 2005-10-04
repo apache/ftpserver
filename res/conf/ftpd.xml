@@ -13,8 +13,8 @@
             <keystore-file>./res/.keystore</keystore-file>
             <keystore-password>password</keystore-password>
             <keystore-type>JKS</keystore-type>
-            <keystore-protocol>TLS</keystore-protocol>
             <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
             <client-authentication>false</client-authentication>
             <key-password>password</key-password>
         </ssl>
@@ -32,8 +32,8 @@
             <keystore-file>./res/.keystore</keystore-file>
             <keystore-password>password</keystore-password>
             <keystore-type>JKS</keystore-type>
-            <keystore-protocol>TLS</keystore-protocol>
             <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
             <client-authentication>false</client-authentication>
             <key-password>password</key-password>
         </ssl>
@@ -52,8 +52,8 @@
             <keystore-file>./res/.keystore</keystore-file>
             <keystore-password>password</keystore-password>
             <keystore-type>JKS</keystore-type>
-            <keystore-protocol>TLS</keystore-protocol>
             <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
             <client-authentication>false</client-authentication>
             <key-password>password</key-password>
         </ssl>
