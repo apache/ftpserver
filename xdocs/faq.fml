@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<faqs title="Frequently Asked Questions">
+
+    <part id="general">
+        <title>General</title>
+
+        <faq>
+            <question>How can I add other language translations?</question>
+            <answer>
+                <p>First you need to specify your language name in config.message.languages
+                   configuration parameter. Then if you start the FTP server UI, you will
+                   see your language entry in the message panel. Translate messages and
+                   finally save your translated messages.
+                </p>
+            </answer>
+        </faq>
+
+        <faq>
+            <question>How can I embed the FTP server in my application?</question>
+            <answer>
+                <p>The following script shows how the FTP server can be embedded.</p>
+                <source>
+      // get the configuration object
+      Configuration config = getConfiguration();
+
+      // create FTP config
+      IFtpConfig ftpConfig = new FtpConfigImpl(config);
+
+      // create the server object and start it
+      FtpServer server = new FtpServer(ftpConfig);
+      server.start();
+                </source>
+                <p>If you want to stop the FTP server:</p>
+                <source>
+      server.stop();
+                </source>
+            </answer>
+        </faq>
+
+        <faq>
+            <question>Why I am getting ClassNotFoundException when I am trying to use
+                      database based user manager?
+            </question>
+            <answer>
+                <ol>
+                    <li>JDBC driver Jar file should be in CLASSPATH or it has to
+                        be copied in the &lt;INSTALL_DIR&gt;/lib directory.
+                    </li>
+                    <li>
+                        Did you specify fully qualified JDBC driver class name in
+                        config.user-manager.jdbc-driver configuration parameter?
+                    </li>
+                </ol>
+            </answer>
+        </faq>
+
+        <faq>
+            <question>I have updated the JDK version. After that the LDAP user
+                      manager is not working.
+            </question>
+            <answer>
+                <p>LDAP based user manager stores the user object in LDAP. This binary
+                   format is JDK specific.
+                </p>
+            </answer>
+        </faq>
+
+    </part>
+</faqs>

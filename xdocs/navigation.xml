@@ -12,6 +12,7 @@
             <item name="Mailing List"        href="/mail-lists.html"/>
             <item name="Issue Tracking"      href="http://issues.apache.org/jira/secure/BrowseProject.jspa?id=10571"/>
             <item name="Who We Are"          href="/team-list.html"/>
+            <item name="FAQ"                 href="/faq.html"/>
             <item name="Download"            href="/downloads.html"/>
         </menu>
         <menu name="Setup">
