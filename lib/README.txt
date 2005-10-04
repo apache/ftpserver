@@ -8,4 +8,4 @@ Source Distribution
 -------------------
 Maven copies all the dependent jar files here if you run ftpserver:build goal.
 You can keep your other jar files in this directory. The FTP server scripts 
-load this lib directory as the java endorsed directory. 
+add all the jar files in this directory in CLASSPATH.
