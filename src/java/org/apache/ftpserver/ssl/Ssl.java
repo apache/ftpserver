@@ -16,19 +16,13 @@
  */
 package org.apache.ftpserver.ssl;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.ISsl;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyStore;
 import java.security.SecureRandom;
-import java.security.Security;
+import java.util.HashMap;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -38,13 +32,16 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import sun.security.provider.Sun;
-
-import com.sun.net.ssl.internal.ssl.Provider;
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.Logger;
+import org.apache.ftpserver.interfaces.ISsl;
+import org.apache.ftpserver.util.IoUtils;
 
 
 /**
- * ISsl implementation.
+ * ISsl implementation. This class encapsulates all 
+ * the SSL functionalities.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
@@ -56,14 +53,18 @@ class Ssl implements ISsl {
     private String m_keystoreFile;
     private String m_keystorePass;
     private String m_keystoreType;
-    private String m_keystoreProtocol;
     private String m_keystoreAlgorithm;
+    
+    private String m_sslProtocol;
     private boolean m_clientAuthReqd;
     private String m_keyPass;
 
-    private SSLContext m_sslContext;
-    private SSLSocketFactory m_socketFactory;
-    private SSLServerSocketFactory m_serverSocketFactory;
+    private KeyStore m_keyStore;
+    private KeyManagerFactory m_keyManagerFactory;
+    private TrustManagerFactory m_trustManagerFactory;
+    
+    private HashMap m_sslContextMap;
+    
     
     /**
      * Set logger.
@@ -79,86 +80,93 @@ class Ssl implements ISsl {
         
         try {
             
-            // check JSSE installation
-            Class.forName("com.sun.net.ssl.internal.ssl.Provider");
-        }
-        catch(Exception ex) {
-            throw new FtpException("JSSE not found.");
-        }
-        
-        try {
-            
             // get configuration parameters
             m_keystoreFile      = conf.getString("keystore-file", "./res/.keystore");
             m_keystorePass      = conf.getString("keystore-password", "password");
             m_keystoreType      = conf.getString("keystore-type", "JKS");
-            m_keystoreProtocol  = conf.getString("keystore-protocol", "TLS");
             m_keystoreAlgorithm = conf.getString("keystore-algorithm", "SunX509");
+            m_sslProtocol       = conf.getString("ssl-protocol", "TLS");
             m_clientAuthReqd    = conf.getBoolean("client-authentication", false);
             m_keyPass           = conf.getString("key-password", "password");
             
-            // get SSL context
-            m_sslContext = getSSLContext();
+            // initialize keystore
+            FileInputStream fin = null;
+            try {
+                fin = new FileInputStream(m_keystoreFile);
+                m_keyStore = KeyStore.getInstance(m_keystoreType);
+                m_keyStore.load(fin, m_keystorePass.toCharArray());
+            }
+            finally {
+                IoUtils.close(fin);
+            }
+            
+            // initialize key manager factory
+            m_keyManagerFactory = KeyManagerFactory.getInstance(m_keystoreAlgorithm);
+            m_keyManagerFactory.init(m_keyStore, m_keyPass.toCharArray());
+            
+            // initialize trust manager factory
+            m_trustManagerFactory = TrustManagerFactory.getInstance(m_keystoreAlgorithm);
+            m_trustManagerFactory.init(m_keyStore);
+            
+            // create ssl context map - the key is the 
+            // SSL protocol and the value is SSLContext.
+            m_sslContextMap = new HashMap();
         }
         catch(Exception ex) {
             m_logger.warn("Ssl.configure()", ex);
-            throw new FtpException("SecureSocketUtil.configure()", ex);
+            throw new FtpException("Ssl.configure()", ex);
         }
     }
     
     /**
-     * Get SSL context.
+     * Get SSL Context.
      */
-    private SSLContext getSSLContext() throws Exception {
+    private synchronized SSLContext getSSLContext(String protocol) throws Exception {
         
-        // initialize keystore
-        KeyStore keystore = null;
-        FileInputStream fin = null;
-        try {
-            fin = new FileInputStream(m_keystoreFile);
-            keystore = KeyStore.getInstance(m_keystoreType);
-            keystore.load(fin, m_keystorePass.toCharArray());
-        }
-        finally {
-            IoUtils.close(fin);
+        // null value check
+        if(protocol == null) {
+            protocol = m_sslProtocol;
         }
         
-        // create SSL context
-        Security.addProvider(new Sun());
-        Security.addProvider(new Provider());
-        SSLContext sslContext = SSLContext.getInstance(m_keystoreProtocol);
+        // if already stored - return it
+        SSLContext ctx = (SSLContext)m_sslContextMap.get(protocol);
+        if(ctx != null) {
+            return ctx;
+        }
         
-        // initialize key manager factory
-        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(m_keystoreAlgorithm);
-        keyManagerFactory.init(keystore, m_keyPass.toCharArray());
+        // create new secure random object
+        SecureRandom random = new SecureRandom();
+        random.nextInt();
         
-        // initialize trust manager factory
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(m_keystoreAlgorithm);
-        tmf.init(keystore);
-        
-        // initialize SSL context
-        sslContext.init(keyManagerFactory.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-        return sslContext;
+        // create SSLContext
+        ctx = SSLContext.getInstance(protocol);
+        ctx.init(m_keyManagerFactory.getKeyManagers(), 
+                 m_trustManagerFactory.getTrustManagers(), 
+                 random);
+
+        // store it in map
+        m_sslContextMap.put(protocol, ctx);
+        return ctx;
     }
-    
+
     /**
      * Create secure server socket.
      */
-    public ServerSocket createServerSocket(InetAddress addr, 
-                                              int port) throws Exception {
-        
+    public ServerSocket createServerSocket(String protocol,
+                                           InetAddress addr, 
+                                           int port) throws Exception {
+
         // get server socket factory
-        if(m_serverSocketFactory == null) {
-            m_serverSocketFactory = m_sslContext.getServerSocketFactory();
-        }
+        SSLContext ctx = getSSLContext(protocol);
+        SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
         
         // create server socket
         SSLServerSocket serverSocket = null;
         if(addr == null) {
-            serverSocket = (SSLServerSocket) m_serverSocketFactory.createServerSocket(port, 100);
+            serverSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port, 100);
         }
         else {
-            serverSocket = (SSLServerSocket) m_serverSocketFactory.createServerSocket(port, 100, addr);
+            serverSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port, 100, addr);
         }
         
         // initialize server socket
@@ -169,19 +177,25 @@ class Ssl implements ISsl {
     }
  
     /**
-     * Create socket.
+     * Returns a socket layered over an existing socket.
      */
-    public Socket createSocket(Socket soc, boolean clientMode) throws Exception {
+    public Socket createSocket(String protocol,
+                               Socket soc, 
+                               boolean clientMode) throws Exception {
+        
+        // already wrapped - no need to do anything
+        if(soc instanceof SSLSocket) {
+            return soc;
+        }
         
         // get socket factory
-        if(m_socketFactory == null) {
-            m_socketFactory = m_sslContext.getSocketFactory();
-        }
+        SSLContext ctx = getSSLContext(protocol);
+        SSLSocketFactory socFactory = ctx.getSocketFactory();
         
         // create socket
         String host = soc.getInetAddress().getHostAddress();
         int port = soc.getLocalPort();
-        SSLSocket ssoc = (SSLSocket)m_socketFactory.createSocket(soc, host, port, true);
+        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(soc, host, port, true);
         ssoc.setUseClientMode(clientMode);
         
         // initialize socket
@@ -193,7 +207,29 @@ class Ssl implements ISsl {
     }
 
     /**
-     * Dispose.
+     * Create a secure socket.
+     */
+    public Socket createSocket(String protocol,
+                               InetAddress addr, 
+                               int port,
+                               boolean clientMode) throws Exception {
+
+        // get socket factory
+        SSLContext ctx = getSSLContext(protocol);
+        SSLSocketFactory socFactory = ctx.getSocketFactory();
+        
+        // create socket
+        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(addr, port);
+        ssoc.setUseClientMode(clientMode);
+        
+        // initialize socket
+        String cipherSuites[] = ssoc.getSupportedCipherSuites();
+        ssoc.setEnabledCipherSuites(cipherSuites);
+        return ssoc;
+    } 
+    
+    /**
+     * Dispose - does nothing.
      */
     public void dispose() {
     }

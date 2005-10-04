@@ -49,24 +49,38 @@ class AUTH implements Command {
             return;  
         }
         
-        String authType = request.getArgument().toUpperCase();
+        // check SSL configuration
         IFtpConfig fconfig = handler.getConfig();
+        if(fconfig.getSocketFactory().getSSL() == null) {
+            out.send(431, "AUTH", null);
+        }
+        
+        // check parameter
+        String authType = request.getArgument().toUpperCase();
         if(authType.equals("SSL")) {
-            if(fconfig.getSocketFactory().getSSL() == null) {
-                out.send(431, "AUTH", null);
+            out.send(234, "AUTH.SSL", null);
+            try {
+                handler.createSecureSocket("SSL");
             }
-            else {
-                out.send(234, "AUTH.SSL", null);
-                try {
-                    handler.createSecureSocket();
-                }
-                catch(FtpException ex) {
-                    throw ex;
-                }
-                catch(Exception ex) {
-                    fconfig.getLogger().warn("AUTH.execute()", ex);
-                    throw new FtpException("AUTH.execute()", ex);
-                }
+            catch(FtpException ex) {
+                throw ex;
+            }
+            catch(Exception ex) {
+                fconfig.getLogger().warn("AUTH.execute()", ex);
+                throw new FtpException("AUTH.execute()", ex);
+            }
+        }
+        else if(authType.equals("TLS")) {
+            out.send(234, "AUTH.TLS", null);
+            try {
+                handler.createSecureSocket("TLS");
+            }
+            catch(FtpException ex) {
+                throw ex;
+            }
+            catch(Exception ex) {
+                fconfig.getLogger().warn("AUTH.execute()", ex);
+                throw new FtpException("AUTH.execute()", ex);
             }
         }
         else {

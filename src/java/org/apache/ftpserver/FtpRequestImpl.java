@@ -295,11 +295,18 @@ class FtpRequestImpl implements FtpRequest {
     }
     
     /**
-     * Get data input stream.
+     * Get data input stream. The return value will never be null.
      */
     public InputStream getDataInputStream() throws IOException {
         try {
+            
+            // get data socket
             Socket dataSoc = m_dataConnection.getDataSocket();
+            if(dataSoc == null) {
+                throw new IOException("Cannot open data connection.");
+            }
+            
+            // create input stream
             InputStream is = dataSoc.getInputStream();
             if(m_dataConnection.isZipMode()) {
                 is = new InflaterInputStream(is);
@@ -313,11 +320,18 @@ class FtpRequestImpl implements FtpRequest {
     }
     
     /**
-     * Get data output stream.
+     * Get data output stream. The return value will never be null.
      */
     public OutputStream getDataOutputStream() throws IOException {
         try {
+            
+            // get data socket
             Socket dataSoc = m_dataConnection.getDataSocket();
+            if(dataSoc == null) {
+                throw new IOException("Cannot open data connection.");
+            }
+            
+            // create output stream
             OutputStream os = dataSoc.getOutputStream();
             if(m_dataConnection.isZipMode()) {
                 os = new DeflaterOutputStream(os);

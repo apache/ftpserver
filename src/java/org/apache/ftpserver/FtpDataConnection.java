@@ -16,14 +16,13 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.ISsl;
-
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ISsl;
 
 
 /**
@@ -47,16 +46,10 @@ class FtpDataConnection {
     private boolean m_isPort   = false;
     private boolean m_isPasv   = false;
     
-    private boolean m_isSecure = false;
+    private boolean m_secure   = false;
     private boolean m_isZip    = false;
     
     
-    /**
-     * Default constructor.
-     */
-    public FtpDataConnection() {
-    }
-
     /**
      * Set the ftp config.
      */
@@ -112,7 +105,6 @@ class FtpDataConnection {
         m_requestTime = System.currentTimeMillis();
     } 
     
-    
     /**
      * Passive command. It returns the success flag.
      */
@@ -122,7 +114,7 @@ class FtpDataConnection {
         closeDataSocket(); 
         
         // get the passive port
-        int port = getPassivePort();
+        int port = m_fconfig.getDataConnectionConfig().getPassivePort();
         if(port == -1) {
             m_fconfig.getLogger().warn("Cannot find an available passive port.");
             m_servSoc = null;
@@ -133,12 +125,12 @@ class FtpDataConnection {
         boolean bRet = false;
         try {
             m_address = m_fconfig.getDataConnectionConfig().getPassiveAddress();
-            if(m_isSecure) {
+            if(m_secure) {
                 ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
                 if(ssl == null) {
-                    throw new FtpException("Data connection SSL not configured");
+                    throw new FtpException("Data connection SSL not configured.");
                 }
-                m_servSoc = ssl.createServerSocket(m_address, m_port);
+                m_servSoc = ssl.createServerSocket(null, m_address, m_port);
             }
             else {
                 m_servSoc = new ServerSocket(port, 1, m_address);   
@@ -171,52 +163,50 @@ class FtpDataConnection {
     public int getPort() {
         return m_port;
     }
-     
+
     /**
      * Get the data socket. In case of error returns null.
      */
-    public synchronized Socket getDataSocket() throws IOException {
-       
-        // get socket depending on the selection
-        if(m_isPort) {
-            if(m_isSecure) {
-                //ISsl ssl = mConfig.getDataConnectionConfig().getSSL();
-                //if(ssl == null) {
-                //  throw new IOException("Data connection SSL not configured");
-                //}
-                //mDataSoc = new Socket(mAddress, miPort);
-                //mDataSoc = ssl.createSocket(mDataSoc, true);
-            }
-            else {
-                m_dataSoc = new Socket(m_address, m_port);  
-            }
-        }
-        else if(m_isPasv) {
-            m_dataSoc = m_servSoc.accept();
-        }
+    public synchronized Socket getDataSocket() {
 
+        // get socket depending on the selection
+        m_dataSoc = null;
+        try {
+            if(m_isPort) {
+                if(m_secure) {
+                    ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
+                    if(ssl == null) {
+                        throw new FtpException("Data connection SSL not configured");
+                    }
+                    m_dataSoc = ssl.createSocket(null, m_address, m_port, false);
+                }
+                else {
+                    m_dataSoc = new Socket(m_address, m_port);  
+                }
+            }
+            else if(m_isPasv) {
+                m_dataSoc = m_servSoc.accept();
+            }
+        }
+        catch(Exception ex) {
+            m_fconfig.getLogger().warn("FtpDataConnection.getDataSocket()", ex);
+        }
+        
         return m_dataSoc;
-    }
-    
-    /**
-     * Get the passive port. Get it from the port pool.
-     */
-    private int getPassivePort() {
-        return m_fconfig.getDataConnectionConfig().getPassivePort();
     }
     
     /**
      * Is secure?
      */
     public boolean isSecure() {
-        return m_isSecure;
+        return m_secure;
     }
     
     /**
-     * Set secure.
+     * Set the security protocol.
      */
     public void setSecure(boolean secure) {
-        m_isSecure = secure;
+        m_secure = secure;
     }
     
     /**
@@ -248,7 +238,7 @@ class FtpDataConnection {
     }
     
     /**
-     * Dispose data connection
+     * Dispose data connection - close all the sockets.
      */ 
     public void dispose() {
         closeDataSocket();

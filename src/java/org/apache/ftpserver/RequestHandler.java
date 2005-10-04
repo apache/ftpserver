@@ -447,14 +447,14 @@ class RequestHandler implements IConnection {
     /**
      * Create secure socket.
      */
-    public void createSecureSocket() throws Exception {
+    public void createSecureSocket(String protocol) throws Exception {
         
         // change socket to SSL socket
         ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }
-        Socket ssoc = ssl.createSocket(m_controlSocket, false);
+        Socket ssoc = ssl.createSocket(protocol, m_controlSocket, false);
         
         // change streams
         m_reader = new BufferedReader(new InputStreamReader(ssoc.getInputStream(), "UTF-8"));

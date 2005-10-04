@@ -50,7 +50,7 @@ class DataConnectionConfig implements IDataConnectionConfig {
     }
     
     /**
-     * Configure the data connection factory.
+     * Configure the data connection config object.
      */
     public void configure(Configuration conf) throws FtpException {
         
@@ -67,7 +67,7 @@ class DataConnectionConfig implements IDataConnectionConfig {
             
             // get PASV ports
             String pasvPorts = conf.getString("pasv-port", "0");
-            StringTokenizer st = new StringTokenizer(pasvPorts, ",;\t\n\r\f");
+            StringTokenizer st = new StringTokenizer(pasvPorts, " ,;\t\n\r\f");
             m_pasvPort = new int[st.countTokens()][2];
             for(int i=0; i<m_pasvPort.length; i++) {
                 m_pasvPort[i][0] = Integer.parseInt(st.nextToken());
@@ -82,6 +82,7 @@ class DataConnectionConfig implements IDataConnectionConfig {
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
                 m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
+                m_ssl.setLogger(m_logger);
                 m_ssl.configure(sslConf);
             }
         }
@@ -89,10 +90,9 @@ class DataConnectionConfig implements IDataConnectionConfig {
             throw ex;
         }
         catch(Exception ex) {
-            m_logger.error("DataConnectionFactory.configure()", ex);
-            throw new FtpException("DataConnectionFactory.configure()", ex);
+            m_logger.error("DataConnectionConfig.configure()", ex);
+            throw new FtpException("DataConnectionConfig.configure()", ex);
         }
-        
     }
     
     /**

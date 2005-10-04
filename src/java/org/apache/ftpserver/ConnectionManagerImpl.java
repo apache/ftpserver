@@ -16,20 +16,21 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.usermanager.BaseUser;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.Logger;
+import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IConnectionManager;
+import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * Connection service to manage all the connections (request handlers).
@@ -239,6 +240,9 @@ class ConnectionManagerImpl implements IConnectionManager {
                     
                 // idle client connection
                 FtpRequestImpl request = (FtpRequestImpl)con.getRequest();
+                if(request == null) {
+                    continue;
+                }
                 if(request.isTimeout(currTime)) {
                     inactiveCons.add(con);
                 }
@@ -263,7 +267,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                     
                     // idle data connectin timeout - close it 
                     if( (currTime - requestTime) > idleTimeMillis ) {
-                        m_logger.info("Removing idle data connection for " + con.getRequest().getUser());
+                        m_logger.info("Removing idle data connection for " + request.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
@@ -273,7 +277,16 @@ class ConnectionManagerImpl implements IConnectionManager {
         // close idle client connections
         for( Iterator conIt=inactiveCons.iterator(); conIt.hasNext(); ) {
             IConnection connection = (IConnection)conIt.next();
-            m_logger.info("Removing idle user " + connection.getRequest().getUser());
+            if(connection == null) {
+                continue;
+            }
+            
+            FtpRequest request = connection.getRequest();
+            if(request == null) {
+                continue;
+            }
+            
+            m_logger.info("Removing idle user " + request.getUser());
             closeConnection(connection);
         }
     }

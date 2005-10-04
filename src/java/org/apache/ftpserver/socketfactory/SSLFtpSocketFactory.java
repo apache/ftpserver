@@ -47,6 +47,6 @@ class SSLFtpSocketFactory extends FtpSocketFactory {
     public ServerSocket createServerSocket() throws Exception {
         InetAddress addr = getServerAddress();
         int port = getPort();
-        return getSSL().createServerSocket(addr, port);
+        return getSSL().createServerSocket(null, addr, port);
     }
 }

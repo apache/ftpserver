@@ -16,11 +16,11 @@
  */
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.Component;
-
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.apache.ftpserver.ftplet.Component;
 
 /**
  * SSL interface.
@@ -31,13 +31,24 @@ public
 interface ISsl extends Component {
 
     /**
-     * Create server socket.
+     * Create secure server socket.
      */
-    ServerSocket createServerSocket(InetAddress addr, int port) throws Exception;
+    ServerSocket createServerSocket(String protocol, 
+                                    InetAddress addr, 
+                                    int port) throws Exception;
     
     /**
-     * Create socket.
+     * Returns a socket layered over an existing socket.
      */
-    Socket createSocket(Socket soc, boolean clientMode) throws Exception;
+    Socket createSocket(String protocol,
+                        Socket soc, 
+                        boolean clientMode) throws Exception;
     
+    /**
+     * Create a secure socket.
+     */
+    Socket createSocket(String protocol,
+                        InetAddress addr, 
+                        int port,
+                        boolean clientMode) throws Exception;
 }
