@@ -36,6 +36,7 @@ public
 class FtpSocketFactory implements ISocketFactory {
     
     private Log m_log;
+    private LogFactory m_logFactory;
     
     private InetAddress m_serverAddress;
     private int m_port;
@@ -46,7 +47,8 @@ class FtpSocketFactory implements ISocketFactory {
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+    	m_logFactory = factory;
+        m_log = m_logFactory.getInstance(getClass());
     }
     
     /**
@@ -68,6 +70,7 @@ class FtpSocketFactory implements ISocketFactory {
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
                 m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
+                m_ssl.setLogFactory(m_logFactory);
                 m_ssl.configure(sslConf);
             }
         }
