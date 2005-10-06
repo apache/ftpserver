@@ -16,15 +16,15 @@
  */
 package org.apache.ftpserver.command;
 
-import org.apache.ftpserver.Command;
-import org.apache.ftpserver.FtpRequestImpl;
-import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
+
+import org.apache.ftpserver.Command;
+import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpWriter;
+import org.apache.ftpserver.RequestHandler;
 
 /**
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>

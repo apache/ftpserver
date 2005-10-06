@@ -16,6 +16,8 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -24,8 +26,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.DateUtils;
-
-import java.io.IOException;
 
 /**
  * Show all statistics information.

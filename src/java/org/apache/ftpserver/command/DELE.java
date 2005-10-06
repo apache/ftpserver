@@ -18,6 +18,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -26,7 +27,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
 
@@ -41,6 +41,7 @@ import org.apache.ftpserver.interfaces.IFtpStatistics;
 public 
 class DELE implements Command {
     
+
     /**
      * Execute command.
      */
@@ -90,8 +91,8 @@ class DELE implements Command {
             
             // log message
             String userName = request.getUser().getName();
-            Logger logger = fconfig.getLogger();
-            logger.info("File delete : " + userName + " - " + fileName);
+            Log log = fconfig.getLogFactory().getInstance(getClass());
+            log.info("File delete : " + userName + " - " + fileName);
             
             // notify statistics object
             IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();

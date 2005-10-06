@@ -19,6 +19,7 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -38,6 +39,7 @@ public
 class OPTS implements Command {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
+    
     
     /**
      * Execute command.
@@ -76,7 +78,8 @@ class OPTS implements Command {
             }
         }
         catch(Exception ex) {
-            handler.getConfig().getLogger().warn("OPTS.execute()", ex);
+            Log log = handler.getConfig().getLogFactory().getInstance(getClass());
+            log.warn("OPTS.execute()", ex);
             request.resetState();
             out.send(500, "OPTS", null);
         }

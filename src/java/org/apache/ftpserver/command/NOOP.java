@@ -16,13 +16,13 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.io.IOException;
 
 /**
  * <code>NOOP &lt;CRLF&gt;</code><br>

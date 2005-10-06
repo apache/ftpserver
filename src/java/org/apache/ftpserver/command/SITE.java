@@ -16,6 +16,10 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -24,9 +28,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.IFtpConfig;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 
 /**
@@ -38,6 +39,7 @@ public
 class SITE implements Command {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
+    
     
     /**
      * Execute command.
@@ -88,7 +90,8 @@ class SITE implements Command {
             }
         }
         catch(Exception ex) {
-            handler.getConfig().getLogger().warn("SITE.execute()", ex);
+            Log log = fconfig.getLogFactory().getInstance(getClass());
+            log.warn("SITE.execute()", ex);
             request.resetState();
             out.send(500, "SITE", null);
         }

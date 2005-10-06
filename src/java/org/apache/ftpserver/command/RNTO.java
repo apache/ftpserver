@@ -18,6 +18,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -41,6 +42,7 @@ import org.apache.ftpserver.interfaces.IFtpConfig;
 public 
 class RNTO implements Command {
     
+
     /**
      * Execute command.
      */
@@ -102,8 +104,9 @@ class RNTO implements Command {
             
             // now rename
             if( frFile.move(toFile) ) { 
-                fconfig.getLogger().info("File rename (" + request.getUser().getName() + ") " 
-                                    + frFile.getFullName() + " -> " + toFile.getFullName());
+                Log log = fconfig.getLogFactory().getInstance(getClass());
+                log.info("File rename (" + request.getUser().getName() + ") " 
+                                         + frFile.getFullName() + " -> " + toFile.getFullName());
                 out.send(250, "RNTO", toFileStr);
                 
                 // call Ftplet.onRenameEnd() method

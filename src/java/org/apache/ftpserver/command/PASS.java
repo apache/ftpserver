@@ -18,6 +18,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
@@ -28,7 +29,6 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.IConnectionManager;
@@ -57,6 +57,7 @@ class PASS implements Command {
     
         boolean bSuccess = false;
         IFtpConfig fconfig = handler.getConfig();
+        Log log = fconfig.getLogFactory().getInstance(getClass());
         IConnectionManager conManager = fconfig.getConnectionManager();
         IFtpStatistics stat = (IFtpStatistics)fconfig.getFtpStatistics();
         try {
@@ -115,9 +116,10 @@ class PASS implements Command {
             }
             catch(Exception ex) {
                 bSuccess = false;
-                fconfig.getLogger().warn("PASS.execute()", ex);
+                log.warn("PASS.execute()", ex);
             }
             if(!bSuccess) {
+                log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
                 return;
             }
@@ -136,12 +138,11 @@ class PASS implements Command {
             
             // everything is fine - send login ok message
             out.send(230, "PASS", userName);
-            Logger logger = fconfig.getLogger();
             if(bAnonymous) {
-                logger.info("Anonymous login success - " + password);
+                log.info("Anonymous login success - " + password);
             }
             else {
-                logger.info("Login success - " + userName);
+                log.info("Login success - " + userName);
             }
             
             // update different objects

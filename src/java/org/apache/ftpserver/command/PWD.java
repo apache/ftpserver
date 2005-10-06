@@ -16,14 +16,14 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.io.IOException;
 
 /**
  * <code>PWD  &lt;CRLF&gt;</code><br>

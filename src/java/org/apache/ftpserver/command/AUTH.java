@@ -16,14 +16,15 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IFtpConfig;
-
-import java.io.IOException;
 
 /**
  * This server supports explicit SSL support.
@@ -33,6 +34,7 @@ import java.io.IOException;
 public 
 class AUTH implements Command {
     
+
     /**
      * Execute command
      */
@@ -51,6 +53,7 @@ class AUTH implements Command {
         
         // check SSL configuration
         IFtpConfig fconfig = handler.getConfig();
+        Log log = fconfig.getLogFactory().getInstance(getClass());
         if(fconfig.getSocketFactory().getSSL() == null) {
             out.send(431, "AUTH", null);
         }
@@ -66,7 +69,7 @@ class AUTH implements Command {
                 throw ex;
             }
             catch(Exception ex) {
-                fconfig.getLogger().warn("AUTH.execute()", ex);
+                log.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
         }
@@ -79,7 +82,7 @@ class AUTH implements Command {
                 throw ex;
             }
             catch(Exception ex) {
-                fconfig.getLogger().warn("AUTH.execute()", ex);
+                log.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
         }

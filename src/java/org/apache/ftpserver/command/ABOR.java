@@ -16,12 +16,12 @@
  */
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
 import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-
-import java.io.IOException;
 
 /**
  * <code>ABOR &lt;CRLF&gt;</code><br>
