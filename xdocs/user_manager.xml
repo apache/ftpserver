@@ -21,8 +21,8 @@
         <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
     </properties>
     <head>
-        <link rel="shortcut icon" href="favicon.ico" />
-        <link rel="icon" href="favicon.ico" />
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="icon" href="favicon.ico"/>
     </head>
     <body>
         <section name="Properties File Based User Manager">
@@ -204,6 +204,18 @@
                             ]]></source>
                         </td>
                     </tr>
+                    <tr>
+                        <td>config.user-manager.sql-user-admin</td>
+                        <td>SQL SELECT statement used to find whether an user is admin or not.
+                            All the dynamic values will be replaced during runtime.
+                            Sample query:
+                            <source><![CDATA[
+    SELECT uid
+    FROM FTP_USER
+    WHERE uid='{uid}' AND WHERE uid='admin'
+                            ]]></source>
+                        </td>
+                    </tr>
                 </table>
             </subsection>
             <div class="warningmessage">If the sql-user-authenticate SELECT query returns no row, it means
@@ -213,6 +225,8 @@
                   the user will be always authenticated. If there is no user for the specified
                   uid and userpassword, the query will return a single row with value 0. As
                   there is one row, the user will be always authenticated.
+                  <br/>
+                  This is also true for sql-user-authenticate SQL query.
             </div>
         </section>
 
