@@ -16,14 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.interfaces.FileObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IFtpStatistics;
-import org.apache.ftpserver.interfaces.StatisticsObserver;
-import org.apache.ftpserver.util.DateUtils;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -38,6 +30,14 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+
+import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.interfaces.FileObserver;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.IFtpStatistics;
+import org.apache.ftpserver.interfaces.StatisticsObserver;
+import org.apache.ftpserver.util.DateUtils;
 
 /**
  * This panel displays all the global statistics information.

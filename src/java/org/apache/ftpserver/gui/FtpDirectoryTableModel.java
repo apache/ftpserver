@@ -16,12 +16,12 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.util.DateUtils;
-
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
+
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.util.DateUtils;
 
 /**
  * This table model tracks user file related activities.

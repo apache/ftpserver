@@ -16,10 +16,10 @@
  */
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.Component;
-
 import java.net.InetAddress;
 import java.net.ServerSocket;
+
+import org.apache.ftpserver.ftplet.Component;
 
 
 /**

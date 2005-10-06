@@ -16,9 +16,9 @@
  */
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.Component;
-
 import java.net.InetAddress;
+
+import org.apache.ftpserver.ftplet.Component;
 
 /**
  * Data connection configuration interface.

@@ -16,9 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -29,6 +26,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IFtpConfig;
 
 /**
  * This panel shows all the connections.

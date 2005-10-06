@@ -16,10 +16,10 @@
  */
 package org.apache.ftpserver.interfaces;
 
+import java.util.Properties;
+
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.util.Properties;
 
 /**
  * This is message resource interface.

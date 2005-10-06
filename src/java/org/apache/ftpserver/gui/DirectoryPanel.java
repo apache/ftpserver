@@ -16,11 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -32,6 +27,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+
+import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IFtpConfig;
 
 /**
  * This panel monitor all user directory create and remove activities.

@@ -16,8 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -33,6 +31,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
+import org.apache.ftpserver.interfaces.IFtpConfig;
 
 /**
  * Tree plugin panel container.

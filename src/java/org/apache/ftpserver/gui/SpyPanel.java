@@ -16,14 +16,10 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,6 +35,11 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IConnectionManager;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+
 
 /**
  * This panel is used to monitor user activities.
@@ -48,7 +49,7 @@ import javax.swing.text.StyleConstants;
 public 
 class SpyPanel extends JPanel implements ConnectionObserver {
     
-    private static final long serialVersionUID = 4258123980008335623L;
+    private static final long serialVersionUID = -8673659781727175707L;
     
     private JTextPane m_logTxt   = null;
     private JTabbedPane m_parent = null;
@@ -88,11 +89,12 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private void initComponents() {
         setLayout(new BorderLayout());
         m_logTxt = new JTextPane();
+        m_logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
         m_logTxt.setEditable(false);
-        JScrollPane txtPane = new JScrollPane(m_logTxt, 
-                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        add(txtPane, BorderLayout.CENTER);
+        
+        JPanel noWrapPanel = new JPanel(new BorderLayout());
+        noWrapPanel.add(m_logTxt);
+        add(new JScrollPane(noWrapPanel), BorderLayout.CENTER);
         m_connection.setObserver(this);
         
         JPanel bottomPane = new JPanel(new FlowLayout(FlowLayout.CENTER));

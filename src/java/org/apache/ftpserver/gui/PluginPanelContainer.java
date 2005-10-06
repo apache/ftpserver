@@ -16,9 +16,9 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import javax.swing.JComponent;
+
+import org.apache.ftpserver.interfaces.IFtpConfig;
 
 /**
  * This is the plugin panel container.

@@ -16,9 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IIpRestrictor;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -27,6 +24,9 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.IIpRestrictor;
 
 /**
  * IP restrictor panel.

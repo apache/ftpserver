@@ -16,13 +16,6 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.util.DateUtils;
-
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +23,13 @@ import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
+
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
+import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.util.DateUtils;
 
 
 /**

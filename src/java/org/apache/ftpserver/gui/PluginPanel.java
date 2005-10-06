@@ -16,9 +16,9 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
-
 import javax.swing.JPanel;
+
+import org.apache.ftpserver.interfaces.IFtpConfig;
 
 /**
  * This is the base class of all the ftp panels.
