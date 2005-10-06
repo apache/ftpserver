@@ -16,6 +16,10 @@
  */
 package org.apache.ftpserver.ftplet;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+
 /**
  * Empty configuration - always returns the default values.
  * 
@@ -24,6 +28,14 @@ package org.apache.ftpserver.ftplet;
 public 
 class EmptyConfiguration implements Configuration {
 
+    public final static EmptyConfiguration INSTANCE = new EmptyConfiguration();
+    
+    /**
+     * Private constructor - use INSTANCE static variable.
+     */
+    private EmptyConfiguration() {
+    }
+    
     /**
      * Throw exception.
      */
@@ -106,5 +118,13 @@ class EmptyConfiguration implements Configuration {
      */
     public Configuration getConfiguration(String param, Configuration defaultVal) {
         return defaultVal;
+    }
+    
+    /**
+     * Get the property keys.
+     */
+    public Enumeration getKeys() {
+        ArrayList empty = new ArrayList(2);
+        return Collections.enumeration(empty);
     }
 }

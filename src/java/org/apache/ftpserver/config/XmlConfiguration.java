@@ -16,11 +16,13 @@
  */
 package org.apache.ftpserver.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * XML based configuration element.
@@ -239,5 +241,21 @@ class XmlConfiguration implements Configuration {
             config = defVal;
         }
         return config;
+    }
+    
+    /**
+     * Get the configuration keys.
+     */
+    public Enumeration getKeys() {
+        
+        // add configuration keys
+        ArrayList keys = new ArrayList();
+        if(m_children != null) {
+            for(int i=0; i<m_children.size(); ++i) {
+                XmlConfiguration child = (XmlConfiguration)m_children.get(i);
+                keys.add(child.m_name);
+            }
+        }
+        return Collections.enumeration(keys);
     }
 }

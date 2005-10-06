@@ -36,7 +36,6 @@ class PropertiesConfiguration implements Configuration {
     
     private Properties m_prop;
     
-    
     /**
      * Constructor - set the properties input stream.
      */
@@ -235,5 +234,12 @@ class PropertiesConfiguration implements Configuration {
         catch(Exception ex) {
         }
         return conf;
+    }
+    
+    /**
+     * Get the configuration keys.
+     */
+    public Enumeration getKeys() {
+        return m_prop.propertyNames();
     }
 }

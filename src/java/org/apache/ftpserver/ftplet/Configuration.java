@@ -16,6 +16,8 @@
  */
 package org.apache.ftpserver.ftplet;
 
+import java.util.Enumeration;
+
 /**
  * Configuration interface. 
  * 
@@ -83,4 +85,9 @@ interface Configuration {
      * Get sub configuration - if not found returns the default value.
      */
     Configuration getConfiguration(String param, Configuration defaultVal);
+    
+    /**
+     * Get the configuration keys.
+     */
+    Enumeration getKeys();
 }
