@@ -16,8 +16,6 @@
  */
 package org.apache.ftpserver.util;
 
-import org.apache.ftpserver.ftplet.FtpException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
+
+import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This class encapsulates <code>java.util.Properties</code> to

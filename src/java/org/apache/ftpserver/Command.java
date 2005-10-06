@@ -16,9 +16,9 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FtpException;
-
 import java.io.IOException;
+
+import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This interface encapsulates all the FTP commands. 

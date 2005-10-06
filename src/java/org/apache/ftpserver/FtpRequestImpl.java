@@ -16,13 +16,6 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.usermanager.BaseUser;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,6 +25,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
+
+import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * FTP request object.
