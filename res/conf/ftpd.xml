@@ -2,9 +2,9 @@
 
 <!-- XML file based configuration -->
 <config>
-    
-    <!-- Standard socket factory. If you want to support explicit 
-         secure connection, please specify the ssl block 
+
+    <!-- Standard socket factory. If you want to support explicit
+         secure connection, please specify the ssl block
     <socket-factory>
         <class>org.apache.ftpserver.socketfactory.FtpSocketFactory</class>
         <address>localhost</address>
@@ -20,9 +20,9 @@
         </ssl>
     </socket-factory>
     -->
-    
-    
-    <!-- Secure server socket factory. In this case you have to 
+
+
+    <!-- Secure server socket factory. In this case you have to
          specify the ssl block
     <socket-factory>
         <class>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory</class>
@@ -39,9 +39,9 @@
         </ssl>
     </socket-factory>
     -->
-    
-    
-    <!-- Data connection configuration. If you want to support secure 
+
+
+    <!-- Data connection configuration. If you want to support secure
          data connection, please specify the ssl block.
     <data-connection>
         <pasv-address>localhost</pasv-address>
@@ -59,13 +59,13 @@
         </ssl>
     </data-connection>
     -->
-    
-    
+
+
     <!-- Standard users admin and anonymous will be created by default.
     <create-default-user>true</create-default-user>
     -->
-    
-    
+
+
     <!-- Ftp message configuration block
     <message>
         <class>org.apache.ftpserver.message.MessageResourceImpl</class>
@@ -73,8 +73,8 @@
         <languages>en,zh-tw</languages>
     </message>
     -->
-    
-    
+
+
     <!-- Connection service configuration block
     <connection-service>
         <max-connection>20</max-connection>
@@ -85,37 +85,16 @@
         <connection-poll-inverval>60</connection-poll-inverval>
     </connection-service>
     -->
-    
-    
-    <!-- Default file based logger configuration block
-    <logger>
-        <class>org.apache.ftpserver.logger.FileLogger</class>
-        <level>1</level>
-        <date-format>yyyy-MM-dd'T'HH:mm:ss</date-format>
-        <dir>./res/log</dir>
-        <max-file-size>1024</max-file-size>
-        <flush>true</flush>
-    </logger>
-    -->
-    
-    
-    <!-- Console logger configuration block
-    <logger>
-        <class>org.apache.ftpserver.logger.ConsoleLogger</class>
-        <level>1</level>
-        <date-format>yyyy-MM-dd'T'HH:mm:ss</date-format>
-    </logger>
-    -->
-    
-    
+
+
     <!-- IP restrictor configuration block
     <ip-restrictor>
         <class>org.apache.ftpserver.iprestrictor.FileIpRestrictor</class>
         <file>./res/ip.gen</file>
     </ip-restrictor>
     -->
-    
-    
+
+
     <!-- Default properties file based user manager configuration block
     <user-manager>
         <class>org.apache.ftpserver.usermanager.PropertiesUserManager</class>
@@ -124,8 +103,8 @@
         <prop-password-encrypt>true</prop-password-encrypt>
     </user-manager>
     -->
-    
-    
+
+
     <!-- Database based user manager configuration
     <user-manager>
         <class>org.apache.ftpserver.usermanager.DbUserManager</class>
@@ -140,10 +119,11 @@
         <sql-user-select>SELECT uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate FROM FTP_USER WHERE uid = '{uid}'</sql-user-select>
         <sql-user-select-all>SELECT uid FROM FTP_USER ORDER BY uid</sql-user-select-all>
         <sql-user-authenticate>SELECT uid from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</sql-user-authenticate>
+        <sql-user-admin>SELECT uid FROM FTP_USER WHERE uid='{uid}' AND WHERE uid='admin'</sql-user-admin>
     </user-manager>
     -->
-    
-    
+
+
     <!-- LDAP based user manager
     <user-manager>
         <class>org.apache.ftpserver.usermanager.LdapUserManager</class>
@@ -155,21 +135,21 @@
         <ldap-user-base-dn>dc=apache,dc=org</ldap-user-base-dn>
     </user-manager>
     -->
-    
-    
+
+
     <!--  file system manager configuration block
     <file-system-manager>
         <class>org.apache.ftpserver.filesystem.NativeFileSystemManager</class>
         <create-home>false</create-home>
     </file-system-manager>
     -->
-    
-    
+
+
     <!-- All ftplets
     <ftplets>f1,f2</ftplets>
     -->
-    
-    
+
+
     <!-- Ftplet configuration
     <ftplet>
         <f1>
@@ -182,5 +162,5 @@
         </f2>
     </ftplet>
     -->
-    
+
 </config>
