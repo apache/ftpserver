@@ -48,9 +48,19 @@ limitations under the License.
 
         <!-- Copy all the dependent jar files -->
         <j:forEach var="lib" items="${pom.artifacts}">
-            <ant:copy file="${lib.path}" todir="${basedir}/lib"/>
+            <ant:copy file="${lib.path}" todir="${basedir}/common/lib"/>
         </j:forEach>
     </goal>
+
+
+    <!-- ========================================== -->
+    <!-- Remove all the .gen files in res directory -->
+    <!-- ========================================== -->
+    <postGoal name="clean:clean">
+        <ant:delete>
+            <ant:fileset dir="${basedir}/res" includes="**/*.gen"/>
+        </ant:delete>
+    </postGoal>
 
 
     <!-- ======================================= -->
@@ -58,10 +68,10 @@ limitations under the License.
     <!-- ======================================= -->
     <postGoal name="dist:prepare-src-filesystem">
 
-        <!-- Create lib directory -->
-        <ant:mkdir dir="${maven.dist.src.assembly.dir}/lib"/>
-        <ant:copy todir="${maven.dist.src.assembly.dir}/lib">
-            <ant:fileset dir="${basedir}/lib" includes="*.txt"/>
+        <!-- Create common directory -->
+        <ant:mkdir dir="${maven.dist.src.assembly.dir}/common"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}/common">
+            <ant:fileset dir="${basedir}/common" excludes="**/*.jar"/>
         </ant:copy>
 
         <!-- Copy all the documents -->
@@ -71,11 +81,12 @@ limitations under the License.
         </ant:copy>
 
         <!-- Copy all script files -->
-        <ant:copy todir="${maven.dist.src.assembly.dir}">
-            <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
+        <ant:mkdir dir="${maven.dist.src.assembly.dir}/bin"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}/bin">
+            <ant:fileset dir="${basedir}/bin"/>
         </ant:copy>
-        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="lf" eof="remove" includes="**/*.sh"/>
-        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="crlf" includes="**/*.bat"/>
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}/bin" eol="lf" eof="remove" includes="*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}/bin" eol="crlf" includes="*.bat"/>
 
         <!-- Copy other resources -->
         <ant:mkdir dir="${maven.dist.src.assembly.dir}/res"/>
@@ -90,28 +101,29 @@ limitations under the License.
     <!-- ================================================= -->
     <postGoal name="dist:prepare-bin-filesystem">
 
-        <!-- Create lib directory -->
-        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/lib"/>
-        <ant:copy todir="${maven.dist.bin.assembly.dir}/lib">
-            <ant:fileset dir="${basedir}/lib" includes="*.txt"/>
+        <!-- Create common directory -->
+        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/common"/>
+        <ant:copy todir="${maven.dist.bin.assembly.dir}/common">
+            <ant:fileset dir="${basedir}/common" excludes="**/*.jar"/>
         </ant:copy>
 
         <!-- Copy the main ftpserver jar file -->
-        <ant:move todir="${maven.dist.bin.assembly.dir}/lib">
+        <ant:move todir="${maven.dist.bin.assembly.dir}/common/lib">
             <ant:fileset dir="${maven.dist.bin.assembly.dir}" includes="*.jar"/>
         </ant:move>
 
         <!-- Copy dependent jar files -->
         <j:forEach var="lib" items="${pom.artifacts}">
-            <ant:copy file="${lib.path}" todir="${maven.dist.bin.assembly.dir}/lib"/>
+            <ant:copy file="${lib.path}" todir="${maven.dist.bin.assembly.dir}/common/lib"/>
         </j:forEach>
 
         <!-- Copy all the scripts -->
-        <ant:copy todir="${maven.dist.bin.assembly.dir}">
-            <ant:fileset dir="${maven.src.dir}/bin" includes="*.bat,*.sh"/>
+        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/bin"/>
+        <ant:copy todir="${maven.dist.bin.assembly.dir}/bin">
+            <ant:fileset dir="${basedir}/bin"/>
         </ant:copy>
-        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="lf" eof="remove" includes="**/*.sh"/>
-        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="crlf" includes="**/*.bat"/>
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}/bin" eol="lf" eof="remove" includes="*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}/bin" eol="crlf" includes="*.bat"/>
 
         <!-- Copy other resource files -->
         <ant:mkdir dir="${maven.dist.bin.assembly.dir}/res"/>
