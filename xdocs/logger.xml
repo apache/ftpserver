@@ -26,108 +26,47 @@
     </head>
     <body>
         <section name="FTP Server Logging">
-            <p>This document explains how to customize the Apache FTP Server
-               logging mechanism.
-            </p>
-            <p>FTP server logger class implements <em>org.apache.ftpserver.ftplet.Logger</em>
-               interface.
+            <p>FTP Server uses <a href="http://jakarta.apache.org/commons/logging">
+               Commons Logging</a> throughout its internal code allowing the developer
+               to choose a logging configuration that suits their needs, e.g
+               java.util.logging or <a href="http://logging.apache.org/log4j">Log4J</a>.
+               Commons Logging provides FTP Server the ability to log hierarchially
+               across various log levels without needing to rely on a particular
+               logging implementation.
             </p>
         </section>
 
-        <section name="File Logger">
-            <p>This is a file based logger implementation. This is the default logger
-               used in the FTP Server if no logger configuration is found.
+        <section name="log4j">
+            <p>If you need to setup detailed logging from within FTP Server's code,
+               then you can use a simple log4j configuration. Note that this logging
+               can be very verbose depending on the log level you chose to use.
             </p>
-            <section name="Configuration Parameters">
-                <table>
-                    <tr>
-                        <th>Configuration Parameter</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>config.logger.class</td>
-                        <td>org.apache.ftpserver.logger.FileLogger</td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.level</td>
-                        <td>Log level
-                            <ul>
-                                <li>0 : Debug</li>
-                                <li>1 : Information</li>
-                                <li>2 : Warning</li>
-                                <li>3 : Error</li>
-                            </ul>
-                            The default log level is 1 (Information).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.date-format</td>
-                        <td>Log entry timestamp format. The default format is yyyy-MM-dd'T'HH:mm:ss</td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.dir</td>
-                        <td>The directory where log files will be stored.
-                            The default value is ./res/log
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.max-file-size</td>
-                        <td>Log file maximum size (0 means no limit) in kbytes. The default value
-                            is 0.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.flush</td>
-                        <td>Flag to indicate to flush log every time after writing.
-                            The default value is true.
-                        </td>
-                    </tr>
-                </table>
-            </section>
+            <p>The log4j configuration file location is
+               &lt;INSTALL_DIR&gt;/common/classes/log4j.properties. You can modify
+               this file to configure log4j.
+            </p>
+            <source>
+   log4j.rootLogger=debug, R
+   log4j.appender.R=org.apache.log4j.RollingFileAppender
+   log4j.appender.R.File=./res/log/log.gen
+   log4j.appender.R.MaxFileSize=10MB
+   log4j.appender.R.MaxBackupIndex=10
+   log4j.appender.R.layout=org.apache.log4j.PatternLayout
+   log4j.appender.R.layout.ConversionPattern=[%5p] %d %m%n
+   log4j.logger.org.apache.catalina=DEBUG, R
+            </source>
+            <p>This log4j configuration sets up a file called log.gen in your
+               FTP Server ./res/log folder with a maximum file size of 10MB
+               and up to 10 backups. DEBUG log level is specified.
+            </p>
+            <p>you should consult the
+               <a href="http://logging.apache.org/log4j/docs/documentation.html">log4j
+               documentation</a> for more options.
+            </p>
         </section>
 
-        <section name="Console Logger">
-            <p>This is another logger implementation. It prints all the log messages
-               at console.
-            </p>
-            <section>
-                <title>Configuration Parameters</title>
-                <table>
-                    <tr>
-                        <th>Configuration Parameter</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>config.logger.class</td>
-                        <td>org.apache.ftpserver.logger.CosoleLogger</td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.level</td>
-                        <td>Log level
-                            <ul>
-                                <li>0 : Debug</li>
-                                <li>1 : Information</li>
-                                <li>2 : Warning</li>
-                                <li>3 : Error</li>
-                            </ul>
-                            The default log level is 1 (Information).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>config.logger.date-format</td>
-                        <td>Log entry timestamp format. The default format is yyyy-MM-dd'T'HH:mm:ss</td>
-                    </tr>
-                </table>
-            </section>
-        </section>
-
-        <section name="Custom Logger">
-            <p>You can write your own logger implementation by implementating
-               <em>org.apache.ftplet.Logger</em> interface. You also need to specify
-               the fully qualified name of your logger class in
-               <em>config.logger.class</em> configuration parameter. All the
-               configuration values under <em>config.logger</em> will be available
-               to your logger implementation.
+        <section name="java.util.logging">
+            <p>In order to configure JDK logging you should have JDK 1.4+.
             </p>
         </section>
 

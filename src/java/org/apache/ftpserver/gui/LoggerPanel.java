@@ -16,16 +16,11 @@
  */
 package org.apache.ftpserver.gui;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.logger.CompositeLogger;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -42,41 +37,43 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import org.apache.commons.logging.Log;
+import org.apache.ftpserver.FtpLogFactory;
+import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.util.IoUtils;
+
 /**
- * This logger panel writes log information.
+ * This logger panel writes the log messages.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class LoggerPanel extends PluginPanel implements Logger {
+class LoggerPanel extends PluginPanel implements Log {
     
-    private static final long serialVersionUID = -5197421525973377762L;
+    private static final long serialVersionUID = 5988947217051710193L;
     private static final int MAX_CHARS = 8192;
     
-    public static final int LEVEL_DEBUG = 0;
-    public static final int LEVEL_INFO  = 1;
-    public static final int LEVEL_WARN  = 2;
-    public static final int LEVEL_ERROR = 3;
-    public static final int LEVEL_NONE  = 4;
-
     private final static Color COLOR_DEBUG = new Color(63, 127, 95);
     private final static Color COLOR_INFO  = new Color(0, 0, 0);
     private final static Color COLOR_WARN  = new Color(245, 150, 45);
     private final static Color COLOR_ERROR = new Color(255, 0, 0);
+
+    private final static String[] LEVELS = new String[] {
+        "TRACE",
+        "DEBUG",
+        "INFO ",
+        "WARN ",
+        "ERROR",
+        "FATAL",
+        "NONE "
+    };
     
-    private final static String[] COMBO_LEVEL = {
-            "DEBUG", 
-            "INFO", 
-            "WARNING", 
-            "ERROR", 
-            "NONE"
-    };
-    private final static String[] TXT_LEVEL = {
-            "DEB",
-            "INF",
-            "WAR",
-            "ERR"
-    };
+    private final static int LEVEL_TRACE = 0;
+    private final static int LEVEL_DEBUG = 1;
+    private final static int LEVEL_INFO  = 2;
+    private final static int LEVEL_WARN  = 3;
+    private final static int LEVEL_ERROR = 4;
+    private final static int LEVEL_FATAL = 5;
     
     private int m_logLevel = LEVEL_INFO;
 
@@ -93,7 +90,7 @@ class LoggerPanel extends PluginPanel implements Logger {
 
     
     /**
-     * Default constructor
+     * Constructor - set the container.
      */
     public LoggerPanel(PluginPanelContainer container) {
         super(container);
@@ -114,6 +111,37 @@ class LoggerPanel extends PluginPanel implements Logger {
         initComponents();
     }
     
+    /**
+     * Return appropriate attribute.
+     */
+    private SimpleAttributeSet getAttributeSet(int level) {
+        
+        SimpleAttributeSet attr = null;
+        switch(level) {
+            case LEVEL_TRACE:
+            case LEVEL_DEBUG:
+                attr = m_debugAttr;
+                break;
+            
+            case LEVEL_INFO:
+                attr = m_infoAttr;
+                break;
+                
+            case LEVEL_WARN:
+                attr = m_warnAttr;
+                break;
+                
+            case LEVEL_ERROR:
+            case LEVEL_FATAL:
+                attr = m_errorAttr;
+                break;
+            
+            default:
+                attr = m_infoAttr;
+                break;
+        }
+        return attr;
+    }
     
     /**
      * Initialize UI components.
@@ -130,29 +158,28 @@ class LoggerPanel extends PluginPanel implements Logger {
         comboLab.setForeground(Color.black);
         topPanel.add(comboLab);
            
-        m_logCombo = new JComboBox(COMBO_LEVEL);
-        m_logCombo.setSelectedIndex(m_logLevel);
+        m_logCombo = new JComboBox(LEVELS);
+        m_logCombo.setSelectedIndex(LEVEL_INFO);
         Dimension dim = new Dimension(90, 22);
         m_logCombo.setPreferredSize(dim);
         m_logCombo.setMaximumSize(dim);
         m_logCombo.setToolTipText("Set Log Level");
         m_logCombo.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent evt) {
-                int selIdx = m_logCombo.getSelectedIndex();
-                m_logLevel = selIdx;
+                m_logLevel = m_logCombo.getSelectedIndex();
             }
         });
         topPanel.add(m_logCombo);
         
-            
         // add text pane
         m_logTxt = new JTextPane();
+        m_logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
         m_logTxt.setEditable(false);
         m_doc = m_logTxt.getDocument();
-        JScrollPane scrollPane = new JScrollPane(m_logTxt, 
-                                                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane, BorderLayout.CENTER);
+        
+        JPanel noWrapPanel = new JPanel(new BorderLayout());
+        noWrapPanel.add(m_logTxt);
+        add(new JScrollPane(noWrapPanel), BorderLayout.CENTER);
         
         // add clear button panel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -165,7 +192,7 @@ class LoggerPanel extends PluginPanel implements Logger {
                     m_doc.remove(0, m_doc.getLength());
                 }
                 catch(Exception ex) {
-                    // ex.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
          });
@@ -177,19 +204,27 @@ class LoggerPanel extends PluginPanel implements Logger {
      */
     public void refresh(IFtpConfig ftpConfig) {
         
-        // remove it from the previous one
-        if(m_ftpConfig != null) {
-            CompositeLogger clogger = (CompositeLogger)m_ftpConfig.getLogger();
-            if(clogger != null) {
-                clogger.removeLogger(this);
-            }
+        // remove old log messages
+        try {
+            m_doc.remove(0, m_doc.getLength());
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
         }
         
-        // add this logger now
-        m_ftpConfig = ftpConfig;
+        // remove from the previous log factory
         if(m_ftpConfig != null) {
-            CompositeLogger clogger = (CompositeLogger)m_ftpConfig.getLogger();
-            clogger.addLogger(this);
+            FtpLogFactory factory = (FtpLogFactory)m_ftpConfig.getLogFactory();
+            if(factory != null) {
+                factory.removeLog(this);
+            }
+        }
+
+        // add this logger
+        m_ftpConfig = ftpConfig;
+        if(ftpConfig != null) {
+            FtpLogFactory factory = (FtpLogFactory)ftpConfig.getLogFactory();
+            factory.addLog(this);
         }
     }
     
@@ -200,41 +235,11 @@ class LoggerPanel extends PluginPanel implements Logger {
         return (m_ftpConfig != null);
     }
 
-    
     /**
      * Get the string representation.
      */
     public String toString() {
         return "Log";
-    }
-    
-    
-    /**
-     * Get current log level
-     */
-    public int getLogLevel() {
-        return m_logLevel;
-    }
-    
-    
-    /**
-     * Set log level
-     */
-    public void setLogLevel(int level) {
-        m_logLevel = level;
-        m_logCombo.setSelectedIndex(level);
-    }
-    
-    /**
-     * Set logger - does nothing
-     */
-    public void setLogger(Logger logger) {
-    }
-    
-    /**
-     * Configure - does nothing.
-     */
-    public void configure(Configuration conf) {
     }
     
     /**
@@ -243,171 +248,205 @@ class LoggerPanel extends PluginPanel implements Logger {
     public void dispose() {
     }
     
+    ///////////////////////////////////////////////////////////
+    ////////////////// Logger implementation //////////////////
     /**
-     * Write string
+     * Check log enable. 
      */
-    private void writeString(int logLevel, String msg) {
-        try {
-            int docLen = m_doc.getLength();
-            if(docLen > MAX_CHARS) {
-                m_doc.remove(0, docLen);
-                docLen = 0;
+    private boolean isEnabled(int level) {
+        return m_logLevel <= level;
+    }
+    
+    /**
+     * Is trace enebled?
+     */
+    public boolean isTraceEnabled() {
+        return isEnabled(LEVEL_TRACE);
+    }
+    
+    /**
+     * Is debug enabled?
+     */
+    public boolean isDebugEnabled() {
+        return isEnabled(LEVEL_DEBUG);
+    }
+    
+    /**
+     * Is info enabled?
+     */
+    public boolean isInfoEnabled() {
+        return isEnabled(LEVEL_INFO);
+    }
+    
+    /**
+     * Is warn enabled?
+     */
+    public boolean isWarnEnabled() {
+        return isEnabled(LEVEL_WARN);
+    }
+    
+    /**
+     * Is error enabled?
+     */
+    public boolean isErrorEnabled() {
+        return isEnabled(LEVEL_ERROR);
+    }
+    
+    /**
+     * Is fatal enabled?
+     */
+    public boolean isFatalEnabled() {
+        return isEnabled(LEVEL_FATAL);
+    }
+    
+    /**
+     * Write message
+     */
+    private void write(final int level, final String message) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {    
+                    // clear if already the char count exceeds
+                    int docLen = m_doc.getLength();
+                    if(docLen > MAX_CHARS) {
+                        m_doc.remove(0, docLen);
+                        docLen = 0;
+                    }
+                    
+                    // insert string
+                    SimpleAttributeSet attr = getAttributeSet(level);
+                    m_doc.insertString(docLen, message, attr);
+                }
+                catch(Exception ex) {
+                    ex.printStackTrace();
+                } 
             }
-            
-            switch(logLevel) {
-                case LEVEL_DEBUG:
-                    m_doc.insertString(docLen, msg, m_debugAttr);
-                    break;
-                    
-                case LEVEL_INFO:
-                    m_doc.insertString(docLen, msg, m_infoAttr);
-                    break;   
-                    
-                case LEVEL_WARN:
-                    m_doc.insertString(docLen, msg, m_warnAttr);
-                    break;
-                    
-                case LEVEL_ERROR:
-                    m_doc.insertString(docLen, msg, m_errorAttr);
-                    break;
-            }
+        });
+    }
+    
+    /**
+     * Write trace message.
+     */
+    public void trace(Object msg) {
+        if(isEnabled(LEVEL_TRACE)) {
+            msg = '[' + LEVELS[LEVEL_TRACE] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_TRACE, String.valueOf(msg));
         }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }        
     }
     
     /**
-     * Log message
+     * Write trace message.
      */
-    private void log(int logLevel, String msg) {
-
-        // check message
-        if( (msg == null) || msg.equals("") ) {
-            return;
+    public void trace(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_TRACE)) {
+            msg = '[' + LEVELS[LEVEL_TRACE] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_TRACE, String.valueOf(msg));
+            write(LEVEL_TRACE, IoUtils.getStackTrace(t));
         }
-        
-        // write message
-        writeString(logLevel, '[' + TXT_LEVEL[logLevel] + "] " + msg + '\n');
     }
     
     /**
-     * Log throwable
+     * Write debug message.
      */
-    private void log(int logLevel, String msg, Throwable th) {
-        log(logLevel, msg);
-        writeString(logLevel, IoUtils.getStackTrace(th));
+    public void debug(Object msg) {
+        if(isEnabled(LEVEL_DEBUG)) {
+            msg = '[' + LEVELS[LEVEL_DEBUG] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_DEBUG, String.valueOf(msg));
+        }
     }
     
     /**
-     * Debug message
+     * Write debug message.
      */
-    public void debug(final String msg) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_DEBUG) {
-                    log(LEVEL_DEBUG, msg);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
-    } 
-    
-    /**
-     * Debug message - throwable
-     */
-    public void debug(final String msg, final Throwable th) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_DEBUG) {
-                    log(LEVEL_DEBUG, msg, th);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
-    }
-        
-    /**
-     * Info message
-     */
-    public void info(final String msg) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_INFO) {
-                    log(LEVEL_INFO, msg);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+    public void debug(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_DEBUG)) {
+            msg = '[' + LEVELS[LEVEL_DEBUG] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_DEBUG, String.valueOf(msg));
+            write(LEVEL_DEBUG, IoUtils.getStackTrace(t));
+        }
     }
     
     /**
-     * Info message - throwable
+     * Write info message.
      */
-    public void info(final String msg, final Throwable th) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_INFO) {
-                    log(LEVEL_INFO, msg, th);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
-    }
-        
-    /**
-     * Warning message
-     */
-    public void warn(final String msg) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_WARN) {
-                    log(LEVEL_WARN, msg);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+    public void info(Object msg) {
+        if(isEnabled(LEVEL_INFO)) {
+            msg = '[' + LEVELS[LEVEL_INFO] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_INFO, String.valueOf(msg));
+        }
     }
     
     /**
-     * Warning message - throwable
+     * Write info message.
      */
-    public void warn(final String msg, final Throwable th) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_WARN) {
-                    log(LEVEL_WARN, msg, th);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+    public void info(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_INFO)) {
+            msg = '[' + LEVELS[LEVEL_INFO] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_INFO, String.valueOf(msg));
+            write(LEVEL_INFO, IoUtils.getStackTrace(t));
+        }
     }
     
     /**
-     * Write error message
+     * Write warning message.
      */
-    public void error(final String msg) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_ERROR) {
-                    log(LEVEL_ERROR, msg);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+    public void warn(Object msg) {
+        if(isEnabled(LEVEL_WARN)) {
+            msg = '[' + LEVELS[LEVEL_WARN] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_WARN, String.valueOf(msg));
+        }
     }
     
     /**
-     * Error message - throwable
+     * Write warning message.
      */
-    public void error(final String msg, final Throwable th) {
-        Runnable runnable = new Runnable() {
-            public void run() { 
-                if(m_logLevel <= LEVEL_ERROR) {
-                    log(LEVEL_ERROR, msg, th);
-                }        
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
+    public void warn(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_WARN)) {
+            msg = '[' + LEVELS[LEVEL_WARN] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_WARN, String.valueOf(msg));
+            write(LEVEL_WARN, IoUtils.getStackTrace(t));
+        }
+    }
+    
+    /**
+     * Write error message.
+     */
+    public void error(Object msg) {
+        if(isEnabled(LEVEL_ERROR)) {
+            msg = '[' + LEVELS[LEVEL_ERROR] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_ERROR, String.valueOf(msg));
+        }
+    }
+    
+    /**
+     * Write error message.
+     */
+    public void error(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_ERROR)) {
+            msg = '[' + LEVELS[LEVEL_ERROR] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_ERROR, String.valueOf(msg));
+            write(LEVEL_ERROR, IoUtils.getStackTrace(t));
+        }
+    }
+    
+    /**
+     * Write fatal message.
+     */
+    public void fatal(Object msg) {
+        if(isEnabled(LEVEL_FATAL)) {
+            msg = '[' + LEVELS[LEVEL_FATAL] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_FATAL, String.valueOf(msg));
+        }
+    }
+    
+    /**
+     * Write fatal message.
+     */
+    public void fatal(Object msg, Throwable t) {
+        if(isEnabled(LEVEL_FATAL)) {
+            msg = '[' + LEVELS[LEVEL_FATAL] + ']' + String.valueOf(msg) + '\n';
+            write(LEVEL_FATAL, String.valueOf(msg));
+            write(LEVEL_FATAL, IoUtils.getStackTrace(t));
+        }
     }
 }

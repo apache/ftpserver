@@ -16,6 +16,11 @@
  */
 package org.apache.ftpserver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FtpConfig;
@@ -24,11 +29,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Logger;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
@@ -38,10 +38,8 @@ import java.util.StringTokenizer;
 public 
 class FtpletContainer implements Ftplet {
     
-    private final static Configuration EMPTY_CONF = new EmptyConfiguration();
-    
+    private Log m_log;
     private ArrayList m_ftplets = new ArrayList();
-    private Logger m_logger;
     
     private class FtpletEntry {
         public FtpletEntry(String name, Ftplet ftplet) {
@@ -65,17 +63,17 @@ class FtpletContainer implements Ftplet {
                      String ftpletNames, 
                      Configuration ftpletConf) throws FtpException {
         
-        m_logger = ftpConfig.getLogger();
         if(ftpletNames == null) {
             return;
         }
         
+        m_log = ftpConfig.getLogFactory().getInstance(getClass());
         StringTokenizer st = new StringTokenizer(ftpletNames, " ,;\r\n\t");
         try {
             while(st.hasMoreTokens()) {
                 String ftpletName = st.nextToken();
-                m_logger.info("Configuring ftplet : " + ftpletName);
-                Configuration subConfig = ftpletConf.getConfiguration(ftpletName, EMPTY_CONF);
+                m_log.info("Configuring ftplet : " + ftpletName);
+                Configuration subConfig = ftpletConf.getConfiguration(ftpletName, EmptyConfiguration.INSTANCE);
                 
                 String className = subConfig.getString("class", null);
                 if(className == null) {
@@ -92,8 +90,8 @@ class FtpletContainer implements Ftplet {
         }
         catch(Exception ex) {
             destroy();
-            m_logger.error("FtpletHandler.init()", ex);
-            throw new FtpException("FtpletHandler.init()", ex);
+            m_log.fatal("FtpletContainer.init()", ex);
+            throw new FtpException("FtpletContainer.init()", ex);
         }
     }
     
@@ -128,7 +126,7 @@ class FtpletContainer implements Ftplet {
                 ftpletEnt.ftplet.destroy();
             }
             catch(Exception ex) {
-                m_logger.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
+                m_log.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
             }
         }
         m_ftplets.clear();

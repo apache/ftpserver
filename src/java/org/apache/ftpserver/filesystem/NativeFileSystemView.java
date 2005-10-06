@@ -43,7 +43,7 @@ class NativeFileSystemView implements FileSystemView {
     
     
     /**
-     * Constructor - set the user and logger objects.
+     * Constructor - set the user object.
      */
     protected NativeFileSystemView(User user) throws FtpException {
         

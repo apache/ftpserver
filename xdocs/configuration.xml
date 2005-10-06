@@ -21,8 +21,8 @@
         <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
     </properties>
     <head>
-        <link rel="shortcut icon" href="favicon.ico" />
-        <link rel="icon" href="favicon.ico" />
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="icon" href="favicon.ico"/>
     </head>
     <body>
         <section name="Overview">
@@ -65,7 +65,7 @@
               </n2>
           <n1>
             ]]></source>
-            <p>We shall use &quot;.&quot; as the configuration path separator. That
+            <p>We shall use "." as the configuration path separator. That
                is we shall use <em>n1.n2.n3</em> and <em>n1.n2.n4</em> to identify
                <em>n3</em> and <em>n4</em> configuration parameters.
             </p>
@@ -152,20 +152,6 @@ config
   |       |
   |       |---- <b>timeout-poll-inverval</b> (60)
   |
-  |---- logger
-  |       |
-  |       |---- <b>class</b> (org.apache.ftpserver.logger.FileLogger)
-  |       |
-  |       |---- <b>level</b> (1)
-  |       |
-  |       |---- <b>date-format</b> (yyyy-MM-dd'T'HH:mm:ss)
-  |       |
-  |       |---- <b>dir</b> (./res/log)
-  |       |
-  |       |---- <b>max-file-size</b> (0)
-  |       |
-  |       |---- <b>flush</b> (true)
-  |
   |---- ip-restrictor
   |       |
   |       |---- <b>class</b> (org.apache.ftpserver.iprestrictor.FileIpRestrictor)
@@ -201,6 +187,8 @@ config
   |       |---- <b>sql-user-select-all</b>
   |       |
   |       |---- <b>sql-user-authenticate</b>
+  |       |
+  |       |---- <b>sql-user-admin</b>
   |       |
   |       |---- <b>ldap-url</b>
   |       |
@@ -392,42 +380,6 @@ config
                     </td>
                 </tr>
                 <tr>
-                    <td>config.logger.class</td>
-                    <td>Logger implementation class.
-                        <ul>
-                            <li>File based logger (default) - org.apache.ftpserver.logger.FileLogger</li>
-                            <li>Console based logger - org.apache.ftpserver.logger.ConsoleLogger</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>config.logger.level</td>
-                    <td>Log level. The default value is 1.
-                        <ul>
-                            <li>0 : Debug</li>
-                            <li>1 : Information</li>
-                            <li>2 : Warning</li>
-                            <li>3 : Error</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>config.logger.date-format</td>
-                    <td>Log entry timestamp format. The default is yyyy-MM-dd'T'HH:mm:ss</td>
-                </tr>
-                <tr>
-                    <td>config.logger.dir</td>
-                    <td>The directory where log files will be stored. The default is ./res/log</td>
-                </tr>
-                <tr>
-                    <td>config.logger.max-file-size</td>
-                    <td>Log file maximum size (0 means no limit) in kbytes. The default is 0.</td>
-                </tr>
-                <tr>
-                    <td>config.logger.flush</td>
-                    <td>Flag to indicate to flush log every time after writing. The default is true.</td>
-                </tr>
-                <tr>
                     <td>config.ip-restrictor.class</td>
                     <td>IP restrictor implementation - org.apache.ftpserver.iprestrictor.FileIpRestrictor</td>
                 </tr>
@@ -552,6 +504,18 @@ config
                         ]]></source>
                     </td>
                 </tr>
+                <tr>
+                        <td>config.user-manager.sql-user-admin</td>
+                        <td>SQL SELECT statement used to find whether an user is admin or not.
+                            All the dynamic values will be replaced during runtime.
+                            Sample query:
+                            <source><![CDATA[
+    SELECT uid
+    FROM FTP_USER
+    WHERE uid='{uid}' AND WHERE uid='admin'
+                            ]]></source>
+                        </td>
+                    </tr>
                 <tr>
                     <td>config.user-manager.ldap-url</td>
                     <td>LDAP URL (eg. ldap://localhost:389)</td>

@@ -32,9 +32,10 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
@@ -57,18 +58,19 @@ class LdapUserManager implements UserManager {
         CN
     };
     
+    private Log m_log;
+    
     private String m_adminName;
     private DirContext m_adminContext;
     private String m_userBaseDn;
     private Attribute m_objClassAttr;
-    private Logger m_logger;
     
     
     /**
-     * Set logger.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -103,13 +105,13 @@ class LdapUserManager implements UserManager {
             m_objClassAttr.add("javaObject");
             m_objClassAttr.add("top");
             
-            m_logger.info("LDAP user manager opened.");
+            m_log.info("LDAP user manager opened.");
         }
         catch(FtpException ex) {
             throw ex;
         }
         catch(Exception ex) {
-            m_logger.error("LdapUserManager.configure()", ex);
+            m_log.fatal("LdapUserManager.configure()", ex);
             throw new FtpException("LdapUserManager.configure()", ex);
         }
     }
@@ -139,7 +141,7 @@ class LdapUserManager implements UserManager {
             matchAttrs.put(m_objClassAttr);
             matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
             NamingEnumeration answers = m_adminContext.search(m_userBaseDn, matchAttrs, CN_ATTRS);
-            m_logger.info("Getting all users under " + m_userBaseDn);
+            m_log.info("Getting all users under " + m_userBaseDn);
             
             // populate list
             ArrayList allUsers = new ArrayList();
@@ -152,7 +154,7 @@ class LdapUserManager implements UserManager {
             return allUsers;
         }
         catch(NamingException ex) {
-            m_logger.error("LdapUserManager.getAllUserNames()", ex);
+            m_log.error("LdapUserManager.getAllUserNames()", ex);
             throw new FtpException("LdapUserManager.getAllUserNames()", ex);
         }
     } 
@@ -165,7 +167,7 @@ class LdapUserManager implements UserManager {
         User user = null;
         try {
             String dn = getDN(name);
-            m_logger.info("Getting user object for " + dn);
+            m_log.info("Getting user object for " + dn);
             user = (User)m_adminContext.lookup(dn);
         }
         catch(NamingException ex) {
@@ -209,11 +211,11 @@ class LdapUserManager implements UserManager {
             attrs.put(new BasicAttribute(CLASS_NAME, BaseUser.class.getName()));
             
             // bind object
-            m_logger.info("Rebinding user " + dn);
+            m_log.info("Rebinding user " + dn);
             m_adminContext.rebind(dn, newUser, attrs);
         }
         catch(NamingException ex) {
-            m_logger.error("LdapUserManager.save()", ex);
+            m_log.error("LdapUserManager.save()", ex);
             throw new FtpException("LdapUserManager.save()", ex);
         }
     }
@@ -231,11 +233,11 @@ class LdapUserManager implements UserManager {
     public synchronized void delete(String userName) throws FtpException {
         try {
             String dn = getDN(userName);
-            m_logger.info("Unbinding " + dn);
+            m_log.info("Unbinding " + dn);
             m_adminContext.unbind(dn);
         }
         catch(NamingException ex) {
-            m_logger.error("LdapUserManager.delete()", ex);
+            m_log.error("LdapUserManager.delete()", ex);
             throw new FtpException("LdapUserManager.delete()", ex);
         }
     }

@@ -16,14 +16,15 @@
  */
 package org.apache.ftpserver.filesystem;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
-
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -34,7 +35,7 @@ import java.io.IOException;
 public 
 class OSVirualFileSystemView implements FileSystemView {
 
-    private Logger m_logger;
+    private Log m_log;
     
     // root directory will be always absolute (canonical name) and
     // the path separator will be always '/'. The root directory
@@ -45,10 +46,11 @@ class OSVirualFileSystemView implements FileSystemView {
     private boolean m_hasWritePermission;
     
     /**
-     * Constructor - set user and logger objects.
+     * Constructor - set the user object.
      */
-    public OSVirualFileSystemView(User user, Logger logger) throws FtpException {
-        m_logger = logger;
+    public OSVirualFileSystemView(User user, LogFactory factory) throws FtpException {
+        
+        m_log = factory.getInstance(getClass());
         try {
             File root = new File(user.getHomeDirectory());
             m_rootName = root.getCanonicalPath();
@@ -61,7 +63,7 @@ class OSVirualFileSystemView implements FileSystemView {
             m_currDir = new OSVirtualFileObject(root, m_rootName, m_hasWritePermission);
         }
         catch(IOException ex) {
-            m_logger.warn("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
+            m_log.warn("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
             throw new FtpException("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
         }
     }
@@ -122,7 +124,7 @@ class OSVirualFileSystemView implements FileSystemView {
             return virtualFile;
         }
         catch(IOException ex) {
-            m_logger.warn("OSVirtualFileSystemView.getFileObject()", ex);
+            m_log.warn("OSVirtualFileSystemView.getFileObject()", ex);
             throw new FtpException("OSVirtualFileSystemView.getFileObject()", ex);
         }
     }

@@ -32,9 +32,10 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.ISsl;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -48,7 +49,7 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class Ssl implements ISsl {
     
-    private Logger m_logger; 
+    private Log m_log;
     
     private String m_keystoreFile;
     private String m_keystorePass;
@@ -67,10 +68,10 @@ class Ssl implements ISsl {
     
     
     /**
-     * Set logger.
+     * Set the log actory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -113,7 +114,7 @@ class Ssl implements ISsl {
             m_sslContextMap = new HashMap();
         }
         catch(Exception ex) {
-            m_logger.warn("Ssl.configure()", ex);
+            m_log.fatal("Ssl.configure()", ex);
             throw new FtpException("Ssl.configure()", ex);
         }
     }

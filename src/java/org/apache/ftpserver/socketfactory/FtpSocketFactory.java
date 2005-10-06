@@ -16,14 +16,15 @@
  */
 package org.apache.ftpserver.socketfactory;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.ISocketFactory;
-import org.apache.ftpserver.interfaces.ISsl;
-
 import java.net.InetAddress;
 import java.net.ServerSocket;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ISocketFactory;
+import org.apache.ftpserver.interfaces.ISsl;
 
 
 /**
@@ -34,17 +35,18 @@ import java.net.ServerSocket;
 public 
 class FtpSocketFactory implements ISocketFactory {
     
-    private Logger m_logger;
+    private Log m_log;
     
     private InetAddress m_serverAddress;
     private int m_port;
     private ISsl m_ssl;
     
+    
     /**
-     * Set logger
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -66,7 +68,6 @@ class FtpSocketFactory implements ISocketFactory {
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
                 m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
-                m_ssl.setLogger(m_logger);
                 m_ssl.configure(sslConf);
             }
         }
@@ -74,7 +75,7 @@ class FtpSocketFactory implements ISocketFactory {
             throw ex;
         }
         catch(Exception ex) {
-            m_logger.error("FtpSocketFactory.configure()", ex);
+            m_log.fatal("FtpSocketFactory.configure()", ex);
             throw new FtpException("FtpSocketFactory.configure()", ex);
         }
     }

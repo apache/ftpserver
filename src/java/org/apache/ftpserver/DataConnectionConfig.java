@@ -16,14 +16,15 @@
  */
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.interfaces.IDataConnectionConfig;
-import org.apache.ftpserver.interfaces.ISsl;
-
 import java.net.InetAddress;
 import java.util.StringTokenizer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.IDataConnectionConfig;
+import org.apache.ftpserver.interfaces.ISsl;
 
 /**
  * Data connection configuration.
@@ -33,7 +34,8 @@ import java.util.StringTokenizer;
 public 
 class DataConnectionConfig implements IDataConnectionConfig {
 
-    private Logger m_logger;
+    private Log m_log;
+    
     private InetAddress m_pasvAddress;
     private int m_pasvPort[][];
     
@@ -41,12 +43,13 @@ class DataConnectionConfig implements IDataConnectionConfig {
     private boolean m_portIpCheck;
     
     private ISsl m_ssl;
+
     
     /**
-     * Set logger.
+     * Set the log factory. 
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -82,7 +85,6 @@ class DataConnectionConfig implements IDataConnectionConfig {
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
                 m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
-                m_ssl.setLogger(m_logger);
                 m_ssl.configure(sslConf);
             }
         }
@@ -90,7 +92,7 @@ class DataConnectionConfig implements IDataConnectionConfig {
             throw ex;
         }
         catch(Exception ex) {
-            m_logger.error("DataConnectionConfig.configure()", ex);
+            m_log.error("DataConnectionConfig.configure()", ex);
             throw new FtpException("DataConnectionConfig.configure()", ex);
         }
     }

@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.ISsl;
@@ -33,6 +34,8 @@ import org.apache.ftpserver.interfaces.ISsl;
  */
 public
 class FtpDataConnection {
+    
+    private Log m_log;
     
     private IFtpConfig    m_fconfig;
     private Socket        m_dataSoc;
@@ -55,6 +58,7 @@ class FtpDataConnection {
      */
     public void setFtpConfig(IFtpConfig cfg) {
         m_fconfig = cfg;
+        m_log = m_fconfig.getLogFactory().getInstance(getClass());
     }
     
     /**
@@ -68,7 +72,7 @@ class FtpDataConnection {
                 m_dataSoc.close(); 
             } 
             catch(Exception ex) {
-                m_fconfig.getLogger().warn("FtpDataConnection.closeDataSocket()", ex);
+                m_log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
             m_dataSoc = null;
         }
@@ -79,7 +83,7 @@ class FtpDataConnection {
                m_servSoc.close();
             }
             catch(Exception ex) {
-                m_fconfig.getLogger().warn("FtpDataConnection.closeDataSocket()", ex);
+                m_log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
             m_fconfig.getDataConnectionConfig().releasePassivePort(m_port);
             m_servSoc = null;
@@ -116,7 +120,7 @@ class FtpDataConnection {
         // get the passive port
         int port = m_fconfig.getDataConnectionConfig().getPassivePort();
         if(port == -1) {
-            m_fconfig.getLogger().warn("Cannot find an available passive port.");
+            m_log.warn("Cannot find an available passive port.");
             m_servSoc = null;
             return false;
         }
@@ -145,7 +149,7 @@ class FtpDataConnection {
         }
         catch(Exception ex) {
             m_servSoc = null;
-            m_fconfig.getLogger().warn("FtpDataConnection.setPasvCommand()", ex);
+            m_log.warn("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
@@ -189,7 +193,7 @@ class FtpDataConnection {
             }
         }
         catch(Exception ex) {
-            m_fconfig.getLogger().warn("FtpDataConnection.getDataSocket()", ex);
+            m_log.warn("FtpDataConnection.getDataSocket()", ex);
         }
         
         return m_dataSoc;

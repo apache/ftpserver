@@ -18,10 +18,10 @@ package org.apache.ftpserver;
 
 import java.util.Date;
 
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FileObserver;
 import org.apache.ftpserver.interfaces.IConnection;
@@ -62,9 +62,9 @@ class FtpStatisticsImpl implements IFtpStatistics {
     
     
     /**
-     * Set the logger object - does nothing.
+     * Set the log factory - does nothing.
      */
-    public void setLogger(Logger logger) {
+    public void setLogFactory(LogFactory factory) {
     }
     
     /**

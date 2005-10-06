@@ -16,15 +16,6 @@
  */
 package org.apache.ftpserver.usermanager;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.util.BaseProperties;
-import org.apache.ftpserver.util.EncryptUtils;
-import org.apache.ftpserver.util.IoUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,6 +24,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.util.BaseProperties;
+import org.apache.ftpserver.util.EncryptUtils;
+import org.apache.ftpserver.util.IoUtils;
 
 
 /**
@@ -46,19 +47,20 @@ class PropertiesUserManager implements UserManager {
 
     private final static String PREFIX    = "FtpServer.user.";
 
+    private Log m_log;
+    
     private BaseProperties m_userDataProp;
     private File           m_userDataFile;
     private boolean        m_isPasswordEncrypt;
     private String         m_adminName;
     
-    private Logger m_logger;
     
     /**
-     * Set logger.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
-    }
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
+    } 
     
     /**
      * Configure user manager.
@@ -78,7 +80,7 @@ class PropertiesUserManager implements UserManager {
             m_adminName = config.getString("admin", "admin");
         }
         catch(IOException ex) {
-            m_logger.error("PropertiesUserManager.configure()", ex);
+            m_log.fatal("PropertiesUserManager.configure()", ex);
             throw new FtpException("PropertiesUserManager.configure()", ex);
         }
     }
@@ -124,7 +126,7 @@ class PropertiesUserManager implements UserManager {
            m_userDataProp.store(fos, "Generated file - don't edit (please)");
        }
        catch(IOException ex) {
-           m_logger.error("PropertiesUserManager.save()", ex);
+           m_log.error("PropertiesUserManager.save()", ex);
            throw new FtpException("PropertiesUserManager.save()", ex);
        }
        finally {
@@ -160,7 +162,7 @@ class PropertiesUserManager implements UserManager {
             m_userDataProp.store(fos, "Generated file - don't edit (please)");
         }
         catch(IOException ex) {
-            m_logger.error("PropertiesUserManager.delete()", ex);
+            m_log.error("PropertiesUserManager.delete()", ex);
             throw new FtpException("PropertiesUserManager.delete()", ex);
         }
         finally {

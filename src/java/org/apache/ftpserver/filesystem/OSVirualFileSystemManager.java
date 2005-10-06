@@ -16,14 +16,15 @@
  */
 package org.apache.ftpserver.filesystem;
 
+import java.io.File;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
-
-import java.io.File;
 
 /**
  * This is a operating system based virtual root file system manager. 
@@ -33,14 +34,17 @@ import java.io.File;
 public 
 class OSVirualFileSystemManager implements FileSystemManager {  
     
-    private Logger m_logger;
+    private Log m_log;
+    private LogFactory m_logFactory;
     private boolean m_createHome;
     
+    
     /**
-     * Set the logger object.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_logFactory = factory;
+        m_log = m_logFactory.getInstance(getClass());
     }
     
     /**
@@ -66,16 +70,16 @@ class OSVirualFileSystemManager implements FileSystemManager {
             String homeDirStr = user.getHomeDirectory();
             File homeDir = new File(homeDirStr);
             if(homeDir.isFile()) {
-                m_logger.warn("Not a directory :: " + homeDirStr);
+                m_log.warn("Not a directory :: " + homeDirStr);
                 throw new FtpException("Not a directory :: " + homeDirStr);
             }
             if( (!homeDir.exists()) && (!homeDir.mkdirs()) ) {
-                m_logger.warn("Cannot create user home :: " + homeDirStr);
+                m_log.warn("Cannot create user home :: " + homeDirStr);
                 throw new FtpException("Cannot create user home :: " + homeDirStr);
             }
         }
         
-        OSVirualFileSystemView fsView = new OSVirualFileSystemView(user, m_logger);
+        OSVirualFileSystemView fsView = new OSVirualFileSystemView(user, m_logFactory);
         return fsView;
     }   
 }

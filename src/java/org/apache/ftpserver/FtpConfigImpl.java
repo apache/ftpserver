@@ -16,13 +16,16 @@
  */
 package org.apache.ftpserver;
 
+import java.net.InetAddress;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IDataConnectionConfig;
@@ -31,10 +34,7 @@ import org.apache.ftpserver.interfaces.IFtpStatistics;
 import org.apache.ftpserver.interfaces.IIpRestrictor;
 import org.apache.ftpserver.interfaces.IMessageResource;
 import org.apache.ftpserver.interfaces.ISocketFactory;
-import org.apache.ftpserver.logger.CompositeLogger;
 import org.apache.ftpserver.usermanager.BaseUser;
-
-import java.net.InetAddress;
 
 /**
  * FTP server configuration implementation. It holds all 
@@ -45,19 +45,18 @@ import java.net.InetAddress;
 public
 class FtpConfigImpl implements IFtpConfig {
 
-    private final static Configuration EMPTY_CONF = new EmptyConfiguration();
-    
+    private LogFactory m_logFactory;
     private ISocketFactory m_socketFactory;
     private IDataConnectionConfig m_dataConConfig;
     private IMessageResource m_messageResource;
     private IConnectionManager m_connectionManager;
-    private Logger m_logger;
     private IIpRestrictor m_ipRestrictor;
     private UserManager m_userManager;
     private FileSystemManager m_fileSystemManager;
     private FtpletContainer m_ftpletContainer;
-    
     private IFtpStatistics m_statistics;
+    
+    private Log m_log;
     
     
     /**
@@ -67,8 +66,12 @@ class FtpConfigImpl implements IFtpConfig {
         
         try {
             
+            // get the log classes
+            m_logFactory = LogFactory.getFactory();
+            m_logFactory = new FtpLogFactory(m_logFactory);
+            m_log        = m_logFactory.getInstance(FtpConfigImpl.class);
+            
             // create all the components
-            m_logger            = (Logger)                createComponent(conf, "logger",              "org.apache.ftpserver.logger.FileLogger");
             m_socketFactory     = (ISocketFactory)        createComponent(conf, "socket-factory",      "org.apache.ftpserver.socketfactory.FtpSocketFactory");
             m_dataConConfig     = (IDataConnectionConfig) createComponent(conf, "data-connection",     "org.apache.ftpserver.DataConnectionConfig"); 
             m_messageResource   = (IMessageResource)      createComponent(conf, "message",             "org.apache.ftpserver.message.MessageResourceImpl");
@@ -77,11 +80,6 @@ class FtpConfigImpl implements IFtpConfig {
             m_userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
             m_fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
             m_statistics        = (IFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
-            
-            // create composite logger
-            CompositeLogger logger = new CompositeLogger();
-            logger.addLogger(m_logger);
-            m_logger = logger;
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);
@@ -92,7 +90,7 @@ class FtpConfigImpl implements IFtpConfig {
             // create and initialize ftlets
             m_ftpletContainer = new FtpletContainer();
             String ftpletNames = conf.getString("ftplets", null);
-            Configuration ftpletConf = conf.getConfiguration("ftplet", EMPTY_CONF);
+            Configuration ftpletConf = conf.getConfiguration("ftplet", EmptyConfiguration.INSTANCE);
             m_ftpletContainer.init(this, ftpletNames, ftpletConf);        
         }
         catch(Exception ex) {
@@ -105,10 +103,10 @@ class FtpConfigImpl implements IFtpConfig {
      * Create component. 
      */
     private Component createComponent(Configuration parentConfig, String configName, String defaultClass) throws Exception {
-        Configuration conf = parentConfig.getConfiguration(configName, EMPTY_CONF);
+        Configuration conf = parentConfig.getConfiguration(configName, EmptyConfiguration.INSTANCE);
         String className = conf.getString("class", defaultClass);
         Component comp = (Component)Class.forName(className).newInstance();
-        comp.setLogger(m_logger);
+        comp.setLogFactory(m_logFactory);
         comp.configure(conf);
         return comp; 
     }
@@ -122,7 +120,7 @@ class FtpConfigImpl implements IFtpConfig {
         // create admin user
         String adminName = userManager.getAdminName();
         if(!userManager.doesExist(adminName)) {
-            getLogger().info("Creating user : " + adminName);
+            m_log.info("Creating user : " + adminName);
             BaseUser adminUser = new BaseUser();
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
@@ -137,7 +135,7 @@ class FtpConfigImpl implements IFtpConfig {
         
         // create anonymous user
         if(!userManager.doesExist("anonymous")) {
-            getLogger().info("Creating user : anonymous");
+            m_log.info("Creating user : anonymous");
             BaseUser anonUser = new BaseUser();
             anonUser.setName("anonymous");
             anonUser.setPassword("");
@@ -149,6 +147,13 @@ class FtpConfigImpl implements IFtpConfig {
             anonUser.setMaxIdleTime(300);
             userManager.save(anonUser);
         }
+    }
+    
+    /**
+     * Get the log factory.
+     */
+    public LogFactory getLogFactory() {
+        return m_logFactory;
     }
     
     /**
@@ -170,13 +175,6 @@ class FtpConfigImpl implements IFtpConfig {
      */
     public IIpRestrictor getIpRestrictor() {
         return m_ipRestrictor;
-    }
-    
-    /**
-     * Get logger.
-     */
-    public Logger getLogger() {
-        return m_logger;
     }
      
     /**
@@ -287,10 +285,9 @@ class FtpConfigImpl implements IFtpConfig {
             m_messageResource = null;
         }
         
-        if(m_logger != null) {
-            m_logger.info("Apache FTP Server stopped.");
-            m_logger.dispose();
-            m_logger = null;
+        if(m_logFactory != null) {
+            m_logFactory.release();
+            m_logFactory = null;
         }
     }
 } 

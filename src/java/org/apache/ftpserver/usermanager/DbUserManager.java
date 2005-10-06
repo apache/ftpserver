@@ -25,9 +25,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.StringUtils;
@@ -46,6 +47,8 @@ import org.apache.ftpserver.util.StringUtils;
 public
 class DbUserManager implements UserManager {
     
+    private Log m_log;
+    
     private Connection m_connection;
     
     private String m_insertUserStmt;
@@ -53,6 +56,7 @@ class DbUserManager implements UserManager {
     private String m_deleteUserStmt;
     private String m_selectUserStmt;
     private String m_selectAllStmt;
+    private String m_isAdminStmt;
     private String m_authenticateStmt;
     
     private String m_jdbcUrl;
@@ -61,13 +65,12 @@ class DbUserManager implements UserManager {
     
     private String m_adminName;
     
-    private Logger m_logger;
     
     /**
-     * Set logger.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -89,14 +92,15 @@ class DbUserManager implements UserManager {
             m_selectUserStmt   = config.getString("sql-user-select");
             m_selectAllStmt    = config.getString("sql-user-select-all");
             m_authenticateStmt = config.getString("sql-user-authenticate");
+            m_isAdminStmt      = config.getString("sql-user-admin");
             
             openConnection();
             
             m_adminName = config.getString("admin", "admin");
-            m_logger.info("Database connection opened.");
+            m_log.info("Database connection opened.");
         }
         catch(Exception ex) {
-            m_logger.error("DbUserManager.configure()", ex);
+            m_log.fatal("DbUserManager.configure()", ex);
             throw new FtpException("DbUserManager.configure()", ex);
         }
     }
@@ -112,7 +116,50 @@ class DbUserManager implements UserManager {
      * @return true if user with this login is administrator
      */
     public boolean isAdmin(String login) throws FtpException {
-        return m_adminName.equals(login);
+        
+        // check input
+        if(login == null) {
+            return false;
+        }
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            
+            // create the sql query
+            HashMap map = new HashMap();
+            map.put( BaseUser.ATTR_LOGIN, escapeString(login) );
+            String sql = StringUtils.replaceString(m_isAdminStmt, map);
+            m_log.info(sql);
+            
+            // execute query
+            prepareConnection();
+            stmt = m_connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            return rs.next();
+        }
+        catch(SQLException ex) {
+            m_log.error("DbUserManager.isAdmin()", ex);
+            throw new FtpException("DbUserManager.isAdmin()", ex);
+        }
+        finally {
+            if(rs != null) {
+                try { 
+                    rs.close(); 
+                } 
+                catch(Exception ex) {
+                    m_log.error("DbUserManager.isAdmin()", ex);
+                }
+            }
+            if(stmt != null) {
+                try { 
+                    stmt.close(); 
+                } 
+                catch(Exception ex) {
+                    m_log.error("DbUserManager.isAdmin()", ex);
+                }
+            }
+        }
     }
     
     /**
@@ -132,12 +179,12 @@ class DbUserManager implements UserManager {
                 m_connection.close(); 
             } 
             catch(SQLException ex) {
-                m_logger.error("DbUserManager.closeConnection()", ex);
+                m_log.error("DbUserManager.closeConnection()", ex);
             }
             m_connection = null;
         }
         
-        m_logger.info("Database connection closed.");
+        m_log.info("Database connection closed.");
     }
     
     /**
@@ -151,7 +198,7 @@ class DbUserManager implements UserManager {
             }
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.prepareConnection()", ex);
+            m_log.error("DbUserManager.prepareConnection()", ex);
             isClosed = true;
         }
         
@@ -170,7 +217,7 @@ class DbUserManager implements UserManager {
         HashMap map = new HashMap();
         map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
         String sql = StringUtils.replaceString(m_deleteUserStmt, map);
-        m_logger.info(sql);
+        m_log.info(sql);
         
         // execute query
         Statement stmt = null;
@@ -180,7 +227,7 @@ class DbUserManager implements UserManager {
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.delete()", ex);
+            m_log.error("DbUserManager.delete()", ex);
             throw new FtpException("DbUserManager.delete()", ex);
         }
         finally {
@@ -189,7 +236,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.delete()", ex);
+                    m_log.error("DbUserManager.delete()", ex);
                 }
             }
         }
@@ -226,7 +273,7 @@ class DbUserManager implements UserManager {
             else {
                 sql = StringUtils.replaceString(m_updateUserStmt, map);
             }
-            m_logger.info(sql);
+            m_log.info(sql);
             
             // execute query
             prepareConnection();
@@ -234,7 +281,7 @@ class DbUserManager implements UserManager {
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.save()", ex);
+            m_log.error("DbUserManager.save()", ex);
             throw new FtpException("DbUserManager.save()", ex);
         }
         finally {
@@ -243,7 +290,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUsermanager.error()", ex);
+                    m_log.error("DbUsermanager.error()", ex);
                 }
             }
         }
@@ -262,7 +309,7 @@ class DbUserManager implements UserManager {
             HashMap map = new HashMap();
             map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(m_selectUserStmt, map);
-            m_logger.info(sql);
+            m_log.info(sql);
             
             // execute query
             prepareConnection();
@@ -285,7 +332,7 @@ class DbUserManager implements UserManager {
             return thisUser;
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.getUserByName()", ex);
+            m_log.error("DbUserManager.getUserByName()", ex);
             throw new FtpException("DbUserManager.getUserByName()", ex);
         }
         finally {
@@ -294,7 +341,7 @@ class DbUserManager implements UserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getUserByName()", ex);
+                    m_log.error("DbUserManager.getUserByName()", ex);
                 }
             }
             if(stmt != null) {
@@ -302,7 +349,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getUserByName()", ex);
+                    m_log.error("DbUserManager.getUserByName()", ex);
                 }
             }
         }
@@ -320,7 +367,7 @@ class DbUserManager implements UserManager {
             HashMap map = new HashMap();
             map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(m_selectUserStmt, map);
-            m_logger.info(sql);
+            m_log.info(sql);
             
             // execute query
             prepareConnection();
@@ -329,7 +376,7 @@ class DbUserManager implements UserManager {
             return rs.next();
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.doesExist()", ex);
+            m_log.error("DbUserManager.doesExist()", ex);
             throw new FtpException("DbUserManager.doesExist()", ex);
         }
         finally {
@@ -338,7 +385,7 @@ class DbUserManager implements UserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.doesExist()", ex);
+                    m_log.error("DbUserManager.doesExist()", ex);
                 }
             }
             if(stmt != null) {
@@ -346,7 +393,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.doesExist()", ex);
+                    m_log.error("DbUserManager.doesExist()", ex);
                 }
             }
         }
@@ -363,7 +410,7 @@ class DbUserManager implements UserManager {
             
             // create sql query
             String sql = m_selectAllStmt;
-            m_logger.info(sql);
+            m_log.info(sql);
             
             // execute query
             prepareConnection();
@@ -378,7 +425,7 @@ class DbUserManager implements UserManager {
             return names;
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.getAllUserNames()", ex);
+            m_log.error("DbUserManager.getAllUserNames()", ex);
             throw new FtpException("DbUserManager.getAllUserNames()", ex);
         }
         finally {
@@ -387,7 +434,7 @@ class DbUserManager implements UserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getAllUserNames()", ex);
+                    m_log.error("DbUserManager.getAllUserNames()", ex);
                 }
             }
             if(stmt != null) {
@@ -395,7 +442,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getAllUserNames()", ex);
+                    m_log.error("DbUserManager.getAllUserNames()", ex);
                 }
             }
         }
@@ -424,7 +471,7 @@ class DbUserManager implements UserManager {
         HashMap map = new HashMap();
         map.put( BaseUser.ATTR_LOGIN, escapeString(user.getName()) );
         String sql = StringUtils.replaceString(m_selectUserStmt, map);
-        m_logger.info(sql);
+        m_log.info(sql);
         
         // execute query
         Statement stmt = null;
@@ -443,7 +490,7 @@ class DbUserManager implements UserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getPassword()", ex);
+                    m_log.error("DbUserManager.getPassword()", ex);
                 }
             }
             if(stmt != null) {
@@ -451,7 +498,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.getPassword()", ex);
+                    m_log.error("DbUserManager.getPassword()", ex);
                 }
             }
         }
@@ -482,7 +529,7 @@ class DbUserManager implements UserManager {
             map.put( BaseUser.ATTR_LOGIN, escapeString(user) );
             map.put( BaseUser.ATTR_PASSWORD, escapeString(password) );
             String sql = StringUtils.replaceString(m_authenticateStmt, map);
-            m_logger.info(sql);
+            m_log.info(sql);
             
             // execute query
             prepareConnection();
@@ -491,7 +538,7 @@ class DbUserManager implements UserManager {
             return rs.next();
         }
         catch(SQLException ex) {
-            m_logger.error("DbUserManager.authenticate()", ex);
+            m_log.error("DbUserManager.authenticate()", ex);
             throw new FtpException("DbUserManager.authenticate()", ex);
         }
         finally {
@@ -500,7 +547,7 @@ class DbUserManager implements UserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.authenticate()", ex);
+                    m_log.error("DbUserManager.authenticate()", ex);
                 }
             }
             if(stmt != null) {
@@ -508,7 +555,7 @@ class DbUserManager implements UserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    m_logger.error("DbUserManager.authenticate()", ex);
+                    m_log.error("DbUserManager.authenticate()", ex);
                 }
             }
         }

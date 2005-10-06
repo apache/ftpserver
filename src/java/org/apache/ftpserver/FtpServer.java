@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.config.XmlConfigurationHandler;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -44,6 +45,7 @@ class FtpServer implements Runnable {
     private Thread m_runner;
     private ServerSocket m_serverSocket;
     private IFtpConfig m_ftpConfig;
+    private Log m_log;
     private boolean m_suspended;
     
 
@@ -52,6 +54,7 @@ class FtpServer implements Runnable {
      */
     public FtpServer(IFtpConfig ftpConfig) {
         m_ftpConfig = ftpConfig;
+        m_log = m_ftpConfig.getLogFactory().getInstance(getClass());
     }
 
     /**
@@ -63,7 +66,7 @@ class FtpServer implements Runnable {
             m_runner = new Thread(this);
             m_runner.start();
             System.out.println("Server ready :: Apache FTP Server");
-            m_ftpConfig.getLogger().info("------- Apache FTP Server started ------");
+            m_log.info("------- Apache FTP Server started ------");
         }
     }
 
@@ -246,7 +249,7 @@ class FtpServer implements Runnable {
         FileInputStream in = null;
         try {
             if( (args.length == 1) && args[0].equals("-default") ) {
-                config = new EmptyConfiguration();
+                config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 2) && args[0].equals("-xml") ) {
                 in = new FileInputStream(args[1]);

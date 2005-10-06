@@ -18,6 +18,8 @@ package org.apache.ftpserver.ftplet;
 
 import java.net.InetAddress;
 
+import org.apache.commons.logging.LogFactory;
+
 /**
  * A ftplet configuration object used by a ftplet container used to pass 
  * information to a ftplet during initialization. The configuration information 
@@ -29,14 +31,14 @@ public
 interface FtpConfig {
 
     /**
+     * Get the log factory.
+     */
+    public LogFactory getLogFactory();
+    
+    /**
      * Get the user manager.
      */
     UserManager getUserManager();
-
-    /**
-     * Get logger.
-     */
-    Logger getLogger();
      
     /**
      * Get file system manager

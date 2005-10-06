@@ -26,11 +26,11 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IConnectionManager;
@@ -53,6 +53,7 @@ class RequestHandler implements IConnection {
     private static final HashMap COMMAND_MAP = new HashMap(64);
     
     private IFtpConfig m_fconfig;
+    private Log m_log;
     
     private Socket m_controlSocket;
     private FtpRequestImpl m_request;
@@ -71,6 +72,7 @@ class RequestHandler implements IConnection {
     public RequestHandler(IFtpConfig fconfig, Socket controlSocket) throws IOException {
         m_fconfig = fconfig;
         m_controlSocket = controlSocket;
+        m_log = m_fconfig.getLogFactory().getInstance(getClass());
         
         // data connection object
         FtpDataConnection dataCon = new FtpDataConnection();
@@ -169,12 +171,11 @@ class RequestHandler implements IConnection {
         
         InetAddress clientAddr = m_request.getRemoteAddress();
         IConnectionManager conManager = m_fconfig.getConnectionManager();
-        Logger logger = m_fconfig.getLogger();
-        
         try {
             
             // write log message
-            logger.info("Open connection - " + clientAddr.getHostAddress());
+            String hostAddress = clientAddr.getHostAddress();
+            m_log.info("Open connection - " + hostAddress);
             
             // notify ftp statistics
             IFtpStatistics ftpStat = (IFtpStatistics)m_fconfig.getFtpStatistics();
@@ -197,6 +198,7 @@ class RequestHandler implements IConnection {
                 // IP permission check
                 IIpRestrictor ipRestrictor = m_fconfig.getIpRestrictor();
                 if( !ipRestrictor.hasPermission(clientAddr) ) {
+                    m_log.warn("No permission to access from " + hostAddress);
                     m_writer.send(530, "ip.restricted", null);
                     return;
                 }
@@ -204,6 +206,7 @@ class RequestHandler implements IConnection {
                 // connection limit check
                 int maxConnections = conManager.getMaxConnections();
                 if(ftpStat.getCurrentConnectionNumber() > maxConnections) {
+                    m_log.warn("Maximum connection limit reached.");
                     m_writer.send(530, "connection.limit", null);
                     return;
                 }
@@ -241,7 +244,7 @@ class RequestHandler implements IConnection {
             // socket closed - no need to do anything
         }
         catch(Exception ex) {
-            logger.warn("RequestHandler.run()", ex);
+            m_log.warn("RequestHandler.run()", ex);
         }
         finally {
             // close all resources if not done already
@@ -285,7 +288,7 @@ class RequestHandler implements IConnection {
                throw (IOException)ex;
             }
             else {
-               m_fconfig.getLogger().warn("RequestHandler.service()", ex);
+                m_log.warn("RequestHandler.service()", ex);
             }
         }
     }
@@ -304,13 +307,12 @@ class RequestHandler implements IConnection {
         }
         
         // call Ftplet.onDisconnect() method.
-        Logger logger = m_fconfig.getLogger();
         try {
             Ftplet ftpletContainer = m_fconfig.getFtpletContainer();
             ftpletContainer.onDisconnect(m_request, m_writer);
         }
         catch(Exception ex) {
-            logger.warn("RequestHandler.close()", ex);
+            m_log.warn("RequestHandler.close()", ex);
         }
 
         // notify statistics object and close request
@@ -321,7 +323,7 @@ class RequestHandler implements IConnection {
             // log message
             String userName = request.getUser().getName();
             InetAddress clientAddr = request.getRemoteAddress(); 
-            logger.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
+            m_log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
             // logout if necessary and notify statistics
             if(request.isLoggedIn()) {
@@ -359,7 +361,7 @@ class RequestHandler implements IConnection {
                 controlSocket.close();
             }
             catch(Exception ex) {
-                logger.warn("RequestHandler.close()", ex);
+                m_log.warn("RequestHandler.close()", ex);
             }
             m_controlSocket = null;
         }

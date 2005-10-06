@@ -24,11 +24,11 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.FtpStatistics;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IMessageResource;
@@ -88,6 +88,7 @@ class FtpWriter implements FtpResponse {
     
     /////////////////////////////////////////////////////////////////////////////
     
+    private Log m_log;
     private Writer m_writer;
     private ConnectionObserver m_observer;
     private IFtpConfig m_fconfig;
@@ -106,6 +107,7 @@ class FtpWriter implements FtpResponse {
      */
     public void setFtpConfig(IFtpConfig fconfig) {
         m_fconfig = fconfig;
+        m_log = m_fconfig.getLogFactory().getInstance(getClass());
     }
 
     /**
@@ -140,8 +142,7 @@ class FtpWriter implements FtpResponse {
         String lang = m_request.getLanguage();
         String msg = resource.getMessage(code, subId, lang);
         if(msg == null) {
-            Logger logger = m_fconfig.getLogger();
-            logger.warn("Message not found : " + code + ',' + subId + ',' + lang);
+            m_log.error("Message not found : " + code + ',' + subId + ',' + lang);
             msg = "";
         }
         msg = replaceVariables(code, basicMsg, msg);

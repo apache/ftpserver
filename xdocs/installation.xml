@@ -35,17 +35,19 @@
                 <li>XML configuration file : ./res/conf/ftpd.xml</li>
             </ul>
             <p>If you want to use your own jar files, you can put those jar files
-               in system CLASSPATH or copy those jar files in the &lt;INSTALL_DIR&gt;/lib
+               in system CLASSPATH or copy those jar files in the &lt;INSTALL_DIR&gt;/common/lib
                directory.
             </p>
-            <p>If you want to run it using Swing UI. Execute the script ftpd_ui.bat
-               (if Windows) or ftpd_ui.sh (if UNIX).
+            <p>If you want to run it using Swing UI. Execute the script
+               &lt;INSTALL_DIR&gt;/bin/ftpd_ui.bat (if Windows)
+               or &lt;INSTALL_DIR&gt;/bin/ftpd_ui.sh (if UNIX).
             </p>
             <img src="images/ftp_run.jpg"/>
             <br/><br/>
             <p>Similarly, if you want to start the FTP server without Swing UI, execute
-               ftpd.bat (if Windows) or ftpd.sh (if UNIX). In this case you need to pass
-               the configuration file location.
+               &lt;INSTALL_DIR&gt;/bin/ftpd.bat (if Windows)
+               or &lt;INSTALL_DIR&gt;/bin/ftpd.sh (if UNIX). In this case
+               you need to pass the configuration file location.
             </p>
             <source>
 Usage: java org.apache.ftpserver.FtpServer &lt;options&gt;
@@ -62,7 +64,13 @@ There are three ways to start the FTP server.
                 <source><![CDATA[
  <INSTALL_DIR>
       |
-      |--- lib
+      |--- bin
+      |
+      |--- common
+      |     |
+      |     |--- classes
+      |     |
+      |     |--- lib
       |
       |--- doc
       |     |
@@ -159,21 +167,27 @@ Finished at  : Wednesday, September 28, 2005 3:11:46 PM IST
                 <source><![CDATA[
  <INSTALL_DIR>
       |
+      |--- bin
+      |
+      |--- common
+      |     |
+      |     |--- classes
+      |     |
+      |     |--- lib
+      |
+      |--- res
+      |     |
+      |     |--- conf
+      |     |
+      |     |--- home
+      |     |
+      |     |--- log
+      |
       |--- src
       |     |
       |     |--- java
-      |     |
-      |     |--- bin
       |
       |----- xdocs
-      |
-      |--- res
-            |
-            |--- conf
-            |
-            |--- home
-            |
-            |--- log
                 ]]></source>
             </subsection>
         </section>

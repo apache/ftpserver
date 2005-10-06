@@ -24,9 +24,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.IIpRestrictor;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.RegularExpr;
@@ -41,16 +42,16 @@ class FileIpRestrictor implements IIpRestrictor {
 
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     
+    private Log m_log;
     private String m_file;
     private Object[][] m_permissions;
-    private Logger m_logger;
     
     
     /**
-     * Set logger.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -61,7 +62,7 @@ class FileIpRestrictor implements IIpRestrictor {
         File dir = new File(m_file).getParentFile();
         if( (!dir.exists()) && (!dir.mkdirs()) ) {
             String dirName = dir.getAbsolutePath();
-            m_logger.error("Cannot create directory - " + dirName);
+            m_log.fatal("Cannot create directory - " + dirName);
             throw new FtpException("Cannot create directory : " + dirName);
         }
         
@@ -114,7 +115,7 @@ class FileIpRestrictor implements IIpRestrictor {
                 }
             }
             catch(IOException ex) {
-                m_logger.error("FileIpRestrictor.getPermissions()", ex);
+                m_log.error("FileIpRestrictor.getPermissions()", ex);
                 throw new FtpException("FileIpRestrictor.getPermissions()", ex);
             }
             finally {
@@ -146,7 +147,7 @@ class FileIpRestrictor implements IIpRestrictor {
             m_permissions = permissions;
         }
         catch(IOException ex) {
-            m_logger.error("FileIpRestrictor.setPermissions()", ex);
+            m_log.error("FileIpRestrictor.setPermissions()", ex);
             throw new FtpException("FileIpRestrictor.setPermissions()", ex);
         }
         finally {

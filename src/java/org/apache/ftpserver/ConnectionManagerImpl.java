@@ -23,10 +23,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Logger;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IConnectionManager;
@@ -40,6 +41,8 @@ import org.apache.ftpserver.usermanager.BaseUser;
 public 
 class ConnectionManagerImpl implements IConnectionManager {
 
+    private Log m_log;
+    
     private ConnectionManagerObserver m_observer;              
     private Timer m_timer;
     private Vector m_conList = new Vector();  
@@ -52,13 +55,12 @@ class ConnectionManagerImpl implements IConnectionManager {
     private int m_defaultIdleSec;
     private int m_pollIntervalSec;
     
-    private Logger m_logger;
     
     /**
-     * Set logger object.
+     * Set the log factory.
      */
-    public void setLogger(Logger logger) {
-        m_logger = logger;
+    public void setLogFactory(LogFactory factory) {
+        m_log = factory.getInstance(getClass());
     }
     
     /**
@@ -267,7 +269,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                     
                     // idle data connectin timeout - close it 
                     if( (currTime - requestTime) > idleTimeMillis ) {
-                        m_logger.info("Removing idle data connection for " + request.getUser());
+                        m_log.info("Removing idle data connection for " + request.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
@@ -286,7 +288,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                 continue;
             }
             
-            m_logger.info("Removing idle user " + request.getUser());
+            m_log.info("Removing idle user " + request.getUser());
             closeConnection(connection);
         }
     }
