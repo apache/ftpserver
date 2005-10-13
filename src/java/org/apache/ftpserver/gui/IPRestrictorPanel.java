@@ -30,17 +30,17 @@ import org.apache.ftpserver.interfaces.IIpRestrictor;
 
 /**
  * IP restrictor panel.
- * 
+ *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public 
+public
 class IPRestrictorPanel extends PluginPanel {
 
     private static final long serialVersionUID = -1871174667851171193L;
-    
+
     private IFtpConfig m_fconfig;
     private IPRestrictorTable m_table;
-    
+
     /**
      * Default constructor.
      */
@@ -48,29 +48,29 @@ class IPRestrictorPanel extends PluginPanel {
         super(container);
         initComponents();
     }
-    
+
     /**
      * Initialize UI components
      */
     private void initComponents() {
         setLayout(new BorderLayout());
-        
+
         m_table = new IPRestrictorTable();
         add(m_table, BorderLayout.CENTER);
-        
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createEtchedBorder());
         add(buttonPanel, BorderLayout.SOUTH);
-        
+
         JButton saveBtn = new JButton("Save");
         saveBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 saveData();
             }
         });
-        
+
         buttonPanel.add(saveBtn);
-        
+
         JButton reloadBtn = new JButton("Reload");
         reloadBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -117,15 +117,15 @@ class IPRestrictorPanel extends PluginPanel {
         m_fconfig = ftpConfig;
         reloadData();
     }
-    
+
     /**
      * This panel can be displayed only when server is
-     * running ie. ftp config is not null.
+     * running that is ftp config is not null.
      */
     public boolean canBeDisplayed() {
         return (m_fconfig != null);
     }
-    
+
     /**
      * Get the string representation.
      */
