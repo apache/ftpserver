@@ -220,13 +220,13 @@
             </subsection>
             <div class="warningmessage">If the sql-user-authenticate SELECT query returns no row, it means
                   failed authentication. The authenticate() method does not check any
-                  data value. So if you use <br/><br/>
-                  <em>SELECT COUNT(*) from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</em><br/><br/>
+                  data value. So if you use <br/>
+                  <em>SELECT COUNT(*) from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</em><br/>
                   the user will be always authenticated. If there is no user for the specified
                   uid and userpassword, the query will return a single row with value 0. As
                   there is one row, the user will be always authenticated.
                   <br/>
-                  This is also true for sql-user-authenticate SQL query.
+                  This is also true for sql-user-admin SQL query.
             </div>
         </section>
 
