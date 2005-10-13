@@ -39,7 +39,10 @@
         <section name="log4j">
             <p>If you need to setup detailed logging from within FTP Server's code,
                then you can use a simple log4j configuration. Note that this logging
-               can be very verbose depending on the log level you chose to use.
+               can be very verbose depending on the log level you chose to use. The
+               log4j jar is bundled with the binary distribution. This is an optional
+               jar file. If you remove this jar file, other logging implementation
+               will be autometically selected by the commons-logging.
             </p>
             <p>The log4j configuration file location is
                &lt;INSTALL_DIR&gt;/common/classes/log4j.properties. You can modify
@@ -66,7 +69,18 @@
         </section>
 
         <section name="java.util.logging">
-            <p>In order to configure JDK logging you should have JDK 1.4+.
+            <p>In order to configure JDK logging you should have JDK 1.4+. In the JDK's
+               logging.properties file. Check your JAVA_HOME environment setting to see
+               which JDK FTP Server is using. The file will be in $JAVA_HOME/jre/lib.
+               Alternately, it can also use a global configuration file located elsewhere
+               by using the system property java.util.logging.config.file, or programmatic
+               configuration using java.util.logging.config.class.
+            </p>
+            <p>The default logging.properties specifies a ConsoleHandler for routing
+               logging to stdout and also a FileHandler. A handler's log level threshold
+               can be set using SEVERE, CONFIG, INFO, WARN, FINE, FINEST or ALL. The
+               logging.properties shipped with JDK is set to INFO. Please refer to Sun's
+               java.util.logging documentation for the complete details.
             </p>
         </section>
 
