@@ -20,7 +20,7 @@
     <part id="general">
         <title>General</title>
 
-        <faq>
+        <faq id="other_language">
             <question>How can I add other language translations?</question>
             <answer>
                 <p>First you need to specify your language name in config.message.languages
@@ -31,7 +31,7 @@
             </answer>
         </faq>
 
-        <faq>
+        <faq id="embed_ftpd">
             <question>How can I embed the FTP server in my application?</question>
             <answer>
                 <p>The following script shows how the FTP server can be embedded.</p>
@@ -53,14 +53,66 @@
             </answer>
         </faq>
 
-        <faq>
+        <faq id="upload_ftplet">
+            <question>How can I send binary data stored in a database when the FTP Server
+                      gets the RETR command.
+            </question>
+            <answer>You can write your own ftplet to do this. The following code will
+                    clarify this.
+                <source>
+   // overwrite onDownloadStart() method
+   public FtpletEnum onDownloadStart(FtpRequest request,
+                                     FtpResponse response) throws FtpException,
+                                                                  IOException {
+
+       String requestedFile = request.getArgument();
+
+       // get input stream from database - BLOB data
+       InputStream in = ...;
+       if(in == null) {
+           response.write(550, "Cannot find file " + requestedFile);
+           return FtpletEnum.RET_SKIP;
+       }
+
+       // gata FTP data output stream
+       OutputStream out = null;
+       response.write(150, "Getting data connection.");
+       try {
+           out = request.getDataOutputStream();
+       }
+       catch(Exception ex) {
+       }
+       if(out == null) {
+           response.write(425, "Cannot open data connection.");
+           return FtpletEnum.RET_SKIP;
+       }
+
+       // now copy bytes
+       try {
+           ....
+           response.write(226, "Data transfer okay.");
+       }
+       catch(Exception ex) {
+           response.write(551, "Data transfer failed.");
+       }
+       finally {
+           out.close();
+           in.close();
+       }
+       return FtpletEnum.RET_SKIP;
+   }
+                </source>
+            </answer>
+        </faq>
+
+        <faq id="db_class_not_found">
             <question>Why I am getting ClassNotFoundException when I am trying to use
                       database based user manager?
             </question>
             <answer>
                 <ol>
                     <li>JDBC driver Jar file should be in CLASSPATH or it has to
-                        be copied in the &lt;INSTALL_DIR&gt;/lib directory.
+                        be copied in the &lt;INSTALL_DIR&gt;/common/lib directory.
                     </li>
                     <li>
                         Did you specify fully qualified JDBC driver class name in
@@ -70,7 +122,7 @@
             </answer>
         </faq>
 
-        <faq>
+        <faq id="ldap_jdk_version">
             <question>I have updated the JDK version. After that the LDAP user
                       manager is not working.
             </question>
