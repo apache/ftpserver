@@ -26,23 +26,22 @@
     </head>
     <body>
         <section name="Download">
-            <p>Please download the source or binary distributions from the
-               following locations.
+            <p>Please download the source or binary distributions from the following locations.
             </p>
             <table>
                 <tr>
                     <td rowspan="2"><b>Source</b></td>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0-src.zip">ftpserver-1.0-src.zip</a></td>
+                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev-src.zip">ftpserver-dev-src.zip</a></td>
                 </tr>
                 <tr>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0-src.tar.gz">ftpserver-1.0-src.tar.gz</a></td>
+                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev-src.tar.gz">ftpserver-dev-src.tar.gz</a></td>
                 </tr>
                 <tr>
                     <td rowspan="2"><b>Binary</b></td>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0.zip">ftpserver-1.0.zip</a></td>
+                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev.zip">ftpserver-dev.zip</a></td>
                 </tr>
                 <tr>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-1.0.tar.gz">ftpserver-1.0.tar.gz</a></td>
+                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev.tar.gz">ftpserver-dev.tar.gz</a></td>
                 </tr>
             </table>
             <div class="infomessage">This is not the release version. We shall release it soon.</div>
