@@ -23,7 +23,7 @@ limitations under the License.
     <groupId>apache</groupId>
     <artifactId>ftpserver</artifactId>
     <name>Apache FTP Server</name>
-    <currentVersion>1.0</currentVersion>
+    <currentVersion>dev</currentVersion>
 
 
     <!-- Organizational Information -->
@@ -44,8 +44,8 @@ limitations under the License.
 
     <!-- Project scm repository -->
     <repository>
-        <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:incubator-ftpserver</connection>
-        <url>http://cvs.apache.org/viewcvs/incubator-ftpserver/</url>
+        <connection>scm:svn://svn.apache.org/repos/asf/incubator/ftpserver/trunk/</connection>
+        <url>http://svn.apache.org/viewcvs.cgi/incubator/ftpserver/trunk/</url>
     </repository>
 
 
@@ -90,9 +90,9 @@ limitations under the License.
     <mailingLists>
         <mailingList>
             <name>Apache FTP Server Mailing List</name>
-            <subscribe>general-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>general-unsubscribe@incubator.apache.org</unsubscribe>
-            <post>general@incubator.apache.org</post>
+            <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
+            <post>ftpserver-dev@incubator.apache.org</post>
             <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listId=142</archive>
         </mailingList>
     </mailingLists>
