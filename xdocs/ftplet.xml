@@ -322,10 +322,19 @@
 
         <section name="Deployment">
             <p>The Ftplet must be added to Apache FTP Server classpath so that
-               the Ftplet can be loaded. Edit ftpd or ftpd_ui scripts to modify
-               CUSTOM_CLASSPATH environment variable. Of course before that you
-               need to uncomment it.
+               the Ftplet can be loaded. There are three ways you can do that.
             </p>
+            <ol>
+                <li>Modify your system CLASSPATH environment variable to include
+                    your ftplet classes.
+                </li>
+                <li>Copy your ftplet class files (unpacked) in the common/classes
+                    subdirectory of the FTP Server installation.
+                </li>
+                <li>Place a jar file containing the custom ftplet class files in
+                    the common/lib subdirectory of the FTP Server installation.
+                </li>
+            </ol>
         </section>
     </body>
 </document>
