@@ -119,7 +119,7 @@
         <sql-user-select>SELECT uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate FROM FTP_USER WHERE uid = '{uid}'</sql-user-select>
         <sql-user-select-all>SELECT uid FROM FTP_USER ORDER BY uid</sql-user-select-all>
         <sql-user-authenticate>SELECT uid from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</sql-user-authenticate>
-        <sql-user-admin>SELECT uid FROM FTP_USER WHERE uid='{uid}' AND WHERE uid='admin'</sql-user-admin>
+        <sql-user-admin>SELECT uid FROM FTP_USER WHERE uid='{uid}' AND uid='admin'</sql-user-admin>
     </user-manager>
     -->
 
