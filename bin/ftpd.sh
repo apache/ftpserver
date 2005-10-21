@@ -127,7 +127,7 @@ done
 #
 CURR_DIR=`pwd`
 cd $FTPD_HOME
-MAIN_CLASS=org.apache.ftpserver.FtpServer
+MAIN_CLASS=org.apache.ftpserver.commandline.CommandLine
 "$JAVACMD" -classpath "$FTPD_CLASSPATH" $MAIN_CLASS $@
 RESULT=$?
 cd $CURR_DIR
