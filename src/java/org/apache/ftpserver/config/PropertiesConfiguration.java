@@ -45,6 +45,21 @@ class PropertiesConfiguration implements Configuration {
         Properties prop = new Properties();
         prop.load(in);
         
+        setProperties(prop);
+    }    
+    
+    /**
+     * Constructor - set the properties.
+     */
+    public PropertiesConfiguration(Properties prop) {
+        setProperties(prop);
+    }    
+    
+    /**
+     * Set properties.
+     */
+    private void setProperties(Properties prop) {
+    
         // strip prefix
         m_prop = new Properties();
         int prefixLen = PREFIX.length();
@@ -58,14 +73,7 @@ class PropertiesConfiguration implements Configuration {
             m_prop.setProperty(key, val);
         }
         prop.clear();
-    }    
-    
-    /**
-     * Constructor - set the properties.
-     */
-    private PropertiesConfiguration(Properties prop) {
-        m_prop = prop;
-    }    
+    }
     
     /**
      * Get string - if not found throws FtpException.
