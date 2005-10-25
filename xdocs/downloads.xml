@@ -31,17 +31,17 @@
             <table>
                 <tr>
                     <td rowspan="2"><b>Source</b></td>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev-src.zip">ftpserver-dev-src.zip</a></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev-src.zip">ftpserver-dev-src.zip</a></td>
                 </tr>
                 <tr>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev-src.tar.gz">ftpserver-dev-src.tar.gz</a></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev-src.tar.gz">ftpserver-dev-src.tar.gz</a></td>
                 </tr>
                 <tr>
                     <td rowspan="2"><b>Binary</b></td>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev.zip">ftpserver-dev.zip</a></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev.zip">ftpserver-dev.zip</a></td>
                 </tr>
                 <tr>
-                    <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev.tar.gz">ftpserver-dev.tar.gz</a></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev.tar.gz">ftpserver-dev.tar.gz</a></td>
                 </tr>
             </table>
             <div class="infomessage">This is not the release version. As Ftpserver is not yet 
