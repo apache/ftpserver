@@ -38,8 +38,8 @@ limitations under the License.
     <inceptionYear>2003</inceptionYear>
     <package>org.apache.ftpserver</package>
     <logo>/images/project-logo.gif</logo>
-    <url>http://incubator.apache.org/projects/ftpserver/</url>
-    <issueTrackingUrl>http://issues.apache.org/jira/secure/BrowseProject.jspa?id=10571</issueTrackingUrl>
+    <url>http://incubator.apache.org/ftpserver/</url>
+    <issueTrackingUrl>http://issues.apache.org/jira/browse/FTPSERVER</issueTrackingUrl>
 
 
     <!-- Project scm repository -->
@@ -88,6 +88,11 @@ limitations under the License.
             <organization/>
             <email/>
         </contributor>
+        <contributor>
+            <name>Niklas Gustavsson</name>
+            <organization/>
+            <email/>
+        </contributor>
     </contributors>
 
 
@@ -98,7 +103,7 @@ limitations under the License.
             <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
             <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
             <post>ftpserver-dev@incubator.apache.org</post>
-            <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listId=142</archive>
+            <archive>http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/</archive>
         </mailingList>
     </mailingLists>
 
