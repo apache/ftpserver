@@ -44,7 +44,12 @@
                     <td><a href="http://incubator.apache.org/projects/ftpserver/download/ftpserver-dev.tar.gz">ftpserver-dev.tar.gz</a></td>
                 </tr>
             </table>
-            <div class="infomessage">This is not the release version. We shall release it soon.</div>
+            <div class="infomessage">This is not the release version. As Ftpserver is not yet 
+               fully accepted as part of the Apache Software Foundation, any software releases
+               (including code held in publically available CVS and SVN) will not be endorsed 
+               by the ASF. For more details, please visit the 
+               <a href="http://incubator.apache.org/incubation/Incubation_Policy.html">Incubation Policy</a> page.
+            </div>
             <p>Old Avalon based FTP Server can be downloaded from
                <a href="http://people.apache.org/~rana_b/incubator/ftpserver/">here</a>.
             </p>
