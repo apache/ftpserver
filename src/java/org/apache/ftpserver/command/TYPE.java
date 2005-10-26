@@ -22,6 +22,7 @@ import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.DataType;
 
 /**
  * <code>TYPE &lt;SP&gt; &lt;type-code&gt; &lt;CRLF&gt;</code><br>
@@ -47,15 +48,14 @@ class TYPE implements Command {
         char type = 'A';
         if (request.hasArgument()){
             type = request.getArgument().charAt(0);
-            type = Character.toUpperCase(type);
         }
         
         // set type
-        if( (type == 'A') || (type == 'I') ) {
-            handler.setDataType(type);
+        try {
+            handler.setDataType(DataType.parseArgument(type));
             out.send(200, "TYPE", null);
-        }
-        else {
+        } 
+        catch(IllegalArgumentException e) {
             out.send(504, "TYPE", null);
         }
     }

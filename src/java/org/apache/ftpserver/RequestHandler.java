@@ -27,10 +27,12 @@ import java.net.SocketException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
+import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IConnectionManager;
@@ -62,8 +64,8 @@ class RequestHandler implements IConnection {
     private boolean m_isConnectionClosed;
     
     private DirectoryLister m_directoryLister;
-    private char m_dataType    = 'A';
-    private char m_structure   = 'F';
+    private DataType m_dataType    = DataType.ASCII;
+    private Structure m_structure  = Structure.FILE;
     
     
     /**
@@ -132,28 +134,28 @@ class RequestHandler implements IConnection {
     /**
      * Get the data type.
      */
-    public char getDataType() {
+    public DataType getDataType() {
         return m_dataType;
     }
     
     /**
      * Set the data type.
      */
-    public void setDataType(char type) {
+    public void setDataType(DataType type) {
         m_dataType = type;
     }
 
     /**
      * Get structure.
      */
-    public char getStructure() {
+    public Structure getStructure() {
         return m_structure;
     }
     
     /**
      * Set structure
      */
-    public void setStructure(char stru) {
+    public void setStructure(Structure stru) {
         m_structure = stru;
     }
         
@@ -395,7 +397,7 @@ class RequestHandler implements IConnection {
                                BufferedOutputStream out,
                                int maxRate) throws IOException {
         
-        boolean isAscii = m_dataType == 'A';
+        boolean isAscii = m_dataType == DataType.ASCII;
         long startTime = System.currentTimeMillis();
         long transferredSize = 0L;
         byte[] buff = new byte[4096];

@@ -28,6 +28,7 @@ import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -184,7 +185,7 @@ class RETR implements Command {
                                        FileObject file, 
                                        long skipLen) throws IOException {
         InputStream in;
-        if(handler.getDataType() == 'A') {
+        if(handler.getDataType() == DataType.ASCII) {
             int c;
             long offset = 0L;
             in = new BufferedInputStream(file.createInputStream(0L));

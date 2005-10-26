@@ -47,7 +47,7 @@ class FtpSocketFactory implements ISocketFactory {
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-    	m_logFactory = factory;
+        m_logFactory = factory;
         m_log = m_logFactory.getInstance(getClass());
     }
     

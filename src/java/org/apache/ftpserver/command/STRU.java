@@ -22,6 +22,7 @@ import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.Structure;
 
 /**
  * <code>STRU &lt;SP&gt; &lt;structure-code&gt; &lt;CRLF&gt;</code><br>
@@ -52,12 +53,11 @@ class STRU implements Command {
         
         // set structure
         char stru = request.getArgument().charAt(0);
-        stru = Character.toUpperCase(stru);
-        if(stru == 'F') {
-            handler.setStructure(stru);
+        try  {
+            handler.setStructure(Structure.parseArgument(stru));
             out.send(200, "STRU", null);
-        }
-        else {
+        } 
+        catch(IllegalArgumentException e) {
             out.send(504, "STRU", null);
         }
     }
