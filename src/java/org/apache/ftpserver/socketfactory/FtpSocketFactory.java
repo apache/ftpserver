@@ -92,7 +92,7 @@ class FtpSocketFactory implements ISocketFactory {
             ssocket = new ServerSocket(m_port, 100);
         }
         else {
-            new ServerSocket(m_port, 100, m_serverAddress);
+            ssocket = new ServerSocket(m_port, 100, m_serverAddress);
         }
         return ssocket;
     }
