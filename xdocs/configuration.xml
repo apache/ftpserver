@@ -457,9 +457,12 @@ config
                         dynamic values will be replaced during runtime. Sample query:
                         <source><![CDATA[
     UPDATE FTP_USER SET
-        userpassword='{userpassword}',homedirectory='{homedirectory}',
-        enableflag='{enableflag}',writepermission='{writepermission}',
-        idletime={idletime},uploadrate={uploadrate},
+        userpassword='{userpassword}',
+        homedirectory='{homedirectory}',
+        enableflag='{enableflag}',
+        writepermission='{writepermission}',
+        idletime={idletime},
+        uploadrate={uploadrate},
         downloadrate={downloadrate}
     WHERE uid='{uid}'
                         ]]></source>
