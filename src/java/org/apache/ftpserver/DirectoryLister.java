@@ -47,11 +47,11 @@ class DirectoryLister {
     
     private FileSystemView m_fileSystemView;
     
-    private boolean m_isAllOption;
-    private boolean m_isDetailOption; 
+    protected boolean m_isAllOption;
+    protected boolean m_isDetailOption; 
     
-    private String m_file;
-    private String m_pattern;
+    protected String m_file;
+    protected String m_pattern;
     private char m_permission[] = new char[10];
     
     private String[] m_selectedTypes = new String[] {"Size", "Modify", "Type"};
@@ -289,7 +289,7 @@ class DirectoryLister {
     /**
      * Parse argument.
      */
-    private boolean parse(String argument) {
+    protected boolean parse(String argument) {
         String lsFileName = "./";
         String options = "";
         String pattern = "*";
