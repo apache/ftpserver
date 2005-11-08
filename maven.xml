@@ -26,7 +26,8 @@ limitations under the License.
         <echo/>
         <echo>clean:clean        - Removes all the generated files.</echo>
         <echo>java:compile       - Compiles all the Java files.</echo>
-        <echo>java:jar-resources - Copies all the resources</echo>
+        <echo>java:jar-resources - Copies all the resources.</echo>
+        <echo>test:test          - Runs all the JUnit test cases.</echo>
         <echo>jar:jar            - Generates FTP server jar file.</echo>
         <echo>site:generate      - Generates FTP server site (including Javadoc).</echo>
         <echo>dist:build-src     - Generates the source distribution files.</echo>
