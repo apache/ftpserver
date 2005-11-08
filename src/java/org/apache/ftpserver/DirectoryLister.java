@@ -298,17 +298,33 @@ class DirectoryLister {
         if(argument != null) {
             argument = argument.trim();
             StringBuffer optionsSb = new StringBuffer(4);
-            StringTokenizer st = new StringTokenizer(argument, " ");
+            StringBuffer lsFileNameSb = new StringBuffer(16);
+            StringTokenizer st = new StringTokenizer(argument, " ", true);
             while(st.hasMoreTokens()) {
                 String token = st.nextToken();
-                if(token.charAt(0) == '-') {
+                
+                if(lsFileNameSb.length() != 0) {
+                    // file name started - append to file name buffer
+                    lsFileNameSb.append(token);
+                }
+                else if(token.equals(" ")) {
+                    // delimiter and file not started - ignore
+                    continue;
+                } 
+                else if(token.charAt(0) == '-') {
+                    // token and file name not started - append to options buffer
                     if (token.length() > 1) {
                         optionsSb.append(token.substring(1));
                     }
                 }
                 else {
-                   lsFileName = token;
+                    // filename - append to the filename buffer
+                    lsFileNameSb.append(token);
                 }
+            }
+            
+            if(lsFileNameSb.length() != 0) {
+                lsFileName = lsFileNameSb.toString();
             }
             options = optionsSb.toString();
         }
