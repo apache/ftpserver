@@ -72,7 +72,7 @@ final class FtpletEnum {
       * Equality check
       */
      public boolean equals(Object obj) {
-         if(obj instanceof Ftplet) {
+         if(obj instanceof FtpletEnum) {
              return m_type == ((FtpletEnum)obj).m_type;
          }
          return false;
