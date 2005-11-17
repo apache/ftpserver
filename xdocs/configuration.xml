@@ -503,7 +503,8 @@ config
                         <source><![CDATA[
     SELECT uid
     FROM FTP_USER
-    WHERE uid='{uid}' AND userpassword='{userpassword}'
+    WHERE uid='{uid}' AND 
+          userpassword='{userpassword}'
                         ]]></source>
                     </td>
                 </tr>
@@ -515,7 +516,8 @@ config
                             <source><![CDATA[
     SELECT uid
     FROM FTP_USER
-    WHERE uid='{uid}' AND WHERE uid='admin'
+    WHERE uid='{uid}' AND 
+          uid='admin'
                             ]]></source>
                         </td>
                     </tr>
