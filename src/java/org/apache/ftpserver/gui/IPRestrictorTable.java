@@ -61,7 +61,7 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     private JButton m_moveDownButton;
     
     /**
-     * Default constructor
+     * Default constructor.
      */
     public IPRestrictorTable() {
         initComponents();
@@ -531,8 +531,7 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     }
             
     ///////////////////// Inner class to hold IP and permission //////////////////
-    private 
-    class Entry {
+    private static class Entry {
         public String m_pattern = "*";
         public Boolean m_allow = Boolean.TRUE;
     }

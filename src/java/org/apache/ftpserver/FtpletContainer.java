@@ -41,13 +41,13 @@ class FtpletContainer implements Ftplet {
     private Log m_log;
     private ArrayList m_ftplets = new ArrayList();
     
-    private class FtpletEntry {
+    private static class FtpletEntry {
         public FtpletEntry(String name, Ftplet ftplet) {
             this.name = name;
             this.ftplet = ftplet;
         }
-        String name;
-        Ftplet ftplet;
+        final String name;
+        final Ftplet ftplet;
     }
     
     /**

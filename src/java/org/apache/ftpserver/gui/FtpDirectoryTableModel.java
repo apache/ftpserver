@@ -132,17 +132,21 @@ class FtpDirectoryTableModel extends AbstractTableModel {
      * Add a new user
      */
     public void newEntry(String file, User user) {
-        TableEntry entry = new TableEntry();
-        entry.dirName = file;
-        entry.userName = user.getName();
-        entry.date = DateUtils.getISO8601Date(System.currentTimeMillis());
         
+        // create a new table entry
+        String dirName = file;
+        String userName = user.getName();
+        String date = DateUtils.getISO8601Date(System.currentTimeMillis());
+        TableEntry entry = new TableEntry(dirName, userName, date);
+        
+        // clear if already too many entries
         int sz = m_entries.size();
         if ( (MAX_SIZE > 0) && (sz >= MAX_SIZE) ) {
             clear();
             sz = 0;
         }
         
+        // add the new entry
         synchronized(m_entries) {
             m_entries.add(entry);
             ++sz;
@@ -160,10 +164,15 @@ class FtpDirectoryTableModel extends AbstractTableModel {
     
     //////////////////////////////////////////////////////////
     ///////////////////////list entry  ///////////////////////
-    public class TableEntry {
-        String dirName;
-        String userName;
-        String date;
+    private static class TableEntry {
+        public TableEntry(String dirName, String userName, String date) {
+            this.dirName = dirName;
+            this.userName = userName;
+            this.date = date;
+        }
+        final String dirName;
+        final String userName;
+        final String date;
     }
     
 }    
