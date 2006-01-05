@@ -49,4 +49,9 @@ interface FileSystemView {
      * List file objects
      */
     FileObject[] listFiles(String file) throws FtpException;
+    
+    /**
+     * Dispose file system view.
+     */
+    void dispose();
 }

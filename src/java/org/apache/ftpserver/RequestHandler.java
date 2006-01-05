@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -338,6 +339,10 @@ class RequestHandler implements IConnection {
             request.clear();
             request.setObserver(null);
             request.getFtpDataConnection().dispose();
+            FileSystemView fview = request.getFileSystemView();
+            if(fview != null) {
+            	fview.dispose();
+            }
             m_request = null;
         }
                 

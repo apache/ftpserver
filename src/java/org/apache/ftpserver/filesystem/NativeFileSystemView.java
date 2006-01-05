@@ -158,4 +158,10 @@ class NativeFileSystemView implements FileSystemView {
         }
         return virtualFiles;
     }
+    
+    /**
+     * Dispose file system view - does nothing.
+     */
+    public void dispose() {
+    }
 }
