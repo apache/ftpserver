@@ -227,6 +227,7 @@ class RequestHandler implements IConnection {
                 if(commandLine == null) {
                     break;
                 }
+                commandLine = commandLine.trim();
                 if(commandLine.equals("")) {
                     continue;
                 }

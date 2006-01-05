@@ -125,13 +125,16 @@ class FtpRequestImpl implements FtpRequest {
         int spInd = m_line.indexOf(' ');
         if(spInd != -1) {
             m_argument = m_line.substring(spInd + 1);
+            if(m_argument.equals("")) {
+                m_argument = null;
+            }
             m_command = m_line.substring(0, spInd).toUpperCase();
         }
         else {
             m_command = m_line.toUpperCase();
         }
         
-        if( (m_command.length()>0) && (m_command.charAt(0)=='X') ) {
+        if( (m_command.length() > 0) && (m_command.charAt(0) == 'X') ) {
             m_command = m_command.substring(1);
         }
     }
