@@ -108,7 +108,7 @@ class CommandLine {
      * Print the usage message.
      */
     private static void usage() {
-        System.err.println("Usage: java org.apache.ftpserver.FtpServer <options>");
+        System.err.println("Usage: java org.apache.ftpserver.commandline.CommandLine [<options>]");
         System.err.println("  <options> := -default |");
         System.err.println("               -xml <XML configuration file> |");
         System.err.println("               -prop <properties configuration file>");
@@ -127,7 +127,8 @@ class CommandLine {
         Configuration config = null;
         FileInputStream in = null;
         try {
-            if( (args.length == 1) && args[0].equals("-default") ) {
+            if( args.length == 0 || 
+            		(args.length == 1 && args[0].equals("-default")) ) {
                 config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 2) && args[0].equals("-xml") ) {
