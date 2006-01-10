@@ -53,14 +53,20 @@ limitations under the License.
     <developers>
         <developer>
             <name>Rana Battacharyya</name>
-            <id>ranab</id>
+            <id>rana_b</id>
             <email>rana_b.{aT}.yahoo.{d0T}.com</email>
             <organization/>
         </developer>
         <developer>
             <name>Paul Hammant</name>
-            <id>ph</id>
+            <id>hammant</id>
             <email>paul.{aT}.hammant.{d0T}.org</email>
+            <organization/>
+        </developer>
+        <developer>
+            <name>Niklas Gustavsson</name>
+            <id>ngn</id>
+            <email>niklas.{aT}.protocol7.{d0T}.com</email>
             <organization/>
         </developer>
     </developers>
@@ -85,11 +91,6 @@ limitations under the License.
         </contributor>
         <contributor>
             <name>Luis Sanabria</name>
-            <organization/>
-            <email/>
-        </contributor>
-        <contributor>
-            <name>Niklas Gustavsson</name>
             <organization/>
             <email/>
         </contributor>
