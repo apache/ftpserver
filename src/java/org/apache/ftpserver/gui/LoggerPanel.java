@@ -75,7 +75,7 @@ class LoggerPanel extends PluginPanel implements Log {
     private final static int LEVEL_ERROR = 4;
     private final static int LEVEL_FATAL = 5;
     
-    private int m_logLevel = LEVEL_INFO;
+    private int logLevel = LEVEL_INFO;
 
     private IFtpConfig ftpConfig;
     
@@ -166,7 +166,7 @@ class LoggerPanel extends PluginPanel implements Log {
         logCombo.setToolTipText("Set Log Level");
         logCombo.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent evt) {
-                m_logLevel = logCombo.getSelectedIndex();
+                logLevel = logCombo.getSelectedIndex();
             }
         });
         topPanel.add(logCombo);
@@ -254,7 +254,7 @@ class LoggerPanel extends PluginPanel implements Log {
      * Check log enable. 
      */
     private boolean isEnabled(int level) {
-        return m_logLevel <= level;
+        return logLevel <= level;
     }
     
     /**

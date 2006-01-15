@@ -360,8 +360,8 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         Object[][] retVal = new Object[entries.size()][2];
         for(int i=0; i<entries.size(); ++i) {
             Entry entry = (Entry)entries.get(i);
-            retVal[i][0] = entry.m_pattern;
-            retVal[i][1] = entry.m_allow;
+            retVal[i][0] = entry.pattern;
+            retVal[i][1] = entry.allow;
         }
         return retVal;
     }
@@ -375,8 +375,8 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         if(objs != null) {
             for(int i=0; i<objs.length; ++i) {
                 Entry entry = new Entry();
-                entry.m_pattern = (String)objs[i][0];
-                entry.m_allow = (Boolean)objs[i][1];
+                entry.pattern = (String)objs[i][0];
+                entry.allow = (Boolean)objs[i][1];
                 entries.add(entry);
             }
         }
@@ -479,10 +479,10 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         Entry entry = (Entry)entries.get(row);
         Object retVal = null;
         if(col == 0) {
-            retVal = entry.m_pattern;
+            retVal = entry.pattern;
         }
         else {
-            retVal = entry.m_allow;
+            retVal = entry.allow;
         }
         return retVal;
     }
@@ -504,10 +504,10 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         
         Entry entry = (Entry)entries.get(row);
         if(col == 0) {
-            entry.m_pattern = (String)val;
+            entry.pattern = (String)val;
         }
         else {
-            entry.m_allow = (Boolean)val;
+            entry.allow = (Boolean)val;
         }
     }
     
@@ -532,7 +532,7 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
             
     ///////////////////// Inner class to hold IP and permission //////////////////
     private static class Entry {
-        public String m_pattern = "*";
-        public Boolean m_allow = Boolean.TRUE;
+        public String pattern = "*";
+        public Boolean allow = Boolean.TRUE;
     }
 }

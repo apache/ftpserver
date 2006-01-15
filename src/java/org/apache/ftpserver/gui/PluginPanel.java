@@ -28,20 +28,20 @@ import org.apache.ftpserver.interfaces.IFtpConfig;
 public 
 abstract class PluginPanel extends JPanel {
 
-    private PluginPanelContainer m_container;
+    private PluginPanelContainer container;
     
     /**
      * Constructor - set the container.
      */
     public PluginPanel(PluginPanelContainer container) {
-        m_container = container;
+        this.container = container;
     }
     
     /**
      * Get the container.
      */
     public PluginPanelContainer getContainer() {
-        return m_container;
+        return container;
     }
     
     /**

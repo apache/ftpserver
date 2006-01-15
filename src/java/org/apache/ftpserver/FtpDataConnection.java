@@ -44,13 +44,13 @@ class FtpDataConnection {
     private InetAddress  address = null;
     private int          port   = 0;
     
-    private long m_requestTime = 0L;
+    private long requestTime = 0L;
     
-    private boolean m_isPort   = false;
-    private boolean m_isPasv   = false;
+    private boolean isPort   = false;
+    private boolean isPasv   = false;
     
-    private boolean m_secure   = false;
-    private boolean m_isZip    = false;
+    private boolean secure   = false;
+    private boolean isZip    = false;
     
     
     /**
@@ -90,7 +90,7 @@ class FtpDataConnection {
         }
         
         // reset request time
-        m_requestTime = 0L;
+        requestTime = 0L;
     }
      
     /**
@@ -102,11 +102,11 @@ class FtpDataConnection {
         closeDataSocket();
         
         // set variables
-        m_isPort = true;
-        m_isPasv = false;
+        isPort = true;
+        isPasv = false;
         address = addr;
         this.port = port;
-        m_requestTime = System.currentTimeMillis();
+        requestTime = System.currentTimeMillis();
     } 
     
     /**
@@ -129,7 +129,7 @@ class FtpDataConnection {
         boolean bRet = false;
         try {
             address = fconfig.getDataConnectionConfig().getPassiveAddress();
-            if(m_secure) {
+            if(secure) {
                 ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
                 if(ssl == null) {
                     throw new FtpException("Data connection SSL not configured.");
@@ -142,10 +142,10 @@ class FtpDataConnection {
             this.port = servSoc.getLocalPort();          
 
             // set different state variables
-            m_isPort = false;
-            m_isPasv = true;
+            isPort = false;
+            isPasv = true;
             bRet = true;
-            m_requestTime = System.currentTimeMillis();
+            requestTime = System.currentTimeMillis();
         }
         catch(Exception ex) {
             servSoc = null;
@@ -176,8 +176,8 @@ class FtpDataConnection {
         // get socket depending on the selection
         dataSoc = null;
         try {
-            if(m_isPort) {
-                if(m_secure) {
+            if(isPort) {
+                if(secure) {
                     ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
@@ -188,7 +188,7 @@ class FtpDataConnection {
                     dataSoc = new Socket(address, port);  
                 }
             }
-            else if(m_isPasv) {
+            else if(isPasv) {
                 dataSoc = servSoc.accept();
             }
         }
@@ -203,28 +203,28 @@ class FtpDataConnection {
      * Is secure?
      */
     public boolean isSecure() {
-        return m_secure;
+        return secure;
     }
     
     /**
      * Set the security protocol.
      */
     public void setSecure(boolean secure) {
-        m_secure = secure;
+        this.secure = secure;
     }
     
     /**
      * Is zip mode?
      */
     public boolean isZipMode() {
-        return m_isZip;
+        return isZip;
     }
     
     /**
      * Set zip mode.
      */
     public void setZipMode(boolean zip) {
-        m_isZip = zip;
+        isZip = zip;
     }
     
     /**
@@ -238,7 +238,7 @@ class FtpDataConnection {
      * Get the request time.
      */
     public long getRequestTime() {
-        return m_requestTime;
+        return requestTime;
     }
     
     /**
