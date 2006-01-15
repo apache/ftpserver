@@ -49,29 +49,29 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class Ssl implements ISsl {
     
-    private Log m_log;
+    private Log log;
     
-    private String m_keystoreFile;
-    private String m_keystorePass;
-    private String m_keystoreType;
-    private String m_keystoreAlgorithm;
+    private String keystoreFile;
+    private String keystorePass;
+    private String keystoreType;
+    private String keystoreAlgorithm;
     
-    private String m_sslProtocol;
-    private boolean m_clientAuthReqd;
-    private String m_keyPass;
+    private String sslProtocol;
+    private boolean clientAuthReqd;
+    private String keyPass;
 
-    private KeyStore m_keyStore;
-    private KeyManagerFactory m_keyManagerFactory;
-    private TrustManagerFactory m_trustManagerFactory;
+    private KeyStore keyStore;
+    private KeyManagerFactory keyManagerFactory;
+    private TrustManagerFactory trustManagerFactory;
     
-    private HashMap m_sslContextMap;
+    private HashMap sslContextMap;
     
     
     /**
      * Set the log actory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     }
     
     /**
@@ -82,39 +82,39 @@ class Ssl implements ISsl {
         try {
             
             // get configuration parameters
-            m_keystoreFile      = conf.getString("keystore-file", "./res/.keystore");
-            m_keystorePass      = conf.getString("keystore-password", "password");
-            m_keystoreType      = conf.getString("keystore-type", "JKS");
-            m_keystoreAlgorithm = conf.getString("keystore-algorithm", "SunX509");
-            m_sslProtocol       = conf.getString("ssl-protocol", "TLS");
-            m_clientAuthReqd    = conf.getBoolean("client-authentication", false);
-            m_keyPass           = conf.getString("key-password", "password");
+            keystoreFile      = conf.getString("keystore-file", "./res/.keystore");
+            keystorePass      = conf.getString("keystore-password", "password");
+            keystoreType      = conf.getString("keystore-type", "JKS");
+            keystoreAlgorithm = conf.getString("keystore-algorithm", "SunX509");
+            sslProtocol       = conf.getString("ssl-protocol", "TLS");
+            clientAuthReqd    = conf.getBoolean("client-authentication", false);
+            keyPass           = conf.getString("key-password", "password");
             
             // initialize keystore
             FileInputStream fin = null;
             try {
-                fin = new FileInputStream(m_keystoreFile);
-                m_keyStore = KeyStore.getInstance(m_keystoreType);
-                m_keyStore.load(fin, m_keystorePass.toCharArray());
+                fin = new FileInputStream(keystoreFile);
+                keyStore = KeyStore.getInstance(keystoreType);
+                keyStore.load(fin, keystorePass.toCharArray());
             }
             finally {
                 IoUtils.close(fin);
             }
             
             // initialize key manager factory
-            m_keyManagerFactory = KeyManagerFactory.getInstance(m_keystoreAlgorithm);
-            m_keyManagerFactory.init(m_keyStore, m_keyPass.toCharArray());
+            keyManagerFactory = KeyManagerFactory.getInstance(keystoreAlgorithm);
+            keyManagerFactory.init(keyStore, keyPass.toCharArray());
             
             // initialize trust manager factory
-            m_trustManagerFactory = TrustManagerFactory.getInstance(m_keystoreAlgorithm);
-            m_trustManagerFactory.init(m_keyStore);
+            trustManagerFactory = TrustManagerFactory.getInstance(keystoreAlgorithm);
+            trustManagerFactory.init(keyStore);
             
             // create ssl context map - the key is the 
             // SSL protocol and the value is SSLContext.
-            m_sslContextMap = new HashMap();
+            sslContextMap = new HashMap();
         }
         catch(Exception ex) {
-            m_log.fatal("Ssl.configure()", ex);
+            log.fatal("Ssl.configure()", ex);
             throw new FtpException("Ssl.configure()", ex);
         }
     }
@@ -126,11 +126,11 @@ class Ssl implements ISsl {
         
         // null value check
         if(protocol == null) {
-            protocol = m_sslProtocol;
+            protocol = sslProtocol;
         }
         
         // if already stored - return it
-        SSLContext ctx = (SSLContext)m_sslContextMap.get(protocol);
+        SSLContext ctx = (SSLContext)sslContextMap.get(protocol);
         if(ctx != null) {
             return ctx;
         }
@@ -141,12 +141,12 @@ class Ssl implements ISsl {
         
         // create SSLContext
         ctx = SSLContext.getInstance(protocol);
-        ctx.init(m_keyManagerFactory.getKeyManagers(), 
-                 m_trustManagerFactory.getTrustManagers(), 
+        ctx.init(keyManagerFactory.getKeyManagers(), 
+                 trustManagerFactory.getTrustManagers(), 
                  random);
 
         // store it in map
-        m_sslContextMap.put(protocol, ctx);
+        sslContextMap.put(protocol, ctx);
         return ctx;
     }
 
@@ -173,7 +173,7 @@ class Ssl implements ISsl {
         // initialize server socket
         String cipherSuites[] = serverSocket.getSupportedCipherSuites();
         serverSocket.setEnabledCipherSuites(cipherSuites);
-        serverSocket.setNeedClientAuth(m_clientAuthReqd);
+        serverSocket.setNeedClientAuth(clientAuthReqd);
         return serverSocket;
     }
  
@@ -202,7 +202,7 @@ class Ssl implements ISsl {
         // initialize socket
         String cipherSuites[] = ssoc.getSupportedCipherSuites();
         ssoc.setEnabledCipherSuites(cipherSuites);
-        ssoc.setNeedClientAuth(m_clientAuthReqd);
+        ssoc.setNeedClientAuth(clientAuthReqd);
         
         return ssoc;
     }

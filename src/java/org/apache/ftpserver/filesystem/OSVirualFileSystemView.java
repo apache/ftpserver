@@ -35,35 +35,35 @@ import org.apache.ftpserver.ftplet.User;
 public 
 class OSVirualFileSystemView implements FileSystemView {
 
-    private Log m_log;
+    private Log log;
     
     // root directory will be always absolute (canonical name) and
     // the path separator will be always '/'. The root directory
     // will always end with '/'.
-    private String m_rootName;
+    private String rootName;
     
-    private FileObject m_currDir;
-    private boolean m_hasWritePermission;
+    private FileObject currDir;
+    private boolean hasWritePermission;
     
     /**
      * Constructor - set the user object.
      */
     public OSVirualFileSystemView(User user, LogFactory factory) throws FtpException {
         
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
         try {
             File root = new File(user.getHomeDirectory());
-            m_rootName = root.getCanonicalPath();
-            m_rootName = OSVirtualFileObject.normalizeSeparateChar(m_rootName);
-            if( !m_rootName.endsWith("/") ) {
-                m_rootName += '/';
+            rootName = root.getCanonicalPath();
+            rootName = OSVirtualFileObject.normalizeSeparateChar(rootName);
+            if( !rootName.endsWith("/") ) {
+                rootName += '/';
             }
             
-            m_hasWritePermission = user.getWritePermission();
-            m_currDir = new OSVirtualFileObject(root, m_rootName, m_hasWritePermission);
+            hasWritePermission = user.getWritePermission();
+            currDir = new OSVirtualFileObject(root, rootName, hasWritePermission);
         }
         catch(IOException ex) {
-            m_log.warn("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
+            log.warn("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
             throw new FtpException("OSVirualFileSystemView.OSVirualFileSystemView()", ex);
         }
     }
@@ -72,14 +72,14 @@ class OSVirualFileSystemView implements FileSystemView {
      * Get the user root directory.
      */
     public FileObject getRootDirectory() throws FtpException {
-        return new OSVirtualFileObject(new File(m_rootName), m_rootName, m_hasWritePermission);
+        return new OSVirtualFileObject(new File(rootName), rootName, hasWritePermission);
     }
     
     /**
      * Get current directory.
      */
     public FileObject getCurrentDirectory() throws FtpException {
-        return m_currDir;
+        return currDir;
     }
     
     /**
@@ -89,7 +89,7 @@ class OSVirualFileSystemView implements FileSystemView {
         FileObject dirObj = getFileObject(dir);
         boolean retVal = false;
         if(dirObj.isDirectory()) {
-            m_currDir = dirObj;
+            currDir = dirObj;
             retVal = true;
         }
         return retVal;
@@ -105,10 +105,10 @@ class OSVirualFileSystemView implements FileSystemView {
             fileStr = OSVirtualFileObject.normalizeSeparateChar(fileStr);
             File physicalFile = null;
             if(fileStr.startsWith("/")) {
-                physicalFile = new File(m_rootName, fileStr.substring(1));
+                physicalFile = new File(rootName, fileStr.substring(1));
             }
             else {
-                File physicalCurrDir = ((OSVirtualFileObject)m_currDir).getPhysicalFile();
+                File physicalCurrDir = ((OSVirtualFileObject)currDir).getPhysicalFile();
                 physicalFile = new File(physicalCurrDir, fileStr);
             }
 
@@ -118,13 +118,13 @@ class OSVirualFileSystemView implements FileSystemView {
 
             // not under the virtual root - not available
             FileObject virtualFile = null;
-            if(m_rootName.regionMatches(0, physicalFileStr, 0, m_rootName.length() - 1)) {
-                virtualFile = new OSVirtualFileObject(physicalFile, m_rootName, m_hasWritePermission);
+            if(rootName.regionMatches(0, physicalFileStr, 0, rootName.length() - 1)) {
+                virtualFile = new OSVirtualFileObject(physicalFile, rootName, hasWritePermission);
             }
             return virtualFile;
         }
         catch(IOException ex) {
-            m_log.warn("OSVirtualFileSystemView.getFileObject()", ex);
+            log.warn("OSVirtualFileSystemView.getFileObject()", ex);
             throw new FtpException("OSVirtualFileSystemView.getFileObject()", ex);
         }
     }
@@ -149,7 +149,7 @@ class OSVirualFileSystemView implements FileSystemView {
         // file - return a single element array 
         if(physicalFile.isFile()) {
             return new FileObject[] {
-                           new OSVirtualFileObject(physicalFile, m_rootName, m_hasWritePermission)
+                           new OSVirtualFileObject(physicalFile, rootName, hasWritePermission)
                        };
         }
         
@@ -162,7 +162,7 @@ class OSVirualFileSystemView implements FileSystemView {
         // now return all the files under the directory
         FileObject[] virtualFiles = new FileObject[physicalFiles.length];
         for(int i=0; i<physicalFiles.length; ++i) {
-            virtualFiles[i] = new OSVirtualFileObject(physicalFiles[i], m_rootName, m_hasWritePermission);
+            virtualFiles[i] = new OSVirtualFileObject(physicalFiles[i], rootName, hasWritePermission);
         }
         return virtualFiles;
     }

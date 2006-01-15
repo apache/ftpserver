@@ -52,16 +52,16 @@ class MessagePanel extends PluginPanel {
 
     private static final long serialVersionUID = -68038181884794057L;
     
-    private IFtpConfig m_fconfig;
-    private JComboBox m_comboBox;
+    private IFtpConfig fconfig;
+    private JComboBox comboBox;
     
-    private JList m_list;
-    private JTextArea m_txtArea;
+    private JList list;
+    private JTextArea txtArea;
     
-    private String[] m_languages;
-    private Vector m_messageKeys;
-    private Properties m_messageProps;
-    private int m_oldKeySelIndex = -1;
+    private String[] languages;
+    private Vector messageKeys;
+    private Properties messageProps;
+    private int oldKeySelIndex = -1;
     
     /**
      * Constructor - set the container.
@@ -87,14 +87,14 @@ class MessagePanel extends PluginPanel {
         comboPanel.add(label);
         
         // all languages
-        m_comboBox = new JComboBox();
-        m_comboBox.setPreferredSize(new Dimension(100, 22));
-        m_comboBox.addActionListener(new ActionListener() {
+        comboBox = new JComboBox();
+        comboBox.setPreferredSize(new Dimension(100, 22));
+        comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 changeLanguage();
             }
         });
-        comboPanel.add(m_comboBox);
+        comboPanel.add(comboBox);
         
         // split pane
         JSplitPane splitPane = new JSplitPane();
@@ -102,19 +102,19 @@ class MessagePanel extends PluginPanel {
         add(splitPane, BorderLayout.CENTER);
         
         // message list keys
-        m_list = new JList();
-        m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        m_list.addListSelectionListener(new ListSelectionListener() {
+        list = new JList();
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 changeKey();
             }
         });
-        JScrollPane listScroller = new JScrollPane(m_list);
+        JScrollPane listScroller = new JScrollPane(list);
         splitPane.setLeftComponent(listScroller);
         
         // message text
-        m_txtArea = new JTextArea();
-        JScrollPane txtPane = new JScrollPane(m_txtArea, 
+        txtArea = new JTextArea();
+        JScrollPane txtPane = new JScrollPane(txtArea, 
                     JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         splitPane.setRightComponent(txtPane);
@@ -148,18 +148,18 @@ class MessagePanel extends PluginPanel {
     public void changeLanguage() {
         
         // get selected language
-        m_oldKeySelIndex = -1;
-        int selIdx = m_comboBox.getSelectedIndex();
+        oldKeySelIndex = -1;
+        int selIdx = comboBox.getSelectedIndex();
         if(selIdx == -1) {
             return;
         }
         String language = null;
         if(selIdx >= 1) {
-            language = m_languages[selIdx - 1];
+            language = languages[selIdx - 1];
         }
         
         // get properties
-        IMessageResource msgRes = m_fconfig.getMessageResource();
+        IMessageResource msgRes = fconfig.getMessageResource();
         Properties prop = msgRes.getMessages(language);
         Vector keyList = new Vector();
         for(Enumeration keys = prop.propertyNames(); keys.hasMoreElements();) {
@@ -167,13 +167,13 @@ class MessagePanel extends PluginPanel {
             keyList.add(key);
         }
         Collections.sort(keyList);
-        m_messageKeys = keyList;
-        m_messageProps = prop;
+        messageKeys = keyList;
+        messageProps = prop;
         
         // load list
-        m_list.removeAll();
-        m_list.setListData(keyList);
-        m_list.setSelectedIndex(0);
+        list.removeAll();
+        list.setListData(keyList);
+        list.setSelectedIndex(0);
     }
     
     /**
@@ -182,24 +182,24 @@ class MessagePanel extends PluginPanel {
     public void changeKey() {
         
         // get key selection index
-        int selIdx = m_list.getSelectedIndex();
+        int selIdx = list.getSelectedIndex();
         if(selIdx == -1) {
             return;
         }
         
         // save the last text area value
-        if(m_oldKeySelIndex != -1) {
-            String oldKey = (String)m_messageKeys.get(m_oldKeySelIndex);
-            String oldTxt = m_txtArea.getText();
-            m_messageProps.setProperty(oldKey, oldTxt);
+        if(oldKeySelIndex != -1) {
+            String oldKey = (String)messageKeys.get(oldKeySelIndex);
+            String oldTxt = txtArea.getText();
+            messageProps.setProperty(oldKey, oldTxt);
         }
-        m_oldKeySelIndex = selIdx;
+        oldKeySelIndex = selIdx;
         
         // update text area
-        String key = (String)m_messageKeys.get(selIdx);
-        String val = m_messageProps.getProperty(key);
-        m_txtArea.setText(val);
-        m_txtArea.setCaretPosition(0);
+        String key = (String)messageKeys.get(selIdx);
+        String val = messageProps.getProperty(key);
+        txtArea.setText(val);
+        txtArea.setCaretPosition(0);
     }
     
     /**
@@ -208,24 +208,24 @@ class MessagePanel extends PluginPanel {
     private void save() {
         
         // get the selected language
-        int selIdx = m_comboBox.getSelectedIndex();
+        int selIdx = comboBox.getSelectedIndex();
         if(selIdx == -1) {
             return;
         }
         String language = null;
         if(selIdx >= 1) {
-            language = m_languages[selIdx - 1];
+            language = languages[selIdx - 1];
         }
         
         // store existing text value
-        String key = (String)m_comboBox.getSelectedItem();
-        String val = m_txtArea.getText();
-        m_messageProps.setProperty(key, val);
+        String key = (String)comboBox.getSelectedItem();
+        String val = txtArea.getText();
+        messageProps.setProperty(key, val);
         
         
         // save custom messages
         try {
-            m_fconfig.getMessageResource().save(m_messageProps, language);
+            fconfig.getMessageResource().save(messageProps, language);
         }
         catch(FtpException ex) {
             GuiUtils.showErrorMessage(this, "Cannot save messages.");
@@ -236,31 +236,31 @@ class MessagePanel extends PluginPanel {
      * Refresh the ftp configuration
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_fconfig = ftpConfig;
-        m_comboBox.removeAllItems();
-        m_list.removeAll();
-        m_oldKeySelIndex = -1;
-        if(m_fconfig == null) {
+        fconfig = ftpConfig;
+        comboBox.removeAllItems();
+        list.removeAll();
+        oldKeySelIndex = -1;
+        if(fconfig == null) {
             return;
         }
         
         // populate language list
-        IMessageResource msgRes = m_fconfig.getMessageResource();
-        m_languages = msgRes.getAvailableLanguages();
-        m_comboBox.addItem("<default>");
-        if(m_languages != null) {
-            for(int i=0; i<m_languages.length; ++i) {
-                m_comboBox.addItem(m_languages[i]);
+        IMessageResource msgRes = fconfig.getMessageResource();
+        languages = msgRes.getAvailableLanguages();
+        comboBox.addItem("<default>");
+        if(languages != null) {
+            for(int i=0; i<languages.length; ++i) {
+                comboBox.addItem(languages[i]);
             }
         }
-        m_comboBox.setSelectedIndex(0);
+        comboBox.setSelectedIndex(0);
     }
 
     /** 
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
     
     /**

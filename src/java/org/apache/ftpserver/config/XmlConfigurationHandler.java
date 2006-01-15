@@ -37,10 +37,10 @@ import org.xml.sax.helpers.DefaultHandler;
 public 
 class XmlConfigurationHandler extends DefaultHandler {
 
-    private ArrayList m_elements = new ArrayList();
-    private XmlConfiguration m_root = null;
-    private InputSource m_source = null;
-    private StringBuffer m_elemVal = new StringBuffer(128);
+    private ArrayList elements = new ArrayList();
+    private XmlConfiguration root = null;
+    private InputSource source = null;
+    private StringBuffer elemVal = new StringBuffer(128);
     
     
     /**
@@ -48,7 +48,7 @@ class XmlConfigurationHandler extends DefaultHandler {
      * @param is xml input stream
      */
     public XmlConfigurationHandler(InputStream is) {
-        m_source = new InputSource(is);
+        source = new InputSource(is);
     }
     
     /**
@@ -64,23 +64,23 @@ class XmlConfigurationHandler extends DefaultHandler {
      * Parse the input to create xml configuration
      */
     public XmlConfiguration parse() throws Exception {                               
-        if(m_root != null) {
-            return m_root;
+        if(root != null) {
+            return root;
         }
         
         XMLReader xmlreader = getParser();
         xmlreader.setContentHandler(this);
         xmlreader.setErrorHandler(this);
-        xmlreader.parse(m_source); 
+        xmlreader.parse(source); 
         
-        return m_root;
+        return root;
     }
 
     /**
      * Update last element value.
      */
     public void characters(char[] ch, int start, int length) throws SAXException {
-        m_elemVal.append(ch, start, length);
+        elemVal.append(ch, start, length);
     }
 
     /**
@@ -90,17 +90,17 @@ class XmlConfigurationHandler extends DefaultHandler {
                            String lname,
                            String qname) throws SAXException {
         
-        int location = m_elements.size() - 1;
-        XmlConfiguration lastElem = (XmlConfiguration)m_elements.remove(location);
+        int location = elements.size() - 1;
+        XmlConfiguration lastElem = (XmlConfiguration)elements.remove(location);
 
         if(lastElem.getChildCount() == 0) {
-            String elemVal = m_elemVal.toString().trim();
+            String trimmedElemVal = elemVal.toString().trim();
             
-            if(elemVal.equals("")) {
+            if(trimmedElemVal.equals("")) {
                 lastElem.setValue(null);
             }
             else {
-                lastElem.setValue(elemVal);
+                lastElem.setValue(trimmedElemVal);
             }
         }
         else {
@@ -108,7 +108,7 @@ class XmlConfigurationHandler extends DefaultHandler {
         }
         
         if(location == 0) {
-            m_root = lastElem;
+            root = lastElem;
         }
     }
 
@@ -121,15 +121,15 @@ class XmlConfigurationHandler extends DefaultHandler {
                              Attributes attrs ) throws SAXException {
         
         XmlConfiguration element = new XmlConfiguration(qname); 
-        int lastIdx = m_elements.size() - 1;
-        m_elemVal.setLength(0);
+        int lastIdx = elements.size() - 1;
+        elemVal.setLength(0);
 
         if(lastIdx > -1) {
-            XmlConfiguration parent = (XmlConfiguration)m_elements.get(lastIdx);
+            XmlConfiguration parent = (XmlConfiguration)elements.get(lastIdx);
             parent.setValue(null);
             parent.addChild(element);
         }
-        m_elements.add(element);
+        elements.add(element);
     }
 
     /**

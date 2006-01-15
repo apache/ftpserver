@@ -36,31 +36,31 @@ import org.apache.ftpserver.interfaces.IFtpConfig;
 public 
 class FtpServer implements Runnable {
 
-    private Thread m_runner;
-    private ServerSocket m_serverSocket;
-    private IFtpConfig m_ftpConfig;
-    private Log m_log;
-    private boolean m_suspended;
+    private Thread runner;
+    private ServerSocket serverSocket;
+    private IFtpConfig ftpConfig;
+    private Log log;
+    private boolean suspended;
     
 
     /**
      * Constructor. Set the server object.
      */
     public FtpServer(IFtpConfig ftpConfig) {
-        m_ftpConfig = ftpConfig;
-        m_log = m_ftpConfig.getLogFactory().getInstance(getClass());
+        this.ftpConfig = ftpConfig;
+        log = this.ftpConfig.getLogFactory().getInstance(getClass());
     }
 
     /**
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-        if (m_runner == null) {
-            m_serverSocket = m_ftpConfig.getSocketFactory().createServerSocket();            
-            m_runner = new Thread(this);
-            m_runner.start();
+        if (runner == null) {
+            serverSocket = ftpConfig.getSocketFactory().createServerSocket();            
+            runner = new Thread(this);
+            runner.start();
             System.out.println("Server ready :: Apache FTP Server");
-            m_log.info("------- Apache FTP Server started ------");
+            log.info("------- Apache FTP Server started ------");
         }
     }
 
@@ -70,34 +70,34 @@ class FtpServer implements Runnable {
     public void stop() {
         
         // first interrupt the server engine thread
-        if (m_runner != null) {
-            m_runner.interrupt();
+        if (runner != null) {
+            runner.interrupt();
         }
 
         // close server socket
-        if (m_serverSocket != null) {
+        if (serverSocket != null) {
             try {
-                m_serverSocket.close();
+                serverSocket.close();
             }
             catch(IOException ex){
             }
-            m_serverSocket = null;
+            serverSocket = null;
         }  
          
         // release server resources
-        if (m_ftpConfig != null) {
-            m_ftpConfig.dispose();
-            m_ftpConfig = null;
+        if (ftpConfig != null) {
+            ftpConfig.dispose();
+            ftpConfig = null;
         }
 
         // wait for the runner thread to terminate
-        if( (m_runner != null) && m_runner.isAlive() ) {
+        if( (runner != null) && runner.isAlive() ) {
             try {
-                m_runner.join();
+                runner.join();
             }
             catch(InterruptedException ex) {
             }
-            m_runner = null;
+            runner = null;
         }
     }
 
@@ -105,47 +105,47 @@ class FtpServer implements Runnable {
      * Get the server status.
      */
     public boolean isStopped() {
-        return m_runner == null;
+        return runner == null;
     }
 
     /**
      * Suspend further requests
      */
     public void suspend() {
-        m_suspended = true;
+        suspended = true;
     }
 
     /**
      * Resume the server handler
      */
     public void resume() {
-        m_suspended = false;
+        suspended = false;
     }
 
     /**
      * Is the server suspended
      */
     public boolean isSuspended() {
-        return m_suspended;
+        return suspended;
     }
 
     /**
      * Listen for client requests.
      */
     public void run() {
-        IConnectionManager conManager = m_ftpConfig.getConnectionManager();
-        while (m_runner != null) {
+        IConnectionManager conManager = ftpConfig.getConnectionManager();
+        while (runner != null) {
             try {
                 
                 // closed - return
-                if(m_serverSocket == null) {
+                if(serverSocket == null) {
                     return;
                 }
                 
                 // accept new connection .. if suspended 
                 // close immediately.
-                Socket soc = m_serverSocket.accept();
-                if(m_suspended) {
+                Socket soc = serverSocket.accept();
+                if(suspended) {
                     try {
                         soc.close();
                     }
@@ -154,7 +154,7 @@ class FtpServer implements Runnable {
                     continue;
                 }
                 
-                IConnection connection = new RequestHandler(m_ftpConfig, soc);
+                IConnection connection = new RequestHandler(ftpConfig, soc);
                 conManager.newConnection(connection);
             }
             catch (Exception ex) {
@@ -167,6 +167,6 @@ class FtpServer implements Runnable {
      * Get the root server configuration object. 
      */
     public IFtpConfig getFtpConfig() {
-        return m_ftpConfig;
+        return ftpConfig;
     }
 }

@@ -45,25 +45,25 @@ class DirectoryLister {
     };
     
     
-    private FileSystemView m_fileSystemView;
+    private FileSystemView fileSystemView;
     
-    protected boolean m_isAllOption;
-    protected boolean m_isDetailOption; 
+    protected boolean isAllOption;
+    protected boolean isDetailOption; 
     
-    protected String m_file;
-    protected String m_pattern;
-    private char m_permission[] = new char[10];
+    protected String file;
+    protected String pattern;
+    private char permission[] = new char[10];
     
-    private String[] m_selectedTypes = new String[] {"Size", "Modify", "Type"};
+    private String[] selectedTypes = new String[] {"Size", "Modify", "Type"};
     
     
     /**
      * Constructor - set the file system view.
      */
     public DirectoryLister(FileSystemView fileSystemView) {
-        m_fileSystemView = fileSystemView;
+        this.fileSystemView = fileSystemView;
         for(int i=3; i<10; ++i) {
-            m_permission[i] = '-';
+            permission[i] = '-';
         }
     }
     
@@ -71,8 +71,8 @@ class DirectoryLister {
      * Get selected types.
      */
     public String[] getSelectedTypes() {
-        String types[] = new String[m_selectedTypes.length];
-        System.arraycopy(m_selectedTypes, 0, types, 0, m_selectedTypes.length);
+        String types[] = new String[selectedTypes.length];
+        System.arraycopy(selectedTypes, 0, types, 0, selectedTypes.length);
         return types;
     }
     
@@ -102,8 +102,8 @@ class DirectoryLister {
         }
         
         // set the user types
-        m_selectedTypes = new String[types.length];
-        System.arraycopy(types, 0, m_selectedTypes, 0, types.length);
+        selectedTypes = new String[types.length];
+        System.arraycopy(types, 0, selectedTypes, 0, types.length);
         return true;
     }
     
@@ -125,7 +125,7 @@ class DirectoryLister {
         // get all the file objects
         FileObject[] files = null;
         try {
-            files = m_fileSystemView.listFiles(m_file);
+            files = fileSystemView.listFiles(file);
         }
         catch(FtpException ex) {
         }
@@ -134,21 +134,21 @@ class DirectoryLister {
         }
         
         RegularExpr regexp = null;
-        if(m_pattern != null) {
-            regexp = new RegularExpr(m_pattern);
+        if(pattern != null) {
+            regexp = new RegularExpr(pattern);
         }
         for(int i=0; i<files.length; i++) {
             if(files[i] == null) {
                 continue;
             }
-            if ( (!m_isAllOption) && files[i].isHidden() ) {
+            if ( (!isAllOption) && files[i].isHidden() ) {
                 continue;
             }
             if( (regexp != null) && (!regexp.isMatch(files[i].getShortName())) ) {
                 continue;
             }
             
-            if(m_isDetailOption) {
+            if(isDetailOption) {
                 printLine(files[i], out);
             }
             else {
@@ -176,7 +176,7 @@ class DirectoryLister {
         
         FileObject[] files = null;
         try {
-            files = m_fileSystemView.listFiles(m_file);
+            files = fileSystemView.listFiles(file);
         }
         catch(FtpException ex) {
         }
@@ -186,14 +186,14 @@ class DirectoryLister {
         
         // Arrays.sort(files, new FileComparator());
         RegularExpr regexp = null;
-        if(m_pattern != null) {
-            regexp = new RegularExpr(m_pattern);
+        if(pattern != null) {
+            regexp = new RegularExpr(pattern);
         }
         for(int i=0; i<files.length; i++) {
             if(files[i] == null) {
                 continue;
             }
-            if ( (!m_isAllOption) && files[i].isHidden() ) {
+            if ( (!isAllOption) && files[i].isHidden() ) {
                 continue;
             }
             if( (regexp != null) && (!regexp.isMatch(files[i].getShortName())) ) {
@@ -221,7 +221,7 @@ class DirectoryLister {
         
         FileObject file = null;
         try {
-            file = m_fileSystemView.getFileObject(argument);
+            file = fileSystemView.getFileObject(argument);
             if(file == null) {
                 return false;
             }
@@ -256,7 +256,7 @@ class DirectoryLister {
         
         FileObject[] files = null;
         try {
-            files = m_fileSystemView.listFiles(m_file);
+            files = fileSystemView.listFiles(file);
         }
         catch(FtpException ex) {
         }
@@ -266,14 +266,14 @@ class DirectoryLister {
         
         // Arrays.sort(files, new FileComparator());
         RegularExpr regexp = null;
-        if(m_pattern != null) {
-            regexp = new RegularExpr(m_pattern);
+        if(pattern != null) {
+            regexp = new RegularExpr(pattern);
         }
         for(int i=0; i<files.length; i++) {
             if(files[i] == null) {
                 continue;
             }
-            if ( (!m_isAllOption) && files[i].isHidden() ) {
+            if ( (!isAllOption) && files[i].isHidden() ) {
                 continue;
             }
             if( (regexp != null) && (!regexp.isMatch(files[i].getShortName())) ) {
@@ -328,15 +328,15 @@ class DirectoryLister {
             }
             options = optionsSb.toString();
         }
-        m_isAllOption = options.indexOf('a') != -1;
-        m_isDetailOption = options.indexOf('l') != -1;
+        isAllOption = options.indexOf('a') != -1;
+        isDetailOption = options.indexOf('l') != -1;
         
         // check regular expression
         if( (lsFileName.indexOf('*') == -1) &&
             (lsFileName.indexOf('?') == -1) &&
             (lsFileName.indexOf('[') == -1) ) {
-            m_pattern = null;
-            m_file = lsFileName;
+            this.pattern = null;
+            file = lsFileName;
             return true;
         }
         
@@ -356,7 +356,7 @@ class DirectoryLister {
             }
             
             // check path
-            FileObject file = m_fileSystemView.getFileObject(lsFileName);
+            FileObject file = fileSystemView.getFileObject(lsFileName);
             if(file == null) {
                 return false;
             }
@@ -371,12 +371,12 @@ class DirectoryLister {
             return false;
         }
 
-        m_file = lsFileName;
+        file = lsFileName;
         if( "*".equals(pattern) || "".equals(pattern) ) {
-            m_pattern = null;
+            this.pattern = null;
         }
         else {
-            m_pattern = pattern;
+        	this.pattern = pattern;
         }
         return true;
     }
@@ -407,10 +407,10 @@ class DirectoryLister {
      * Get permission string.
      */
     private char[] getPermission(FileObject file) {
-        m_permission[0] = file.isDirectory() ? 'd' : '-';
-        m_permission[1] = file.hasReadPermission() ? 'r' : '-';
-        m_permission[2] = file.hasWritePermission() ? 'w' : '-';
-        return m_permission;
+        permission[0] = file.isDirectory() ? 'd' : '-';
+        permission[1] = file.hasReadPermission() ? 'r' : '-';
+        permission[2] = file.hasWritePermission() ? 'w' : '-';
+        return permission;
     }
     
     /**
@@ -440,8 +440,8 @@ class DirectoryLister {
      * Print each file line.
      */
     private void printMLine(FileObject file, Writer out) throws IOException {
-        for(int i=0; i<m_selectedTypes.length; ++i) {
-            String type = m_selectedTypes[i];
+        for(int i=0; i<selectedTypes.length; ++i) {
+            String type = selectedTypes[i];
             if(type.equalsIgnoreCase("size")) {
                 out.write("Size=");
                 out.write(String.valueOf(file.getSize()));

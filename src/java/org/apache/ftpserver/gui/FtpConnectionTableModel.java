@@ -46,27 +46,27 @@ class FtpConnectionTableModel extends AbstractTableModel
                                                "Login Time", 
                                                "Last Access Time",    
                                                "IP"};
-    private List m_connections;
-    private IFtpConfig m_fonfig;
+    private List connections;
+    private IFtpConfig fonfig;
     
     /**
      * Constructor - initialize user list
      */
     public FtpConnectionTableModel() {
-        m_connections = new Vector();
+        connections = new Vector();
     }
     
     /**
      * Reload the model.
      */
     public void refresh(IFtpConfig cfg) {
-        m_fonfig = cfg;
-        if (m_fonfig != null) {
-            m_connections = m_fonfig.getConnectionManager().getAllConnections();
-            m_fonfig.getConnectionManager().setObserver(this);
+        fonfig = cfg;
+        if (fonfig != null) {
+            connections = fonfig.getConnectionManager().getAllConnections();
+            fonfig.getConnectionManager().setObserver(this);
         }
         else {
-            m_connections.clear();
+            connections.clear();
         }
         fireTableDataChanged();
     }
@@ -96,7 +96,7 @@ class FtpConnectionTableModel extends AbstractTableModel
      * Get row count.
      */
     public int getRowCount() {
-        return m_connections.size();
+        return connections.size();
     }
     
     /**
@@ -135,8 +135,8 @@ class FtpConnectionTableModel extends AbstractTableModel
         String retVal = "";
         
         IConnection thisCon = null;
-        if (row < m_connections.size()) {
-            thisCon = (IConnection)m_connections.get(row);
+        if (row < connections.size()) {
+            thisCon = (IConnection)connections.get(row);
         }
         if (thisCon == null) {
             return retVal;
@@ -183,8 +183,8 @@ class FtpConnectionTableModel extends AbstractTableModel
      * Get connection at an index.
      */
     public IConnection getConnection(int index) {
-        if(index < m_connections.size()) {
-            return (IConnection)m_connections.get(index);
+        if(index < connections.size()) {
+            return (IConnection)connections.get(index);
         }
         return null;
     }
@@ -196,8 +196,8 @@ class FtpConnectionTableModel extends AbstractTableModel
     public void openedConnection(final IConnection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                m_connections.add(con);
-                int sz = m_connections.size();
+                connections.add(con);
+                int sz = connections.size();
                 fireTableRowsInserted(sz, sz);        
             }
         };
@@ -210,9 +210,9 @@ class FtpConnectionTableModel extends AbstractTableModel
     public void closedConnection(final IConnection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                int index = m_connections.indexOf(con);
+                int index = connections.indexOf(con);
                 if (index != -1) {
-                    m_connections.remove(index);
+                    connections.remove(index);
                     fireTableRowsDeleted(index, index);
                 }        
             }
@@ -226,7 +226,7 @@ class FtpConnectionTableModel extends AbstractTableModel
     public void updatedConnection(final IConnection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                int index = m_connections.indexOf(con);
+                int index = connections.indexOf(con);
                 if(index != -1) {       
                     fireTableRowsUpdated(index, index);
                 }        

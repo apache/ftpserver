@@ -49,15 +49,15 @@ class MessageResourceImpl implements IMessageResource {
 
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     
-    private Log m_log;
+    private Log log;
     
-    private String[] m_languages;
-    private HashMap m_messages;
-    private String m_customMessageDir;
+    private String[] languages;
+    private HashMap messages;
+    private String customMessageDir;
     
     private static class PropertiesPair {
-        public Properties m_default = new Properties();
-        public Properties m_custom = new Properties();
+        public Properties defaultProperties = new Properties();
+        public Properties customProperties = new Properties();
     } 
     
     
@@ -65,7 +65,7 @@ class MessageResourceImpl implements IMessageResource {
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     }
     
     /**
@@ -74,30 +74,30 @@ class MessageResourceImpl implements IMessageResource {
     public void configure(Configuration config) throws FtpException {
         
         // get the custom message directory
-        m_customMessageDir = config.getString("custom-message-dir", "./res");
+        customMessageDir = config.getString("custom-message-dir", "./res");
         
         // get all the languages
         String languages = config.getString("languages", null);
         if(languages != null) {
             StringTokenizer st = new StringTokenizer(languages, ",; \t");
             int tokenCount = st.countTokens();
-            m_languages = new String[tokenCount];
+            this.languages = new String[tokenCount];
             for(int i=0; i<tokenCount; ++i) {
-                m_languages[i] = st.nextToken().toLowerCase();
+                this.languages[i] = st.nextToken().toLowerCase();
             }
         }
         
         // populate different properties
-        m_messages = new HashMap();
-        if(m_languages != null) {
-            for(int i=0; i<m_languages.length; ++i) {
-                String lang = m_languages[i];
+        messages = new HashMap();
+        if(this.languages != null) {
+            for(int i=0; i<this.languages.length; ++i) {
+                String lang = this.languages[i];
                 PropertiesPair pair = createPropertiesPair(lang);
-                m_messages.put(lang, pair);
+                messages.put(lang, pair);
             }
         }
         PropertiesPair pair = createPropertiesPair(null);
-        m_messages.put(null, pair);
+        messages.put(null, pair);
     }
     
     /**
@@ -119,11 +119,11 @@ class MessageResourceImpl implements IMessageResource {
         try {
             in = getClass().getClassLoader().getResourceAsStream(defaultResourceName);
             if(in != null) {
-                pair.m_default.load(in);
+                pair.defaultProperties.load(in);
             }
         }
         catch(Exception ex) {
-            m_log.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            log.warn("MessageResourceImpl.createPropertiesPair()", ex);
             throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
@@ -133,20 +133,20 @@ class MessageResourceImpl implements IMessageResource {
         // load custom resource
         File resourceFile = null;
         if(lang == null) {
-            resourceFile = new File(m_customMessageDir, "FtpStatus.gen");
+            resourceFile = new File(customMessageDir, "FtpStatus.gen");
         }
         else {
-            resourceFile = new File(m_customMessageDir, "FtpStatus_" + lang + ".gen");
+            resourceFile = new File(customMessageDir, "FtpStatus_" + lang + ".gen");
         }
         in = null;
         try {
             if(resourceFile.exists()) {
                 in = new FileInputStream(resourceFile);
-                pair.m_custom.load(in);
+                pair.customProperties.load(in);
             }
         }
         catch(Exception ex) {
-            m_log.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            log.warn("MessageResourceImpl.createPropertiesPair()", ex);
             throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
@@ -160,7 +160,7 @@ class MessageResourceImpl implements IMessageResource {
      * Get all the available languages.
      */
     public String[] getAvailableLanguages() {
-        return m_languages;
+        return languages;
     }
     
     /**
@@ -179,22 +179,22 @@ class MessageResourceImpl implements IMessageResource {
         PropertiesPair pair = null;
         if(language != null) {
             language = language.toLowerCase();
-            pair = (PropertiesPair)m_messages.get(language);
+            pair = (PropertiesPair)messages.get(language);
             if(pair != null) {
-                value = pair.m_custom.getProperty(key);
+                value = pair.customProperties.getProperty(key);
                 if(value == null) {
-                    value = pair.m_default.getProperty(key);
+                    value = pair.defaultProperties.getProperty(key);
                 }
             }
         }
         
         // if not available get the default value
         if(value == null) {
-            pair = (PropertiesPair)m_messages.get(null);
+            pair = (PropertiesPair)messages.get(null);
             if(pair != null) {
-                value = pair.m_custom.getProperty(key);
+                value = pair.customProperties.getProperty(key);
                 if(value == null) {
-                    value = pair.m_default.getProperty(key);
+                    value = pair.defaultProperties.getProperty(key);
                 }
             }
         }
@@ -210,17 +210,17 @@ class MessageResourceImpl implements IMessageResource {
         
         // load properties sequentially 
         // (default,custom,default language,custom language)
-        PropertiesPair pair = (PropertiesPair)m_messages.get(null);
+        PropertiesPair pair = (PropertiesPair)this.messages.get(null);
         if(pair != null) {
-            messages.putAll(pair.m_default);
-            messages.putAll(pair.m_custom);
+            messages.putAll(pair.defaultProperties);
+            messages.putAll(pair.customProperties);
         }
         if(language != null) {
             language = language.toLowerCase();
-            pair = (PropertiesPair)m_messages.get(language);
+            pair = (PropertiesPair)this.messages.get(language);
             if(pair != null) {
-                messages.putAll(pair.m_default);
-                messages.putAll(pair.m_custom);
+                messages.putAll(pair.defaultProperties);
+                messages.putAll(pair.customProperties);
             }
         }
         return messages;
@@ -244,11 +244,11 @@ class MessageResourceImpl implements IMessageResource {
         // get custom resource file name
         File resourceFile = null;
         if(language == null) {
-            resourceFile = new File(m_customMessageDir, "FtpStatus.gen");
+            resourceFile = new File(customMessageDir, "FtpStatus.gen");
         }
         else {
             language = language.toLowerCase();
-            resourceFile = new File(m_customMessageDir, "FtpStatus_" + language + ".gen");
+            resourceFile = new File(customMessageDir, "FtpStatus_" + language + ".gen");
         }
         
         // save resource file
@@ -258,7 +258,7 @@ class MessageResourceImpl implements IMessageResource {
             prop.store(out, "Custom Messages");
         }
         catch(IOException ex) {
-            m_log.error("MessageResourceImpl.save()", ex);
+            log.error("MessageResourceImpl.save()", ex);
             throw new FtpException("MessageResourceImpl.save()", ex);
         }
         finally {
@@ -266,25 +266,25 @@ class MessageResourceImpl implements IMessageResource {
         }
         
         // assign new messages
-        PropertiesPair pair = (PropertiesPair)m_messages.get(language);
+        PropertiesPair pair = (PropertiesPair)messages.get(language);
         if(pair == null) {
             pair = new PropertiesPair();
-            m_messages.put(language, pair);
+            messages.put(language, pair);
         }
-        pair.m_custom = prop;
+        pair.customProperties = prop;
     }
     
     /**
      * Dispose component - clear all maps.
      */
     public void dispose() {
-        Iterator it = m_messages.keySet().iterator();
+        Iterator it = messages.keySet().iterator();
         while(it.hasNext()) {
             String language = (String)it.next();
-            PropertiesPair pair = (PropertiesPair)m_messages.get(language);
-            pair.m_custom.clear();
-            pair.m_default.clear();
+            PropertiesPair pair = (PropertiesPair)messages.get(language);
+            pair.customProperties.clear();
+            pair.defaultProperties.clear();
         }
-        m_messages.clear();
+        messages.clear();
     }
 }

@@ -38,7 +38,7 @@ class FtpFileTableModel extends AbstractTableModel {
                                                "User", 
                                                "Time"};    
 
-    private Vector m_entries = new Vector();
+    private Vector entries = new Vector();
          
     /**
      * Get column class - always string
@@ -65,7 +65,7 @@ class FtpFileTableModel extends AbstractTableModel {
      * Get row count.
      */
     public int getRowCount() {
-        return m_entries.size();
+        return entries.size();
     }
     
     /**
@@ -89,7 +89,7 @@ class FtpFileTableModel extends AbstractTableModel {
         String retVal = "";
         TableEntry entry = null;
         try {
-            entry = (TableEntry)m_entries.get(row);
+            entry = (TableEntry)entries.get(row);
         }
         catch(Exception ex) {
         }
@@ -139,15 +139,15 @@ class FtpFileTableModel extends AbstractTableModel {
         TableEntry entry = new TableEntry(fileName, userName, date);
         
         // clear if already too many entries
-        int sz = m_entries.size();
+        int sz = entries.size();
         if ( (MAX_SIZE > 0) && (sz >= MAX_SIZE) ) {
             clear();
             sz = 0;
         }
         
         // add the new entry
-        synchronized(m_entries) {
-            m_entries.add(entry);
+        synchronized(entries) {
+            entries.add(entry);
             ++sz;
         }
         fireTableRowsInserted(sz, sz);
@@ -157,7 +157,7 @@ class FtpFileTableModel extends AbstractTableModel {
      * Remove all entries.
      */
     public void clear() {
-        m_entries.clear();
+        entries.clear();
         fireTableDataChanged();
     }
     

@@ -45,18 +45,18 @@ import org.apache.ftpserver.usermanager.BaseUser;
 public
 class FtpConfigImpl implements IFtpConfig {
 
-    private LogFactory m_logFactory;
-    private ISocketFactory m_socketFactory;
-    private IDataConnectionConfig m_dataConConfig;
-    private IMessageResource m_messageResource;
-    private IConnectionManager m_connectionManager;
-    private IIpRestrictor m_ipRestrictor;
-    private UserManager m_userManager;
-    private FileSystemManager m_fileSystemManager;
-    private FtpletContainer m_ftpletContainer;
-    private IFtpStatistics m_statistics;
+    private LogFactory logFactory;
+    private ISocketFactory socketFactory;
+    private IDataConnectionConfig dataConConfig;
+    private IMessageResource messageResource;
+    private IConnectionManager connectionManager;
+    private IIpRestrictor ipRestrictor;
+    private UserManager userManager;
+    private FileSystemManager fileSystemManager;
+    private FtpletContainer ftpletContainer;
+    private IFtpStatistics statistics;
     
-    private Log m_log;
+    private Log log;
     
     
     /**
@@ -67,19 +67,19 @@ class FtpConfigImpl implements IFtpConfig {
         try {
             
             // get the log classes
-            m_logFactory = LogFactory.getFactory();
-            m_logFactory = new FtpLogFactory(m_logFactory);
-            m_log        = m_logFactory.getInstance(FtpConfigImpl.class);
+            logFactory = LogFactory.getFactory();
+            logFactory = new FtpLogFactory(logFactory);
+            log        = logFactory.getInstance(FtpConfigImpl.class);
             
             // create all the components
-            m_socketFactory     = (ISocketFactory)        createComponent(conf, "socket-factory",      "org.apache.ftpserver.socketfactory.FtpSocketFactory");
-            m_dataConConfig     = (IDataConnectionConfig) createComponent(conf, "data-connection",     "org.apache.ftpserver.DataConnectionConfig"); 
-            m_messageResource   = (IMessageResource)      createComponent(conf, "message",             "org.apache.ftpserver.message.MessageResourceImpl");
-            m_connectionManager = (IConnectionManager)    createComponent(conf, "connection-manager",  "org.apache.ftpserver.ConnectionManagerImpl");
-            m_ipRestrictor      = (IIpRestrictor)         createComponent(conf, "ip-restrictor",       "org.apache.ftpserver.iprestrictor.FileIpRestrictor");
-            m_userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
-            m_fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
-            m_statistics        = (IFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
+            socketFactory     = (ISocketFactory)        createComponent(conf, "socket-factory",      "org.apache.ftpserver.socketfactory.FtpSocketFactory");
+            dataConConfig     = (IDataConnectionConfig) createComponent(conf, "data-connection",     "org.apache.ftpserver.DataConnectionConfig"); 
+            messageResource   = (IMessageResource)      createComponent(conf, "message",             "org.apache.ftpserver.message.MessageResourceImpl");
+            connectionManager = (IConnectionManager)    createComponent(conf, "connection-manager",  "org.apache.ftpserver.ConnectionManagerImpl");
+            ipRestrictor      = (IIpRestrictor)         createComponent(conf, "ip-restrictor",       "org.apache.ftpserver.iprestrictor.FileIpRestrictor");
+            userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
+            fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
+            statistics        = (IFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);
@@ -88,10 +88,10 @@ class FtpConfigImpl implements IFtpConfig {
             }
             
             // create and initialize ftlets
-            m_ftpletContainer = new FtpletContainer();
+            ftpletContainer = new FtpletContainer();
             String ftpletNames = conf.getString("ftplets", null);
             Configuration ftpletConf = conf.getConfiguration("ftplet", EmptyConfiguration.INSTANCE);
-            m_ftpletContainer.init(this, ftpletNames, ftpletConf);        
+            ftpletContainer.init(this, ftpletNames, ftpletConf);        
         }
         catch(Exception ex) {
             dispose();
@@ -106,7 +106,7 @@ class FtpConfigImpl implements IFtpConfig {
         Configuration conf = parentConfig.getConfiguration(configName, EmptyConfiguration.INSTANCE);
         String className = conf.getString("class", defaultClass);
         Component comp = (Component)Class.forName(className).newInstance();
-        comp.setLogFactory(m_logFactory);
+        comp.setLogFactory(logFactory);
         comp.configure(conf);
         return comp; 
     }
@@ -120,7 +120,7 @@ class FtpConfigImpl implements IFtpConfig {
         // create admin user
         String adminName = userManager.getAdminName();
         if(!userManager.doesExist(adminName)) {
-            m_log.info("Creating user : " + adminName);
+            log.info("Creating user : " + adminName);
             BaseUser adminUser = new BaseUser();
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
@@ -135,7 +135,7 @@ class FtpConfigImpl implements IFtpConfig {
         
         // create anonymous user
         if(!userManager.doesExist("anonymous")) {
-            m_log.info("Creating user : anonymous");
+            log.info("Creating user : anonymous");
             BaseUser anonUser = new BaseUser();
             anonUser.setName("anonymous");
             anonUser.setPassword("");
@@ -153,91 +153,91 @@ class FtpConfigImpl implements IFtpConfig {
      * Get the log factory.
      */
     public LogFactory getLogFactory() {
-        return m_logFactory;
+        return logFactory;
     }
     
     /**
      * Get socket factory.
      */
     public ISocketFactory getSocketFactory() {
-        return m_socketFactory;
+        return socketFactory;
     }
     
     /**
      * Get user manager.
      */
     public UserManager getUserManager() {
-        return m_userManager;
+        return userManager;
     }
     
     /**
      * Get IP restrictor.
      */
     public IIpRestrictor getIpRestrictor() {
-        return m_ipRestrictor;
+        return ipRestrictor;
     }
      
     /**
      * Get connection manager.
      */
     public IConnectionManager getConnectionManager() {
-        return m_connectionManager;
+        return connectionManager;
     } 
     
     /**
      * Get file system manager.
      */
     public FileSystemManager getFileSystemManager() {
-        return m_fileSystemManager;
+        return fileSystemManager;
     }
      
     /**
      * Get message resource.
      */
     public IMessageResource getMessageResource() {
-        return m_messageResource;
+        return messageResource;
     }
     
     /**
      * Get ftp statistics.
      */
     public FtpStatistics getFtpStatistics() {
-        return m_statistics;
+        return statistics;
     }
     
     /**
      * Get ftplet handler.
      */
     public Ftplet getFtpletContainer() {
-        return m_ftpletContainer;
+        return ftpletContainer;
     }
 
     /**
      * Get data connection config.
      */
     public IDataConnectionConfig getDataConnectionConfig() {
-        return m_dataConConfig;
+        return dataConConfig;
     }
     
     /**
      * Get server address.
      */
     public InetAddress getServerAddress() {
-        return m_socketFactory.getServerAddress();
+        return socketFactory.getServerAddress();
     } 
         
     /**
      * Get server port.
      */
     public int getServerPort() {
-        return m_socketFactory.getPort();
+        return socketFactory.getPort();
     } 
     
     /**
      * Get Ftplet.
      */
     public Ftplet getFtplet(String name) {
-        return m_ftpletContainer.getFtplet(name);
+        return ftpletContainer.getFtplet(name);
     }
     
     /**
@@ -245,49 +245,49 @@ class FtpConfigImpl implements IFtpConfig {
      */
     public void dispose() {
         
-        if(m_connectionManager != null) {
-            m_connectionManager.dispose();
-            m_connectionManager = null;
+        if(connectionManager != null) {
+            connectionManager.dispose();
+            connectionManager = null;
         }
         
-        if(m_dataConConfig != null) {
-            m_dataConConfig.dispose();
-            m_dataConConfig = null;
+        if(dataConConfig != null) {
+            dataConConfig.dispose();
+            dataConConfig = null;
         }
         
-        if(m_ftpletContainer != null) {
-            m_ftpletContainer.destroy();
-            m_ftpletContainer = null;
+        if(ftpletContainer != null) {
+            ftpletContainer.destroy();
+            ftpletContainer = null;
         }
         
-        if(m_userManager != null) {
-            m_userManager.dispose();
-            m_userManager = null;
+        if(userManager != null) {
+            userManager.dispose();
+            userManager = null;
         }
         
-        if(m_ipRestrictor != null) {
-            m_ipRestrictor.dispose();
-            m_ipRestrictor = null;
+        if(ipRestrictor != null) {
+            ipRestrictor.dispose();
+            ipRestrictor = null;
         }
         
-        if(m_fileSystemManager != null) {
-            m_fileSystemManager.dispose();
-            m_fileSystemManager = null;
+        if(fileSystemManager != null) {
+            fileSystemManager.dispose();
+            fileSystemManager = null;
         }
         
-        if(m_statistics != null) {
-            m_statistics.dispose();
-            m_statistics = null;
+        if(statistics != null) {
+            statistics.dispose();
+            statistics = null;
         }
         
-        if(m_messageResource != null) {
-            m_messageResource.dispose();
-            m_messageResource = null;
+        if(messageResource != null) {
+            messageResource.dispose();
+            messageResource = null;
         }
         
-        if(m_logFactory != null) {
-            m_logFactory.release();
-            m_logFactory = null;
+        if(logFactory != null) {
+            logFactory.release();
+            logFactory = null;
         }
     }
 } 

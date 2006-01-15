@@ -41,101 +41,101 @@ import org.apache.ftpserver.usermanager.BaseUser;
 public
 class FtpRequestImpl implements FtpRequest {
     
-    private String m_line;
-    private String m_command;
-    private String m_argument;
+    private String line;
+    private String command;
+    private String argument;
     
-    private User m_user;
-    private HashMap m_attributeMap;
-    private InetAddress m_remoteAddr;
-    private ConnectionObserver m_observer;
-    private String m_language;
+    private User user;
+    private HashMap attributeMap;
+    private InetAddress remoteAddr;
+    private ConnectionObserver observer;
+    private String language;
     
-    private long m_connectionTime = 0L;
-    private long m_loginTime = 0L;
-    private long m_lastAccessTime = 0L;
+    private long connectionTime = 0L;
+    private long loginTime = 0L;
+    private long lastAccessTime = 0L;
     
-    private FtpDataConnection m_dataConnection;
-    private FileSystemView m_fileSystemView;
+    private FtpDataConnection dataConnection;
+    private FileSystemView fileSystemView;
     
-    private FileObject m_renameFrom;
-    private long m_fileOffset;
+    private FileObject renameFrom;
+    private long fileOffset;
     
     /**
      * Default constructor.
      */
     public FtpRequestImpl() {
-        m_attributeMap = new HashMap();
-        m_user = new BaseUser();
-        m_connectionTime = System.currentTimeMillis();
+        attributeMap = new HashMap();
+        user = new BaseUser();
+        connectionTime = System.currentTimeMillis();
     } 
     
     /**
      * Set client address.
      */
     public void setClientAddress(InetAddress addr) {
-        m_remoteAddr = addr;
+        remoteAddr = addr;
     }
 
     /**
      * Set FTP data connection.
      */
     public void setFtpDataConnection(FtpDataConnection dataCon) {
-        m_dataConnection = dataCon;
+        dataConnection = dataCon;
     }
     
     /**
      * Get the observer object to get what the user is sending.
      */
     public void setObserver(ConnectionObserver observer) {
-        m_observer = observer;
+        this.observer = observer;
     } 
     
     /**
      * Reset temporary state variables.
      */
     public void resetState() {
-        m_renameFrom = null;
-        m_fileOffset = 0L;
+        renameFrom = null;
+        fileOffset = 0L;
     }
     
     /**
      * Reinitialize request.
      */
     public void reinitialize() {
-        m_user = new BaseUser();
-        m_loginTime = 0L;
-        m_fileSystemView = null;
-        m_renameFrom = null;
-        m_fileOffset = 0L;
+        user = new BaseUser();
+        loginTime = 0L;
+        fileSystemView = null;
+        renameFrom = null;
+        fileOffset = 0L;
     }
     
     /**
      * Parse the ftp command line.
      */
-    public void parse(String line) {
+    public void parse(String lineToParse) {
         
         // notify connection observer
-        spyRequest(line);
+        spyRequest(lineToParse);
         
         // parse request
-        m_line = line;
-        m_command = null;
-        m_argument = null;
-        int spInd = m_line.indexOf(' ');
+        line = lineToParse;
+        command = null;
+        argument = null;
+        int spInd = line.indexOf(' ');
         if(spInd != -1) {
-            m_argument = m_line.substring(spInd + 1);
-            if(m_argument.equals("")) {
-                m_argument = null;
+            argument = line.substring(spInd + 1);
+            if(argument.equals("")) {
+                argument = null;
             }
-            m_command = m_line.substring(0, spInd).toUpperCase();
+            command = line.substring(0, spInd).toUpperCase();
         }
         else {
-            m_command = m_line.toUpperCase();
+            command = line.toUpperCase();
         }
         
-        if( (m_command.length() > 0) && (m_command.charAt(0) == 'X') ) {
-            m_command = m_command.substring(1);
+        if( (command.length() > 0) && (command.charAt(0) == 'X') ) {
+            command = command.substring(1);
         }
     }
     
@@ -143,7 +143,7 @@ class FtpRequestImpl implements FtpRequest {
      * Spy print. Monitor user request.
      */
     private void spyRequest(String str) {
-        ConnectionObserver observer = m_observer;
+        ConnectionObserver observer = this.observer;
         if(observer != null) {
             observer.request(str + "\r\n");
         }
@@ -153,113 +153,113 @@ class FtpRequestImpl implements FtpRequest {
      * Set login attribute & user file system view.
      */
     public void setLogin(FileSystemView userFsView) {
-        m_loginTime = System.currentTimeMillis();
-        m_fileSystemView = userFsView;
+        loginTime = System.currentTimeMillis();
+        fileSystemView = userFsView;
     }
     
     /**
      * Set logout.
      */
     public void setLogout() {
-        m_loginTime = 0L;
+        loginTime = 0L;
     }
     
     /**
      * Update last access time.
      */
     public void updateLastAccessTime() {
-        m_lastAccessTime = System.currentTimeMillis();
+        lastAccessTime = System.currentTimeMillis();
     }
     
     /**
      * Is logged-in
      */
     public boolean isLoggedIn() {
-        return (m_loginTime != 0L);
+        return (loginTime != 0L);
     }
     
     /**
      * Get FTP data connection.
      */
     public FtpDataConnection getFtpDataConnection() {
-        return m_dataConnection;
+        return dataConnection;
     }
     
     /**
      * Get file system view.
      */
     public FileSystemView getFileSystemView() {
-        return m_fileSystemView;
+        return fileSystemView;
     }
     
     /**
      * Get connection time.
      */
     public Date getConnectionTime() {
-        return new Date(m_connectionTime);
+        return new Date(connectionTime);
     }
     
     /**
      * Get the login time.
      */
     public Date getLoginTime() {
-        return new Date(m_loginTime);
+        return new Date(loginTime);
     }
     
     /**
      * Get last access time.
      */
     public Date getLastAccessTime() {
-        return new Date(m_lastAccessTime);
+        return new Date(lastAccessTime);
     }
     
     /**
      * Get file offset.
      */
     public long getFileOffset() {
-        return m_fileOffset;
+        return fileOffset;
     }
     
     /**
      * Set the file offset.
      */
     public void setFileOffset(long offset) {
-        m_fileOffset = offset;
+        fileOffset = offset;
     }
     
     /**
      * Get rename from file object.
      */
     public FileObject getRenameFrom() {
-        return m_renameFrom;
+        return renameFrom;
     }
     
     /**
      * Set rename from.
      */
     public void setRenameFrom(FileObject file) {
-        m_renameFrom = file;
+        renameFrom = file;
     }
     
     /**
      * Get the ftp command.
      */
     public String getCommand() {
-        return m_command;
+        return command;
     }
     
     /**
      * Get ftp input argument.  
      */ 
     public String getArgument() {
-        return m_argument;
+        return argument;
     }
     
     /**
      * Get the ftp request line.
      */
     public String getRequestLine() {
-        return m_line;
+        return line;
     }
     
     /**
@@ -273,28 +273,28 @@ class FtpRequestImpl implements FtpRequest {
      * Get language.
      */
     public String getLanguage() {
-        return m_language;
+        return language;
     }
     
     /**
      * Set language.
      */
     public void setLanguage(String language) {
-        m_language = language;
+        this.language = language;
     }
     
     /**
      * Get user.
      */
     public User getUser() {
-        return m_user;
+        return user;
     }
     
     /**
      * Get remote address
      */
     public InetAddress getRemoteAddress() {
-        return m_remoteAddr;
+        return remoteAddr;
     }
     
     /**
@@ -304,20 +304,20 @@ class FtpRequestImpl implements FtpRequest {
         try {
             
             // get data socket
-            Socket dataSoc = m_dataConnection.getDataSocket();
+            Socket dataSoc = dataConnection.getDataSocket();
             if(dataSoc == null) {
                 throw new IOException("Cannot open data connection.");
             }
             
             // create input stream
             InputStream is = dataSoc.getInputStream();
-            if(m_dataConnection.isZipMode()) {
+            if(dataConnection.isZipMode()) {
                 is = new InflaterInputStream(is);
             }
             return is;
         }
         catch(IOException ex) {
-            m_dataConnection.closeDataSocket();
+            dataConnection.closeDataSocket();
             throw ex;
         }
     }
@@ -329,20 +329,20 @@ class FtpRequestImpl implements FtpRequest {
         try {
             
             // get data socket
-            Socket dataSoc = m_dataConnection.getDataSocket();
+            Socket dataSoc = dataConnection.getDataSocket();
             if(dataSoc == null) {
                 throw new IOException("Cannot open data connection.");
             }
             
             // create output stream
             OutputStream os = dataSoc.getOutputStream();
-            if(m_dataConnection.isZipMode()) {
+            if(dataConnection.isZipMode()) {
                 os = new DeflaterOutputStream(os);
             }
             return os;
         }
         catch(IOException ex) {
-            m_dataConnection.closeDataSocket();
+            dataConnection.closeDataSocket();
             throw ex;
         }
     }
@@ -351,28 +351,28 @@ class FtpRequestImpl implements FtpRequest {
      * Get attribute
      */
     public Object getAttribute(String name) {
-        return m_attributeMap.get(name);
+        return attributeMap.get(name);
     }
     
     /**
      * Set attribute.
      */
     public void setAttribute(String name, Object value) {
-        m_attributeMap.put(name, value);
+        attributeMap.put(name, value);
     }
     
     /**
      * Remove attribute.
      */
     public void removeAttribute(String name) {
-        m_attributeMap.remove(name);
+        attributeMap.remove(name);
     }
     
     /**
      * Remove all attributes.
      */
     public void clear() {
-        m_attributeMap.clear();
+        attributeMap.clear();
     }
     
     /**
@@ -381,9 +381,9 @@ class FtpRequestImpl implements FtpRequest {
      */
     public boolean isTimeout(long currTime) {
          boolean bActive = true;
-         int maxIdleTime = m_user.getMaxIdleTime();
+         int maxIdleTime = user.getMaxIdleTime();
          if(maxIdleTime > 0) {
-             long currIdleTimeMillis = currTime - m_lastAccessTime;
+             long currIdleTimeMillis = currTime - lastAccessTime;
              long maxIdleTimeMillis = maxIdleTime * 1000L;
              bActive = currIdleTimeMillis <= maxIdleTimeMillis;
          }

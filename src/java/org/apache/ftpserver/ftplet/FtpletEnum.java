@@ -58,14 +58,14 @@ final class FtpletEnum {
      public static final FtpletEnum RET_DISCONNECT = new FtpletEnum(3);
 
 
-     private int m_type;
+     private int type;
 
 
      /**
       * Private constructor - set the type
       */
      private FtpletEnum(int type) {
-         m_type = type;
+         this.type = type;
      }
 
      /**
@@ -73,7 +73,7 @@ final class FtpletEnum {
       */
      public boolean equals(Object obj) {
          if(obj instanceof FtpletEnum) {
-             return m_type == ((FtpletEnum)obj).m_type;
+             return type == ((FtpletEnum)obj).type;
          }
          return false;
      }
@@ -82,7 +82,7 @@ final class FtpletEnum {
       * String representation
       */
      public String toString() {
-         return String.valueOf(m_type);
+         return String.valueOf(type);
      }
 
 }

@@ -28,7 +28,7 @@ import java.io.FilenameFilter;
 public
 class FileRegularFilter implements FilenameFilter {
     
-    private RegularExpr mRegularExpr = null;
+    private RegularExpr regularExpr = null;
     
     /**
      * Constructor.
@@ -36,10 +36,10 @@ class FileRegularFilter implements FilenameFilter {
      */
     public FileRegularFilter(String pattern) {
         if ((pattern == null) || pattern.equals("") || pattern.equals("*")) {
-            mRegularExpr = null;
+            regularExpr = null;
         }
         else {
-            mRegularExpr = new RegularExpr(pattern);
+            regularExpr = new RegularExpr(pattern);
         }
     }
     
@@ -49,9 +49,9 @@ class FileRegularFilter implements FilenameFilter {
      * @param name - the name of the file.
      */
     public boolean accept(File dir, String name) {
-        if (mRegularExpr == null) {
+        if (regularExpr == null) {
             return true;
         }
-        return mRegularExpr.isMatch(name);
+        return regularExpr.isMatch(name);
     }
 }    

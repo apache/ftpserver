@@ -51,17 +51,17 @@ class BaseUser implements User, Serializable {
     public static final String ATTR_MAX_UPLOAD_RATE   = "uploadrate";
     public static final String ATTR_MAX_DOWNLOAD_RATE = "downloadrate";
     
-    private String m_name        = null;
-    private String m_password    = null;
+    private String name        = null;
+    private String password    = null;
 
-    private int m_maxIdleTimeSec  = 0; // no limit
-    private int m_maxUploadRate   = 0; // no limit
-    private int m_maxDownloadRate = 0; // no limit
+    private int maxIdleTimeSec  = 0; // no limit
+    private int maxUploadRate   = 0; // no limit
+    private int maxDownloadRate = 0; // no limit
 
-    private boolean m_hasWritePermission;
+    private boolean hasWritePermission;
     
-    private String m_homeDir    = null;
-    private boolean m_isEnabled = true;
+    private String homeDir    = null;
+    private boolean isEnabled = true;
     
     /**
      * Default constructor.
@@ -73,58 +73,58 @@ class BaseUser implements User, Serializable {
      * Copy constructor.
      */
     public BaseUser(User user) {
-        m_name = user.getName();
-        m_password = user.getPassword();
-        m_maxIdleTimeSec = user.getMaxIdleTime();
-        m_maxUploadRate = user.getMaxUploadRate();
-        m_maxDownloadRate = user.getMaxDownloadRate();
-        m_hasWritePermission = user.getWritePermission();
-        m_homeDir = user.getHomeDirectory();
-        m_isEnabled = user.getEnabled();
+        name = user.getName();
+        password = user.getPassword();
+        maxIdleTimeSec = user.getMaxIdleTime();
+        maxUploadRate = user.getMaxUploadRate();
+        maxDownloadRate = user.getMaxDownloadRate();
+        hasWritePermission = user.getWritePermission();
+        homeDir = user.getHomeDirectory();
+        isEnabled = user.getEnabled();
     }
     
     /**
      * Get the user name.
      */
     public String getName() {
-        return m_name;
+        return name;
     }
         
     /**
      * Set user name.
      */
     public void setName(String name) {
-        m_name = name;
+        this.name = name;
     }
     
     /**
      * Get the user password.
      */
     public String getPassword() {
-        return m_password;
+        return password;
     }
     
     /**
      * Set user password.
      */
     public void setPassword(String pass) {
-        m_password = pass;
+        password = pass;
     }
 
     /**
      * Get the maximum idle time in second.
      */
     public int getMaxIdleTime() {
-        return m_maxIdleTimeSec;
+        return maxIdleTimeSec;
     }
 
     /**
      * Set the maximum idle time in second.
      */
     public void setMaxIdleTime(int idleSec) {
-        m_maxIdleTimeSec = idleSec;
-        if(m_maxIdleTimeSec < 0) {
-            m_maxIdleTimeSec = 0;
+        maxIdleTimeSec = idleSec;
+        if(maxIdleTimeSec < 0) {
+            maxIdleTimeSec = 0;
         }
     }
 
@@ -132,21 +132,21 @@ class BaseUser implements User, Serializable {
      * Get the user enable status.
      */
     public boolean getEnabled() {
-        return m_isEnabled;
+        return isEnabled;
     }
     
     /**
      * Set the user enable status.
      */
     public void setEnabled(boolean enb) {
-        m_isEnabled = enb;
+        isEnabled = enb;
     }
 
     /**
      * Get maximum user upload rate in bytes/sec.
      */
     public int getMaxUploadRate() {
-        return m_maxUploadRate;
+        return maxUploadRate;
     }
     
     /**
@@ -154,14 +154,14 @@ class BaseUser implements User, Serializable {
      * Less than or equal to zero means no limit.
      */
     public void setMaxUploadRate(int rate) {
-        m_maxUploadRate = rate;
+        maxUploadRate = rate;
     }
     
     /**
      * Get maximum user download rate in bytes/sec.
      */
     public int getMaxDownloadRate() {
-        return m_maxDownloadRate;
+        return maxDownloadRate;
     }
     
     /**
@@ -169,41 +169,41 @@ class BaseUser implements User, Serializable {
      * Less than or equal to zero means no limit.
      */
     public void setMaxDownloadRate(int rate) {
-        m_maxDownloadRate = rate;
+        maxDownloadRate = rate;
     }
     
     /**
      * Get the user home directory.
      */
     public String getHomeDirectory() {
-        return m_homeDir;
+        return homeDir;
     }
 
     /**
      * Set the user home directory.
      */
     public void setHomeDirectory(String home) {
-        m_homeDir = home;
+        homeDir = home;
     } 
         
     /**
      * Get write permission.
      */
     public boolean getWritePermission() {
-        return m_hasWritePermission;
+        return hasWritePermission;
     }
     
     /**
      * Set write permission.
      */
     public void setWritePermission(boolean writePerm) {
-        m_hasWritePermission = writePerm;
+        hasWritePermission = writePerm;
     } 
 
     /** 
      * String representation.
      */
     public String toString() {
-        return m_name;
+        return name;
     }    
 }

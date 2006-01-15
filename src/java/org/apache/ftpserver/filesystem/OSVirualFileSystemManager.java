@@ -34,24 +34,24 @@ import org.apache.ftpserver.ftplet.User;
 public 
 class OSVirualFileSystemManager implements FileSystemManager {  
     
-    private Log m_log;
-    private LogFactory m_logFactory;
-    private boolean m_createHome;
+    private Log log;
+    private LogFactory logFactory;
+    private boolean createHome;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_logFactory = factory;
-        m_log = m_logFactory.getInstance(getClass());
+        logFactory = factory;
+        log = logFactory.getInstance(getClass());
     }
     
     /**
      * Configure the file system manager - does nothing.
      */
     public void configure(Configuration conf) throws FtpException {
-        m_createHome = conf.getBoolean("create-home", false);
+        createHome = conf.getBoolean("create-home", false);
     }
     
     /**
@@ -66,20 +66,20 @@ class OSVirualFileSystemManager implements FileSystemManager {
     public FileSystemView createFileSystemView(User user) throws FtpException {
         
         // create home if does not exist
-        if(m_createHome) {
+        if(createHome) {
             String homeDirStr = user.getHomeDirectory();
             File homeDir = new File(homeDirStr);
             if(homeDir.isFile()) {
-                m_log.warn("Not a directory :: " + homeDirStr);
+                log.warn("Not a directory :: " + homeDirStr);
                 throw new FtpException("Not a directory :: " + homeDirStr);
             }
             if( (!homeDir.exists()) && (!homeDir.mkdirs()) ) {
-                m_log.warn("Cannot create user home :: " + homeDirStr);
+                log.warn("Cannot create user home :: " + homeDirStr);
                 throw new FtpException("Cannot create user home :: " + homeDirStr);
             }
         }
         
-        OSVirualFileSystemView fsView = new OSVirualFileSystemView(user, m_logFactory);
+        OSVirualFileSystemView fsView = new OSVirualFileSystemView(user, logFactory);
         return fsView;
     }   
 }

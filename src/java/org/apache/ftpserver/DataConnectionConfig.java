@@ -34,24 +34,24 @@ import org.apache.ftpserver.interfaces.ISsl;
 public 
 class DataConnectionConfig implements IDataConnectionConfig {
 
-    private Log m_log;
-    private LogFactory m_logFactory;
+    private Log log;
+    private LogFactory logFactory;
     
-    private InetAddress m_pasvAddress;
-    private int m_pasvPort[][];
+    private InetAddress pasvAddress;
+    private int pasvPort[][];
     
-    private boolean m_portEnable;
-    private boolean m_portIpCheck;
+    private boolean portEnable;
+    private boolean portIpCheck;
     
-    private ISsl m_ssl;
+    private ISsl ssl;
 
     
     /**
      * Set the log factory. 
      */
     public void setLogFactory(LogFactory factory) {
-        m_logFactory = factory;
-        m_log = m_logFactory.getInstance(getClass());
+        logFactory = factory;
+        log = logFactory.getInstance(getClass());
     }
     
     /**
@@ -64,38 +64,38 @@ class DataConnectionConfig implements IDataConnectionConfig {
             // get passive address
             String pasvAddress = conf.getString("pasv-address", null);
             if(pasvAddress == null) {
-                m_pasvAddress = InetAddress.getLocalHost();
+                this.pasvAddress = InetAddress.getLocalHost();
             }
             else {
-                m_pasvAddress = InetAddress.getByName(pasvAddress);
+                this.pasvAddress = InetAddress.getByName(pasvAddress);
             }
             
             // get PASV ports
             String pasvPorts = conf.getString("pasv-port", "0");
             StringTokenizer st = new StringTokenizer(pasvPorts, " ,;\t\n\r\f");
-            m_pasvPort = new int[st.countTokens()][2];
-            for(int i=0; i<m_pasvPort.length; i++) {
-                m_pasvPort[i][0] = Integer.parseInt(st.nextToken());
-                m_pasvPort[i][1] = 0;
+            pasvPort = new int[st.countTokens()][2];
+            for(int i=0; i<pasvPort.length; i++) {
+                pasvPort[i][0] = Integer.parseInt(st.nextToken());
+                pasvPort[i][1] = 0;
             }
             
             // get PORT parameters
-            m_portEnable = conf.getBoolean("port-enable", true);
-            m_portIpCheck = conf.getBoolean("port-ip-check", false);
+            portEnable = conf.getBoolean("port-enable", true);
+            portIpCheck = conf.getBoolean("port-ip-check", false);
             
             // create SSL component
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
-                m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
-                m_ssl.setLogFactory(m_logFactory);
-                m_ssl.configure(sslConf);
+                ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
+                ssl.setLogFactory(logFactory);
+                ssl.configure(sslConf);
             }
         }
         catch(FtpException ex) {
             throw ex;
         }
         catch(Exception ex) {
-            m_log.error("DataConnectionConfig.configure()", ex);
+            log.error("DataConnectionConfig.configure()", ex);
             throw new FtpException("DataConnectionConfig.configure()", ex);
         }
     }
@@ -104,28 +104,28 @@ class DataConnectionConfig implements IDataConnectionConfig {
      * Is PORT enabled?
      */
     public boolean isPortEnabled() {
-        return m_portEnable;
+        return portEnable;
     }
     
     /**
      * Check the PORT IP?
      */
     public boolean isPortIpCheck() {
-        return m_portIpCheck;
+        return portIpCheck;
     }
     
     /**
      * Get passive host.
      */
     public InetAddress getPassiveAddress() {
-        return m_pasvAddress;
+        return pasvAddress;
     }
     
     /**
      * Get SSL component.
      */
     public ISsl getSSL() {
-        return m_ssl;
+        return ssl;
     }
     
     /**
@@ -140,12 +140,12 @@ class DataConnectionConfig implements IDataConnectionConfig {
         while( (dataPort==-1) && (--loopTimes >= 0)  && (!currThread.isInterrupted()) ) {
 
             // search for a free port            
-            for(int i=0; i<m_pasvPort.length; i++) {
-                if(m_pasvPort[i][1] == 0) {
-                    if(m_pasvPort[i][0] != 0) {
-                        m_pasvPort[i][1] = 1;
+            for(int i=0; i<pasvPort.length; i++) {
+                if(pasvPort[i][1] == 0) {
+                    if(pasvPort[i][0] != 0) {
+                        pasvPort[i][1] = 1;
                     }
-                    dataPort = m_pasvPort[i][0];
+                    dataPort = pasvPort[i][0];
                     break;
                 }
             }
@@ -167,9 +167,9 @@ class DataConnectionConfig implements IDataConnectionConfig {
      * Release data port
      */
     public synchronized void releasePassivePort(int port) {
-        for(int i=0; i<m_pasvPort.length; i++) {
-            if(m_pasvPort[i][0] == port) {
-                m_pasvPort[i][1] = 0;
+        for(int i=0; i<pasvPort.length; i++) {
+            if(pasvPort[i][0] == port) {
+                pasvPort[i][1] = 0;
                 break;
             }
         }

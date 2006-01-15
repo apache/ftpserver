@@ -32,37 +32,37 @@ import org.apache.commons.logging.LogFactory;
 public
 class FtpLogFactory extends LogFactory {
     
-    private LogFactory m_original;
-    private Vector m_logs;
+    private LogFactory original;
+    private Vector logs;
     
     
     /**
      * Constructor - pass the original log factory.
      */
     public FtpLogFactory(LogFactory original) {
-        m_original = original;
-        m_logs = new Vector();
+        this.original = original;
+        logs = new Vector();
     }
     
     /**
      * Add log object.
      */
     public void addLog(Log log) {
-        m_logs.add(log);
+        logs.add(log);
     }
     
     /**
      * Remove log object.
      */
     public void removeLog(Log log) {
-        m_logs.remove(log);
+        logs.remove(log);
     }
     
     /**
      * Get log object.
      */
     public Log getInstance(Class clazz) {
-        Log olog = m_original.getInstance(clazz);
+        Log olog = original.getInstance(clazz);
         return createProxyLog(olog);
     }
     
@@ -70,7 +70,7 @@ class FtpLogFactory extends LogFactory {
      * Get log object.
      */
     public Log getInstance(String name) {
-        Log olog = m_original.getInstance(name);
+        Log olog = original.getInstance(name);
         return createProxyLog(olog);
     }
     
@@ -78,36 +78,36 @@ class FtpLogFactory extends LogFactory {
      * Get attribute.
      */
     public Object getAttribute(String arg) {
-        return m_original.getAttribute(arg);
+        return original.getAttribute(arg);
     }
     
     /**
      * Get all the attribute names.
      */
     public String[] getAttributeNames() {
-        return m_original.getAttributeNames();
+        return original.getAttributeNames();
     }
     
     /**
      * Set attribute.
      */
     public void setAttribute(String arg, Object val) {
-        m_original.setAttribute(arg, val);
+        original.setAttribute(arg, val);
     }
     
     /**
      * Remove attribute.
      */
     public void removeAttribute(String arg) {
-        m_original.removeAttribute(arg);
+        original.removeAttribute(arg);
     }
     
     /**
      * Release log factory.
      */
     public void release() {
-        m_original.release();
-        m_logs.clear();
+        original.release();
+        logs.clear();
     }
     
     /**
@@ -117,8 +117,8 @@ class FtpLogFactory extends LogFactory {
         InvocationHandler handler = new InvocationHandler() {
             public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
                 Object retVal = m.invoke(original, args);
-                for(int i=m_logs.size(); --i>=0;) {
-                    Log log = (Log)m_logs.get(i);
+                for(int i=logs.size(); --i>=0;) {
+                    Log log = (Log)logs.get(i);
                     m.invoke(log, args);
                 }
                 return retVal;

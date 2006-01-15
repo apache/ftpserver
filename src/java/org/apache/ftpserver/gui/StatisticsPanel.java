@@ -87,10 +87,10 @@ class StatisticsPanel extends PluginPanel
             "Total connections"
     };
 
-    private IFtpConfig m_ftpConfig;
-    private IFtpStatistics m_statistics;
-    private String m_data[] = new String[STAT_NAMES.length];
-    private EventListenerList m_listeners = new EventListenerList();
+    private IFtpConfig ftpConfig;
+    private IFtpStatistics statistics;
+    private String data[] = new String[STAT_NAMES.length];
+    private EventListenerList listeners = new EventListenerList();
     
     /**
      * Constructor - create all UI components.
@@ -99,8 +99,8 @@ class StatisticsPanel extends PluginPanel
         super(container);
         
         // initialize string array
-        for(int i=0; i<m_data.length; ++i) {
-            m_data[i] = "";
+        for(int i=0; i<data.length; ++i) {
+            data[i] = "";
         }
         
         initComponents();
@@ -129,7 +129,7 @@ class StatisticsPanel extends PluginPanel
         btnPanel.add(reloadButton);
         reloadButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                refresh(m_ftpConfig);
+                refresh(ftpConfig);
             }
         });
     }
@@ -177,7 +177,7 @@ class StatisticsPanel extends PluginPanel
             return STAT_NAMES[rowIndex];
         }
         else {
-            return m_data[rowIndex];
+            return data[rowIndex];
         }
     }
     
@@ -191,14 +191,14 @@ class StatisticsPanel extends PluginPanel
      * Add table model listener.
      */
     public void addTableModelListener(TableModelListener l) {
-        m_listeners.add(TableModelListener.class, l);
+        listeners.add(TableModelListener.class, l);
     } 
     
     /**
      * Remove table model listener.
      */
     public void removeTableModelListener(TableModelListener l) {
-        m_listeners.remove(TableModelListener.class, l);
+        listeners.remove(TableModelListener.class, l);
     }
 
     /**
@@ -210,14 +210,14 @@ class StatisticsPanel extends PluginPanel
         if(val == null) {
             val = "";
         }
-        m_data[index] = val;
+        data[index] = val;
         
         // notify table listeners
         TableModelEvent e = new TableModelEvent(StatisticsPanel.this, index, index, 1);
-        Object[] listeners = m_listeners.getListenerList();
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i]==TableModelListener.class) {
-                ((TableModelListener)listeners[i+1]).tableChanged(e);
+        Object[] listenerList = listeners.getListenerList();
+        for (int i = listenerList.length-2; i>=0; i-=2) {
+            if (listenerList[i]==TableModelListener.class) {
+                ((TableModelListener)listenerList[i+1]).tableChanged(e);
             }
         }
     }
@@ -226,14 +226,14 @@ class StatisticsPanel extends PluginPanel
      * Refresh the ftp configuration
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_ftpConfig = ftpConfig;
-        if (m_ftpConfig != null) {
-            m_statistics = (IFtpStatistics)m_ftpConfig.getFtpStatistics();
-            m_statistics.setObserver(this);
-            m_statistics.setFileObserver(this);
+        this.ftpConfig = ftpConfig;
+        if (this.ftpConfig != null) {
+            statistics = (IFtpStatistics)this.ftpConfig.getFtpStatistics();
+            statistics.setObserver(this);
+            statistics.setFileObserver(this);
             
             // reset component values
-            String startTime = DateUtils.getISO8601Date(m_statistics.getStartTime().getTime());
+            String startTime = DateUtils.getISO8601Date(statistics.getStartTime().getTime());
             setValue(I_START_TIME, startTime);
             notifyMkdir();
             notifyRmdir();
@@ -244,11 +244,11 @@ class StatisticsPanel extends PluginPanel
             notifyOpenConnection();
         }
         else {
-            if(m_statistics != null) {
-                m_statistics.setObserver(null);
-                m_statistics.setFileObserver(null);
+            if(statistics != null) {
+                statistics.setObserver(null);
+                statistics.setFileObserver(null);
             }
-            m_statistics = null;
+            statistics = null;
         }
     }
 
@@ -258,7 +258,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyUpload() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalUpload = stat.getTotalUploadNumber();
                     setValue(I_FILE_UPLOAD, String.valueOf(totalUpload));
@@ -290,7 +290,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyDownload() {
         Runnable runnable = new Runnable() {
             public void run() {
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalDownload = stat.getTotalDownloadNumber();
                     setValue(I_FILE_DOWNLOAD, String.valueOf(totalDownload));
@@ -322,7 +322,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyDelete() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalDelete = stat.getTotalDeleteNumber();
                     setValue(I_FILE_REMOVED, String.valueOf(totalDelete));
@@ -351,7 +351,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyLogin(final boolean anonymous) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int loginNbr = stat.getCurrentLoginNumber();
                     setValue(I_CURR_LOGINS, String.valueOf(loginNbr));
@@ -385,7 +385,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyOpenConnection() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int currCon = stat.getCurrentConnectionNumber();
                     setValue(I_CURR_CONS, String.valueOf(currCon));
@@ -411,7 +411,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyMkdir() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalMkdir = stat.getTotalDirectoryCreated();
                     setValue(I_DIR_CREATED, String.valueOf(totalMkdir));
@@ -440,7 +440,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyRmdir() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = m_statistics;
+                IFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalRmdir = stat.getTotalDirectoryRemoved();
                     setValue(I_DIR_REMOVED, String.valueOf(totalRmdir));
@@ -467,7 +467,7 @@ class StatisticsPanel extends PluginPanel
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (m_ftpConfig != null);
+        return (ftpConfig != null);
     }
 
     /**

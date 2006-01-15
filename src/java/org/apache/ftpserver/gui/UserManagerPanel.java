@@ -79,21 +79,21 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         new Integer(3600)    
     };
     
-    private IFtpConfig m_fconfig;                  
+    private IFtpConfig fconfig;                  
     
-    private JComboBox m_userLst;
-    private JTextField m_nameTxt;
+    private JComboBox userLst;
+    private JTextField nameTxt;
     
-    private JPasswordField m_passwordTxt;
-    private JPasswordField m_retypePasswordTxt;
-    private JCheckBox m_passwordChkBox;
+    private JPasswordField passwordTxt;
+    private JPasswordField retypePasswordTxt;
+    private JCheckBox passwordChkBox;
     
-    private JTextField m_directoryTxt;
-    private JCheckBox m_enabledChkBox;
-    private JCheckBox m_writeChkBox;
-    private JComboBox m_idleLst;
-    private JComboBox m_uploadLst;
-    private JComboBox m_downloadLst;
+    private JTextField directoryTxt;
+    private JCheckBox enabledChkBox;
+    private JCheckBox writeChkBox;
+    private JComboBox idleLst;
+    private JComboBox uploadLst;
+    private JComboBox downloadLst;
     
     /**
      * Constructor - create all UI components.
@@ -118,14 +118,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         int yindex = -1;        
 
         // user list
-        m_userLst = new JComboBox();
-        m_userLst.addActionListener(this);
-        m_userLst.setPreferredSize(new Dimension(120, 22));
+        userLst = new JComboBox();
+        userLst.addActionListener(this);
+        userLst.setPreferredSize(new Dimension(120, 22));
         gc.gridx = 0;
         gc.gridy = ++yindex;
         gc.gridwidth = 3;
         gc.anchor = GridBagConstraints.CENTER;
-        topPanel.add(m_userLst, gc);
+        topPanel.add(userLst, gc);
         
         // user name
         JLabel nameLab = new JLabel("Name :: ");
@@ -137,13 +137,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(nameLab, gc);
          
-        m_nameTxt = new JTextField();
-        m_nameTxt.setColumns(12);
+        nameTxt = new JTextField();
+        nameTxt.setColumns(12);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_nameTxt, gc);
+        topPanel.add(nameTxt, gc);
         
         // password
         JLabel passwordLab = new JLabel("Password :: ");
@@ -155,13 +155,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(passwordLab, gc);        
         
-        m_passwordTxt = new JPasswordField();
-        m_passwordTxt.setColumns(12);
+        passwordTxt = new JPasswordField();
+        passwordTxt.setColumns(12);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_passwordTxt, gc);
+        topPanel.add(passwordTxt, gc);
 
         JButton generatePassBtn = new JButton("Generate");
         generatePassBtn.addActionListener(new ActionListener() {
@@ -186,13 +186,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(retypePasswordLab, gc);
         
-        m_retypePasswordTxt = new JPasswordField();
-        m_retypePasswordTxt.setColumns(12);
+        retypePasswordTxt = new JPasswordField();
+        retypePasswordTxt.setColumns(12);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_retypePasswordTxt, gc);
+        topPanel.add(retypePasswordTxt, gc);
         
         // set password
         JLabel setPasswordLab = new JLabel("Set Password :: ");
@@ -204,13 +204,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(setPasswordLab, gc);
         
-        m_passwordChkBox = new JCheckBox();
-        m_passwordChkBox.setHorizontalTextPosition(SwingConstants.LEFT);
+        passwordChkBox = new JCheckBox();
+        passwordChkBox.setHorizontalTextPosition(SwingConstants.LEFT);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_passwordChkBox, gc);
+        topPanel.add(passwordChkBox, gc);
 
         // root directory
         JLabel directoryLab = new JLabel("Root Directory :: ");
@@ -222,20 +222,20 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(directoryLab, gc);
         
-        m_directoryTxt = new JTextField("./res/home");
-        m_directoryTxt.setColumns(12);
+        directoryTxt = new JTextField("./res/home");
+        directoryTxt.setColumns(12);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 1;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_directoryTxt, gc); 
+        topPanel.add(directoryTxt, gc); 
         
         JButton directoryBtn = new JButton("Browse");
         directoryBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 String dir = DirChooser.showDialog(UserManagerPanel.this, "Select User Home", null);
                 if(dir != null) {
-                    m_directoryTxt.setText(dir);
+                    directoryTxt.setText(dir);
                 }
             }
          });
@@ -256,12 +256,12 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(enabledLab, gc);
 
-        m_enabledChkBox = new JCheckBox();
+        enabledChkBox = new JCheckBox();
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_enabledChkBox, gc);
+        topPanel.add(enabledChkBox, gc);
         
         // write permission
         JLabel writePermLab = new JLabel("Write Permission :: ");
@@ -273,12 +273,12 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(writePermLab, gc);
         
-        m_writeChkBox = new JCheckBox();
+        writeChkBox = new JCheckBox();
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_writeChkBox, gc);
+        topPanel.add(writeChkBox, gc);
                 
         // idle time
         JLabel idleLab = new JLabel("Max. Idle Time (seconds) :: ");
@@ -290,14 +290,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(idleLab, gc);
         
-        m_idleLst = new JComboBox(IDLE_SECONDS);
-        m_idleLst.setPreferredSize(new Dimension(130, 22));
-        m_idleLst.setEditable(true);
+        idleLst = new JComboBox(IDLE_SECONDS);
+        idleLst.setPreferredSize(new Dimension(130, 22));
+        idleLst.setEditable(true);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_idleLst, gc);
+        topPanel.add(idleLst, gc);
         
         // user upload limit
         JLabel uploadLab = new JLabel("Max. Upload (bytes/sec) :: ");
@@ -309,14 +309,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(uploadLab, gc);
         
-        m_uploadLst = new JComboBox(BYTE_RATES);
-        m_uploadLst.setPreferredSize(new Dimension(130, 22));
-        m_uploadLst.setEditable(true);
+        uploadLst = new JComboBox(BYTE_RATES);
+        uploadLst.setPreferredSize(new Dimension(130, 22));
+        uploadLst.setEditable(true);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_uploadLst, gc);
+        topPanel.add(uploadLst, gc);
         
         // user download limit
         JLabel jDownloadLab = new JLabel("Max. Download (bytes/sec) :: ");
@@ -328,14 +328,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         gc.anchor = GridBagConstraints.EAST;
         topPanel.add(jDownloadLab, gc);
         
-        m_downloadLst = new JComboBox(BYTE_RATES);
-        m_downloadLst.setPreferredSize(new Dimension(130, 22));
-        m_downloadLst.setEditable(true);
+        downloadLst = new JComboBox(BYTE_RATES);
+        downloadLst.setPreferredSize(new Dimension(130, 22));
+        downloadLst.setEditable(true);
         gc.gridx = 1;
         gc.gridy = yindex;
         gc.gridwidth = 2;
         gc.anchor = GridBagConstraints.WEST;
-        topPanel.add(m_downloadLst, gc);
+        topPanel.add(downloadLst, gc);
         
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(btnPanel, BorderLayout.SOUTH);
@@ -362,7 +362,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         JButton reloadBtn = new JButton("Reload");
         reloadBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                refresh(m_fconfig);
+                refresh(fconfig);
             }
         });
         btnPanel.add(reloadBtn);
@@ -400,9 +400,9 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                                                    JOptionPane.OK_CANCEL_OPTION,
                                                    JOptionPane.INFORMATION_MESSAGE);
         if(option == JOptionPane.OK_OPTION) {
-            m_passwordTxt.setText(password);
-            m_retypePasswordTxt.setText(password);
-            m_passwordChkBox.setSelected(true);
+            passwordTxt.setText(password);
+            retypePasswordTxt.setText(password);
+            passwordChkBox.setSelected(true);
         }
     }
 
@@ -411,22 +411,22 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      * Refresh the panel - set the ftp config.
      */
     public void refresh(IFtpConfig config) {
-        m_fconfig = config;
-        m_userLst.removeAllItems();
-        if(m_fconfig == null) {
+        fconfig = config;
+        userLst.removeAllItems();
+        if(fconfig == null) {
             return;
         }
         
-        UserManager userManager = m_fconfig.getUserManager();
+        UserManager userManager = fconfig.getUserManager();
         try {
             Iterator userIt = userManager.getAllUserNames().iterator();
             boolean hasUser = false;
             while(userIt.hasNext()) {
                 hasUser = true;
-                m_userLst.addItem(userIt.next());
+                userLst.addItem(userIt.next());
             }
             if(hasUser) {
-                m_userLst.setSelectedIndex(0);
+                userLst.setSelectedIndex(0);
             }
         }
         catch(Exception ex) {
@@ -439,28 +439,28 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      * List selection changed. 
      */
     public void actionPerformed(ActionEvent e) {
-        Object selVal = m_userLst.getSelectedItem();
+        Object selVal = userLst.getSelectedItem();
         try {      
             if(selVal != null) {
                 String userName = selVal.toString();
-                User user = m_fconfig.getUserManager().getUserByName(userName);
+                User user = fconfig.getUserManager().getUserByName(userName);
                 if (user == null) {
                     GuiUtils.showErrorMessage(this, userName + " : does not exist.");
-                    refresh(m_fconfig);
+                    refresh(fconfig);
                 }
                 else {
                     
                     // populate UI components
-                    m_nameTxt.setText(user.getName());
-                    m_passwordTxt.setText("");
-                    m_retypePasswordTxt.setText("");
-                    m_passwordChkBox.setSelected(false);
-                    m_directoryTxt.setText(user.getHomeDirectory());
-                    m_enabledChkBox.setSelected(user.getEnabled());
-                    m_writeChkBox.setSelected(user.getWritePermission());
-                    setIdleTimeCombo(m_idleLst, user.getMaxIdleTime());
-                    setByteRateCombo(m_uploadLst, user.getMaxUploadRate());
-                    setByteRateCombo(m_downloadLst, user.getMaxDownloadRate());
+                    nameTxt.setText(user.getName());
+                    passwordTxt.setText("");
+                    retypePasswordTxt.setText("");
+                    passwordChkBox.setSelected(false);
+                    directoryTxt.setText(user.getHomeDirectory());
+                    enabledChkBox.setSelected(user.getEnabled());
+                    writeChkBox.setSelected(user.getWritePermission());
+                    setIdleTimeCombo(idleLst, user.getMaxIdleTime());
+                    setByteRateCombo(uploadLst, user.getMaxUploadRate());
+                    setByteRateCombo(downloadLst, user.getMaxDownloadRate());
                 }
             }
         }
@@ -475,7 +475,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      */
     private void save() {
         // check user name field
-        String userName = m_nameTxt.getText().trim();
+        String userName = nameTxt.getText().trim();
         if(userName.equals("")) {
             GuiUtils.showErrorMessage(this, "Please enter an user name");
             return;
@@ -485,14 +485,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             BaseUser user = new BaseUser();
             user.setName(userName);
             if(setPassword(user)) {
-                user.setHomeDirectory(new File(m_directoryTxt.getText()).getCanonicalPath());
-                user.setEnabled(m_enabledChkBox.isSelected());
-                user.setWritePermission(m_writeChkBox.isSelected());
-                user.setMaxIdleTime(getMaxIdleTime(m_uploadLst));
-                user.setMaxUploadRate(getBytesTransferRate(m_uploadLst));
-                user.setMaxDownloadRate(getBytesTransferRate(m_downloadLst));
-                m_fconfig.getUserManager().save(user);
-                refresh(m_fconfig);
+                user.setHomeDirectory(new File(directoryTxt.getText()).getCanonicalPath());
+                user.setEnabled(enabledChkBox.isSelected());
+                user.setWritePermission(writeChkBox.isSelected());
+                user.setMaxIdleTime(getMaxIdleTime(uploadLst));
+                user.setMaxUploadRate(getBytesTransferRate(uploadLst));
+                user.setMaxDownloadRate(getBytesTransferRate(downloadLst));
+                fconfig.getUserManager().save(user);
+                refresh(fconfig);
                 GuiUtils.showInformationMessage(this, "Saved user - " + user.getName());
             }
         }
@@ -508,10 +508,10 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
     private boolean setPassword(BaseUser usr) throws FtpException {
         
         String userName = usr.getName();
-        boolean bNewUser = !m_fconfig.getUserManager().doesExist(userName);
-        boolean bPassSet = m_passwordChkBox.isSelected();
-        String password = new String(m_passwordTxt.getPassword());
-        String repassword = new String(m_retypePasswordTxt.getPassword()); 
+        boolean bNewUser = !fconfig.getUserManager().doesExist(userName);
+        boolean bPassSet = passwordChkBox.isSelected();
+        String password = new String(passwordTxt.getPassword());
+        String repassword = new String(retypePasswordTxt.getPassword()); 
         boolean bAnonymous = userName.equals("anonymous");
         
         // new user
@@ -599,7 +599,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      * Delete user.
      */
     private void delete() {
-        Object selVal = m_userLst.getSelectedItem();
+        Object selVal = userLst.getSelectedItem();
         if(selVal == null) {
             return;
         }
@@ -610,8 +610,8 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         }
         
         try {
-            m_fconfig.getUserManager().delete(userName);
-            refresh(m_fconfig);
+            fconfig.getUserManager().delete(userName);
+            refresh(fconfig);
             GuiUtils.showInformationMessage(this, "Deleted user - " + userName);
         }
         catch(Exception ex) {
@@ -624,7 +624,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      * Can this panel be displayed.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
     
     

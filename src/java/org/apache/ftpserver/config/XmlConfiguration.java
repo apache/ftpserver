@@ -32,50 +32,50 @@ import org.apache.ftpserver.ftplet.FtpException;
 public
 class XmlConfiguration implements Configuration {
     
-    private String m_name;
-    private String m_value;
-    private ArrayList m_children;
+    private String name;
+    private String value;
+    private ArrayList children;
     
     /**
      * Create a new <code>XmlConfiguration</code> instance.
      */
     public XmlConfiguration(String name) {
-        m_name = name;
+        this.name = name;
     }
     
     /**
      * Returns the name of this element.
      */
     String getName() {
-        return m_name;
+        return name;
     }
     
     /**
      * Return count of children.
      */
     int getChildCount() {
-        if( null == m_children ) {
+        if( null == children ) {
             return 0;
         }
-        return m_children.size();
+        return children.size();
     }
     
     /**
      * Set data to the value of this element.
      */
     void setValue(String value) {
-        m_value = value;
+        this.value = value;
     }
     
     /**
      * Add a child <code>XmlConfiguration</code> to this element.
      */
     void addChild(XmlConfiguration elem) {
-        if(m_children == null) {
-            m_children = new ArrayList();
+        if(children == null) {
+            children = new ArrayList();
         }
 
-        m_children.add( elem );
+        children.add( elem );
     }
     
     /**
@@ -83,7 +83,7 @@ class XmlConfiguration implements Configuration {
      */
     public String getString(String param) throws FtpException {
         XmlConfiguration child = (XmlConfiguration)getConfiguration(param);
-        String val = child.m_value;
+        String val = child.value;
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -209,10 +209,10 @@ class XmlConfiguration implements Configuration {
     public Configuration getConfiguration(String param) throws FtpException {
         XmlConfiguration child = null;
         
-        if(m_children != null) {
-            for(Iterator it=m_children.iterator(); it.hasNext(); ) {
+        if(children != null) {
+            for(Iterator it=children.iterator(); it.hasNext(); ) {
                 XmlConfiguration thisChild = (XmlConfiguration)it.next();
-                if( thisChild.m_name.equals(param) ) {
+                if( thisChild.name.equals(param) ) {
                     child = thisChild;
                     break;
                 }
@@ -250,10 +250,10 @@ class XmlConfiguration implements Configuration {
         
         // add configuration keys
         ArrayList keys = new ArrayList();
-        if(m_children != null) {
-            for(int i=0; i<m_children.size(); ++i) {
-                XmlConfiguration child = (XmlConfiguration)m_children.get(i);
-                keys.add(child.m_name);
+        if(children != null) {
+            for(int i=0; i<children.size(); ++i) {
+                XmlConfiguration child = (XmlConfiguration)children.get(i);
+                keys.add(child.name);
             }
         }
         return Collections.enumeration(keys);

@@ -33,13 +33,13 @@ public
 class NativeFileSystemView implements FileSystemView {
     
     // the root directory will always end with '/'.
-    private String m_rootDir;
+    private String rootDir;
     
     // the first and the last character will always be '/'
     // It is always with respect to the root directory.
-    private String m_currDir;
+    private String currDir;
     
-    private boolean m_writePermission;
+    private boolean writePermission;
     
     
     /**
@@ -53,17 +53,17 @@ class NativeFileSystemView implements FileSystemView {
         if(!rootDir.endsWith("/")) {
             rootDir += '/';
         }
-        m_rootDir = rootDir;
+        this.rootDir = rootDir;
         
-        m_writePermission = user.getWritePermission();
-        m_currDir = "/";
+        writePermission = user.getWritePermission();
+        currDir = "/";
     }
     
     /**
      * Get the root directory.
      */
     public FileObject getRootDirectory() {
-        return new NativeFileObject("/", new File(m_rootDir), m_writePermission);
+        return new NativeFileObject("/", new File(rootDir), writePermission);
     }
     
     /**
@@ -71,12 +71,12 @@ class NativeFileSystemView implements FileSystemView {
      */
     public FileObject getCurrentDirectory() {
         FileObject fileObj = null;
-        if(m_currDir.equals("/")) {
-            fileObj = new NativeFileObject("/", new File(m_rootDir), m_writePermission); 
+        if(currDir.equals("/")) {
+            fileObj = new NativeFileObject("/", new File(rootDir), writePermission); 
         }
         else {
-            File file = new File(m_rootDir, m_currDir.substring(1));
-            fileObj = new NativeFileObject(m_currDir, file, m_writePermission);
+            File file = new File(rootDir, currDir.substring(1));
+            fileObj = new NativeFileObject(currDir, file, writePermission);
             
         }
         return fileObj;
@@ -88,12 +88,12 @@ class NativeFileSystemView implements FileSystemView {
     public FileObject getFileObject(String file) {
         
         // get actual file object
-        String physicalName = NativeFileObject.getPhysicalName(m_rootDir, m_currDir, file);
+        String physicalName = NativeFileObject.getPhysicalName(rootDir, currDir, file);
         File fileObj = new File(physicalName);
         
         // strip the root directory and return
-        String userFileName = physicalName.substring(m_rootDir.length() - 1);
-        return new NativeFileObject(userFileName, fileObj, m_writePermission);
+        String userFileName = physicalName.substring(rootDir.length() - 1);
+        return new NativeFileObject(userFileName, fileObj, writePermission);
     }
     
     /**
@@ -102,19 +102,19 @@ class NativeFileSystemView implements FileSystemView {
     public boolean changeDirectory(String dir) {
         
         // not a directory - return false
-        dir = NativeFileObject.getPhysicalName(m_rootDir, m_currDir, dir);
+        dir = NativeFileObject.getPhysicalName(rootDir, currDir, dir);
         File dirObj = new File(dir); 
         if(!dirObj.isDirectory()) {
             return false;
         }
         
         // strip user root and add last '/' if necessary
-        dir = dir.substring(m_rootDir.length() - 1);
+        dir = dir.substring(rootDir.length() - 1);
         if(dir.charAt(dir.length() - 1) != '/') {
             dir = dir + '/';
         }
         
-        m_currDir = dir;
+        currDir = dir;
         return true;
     } 
     
@@ -154,7 +154,7 @@ class NativeFileSystemView implements FileSystemView {
         for(int i=0; i<physicalFiles.length; ++i) {
             File fileObj = physicalFiles[i];
             String fileName = virtualFileStr + fileObj.getName();
-            virtualFiles[i] = new NativeFileObject(fileName, fileObj, m_writePermission);
+            virtualFiles[i] = new NativeFileObject(fileName, fileObj, writePermission);
         }
         return virtualFiles;
     }

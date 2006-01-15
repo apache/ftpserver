@@ -29,7 +29,7 @@ class FtpException extends Exception {
 
     private static final long serialVersionUID = -1328383839915898987L;
     
-    private Throwable m_throwable = null;
+    private Throwable throwable = null;
 
     /**
      * Default constructor.
@@ -55,7 +55,7 @@ class FtpException extends Exception {
      */
     public FtpException(Throwable th) {
         super(th.getMessage());
-        m_throwable = th;
+        throwable = th;
     }
 
     /**
@@ -66,25 +66,25 @@ class FtpException extends Exception {
      */
     public FtpException(String msg, Throwable th) {
         super(msg);
-        m_throwable = th;
+        throwable = th;
     }
     
     /**
      * Get the root cause.
      */
     public Throwable getRootCause() {
-        return m_throwable;
+        return throwable;
     }
     
     /**
      * Print stack trace.
      */
     public void printStackTrace(PrintWriter pw) {
-        if(m_throwable == null) {
+        if(throwable == null) {
             super.printStackTrace(pw);
         }
         else {
-            m_throwable.printStackTrace(pw);
+            throwable.printStackTrace(pw);
         }
     }
     
@@ -92,11 +92,11 @@ class FtpException extends Exception {
      * Print stack trace.
      */
     public void printStackTrace(PrintStream ps) {
-        if(m_throwable == null) {
+        if(throwable == null) {
             super.printStackTrace(ps);
         }
         else {
-            m_throwable.printStackTrace(ps);
+            throwable.printStackTrace(ps);
         }
     }
     
@@ -104,11 +104,11 @@ class FtpException extends Exception {
      * Print stack trace.
      */
     public void printStackTrace() {
-        if(m_throwable == null) {
+        if(throwable == null) {
             super.printStackTrace();
         }
         else {
-            m_throwable.printStackTrace();
+            throwable.printStackTrace();
         }
     }
 }

@@ -51,15 +51,15 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     
     private static final long serialVersionUID = -8673659781727175707L;
     
-    private JTextPane m_logTxt   = null;
-    private JTabbedPane m_parent = null;
-    private JComponent m_defaultTab = null;
+    private JTextPane logTxt   = null;
+    private JTabbedPane parent = null;
+    private JComponent defaultTab = null;
     
-    private IFtpConfig m_fconfig   = null;
-    private IConnection m_connection = null;
+    private IFtpConfig fconfig   = null;
+    private IConnection connection = null;
     
-    private SimpleAttributeSet m_reqAttrs = null;
-    private SimpleAttributeSet m_resAttrs = null;
+    private SimpleAttributeSet reqAttrs = null;
+    private SimpleAttributeSet resAttrs = null;
     
     
     /**
@@ -70,17 +70,17 @@ class SpyPanel extends JPanel implements ConnectionObserver {
                     JTabbedPane parent,
                     JComponent defaultTab) {
         
-        m_fconfig = config;
-        m_connection = con;
-        m_parent = parent;
-        m_defaultTab = defaultTab;
+        fconfig = config;
+        connection = con;
+        this.parent = parent;
+        this.defaultTab = defaultTab;
         initComponents();
         
-        m_reqAttrs = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_reqAttrs, new Color(0xFF, 0x00, 0xFF));
+        reqAttrs = new SimpleAttributeSet();
+        StyleConstants.setForeground(reqAttrs, new Color(0xFF, 0x00, 0xFF));
         
-        m_resAttrs = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_resAttrs, new Color(0x00, 0x00, 0x8B));
+        resAttrs = new SimpleAttributeSet();
+        StyleConstants.setForeground(resAttrs, new Color(0x00, 0x00, 0x8B));
     }
     
     /**
@@ -88,14 +88,14 @@ class SpyPanel extends JPanel implements ConnectionObserver {
      */
     private void initComponents() {
         setLayout(new BorderLayout());
-        m_logTxt = new JTextPane();
-        m_logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        m_logTxt.setEditable(false);
+        logTxt = new JTextPane();
+        logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        logTxt.setEditable(false);
         
         JPanel noWrapPanel = new JPanel(new BorderLayout());
-        noWrapPanel.add(m_logTxt);
+        noWrapPanel.add(logTxt);
         add(new JScrollPane(noWrapPanel), BorderLayout.CENTER);
-        m_connection.setObserver(this);
+        connection.setObserver(this);
         
         JPanel bottomPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
@@ -131,9 +131,9 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     public void response(final String msg) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                Document doc = m_logTxt.getDocument();
+                Document doc = logTxt.getDocument();
                 try {
-                    doc.insertString(doc.getLength(), msg, m_resAttrs);
+                    doc.insertString(doc.getLength(), msg, resAttrs);
                 }
                 catch(BadLocationException ex) {
                     ex.printStackTrace();
@@ -149,9 +149,9 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     public void request(final String msg) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                Document doc = m_logTxt.getDocument();
+                Document doc = logTxt.getDocument();
                 try {
-                    doc.insertString(doc.getLength(), msg, m_reqAttrs);
+                    doc.insertString(doc.getLength(), msg, reqAttrs);
                 }
                 catch(BadLocationException ex) {
                     ex.printStackTrace();
@@ -165,18 +165,18 @@ class SpyPanel extends JPanel implements ConnectionObserver {
      * Clear log messages
      */
     public void clearLog() {
-        m_logTxt.setText("");
+        logTxt.setText("");
     }
     
     /**
      * Close pane
      */
     public void closePane() {
-        m_parent.remove(this);
-        if(m_parent.getTabCount() == 0) {
-            m_parent.addTab("Spy", m_defaultTab);
+        parent.remove(this);
+        if(parent.getTabCount() == 0) {
+            parent.addTab("Spy", defaultTab);
         }
-        m_connection.setObserver(null);
+        connection.setObserver(null);
         clearLog();
     }
     
@@ -186,11 +186,11 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private void disconnectUser() {
         boolean bConf = GuiUtils.getConfirmation(this, "Do you want to close the connection?");
         if(bConf) {
-            IConnectionManager manager = m_fconfig.getConnectionManager();
+            IConnectionManager manager = fconfig.getConnectionManager();
             if (manager != null) {
-                manager.closeConnection(m_connection);
+                manager.closeConnection(connection);
             }
-            m_connection.setObserver(null);
+            connection.setObserver(null);
         }
     }    
     
@@ -198,6 +198,6 @@ class SpyPanel extends JPanel implements ConnectionObserver {
      * Get the connection object being monitored.
      */
     public IConnection getConnection() {
-        return m_connection;
+        return connection;
     }
 }

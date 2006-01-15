@@ -88,47 +88,47 @@ class FtpWriter implements FtpResponse {
     
     /////////////////////////////////////////////////////////////////////////////
     
-    private Log m_log;
-    private Writer m_writer;
-    private ConnectionObserver m_observer;
-    private IFtpConfig m_fconfig;
-    private FtpRequest m_request;
+    private Log log;
+    private Writer writer;
+    private ConnectionObserver observer;
+    private IFtpConfig fconfig;
+    private FtpRequest request;
 
         
     /**
      * Set the control socket.
      */
     public void setControlSocket(Socket soc) throws IOException {
-        m_writer = new OutputStreamWriter(soc.getOutputStream(), "UTF-8");
+        writer = new OutputStreamWriter(soc.getOutputStream(), "UTF-8");
     }
     
     /**
      * Set ftp config.
      */
     public void setFtpConfig(IFtpConfig fconfig) {
-        m_fconfig = fconfig;
-        m_log = m_fconfig.getLogFactory().getInstance(getClass());
+        this.fconfig = fconfig;
+        log = this.fconfig.getLogFactory().getInstance(getClass());
     }
 
     /**
      * Set ftp request.
      */
     public void setFtpRequest(FtpRequest request) {
-        m_request = request;
+        this.request = request;
     }
     
     /**
      * Get the observer object to get what the server response.
      */
     public void setObserver(ConnectionObserver observer) {
-        m_observer = observer;
+        this.observer = observer;
     }        
     
     /**
      * Spy print. Monitor server response.
      */
     private void spyResponse(String str) {
-        ConnectionObserver observer = m_observer;
+        ConnectionObserver observer = this.observer;
         if(observer != null) {
             observer.response(str);
         }
@@ -138,11 +138,11 @@ class FtpWriter implements FtpResponse {
      * Generate and send ftp server response.
      */
     public void send(int code, String subId, String basicMsg) throws IOException {
-        IMessageResource resource = m_fconfig.getMessageResource();
-        String lang = m_request.getLanguage();
+        IMessageResource resource = fconfig.getMessageResource();
+        String lang = request.getLanguage();
         String msg = resource.getMessage(code, subId, lang);
         if(msg == null) {
-            m_log.error("Message not found : " + code + ',' + subId + ',' + lang);
+            log.error("Message not found : " + code + ',' + subId + ',' + lang);
             msg = "";
         }
         msg = replaceVariables(code, basicMsg, msg);
@@ -166,15 +166,15 @@ class FtpWriter implements FtpResponse {
         
         msg = processNewLine(code, msg);
         spyResponse(msg);
-        m_writer.write(msg);
-        m_writer.flush();
+        writer.write(msg);
+        writer.flush();
     }
     
     /**
      * Close writer.
      */
     public void close() {
-        IoUtils.close(m_writer);
+        IoUtils.close(writer);
     }
     
     /**
@@ -304,13 +304,13 @@ class FtpWriter implements FtpResponse {
         
         // server address
         if(varName.equals(SERVER_IP)) {
-            InetAddress addr = m_fconfig.getDataConnectionConfig().getPassiveAddress();
+            InetAddress addr = fconfig.getDataConnectionConfig().getPassiveAddress();
             varVal = addr.getHostAddress();
         }
         
         // server port
         else if(varName.equals(SERVER_PORT)) {
-            varVal = String.valueOf(m_fconfig.getServerPort());
+            varVal = String.valueOf(fconfig.getServerPort());
         }
         
         return varVal;
@@ -325,17 +325,17 @@ class FtpWriter implements FtpResponse {
         
         // request line
         if(varName.equals(REQUEST_LINE)) {
-            varVal = m_request.getRequestLine();
+            varVal = request.getRequestLine();
         }
         
         // request command
         else if(varName.equals(REQUEST_CMD)) {
-            varVal = m_request.getCommand();
+            varVal = request.getCommand();
         }
         
         // request argument
         else if(varName.equals(REQUEST_ARG)) {
-            varVal = m_request.getArgument();
+            varVal = request.getArgument();
         }
         
         return varVal;
@@ -347,7 +347,7 @@ class FtpWriter implements FtpResponse {
     private String getStatisticalVariableValue(String varName) {
     
         String varVal = null;
-        FtpStatistics stat = m_fconfig.getFtpStatistics();
+        FtpStatistics stat = fconfig.getFtpStatistics();
         
         // server start time
         if(varName.equals(STAT_START_TIME)) {
@@ -382,7 +382,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalConnectionVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = m_fconfig.getFtpStatistics();
+        FtpStatistics stat = fconfig.getFtpStatistics();
         
         // total connection number
         if(varName.equals(STAT_CON_TOTAL)) {
@@ -402,7 +402,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalLoginVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = m_fconfig.getFtpStatistics();
+        FtpStatistics stat = fconfig.getFtpStatistics();
         
         // total login number
         if(varName.equals(STAT_LOGIN_TOTAL)) {
@@ -432,7 +432,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalFileVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = m_fconfig.getFtpStatistics();
+        FtpStatistics stat = fconfig.getFtpStatistics();
         
         // total number of file upload
         if(varName.equals(STAT_FILE_UPLOAD_COUNT)) {
@@ -467,7 +467,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalDirectoryVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = m_fconfig.getFtpStatistics();
+        FtpStatistics stat = fconfig.getFtpStatistics();
         
         // total directory created
         if(varName.equals(STAT_DIR_CREATE_COUNT)) {
@@ -510,37 +510,37 @@ class FtpWriter implements FtpResponse {
         
         // client ip
         if(varName.equals(CLIENT_IP)) {
-            varVal = m_request.getRemoteAddress().getHostAddress();
+            varVal = request.getRemoteAddress().getHostAddress();
         }
         
         // client connection time
         else if(varName.equals(CLIENT_CON_TIME)) {
-            varVal = DateUtils.getISO8601Date(m_request.getConnectionTime().getTime());
+            varVal = DateUtils.getISO8601Date(request.getConnectionTime().getTime());
         }
         
         // client login name
         else if(varName.equals(CLIENT_LOGIN_NAME)) {
-            varVal = m_request.getUser().getName();
+            varVal = request.getUser().getName();
         }
         
         // client login time
         else if(varName.equals(CLIENT_LOGIN_TIME)) {
-            varVal = DateUtils.getISO8601Date(m_request.getLoginTime().getTime());
+            varVal = DateUtils.getISO8601Date(request.getLoginTime().getTime());
         }
         
         // client last access time
         else if(varName.equals(CLIENT_ACCESS_TIME)) {
-            varVal = DateUtils.getISO8601Date(m_request.getLastAccessTime().getTime());
+            varVal = DateUtils.getISO8601Date(request.getLastAccessTime().getTime());
         }
         
         // client home
         else if(varName.equals(CLIENT_HOME)) {
-            varVal = m_request.getUser().getHomeDirectory();
+            varVal = request.getUser().getHomeDirectory();
         }
         
         // client directory
         else if(varName.equals(CLIENT_DIR)) {
-            FileSystemView fsView = m_request.getFileSystemView();
+            FileSystemView fsView = request.getFileSystemView();
             if(fsView != null) {
                 try {
                     varVal = fsView.getCurrentDirectory().getFullName();

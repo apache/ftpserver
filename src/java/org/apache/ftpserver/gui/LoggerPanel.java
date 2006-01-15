@@ -77,16 +77,16 @@ class LoggerPanel extends PluginPanel implements Log {
     
     private int m_logLevel = LEVEL_INFO;
 
-    private IFtpConfig m_ftpConfig;
+    private IFtpConfig ftpConfig;
     
-    private JComboBox m_logCombo;
-    private JTextPane m_logTxt;
-    private Document m_doc;
+    private JComboBox logCombo;
+    private JTextPane logTxt;
+    private Document doc;
     
-    private SimpleAttributeSet m_debugAttr;
-    private SimpleAttributeSet m_infoAttr;
-    private SimpleAttributeSet m_warnAttr;
-    private SimpleAttributeSet m_errorAttr;
+    private SimpleAttributeSet debugAttr;
+    private SimpleAttributeSet infoAttr;
+    private SimpleAttributeSet warnAttr;
+    private SimpleAttributeSet errorAttr;
 
     
     /**
@@ -96,17 +96,17 @@ class LoggerPanel extends PluginPanel implements Log {
         super(container);
         
         // create style attributes
-        m_debugAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_debugAttr, COLOR_DEBUG);
+        debugAttr = new SimpleAttributeSet();
+        StyleConstants.setForeground(debugAttr, COLOR_DEBUG);
         
-        m_infoAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_infoAttr, COLOR_INFO);
+        infoAttr = new SimpleAttributeSet();
+        StyleConstants.setForeground(infoAttr, COLOR_INFO);
         
-        m_warnAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_warnAttr, COLOR_WARN);
+        warnAttr = new SimpleAttributeSet();
+        StyleConstants.setForeground(warnAttr, COLOR_WARN);
         
-        m_errorAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(m_errorAttr, COLOR_ERROR);
+        errorAttr = new SimpleAttributeSet();
+        StyleConstants.setForeground(errorAttr, COLOR_ERROR);
         
         initComponents();
     }
@@ -120,24 +120,24 @@ class LoggerPanel extends PluginPanel implements Log {
         switch(level) {
             case LEVEL_TRACE:
             case LEVEL_DEBUG:
-                attr = m_debugAttr;
+                attr = debugAttr;
                 break;
             
             case LEVEL_INFO:
-                attr = m_infoAttr;
+                attr = infoAttr;
                 break;
                 
             case LEVEL_WARN:
-                attr = m_warnAttr;
+                attr = warnAttr;
                 break;
                 
             case LEVEL_ERROR:
             case LEVEL_FATAL:
-                attr = m_errorAttr;
+                attr = errorAttr;
                 break;
             
             default:
-                attr = m_infoAttr;
+                attr = infoAttr;
                 break;
         }
         return attr;
@@ -158,27 +158,27 @@ class LoggerPanel extends PluginPanel implements Log {
         comboLab.setForeground(Color.black);
         topPanel.add(comboLab);
            
-        m_logCombo = new JComboBox(LEVELS);
-        m_logCombo.setSelectedIndex(LEVEL_INFO);
+        logCombo = new JComboBox(LEVELS);
+        logCombo.setSelectedIndex(LEVEL_INFO);
         Dimension dim = new Dimension(90, 22);
-        m_logCombo.setPreferredSize(dim);
-        m_logCombo.setMaximumSize(dim);
-        m_logCombo.setToolTipText("Set Log Level");
-        m_logCombo.addItemListener(new ItemListener() {
+        logCombo.setPreferredSize(dim);
+        logCombo.setMaximumSize(dim);
+        logCombo.setToolTipText("Set Log Level");
+        logCombo.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent evt) {
-                m_logLevel = m_logCombo.getSelectedIndex();
+                m_logLevel = logCombo.getSelectedIndex();
             }
         });
-        topPanel.add(m_logCombo);
+        topPanel.add(logCombo);
         
         // add text pane
-        m_logTxt = new JTextPane();
-        m_logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        m_logTxt.setEditable(false);
-        m_doc = m_logTxt.getDocument();
+        logTxt = new JTextPane();
+        logTxt.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        logTxt.setEditable(false);
+        doc = logTxt.getDocument();
         
         JPanel noWrapPanel = new JPanel(new BorderLayout());
-        noWrapPanel.add(m_logTxt);
+        noWrapPanel.add(logTxt);
         add(new JScrollPane(noWrapPanel), BorderLayout.CENTER);
         
         // add clear button panel
@@ -189,7 +189,7 @@ class LoggerPanel extends PluginPanel implements Log {
         clearAction.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 try {
-                    m_doc.remove(0, m_doc.getLength());
+                    doc.remove(0, doc.getLength());
                 }
                 catch(Exception ex) {
                     ex.printStackTrace();
@@ -206,22 +206,22 @@ class LoggerPanel extends PluginPanel implements Log {
         
         // remove old log messages
         try {
-            m_doc.remove(0, m_doc.getLength());
+            doc.remove(0, doc.getLength());
         }
         catch(Exception ex) {
             ex.printStackTrace();
         }
         
         // remove from the previous log factory
-        if(m_ftpConfig != null) {
-            FtpLogFactory factory = (FtpLogFactory)m_ftpConfig.getLogFactory();
+        if(this.ftpConfig != null) {
+            FtpLogFactory factory = (FtpLogFactory)this.ftpConfig.getLogFactory();
             if(factory != null) {
                 factory.removeLog(this);
             }
         }
 
         // add this logger
-        m_ftpConfig = ftpConfig;
+        this.ftpConfig = ftpConfig;
         if(ftpConfig != null) {
             FtpLogFactory factory = (FtpLogFactory)ftpConfig.getLogFactory();
             factory.addLog(this);
@@ -232,7 +232,7 @@ class LoggerPanel extends PluginPanel implements Log {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (m_ftpConfig != null);
+        return (ftpConfig != null);
     }
 
     /**
@@ -307,15 +307,15 @@ class LoggerPanel extends PluginPanel implements Log {
             public void run() {
                 try {    
                     // clear if already the char count exceeds
-                    int docLen = m_doc.getLength();
+                    int docLen = doc.getLength();
                     if(docLen > MAX_CHARS) {
-                        m_doc.remove(0, docLen);
+                        doc.remove(0, docLen);
                         docLen = 0;
                     }
                     
                     // insert string
                     SimpleAttributeSet attr = getAttributeSet(level);
-                    m_doc.insertString(docLen, message, attr);
+                    doc.insertString(docLen, message, attr);
                 }
                 catch(Exception ex) {
                     ex.printStackTrace();

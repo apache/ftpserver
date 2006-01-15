@@ -66,15 +66,15 @@ class DirChooser extends JDialog implements TreeSelectionListener,
 
     private final static FileSystemView FILE_VIEW = FileSystemView.getFileSystemView();
     
-    private JTree m_tree;
-    private JTextField m_dirText;
-    private JScrollPane m_scrollPane;
+    private JTree tree;
+    private JTextField dirText;
+    private JScrollPane scrollPane;
     
-    private JButton m_selectButton;
-    private JButton m_cancelButton;
+    private JButton selectButton;
+    private JButton cancelButton;
     
-    private boolean m_showHidden = false; 
-    private String m_selectedDir = null; 
+    private boolean showHidden = false; 
+    private String selectedDir = null; 
     
     
     /**
@@ -103,9 +103,9 @@ class DirChooser extends JDialog implements TreeSelectionListener,
         tabPane.add("Directory", topPanel);
         
         // file tree
-        m_tree = new JTree();
-        m_scrollPane = new JScrollPane(m_tree);
-        topPanel.add(m_scrollPane, BorderLayout.CENTER);
+        tree = new JTree();
+        scrollPane = new JScrollPane(tree);
+        topPanel.add(scrollPane, BorderLayout.CENTER);
         
         // directory text panel
         JPanel dirTextPanel = new JPanel(new BorderLayout());
@@ -117,32 +117,32 @@ class DirChooser extends JDialog implements TreeSelectionListener,
         dirTextPanel.add(dirLab, BorderLayout.WEST);
         
         // directory text filed
-        m_dirText = new JTextField();
-        dirTextPanel.add(m_dirText, BorderLayout.CENTER);
+        dirText = new JTextField();
+        dirTextPanel.add(dirText, BorderLayout.CENTER);
         
         // add the bottom pane
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         container.add(bottomPanel, BorderLayout.SOUTH);
         
         // select button
-        m_selectButton = new JButton("Select");
-        m_selectButton.addActionListener(new ActionListener() {
+        selectButton = new JButton("Select");
+        selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                m_selectedDir = m_dirText.getText();
+                selectedDir = dirText.getText();
                 DirChooser.this.dispose();
             }
         });
-        bottomPanel.add(m_selectButton);
+        bottomPanel.add(selectButton);
         
         // cancel button
-        m_cancelButton = new JButton("Cancel");
-        m_cancelButton.addActionListener(new ActionListener() {
+        cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                m_selectedDir = null;
+                selectedDir = null;
                 DirChooser.this.dispose();
             }
         });
-        bottomPanel.add(m_cancelButton);
+        bottomPanel.add(cancelButton);
         
         // initialize 
         populateTree();
@@ -167,12 +167,12 @@ class DirChooser extends JDialog implements TreeSelectionListener,
             rootNode.add(driveNodes[i]);
         }
         
-        m_tree.setModel(model);
-        m_tree.setRootVisible(false);
-        m_tree.setExpandsSelectedPaths(true);
-        m_tree.addTreeWillExpandListener(this);
-        m_tree.setCellRenderer(new DirTreeCellRenderer());
-        m_tree.addTreeSelectionListener(this);
+        tree.setModel(model);
+        tree.setRootVisible(false);
+        tree.setExpandsSelectedPaths(true);
+        tree.addTreeWillExpandListener(this);
+        tree.setCellRenderer(new DirTreeCellRenderer());
+        tree.addTreeSelectionListener(this);
     }
     
     
@@ -221,12 +221,12 @@ class DirChooser extends JDialog implements TreeSelectionListener,
             dir = parent;
         }
         
-        JViewport viewPort = m_scrollPane.getViewport();
-        TreeModel model = m_tree.getModel();
+        JViewport viewPort = scrollPane.getViewport();
+        TreeModel model = tree.getModel();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)model.getRoot();
         for(int i=dirs.size(); --i>=0; ) {
             File currDir = (File)dirs.get(i);
-            m_tree.expandPath(new TreePath(node.getPath()));
+            tree.expandPath(new TreePath(node.getPath()));
             int count = node.getChildCount();
             int j;
             for(j=0; j<count; ++j) {
@@ -234,8 +234,8 @@ class DirChooser extends JDialog implements TreeSelectionListener,
                 if(currNode.getUserObject().equals(currDir)) {
                     node = currNode;
                     TreePath currPath = new TreePath(currNode.getPath());
-                    m_tree.setSelectionPath(currPath);
-                    Rectangle rect = m_tree.getPathBounds(currPath);
+                    tree.setSelectionPath(currPath);
+                    Rectangle rect = tree.getPathBounds(currPath);
                     if(rect != null) {
                         viewPort.setViewPosition(rect.getLocation());
                     }
@@ -255,7 +255,7 @@ class DirChooser extends JDialog implements TreeSelectionListener,
     protected void processWindowEvent(WindowEvent e) {
         int id = e.getID();
         if (id == WindowEvent.WINDOW_CLOSING) {
-            m_selectedDir = null;
+            selectedDir = null;
             dispose();
         } 
         else {
@@ -272,7 +272,7 @@ class DirChooser extends JDialog implements TreeSelectionListener,
         chooser.setLocationRelativeTo(parent);
         
         chooser.setVisible(true);
-        return chooser.m_selectedDir;
+        return chooser.selectedDir;
     }
     
     
@@ -286,7 +286,7 @@ class DirChooser extends JDialog implements TreeSelectionListener,
         if(path != null) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
             File dir = (File)node.getUserObject();
-            m_dirText.setText(dir.getAbsolutePath());
+            dirText.setText(dir.getAbsolutePath());
         }
     } 
 
@@ -324,7 +324,7 @@ class DirChooser extends JDialog implements TreeSelectionListener,
         Arrays.sort(childDirs);
         for(int i = 0; i < childDirs.length; i++) {
             if(childDirs[i].isHidden()) {
-                if(m_showHidden) {
+                if(showHidden) {
                     node.add(new DefaultMutableTreeNode(childDirs[i]));
                 }
             }

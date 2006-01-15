@@ -55,42 +55,42 @@ class RequestHandler implements IConnection {
 
     private static final HashMap COMMAND_MAP = new HashMap(64);
     
-    private IFtpConfig m_fconfig;
-    private Log m_log;
+    private IFtpConfig fconfig;
+    private Log log;
     
-    private Socket m_controlSocket;
-    private FtpRequestImpl m_request;
-    private FtpWriter m_writer;
-    private BufferedReader m_reader;
-    private boolean m_isConnectionClosed;
+    private Socket controlSocket;
+    private FtpRequestImpl request;
+    private FtpWriter writer;
+    private BufferedReader reader;
+    private boolean isConnectionClosed;
     
-    private DirectoryLister m_directoryLister;
-    private DataType m_dataType    = DataType.ASCII;
-    private Structure m_structure  = Structure.FILE;
+    private DirectoryLister directoryLister;
+    private DataType dataType    = DataType.ASCII;
+    private Structure structure  = Structure.FILE;
     
     
     /**
      * Constructor - set the control socket.
      */
     public RequestHandler(IFtpConfig fconfig, Socket controlSocket) throws IOException {
-        m_fconfig = fconfig;
-        m_controlSocket = controlSocket;
-        m_log = m_fconfig.getLogFactory().getInstance(getClass());
+        this.fconfig = fconfig;
+        this.controlSocket = controlSocket;
+        log = this.fconfig.getLogFactory().getInstance(getClass());
         
         // data connection object
         FtpDataConnection dataCon = new FtpDataConnection();
-        dataCon.setFtpConfig(m_fconfig);
+        dataCon.setFtpConfig(this.fconfig);
         
         // reader object
-        m_request = new FtpRequestImpl();
-        m_request.setClientAddress(m_controlSocket.getInetAddress());
-        m_request.setFtpDataConnection(dataCon);
+        request = new FtpRequestImpl();
+        request.setClientAddress(this.controlSocket.getInetAddress());
+        request.setFtpDataConnection(dataCon);
         
         // writer object
-        m_writer = new FtpWriter();
-        m_writer.setControlSocket(m_controlSocket);
-        m_writer.setFtpConfig(m_fconfig);
-        m_writer.setFtpRequest(m_request);
+        writer = new FtpWriter();
+        writer.setControlSocket(this.controlSocket);
+        writer.setFtpConfig(this.fconfig);
+        writer.setFtpRequest(request);
     }
     
     /**
@@ -99,15 +99,15 @@ class RequestHandler implements IConnection {
     public void setObserver(ConnectionObserver observer) {
         
         // set writer observer
-        FtpWriter writer = m_writer;
+        FtpWriter writer = this.writer;
         if(writer != null) {
-            writer.setObserver(observer);
+        	writer.setObserver(observer);
         }
         
         // set request observer
-        FtpRequestImpl request = m_request;
+        FtpRequestImpl request = this.request;
         if(request != null) {
-            request.setObserver(observer);
+        	request.setObserver(observer);
         }
     }   
     
@@ -115,56 +115,56 @@ class RequestHandler implements IConnection {
      * Get the configuration object.
      */
     public IFtpConfig getConfig() {
-        return m_fconfig;
+        return fconfig;
     }
     
     /**
      * Get directory lister.
      */
     public DirectoryLister getDirectoryLister() {
-        return m_directoryLister;
+        return directoryLister;
     }
     
     /**
      * Set directory lister.
      */
     public void setDirectoryLister(DirectoryLister lister) {
-        m_directoryLister = lister;
+        directoryLister = lister;
     }
                 
     /**
      * Get the data type.
      */
     public DataType getDataType() {
-        return m_dataType;
+        return dataType;
     }
     
     /**
      * Set the data type.
      */
     public void setDataType(DataType type) {
-        m_dataType = type;
+        dataType = type;
     }
 
     /**
      * Get structure.
      */
     public Structure getStructure() {
-        return m_structure;
+        return structure;
     }
     
     /**
      * Set structure
      */
     public void setStructure(Structure stru) {
-        m_structure = stru;
+        structure = stru;
     }
         
     /**
      * Get request.
      */
     public FtpRequest getRequest() {
-        return m_request;
+        return request;
     }
     
     /**
@@ -172,22 +172,22 @@ class RequestHandler implements IConnection {
      */
     public void run() {
         
-        InetAddress clientAddr = m_request.getRemoteAddress();
-        IConnectionManager conManager = m_fconfig.getConnectionManager();
+        InetAddress clientAddr = request.getRemoteAddress();
+        IConnectionManager conManager = fconfig.getConnectionManager();
         try {
             
             // write log message
             String hostAddress = clientAddr.getHostAddress();
-            m_log.info("Open connection - " + hostAddress);
+            log.info("Open connection - " + hostAddress);
             
             // notify ftp statistics
-            IFtpStatistics ftpStat = (IFtpStatistics)m_fconfig.getFtpStatistics();
+            IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
             ftpStat.setOpenConnection(this);
             
             // call Ftplet.onConnect() method
             boolean isSkipped = false;
-            Ftplet ftpletContainer = m_fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onConnect(m_request, m_writer);
+            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            FtpletEnum ftpletRet = ftpletContainer.onConnect(request, writer);
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 isSkipped = true;
             }
@@ -199,29 +199,29 @@ class RequestHandler implements IConnection {
             if(!isSkipped) {
 
                 // IP permission check
-                IIpRestrictor ipRestrictor = m_fconfig.getIpRestrictor();
+                IIpRestrictor ipRestrictor = fconfig.getIpRestrictor();
                 if( !ipRestrictor.hasPermission(clientAddr) ) {
-                    m_log.warn("No permission to access from " + hostAddress);
-                    m_writer.send(530, "ip.restricted", null);
+                    log.warn("No permission to access from " + hostAddress);
+                    writer.send(530, "ip.restricted", null);
                     return;
                 }
                 
                 // connection limit check
                 int maxConnections = conManager.getMaxConnections();
                 if(ftpStat.getCurrentConnectionNumber() > maxConnections) {
-                    m_log.warn("Maximum connection limit reached.");
-                    m_writer.send(530, "connection.limit", null);
+                    log.warn("Maximum connection limit reached.");
+                    writer.send(530, "connection.limit", null);
                     return;
                 }
                 
                 // everything is fine - go ahead 
-                m_writer.send(220, null, null);
+                writer.send(220, null, null);
             }
             
-            m_reader = new BufferedReader(new InputStreamReader(m_controlSocket.getInputStream(), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream(), "UTF-8"));
             do {
                 notifyObserver();
-                String commandLine = m_reader.readLine();
+                String commandLine = reader.readLine();
                 
                 // test command line
                 if(commandLine == null) {
@@ -233,26 +233,26 @@ class RequestHandler implements IConnection {
                 }
                 
                 // parse and check permission
-                m_request.parse(commandLine);
+                request.parse(commandLine);
                 if(!hasPermission()) {
-                    m_writer.send(530, "permission", null);
+                    writer.send(530, "permission", null);
                     continue;
                 }
 
                 // execute command
-                service(m_request, m_writer);
+                service(request, writer);
             }
-            while(!m_isConnectionClosed);
+            while(!isConnectionClosed);
         }
         catch(SocketException ex) {
             // socket closed - no need to do anything
         }
         catch(Exception ex) {
-            m_log.warn("RequestHandler.run()", ex);
+            log.warn("RequestHandler.run()", ex);
         }
         finally {
             // close all resources if not done already
-            if(!m_isConnectionClosed) {
+            if(!isConnectionClosed) {
                  conManager.closeConnection(this);
             }
         }
@@ -262,8 +262,8 @@ class RequestHandler implements IConnection {
      * Notify connection manager observer.
      */
     protected void notifyObserver() {
-        m_request.updateLastAccessTime();
-        m_fconfig.getConnectionManager().updateConnection(this);
+        request.updateLastAccessTime();
+        fconfig.getConnectionManager().updateConnection(this);
     }
 
     /**
@@ -292,7 +292,7 @@ class RequestHandler implements IConnection {
                throw (IOException)ex;
             }
             else {
-                m_log.warn("RequestHandler.service()", ex);
+                log.warn("RequestHandler.service()", ex);
             }
         }
     }
@@ -304,34 +304,34 @@ class RequestHandler implements IConnection {
         
         // check whether already closed or not
         synchronized(this) {
-            if(m_isConnectionClosed) {
+            if(isConnectionClosed) {
                 return;
             }
-            m_isConnectionClosed = true;
+            isConnectionClosed = true;
         }
         
         // call Ftplet.onDisconnect() method.
         try {
-            Ftplet ftpletContainer = m_fconfig.getFtpletContainer();
-            ftpletContainer.onDisconnect(m_request, m_writer);
+            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            ftpletContainer.onDisconnect(request, writer);
         }
         catch(Exception ex) {
-            m_log.warn("RequestHandler.close()", ex);
+            log.warn("RequestHandler.close()", ex);
         }
 
         // notify statistics object and close request
-        IFtpStatistics ftpStat = (IFtpStatistics)m_fconfig.getFtpStatistics();
-        FtpRequestImpl request = m_request;
+        IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
+
         if(request != null) {
             
             // log message
             String userName = request.getUser().getName();
             InetAddress clientAddr = request.getRemoteAddress(); 
-            m_log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
+            log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
             // logout if necessary and notify statistics
             if(request.isLoggedIn()) {
-                request.setLogout();
+            	request.setLogout();
                 ftpStat.setLogout(this);
             }
             ftpStat.setCloseConnection(this);
@@ -344,34 +344,34 @@ class RequestHandler implements IConnection {
             if(fview != null) {
             	fview.dispose();
             }
-            m_request = null;
+            request = null;
         }
                 
         // close ftp writer
-        FtpWriter writer = m_writer;
+        FtpWriter writer = this.writer;
         if(writer != null) {
-            writer.setObserver(null);
-            writer.close();
-            m_writer = null;
+        	writer.setObserver(null);
+        	writer.close();
+            writer = null;
         }
         
         // close buffered reader
-        BufferedReader reader = m_reader;
+        BufferedReader reader = this.reader;
         if(reader != null) {
             IoUtils.close(reader);
-            m_reader = null;
+            reader = null;
         }
         
         // close control socket
-        Socket controlSocket = m_controlSocket;
+        Socket controlSocket = this.controlSocket;
         if (controlSocket != null) {
             try {
-                controlSocket.close();
+            	controlSocket.close();
             }
             catch(Exception ex) {
-                m_log.warn("RequestHandler.close()", ex);
+                log.warn("RequestHandler.close()", ex);
             }
-            m_controlSocket = null;
+            controlSocket = null;
         }
     }
 
@@ -379,11 +379,11 @@ class RequestHandler implements IConnection {
      * Check user permission to execute ftp command. 
      */
     protected boolean hasPermission() {
-        String cmd = m_request.getCommand();
+        String cmd = request.getCommand();
         if(cmd == null) {
             return false;
         }
-        return m_request.isLoggedIn() ||
+        return request.isLoggedIn() ||
         cmd.equals("USER")            || 
         cmd.equals("PASS")            ||
         cmd.equals("AUTH")            ||
@@ -403,7 +403,7 @@ class RequestHandler implements IConnection {
                                BufferedOutputStream out,
                                int maxRate) throws IOException {
         
-        boolean isAscii = m_dataType == DataType.ASCII;
+        boolean isAscii = dataType == DataType.ASCII;
         long startTime = System.currentTimeMillis();
         long transferredSize = 0L;
         byte[] buff = new byte[4096];
@@ -460,18 +460,18 @@ class RequestHandler implements IConnection {
     public void createSecureSocket(String protocol) throws Exception {
         
         // change socket to SSL socket
-        ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
+        ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }
-        Socket ssoc = ssl.createSocket(protocol, m_controlSocket, false);
+        Socket ssoc = ssl.createSocket(protocol, controlSocket, false);
         
         // change streams
-        m_reader = new BufferedReader(new InputStreamReader(ssoc.getInputStream(), "UTF-8"));
-        m_writer.setControlSocket(ssoc);
+        reader = new BufferedReader(new InputStreamReader(ssoc.getInputStream(), "UTF-8"));
+        writer.setControlSocket(ssoc);
         
         // set control socket
-        m_controlSocket = ssoc;
+        controlSocket = ssoc;
     }
     
     /////////////////////////////////////////////////////////////////////

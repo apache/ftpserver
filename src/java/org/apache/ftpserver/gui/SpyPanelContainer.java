@@ -40,10 +40,10 @@ class SpyPanelContainer extends PluginPanel {
     
     private static final long serialVersionUID = 7426681776615720958L;
     
-    private JTabbedPane m_tabbedPane;
-    private JLabel m_defaultComp;
+    private JTabbedPane tabbedPane;
+    private JLabel defaultComp;
     
-    private IFtpConfig m_fconfig;
+    private IFtpConfig fconfig;
     
     
     /**
@@ -59,20 +59,20 @@ class SpyPanelContainer extends PluginPanel {
      */
     private void initComponents() {
         setLayout(new BorderLayout());
-        m_tabbedPane = new JTabbedPane();
-        m_tabbedPane.setPreferredSize(new Dimension(470, 340));
-        add(m_tabbedPane, BorderLayout.CENTER);
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(470, 340));
+        add(tabbedPane, BorderLayout.CENTER);
         
         // initialize component to be displayed if 
         // there is no currently monitored connection
-        m_defaultComp = new JLabel("Please, select a connection.", JLabel.CENTER);
-        m_defaultComp.setFont(new Font(null, Font.BOLD, 17));
-        m_defaultComp.setForeground(Color.blue);
-        m_defaultComp.setBackground(Color.white);
-        m_defaultComp.setBorder(BorderFactory.createEtchedBorder());
-        m_defaultComp.setOpaque(true);
+        defaultComp = new JLabel("Please, select a connection.", JLabel.CENTER);
+        defaultComp.setFont(new Font(null, Font.BOLD, 17));
+        defaultComp.setForeground(Color.blue);
+        defaultComp.setBackground(Color.white);
+        defaultComp.setBorder(BorderFactory.createEtchedBorder());
+        defaultComp.setOpaque(true);
         
-        m_tabbedPane.addTab("Spy", m_defaultComp);
+        tabbedPane.addTab("Spy", defaultComp);
     }
 
     /**
@@ -82,24 +82,24 @@ class SpyPanelContainer extends PluginPanel {
         String userName = getCaption(con); 
         
         // don't add another tab if already being monitored
-        int tabCount = m_tabbedPane.getTabCount();
+        int tabCount = tabbedPane.getTabCount();
         for(int i=0; i<tabCount; i++) {
-            Component selComp = m_tabbedPane.getComponentAt(i);
-            if ( (selComp != null) && (selComp != m_defaultComp) ) {
+            Component selComp = tabbedPane.getComponentAt(i);
+            if ( (selComp != null) && (selComp != defaultComp) ) {
                 IConnection tabcon = ((SpyPanel)selComp).getConnection();
                 if (tabcon == con) {
-                    m_tabbedPane.setTitleAt(i, userName);
-                    m_tabbedPane.setSelectedIndex(i);
+                    tabbedPane.setTitleAt(i, userName);
+                    tabbedPane.setSelectedIndex(i);
                     return;
                 }
             }
         }
         
         // add new tab
-        SpyPanel spyPane = new SpyPanel(m_fconfig, con, m_tabbedPane, m_defaultComp);
-        m_tabbedPane.remove(m_defaultComp);
-        m_tabbedPane.add(userName, spyPane);
-        m_tabbedPane.setSelectedComponent(spyPane);
+        SpyPanel spyPane = new SpyPanel(fconfig, con, tabbedPane, defaultComp);
+        tabbedPane.remove(defaultComp);
+        tabbedPane.add(userName, spyPane);
+        tabbedPane.setSelectedComponent(spyPane);
     } 
     
     /**
@@ -121,17 +121,17 @@ class SpyPanelContainer extends PluginPanel {
      * Refresh the ftp configuration
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_fconfig = ftpConfig;
-        int tabCount = m_tabbedPane.getTabCount();
+        fconfig = ftpConfig;
+        int tabCount = tabbedPane.getTabCount();
         for(int i=0; i<tabCount; i++) {
-            Component tabComp = m_tabbedPane.getComponentAt(i);
-            if ( (tabComp != null) && (tabComp != m_defaultComp) ) {
+            Component tabComp = tabbedPane.getComponentAt(i);
+            if ( (tabComp != null) && (tabComp != defaultComp) ) {
                 ((SpyPanel)tabComp).closePane();
-                m_tabbedPane.remove(tabComp);
+                tabbedPane.remove(tabComp);
             }
         }
         
-        m_tabbedPane.addTab("Spy", m_defaultComp);
+        tabbedPane.addTab("Spy", defaultComp);
     }
 
     
@@ -139,7 +139,7 @@ class SpyPanelContainer extends PluginPanel {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
 
     

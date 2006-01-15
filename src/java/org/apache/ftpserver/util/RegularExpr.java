@@ -26,14 +26,14 @@ package org.apache.ftpserver.util;
 public
 class RegularExpr {
     
-    private char[] mcPattern;
+    private char[] pattern;
     
     /**
      * Constructor.
      * @param pattern regular expression
      */
     public RegularExpr(String pattern) {
-        mcPattern = pattern.toCharArray();
+        this.pattern = pattern.toCharArray();
     }
     
     /**
@@ -42,7 +42,7 @@ class RegularExpr {
     public boolean isMatch(String name) {
         
         // common pattern - *
-        if( (mcPattern.length == 1) && (mcPattern[0] == '*') ) {
+        if( (pattern.length == 1) && (pattern[0] == '*') ) {
             return true;
         }
         
@@ -59,11 +59,11 @@ class RegularExpr {
             
             // no more pattern characters
             // if no more strName characters - return true
-            if(patternIndex >= mcPattern.length) {
+            if(patternIndex >= pattern.length) {
                return strIndex == strName.length;
             }
             
-            char pc = mcPattern[patternIndex++];
+            char pc = pattern[patternIndex++];
             switch(pc) {
                 
                 // Match a single character in the range
@@ -86,10 +86,10 @@ class RegularExpr {
                         
                         // single character match
                         // no more pattern character - error condition.
-                        if(patternIndex>=mcPattern.length) {
+                        if(patternIndex>=pattern.length) {
                             return false;
                         }
-                        pc = mcPattern[patternIndex++];
+                        pc = pattern[patternIndex++];
                         
                         // end character - break out the loop
                         // if end bracket is the first character - always a match.
@@ -118,12 +118,12 @@ class RegularExpr {
                         if(pc == '-') {
                             
                             // pattern string is [a-  error condition.
-                            if(patternIndex>=mcPattern.length) {
+                            if(patternIndex>=pattern.length) {
                                 return false;
                             }
                             
                             // read the high range character and compare.
-                            pc = mcPattern[patternIndex++];
+                            pc = pattern[patternIndex++];
                             bMatch = (fc>=lastc) && (fc<=pc);
                             lastc = pc;
                         }
@@ -156,7 +156,7 @@ class RegularExpr {
                 case '*' :
                 
                     // no more string character remaining  - returns true 
-                    if(patternIndex >= mcPattern.length) {
+                    if(patternIndex >= pattern.length) {
                         return true;
                     }
                     

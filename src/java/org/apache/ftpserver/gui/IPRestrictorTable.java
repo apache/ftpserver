@@ -50,15 +50,15 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
             "Permission"
     };
     
-    private Vector m_entries = new Vector();
-    private EventListenerList m_modelListeners  = new EventListenerList();
+    private Vector entries = new Vector();
+    private EventListenerList modelListeners  = new EventListenerList();
     
-    private JTable m_table;
-    private JButton m_addButton;
-    private JButton m_insertButton;
-    private JButton m_removeButton;
-    private JButton m_moveUpButton;
-    private JButton m_moveDownButton;
+    private JTable table;
+    private JButton addButton;
+    private JButton insertButton;
+    private JButton removeButton;
+    private JButton moveUpButton;
+    private JButton moveDownButton;
     
     /**
      * Default constructor.
@@ -74,59 +74,59 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         
         setLayout(new BorderLayout());
         
-        m_table = new JTable(this);
-        m_table.setColumnSelectionAllowed(false);
-        m_table.setRowSelectionAllowed(true);
-        m_table.setRowHeight(20);
-        m_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        m_table.getSelectionModel().addListSelectionListener(this);
-        m_table.getColumnModel().getSelectionModel().addListSelectionListener(this);
+        table = new JTable(this);
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+        table.setRowHeight(20);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getSelectionModel().addListSelectionListener(this);
+        table.getColumnModel().getSelectionModel().addListSelectionListener(this);
         
-        JScrollPane scrollPane = new JScrollPane(m_table);
+        JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(buttonPanel, BorderLayout.SOUTH);
         
-        m_addButton = new JButton("Add");
-        m_addButton.addActionListener(new ActionListener() {
+        addButton = new JButton("Add");
+        addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 addRow();
             }
         });
-        buttonPanel.add(m_addButton);
+        buttonPanel.add(addButton);
         
-        m_insertButton = new JButton("Insert");
-        m_insertButton.addActionListener(new ActionListener() {
+        insertButton = new JButton("Insert");
+        insertButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 insertRow();
             }
         });
-        buttonPanel.add(m_insertButton);
+        buttonPanel.add(insertButton);
         
-        m_removeButton = new JButton("Remove");
-        m_removeButton.addActionListener(new ActionListener() {
+        removeButton = new JButton("Remove");
+        removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 removeRow();
             }
         });
-        buttonPanel.add(m_removeButton);
+        buttonPanel.add(removeButton);
         
-        m_moveUpButton = new JButton("Move Up");
-        m_moveUpButton.addActionListener(new ActionListener() {
+        moveUpButton = new JButton("Move Up");
+        moveUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 moveUpRow();
             }
         });
-        buttonPanel.add(m_moveUpButton);
+        buttonPanel.add(moveUpButton);
         
-        m_moveDownButton = new JButton("Move Down");
-        m_moveDownButton.addActionListener(new ActionListener() {
+        moveDownButton = new JButton("Move Down");
+        moveDownButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 moveDownRow();
             }
         });
-        buttonPanel.add(m_moveDownButton);
+        buttonPanel.add(moveDownButton);
         setButtonStatus();
     }
     
@@ -134,11 +134,11 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Set button enable/disable status
      */
     private void setButtonStatus() {
-        m_addButton.setEnabled(canBeAdded());
-        m_insertButton.setEnabled(canBeInserted());
-        m_removeButton.setEnabled(canBeRemoved());
-        m_moveUpButton.setEnabled(canBeMovedUp());
-        m_moveDownButton.setEnabled(canBeMovedDown());
+        addButton.setEnabled(canBeAdded());
+        insertButton.setEnabled(canBeInserted());
+        removeButton.setEnabled(canBeRemoved());
+        moveUpButton.setEnabled(canBeMovedUp());
+        moveDownButton.setEnabled(canBeMovedDown());
     }
     
     /**
@@ -161,12 +161,12 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     private boolean canBeRemoved() {
         
         // no data - nothing to be removed
-        if( (m_entries == null) || (m_entries.size() == 0) ) {
+        if( (entries == null) || (entries.size() == 0) ) {
             return false;
         }
         
         // no row selection - nothing to be removed
-        int selRow = m_table.getSelectedRow();
+        int selRow = table.getSelectedRow();
         return (selRow >= 0);
     }
     
@@ -176,12 +176,12 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     private boolean canBeMovedUp() {
         
         // no data - nothing to move up
-        if( (m_entries == null) || (m_entries.size() == 0) ) {
+        if( (entries == null) || (entries.size() == 0) ) {
             return false;
         }
         
         // no selection or the first row has been selected
-        int selRow = m_table.getSelectedRow();
+        int selRow = table.getSelectedRow();
         return (selRow > 0);
     }
     
@@ -191,18 +191,18 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     private boolean canBeMovedDown() {
         
         // no data - nothing to move down
-        if( (m_entries == null) || (m_entries.size() == 0) ) {
+        if( (entries == null) || (entries.size() == 0) ) {
             return false;
         }
         
         // no selection - nothing to move down
-        int selRow = m_table.getSelectedRow();
+        int selRow = table.getSelectedRow();
         if(selRow == -1) {
             return false;
         }
         
         // last row cannot be moved down
-        return ( selRow != (m_entries.size()-1) );
+        return ( selRow != (entries.size()-1) );
     }
     
     /**
@@ -220,13 +220,13 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         
         // get row data and add
         Entry entry = new Entry();
-        m_entries.add(entry);
+        entries.add(entry);
         
         // notify listeners and select the newly added row
-        int lastRow = m_entries.size() - 1;
+        int lastRow = entries.size() - 1;
         fireTableChanged( new TableModelEvent(this, lastRow, lastRow,
               TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT) );
-        m_table.setRowSelectionInterval(lastRow, lastRow);
+        table.setRowSelectionInterval(lastRow, lastRow);
     }
     
     
@@ -244,9 +244,9 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         stopCellEditing(); 
         
         // get the selected row 
-        int selRow = m_table.getSelectedRow();
+        int selRow = table.getSelectedRow();
         if(selRow == -1) {
-            selRow = m_entries.size() - 1;
+            selRow = entries.size() - 1;
         }
         if(selRow == -1) {
             selRow = 0;
@@ -254,12 +254,12 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         
         // get row data and add
         Entry entry = new Entry();
-        m_entries.add(selRow, entry);
+        entries.add(selRow, entry);
         
         // notify listeners
         fireTableChanged( new TableModelEvent(this, selRow, selRow,
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT) );
-        m_table.setRowSelectionInterval(selRow, selRow);
+        table.setRowSelectionInterval(selRow, selRow);
     }
     
     /**
@@ -276,25 +276,25 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         stopCellEditing();
         
         // get current selection
-        int selRow = m_table.getSelectedRow();
+        int selRow = table.getSelectedRow();
         if(selRow == -1) {
-            selRow = m_entries.size() - 1;
+            selRow = entries.size() - 1;
         }
         
         // remove row
-        m_entries.remove(selRow);
+        entries.remove(selRow);
         fireTableChanged( new TableModelEvent(this, selRow, selRow,
              TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE) );
         
         // select another row
-        if(m_entries.isEmpty()) {
+        if(entries.isEmpty()) {
             setButtonStatus();
         }
         else {
-            if(selRow == m_entries.size()) {
+            if(selRow == entries.size()) {
                 --selRow;
             }
-            m_table.setRowSelectionInterval(selRow, selRow);
+            table.setRowSelectionInterval(selRow, selRow);
         }
     }
     
@@ -312,17 +312,17 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         stopCellEditing();
         
         // change the entry positions
-        int selRow = m_table.getSelectedRow();
-        Entry ent1 = (Entry)m_entries.get(selRow);
-        Entry ent2 = (Entry)m_entries.get(selRow - 1);
+        int selRow = table.getSelectedRow();
+        Entry ent1 = (Entry)entries.get(selRow);
+        Entry ent2 = (Entry)entries.get(selRow - 1);
         
-        m_entries.set(selRow, ent2);
-        m_entries.set(selRow - 1, ent1);
+        entries.set(selRow, ent2);
+        entries.set(selRow - 1, ent1);
         
         // notify listeners and update the table selection
         fireTableChanged( new TableModelEvent(this, selRow - 1, selRow,
               TableModelEvent.ALL_COLUMNS, TableModelEvent.UPDATE) );
-        m_table.setRowSelectionInterval(selRow - 1, selRow - 1);
+        table.setRowSelectionInterval(selRow - 1, selRow - 1);
     }
     
     /**
@@ -339,17 +339,17 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
         stopCellEditing();
         
         // change the entry positions
-        int selRow = m_table.getSelectedRow();
-        Entry ent1 = (Entry)m_entries.get(selRow);
-        Entry ent2 = (Entry)m_entries.get(selRow + 1);
+        int selRow = table.getSelectedRow();
+        Entry ent1 = (Entry)entries.get(selRow);
+        Entry ent2 = (Entry)entries.get(selRow + 1);
         
-        m_entries.set(selRow, ent2);
-        m_entries.set(selRow + 1, ent1);
+        entries.set(selRow, ent2);
+        entries.set(selRow + 1, ent1);
         
         // notify listeners and update the table selection
         fireTableChanged( new TableModelEvent(this, selRow, selRow + 1,
               TableModelEvent.ALL_COLUMNS, TableModelEvent.UPDATE) );
-        m_table.setRowSelectionInterval(selRow + 1, selRow + 1);
+        table.setRowSelectionInterval(selRow + 1, selRow + 1);
     }
     
     /**
@@ -357,9 +357,9 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      */
     public Object[][] getData() {
         stopCellEditing();
-        Object[][] retVal = new Object[m_entries.size()][2];
-        for(int i=0; i<m_entries.size(); ++i) {
-            Entry entry = (Entry)m_entries.get(i);
+        Object[][] retVal = new Object[entries.size()][2];
+        for(int i=0; i<entries.size(); ++i) {
+            Entry entry = (Entry)entries.get(i);
             retVal[i][0] = entry.m_pattern;
             retVal[i][1] = entry.m_allow;
         }
@@ -371,21 +371,21 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      */
     public void setData(Object[][] objs) {
         cancelCellEditing();
-        m_entries.clear();
+        entries.clear();
         if(objs != null) {
             for(int i=0; i<objs.length; ++i) {
                 Entry entry = new Entry();
                 entry.m_pattern = (String)objs[i][0];
                 entry.m_allow = (Boolean)objs[i][1];
-                m_entries.add(entry);
+                entries.add(entry);
             }
         }
         fireTableChanged( new TableModelEvent(this) );
-        if(m_entries.isEmpty()) {
+        if(entries.isEmpty()) {
             setButtonStatus();
         }
         else {
-            m_table.setRowSelectionInterval(0, 0);
+            table.setRowSelectionInterval(0, 0);
         }
     }  
     
@@ -393,11 +393,11 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Cancel editing
      */
     public void cancelCellEditing() {
-        if(m_table.isEditing()) {
-            int row = m_table.getEditingRow();
-            int col = m_table.getEditingColumn();
+        if(table.isEditing()) {
+            int row = table.getEditingRow();
+            int col = table.getEditingColumn();
             if( (row != -1) && (col != -1) ) {
-                TableCellEditor editor = m_table.getCellEditor();
+                TableCellEditor editor = table.getCellEditor();
                 editor.cancelCellEditing();
             }
         }
@@ -407,11 +407,11 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Stop editing
      */
     public void stopCellEditing() {
-        if(m_table.isEditing()) {
-            int row = m_table.getEditingRow();
-            int col = m_table.getEditingColumn();
+        if(table.isEditing()) {
+            int row = table.getEditingRow();
+            int col = table.getEditingColumn();
             if( (row != -1) && (col != -1) ) {
-                TableCellEditor editor = m_table.getCellEditor();
+                TableCellEditor editor = table.getCellEditor();
                 editor.stopCellEditing();
             }
         }
@@ -430,7 +430,7 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Add new listener.
      */
     public void addTableModelListener(TableModelListener l) {
-        m_modelListeners.add(TableModelListener.class, l);
+        modelListeners.add(TableModelListener.class, l);
     }
     
     /**
@@ -465,18 +465,18 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Get row count.
      */
     public int getRowCount() {
-        return m_entries.size();
+        return entries.size();
     }
     
     /**
      * Get value.
      */
     public Object getValueAt(int row, int col) {
-        if(m_entries == null) {
+        if(entries == null) {
             return null;
         }
         
-        Entry entry = (Entry)m_entries.get(row);
+        Entry entry = (Entry)entries.get(row);
         Object retVal = null;
         if(col == 0) {
             retVal = entry.m_pattern;
@@ -498,11 +498,11 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Set value.
      */
     public void setValueAt(Object val, int row, int col) {
-        if(m_entries == null) {
+        if(entries == null) {
             return;
         }
         
-        Entry entry = (Entry)m_entries.get(row);
+        Entry entry = (Entry)entries.get(row);
         if(col == 0) {
             entry.m_pattern = (String)val;
         }
@@ -515,14 +515,14 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
      * Remove listener.
      */
     public void removeTableModelListener(TableModelListener l) {
-        m_modelListeners.remove(TableModelListener.class, l);
+        modelListeners.remove(TableModelListener.class, l);
     }
     
     /**
      * Event handler.
      */
     private void fireTableChanged(TableModelEvent e) {
-        Object[] listeners = m_modelListeners.getListenerList();
+        Object[] listeners = modelListeners.getListenerList();
         for (int i = listeners.length-2; i>=0; i-=2) {
             if (listeners[i] == TableModelListener.class) {
                 ((TableModelListener)listeners[i+1]).tableChanged(e);

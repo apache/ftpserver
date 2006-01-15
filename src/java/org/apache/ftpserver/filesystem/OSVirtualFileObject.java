@@ -34,13 +34,13 @@ import org.apache.ftpserver.ftplet.FileObject;
 public
 class OSVirtualFileObject implements FileObject {
 
-    private File m_file;
-    private boolean m_writePermission;
+    private File file;
+    private boolean writePermission;
     
     // root directory will be always absolute (canonical name) and
     // the path separator will be always '/'. The root directory
     // will always end with '/'.
-    private String m_rootDir;
+    private String rootDir;
     
     
     /**
@@ -48,9 +48,9 @@ class OSVirtualFileObject implements FileObject {
      * <code>OSVirtualFileSystemView</code>.
      */
     protected OSVirtualFileObject(File file, String rootDir, boolean writePerm) {
-        m_file = file;
-        m_rootDir = rootDir;
-        m_writePermission = writePerm;
+        this.file = file;
+        this.rootDir = rootDir;
+        writePermission = writePerm;
     }
 
     /**
@@ -63,11 +63,11 @@ class OSVirtualFileObject implements FileObject {
     public String getFullName() {
         String virtualFileStr = null;
         try {
-            String physicalFileStr = m_file.getCanonicalPath();
+            String physicalFileStr = file.getCanonicalPath();
             physicalFileStr = normalizeSeparateChar(physicalFileStr);
-            virtualFileStr = physicalFileStr.substring(m_rootDir.length() - 1);
+            virtualFileStr = physicalFileStr.substring(rootDir.length() - 1);
             
-            if(m_file.isDirectory()) {
+            if(file.isDirectory()) {
                 if(virtualFileStr.equals("")) {
                     virtualFileStr = "/";
                 }
@@ -86,42 +86,42 @@ class OSVirtualFileObject implements FileObject {
      * Get the file short name.
      */
     public String getShortName() {
-        return m_file.getName();
+        return file.getName();
     }
     
     /**
      * Is a hidden file?
      */
     public boolean isHidden() {
-        return m_file.isHidden();
+        return file.isHidden();
     }
      
     /**
      * Is it a directory?
      */
     public boolean isDirectory() {
-        return m_file.isDirectory();
+        return file.isDirectory();
     }
     
     /**
      * Is it a file?
      */
     public boolean isFile() {
-        return m_file.isFile();
+        return file.isFile();
     }
     
     /**
      * Does this file exists?
      */
     public boolean doesExist() {
-        return m_file.exists();
+        return file.exists();
     }
     
     /**
      * Get file size.
      */
     public long getSize() {
-        return m_file.length();
+        return file.length();
     }
     
     /**
@@ -142,33 +142,33 @@ class OSVirtualFileObject implements FileObject {
      * Get link count
      */
     public int getLinkCount() {
-        return m_file.isDirectory() ? 3 : 1;
+        return file.isDirectory() ? 3 : 1;
     }
     
     /**
      * Get last modified time.
      */ 
     public long getLastModified() {
-        return m_file.lastModified();
+        return file.lastModified();
     }
     
     /**
      * Check read permission.
      */
     public boolean hasReadPermission() {
-        return m_file.canRead();
+        return file.canRead();
     }
     
     /**
      * Chech file write permission.
      */
     public boolean hasWritePermission() {
-        if(!m_writePermission) {
+        if(!writePermission) {
             return false;
         }
         
-        if(m_file.exists()) {
-            return m_file.canWrite();
+        if(file.exists()) {
+            return file.canWrite();
         }
         return true;
     }
@@ -192,7 +192,7 @@ class OSVirtualFileObject implements FileObject {
     public boolean delete() {
         boolean retVal = false;
         if( hasDeletePermission() ) {
-            retVal = m_file.delete();
+            retVal = file.delete();
         }
         return retVal;
     }
@@ -203,8 +203,8 @@ class OSVirtualFileObject implements FileObject {
     public boolean move(FileObject dest) {
         boolean retVal = false;
         if(dest.hasWritePermission() && hasReadPermission()) {
-            File destFile = ((OSVirtualFileObject)dest).m_file;
-            retVal = m_file.renameTo(destFile);
+            File destFile = ((OSVirtualFileObject)dest).file;
+            retVal = file.renameTo(destFile);
         }
         return retVal;
     }
@@ -215,7 +215,7 @@ class OSVirtualFileObject implements FileObject {
     public boolean mkdir() {
         boolean retVal = false;
         if(hasWritePermission()) {
-            retVal = m_file.mkdirs();
+            retVal = file.mkdirs();
         }
         return retVal;
     }
@@ -227,18 +227,18 @@ class OSVirtualFileObject implements FileObject {
         
         // permission check
         if(!hasWritePermission()) {
-            throw new IOException("No write permission : " + m_file.getName());
+            throw new IOException("No write permission : " + file.getName());
         }
         
         // create output stream
         OutputStream out = null;
-        if(append && m_file.exists()) {
-            RandomAccessFile raf = new RandomAccessFile(m_file, "rw");
+        if(append && file.exists()) {
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
             raf.seek(raf.length());
             out = new FileOutputStream(raf.getFD());
         }
         else {
-            out = new FileOutputStream(m_file);
+            out = new FileOutputStream(file);
         }
         
         return out;
@@ -251,11 +251,11 @@ class OSVirtualFileObject implements FileObject {
         
         // permission check
         if(!hasWritePermission()) {
-            throw new IOException("No write permission : " + m_file.getName());
+            throw new IOException("No write permission : " + file.getName());
         }
         
         // create output stream
-        RandomAccessFile raf = new RandomAccessFile(m_file, "rw");
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
         raf.setLength(offset);
         raf.seek(offset);
         return new FileOutputStream(raf.getFD());
@@ -268,11 +268,11 @@ class OSVirtualFileObject implements FileObject {
         
         // permission check
         if(!hasReadPermission()) {
-            throw new IOException("No read permission : " + m_file.getName());
+            throw new IOException("No read permission : " + file.getName());
         }
         
         // move to the appropriate offset and create input stream
-        RandomAccessFile raf = new RandomAccessFile(m_file, "r");
+        RandomAccessFile raf = new RandomAccessFile(file, "r");
         raf.seek(offset);
         return new FileInputStream(raf.getFD());
     }
@@ -281,7 +281,7 @@ class OSVirtualFileObject implements FileObject {
      * Get the physical file.
      */
     File getPhysicalFile() {
-        return m_file;
+        return file;
     }
     
     /**

@@ -47,19 +47,19 @@ class PropertiesUserManager implements UserManager {
 
     private final static String PREFIX    = "FtpServer.user.";
 
-    private Log m_log;
+    private Log log;
     
-    private BaseProperties m_userDataProp;
-    private File           m_userDataFile;
-    private boolean        m_isPasswordEncrypt;
-    private String         m_adminName;
+    private BaseProperties userDataProp;
+    private File           userDataFile;
+    private boolean        isPasswordEncrypt;
+    private String         adminName;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     } 
     
     /**
@@ -67,20 +67,20 @@ class PropertiesUserManager implements UserManager {
      */
     public void configure(Configuration config) throws FtpException {
         try {
-            m_userDataFile = new File(config.getString("prop-file", "./res/user.gen"));
-            File dir = m_userDataFile.getParentFile();
+            userDataFile = new File(config.getString("prop-file", "./res/user.gen"));
+            File dir = userDataFile.getParentFile();
             if( (!dir.exists()) && (!dir.mkdirs()) ) {
                 String dirName = dir.getAbsolutePath();
                 throw new IOException("Cannot create directory : " + dirName);
             }
-            m_userDataFile.createNewFile();
-            m_userDataProp = new BaseProperties(m_userDataFile);
+            userDataFile.createNewFile();
+            userDataProp = new BaseProperties(userDataFile);
             
-            m_isPasswordEncrypt = config.getBoolean("prop-password-encrypt", true);
-            m_adminName = config.getString("admin", "admin");
+            isPasswordEncrypt = config.getBoolean("prop-password-encrypt", true);
+            adminName = config.getString("admin", "admin");
         }
         catch(IOException ex) {
-            m_log.fatal("PropertiesUserManager.configure()", ex);
+            log.fatal("PropertiesUserManager.configure()", ex);
             throw new FtpException("PropertiesUserManager.configure()", ex);
         }
     }
@@ -89,14 +89,14 @@ class PropertiesUserManager implements UserManager {
      * Get the admin name.
      */
     public String getAdminName() {
-        return m_adminName;
+        return adminName;
     }
     
     /**
      * @return true if user with this login is administrator
      */
     public boolean isAdmin(String login) throws FtpException {
-        return m_adminName.equals(login);
+        return adminName.equals(login);
     }
     
     /**
@@ -111,22 +111,22 @@ class PropertiesUserManager implements UserManager {
        String thisPrefix = PREFIX + usr.getName() + '.';
        
        // set other properties
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_PASSWORD,          getPassword(usr));
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_HOME,              usr.getHomeDirectory());
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_ENABLE,            usr.getEnabled());
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_WRITE_PERM,        usr.getWritePermission());
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
-       m_userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_PASSWORD,          getPassword(usr));
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_HOME,              usr.getHomeDirectory());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_ENABLE,            usr.getEnabled());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_WRITE_PERM,        usr.getWritePermission());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
    
        // save user data
        FileOutputStream fos = null;
        try {
-           fos = new FileOutputStream(m_userDataFile);
-           m_userDataProp.store(fos, "Generated file - don't edit (please)");
+           fos = new FileOutputStream(userDataFile);
+           userDataProp.store(fos, "Generated file - don't edit (please)");
        }
        catch(IOException ex) {
-           m_log.error("PropertiesUserManager.save()", ex);
+           log.error("PropertiesUserManager.save()", ex);
            throw new FtpException("PropertiesUserManager.save()", ex);
        }
        finally {
@@ -142,7 +142,7 @@ class PropertiesUserManager implements UserManager {
         
         // remove entries from properties
         String thisPrefix = PREFIX + usrName + '.';
-        Enumeration propNames = m_userDataProp.propertyNames();
+        Enumeration propNames = userDataProp.propertyNames();
         ArrayList remKeys = new ArrayList();
         while(propNames.hasMoreElements()) {
             String thisKey = propNames.nextElement().toString();
@@ -152,17 +152,17 @@ class PropertiesUserManager implements UserManager {
         }
         Iterator remKeysIt = remKeys.iterator();
         while (remKeysIt.hasNext()) {
-            m_userDataProp.remove(remKeysIt.next().toString());
+            userDataProp.remove(remKeysIt.next().toString());
         }
         
         // save user data
         FileOutputStream fos = null;
         try {    
-            fos = new FileOutputStream(m_userDataFile);
-            m_userDataProp.store(fos, "Generated file - don't edit (please)");
+            fos = new FileOutputStream(userDataFile);
+            userDataProp.store(fos, "Generated file - don't edit (please)");
         }
         catch(IOException ex) {
-            m_log.error("PropertiesUserManager.delete()", ex);
+            log.error("PropertiesUserManager.delete()", ex);
             throw new FtpException("PropertiesUserManager.delete()", ex);
         }
         finally {
@@ -187,19 +187,19 @@ class PropertiesUserManager implements UserManager {
         String password = usr.getPassword();
         
         if(password != null) {
-            if (m_isPasswordEncrypt) {
+            if (isPasswordEncrypt) {
                 password = EncryptUtils.encryptMD5(password);
             }
         }
         else {
             String blankPassword = "";
-            if(m_isPasswordEncrypt) {
+            if(isPasswordEncrypt) {
                 blankPassword = EncryptUtils.encryptMD5("");
             }
             
             if( doesExist(name) ) {
                 String key = PREFIX + name + '.' + BaseUser.ATTR_PASSWORD;
-                password = m_userDataProp.getProperty(key, blankPassword);
+                password = userDataProp.getProperty(key, blankPassword);
             }
             else {
                 password = blankPassword;
@@ -216,7 +216,7 @@ class PropertiesUserManager implements UserManager {
         // get all user names
         String suffix = '.' + BaseUser.ATTR_HOME;
         ArrayList ulst = new ArrayList();
-        Enumeration allKeys = m_userDataProp.propertyNames();
+        Enumeration allKeys = userDataProp.propertyNames();
         int prefixlen = PREFIX.length();
         int suffixlen = suffix.length();
         while(allKeys.hasMoreElements()) {
@@ -245,12 +245,12 @@ class PropertiesUserManager implements UserManager {
         String baseKey = PREFIX + userName + '.';
         BaseUser user = new BaseUser();
         user.setName(userName);
-        user.setEnabled(m_userDataProp.getBoolean(baseKey + BaseUser.ATTR_ENABLE, true));
-        user.setHomeDirectory( m_userDataProp.getProperty(baseKey + BaseUser.ATTR_HOME, "/") );
-        user.setWritePermission(m_userDataProp.getBoolean(baseKey + BaseUser.ATTR_WRITE_PERM, false));
-        user.setMaxIdleTime(m_userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_IDLE_TIME, 0));
-        user.setMaxUploadRate(m_userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_UPLOAD_RATE, 0));
-        user.setMaxDownloadRate(m_userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_DOWNLOAD_RATE, 0));
+        user.setEnabled(userDataProp.getBoolean(baseKey + BaseUser.ATTR_ENABLE, true));
+        user.setHomeDirectory( userDataProp.getProperty(baseKey + BaseUser.ATTR_HOME, "/") );
+        user.setWritePermission(userDataProp.getBoolean(baseKey + BaseUser.ATTR_WRITE_PERM, false));
+        user.setMaxIdleTime(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_IDLE_TIME, 0));
+        user.setMaxUploadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_UPLOAD_RATE, 0));
+        user.setMaxDownloadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_DOWNLOAD_RATE, 0));
         return user;
     }
     
@@ -259,7 +259,7 @@ class PropertiesUserManager implements UserManager {
      */
     public synchronized boolean doesExist(String name) {
         String key = PREFIX + name + '.' + BaseUser.ATTR_HOME;
-        return m_userDataProp.containsKey(key);
+        return userDataProp.containsKey(key);
     }
     
     /**
@@ -270,8 +270,8 @@ class PropertiesUserManager implements UserManager {
             password = "";
         }
         
-        String passVal = m_userDataProp.getProperty(PREFIX + user + '.' + BaseUser.ATTR_PASSWORD);
-        if (m_isPasswordEncrypt) {
+        String passVal = userDataProp.getProperty(PREFIX + user + '.' + BaseUser.ATTR_PASSWORD);
+        if (isPasswordEncrypt) {
             password = EncryptUtils.encryptMD5(password);
         }
         return password.equals(passVal);
@@ -281,9 +281,9 @@ class PropertiesUserManager implements UserManager {
      * Close the user manager - remove existing entries.
      */
     public synchronized void dispose() {
-        if (m_userDataProp != null) {
-            m_userDataProp.clear();
-            m_userDataProp = null;
+        if (userDataProp != null) {
+            userDataProp.clear();
+            userDataProp = null;
         }
     }
 }

@@ -42,31 +42,31 @@ class FileIpRestrictor implements IIpRestrictor {
 
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     
-    private Log m_log;
-    private String m_file;
-    private Object[][] m_permissions;
+    private Log log;
+    private String file;
+    private Object[][] permissions;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     }
     
     /**
      * Configure the IP restrictor.
      */
     public void configure(Configuration config) throws FtpException {
-        m_file = config.getString("file", "./res/ip.gen");
-        File dir = new File(m_file).getParentFile();
+        file = config.getString("file", "./res/ip.gen");
+        File dir = new File(file).getParentFile();
         if( (!dir.exists()) && (!dir.mkdirs()) ) {
             String dirName = dir.getAbsolutePath();
-            m_log.fatal("Cannot create directory - " + dirName);
+            log.fatal("Cannot create directory - " + dirName);
             throw new FtpException("Cannot create directory : " + dirName);
         }
         
-        m_permissions = getPermissions();
+        permissions = getPermissions();
     }
     
     /**
@@ -75,11 +75,11 @@ class FileIpRestrictor implements IIpRestrictor {
     public boolean hasPermission(InetAddress address) throws FtpException {
         String addressStr = address.getHostAddress();
         boolean retVal = true;
-        for(int i=0; i<m_permissions.length; ++i) {
-            String ipPattern = (String)m_permissions[i][0];
+        for(int i=0; i<permissions.length; ++i) {
+            String ipPattern = (String)permissions[i][0];
             RegularExpr regexp = new RegularExpr(ipPattern);
             if(regexp.isMatch(addressStr)) {
-                retVal = ((Boolean)m_permissions[i][1]).booleanValue();
+                retVal = ((Boolean)permissions[i][1]).booleanValue();
                 break;
             }
         }
@@ -92,10 +92,10 @@ class FileIpRestrictor implements IIpRestrictor {
     public Object[][] getPermissions() throws FtpException {
         
         ArrayList permList = new ArrayList();
-        if(new File(m_file).exists()) {
+        if(new File(file).exists()) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new FileReader(m_file));
+                br = new BufferedReader(new FileReader(file));
                 String line = null;
                 while((line = br.readLine()) != null) {
                     line = line.trim();
@@ -115,7 +115,7 @@ class FileIpRestrictor implements IIpRestrictor {
                 }
             }
             catch(IOException ex) {
-                m_log.error("FileIpRestrictor.getPermissions()", ex);
+                log.error("FileIpRestrictor.getPermissions()", ex);
                 throw new FtpException("FileIpRestrictor.getPermissions()", ex);
             }
             finally {
@@ -137,17 +137,17 @@ class FileIpRestrictor implements IIpRestrictor {
     public void setPermissions(Object[][] permissions) throws FtpException {
         FileWriter fw = null;
         try {
-            fw = new FileWriter(m_file);
+            fw = new FileWriter(file);
             for(int i=0; i<permissions.length; ++i) {
                 fw.write(String.valueOf(permissions[i][1]));
                 fw.write(' ');
                 fw.write(String.valueOf(permissions[i][0]));
                 fw.write(LINE_SEP);
             }
-            m_permissions = permissions;
+            this.permissions = permissions;
         }
         catch(IOException ex) {
-            m_log.error("FileIpRestrictor.setPermissions()", ex);
+            log.error("FileIpRestrictor.setPermissions()", ex);
             throw new FtpException("FileIpRestrictor.setPermissions()", ex);
         }
         finally {

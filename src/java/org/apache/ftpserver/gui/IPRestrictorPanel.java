@@ -38,8 +38,8 @@ class IPRestrictorPanel extends PluginPanel {
 
     private static final long serialVersionUID = -1871174667851171193L;
 
-    private IFtpConfig m_fconfig;
-    private IPRestrictorTable m_table;
+    private IFtpConfig fconfig;
+    private IPRestrictorTable table;
 
     /**
      * Default constructor.
@@ -55,8 +55,8 @@ class IPRestrictorPanel extends PluginPanel {
     private void initComponents() {
         setLayout(new BorderLayout());
 
-        m_table = new IPRestrictorTable();
-        add(m_table, BorderLayout.CENTER);
+        table = new IPRestrictorTable();
+        add(table, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -85,8 +85,8 @@ class IPRestrictorPanel extends PluginPanel {
      */
     private void saveData() {
         try {
-            IIpRestrictor restrictor = m_fconfig.getIpRestrictor();
-            restrictor.setPermissions(m_table.getData());
+            IIpRestrictor restrictor = fconfig.getIpRestrictor();
+            restrictor.setPermissions(table.getData());
         }
         catch(Exception ex) {
             GuiUtils.showErrorMessage(this, "Cannot save IP entries.");
@@ -99,11 +99,11 @@ class IPRestrictorPanel extends PluginPanel {
     private void reloadData() {
         try {
             Object[][] perms = null;
-            if(m_fconfig != null) {
-                IIpRestrictor restrictor = m_fconfig.getIpRestrictor();
+            if(fconfig != null) {
+                IIpRestrictor restrictor = fconfig.getIpRestrictor();
                 perms = restrictor.getPermissions();
             }
-            m_table.setData(perms);
+            table.setData(perms);
         }
         catch(Exception ex) {
             GuiUtils.showErrorMessage(this, "Cannot load IP entries.");
@@ -114,7 +114,7 @@ class IPRestrictorPanel extends PluginPanel {
      * Refresh - set the ftp config.
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_fconfig = ftpConfig;
+        fconfig = ftpConfig;
         reloadData();
     }
 
@@ -123,7 +123,7 @@ class IPRestrictorPanel extends PluginPanel {
      * running that is ftp config is not null.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
 
     /**

@@ -35,14 +35,14 @@ import org.apache.ftpserver.interfaces.ISsl;
 public
 class FtpDataConnection {
     
-    private Log m_log;
+    private Log log;
     
-    private IFtpConfig    m_fconfig;
-    private Socket        m_dataSoc;
-    private ServerSocket  m_servSoc;
+    private IFtpConfig    fconfig;
+    private Socket        dataSoc;
+    private ServerSocket  servSoc;
     
-    private InetAddress  m_address = null;
-    private int          m_port   = 0;
+    private InetAddress  address = null;
+    private int          port   = 0;
     
     private long m_requestTime = 0L;
     
@@ -57,8 +57,8 @@ class FtpDataConnection {
      * Set the ftp config.
      */
     public void setFtpConfig(IFtpConfig cfg) {
-        m_fconfig = cfg;
-        m_log = m_fconfig.getLogFactory().getInstance(getClass());
+        fconfig = cfg;
+        log = fconfig.getLogFactory().getInstance(getClass());
     }
     
     /**
@@ -67,26 +67,26 @@ class FtpDataConnection {
     public synchronized void closeDataSocket() {
         
         // close client socket if any
-        if(m_dataSoc != null) {
+        if(dataSoc != null) {
             try {
-                m_dataSoc.close(); 
+                dataSoc.close(); 
             } 
             catch(Exception ex) {
-                m_log.warn("FtpDataConnection.closeDataSocket()", ex);
+                log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
-            m_dataSoc = null;
+            dataSoc = null;
         }
         
         // close server socket if any
-        if (m_servSoc != null) {
+        if (servSoc != null) {
             try {
-               m_servSoc.close();
+               servSoc.close();
             }
             catch(Exception ex) {
-                m_log.warn("FtpDataConnection.closeDataSocket()", ex);
+                log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
-            m_fconfig.getDataConnectionConfig().releasePassivePort(m_port);
-            m_servSoc = null;
+            fconfig.getDataConnectionConfig().releasePassivePort(port);
+            servSoc = null;
         }
         
         // reset request time
@@ -104,8 +104,8 @@ class FtpDataConnection {
         // set variables
         m_isPort = true;
         m_isPasv = false;
-        m_address = addr;
-        m_port = port;
+        address = addr;
+        this.port = port;
         m_requestTime = System.currentTimeMillis();
     } 
     
@@ -118,28 +118,28 @@ class FtpDataConnection {
         closeDataSocket(); 
         
         // get the passive port
-        int port = m_fconfig.getDataConnectionConfig().getPassivePort();
+        int port = fconfig.getDataConnectionConfig().getPassivePort();
         if(port == -1) {
-            m_log.warn("Cannot find an available passive port.");
-            m_servSoc = null;
+            log.warn("Cannot find an available passive port.");
+            servSoc = null;
             return false;
         }
         
         // open passive server socket and get parameters
         boolean bRet = false;
         try {
-            m_address = m_fconfig.getDataConnectionConfig().getPassiveAddress();
+            address = fconfig.getDataConnectionConfig().getPassiveAddress();
             if(m_secure) {
-                ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
+                ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
                 if(ssl == null) {
                     throw new FtpException("Data connection SSL not configured.");
                 }
-                m_servSoc = ssl.createServerSocket(null, m_address, m_port);
+                servSoc = ssl.createServerSocket(null, address, this.port);
             }
             else {
-                m_servSoc = new ServerSocket(port, 1, m_address);   
+                servSoc = new ServerSocket(port, 1, address);   
             }
-            m_port = m_servSoc.getLocalPort();          
+            this.port = servSoc.getLocalPort();          
 
             // set different state variables
             m_isPort = false;
@@ -148,8 +148,8 @@ class FtpDataConnection {
             m_requestTime = System.currentTimeMillis();
         }
         catch(Exception ex) {
-            m_servSoc = null;
-            m_log.warn("FtpDataConnection.setPasvCommand()", ex);
+            servSoc = null;
+            log.warn("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
@@ -158,14 +158,14 @@ class FtpDataConnection {
      * Get client address.
      */
     public InetAddress getInetAddress() {
-        return m_address;
+        return address;
     }
      
     /**
      * Get port number.
      */
     public int getPort() {
-        return m_port;
+        return port;
     }
 
     /**
@@ -174,29 +174,29 @@ class FtpDataConnection {
     public synchronized Socket getDataSocket() {
 
         // get socket depending on the selection
-        m_dataSoc = null;
+        dataSoc = null;
         try {
             if(m_isPort) {
                 if(m_secure) {
-                    ISsl ssl = m_fconfig.getDataConnectionConfig().getSSL();
+                    ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
                     }
-                    m_dataSoc = ssl.createSocket(null, m_address, m_port, false);
+                    dataSoc = ssl.createSocket(null, address, port, false);
                 }
                 else {
-                    m_dataSoc = new Socket(m_address, m_port);  
+                    dataSoc = new Socket(address, port);  
                 }
             }
             else if(m_isPasv) {
-                m_dataSoc = m_servSoc.accept();
+                dataSoc = servSoc.accept();
             }
         }
         catch(Exception ex) {
-            m_log.warn("FtpDataConnection.getDataSocket()", ex);
+            log.warn("FtpDataConnection.getDataSocket()", ex);
         }
         
-        return m_dataSoc;
+        return dataSoc;
     }
     
     /**
@@ -231,7 +231,7 @@ class FtpDataConnection {
      * Is the data connection active?
      */
     public boolean isActive() {
-        return m_dataSoc != null;
+        return dataSoc != null;
     }
     
     /**

@@ -58,19 +58,19 @@ class LdapUserManager implements UserManager {
         CN
     };
     
-    private Log m_log;
+    private Log log;
     
-    private String m_adminName;
-    private DirContext m_adminContext;
-    private String m_userBaseDn;
-    private Attribute m_objClassAttr;
+    private String adminName;
+    private DirContext adminContext;
+    private String userBaseDn;
+    private Attribute objClassAttr;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     }
     
     /**
@@ -81,7 +81,7 @@ class LdapUserManager implements UserManager {
         try {
             
             // get admin name 
-            m_adminName = config.getString("admin", "admin");
+            adminName = config.getString("admin", "admin");
             
             // get ldap parameters
             String url      = config.getString("ldap-url");
@@ -89,7 +89,7 @@ class LdapUserManager implements UserManager {
             String password = config.getString("ldap-admin-password");
             String auth     = config.getString("ldap-authentication", "simple");
 
-            m_userBaseDn    = config.getString("ldap-user-base-dn");
+            userBaseDn    = config.getString("ldap-user-base-dn");
             
             // create connection
             Properties adminEnv = new Properties();
@@ -98,20 +98,20 @@ class LdapUserManager implements UserManager {
             adminEnv.setProperty(Context.SECURITY_AUTHENTICATION, auth);             
             adminEnv.setProperty(Context.SECURITY_PRINCIPAL, admin);             
             adminEnv.setProperty(Context.SECURITY_CREDENTIALS, password);                     
-            m_adminContext = new InitialDirContext(adminEnv);
+            adminContext = new InitialDirContext(adminEnv);
             
             // create objectClass attribute
-            m_objClassAttr = new BasicAttribute(OBJ_CLASS, false);
-            m_objClassAttr.add("javaObject");
-            m_objClassAttr.add("top");
+            objClassAttr = new BasicAttribute(OBJ_CLASS, false);
+            objClassAttr.add("javaObject");
+            objClassAttr.add("top");
             
-            m_log.info("LDAP user manager opened.");
+            log.info("LDAP user manager opened.");
         }
         catch(FtpException ex) {
             throw ex;
         }
         catch(Exception ex) {
-            m_log.fatal("LdapUserManager.configure()", ex);
+            log.fatal("LdapUserManager.configure()", ex);
             throw new FtpException("LdapUserManager.configure()", ex);
         }
     }
@@ -120,14 +120,14 @@ class LdapUserManager implements UserManager {
      * Get the admin name.
      */
     public String getAdminName() {
-        return m_adminName;
+        return adminName;
     }
     
     /**
      * @return true if user with this login is administrator
      */
     public boolean isAdmin(String login) throws FtpException {
-        return m_adminName.equals(login);
+        return adminName.equals(login);
     }
     
     /**
@@ -138,10 +138,10 @@ class LdapUserManager implements UserManager {
         try {
             // search ldap
             Attributes matchAttrs = new BasicAttributes(true);
-            matchAttrs.put(m_objClassAttr);
+            matchAttrs.put(objClassAttr);
             matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
-            NamingEnumeration answers = m_adminContext.search(m_userBaseDn, matchAttrs, CN_ATTRS);
-            m_log.info("Getting all users under " + m_userBaseDn);
+            NamingEnumeration answers = adminContext.search(userBaseDn, matchAttrs, CN_ATTRS);
+            log.info("Getting all users under " + userBaseDn);
             
             // populate list
             ArrayList allUsers = new ArrayList();
@@ -154,7 +154,7 @@ class LdapUserManager implements UserManager {
             return allUsers;
         }
         catch(NamingException ex) {
-            m_log.error("LdapUserManager.getAllUserNames()", ex);
+            log.error("LdapUserManager.getAllUserNames()", ex);
             throw new FtpException("LdapUserManager.getAllUserNames()", ex);
         }
     } 
@@ -167,8 +167,8 @@ class LdapUserManager implements UserManager {
         User user = null;
         try {
             String dn = getDN(name);
-            m_log.info("Getting user object for " + dn);
-            user = (User)m_adminContext.lookup(dn);
+            log.info("Getting user object for " + dn);
+            user = (User)adminContext.lookup(dn);
         }
         catch(NamingException ex) {
             user = null;
@@ -211,11 +211,11 @@ class LdapUserManager implements UserManager {
             attrs.put(new BasicAttribute(CLASS_NAME, BaseUser.class.getName()));
             
             // bind object
-            m_log.info("Rebinding user " + dn);
-            m_adminContext.rebind(dn, newUser, attrs);
+            log.info("Rebinding user " + dn);
+            adminContext.rebind(dn, newUser, attrs);
         }
         catch(NamingException ex) {
-            m_log.error("LdapUserManager.save()", ex);
+            log.error("LdapUserManager.save()", ex);
             throw new FtpException("LdapUserManager.save()", ex);
         }
     }
@@ -233,11 +233,11 @@ class LdapUserManager implements UserManager {
     public synchronized void delete(String userName) throws FtpException {
         try {
             String dn = getDN(userName);
-            m_log.info("Unbinding " + dn);
-            m_adminContext.unbind(dn);
+            log.info("Unbinding " + dn);
+            adminContext.unbind(dn);
         }
         catch(NamingException ex) {
-            m_log.error("LdapUserManager.delete()", ex);
+            log.error("LdapUserManager.delete()", ex);
             throw new FtpException("LdapUserManager.delete()", ex);
         }
     }
@@ -246,13 +246,13 @@ class LdapUserManager implements UserManager {
      * Close user manager.
      */
     public synchronized void dispose() {
-        if (m_adminContext != null) {
+        if (adminContext != null) {
             try {
-                m_adminContext.close();
+                adminContext.close();
             }
             catch(NamingException ex) {
             }
-            m_adminContext = null;
+            adminContext = null;
         }
     }
     
@@ -275,6 +275,6 @@ class LdapUserManager implements UserManager {
                 i++;
             }
         }
-        return CN + '=' + valBuf.toString() + ',' + m_userBaseDn;
+        return CN + '=' + valBuf.toString() + ',' + userBaseDn;
     }
 }    

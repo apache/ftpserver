@@ -41,26 +41,26 @@ import org.apache.ftpserver.usermanager.BaseUser;
 public 
 class ConnectionManagerImpl implements IConnectionManager {
 
-    private Log m_log;
+    private Log log;
     
-    private ConnectionManagerObserver m_observer;              
-    private Timer m_timer;
-    private Vector m_conList = new Vector();  
+    private ConnectionManagerObserver observer;              
+    private Timer timer;
+    private Vector conList = new Vector();  
     
-    private int m_maxConnections;
-    private int m_maxLogins;
-    private boolean m_anonEnabled;
-    private int m_maxAnonLogins;
+    private int maxConnections;
+    private int maxLogins;
+    private boolean anonEnabled;
+    private int maxAnonLogins;
     
-    private int m_defaultIdleSec;
-    private int m_pollIntervalSec;
+    private int defaultIdleSec;
+    private int pollIntervalSec;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_log = factory.getInstance(getClass());
+        log = factory.getInstance(getClass());
     }
     
     /**
@@ -69,63 +69,63 @@ class ConnectionManagerImpl implements IConnectionManager {
     public void configure(Configuration config) throws FtpException {
         
         // get configuration parameters
-        m_maxConnections  = config.getInt     ("max-connection",          20);
-        m_maxLogins       = config.getInt     ("max-login",               10);
-        m_anonEnabled     = config.getBoolean ("anonymous-login-enabled", true);
-        m_maxAnonLogins   = config.getInt     ("max-anonymous-login",     10);
-        m_defaultIdleSec  = config.getInt     ("default-idle-time",       60);
-        m_pollIntervalSec = config.getInt     ("timeout-poll-inverval",   60);
+        maxConnections  = config.getInt     ("max-connection",          20);
+        maxLogins       = config.getInt     ("max-login",               10);
+        anonEnabled     = config.getBoolean ("anonymous-login-enabled", true);
+        maxAnonLogins   = config.getInt     ("max-anonymous-login",     10);
+        defaultIdleSec  = config.getInt     ("default-idle-time",       60);
+        pollIntervalSec = config.getInt     ("timeout-poll-inverval",   60);
         
         // set timer to remove inactive users and load data
-        m_timer = new Timer();
+        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 timerTask();
             }
         };
-        m_timer.schedule(timerTask, 0, m_pollIntervalSec*1000L);
+        timer.schedule(timerTask, 0, pollIntervalSec*1000L);
     } 
     
     /**
      * Set connection manager observer.
      */
     public void setObserver(ConnectionManagerObserver observer) {
-        m_observer = observer;
+        this.observer = observer;
     }
     
     /**
      * Get maximum number of connections.
      */
     public int getMaxConnections() {
-        return m_maxConnections;
+        return maxConnections;
     }
      
     /**
      * Get maximum number of logins.
      */
     public int getMaxLogins() {
-        return m_maxLogins;
+        return maxLogins;
     }
     
     /**
      * Is anonymous login enabled?
      */
     public boolean isAnonymousLoginEnabled() {
-        return m_anonEnabled;
+        return anonEnabled;
     }
     
     /**
      * Get maximum anonymous logins
      */
     public int getMaxAnonymousLogins() {
-        return m_maxAnonLogins;
+        return maxAnonLogins;
     }
 
     /**
      * Get all request handlers
      */
     public List getAllConnections() {
-        List cons = m_conList;
+        List cons = conList;
         if(cons == null) {
             return new Vector();
         }
@@ -143,14 +143,14 @@ class ConnectionManagerImpl implements IConnectionManager {
         }
         
         // disposed - ignore
-        List cons = m_conList;
+        List cons = conList;
         if(cons == null) {
             return;
         }
         cons.add(connection);
         
         // notify observer about a new connection
-        ConnectionManagerObserver observer = m_observer;
+        ConnectionManagerObserver observer = this.observer;
         if (observer != null) {
             observer.openedConnection(connection);
             observer.updatedConnection(connection);
@@ -158,7 +158,7 @@ class ConnectionManagerImpl implements IConnectionManager {
         
         // set default idle time
         BaseUser user = (BaseUser)connection.getRequest().getUser();
-        user.setMaxIdleTime(m_defaultIdleSec);
+        user.setMaxIdleTime(defaultIdleSec);
         
         // now start a new thread to serve this connection
         new Thread(connection).start();
@@ -175,7 +175,7 @@ class ConnectionManagerImpl implements IConnectionManager {
         }
         
         // notify observer
-        ConnectionManagerObserver observer = m_observer;
+        ConnectionManagerObserver observer = this.observer;
         if(observer != null) {
             observer.updatedConnection(connection); 
         }
@@ -192,14 +192,14 @@ class ConnectionManagerImpl implements IConnectionManager {
         }
         
         // close socket
-        List cons = m_conList;
+        List cons = conList;
         if(cons != null) {
             cons.remove(connection);
         }
         connection.close();
         
         // notify observer
-        ConnectionManagerObserver observer = m_observer;
+        ConnectionManagerObserver observer = this.observer;
         if(observer != null) {
             observer.closedConnection(connection);
         }
@@ -226,14 +226,14 @@ class ConnectionManagerImpl implements IConnectionManager {
         // get all connections
         ArrayList inactiveCons = new ArrayList();
         long currTime = System.currentTimeMillis();
-        Vector conList = m_conList;
+        Vector conList = this.conList;
         if(conList == null) {
             return;
         }
         
         // get inactive client connection list 
         synchronized(conList) {
-            long idleTimeMillis = m_defaultIdleSec*1000L;
+            long idleTimeMillis = defaultIdleSec*1000L;
             for( int i = conList.size(); --i>=0; ) {
                 IConnection con = (IConnection)conList.get(i);
                 if(con == null) {
@@ -269,7 +269,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                     
                     // idle data connectin timeout - close it 
                     if( (currTime - requestTime) > idleTimeMillis ) {
-                        m_log.info("Removing idle data connection for " + request.getUser());
+                        log.info("Removing idle data connection for " + request.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
@@ -288,7 +288,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                 continue;
             }
             
-            m_log.info("Removing idle user " + request.getUser());
+            log.info("Removing idle user " + request.getUser());
             closeConnection(connection);
         }
     }
@@ -299,17 +299,17 @@ class ConnectionManagerImpl implements IConnectionManager {
     public void dispose() {
         
         // stop timer
-        Timer timer = m_timer;
+        Timer timer = this.timer;
         if (timer != null) {
             timer.cancel();
-            m_timer = null;
+            this.timer = null;
         }
         
         // close all connections
-        List cons = m_conList;
+        List cons = conList;
         if (cons != null) {
             closeAllConnections();
-            m_conList = null;
+            conList = null;
         }
     } 
 }

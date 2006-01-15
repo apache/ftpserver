@@ -36,29 +36,29 @@ import org.apache.ftpserver.interfaces.StatisticsObserver;
 public 
 class FtpStatisticsImpl implements IFtpStatistics {
 
-    private StatisticsObserver m_observer = null;
-    private FileObserver m_fileObserver   = null;
+    private StatisticsObserver observer = null;
+    private FileObserver fileObserver   = null;
     
-    private Date m_startTime         = new Date();
+    private Date startTime         = new Date();
     
-    private int m_uploadCount        = 0;
-    private int m_downloadCount      = 0;
-    private int m_deleteCount        = 0;
+    private int uploadCount        = 0;
+    private int downloadCount      = 0;
+    private int deleteCount        = 0;
     
-    private int m_mkdirCount         = 0;
-    private int m_rmdirCount         = 0;
+    private int mkdirCount         = 0;
+    private int rmdirCount         = 0;
     
-    private int m_currLogins         = 0;
-    private int m_totalLogins        = 0;
+    private int currLogins         = 0;
+    private int totalLogins        = 0;
     
-    private int m_currAnonLogins     = 0;
-    private int m_totalAnonLogins    = 0;
+    private int currAnonLogins     = 0;
+    private int totalAnonLogins    = 0;
     
-    private int m_currConnections    = 0;
-    private int m_totalConnections   = 0;
+    private int currConnections    = 0;
+    private int totalConnections   = 0;
     
-    private long m_bytesUpload       = 0L;
-    private long m_bytesDownload     = 0L;
+    private long bytesUpload       = 0L;
+    private long bytesDownload     = 0L;
     
     
     /**
@@ -83,14 +83,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Set the observer.
      */
     public void setObserver(StatisticsObserver observer) {
-        m_observer = observer;
+        this.observer = observer;
     }
     
     /**
      * Set the file observer.
      */
     public void setFileObserver(FileObserver observer) {
-        m_fileObserver = observer;
+        fileObserver = observer;
     }
     
     
@@ -100,98 +100,98 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Get server start time.
      */
     public Date getStartTime() {
-        return m_startTime;
+        return startTime;
     }
      
     /**
      * Get number of files uploaded.
      */
     public int getTotalUploadNumber() {
-        return m_uploadCount;
+        return uploadCount;
     }
     
     /**
      * Get number of files downloaded.
      */
     public int getTotalDownloadNumber() {
-        return m_downloadCount;
+        return downloadCount;
     }
     
     /**
      * Get number of files deleted.
      */
     public int getTotalDeleteNumber() {
-        return m_deleteCount;
+        return deleteCount;
     }
      
     /**
      * Get total number of bytes uploaded.
      */
     public long getTotalUploadSize() {
-        return m_bytesUpload;
+        return bytesUpload;
     }
      
     /**
      * Get total number of bytes downloaded.
      */
     public long getTotalDownloadSize() {
-        return m_bytesDownload;
+        return bytesDownload;
     }
     
     /**
      * Get total directory created.
      */
     public int getTotalDirectoryCreated() {
-        return m_mkdirCount;
+        return mkdirCount;
     }
     
     /**
      * Get total directory removed.
      */
     public int getTotalDirectoryRemoved() {
-        return m_mkdirCount;
+        return mkdirCount;
     }
     
     /**
      * Get total number of connections.
      */
     public int getTotalConnectionNumber() {
-        return m_totalConnections;
+        return totalConnections;
     }
      
     /**
      * Get current number of connections.
      */
     public int getCurrentConnectionNumber() {
-        return m_currConnections;
+        return currConnections;
     }
     
     /**
      * Get total number of logins.
      */
     public int getTotalLoginNumber() {
-        return m_totalLogins;
+        return totalLogins;
     }
      
     /**
      * Get current number of logins.
      */
     public int getCurrentLoginNumber() {
-        return m_currLogins;
+        return currLogins;
     }
     
     /**
      * Get total number of anonymous logins.
      */
     public int getTotalAnonymousLoginNumber() {
-        return m_totalAnonLogins;
+        return totalAnonLogins;
     }
      
     /**
      * Get current number of anonymous logins.
      */
     public int getCurrentAnonymousLoginNumber() {
-        return m_currAnonLogins;
+        return currAnonLogins;
     }
     
     
@@ -201,8 +201,8 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment upload count.
      */
     public void setUpload(IConnection connection, FileObject file, long size) {
-        ++m_uploadCount;
-        m_bytesUpload += size;
+        ++uploadCount;
+        bytesUpload += size;
         notifyUpload(connection, file, size);
     }
      
@@ -210,8 +210,8 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment download count.
      */
     public void setDownload(IConnection connection, FileObject file, long size) {
-        ++m_downloadCount;
-        m_bytesDownload += size;
+        ++downloadCount;
+        bytesDownload += size;
         notifyDownload(connection, file, size);
     }
      
@@ -219,7 +219,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment delete count.
      */
     public void setDelete(IConnection connection, FileObject file) {
-        ++m_deleteCount;
+        ++deleteCount;
         notifyDelete(connection, file);
     }
      
@@ -227,7 +227,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment make directory count.
      */
     public void setMkdir(IConnection connection, FileObject file) {
-        ++m_mkdirCount;
+        ++mkdirCount;
         notifyMkdir(connection, file);
     }
     
@@ -235,7 +235,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment remove directory count.
      */
     public void setRmdir(IConnection connection, FileObject file) {
-        ++m_rmdirCount;
+        ++rmdirCount;
         notifyRmdir(connection, file);
     }
     
@@ -243,8 +243,8 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Increment open connection count.
      */
     public void setOpenConnection(IConnection connection) {
-        ++m_currConnections;
-        ++m_totalConnections;
+        ++currConnections;
+        ++totalConnections;
         notifyOpenConnection(connection);
     }
     
@@ -252,7 +252,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Decrement open connection count.
      */
     public void setCloseConnection(IConnection connection) {
-        --m_currConnections;
+        --currConnections;
         notifyCloseConnection(connection);
     }
     
@@ -260,12 +260,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * New login.
      */
     public void setLogin(IConnection connection) {
-        ++m_currLogins;
-        ++m_totalLogins;
+        ++currLogins;
+        ++totalLogins;
         User user = connection.getRequest().getUser();
         if( "anonymous".equals(user.getName()) ) {
-            ++m_currAnonLogins;
-            ++m_totalAnonLogins;
+            ++currAnonLogins;
+            ++totalAnonLogins;
         }
         notifyLogin(connection);
     }
@@ -274,10 +274,10 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * User logout
      */
     public void setLogout(IConnection connection) {
-        --m_currLogins;
+        --currLogins;
         User user = connection.getRequest().getUser();
         if( "anonymous".equals(user.getName()) ) {
-            --m_currAnonLogins;
+            --currAnonLogins;
         }
         notifyLogout(connection);
     }
@@ -289,14 +289,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer upload notification.
      */
     private void notifyUpload(IConnection connection, FileObject file, long size) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyUpload();
+        	observer.notifyUpload();
         }
 
-        FileObserver fileObserver = m_fileObserver;
+        FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyUpload(connection, file, size);
+        	fileObserver.notifyUpload(connection, file, size);
         }
     }
     
@@ -304,14 +304,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer download notification.
      */
     private void notifyDownload(IConnection connection, FileObject file, long size) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyDownload();
+        	observer.notifyDownload();
         }
 
-        FileObserver fileObserver = m_fileObserver;
+        FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyDownload(connection, file, size);
+        	fileObserver.notifyDownload(connection, file, size);
         }
     }
     
@@ -319,14 +319,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer delete notification.
      */
     private void notifyDelete(IConnection connection, FileObject file) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyDelete();
+        	observer.notifyDelete();
         }
 
-        FileObserver fileObserver = m_fileObserver;
+        FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyDelete(connection, file);
+        	fileObserver.notifyDelete(connection, file);
         }
     }
     
@@ -334,14 +334,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer make directory notification.
      */
     private void notifyMkdir(IConnection connection, FileObject file) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyMkdir();
+        	observer.notifyMkdir();
         }
 
-        FileObserver fileObserver = m_fileObserver;
+        FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyMkdir(connection, file);
+        	fileObserver.notifyMkdir(connection, file);
         }
     }
     
@@ -349,14 +349,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer remove directory notification.
      */
     private void notifyRmdir(IConnection connection, FileObject file) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyRmdir();
+        	observer.notifyRmdir();
         }
 
-        FileObserver fileObserver = m_fileObserver;
+        FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyRmdir(connection, file);
+        	fileObserver.notifyRmdir(connection, file);
         }
     }
     
@@ -364,9 +364,9 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer open connection notification.
      */
     private void notifyOpenConnection(IConnection connection) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyOpenConnection();
+        	observer.notifyOpenConnection();
         }
     } 
     
@@ -374,9 +374,9 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer close connection notification.
      */
     private void notifyCloseConnection(IConnection connection) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyCloseConnection();
+        	observer.notifyCloseConnection();
         }
     } 
     
@@ -384,7 +384,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer login notification.
      */
     private void notifyLogin(IConnection connection) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
             
             // is anonymous login
@@ -402,7 +402,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
      * Observer logout notification.
      */
     private void notifyLogout(IConnection connection) {
-        StatisticsObserver observer = m_observer;
+        StatisticsObserver observer = this.observer;
         if (observer != null) {
             // is anonymous login
             User user = connection.getRequest().getUser();

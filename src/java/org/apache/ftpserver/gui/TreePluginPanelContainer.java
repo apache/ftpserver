@@ -47,26 +47,26 @@ class TreePluginPanelContainer extends JSplitPane
     
     private static final long serialVersionUID = -6807863406907626635L;
     
-    private ArrayList m_pluginPanels = new ArrayList();
-    private Vector m_treeListenrs = new Vector();
+    private ArrayList pluginPanels = new ArrayList();
+    private Vector treeListeners = new Vector();
     
-    private IFtpConfig m_fconfig;
+    private IFtpConfig fconfig;
     
-    private JPanel m_rightPane;
-    private JTree m_tree;
+    private JPanel rightPane;
+    private JTree tree;
     
     /**
      * Add plugin panel.
      */
     public void add(PluginPanel panel) {
-        m_pluginPanels.add(panel);
+        pluginPanels.add(panel);
     }
     
     /**
      * Get the plugin panel at the specifid index.
      */
     public PluginPanel getPluginPanel(int index) {
-        return (PluginPanel)m_pluginPanels.get(index);
+        return (PluginPanel)pluginPanels.get(index);
     }
     
     /**
@@ -76,23 +76,23 @@ class TreePluginPanelContainer extends JSplitPane
         setDividerSize(2);
         setDividerLocation(110);
         
-        m_tree = new JTree(this);
+        tree = new JTree(this);
         putClientProperty("JTree.lineStyle", "Angled");
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         renderer.setLeafIcon(null);
         renderer.setOpenIcon(null);
         renderer.setClosedIcon(null);
-        m_tree.setCellRenderer(renderer);
-        m_tree.addTreeSelectionListener(this);
+        tree.setCellRenderer(renderer);
+        tree.addTreeSelectionListener(this);
         
-        JScrollPane custPane = new JScrollPane(m_tree, 
+        JScrollPane custPane = new JScrollPane(tree, 
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         setLeftComponent(custPane);
         
-        m_rightPane = new JPanel(new BorderLayout());
-        setRightComponent(m_rightPane);
+        rightPane = new JPanel(new BorderLayout());
+        setRightComponent(rightPane);
         return this;
     }
     
@@ -100,15 +100,15 @@ class TreePluginPanelContainer extends JSplitPane
      * Get the selected index.
      */
     public int getSelectedIndex() {
-        Object node = m_tree.getSelectionPath().getLastPathComponent();
-        return m_pluginPanels.indexOf(node);
+        Object node = tree.getSelectionPath().getLastPathComponent();
+        return pluginPanels.indexOf(node);
     }
     
     /**
      * Set the selected index.
      */
     public void setSelectedIndex(int index) {
-        m_tree.setSelectionRow(index);
+        tree.setSelectionRow(index);
     }
     
     /**
@@ -117,15 +117,15 @@ class TreePluginPanelContainer extends JSplitPane
     public void valueChanged(TreeSelectionEvent e) {
         
         // check selection value
-        int rows[] = m_tree.getSelectionRows();
+        int rows[] = tree.getSelectionRows();
         if( (rows == null) || (rows.length == 0) ) {
             return;
         }
         
         // return the selected plugin panel
-        PluginPanel panel = (PluginPanel)m_pluginPanels.get(rows[rows.length - 1]);
+        PluginPanel panel = (PluginPanel)pluginPanels.get(rows[rows.length - 1]);
         if(panel.canBeDisplayed()) {
-            GuiUtils.showNewPanel(m_rightPane, panel);
+            GuiUtils.showNewPanel(rightPane, panel);
         }
     }
     
@@ -133,15 +133,15 @@ class TreePluginPanelContainer extends JSplitPane
      * get root object
      */
     public Object getRoot() {
-        return m_pluginPanels.get(0);
+        return pluginPanels.get(0);
     }
     
     /**
      * get child count
      */
     public int getChildCount(Object parent) {
-        if(parent == m_pluginPanels.get(0)) {
-            return m_pluginPanels.size() - 1;
+        if(parent == pluginPanels.get(0)) {
+            return pluginPanels.size() - 1;
         }
         return 0;
     }
@@ -150,21 +150,21 @@ class TreePluginPanelContainer extends JSplitPane
      * is a leaf or node
      */
     public boolean isLeaf(Object node) {
-       return (node != m_pluginPanels.get(0));
+       return (node != pluginPanels.get(0));
     }
     
     /**
      * get child index
      */
     public int getIndexOfChild(Object parent, Object child) {
-        return m_pluginPanels.indexOf(child) - 1;
+        return pluginPanels.indexOf(child) - 1;
     }
     
     /**
      * add a listener
      */
     public void addTreeModelListener(TreeModelListener l) {
-        m_treeListenrs.add(l);
+        treeListeners.add(l);
     }
 
     /**
@@ -177,24 +177,24 @@ class TreePluginPanelContainer extends JSplitPane
      * remove a listener
      */
     public void removeTreeModelListener(TreeModelListener l) {
-        m_treeListenrs.remove(l);
+        treeListeners.remove(l);
     }
     
     /** 
      * get child object
      */
     public Object getChild(Object parent, int index) {
-        return m_pluginPanels.get(index + 1);
+        return pluginPanels.get(index + 1);
     }
     
     /**
      * Get ftp config.
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_fconfig = ftpConfig;
-        for(int i=0; i<m_pluginPanels.size(); ++i) {
-            PluginPanel ppanel = (PluginPanel)m_pluginPanels.get(i);
-            ppanel.refresh(m_fconfig);
+        fconfig = ftpConfig;
+        for(int i=0; i<pluginPanels.size(); ++i) {
+            PluginPanel ppanel = (PluginPanel)pluginPanels.get(i);
+            ppanel.refresh(fconfig);
         }
     }
     
@@ -202,6 +202,6 @@ class TreePluginPanelContainer extends JSplitPane
      * Get ftp config.
      */
     public IFtpConfig getFtpConfig() {
-        return m_fconfig;
+        return fconfig;
     }
 }

@@ -35,20 +35,20 @@ import org.apache.ftpserver.interfaces.ISsl;
 public 
 class FtpSocketFactory implements ISocketFactory {
     
-    private Log m_log;
-    private LogFactory m_logFactory;
+    private Log log;
+    private LogFactory logFactory;
     
-    private InetAddress m_serverAddress;
-    private int m_port;
-    private ISsl m_ssl;
+    private InetAddress serverAddress;
+    private int port;
+    private ISsl ssl;
     
     
     /**
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
-        m_logFactory = factory;
-        m_log = m_logFactory.getInstance(getClass());
+        logFactory = factory;
+        log = logFactory.getInstance(getClass());
     }
     
     /**
@@ -60,25 +60,25 @@ class FtpSocketFactory implements ISocketFactory {
             // get server address
             String serverAddress = conf.getString("address", null);
             if(serverAddress != null) {
-                m_serverAddress = InetAddress.getByName(serverAddress);
+                this.serverAddress = InetAddress.getByName(serverAddress);
             }
             
             // get server port
-            m_port = conf.getInt("port", 21);
+            port = conf.getInt("port", 21);
             
             // get certificate
             Configuration sslConf = conf.getConfiguration("ssl", null);
             if(sslConf != null) {
-                m_ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
-                m_ssl.setLogFactory(m_logFactory);
-                m_ssl.configure(sslConf);
+                ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
+                ssl.setLogFactory(logFactory);
+                ssl.configure(sslConf);
             }
         }
         catch(FtpException ex) {
             throw ex;
         }
         catch(Exception ex) {
-            m_log.fatal("FtpSocketFactory.configure()", ex);
+            log.fatal("FtpSocketFactory.configure()", ex);
             throw new FtpException("FtpSocketFactory.configure()", ex);
         }
     }
@@ -88,11 +88,11 @@ class FtpSocketFactory implements ISocketFactory {
      */
     public ServerSocket createServerSocket() throws Exception {     
         ServerSocket ssocket = null;
-        if(m_serverAddress == null) {
-            ssocket = new ServerSocket(m_port, 100);
+        if(serverAddress == null) {
+            ssocket = new ServerSocket(port, 100);
         }
         else {
-            ssocket = new ServerSocket(m_port, 100, m_serverAddress);
+            ssocket = new ServerSocket(port, 100, serverAddress);
         }
         return ssocket;
     }
@@ -101,21 +101,21 @@ class FtpSocketFactory implements ISocketFactory {
      * Get server address.
      */
     public InetAddress getServerAddress() {
-        return m_serverAddress;
+        return serverAddress;
     }
     
     /**
      * Get port number.
      */
     public int getPort() {
-        return m_port;
+        return port;
     }
         
     /**
      * Get SSL component.
      */
     public ISsl getSSL() {
-        return m_ssl;
+        return ssl;
     }
     
     /**

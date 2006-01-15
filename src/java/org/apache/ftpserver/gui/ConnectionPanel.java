@@ -40,16 +40,16 @@ class ConnectionPanel extends PluginPanel {
 
     private static final long serialVersionUID = 3774741162954995177L;
     
-    private IFtpConfig m_fconfig;
-    private JTable m_ConTable;   
-    private FtpConnectionTableModel m_model;
+    private IFtpConfig fconfig;
+    private JTable conTable;   
+    private FtpConnectionTableModel model;
     
     /**
      * Instantiate connection panel.
      */
     public ConnectionPanel(PluginPanelContainer container) {
         super(container);
-        m_model = new FtpConnectionTableModel();
+        model = new FtpConnectionTableModel();
         initComponents();
     }
 
@@ -60,10 +60,10 @@ class ConnectionPanel extends PluginPanel {
     private void initComponents() {
         setLayout(new BorderLayout());
         
-        m_ConTable = new JTable(m_model);
-        m_ConTable.setPreferredScrollableViewportSize(new Dimension(470, 320));
-        m_ConTable.setColumnSelectionAllowed(false);
-        JScrollPane bottomPane = new JScrollPane(m_ConTable, 
+        conTable = new JTable(model);
+        conTable.setPreferredScrollableViewportSize(new Dimension(470, 320));
+        conTable.setColumnSelectionAllowed(false);
+        JScrollPane bottomPane = new JScrollPane(conTable, 
                                      JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                      JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);                          
         add(bottomPane, BorderLayout.CENTER);
@@ -98,7 +98,7 @@ class ConnectionPanel extends PluginPanel {
         
         jReloadBtn.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
-                refresh(m_fconfig);
+                refresh(fconfig);
              }
         });
     }
@@ -108,7 +108,7 @@ class ConnectionPanel extends PluginPanel {
      * Close connection.
      */
     private void closeConnection() {
-        int indices[] = m_ConTable.getSelectedRows();
+        int indices[] = conTable.getSelectedRows();
         if(indices.length == 0) {
             GuiUtils.showErrorMessage(this, "Please select connection(s).");
             return;
@@ -120,9 +120,9 @@ class ConnectionPanel extends PluginPanel {
         }
         
         for(int i=indices.length; --i>=0; ) {
-            IConnection con = m_model.getConnection(indices[i]);
+            IConnection con = model.getConnection(indices[i]);
             if(con != null) {
-                m_fconfig.getConnectionManager().closeConnection(con);
+                fconfig.getConnectionManager().closeConnection(con);
             }
         }
     }
@@ -132,7 +132,7 @@ class ConnectionPanel extends PluginPanel {
      * Spy user
      */
     private void spyUser() {
-        int indices[] = m_ConTable.getSelectedRows();
+        int indices[] = conTable.getSelectedRows();
         if(indices.length == 0) {
             GuiUtils.showErrorMessage(this, "Please select connection(s).");
             return;
@@ -141,7 +141,7 @@ class ConnectionPanel extends PluginPanel {
         // monitor all the selected users
         SpyPanelContainer spyContainer = (SpyPanelContainer)getContainer().getPluginPanel(PluginPanelContainer.SPY_INDEX);
         for(int i=indices.length; --i>=0; ) {   
-            IConnection con = m_model.getConnection(indices[i]);
+            IConnection con = model.getConnection(indices[i]);
             if (con != null) {
                 spyContainer.monitorConnection(con); 
             }
@@ -156,8 +156,8 @@ class ConnectionPanel extends PluginPanel {
      * Refresh the ftp configuration
      */
     public void refresh(IFtpConfig ftpConfig) {
-        m_fconfig = ftpConfig;
-        m_model.refresh(ftpConfig);
+        fconfig = ftpConfig;
+        model.refresh(ftpConfig);
     }
 
     
@@ -165,7 +165,7 @@ class ConnectionPanel extends PluginPanel {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
 
     

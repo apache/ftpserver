@@ -33,7 +33,7 @@ class ServerFrame extends JFrame {
     
     private static final long serialVersionUID = 8399655106217258507L;
     
-    private PluginPanelContainer m_pluginContainer;
+    private PluginPanelContainer pluginContainer;
     
     /**
      * Constructor - create tree and show the root panel.
@@ -43,20 +43,20 @@ class ServerFrame extends JFrame {
         getContentPane().add(tabPane);
         
         // add all plugin panels
-        m_pluginContainer = new TreePluginPanelContainer();
-        m_pluginContainer.add(new RootPanel(m_pluginContainer));
-        m_pluginContainer.add(new UserManagerPanel(m_pluginContainer));
-        m_pluginContainer.add(new IPRestrictorPanel(m_pluginContainer));
-        m_pluginContainer.add(new MessagePanel(m_pluginContainer));
-        m_pluginContainer.add(new ConnectionPanel(m_pluginContainer));
-        m_pluginContainer.add(new SpyPanelContainer(m_pluginContainer));
-        m_pluginContainer.add(new FilePanel(m_pluginContainer));
-        m_pluginContainer.add(new DirectoryPanel(m_pluginContainer));
-        m_pluginContainer.add(new LoggerPanel(m_pluginContainer));
-        m_pluginContainer.add(new StatisticsPanel(m_pluginContainer));
+        pluginContainer = new TreePluginPanelContainer();
+        pluginContainer.add(new RootPanel(pluginContainer));
+        pluginContainer.add(new UserManagerPanel(pluginContainer));
+        pluginContainer.add(new IPRestrictorPanel(pluginContainer));
+        pluginContainer.add(new MessagePanel(pluginContainer));
+        pluginContainer.add(new ConnectionPanel(pluginContainer));
+        pluginContainer.add(new SpyPanelContainer(pluginContainer));
+        pluginContainer.add(new FilePanel(pluginContainer));
+        pluginContainer.add(new DirectoryPanel(pluginContainer));
+        pluginContainer.add(new LoggerPanel(pluginContainer));
+        pluginContainer.add(new StatisticsPanel(pluginContainer));
         
-        tabPane.addTab("FTP", m_pluginContainer.getComponent());
-        m_pluginContainer.setSelectedIndex(PluginPanelContainer.ROOT_INDEX);
+        tabPane.addTab("FTP", pluginContainer.getComponent());
+        pluginContainer.setSelectedIndex(PluginPanelContainer.ROOT_INDEX);
         
         // show frame
         setTitle("Apache FTP Server");
@@ -80,7 +80,7 @@ class ServerFrame extends JFrame {
                 return;
             }
             super.processWindowEvent(e);
-            RootPanel root = (RootPanel)m_pluginContainer.getPluginPanel(0);
+            RootPanel root = (RootPanel)pluginContainer.getPluginPanel(0);
             root.stopServer();
             dispose();
             System.exit(0);

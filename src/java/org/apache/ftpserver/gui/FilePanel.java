@@ -49,8 +49,8 @@ class FilePanel extends PluginPanel {
             "Deleted"
     };
     
-    private IFtpConfig        m_fconfig;
-    private FtpFileTableModel[] m_models;
+    private IFtpConfig        fconfig;
+    private FtpFileTableModel[] models;
     
     
     /**
@@ -72,9 +72,9 @@ class FilePanel extends PluginPanel {
         JTabbedPane tabPane = new JTabbedPane();
         add(tabPane, BorderLayout.CENTER);
         
-        m_models = new FtpFileTableModel[3];
-        for(int i=0; i<m_models.length; ++i) {
-            m_models[i] = new FtpFileTableModel();
+        models = new FtpFileTableModel[3];
+        for(int i=0; i<models.length; ++i) {
+            models[i] = new FtpFileTableModel();
             tabPane.addTab(HEADERS[i], createTabComponent(i));
         }
     }
@@ -86,7 +86,7 @@ class FilePanel extends PluginPanel {
         
         JPanel panel = new JPanel(new BorderLayout()); 
         
-        JTable fileTable = new JTable(m_models[index]);
+        JTable fileTable = new JTable(models[index]);
         fileTable.setPreferredScrollableViewportSize(new Dimension(470, 300));
         fileTable.setColumnSelectionAllowed(false);
         JScrollPane scrollPane = new JScrollPane(fileTable, 
@@ -104,7 +104,7 @@ class FilePanel extends PluginPanel {
         // event handler
         jResetBtn.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
-                m_models[index].clear();
+                models[index].clear();
              }
         });
         return panel;
@@ -115,7 +115,7 @@ class FilePanel extends PluginPanel {
      */
     public void notifyUpload(IConnection con, FileObject file, long sz) {
         User user = con.getRequest().getUser();
-        m_models[0].newEntry(file.getFullName(), user);
+        models[0].newEntry(file.getFullName(), user);
     }
     
     /**
@@ -123,7 +123,7 @@ class FilePanel extends PluginPanel {
      */
     public void notifyDownload(IConnection con, FileObject file, long sz) {
         User user = con.getRequest().getUser();
-        m_models[1].newEntry(file.getFullName(), user);
+        models[1].newEntry(file.getFullName(), user);
     }
     
     /**
@@ -131,7 +131,7 @@ class FilePanel extends PluginPanel {
      */
     public void notifyDelete(IConnection con, FileObject file) {
         User user = con.getRequest().getUser();
-        m_models[2].newEntry(file.getFullName(), user);
+        models[2].newEntry(file.getFullName(), user);
     }
     
     
@@ -139,7 +139,7 @@ class FilePanel extends PluginPanel {
      * Refresh the panel - set the ftp config.
      */
     public void refresh(IFtpConfig config) {
-        m_fconfig = config;
+        fconfig = config;
     }
     
     
@@ -147,7 +147,7 @@ class FilePanel extends PluginPanel {
      * Can this panel be displayed.
      */
     public boolean canBeDisplayed() {
-        return (m_fconfig != null);
+        return (fconfig != null);
     }
  
     

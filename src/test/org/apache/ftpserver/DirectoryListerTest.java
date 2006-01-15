@@ -41,14 +41,14 @@ public class DirectoryListerTest extends TestCase {
      */
     public void testParse() {
         assertEquals(true, directoryLister.parse("-ls /abcd"));
-        assertEquals("/abcd", directoryLister.m_file);
-        assertEquals(true, directoryLister.m_isDetailOption);
-        assertEquals(false, directoryLister.m_isAllOption);
+        assertEquals("/abcd", directoryLister.file);
+        assertEquals(true, directoryLister.isDetailOption);
+        assertEquals(false, directoryLister.isAllOption);
 
         assertEquals(true, directoryLister.parse("-ls /ab cd"));
-        assertEquals("/ab cd", directoryLister.m_file);
-        assertEquals(true, directoryLister.m_isDetailOption);
-        assertEquals(false, directoryLister.m_isAllOption);
+        assertEquals("/ab cd", directoryLister.file);
+        assertEquals(true, directoryLister.isDetailOption);
+        assertEquals(false, directoryLister.isAllOption);
     }
 
 }
