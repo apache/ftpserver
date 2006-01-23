@@ -17,11 +17,10 @@
 package org.apache.ftpserver.config;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FtpException;
 
 /**
@@ -79,10 +78,41 @@ class XmlConfiguration implements Configuration {
     }
     
     /**
+     * Get child.
+     */
+    XmlConfiguration getChild(String param) {
+        XmlConfiguration child = null;
+        if(children != null) {
+            for(Iterator it=children.iterator(); it.hasNext(); ) {
+                XmlConfiguration thisChild = (XmlConfiguration)it.next();
+                if( thisChild.name.equals(param) ) {
+                    child = thisChild;
+                    break;
+                }
+            }
+        }
+        return child;
+    }
+    
+    /**
+     * Is empty?
+     */
+    public boolean isEmpty() {
+        return (children == null) || children.isEmpty();
+    }
+
+    
+    /**
      * Get string - if not found throws FtpException.
      */
     public String getString(String param) throws FtpException {
-        XmlConfiguration child = (XmlConfiguration)getConfiguration(param);
+        
+        // get child
+        XmlConfiguration child = getChild(param);
+        if(child == null) {
+            throw new FtpException("Not found : " + param);
+        }
+        
         String val = child.value;
         if(val == null) {
             throw new FtpException("Not found : " + param);
@@ -201,61 +231,16 @@ class XmlConfiguration implements Configuration {
         }
         return retVal;
     }
-    
-    /**
-     * Return the first <code>XmlConfiguration</code> object child of this
-     * associated with the given name. 
-     */
-    public Configuration getConfiguration(String param) throws FtpException {
-        XmlConfiguration child = null;
-        
-        if(children != null) {
-            for(Iterator it=children.iterator(); it.hasNext(); ) {
-                XmlConfiguration thisChild = (XmlConfiguration)it.next();
-                if( thisChild.name.equals(param) ) {
-                    child = thisChild;
-                    break;
-                }
-            }
-        } 
-        
-        if(child == null) {
-            throw new FtpException("Not found : " + param);
-        }
-        return child;
-    }
 
     /**
      * Return the first <code>XmlConfiguration</code> object child of this
      * associated with the given name. 
      */
-    public Configuration getConfiguration(String param, Configuration defVal) {
-        Configuration config = null;
-        try {
-            config = getConfiguration(param);
+    public Configuration subset(String param) {
+        Configuration child = getChild(param);
+        if(child == null) {
+            child = EmptyConfiguration.INSTANCE;
         }
-        catch(Exception ex) {
-            config = defVal;
-        }
-        if(config == null) {
-            config = defVal;
-        }
-        return config;
-    }
-    
-    /**
-     * Get the configuration keys.
-     */
-    public Enumeration getKeys() {
-        
-        // add configuration keys
-        ArrayList keys = new ArrayList();
-        if(children != null) {
-            for(int i=0; i<children.size(); ++i) {
-                XmlConfiguration child = (XmlConfiguration)children.get(i);
-                keys.add(child.name);
-            }
-        }
-        return Collections.enumeration(keys);
+        return child;
     }
 }

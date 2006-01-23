@@ -291,12 +291,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyUpload(IConnection connection, FileObject file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyUpload();
+            observer.notifyUpload();
         }
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-        	fileObserver.notifyUpload(connection, file, size);
+            fileObserver.notifyUpload(connection, file, size);
         }
     }
     
@@ -306,12 +306,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyDownload(IConnection connection, FileObject file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyDownload();
+            observer.notifyDownload();
         }
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-        	fileObserver.notifyDownload(connection, file, size);
+            fileObserver.notifyDownload(connection, file, size);
         }
     }
     
@@ -321,12 +321,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyDelete(IConnection connection, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyDelete();
+            observer.notifyDelete();
         }
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-        	fileObserver.notifyDelete(connection, file);
+            fileObserver.notifyDelete(connection, file);
         }
     }
     
@@ -336,12 +336,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyMkdir(IConnection connection, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyMkdir();
+            observer.notifyMkdir();
         }
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-        	fileObserver.notifyMkdir(connection, file);
+            fileObserver.notifyMkdir(connection, file);
         }
     }
     
@@ -351,12 +351,12 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyRmdir(IConnection connection, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyRmdir();
+            observer.notifyRmdir();
         }
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-        	fileObserver.notifyRmdir(connection, file);
+            fileObserver.notifyRmdir(connection, file);
         }
     }
     
@@ -366,7 +366,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyOpenConnection(IConnection connection) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyOpenConnection();
+            observer.notifyOpenConnection();
         }
     } 
     
@@ -376,7 +376,7 @@ class FtpStatisticsImpl implements IFtpStatistics {
     private void notifyCloseConnection(IConnection connection) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-        	observer.notifyCloseConnection();
+            observer.notifyCloseConnection();
         }
     } 
     

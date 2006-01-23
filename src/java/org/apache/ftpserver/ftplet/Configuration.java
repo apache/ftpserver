@@ -1,4 +1,4 @@
-// $Id$
+// $Id:$
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -16,7 +16,6 @@
  */
 package org.apache.ftpserver.ftplet;
 
-import java.util.Enumeration;
 
 /**
  * Configuration interface. 
@@ -26,6 +25,11 @@ import java.util.Enumeration;
 public 
 interface Configuration {
 
+    /**
+     * Is it an empty configuration?
+     */
+    boolean isEmpty();
+    
     /**
      * Get string - if not found throws FtpException.
      */
@@ -77,17 +81,7 @@ interface Configuration {
     double getDouble(String param, double defaultVal);
 
     /**
-     * Get sub configuration - if not found throws FtpException.
+     * Get configuration subset. The return value will never be null.
      */
-    Configuration getConfiguration(String param) throws FtpException;
-    
-    /**
-     * Get sub configuration - if not found returns the default value.
-     */
-    Configuration getConfiguration(String param, Configuration defaultVal);
-    
-    /**
-     * Get the configuration keys.
-     */
-    Enumeration getKeys();
+    Configuration subset(String param);
 }

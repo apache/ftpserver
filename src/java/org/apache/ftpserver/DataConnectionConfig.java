@@ -84,8 +84,8 @@ class DataConnectionConfig implements IDataConnectionConfig {
             portIpCheck = conf.getBoolean("port-ip-check", false);
             
             // create SSL component
-            Configuration sslConf = conf.getConfiguration("ssl", null);
-            if(sslConf != null) {
+            Configuration sslConf = conf.subset("ssl");
+            if(!sslConf.isEmpty()) {
                 ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
                 ssl.setLogFactory(logFactory);
                 ssl.configure(sslConf);

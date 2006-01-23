@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -90,7 +89,7 @@ class FtpConfigImpl implements IFtpConfig {
             // create and initialize ftlets
             ftpletContainer = new FtpletContainer();
             String ftpletNames = conf.getString("ftplets", null);
-            Configuration ftpletConf = conf.getConfiguration("ftplet", EmptyConfiguration.INSTANCE);
+            Configuration ftpletConf = conf.subset("ftplet");
             ftpletContainer.init(this, ftpletNames, ftpletConf);        
         }
         catch(Exception ex) {
@@ -103,7 +102,11 @@ class FtpConfigImpl implements IFtpConfig {
      * Create component. 
      */
     private Component createComponent(Configuration parentConfig, String configName, String defaultClass) throws Exception {
-        Configuration conf = parentConfig.getConfiguration(configName, EmptyConfiguration.INSTANCE);
+        
+        // get configuration subset
+        Configuration conf = parentConfig.subset(configName);
+        
+        // create and configure component
         String className = conf.getString("class", defaultClass);
         Component comp = (Component)Class.forName(className).newInstance();
         comp.setLogFactory(logFactory);

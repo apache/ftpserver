@@ -32,9 +32,14 @@ import org.apache.ftpserver.ftplet.FtpException;
 public 
 class PropertiesConfiguration implements Configuration {
     
-    private final static String PREFIX = "config.";
-    
     private Properties prop;
+    private String prefix = "config.";
+    
+    /**
+     * Private constructor - used internally to get configuration subset.
+     */
+    private PropertiesConfiguration() {
+    }
     
     /**
      * Constructor - set the properties input stream.
@@ -42,44 +47,39 @@ class PropertiesConfiguration implements Configuration {
     public PropertiesConfiguration(InputStream in) throws IOException {
         
         // load properties
-        Properties prop = new Properties();
+        prop = new Properties();
         prop.load(in);
-        
-        setProperties(prop);
     }    
     
     /**
      * Constructor - set the properties.
      */
     public PropertiesConfiguration(Properties prop) {
-        setProperties(prop);
+        prop = new Properties(prop);
     }    
     
+
     /**
-     * Set properties.
+     * Is empty?
      */
-    private void setProperties(Properties prop) {
-    
-        // strip prefix
-        this.prop = new Properties();
-        int prefixLen = PREFIX.length();
+    public boolean isEmpty() {
+        boolean empty = true;
         Enumeration keys = prop.propertyNames();
         while(keys.hasMoreElements()) {
             String key = (String)keys.nextElement();
-            String val = prop.getProperty(key);
-            if(key.startsWith(PREFIX)) {
-                key = key.substring(prefixLen);
+            if(key.startsWith(prefix)) {
+                empty = false;
+                break;
             }
-            this.prop.setProperty(key, val);
         }
-        prop.clear();
+        return empty;
     }
     
     /**
      * Get string - if not found throws FtpException.
      */
     public String getString(String param) throws FtpException {
-        String val = prop.getProperty(param);
+        String val = prop.getProperty(prefix + param);
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -90,14 +90,14 @@ class PropertiesConfiguration implements Configuration {
      * Get string - if not found returns the default value.
      */
     public String getString(String param, String defaultVal) {
-        return prop.getProperty(param, defaultVal);
+        return prop.getProperty(prefix + param, defaultVal);
     }
     
     /**
      * Get integer - if not found throws FtpException.
      */
     public int getInt(String param) throws FtpException {
-        String val = prop.getProperty(param);
+        String val = prop.getProperty(prefix + param);
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -127,7 +127,7 @@ class PropertiesConfiguration implements Configuration {
      * Get long - if not found throws FtpException.
      */
     public long getLong(String param) throws FtpException {
-        String val = prop.getProperty(param);
+        String val = prop.getProperty(prefix + param);
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -157,7 +157,7 @@ class PropertiesConfiguration implements Configuration {
      * Get boolean - if not found throws FtpException.
      */
     public boolean getBoolean(String param) throws FtpException {
-        String val = prop.getProperty(param);
+        String val = prop.getProperty(prefix + param);
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -181,7 +181,7 @@ class PropertiesConfiguration implements Configuration {
      * Get double - if not found throws FtpException.
      */
     public double getDouble(String param) throws FtpException {
-        String val = prop.getProperty(param);
+        String val = prop.getProperty(prefix + param);
         if(val == null) {
             throw new FtpException("Not found : " + param);
         }
@@ -208,46 +208,12 @@ class PropertiesConfiguration implements Configuration {
     }
     
     /**
-     * Get sub configuration - if not found throws FtpException.
+     * Get sub configuration.
      */
-    public Configuration getConfiguration(String param) throws FtpException {
-        Properties subProp = new Properties();
-        Enumeration propNames = prop.propertyNames();
-        String prefix = param + '.';
-        int prefixLen = prefix.length();
-        while(propNames.hasMoreElements()) {
-            String key = (String)propNames.nextElement();
-            if(!key.startsWith(prefix)) {
-                continue;
-            }
-            String val = prop.getProperty(key);
-            key = key.substring(prefixLen);
-            subProp.setProperty(key, val);
-        }
-        
-        if(subProp.isEmpty()) {
-            throw new FtpException("Not found : " + param);
-        }
-        return new PropertiesConfiguration(subProp);
-    }
-    
-    /**
-     * Get sub configuration - if not found returns the default value.
-     */
-    public Configuration getConfiguration(String param, Configuration defaultVal) {
-        Configuration conf = defaultVal;
-        try {
-            conf = getConfiguration(param);
-        }
-        catch(Exception ex) {
-        }
-        return conf;
-    }
-    
-    /**
-     * Get the configuration keys.
-     */
-    public Enumeration getKeys() {
-        return prop.propertyNames();
+    public Configuration subset(String param) {
+        PropertiesConfiguration subConfig = new PropertiesConfiguration();
+        subConfig.prop = prop;
+        subConfig.prefix = prefix + param + '.';
+        return subConfig; 
     }
 }

@@ -1,4 +1,4 @@
-// $Id$
+// $Id:$
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -16,9 +16,6 @@
  */
 package org.apache.ftpserver.ftplet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 
 /**
  * Empty configuration - always returns the default values.
@@ -34,6 +31,13 @@ class EmptyConfiguration implements Configuration {
      * Private constructor - use INSTANCE static variable.
      */
     private EmptyConfiguration() {
+    }
+    
+    /**
+     * Is empty?
+     */
+    public boolean isEmpty() {
+        return true;
     }
     
     /**
@@ -109,22 +113,8 @@ class EmptyConfiguration implements Configuration {
     /**
      * Throw exception.
      */
-    public Configuration getConfiguration(String param) throws FtpException {
-        throw new FtpException();
+    public Configuration subset(String param) {
+        return this;
     }
 
-    /**
-     * Return the default value.
-     */
-    public Configuration getConfiguration(String param, Configuration defaultVal) {
-        return defaultVal;
-    }
-    
-    /**
-     * Get the property keys.
-     */
-    public Enumeration getKeys() {
-        ArrayList empty = new ArrayList(2);
-        return Collections.enumeration(empty);
-    }
 }

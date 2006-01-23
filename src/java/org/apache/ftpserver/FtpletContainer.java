@@ -22,7 +22,6 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FtpConfig;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -73,8 +72,9 @@ class FtpletContainer implements Ftplet {
             while(st.hasMoreTokens()) {
                 String ftpletName = st.nextToken();
                 log.info("Configuring ftplet : " + ftpletName);
-                Configuration subConfig = ftpletConf.getConfiguration(ftpletName, EmptyConfiguration.INSTANCE);
                 
+                // get ftplet specific configuration
+                Configuration subConfig = ftpletConf.subset(ftpletName);
                 String className = subConfig.getString("class", null);
                 if(className == null) {
                     continue;

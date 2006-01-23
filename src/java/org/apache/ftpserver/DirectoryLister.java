@@ -376,7 +376,7 @@ class DirectoryLister {
             this.pattern = null;
         }
         else {
-        	this.pattern = pattern;
+            this.pattern = pattern;
         }
         return true;
     }

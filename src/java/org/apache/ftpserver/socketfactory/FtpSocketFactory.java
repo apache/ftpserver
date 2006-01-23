@@ -67,8 +67,8 @@ class FtpSocketFactory implements ISocketFactory {
             port = conf.getInt("port", 21);
             
             // get certificate
-            Configuration sslConf = conf.getConfiguration("ssl", null);
-            if(sslConf != null) {
+            Configuration sslConf = conf.subset("ssl");
+            if(!sslConf.isEmpty()) {
                 ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
                 ssl.setLogFactory(logFactory);
                 ssl.configure(sslConf);

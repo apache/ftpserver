@@ -128,7 +128,7 @@ class CommandLine {
         FileInputStream in = null;
         try {
             if( args.length == 0 || 
-            		(args.length == 1 && args[0].equals("-default")) ) {
+                (args.length == 1 && args[0].equals("-default")) ) {
                 config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 2) && args[0].equals("-xml") ) {

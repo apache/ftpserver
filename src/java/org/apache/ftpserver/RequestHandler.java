@@ -101,13 +101,13 @@ class RequestHandler implements IConnection {
         // set writer observer
         FtpWriter writer = this.writer;
         if(writer != null) {
-        	writer.setObserver(observer);
+            writer.setObserver(observer);
         }
         
         // set request observer
         FtpRequestImpl request = this.request;
         if(request != null) {
-        	request.setObserver(observer);
+            request.setObserver(observer);
         }
     }   
     
@@ -331,7 +331,7 @@ class RequestHandler implements IConnection {
             
             // logout if necessary and notify statistics
             if(request.isLoggedIn()) {
-            	request.setLogout();
+                request.setLogout();
                 ftpStat.setLogout(this);
             }
             ftpStat.setCloseConnection(this);
@@ -342,7 +342,7 @@ class RequestHandler implements IConnection {
             request.getFtpDataConnection().dispose();
             FileSystemView fview = request.getFileSystemView();
             if(fview != null) {
-            	fview.dispose();
+                fview.dispose();
             }
             request = null;
         }
@@ -350,8 +350,8 @@ class RequestHandler implements IConnection {
         // close ftp writer
         FtpWriter writer = this.writer;
         if(writer != null) {
-        	writer.setObserver(null);
-        	writer.close();
+            writer.setObserver(null);
+            writer.close();
             writer = null;
         }
         
@@ -366,7 +366,7 @@ class RequestHandler implements IConnection {
         Socket controlSocket = this.controlSocket;
         if (controlSocket != null) {
             try {
-            	controlSocket.close();
+                controlSocket.close();
             }
             catch(Exception ex) {
                 log.warn("RequestHandler.close()", ex);
