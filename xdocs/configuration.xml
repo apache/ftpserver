@@ -341,25 +341,25 @@ config
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.max-connection">config.connection-service.max-connection</a></td>
+                    <td><a name="config.connection-manager.max-connection">config.connection-manager.max-connection</a></td>
                     <td>Maximum simultaneous connections (0 means no limit).
                         The default value is 20.
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.max-login">config.connection-service.max-login</a></td>
+                    <td><a name="config.connection-manager.max-login">config.connection-manager.max-login</a></td>
                     <td>Maximum simultaneous logins (0 means no limit).
                         The default value is 10.
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.anonymous-login-enabled">config.connection-service.anonymous-login-enabled</a></td>
+                    <td><a name="config.connection-manager.anonymous-login-enabled">config.connection-manager.anonymous-login-enabled</a></td>
                     <td>Flag to indicate annonymous login support. By default the server
                         allows anonymous connections. That is the default value is true.
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.max-anonymous-login">config.connection-service.max-anonymous-login</a></td>
+                    <td><a name="config.connection-manager.max-anonymous-login">config.connection-manager.max-anonymous-login</a></td>
                     <td>Maximum anonymous simultaneous logins (0 means no limit).
                         Should be less than or equal to the maximum number of simultaneous
                         logins. It will not be used if the sever does not allow anonymous
@@ -367,14 +367,14 @@ config
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.default-idle-time">config.connection-service.default-idle-time</a></td>
+                    <td><a name="config.connection-manager.default-idle-time">config.connection-manager.default-idle-time</a></td>
                     <td>Default idle time in seconds. It is used to close idle
                         data connection and non-logged-in connections. The default value
                         is 60.
                     </td>
                 </tr>
                 <tr>
-                    <td><a name="config.connection-service.timeout-poll-interval">config.connection-service.timeout-poll-interval</a></td>
+                    <td><a name="config.connection-manager.timeout-poll-interval">config.connection-manager.timeout-poll-interval</a></td>
                     <td>Polling interval in seconds to disconnect idle users. The default
                         value is 60.
                     </td>

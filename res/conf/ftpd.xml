@@ -75,15 +75,15 @@
     -->
 
 
-    <!-- Connection service configuration block
-    <connection-service>
+    <!-- Connection manager configuration block
+    <connection-manager>
         <max-connection>20</max-connection>
         <max-login>10</max-login>
         <anonymous-login-enabled>true</anonymous-login-enabled>
         <max-anonymous-login>10</max-anonymous-login>
         <default-idle-time>60</default-idle-time>
-        <connection-poll-inverval>60</connection-poll-inverval>
-    </connection-service>
+        <timeout-poll-inverval>60</timeout-poll-inverval>
+    </connection-manager>
     -->
 
 
