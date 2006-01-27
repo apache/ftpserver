@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2002-2004 The Apache Software Foundation or its licensors,
+  as applicable.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Apache FTP Server :: Version Control</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+    
+        <subsection name="Overview">
+            <p>The FTP Server source code resides in the Apache 
+               <a href="http://subversion.tigris.org/">Subversion (SVN)</a> repository.
+            </p>
+            <p>The command-line SVN client can be obtained 
+               <a href="http://subversion.tigris.org/project_packages.html">here</a>.
+            </p>
+            <p>The TortoiseSVN GUI client for Windows can be obtained 
+               <a href="http://tortoisesvn.tigris.org/">here</a>. There are also SVN plugins 
+               available for both <a href="http://subclipse.tigris.org/">Eclipse</a> and 
+               <a href="http://svnup.tigris.org/">IntelliJ IDEA</a>.
+            </p>
+        </subsection>
+    
+        <subsection name="Web Access (read-only)">
+            <p>The source code can be browsed via the Web at 
+               <a href="http://svn.apache.org/viewcvs.cgi/incubator/ftpserver/">http://svn.apache.org/viewcvs.cgi/incubator/ftpserver/</a>. 
+               No SVN client software is required.
+            </p>
+        </subsection>
+        
+        <subsection name="Anonymous Access (read-only)">
+            <p>The SVN URL for anonymous users is 
+               <a href="http://svn.apache.org/repos/asf/incubator/ftpserver/">http://svn.apache.org/repos/asf/incubator/ftpserver/</a>. 
+               Instructions for anonymous SVN access are <a href="http://www.apache.org/dev/version-control.html#anon-svn">here</a>.
+            </p>
+        </subsection>
+        
+        <subsection name="Committer Access (read-write)">
+            <p>The SVN URL for committers is 
+               <a href="https://svn.apache.org/repos/asf/incubator/ftpserver/">https://svn.apache.org/repos/asf/incubator/ftpserver/</a>. 
+               Instructions for committer SVN access are <a href="http://www.apache.org/dev/version-control.html#https-svn">here</a>.
+            </p>
+        </subsection>
+        
+        <subsection name="Access Via a Proxy">
+            <p>SVN clients can go through a proxy if you configure them to do so. 
+            The <a href="http://subversion.tigris.org/faq.html#proxy">Subversion FAQ</a> 
+            describes how to configure the command-line client to use a proxy. 
+            To configure TortoiseSVN to use a proxy, go to &quot;TortoiseSVN Settings &gt; Network&quot;.
+            </p>
+        </subsection>
+        
+    </body>
+</document>

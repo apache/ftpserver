@@ -191,35 +191,5 @@ Finished at  : Wednesday, September 28, 2005 3:11:46 PM IST
                 ]]></source>
             </subsection>
         </section>
-
-        <section name="Subversion Access">
-            <p>You can also get the latest development version from Subversion.
-               If you just wish to browse around or download a few individual files,
-               the best tool is the web-based
-               <a href="http://svn.apache.org/viewcvs.cgi/incubator/ftpserver/trunk/">
-               ViewCVS interface for Subversion</a> or go straight to the public repository
-               at <a href="http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/">
-               http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/</a>
-            </p>
-
-            <subsection title="Anonymous Subversion">
-                <p>To access the Subversion repositories anonymously, you will need a
-                   Subversion client. Choose the module you would like and check it out.
-                   In this case use:
-                </p>
-                <source>
-     svn checkout http://svn.apache.org/repos/asf/incubator/ftpserver/trunk ftpserver
-                </source>
-                <p>For more help on using Subversion, consult the
-                   <a href="http://subversion.tigris.org/">Subversion website</a> or
-                   <a href="http://svnbook.red-bean.com/">Subversion book</a>. The web
-                   site provides a
-                   <a href="http://subversion.tigris.org/project_links.html">list of clients
-                   and useful links</a> (including a link to the
-                   <a href="http://subclipse.tigris.org/">Eclipse plug-in</a>).
-                </p>
-            </subsection>
-
-        </section>
     </body>
 </document>
