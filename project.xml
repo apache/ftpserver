@@ -69,16 +69,17 @@ limitations under the License.
             <email>niklas.{aT}.protocol7.{d0T}.com</email>
             <organization/>
         </developer>
+        <developer>
+            <name>Sergey M Vladimirov</name>
+            <id>sergey</id>
+            <email>vlsergey.{aT}.gmail.{d0T}.com</email>
+            <organization>Netcracker corp.</organization>
+        </developer>
     </developers>
 
 
     <!-- Contributor list -->
     <contributors>
-        <contributor>
-            <name>Sergey M Vladimirov</name>
-            <organization>Netcracker corp.</organization>
-            <email>vlsergey.{aT}.gmail.{d0T}.com</email>
-        </contributor>
         <contributor>
             <name>Birkir A. Barkarson</name>
             <organization/>
