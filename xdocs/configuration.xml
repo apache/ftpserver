@@ -152,6 +152,12 @@ config
   |       |
   |       |---- <b><a href="#config.connection-manager.timeout-poll-interval">timeout-poll-inverval</a></b> (60)
   |
+  |---- command-factory
+  |       |
+  |       |---- command
+  |               |
+  |               |---- <b><i><a href="#config.command-factory.command.command-name">command-name</a></i></b>
+  |
   |---- ip-restrictor
   |       |
   |       |---- <b><a href="#config.ip-restrictor.class">class</a></b> (org.apache.ftpserver.iprestrictor.FileIpRestrictor)
@@ -377,6 +383,13 @@ config
                     <td><a name="config.connection-manager.timeout-poll-interval">config.connection-manager.timeout-poll-interval</a></td>
                     <td>Polling interval in seconds to disconnect idle users. The default
                         value is 60.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.command-factory.command.command-name">config.command-factory.command.command-name</a></td>
+                    <td>Command name and fully qualified command implementation class name mapping. The default 
+                        implementations are already set in the server. You can overwrite or add your own command 
+                        implementations.
                     </td>
                 </tr>
                 <tr>
