@@ -18,7 +18,9 @@ package org.apache.ftpserver.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.Configuration;
@@ -215,5 +217,21 @@ class PropertiesConfiguration implements Configuration {
         subConfig.prop = prop;
         subConfig.prefix = prefix + param + '.';
         return subConfig; 
+    }
+    
+    /**
+     * Get configuration keys.
+     */
+    public Iterator getKeys() {
+        ArrayList arr = new ArrayList();
+        for(Enumeration en = prop.keys(); en.hasMoreElements(); ) {
+            String key = (String)en.nextElement();
+            if(!key.startsWith(prefix)) {
+                continue;
+            }
+            key = key.substring(prefix.length());
+            arr.add(key);
+        }
+        return arr.iterator();
     }
 }

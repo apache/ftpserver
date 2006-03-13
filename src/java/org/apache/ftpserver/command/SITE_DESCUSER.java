@@ -18,7 +18,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
@@ -26,6 +25,7 @@ import org.apache.ftpserver.ftplet.FtpConfig;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * This SITE command returns the specified user information.
@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.UserManager;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_DESCUSER implements Command {
+class SITE_DESCUSER implements ICommand {
 
     /**
      * Execute command.

@@ -20,11 +20,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 
 
 /**
@@ -36,7 +36,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author Birkir A. Barkarson
  */
 public 
-class OPTS implements Command {
+class OPTS implements ICommand {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
     
@@ -67,7 +67,7 @@ class OPTS implements Command {
         
         // call appropriate command method
         String optsRequest = "OPTS_" + argument; 
-        Command command = (Command)COMMAND_MAP.get( optsRequest );
+        ICommand command = (ICommand)COMMAND_MAP.get( optsRequest );
         try {
             if(command != null) {
                 command.execute(handler, request, out);

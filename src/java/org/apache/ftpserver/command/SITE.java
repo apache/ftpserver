@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 
 
@@ -36,7 +36,7 @@ import org.apache.ftpserver.interfaces.IFtpConfig;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE implements Command {
+class SITE implements ICommand {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
     
@@ -79,7 +79,7 @@ class SITE implements Command {
         
         // call appropriate command method
         String siteRequest = "SITE_" + argument; 
-        Command command = (Command)COMMAND_MAP.get( siteRequest );
+        ICommand command = (ICommand)COMMAND_MAP.get( siteRequest );
         try {
             if(command != null) {
                 command.execute(handler, request, out);

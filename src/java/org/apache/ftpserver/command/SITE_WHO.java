@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
@@ -28,6 +27,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.StringUtils;
@@ -39,7 +39,7 @@ import org.apache.ftpserver.util.StringUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_WHO implements Command {
+class SITE_WHO implements ICommand {
     
     /**
      * Execute command.

@@ -1,4 +1,4 @@
-// $Id:$
+// $Id$
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 package org.apache.ftpserver.ftplet;
+
+import java.util.Iterator;
 
 
 /**
@@ -84,4 +86,9 @@ interface Configuration {
      * Get configuration subset. The return value will never be null.
      */
     Configuration subset(String param);
+    
+    /**
+     * Get the configuration keys.
+     */
+    Iterator getKeys();
 }

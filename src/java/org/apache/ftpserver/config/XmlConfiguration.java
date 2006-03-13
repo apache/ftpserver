@@ -243,4 +243,18 @@ class XmlConfiguration implements Configuration {
         }
         return child;
     }
+    
+    /**
+     * Get the configuration keys.
+     */
+    public Iterator getKeys() {
+        ArrayList arr = new ArrayList( children == null? 1 : children.size() );
+        if(children != null) {
+            for(int i=0; i<children.size(); ++i) {
+                XmlConfiguration conf = (XmlConfiguration)children.get(i); 
+                arr.add(conf.name);
+            }
+        }
+        return arr.iterator();
+    }
 }

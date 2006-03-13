@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * The EPRT command allows for the specification of an extended address
@@ -36,7 +36,7 @@ import org.apache.ftpserver.RequestHandler;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class EPRT implements Command {
+class EPRT implements ICommand {
 
     /**
      * Execute command.

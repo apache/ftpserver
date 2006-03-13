@@ -18,10 +18,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.IMessageResource;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.ftpserver.interfaces.IMessageResource;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class HELP implements Command {
+class HELP implements ICommand {
     
     /**
      * Execute command.

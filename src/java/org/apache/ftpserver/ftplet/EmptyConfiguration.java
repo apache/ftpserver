@@ -1,4 +1,4 @@
-// $Id:$
+// $Id$
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 package org.apache.ftpserver.ftplet;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -115,6 +118,13 @@ class EmptyConfiguration implements Configuration {
      */
     public Configuration subset(String param) {
         return this;
+    }
+    
+    /**
+     * Get the keys.
+     */
+    public Iterator getKeys() {
+        return new ArrayList(1).iterator();
     }
 
 }

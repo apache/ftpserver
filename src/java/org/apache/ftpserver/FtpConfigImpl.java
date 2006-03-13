@@ -26,6 +26,7 @@ import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.ICommandFactory;
 import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IDataConnectionConfig;
 import org.apache.ftpserver.interfaces.IFtpConfig;
@@ -54,6 +55,7 @@ class FtpConfigImpl implements IFtpConfig {
     private FileSystemManager fileSystemManager;
     private FtpletContainer ftpletContainer;
     private IFtpStatistics statistics;
+    private ICommandFactory commandFactory;
     
     private Log log;
     
@@ -79,6 +81,7 @@ class FtpConfigImpl implements IFtpConfig {
             userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
             fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
             statistics        = (IFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
+            commandFactory    = (ICommandFactory)       createComponent(conf, "command-factory",     "org.apache.ftpserver.CommandFactory");
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);
@@ -220,6 +223,13 @@ class FtpConfigImpl implements IFtpConfig {
      */
     public IDataConnectionConfig getDataConnectionConfig() {
         return dataConConfig;
+    }
+    
+    /**
+     * Get the command factory.
+     */
+    public ICommandFactory getCommandFactory() {
+        return commandFactory;
     }
     
     /**

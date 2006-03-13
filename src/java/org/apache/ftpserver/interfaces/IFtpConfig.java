@@ -59,6 +59,11 @@ interface IFtpConfig extends FtpConfig {
     IDataConnectionConfig getDataConnectionConfig();
     
     /**
+     * Get the command factory.
+     */
+    ICommandFactory getCommandFactory();
+    
+    /**
      * Release all components.
      */
     void dispose();

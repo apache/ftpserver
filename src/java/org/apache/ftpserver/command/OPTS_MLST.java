@@ -19,12 +19,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * Client-Server listing negotation.
@@ -34,7 +34,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author Birkir A. Barkarson
  */
 public 
-class OPTS_MLST implements Command {
+class OPTS_MLST implements ICommand {
     
     /**
      * Execute command.

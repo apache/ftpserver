@@ -19,11 +19,11 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * <code>MLST &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -33,7 +33,7 @@ import org.apache.ftpserver.RequestHandler;
  * @author Birkir A. Barkarson
  */
 public 
-class MLST implements Command {
+class MLST implements ICommand {
 
     /**
      * Execute command.

@@ -1,4 +1,4 @@
-// $Id$
+// $Id: Command.java 306756 2005-10-06 11:30:03 +0530 (Thu, 06 Oct 2005) rana_b $
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.ftpserver;
+package org.apache.ftpserver.interfaces;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpWriter;
+import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 
 /**
@@ -26,7 +29,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-interface Command {
+interface ICommand {
 
     /**
      * Execute command.

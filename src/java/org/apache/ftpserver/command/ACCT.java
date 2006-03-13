@@ -18,10 +18,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * <code>ACCT &lt;CRLF&gt;</code><br>
@@ -32,7 +32,7 @@ import org.apache.ftpserver.RequestHandler;
  * @author Birkir A. Barkarson
  */
 public 
-class ACCT implements Command {
+class ACCT implements ICommand {
 
     /**
      * Execute command.

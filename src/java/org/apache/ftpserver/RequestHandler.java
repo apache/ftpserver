@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.DataType;
@@ -35,6 +34,8 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.interfaces.ICommand;
+import org.apache.ftpserver.interfaces.ICommandFactory;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IFtpConfig;
@@ -52,8 +53,6 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public 
 class RequestHandler implements IConnection {
-
-    private static final HashMap COMMAND_MAP = new HashMap(64);
     
     private IFtpConfig fconfig;
     private Log log;
@@ -271,7 +270,9 @@ class RequestHandler implements IConnection {
      */
     public void service(FtpRequestImpl request, FtpWriter out) throws IOException, FtpException {
         try {
-            Command command = (Command)COMMAND_MAP.get( request.getCommand() );
+            String commandName = request.getCommand();
+            ICommandFactory commandFactory = fconfig.getCommandFactory();
+            ICommand command = commandFactory.getCommand(commandName);
             if(command != null) {
                 command.execute(this, request, out);
             }
@@ -472,52 +473,5 @@ class RequestHandler implements IConnection {
         
         // set control socket
         controlSocket = ssoc;
-    }
-    
-    /////////////////////////////////////////////////////////////////////
-    static {
-        COMMAND_MAP.put("ABOR", new org.apache.ftpserver.command.ABOR());
-        COMMAND_MAP.put("ACCT", new org.apache.ftpserver.command.ACCT());
-        COMMAND_MAP.put("APPE", new org.apache.ftpserver.command.APPE());
-        COMMAND_MAP.put("AUTH", new org.apache.ftpserver.command.AUTH());
-        COMMAND_MAP.put("CDUP", new org.apache.ftpserver.command.CDUP());
-        COMMAND_MAP.put("CWD",  new org.apache.ftpserver.command.CWD());
-        COMMAND_MAP.put("DELE", new org.apache.ftpserver.command.DELE());
-        COMMAND_MAP.put("EPRT", new org.apache.ftpserver.command.EPRT());
-        COMMAND_MAP.put("EPSV", new org.apache.ftpserver.command.EPSV());
-        COMMAND_MAP.put("FEAT", new org.apache.ftpserver.command.FEAT());
-        COMMAND_MAP.put("HELP", new org.apache.ftpserver.command.HELP());
-        COMMAND_MAP.put("LANG", new org.apache.ftpserver.command.LANG());
-        COMMAND_MAP.put("LIST", new org.apache.ftpserver.command.LIST());
-        COMMAND_MAP.put("MDTM", new org.apache.ftpserver.command.MDTM());
-        COMMAND_MAP.put("MLST", new org.apache.ftpserver.command.MLST());
-        COMMAND_MAP.put("MKD",  new org.apache.ftpserver.command.MKD());
-        COMMAND_MAP.put("MLSD", new org.apache.ftpserver.command.MLSD());
-        COMMAND_MAP.put("MODE", new org.apache.ftpserver.command.MODE());
-        COMMAND_MAP.put("NLST", new org.apache.ftpserver.command.NLST());
-        COMMAND_MAP.put("NOOP", new org.apache.ftpserver.command.NOOP());
-        COMMAND_MAP.put("OPTS", new org.apache.ftpserver.command.OPTS());
-        COMMAND_MAP.put("PASS", new org.apache.ftpserver.command.PASS());
-        COMMAND_MAP.put("PASV", new org.apache.ftpserver.command.PASV());
-        COMMAND_MAP.put("PBSZ", new org.apache.ftpserver.command.PBSZ());
-        COMMAND_MAP.put("PORT", new org.apache.ftpserver.command.PORT());
-        COMMAND_MAP.put("PROT", new org.apache.ftpserver.command.PROT());
-        COMMAND_MAP.put("PWD",  new org.apache.ftpserver.command.PWD());
-        COMMAND_MAP.put("QUIT", new org.apache.ftpserver.command.QUIT());
-        COMMAND_MAP.put("REIN", new org.apache.ftpserver.command.REIN());
-        COMMAND_MAP.put("REST", new org.apache.ftpserver.command.REST());
-        COMMAND_MAP.put("RETR", new org.apache.ftpserver.command.RETR());
-        COMMAND_MAP.put("RMD",  new org.apache.ftpserver.command.RMD());
-        COMMAND_MAP.put("RNFR", new org.apache.ftpserver.command.RNFR());
-        COMMAND_MAP.put("RNTO", new org.apache.ftpserver.command.RNTO());
-        COMMAND_MAP.put("SITE", new org.apache.ftpserver.command.SITE());
-        COMMAND_MAP.put("SIZE", new org.apache.ftpserver.command.SIZE());
-        COMMAND_MAP.put("STAT", new org.apache.ftpserver.command.STAT());
-        COMMAND_MAP.put("STOR", new org.apache.ftpserver.command.STOR());
-        COMMAND_MAP.put("STOU", new org.apache.ftpserver.command.STOU());
-        COMMAND_MAP.put("STRU", new org.apache.ftpserver.command.STRU());
-        COMMAND_MAP.put("SYST", new org.apache.ftpserver.command.SYST());
-        COMMAND_MAP.put("TYPE", new org.apache.ftpserver.command.TYPE());
-        COMMAND_MAP.put("USER", new org.apache.ftpserver.command.USER());
     }
 }

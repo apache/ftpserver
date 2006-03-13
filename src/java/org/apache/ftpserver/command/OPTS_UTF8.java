@@ -18,11 +18,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 
 
 /**
@@ -34,7 +34,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author Birkir A. Barkarson
  */
 public 
-class OPTS_UTF8 implements Command {
+class OPTS_UTF8 implements ICommand {
     
     /**
      * Execute command.

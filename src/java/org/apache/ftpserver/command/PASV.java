@@ -19,12 +19,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * <code>PASV &lt;CRLF&gt;</code><br>
@@ -38,7 +38,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class PASV implements Command {
+class PASV implements ICommand {
 
     /**
      * Execute command

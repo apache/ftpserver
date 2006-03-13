@@ -20,11 +20,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * Displays the FTP server timezone in RFC 822 format.
@@ -32,7 +32,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_ZONE implements Command {
+class SITE_ZONE implements ICommand {
 
     private final static SimpleDateFormat TIMEZONE_FMT = new SimpleDateFormat("Z"); 
 

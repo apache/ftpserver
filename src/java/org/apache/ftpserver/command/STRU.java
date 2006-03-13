@@ -18,11 +18,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Structure;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * <code>STRU &lt;SP&gt; &lt;structure-code&gt; &lt;CRLF&gt;</code><br>
@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.Structure;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class STRU implements Command {
+class STRU implements ICommand {
     
     /**
      * Execute command

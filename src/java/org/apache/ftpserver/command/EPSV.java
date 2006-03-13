@@ -18,11 +18,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.interfaces.ICommand;
 
 /**
  * The EPSV command requests that a server listen on a data port and
@@ -39,7 +39,7 @@ import org.apache.ftpserver.RequestHandler;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class EPSV implements Command {
+class EPSV implements ICommand {
 
     /**
      * Execute command.

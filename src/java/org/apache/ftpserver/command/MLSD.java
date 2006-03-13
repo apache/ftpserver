@@ -22,12 +22,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketException;
 
-import org.apache.ftpserver.Command;
 import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -42,7 +42,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author Birkir A. Barkarson
  */
 public 
-class MLSD implements Command {
+class MLSD implements ICommand {
 
     /**
      * Execute command.
