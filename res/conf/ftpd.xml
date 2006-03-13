@@ -87,6 +87,15 @@
     -->
 
 
+    <!-- Command factory configuration block
+    <command-factory>
+        <command>
+            <command-name>fully-qualified-command-class-name</command-name>
+        </command>
+    </command-factory>
+    -->
+
+
     <!-- IP restrictor configuration block
     <ip-restrictor>
         <class>org.apache.ftpserver.iprestrictor.FileIpRestrictor</class>
