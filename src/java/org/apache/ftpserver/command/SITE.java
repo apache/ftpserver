@@ -86,7 +86,7 @@ class SITE implements ICommand {
             }
             else {
                 request.resetState();
-                out.send(502, "SITE.not.implemented", argument);
+                out.send(502, "SITE", argument);
             }
         }
         catch(Exception ex) {
