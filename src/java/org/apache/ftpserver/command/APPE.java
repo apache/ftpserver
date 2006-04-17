@@ -155,7 +155,7 @@ class APPE implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "STOR", fileName);
+                out.send(226, "APPE", fileName);
                 
                 // call Ftplet.onAppendEnd() method
                 ftpletRet = ftpletContainer.onAppendEnd(request, out);
