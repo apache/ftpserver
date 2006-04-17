@@ -18,7 +18,10 @@ package org.apache.ftpserver.gui;
 
 import java.util.Vector;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.DateUtils;
@@ -29,7 +32,7 @@ import org.apache.ftpserver.util.DateUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>.
  */
 public
-class FtpDirectoryTableModel extends AbstractTableModel {
+class FtpDirectoryTableModel implements TableModel {
     
     private static final long serialVersionUID = 2468107659374857692L;
     
@@ -39,7 +42,7 @@ class FtpDirectoryTableModel extends AbstractTableModel {
                                                "Time"};    
 
     private Vector entries = new Vector();
-    
+    private EventListenerList listeners = new EventListenerList();
          
     /**
      * Get column class - always string
@@ -151,15 +154,49 @@ class FtpDirectoryTableModel extends AbstractTableModel {
             entries.add(entry);
             ++sz;
         }
-        fireTableRowsInserted(sz, sz);
-    }  
+        fireTableChanged(new TableModelEvent(FtpDirectoryTableModel.this, 
+                                             sz, 
+                                             sz,
+                                             TableModelEvent.ALL_COLUMNS, 
+                                             TableModelEvent.INSERT));
+    }
     
     /**
      * Remove all entries
      */
     public void clear() {
         entries.clear();
-        fireTableDataChanged();
+        fireTableChanged(new TableModelEvent(this));
+    }
+    
+    /**
+     * Adds a listener to the list that's notified each time a change
+     * to the data model occurs.
+     */
+    public void addTableModelListener(TableModelListener l) {
+        listeners.add(TableModelListener.class, l);
+    }
+
+    /**
+     * Removes a listener from the list that's notified each time a
+     * change to the data model occurs.
+     */
+    public void removeTableModelListener(TableModelListener l) {
+        listeners.remove(TableModelListener.class, l);
+    }
+    
+    /**
+     * Forwards the given notification event to all
+     * <code>TableModelListeners</code> that registered
+     * themselves as listeners for this table model.
+     */
+    private void fireTableChanged(TableModelEvent e) {
+        Object[] listenerArr = listeners.getListenerList();
+        for (int i = listenerArr.length-2; i>=0; i-=2) {
+            if (listenerArr[i]==TableModelListener.class) {
+                ((TableModelListener)listenerArr[i+1]).tableChanged(e);
+            }
+        }
     }
     
     //////////////////////////////////////////////////////////

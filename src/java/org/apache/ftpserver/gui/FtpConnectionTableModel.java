@@ -22,12 +22,16 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.SwingUtilities;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
 import org.apache.ftpserver.interfaces.IConnection;
+import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.util.DateUtils;
 
@@ -38,23 +42,16 @@ import org.apache.ftpserver.util.DateUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>.
  */
 public
-class FtpConnectionTableModel extends AbstractTableModel 
-                              implements ConnectionManagerObserver {
+class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     
     private static final long serialVersionUID = -6586674924776468079L;
     private final static String[] COL_NAMES = {"User", 
                                                "Login Time", 
                                                "Last Access Time",    
                                                "IP"};
-    private List connections;
+    private List connections = new Vector();
     private IFtpConfig fonfig;
-    
-    /**
-     * Constructor - initialize user list
-     */
-    public FtpConnectionTableModel() {
-        connections = new Vector();
-    }
+    private EventListenerList listeners = new EventListenerList();
     
     /**
      * Reload the model.
@@ -62,13 +59,14 @@ class FtpConnectionTableModel extends AbstractTableModel
     public void refresh(IFtpConfig cfg) {
         fonfig = cfg;
         if (fonfig != null) {
-            connections = fonfig.getConnectionManager().getAllConnections();
-            fonfig.getConnectionManager().setObserver(this);
+            IConnectionManager conManager = fonfig.getConnectionManager();
+            connections = conManager.getAllConnections();
+            conManager.setObserver(this);
         }
         else {
             connections.clear();
         }
-        fireTableDataChanged();
+        fireTableChanged(new TableModelEvent(this));
     }
      
     /**
@@ -133,7 +131,6 @@ class FtpConnectionTableModel extends AbstractTableModel
         
         // error check
         String retVal = "";
-        
         IConnection thisCon = null;
         if (row < connections.size()) {
             thisCon = (IConnection)connections.get(row);
@@ -141,7 +138,12 @@ class FtpConnectionTableModel extends AbstractTableModel
         if (thisCon == null) {
             return retVal;
         }
+        
         FtpRequest request = thisCon.getRequest();
+        if(request == null) {
+            return retVal;
+        }
+        
         User user = request.getUser();
         InetAddress addr = null;
         Date date = null;
@@ -189,6 +191,36 @@ class FtpConnectionTableModel extends AbstractTableModel
         return null;
     }
      
+    /**
+     * Adds a listener to the list that's notified each time a change
+     * to the data model occurs.
+     */
+    public void addTableModelListener(TableModelListener l) {
+        listeners.add(TableModelListener.class, l);
+    }
+
+    /**
+     * Removes a listener from the list that's notified each time a
+     * change to the data model occurs.
+     */
+    public void removeTableModelListener(TableModelListener l) {
+        listeners.remove(TableModelListener.class, l);
+    }
+    
+    /**
+     * Forwards the given notification event to all
+     * <code>TableModelListeners</code> that registered
+     * themselves as listeners for this table model.
+     */
+    private void fireTableChanged(TableModelEvent e) {
+        Object[] listenerArr = listeners.getListenerList();
+        for (int i = listenerArr.length-2; i>=0; i-=2) {
+            if (listenerArr[i]==TableModelListener.class) {
+                ((TableModelListener)listenerArr[i+1]).tableChanged(e);
+            }
+        }
+    }
+    
     /////////////////////////// Observer Methods ///////////////////////////
     /**
      * Add a new connection
@@ -198,7 +230,11 @@ class FtpConnectionTableModel extends AbstractTableModel
             public void run() { 
                 connections.add(con);
                 int sz = connections.size();
-                fireTableRowsInserted(sz, sz);        
+                fireTableChanged(new TableModelEvent(FtpConnectionTableModel.this, 
+                                                     sz, 
+                                                     sz,
+                                                     TableModelEvent.ALL_COLUMNS, 
+                                                     TableModelEvent.INSERT));        
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -213,7 +249,11 @@ class FtpConnectionTableModel extends AbstractTableModel
                 int index = connections.indexOf(con);
                 if (index != -1) {
                     connections.remove(index);
-                    fireTableRowsDeleted(index, index);
+                    fireTableChanged(new TableModelEvent(FtpConnectionTableModel.this, 
+                                                         index, 
+                                                         index,
+                                                         TableModelEvent.ALL_COLUMNS, 
+                                                         TableModelEvent.DELETE));
                 }        
             }
         };
@@ -227,12 +267,15 @@ class FtpConnectionTableModel extends AbstractTableModel
         Runnable runnable = new Runnable() {
             public void run() { 
                 int index = connections.indexOf(con);
-                if(index != -1) {       
-                    fireTableRowsUpdated(index, index);
+                if(index != -1) {
+                    fireTableChanged(new TableModelEvent(FtpConnectionTableModel.this, 
+                                                         index, 
+                                                         index,
+                                                         TableModelEvent.ALL_COLUMNS, 
+                                                         TableModelEvent.UPDATE));
                 }        
             }
         };
         SwingUtilities.invokeLater(runnable);
     } 
-
 }    
