@@ -25,7 +25,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -485,10 +484,10 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             BaseUser user = new BaseUser();
             user.setName(userName);
             if(setPassword(user)) {
-                user.setHomeDirectory(new File(directoryTxt.getText()).getCanonicalPath());
+                user.setHomeDirectory(directoryTxt.getText());
                 user.setEnabled(enabledChkBox.isSelected());
                 user.setWritePermission(writeChkBox.isSelected());
-                user.setMaxIdleTime(getMaxIdleTime(uploadLst));
+                user.setMaxIdleTime(getMaxIdleTime(idleLst));
                 user.setMaxUploadRate(getBytesTransferRate(uploadLst));
                 user.setMaxDownloadRate(getBytesTransferRate(downloadLst));
                 fconfig.getUserManager().save(user);
