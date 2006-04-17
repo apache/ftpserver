@@ -37,11 +37,13 @@ class DataConnectionConfig implements IDataConnectionConfig {
     private Log log;
     private LogFactory logFactory;
     
-    private InetAddress pasvAddress;
-    private int pasvPort[][];
+    private boolean activeEnable;
+    private boolean activeIpCheck;
+    private InetAddress activeLocalAddress;
+    private int activeLocalPort;
     
-    private boolean portEnable;
-    private boolean portIpCheck;
+    private InetAddress passiveAddress;
+    private int passivePorts[][];
     
     private ISsl ssl;
 
@@ -61,29 +63,42 @@ class DataConnectionConfig implements IDataConnectionConfig {
         
         try {
             
-            // get passive address
-            String pasvAddress = conf.getString("pasv-address", null);
+            // get the active data connection parameters
+            Configuration activeConf = conf.subset("active");
+            activeEnable = activeConf.getBoolean("enable", true);
+            if(activeEnable) {
+                String portAddress = activeConf.getString("local-address", null);
+                if(portAddress == null) {
+                    activeLocalAddress = InetAddress.getLocalHost();
+                }
+                else {
+                    activeLocalAddress = InetAddress.getByName(portAddress);
+                }
+                
+                activeLocalPort = activeConf.getInt("local-port", 0);
+                activeIpCheck = activeConf.getBoolean("ip-check", false);
+            }
+            
+            // get the passive data connection parameters
+            Configuration passiveConf = conf.subset("passive");
+            
+            String pasvAddress = passiveConf.getString("address", null);
             if(pasvAddress == null) {
-                this.pasvAddress = InetAddress.getLocalHost();
+                passiveAddress = InetAddress.getLocalHost();
             }
             else {
-                this.pasvAddress = InetAddress.getByName(pasvAddress);
+                passiveAddress = InetAddress.getByName(pasvAddress);
             }
             
-            // get PASV ports
-            String pasvPorts = conf.getString("pasv-port", "0");
+            String pasvPorts = passiveConf.getString("ports", "0");
             StringTokenizer st = new StringTokenizer(pasvPorts, " ,;\t\n\r\f");
-            pasvPort = new int[st.countTokens()][2];
-            for(int i=0; i<pasvPort.length; i++) {
-                pasvPort[i][0] = Integer.parseInt(st.nextToken());
-                pasvPort[i][1] = 0;
+            passivePorts = new int[st.countTokens()][2];
+            for(int i=0; i<passivePorts.length; i++) {
+                passivePorts[i][0] = Integer.parseInt(st.nextToken());
+                passivePorts[i][1] = 0;
             }
             
-            // get PORT parameters
-            portEnable = conf.getBoolean("port-enable", true);
-            portIpCheck = conf.getBoolean("port-ip-check", false);
-            
-            // create SSL component
+            // get SSL parameters if available 
             Configuration sslConf = conf.subset("ssl");
             if(!sslConf.isEmpty()) {
                 ssl = (ISsl)Class.forName("org.apache.ftpserver.ssl.Ssl").newInstance();
@@ -99,33 +114,40 @@ class DataConnectionConfig implements IDataConnectionConfig {
             throw new FtpException("DataConnectionConfig.configure()", ex);
         }
     }
-    
+
     /**
      * Is PORT enabled?
      */
-    public boolean isPortEnabled() {
-        return portEnable;
+    public boolean isActiveEnabled() {
+        return activeEnable;
     }
     
     /**
      * Check the PORT IP?
      */
-    public boolean isPortIpCheck() {
-        return portIpCheck;
+    public boolean isActiveIpCheck() {
+        return activeIpCheck;
+    }
+    
+    /**
+     * Get the local address for active mode data transfer.
+     */
+    public InetAddress getActiveLocalAddress() {
+        return activeLocalAddress;
+    }
+    
+    /**
+     * Get the active local port number.
+     */
+    public int getActiveLocalPort() {
+        return activeLocalPort;
     }
     
     /**
      * Get passive host.
      */
     public InetAddress getPassiveAddress() {
-        return pasvAddress;
-    }
-    
-    /**
-     * Get SSL component.
-     */
-    public ISsl getSSL() {
-        return ssl;
+        return passiveAddress;
     }
     
     /**
@@ -140,12 +162,12 @@ class DataConnectionConfig implements IDataConnectionConfig {
         while( (dataPort==-1) && (--loopTimes >= 0)  && (!currThread.isInterrupted()) ) {
 
             // search for a free port            
-            for(int i=0; i<pasvPort.length; i++) {
-                if(pasvPort[i][1] == 0) {
-                    if(pasvPort[i][0] != 0) {
-                        pasvPort[i][1] = 1;
+            for(int i=0; i<passivePorts.length; i++) {
+                if(passivePorts[i][1] == 0) {
+                    if(passivePorts[i][0] != 0) {
+                        passivePorts[i][1] = 1;
                     }
-                    dataPort = pasvPort[i][0];
+                    dataPort = passivePorts[i][0];
                     break;
                 }
             }
@@ -167,13 +189,20 @@ class DataConnectionConfig implements IDataConnectionConfig {
      * Release data port
      */
     public synchronized void releasePassivePort(int port) {
-        for(int i=0; i<pasvPort.length; i++) {
-            if(pasvPort[i][0] == port) {
-                pasvPort[i][1] = 0;
+        for(int i=0; i<passivePorts.length; i++) {
+            if(passivePorts[i][0] == port) {
+                passivePorts[i][1] = 0;
                 break;
             }
         }
         notify();
+    }
+    
+    /**
+     * Get SSL component.
+     */
+    public ISsl getSSL() {
+        return ssl;
     }
     
     /**

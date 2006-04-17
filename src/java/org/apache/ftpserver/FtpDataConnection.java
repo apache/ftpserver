@@ -22,6 +22,7 @@ import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.IDataConnectionConfig;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.ISsl;
 
@@ -175,17 +176,31 @@ class FtpDataConnection {
 
         // get socket depending on the selection
         dataSoc = null;
+        IDataConnectionConfig dataConfig = fconfig.getDataConnectionConfig();
         try {
             if(isPort) {
+                int localPort = dataConfig.getActiveLocalPort();
                 if(secure) {
-                    ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
+                    ISsl ssl = dataConfig.getSSL();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
                     }
-                    dataSoc = ssl.createSocket(null, address, port, false);
+                    if(localPort == 0) {
+                        dataSoc = ssl.createSocket(null, address, port, false);
+                    }
+                    else {
+                        InetAddress localAddr = dataConfig.getActiveLocalAddress();
+                        dataSoc = ssl.createSocket(null, address, port, localAddr, localPort, false);
+                    }
                 }
                 else {
-                    dataSoc = new Socket(address, port);  
+                    if(localPort == 0) {
+                        dataSoc = new Socket(address, port);  
+                    }
+                    else {
+                        InetAddress localAddr = dataConfig.getActiveLocalAddress();
+                        dataSoc = new Socket(address, port, localAddr, localPort);
+                    }
                 }
             }
             else if(isPasv) {
