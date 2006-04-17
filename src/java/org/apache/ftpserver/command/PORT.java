@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.interfaces.ICommand;
+import org.apache.ftpserver.interfaces.IDataConnectionConfig;
 
 /**
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>
@@ -72,7 +73,8 @@ class PORT implements ICommand {
         }
         
         // is port enabled
-        if(!handler.getConfig().getDataConnectionConfig().isPortEnabled()) {
+        IDataConnectionConfig dataCfg = handler.getConfig().getDataConnectionConfig();
+        if(!dataCfg.isActiveEnabled()) {
             out.send(510, "PORT.disabled", null);
             return;
         } 
@@ -90,7 +92,7 @@ class PORT implements ICommand {
         }
         
         // check IP
-        if(handler.getConfig().getDataConnectionConfig().isPortIpCheck()) {
+        if(dataCfg.isActiveIpCheck()) {
             InetAddress clientAddr = handler.getRequest().getRemoteAddress();
             if(!dataAddr.equals(clientAddr)) {
                 out.send(510, "PORT.mismatch", null);
