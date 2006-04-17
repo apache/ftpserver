@@ -230,6 +230,30 @@ class Ssl implements ISsl {
     } 
     
     /**
+     * Create a secure socket.
+     */
+    public Socket createSocket(String protocol,
+                               InetAddress host,
+                               int port,
+                               InetAddress localhost,
+                               int localport,
+                               boolean clientMode) throws Exception {
+        
+        // get socket factory
+        SSLContext ctx = getSSLContext(protocol);
+        SSLSocketFactory socFactory = ctx.getSocketFactory();
+        
+        // create socket
+        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(host, port, localhost, localport);
+        ssoc.setUseClientMode(clientMode);
+        
+        // initialize socket
+        String cipherSuites[] = ssoc.getSupportedCipherSuites();
+        ssoc.setEnabledCipherSuites(cipherSuites);
+        return ssoc;
+    }
+    
+    /**
      * Dispose - does nothing.
      */
     public void dispose() {
