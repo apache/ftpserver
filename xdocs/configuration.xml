@@ -104,13 +104,21 @@ config
   |
   |---- data-connection
   |       |
-  |       |---- <b><a href="#config.data-connection.pasv-address">pasv-address</a></b> (&lt;none&gt;)
+  |       |---- active
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.enable">enable</a></b> (true)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.local-address">local-address</a></b> (&lt;none&gt;)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.local-port">local-port</a></b> (0)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.ip-check">ip-check</a></b> (false)
   |       |
-  |       |---- <b><a href="#config.data-connection.pasv-port">pasv-port</a></b> (0)
-  |       |
-  |       |---- <b><a href="#config.data-connection.port-enable">port-enable</a></b> (true)
-  |       |
-  |       |---- <b><a href="#config.data-connection.port-ip-check">port-ip-check</a></b> (false)
+  |       |---- passive
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.passive.address">address</a></b> (&lt;none&gt;)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.passive.ports">ports</a></b> (0)
   |       |
   |       |---- ssl
   |               |
@@ -277,22 +285,33 @@ config
                     <td>Key password. The default value is password.</td>
                 </tr>
                 <tr>
-                    <td><a name="config.data-connection.pasv-address">config.data-connection.pasv-address</a></td>
-                    <td>FTP passive (PASV) address The default value is localhost.</td>
-                </tr>
-                <tr>
-                    <td><a name="config.data-connection.pasv-port">config.data-connection.pasv-port</a></td>
-                    <td>Allowed passive ports (comma separated).
-                        0 means any free port. The default value is 0.
-                    </td>
-                </tr>
-                <tr>
-                    <td><a name="config.data-connection.port-enable">config.data-connection.port-enable</a></td>
+                    <td><a name="config.data-connection.active.enable">config.data-connection.active.enable</a></td>
                     <td>PORT data connection enabled. The default value is true.</td>
                 </tr>
                 <tr>
-                    <td><a name="config.data-connection.port-ip-check">config.data-connection.port-ip-check</a></td>
+                    <td><a name="config.data-connection.active.local-address">config.data-connection.active.local-address</a></td>
+                    <td>The localhost address used when local port specified in active data transfer.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.local-port">config.data-connection.active.local-port</a></td>
+                    <td>The local port to be used during active data transfer. According to the
+                        specifications, it should be 20. The default value is 0. It means that any free
+                        port will be used.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.ip-check">config.data-connection.active.ip-check</a></td>
                     <td>Check the PORT IP with the client IP. The default value is false.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.passive.address">config.data-connection.passive.address</a></td>
+                    <td>FTP passive (PASV) address The default value is localhost.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.passive.ports">config.data-connection.passive.ports</a></td>
+                    <td>Allowed passive ports (comma separated).
+                        0 means any free port. The default value is 0.
+                    </td>
                 </tr>
                 <tr>
                     <td><a name="config.data-connection.ssl.keystore-file">config.data-connection.ssl.keystore-file</a></td>
