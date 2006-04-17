@@ -44,10 +44,16 @@
     <!-- Data connection configuration. If you want to support secure
          data connection, please specify the ssl block.
     <data-connection>
-        <pasv-address>localhost</pasv-address>
-        <pasv-port>0</pasv-port>
-        <port-enable>true</port-enable>
-        <port-ip-check>false</port-ip-check>
+        <active>
+            <enable>true</enable>
+            <local-address>localhost<local-address>
+            <local-port>20</local-port>
+            <ip-check>false<ip-check>
+        </active>
+        <passive>
+            <address>localhost</address>
+            <ports>0</ports>
+        </passive>
         <ssl>
             <keystore-file>./res/.keystore</keystore-file>
             <keystore-password>password</keystore-password>
