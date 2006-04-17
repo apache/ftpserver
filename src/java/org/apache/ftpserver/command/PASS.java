@@ -184,7 +184,7 @@ class PASS implements ICommand {
         reqUser.setName(user.getName());
         reqUser.setEnabled(user.getEnabled());
         reqUser.setHomeDirectory(user.getHomeDirectory());
-        reqUser.setMaxDownloadRate(user.getMaxDownloadRate());
+        reqUser.setMaxUploadRate(user.getMaxUploadRate());
         reqUser.setMaxDownloadRate(user.getMaxDownloadRate());
         reqUser.setMaxIdleTime(user.getMaxIdleTime());
         reqUser.setWritePermission(user.getWritePermission());
