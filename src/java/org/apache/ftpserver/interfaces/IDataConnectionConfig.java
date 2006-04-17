@@ -29,17 +29,27 @@ public
 interface IDataConnectionConfig extends Component {
 
     /**
-     * Is PORT data connection enabled?
+     * Is active data connection enabled?
      */
-    boolean isPortEnabled();
+    boolean isActiveEnabled();
     
     /**
-     * Check the PORT IP?
+     * Check the PORT IP with the client IP?
      */
-    boolean isPortIpCheck();
+    boolean isActiveIpCheck();
     
     /**
-     * Get passive address.
+     * Get the active data connection local host.
+     */
+    InetAddress getActiveLocalAddress();
+    
+    /**
+     * Get the active data connection local port.
+     */
+    int getActiveLocalPort(); 
+    
+    /**
+     * Get passive server address.
      */
     InetAddress getPassiveAddress();
     

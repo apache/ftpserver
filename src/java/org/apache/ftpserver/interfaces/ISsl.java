@@ -48,7 +48,17 @@ interface ISsl extends Component {
      * Create a secure socket.
      */
     Socket createSocket(String protocol,
-                        InetAddress addr, 
+                        InetAddress host, 
                         int port,
+                        boolean clientMode) throws Exception;
+    
+    /**
+     * Create a secure socket.
+     */
+    Socket createSocket(String protocol,
+                        InetAddress host,
+                        int port,
+                        InetAddress localhost,
+                        int localport,
                         boolean clientMode) throws Exception;
 }
