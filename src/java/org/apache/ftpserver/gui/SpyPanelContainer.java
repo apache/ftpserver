@@ -123,17 +123,13 @@ class SpyPanelContainer extends PluginPanel {
     public void refresh(IFtpConfig ftpConfig) {
         fconfig = ftpConfig;
         int tabCount = tabbedPane.getTabCount();
-        for(int i=0; i<tabCount; i++) {
+        for(int i=tabCount; --i>=0; ) {
             Component tabComp = tabbedPane.getComponentAt(i);
             if ( (tabComp != null) && (tabComp != defaultComp) ) {
                 ((SpyPanel)tabComp).closePane();
-                tabbedPane.remove(tabComp);
             }
         }
-        
-        tabbedPane.addTab("Spy", defaultComp);
     }
-
     
     /** 
      * This can be displayed only when the server is running.
@@ -142,7 +138,6 @@ class SpyPanelContainer extends PluginPanel {
         return (fconfig != null);
     }
 
-    
     /**
      * Get the string representation.
      */
