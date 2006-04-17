@@ -411,7 +411,8 @@ class RequestHandler implements IConnection {
         
         while(true) {
             
-            // if current rate exceeds the max rate, sleep for 50ms
+            // if current rate exceeds the max rate, sleep for 50ms 
+            // and again check the current transfer rate
             if(maxRate > 0) {
                 
                 // prevent "divide by zero" exception
@@ -424,6 +425,7 @@ class RequestHandler implements IConnection {
                 long currRate = (transferredSize*1000L)/interval;
                 if(currRate > maxRate) {
                     try { Thread.sleep(50); } catch(InterruptedException ex) {break;}
+                    continue;
                 }
             }
             
