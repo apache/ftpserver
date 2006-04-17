@@ -125,6 +125,8 @@
                         <td>Client login notification method. This will be called after the
                             user authentication. In this case the FTP server has already sent
                             the login OK (230) reply. This is called during FTP PASS request.
+                            The FTP session will be disconnected in the return value is 
+                            FtpletEnum.RET_DISCONNECT.
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +135,10 @@
                             server will not check anything like file existance or permission.
                             The requested file name can be get from request argument. We can
                             get the file object from the request file system view. This is
-                            called in DELE FTP command.
+                            called in DELE FTP command. The method should send some responses
+                            (like 250, 450, 550) in case of RET_SKIP return value.
+                            In this case, the server will skip the command processing and the 
+                            ftplet has to send appropriate response values.
                         </td>
                     </tr>
                     <tr>
@@ -150,7 +155,13 @@
                         <td>This method will be called before the file upload. The file name
                             can be get from the request argument. We can get the data input
                             stream from request. This will be called before the permission
-                            check. This is called during STOR command.
+                            check. This is called during STOR command. If the method returns 
+                            RET_SKIP, it has to send responses before and after processing.
+                            For example, before opening the data input stream, the method has 
+                            to notify the client with a response code 150. Similarly, after the 
+                            data transfer, the method has to notify the client with a response 
+                            code 226. In case of any error, the method should send different
+                            response codes like 450, 425, 426, 551.
                         </td>
                     </tr>
                     <tr>
@@ -168,7 +179,13 @@
                             RETR command. This will be called before the file download. We
                             can get the file name argument from request. Similarly, the
                             data output stream can be get from the request. This will be called
-                            before the file existance and permissoin check.
+                            before the file existance and permissoin check. If the method returns 
+                            RET_SKIP, it has to send responses before and after processing.
+                            For example, before opening the data output stream, the method has 
+                            to notify the client with a response code 150. Similarly, after the 
+                            data transfer, the method has to notify the client with a response 
+                            code 226. In case of any error, the method should send different
+                            response codes like 450, 425, 426, 551.
                         </td>
                     </tr>
                     <tr>
@@ -185,7 +202,9 @@
                         <td>Before directory deletion this method will be called during RMD
                             command. Before this FTP server will not check anything like
                             directory existance or permission. The requested directory name
-                            can be get from request argument.
+                            can be get from request argument. If the method returns the RET_SKIP,
+                            it has to send appropriate response codes to clients like 250, 450, 
+                            550.
                         </td>
                     </tr>
                     <tr>
@@ -201,7 +220,8 @@
                         <td>Before directory creation this method will be called during MKD
                             command. Before this FTP server will not check anything like
                             directory existance or permission. The requested directory name
-                            can be get from request argument.
+                            can be get from request argument. If it returns RET_SKIP, it has to
+                            send appropriate response codes to clients like 250, 550.
                         </td>
                     </tr>
                     <tr>
@@ -217,7 +237,13 @@
                         <td>This is file append request notification method called in APPE
                             command. The file name can be get from the request argument.
                             We can get the data input stream from request. This will be called
-                            before the permission check.
+                            before the permission check. If the method returns 
+                            RET_SKIP, it has to send responses before and after processing.
+                            For example, before opening the data input stream, the method has 
+                            to notify the client with a response code 150. Similarly, after the 
+                            data transfer, the method has to notify the client with a response 
+                            code 226. In case of any error, the method should send different
+                            response codes like 450, 425, 426, 551. 
                         </td>
                     </tr>
                     <tr>
@@ -234,7 +260,13 @@
                         <td>onUploadUniqueStart</td>
                         <td>This is unique file create request notification method called in
                             STOU command. We can get the data input stream from request.
-                            This will be called before the permission check.
+                            This will be called before the permission check. If the method 
+                            returns RET_SKIP, it has to send responses before and after processing.
+                            For example, before opening the data input stream, the method has 
+                            to notify the client with a response code 150. Similarly, after the 
+                            data transfer, the method has to notify the client with a response 
+                            code 226. In case of any error, the method should send different
+                            response codes like 450, 425, 426, 551. 
                         </td>
                     </tr>
                     <tr>
@@ -249,10 +281,11 @@
                     </tr>
                     <tr>
                         <td>onRenameStart</td>
-                        <td>This is file rename start notification method called in RNFR
+                        <td>This is file rename start notification method called in RNTO
                             command. This will be called before the file existance or
                             permission check. The &quot;rename from&quot; file object
-                            can be get from request object.
+                            can be get from request object. If it returns RET_SKIP, it has to 
+                            send appropriate response codes like 503, 553, 250. 
                         </td>
                     </tr>
                     <tr>
@@ -273,6 +306,350 @@
                             to implement custom SITE command. If this method returns RET_SKIP
                             or RET_DISCONNECT, the existing SITE commands will not be executed.
                         </td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="Response Codes">
+                <p>This section gives an overview on different response codes which
+                   might be useful in developing custom ftplet. These commands might
+                   be used when the ftplet method return value is RET_SKIP.
+                </p>
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Response Code</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>onConnect</td>
+                        <td>220</td>
+                        <td>Service ready for new user.</td>
+                    </tr>
+                    <tr>
+                        <td>onConnect</td>
+                        <td>530</td>
+                        <td>No server access from the IP.</td>
+                    </tr>
+                    <tr>
+                        <td>onConnect</td>
+                        <td>530</td>
+                        <td>Maximum server connection has been reached.</td>
+                    </tr>
+                    <tr>
+                        <td>onDisconnect</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onLogin</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onDeleteStart</td>
+                        <td>250</td>
+                        <td>Requested file action okay</td>
+                    </tr>
+                    <tr>
+                        <td>onDeleteStart</td>
+                        <td>450</td>
+                        <td>No permission to delete.</td>
+                    </tr>
+                    <tr>
+                        <td>onDeleteStart</td>
+                        <td>550</td>
+                        <td>Not a valid file.</td>
+                    </tr>
+                    <tr>
+                        <td>onDeleteStart</td>
+                        <td>450</td>
+                        <td>Can't delete file.</td>
+                    </tr>
+                    <tr>
+                        <td>onDeleteEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>150</td>
+                        <td>File status okay; about to open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>226</td>
+                        <td>Transfer complete.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>550</td>
+                        <td>Invalid path.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>550</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>425</td>
+                        <td>Can't open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>426</td>
+                        <td>Data connection error.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadStart</td>
+                        <td>551</td>
+                        <td>Error on output file.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>150</td>
+                        <td>File status okay; about to open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>226</td>
+                        <td>Transfer complete.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>550</td>
+                        <td>No such file or directory.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>550</td>
+                        <td>Not a plain file.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>550</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>425</td>
+                        <td>Can't open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>426</td>
+                        <td>Data connection error.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadStart</td>
+                        <td>551</td>
+                        <td>Error on input file.</td>
+                    </tr>
+                    <tr>
+                        <td>onDownloadEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onRmdirStart</td>
+                        <td>250</td>
+                        <td>Directory removed.</td>
+                    </tr>
+                    <tr>
+                        <td>onRmdirStart</td>
+                        <td>550</td>
+                        <td>Not a valid directory.</td>
+                    </tr>
+                    <tr>
+                        <td>onRmdirStart</td>
+                        <td>550</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onRmdirStart</td>
+                        <td>550</td>
+                        <td>Can't remove directory.</td>
+                    </tr>
+                    <tr>
+                        <td>onRmdirEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirStart</td>
+                        <td>250</td>
+                        <td>Directory created.</td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirStart</td>
+                        <td>550</td>
+                        <td>Not a valid file.</td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirStart</td>
+                        <td>550</td>
+                        <td>Permission denied</td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirStart</td>
+                        <td>550</td>
+                        <td>Directory already exists.</td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirStart</td>
+                        <td>550</td>
+                        <td>Can't create directory.</td>
+                    </tr>
+                    <tr>
+                        <td>onMkdirEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>150</td>
+                        <td>File status okay; about to open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>226</td>
+                        <td>Transfer complete.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>550</td>
+                        <td>Not a plain file.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>550</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>425</td>
+                        <td>Can't open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>426</td>
+                        <td>Data connection error.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendStart</td>
+                        <td>551</td>
+                        <td>Error on output file.</td>
+                    </tr>
+                    <tr>
+                        <td>onAppendEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>150</td>
+                        <td>File status okay; about to open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>250</td>
+                        <td>filename: Transfer started.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>226</td>
+                        <td>filename: Transfer complete.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>550</td>
+                        <td>Unique file name error.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>550</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>425</td>
+                        <td>Can't open data connection.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>426</td>
+                        <td>Data connection error.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueStart</td>
+                        <td>551</td>
+                        <td>Error on output file.</td>
+                    </tr>
+                    <tr>
+                        <td>onUploadUniqueEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>250</td>
+                        <td>Requested file action okay, file renamed.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>503</td>
+                        <td>Can't find the file which has to be renamed.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>553</td>
+                        <td>Not a valid file name.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>553</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>553</td>
+                        <td>No such file or directory.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameStart</td>
+                        <td>553</td>
+                        <td>Can't rename file.</td>
+                    </tr>
+                    <tr>
+                        <td>onRenameEnd</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>onSite</td>
+                        <td>200</td>
+                        <td>Command SITE okay.</td>
+                    </tr>
+                    <tr>
+                        <td>onSite</td>
+                        <td>530</td>
+                        <td>Permission denied.</td>
+                    </tr>
+                    <tr>
+                        <td>onSite</td>
+                        <td>502</td>
+                        <td>Not implemented.</td>
+                    </tr>
+                    <tr>
+                        <td>onSite</td>
+                        <td>500</td>
+                        <td>Execution failed.</td>
                     </tr>
                 </table>
             </subsection>
