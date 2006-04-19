@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: $
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -111,8 +111,6 @@ class CommandFactory implements ICommandFactory {
         while(cmds.hasNext()) {
             String cmdName = (String)cmds.next();
             String cmdClass = sconf.getString(cmdName, null);
-            System.out.println(cmdName + "::" + cmdClass);
-            
             if(cmdClass == null || cmdClass.equals("")) {
                 throw new FtpException("Command not found :: " + cmdName);
             }
