@@ -461,9 +461,9 @@ class RequestHandler implements IConnection {
      * Create secure socket.
      */
     public void createSecureSocket(String protocol) throws Exception {
-        
+
         // change socket to SSL socket
-        ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
+        ISsl ssl = fconfig.getSocketFactory().getSSL();
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }
