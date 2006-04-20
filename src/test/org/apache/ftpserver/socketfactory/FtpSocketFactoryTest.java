@@ -39,8 +39,8 @@ public class FtpSocketFactoryTest extends TestCase {
     private Properties getProperties() {
         Properties properties = new Properties();
         ftpSocketFactory2 = new FtpSocketFactory();
-        properties.setProperty("address", "localhost");
-        properties.setProperty("port", "8021");
+        properties.setProperty("config.address", "localhost");
+        properties.setProperty("config.port", "8021");
         return properties;
     }
 
