@@ -122,7 +122,7 @@ class RootPanel extends PluginPanel {
         
         // file text field
         cfgFileTxt = new JTextField();
-        cfgFileTxt.setText("./res/conf/ftpd.properties");
+        cfgFileTxt.setText("../res/conf/ftpd.properties");
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridx = 1;
         gc.gridy = yindex;
