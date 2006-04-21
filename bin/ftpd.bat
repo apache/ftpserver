@@ -28,7 +28,7 @@ rem ----- Create CLASSPATH --------------------------------------------
 set FTPD_CLASSPATH=%CLASSPATH%;%FTPD_HOME%\common\classes;%FTPD_HOME%\target\classes;
 cd /d "%FTPD_HOME%\common\lib"
 for %%i in ("*.jar") do call "%FTPD_HOME%\bin\appendcp.bat" "%FTPD_HOME%\common\lib\%%i"
-cd /d %FTPD_HOME%
+cd /d %FTPD_HOME%\bin
 
 rem ----- call java.. ---------------------------------------------------
 set MAIN_CLASS=org.apache.ftpserver.commandline.CommandLine
