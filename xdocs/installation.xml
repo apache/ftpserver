@@ -31,26 +31,26 @@
                The zip file includes sample configuration files (properties and xml).
             </p>
             <ul>
-                <li>Properties configuration file : ./res/conf/ftpd.properties</li>
-                <li>XML configuration file : ./res/conf/ftpd.xml</li>
+                <li>Properties configuration file : &lt;INSTALL_DIR&gt;/res/conf/ftpd.properties</li>
+                <li>XML configuration file : &lt;INSTALL_DIR&gt;/res/conf/ftpd.xml</li>
             </ul>
             <p>If you want to use your own jar files, you can put those jar files
                in system CLASSPATH or copy those jar files in the &lt;INSTALL_DIR&gt;/common/lib
                directory.
             </p>
-            <p>If you want to run it using Swing UI. Execute the script
-               &lt;INSTALL_DIR&gt;/bin/ftpd_ui.bat (if Windows)
-               or &lt;INSTALL_DIR&gt;/bin/ftpd_ui.sh (if UNIX).
+            <p>If you want to run it using Swing UI, go to &lt;INSTALL_DIR&gt;/bin
+               directory and execute the script ftpd_ui.bat (if Windows) or 
+               ftpd_ui.sh (if UNIX).
             </p>
             <img src="images/ftp_run.jpg"/>
             <br/><br/>
-            <p>Similarly, if you want to start the FTP server without Swing UI, execute
-               &lt;INSTALL_DIR&gt;/bin/ftpd.bat (if Windows)
-               or &lt;INSTALL_DIR&gt;/bin/ftpd.sh (if UNIX). In this case
-               you need to pass the configuration file location.
+            <p>Similarly, if you want to start the FTP server without Swing UI, go to
+               &lt;INSTALL_DIR&gt;/bin directory and execute ftpd.bat (if Windows)
+               or ftpd.sh (if UNIX). In this case you need to pass the configuration 
+               file location.
             </p>
             <source>
-Usage: java org.apache.ftpserver.FtpServer &lt;options&gt;
+Usage: java org.apache.ftpserver.commandline.CommandLine [<options>]
   &lt;options&gt; := -default |
                -xml &lt;XML configuration file&gt; |
                -prop &lt;properties configuration file&gt;
@@ -59,6 +59,8 @@ There are three ways to start the FTP server.
     -default :: default configuration will be used.
     -xml     :: XML configuration will be used. User has to specify the file.
     -prop    :: properties configuration will be used. User has to specify the file.
+
+In case of no option, default configuration will be used.
             </source>
             <subsection name="Binary Distribution Directory Structure">
                 <source><![CDATA[
@@ -122,6 +124,10 @@ There are three ways to start the FTP server.
                     <td>Copies all the resources.</td>
                 </tr>
                 <tr>
+                    <td>test:test</td>
+                    <td>Run all JUnit test cases.</td>
+                </tr>
+                <tr>
                     <td>jar:jar</td>
                     <td>Generates FTP Server jar file.</td>
                 </tr>
@@ -153,15 +159,16 @@ ftpserver:usage:
     [echo]
     [echo] clean:clean        - Removes all the generated files.
     [echo] java:compile       - Compiles all the Java files.
-    [echo] java:jar-resources - Copies all the resources
+    [echo] java:jar-resources - Copies all the resources.
+    [echo] test:test          - Runs all the JUnit test cases.
     [echo] jar:jar            - Generates FTP server jar file.
     [echo] site:generate      - Generates FTP server site (including Javadoc).
     [echo] dist:build-src     - Generates the source distribution files.
     [echo] dist:build-bin     - Generates the binary distribution files.
     [echo]
 BUILD SUCCESSFUL
-Total time   : 2 seconds
-Finished at  : Wednesday, September 28, 2005 3:11:46 PM IST
+Total time   : 14 seconds
+Finished at  : Friday, April 21, 2006 3:01:01 PM IST
             ]]></source>
             <subsection name="Source Distribution Directory Structure">
                 <source><![CDATA[
@@ -186,6 +193,8 @@ Finished at  : Wednesday, September 28, 2005 3:11:46 PM IST
       |--- src
       |     |
       |     |--- java
+      |     |
+      |     |--- test
       |
       |----- xdocs
                 ]]></source>
