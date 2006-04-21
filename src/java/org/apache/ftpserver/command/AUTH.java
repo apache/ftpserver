@@ -56,6 +56,7 @@ class AUTH implements ICommand {
         Log log = fconfig.getLogFactory().getInstance(getClass());
         if(fconfig.getSocketFactory().getSSL() == null) {
             out.send(431, "AUTH", null);
+            return;
         }
         
         // check parameter
