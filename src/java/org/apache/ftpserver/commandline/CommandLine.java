@@ -1,4 +1,4 @@
-// $Id$
+//$Id: CommandLine.java 371463 2006-01-23 04:54:43Z rana_b $
 /*
  * Copyright 2004 The Apache Software Foundation
  *
@@ -40,7 +40,8 @@ import org.apache.ftpserver.util.IoUtils;
  *   <li>-xml :: XML configuration will be used. User has to specify the file.</li>
  *   <li>-prop :: properties configuration will be used. User has to specify the file.</li>
  * </ul>
- *
+ * If you do not specify any parameter, default configuration will be used. 
+ * 
  * @author Luis Sanabria
  */
 public 
@@ -117,6 +118,8 @@ class CommandLine {
         System.out.println("    -default :: default configuration will be used.");
         System.out.println("    -xml     :: XML configuration will be used. User has to specify the file.");
         System.out.println("    -prop    :: properties configuration will be used. User has to specify the file.");
+        System.out.println();
+        System.out.println("In case of no option, default configuration will be used.");
     }
 
     /**
@@ -127,16 +130,23 @@ class CommandLine {
         Configuration config = null;
         FileInputStream in = null;
         try {
-            if( args.length == 0 || 
-                (args.length == 1 && args[0].equals("-default")) ) {
+            if(args.length == 0) {
+                usage();
+                System.out.println("Using default configuration....");
+                config = EmptyConfiguration.INSTANCE;
+            }
+            else if( (args.length == 1) && args[0].equals("-default") ) {
+                System.out.println("Using default configuration....");
                 config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 2) && args[0].equals("-xml") ) {
+                System.out.println("Using xml configuration file " + args[1] + "...");
                 in = new FileInputStream(args[1]);
                 XmlConfigurationHandler xmlHandler = new XmlConfigurationHandler(in);
                 config = xmlHandler.parse();
             }
             else if( (args.length == 2) && args[0].equals("-prop") ) {
+                System.out.println("Using properties configuration file " + args[1] + "...");
                 in = new FileInputStream(args[1]);
                 config = new PropertiesConfiguration(in);
             }
@@ -144,11 +154,11 @@ class CommandLine {
         finally {
             IoUtils.close(in);
         }
-
+        
         if(config == null) {
             usage();
         }
-
+        
         return config;
     }
 }
