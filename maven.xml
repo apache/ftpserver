@@ -82,13 +82,12 @@ limitations under the License.
         </ant:copy>
 
         <!-- Copy all script files -->
-        <ant:mkdir dir="${maven.dist.src.assembly.dir}/bin"/>
-        <ant:copy todir="${maven.dist.src.assembly.dir}/bin">
-            <ant:fileset dir="${basedir}/bin"/>
+        <ant:copy todir="${maven.dist.src.assembly.dir}">
+            <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
         </ant:copy>
-        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}/bin" eol="lf" eof="remove" includes="*.sh"/>
-        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}/bin" eol="crlf" includes="*.bat"/>
-
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="lf" eof="remove" includes="*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="crlf" includes="*.bat"/>
+        
         <!-- Copy other resources -->
         <ant:mkdir dir="${maven.dist.src.assembly.dir}/res"/>
         <ant:copy todir="${maven.dist.src.assembly.dir}/res">
@@ -119,13 +118,12 @@ limitations under the License.
         </j:forEach>
 
         <!-- Copy all the scripts -->
-        <ant:mkdir dir="${maven.dist.bin.assembly.dir}/bin"/>
-        <ant:copy todir="${maven.dist.bin.assembly.dir}/bin">
-            <ant:fileset dir="${basedir}/bin"/>
+        <ant:copy todir="${maven.dist.bin.assembly.dir}">
+            <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
         </ant:copy>
-        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}/bin" eol="lf" eof="remove" includes="*.sh"/>
-        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}/bin" eol="crlf" includes="*.bat"/>
-
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="lf" eof="remove" includes="*.sh"/>
+        <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="crlf" includes="*.bat"/>
+        
         <!-- Copy other resource files -->
         <ant:mkdir dir="${maven.dist.bin.assembly.dir}/res"/>
         <ant:copy todir="${maven.dist.bin.assembly.dir}/res">
@@ -134,4 +132,3 @@ limitations under the License.
     </postGoal>
 
 </project>
-
