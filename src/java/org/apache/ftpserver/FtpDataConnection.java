@@ -129,9 +129,10 @@ class FtpDataConnection {
         // open passive server socket and get parameters
         boolean bRet = false;
         try {
-            address = fconfig.getDataConnectionConfig().getPassiveAddress();
+            IDataConnectionConfig dataCfg = fconfig.getDataConnectionConfig();
+            address = dataCfg.getPassiveAddress();
             if(secure) {
-                ISsl ssl = fconfig.getDataConnectionConfig().getSSL();
+                ISsl ssl = dataCfg.getSSL();
                 if(ssl == null) {
                     throw new FtpException("Data connection SSL not configured.");
                 }
@@ -140,6 +141,7 @@ class FtpDataConnection {
             else {
                 servSoc = new ServerSocket(port, 1, address);   
             }
+            servSoc.setSoTimeout(dataCfg.getMaxIdleTimeMillis());
             this.port = servSoc.getLocalPort();          
 
             // set different state variables
@@ -150,6 +152,7 @@ class FtpDataConnection {
         }
         catch(Exception ex) {
             servSoc = null;
+            closeDataSocket();
             log.warn("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
@@ -208,6 +211,7 @@ class FtpDataConnection {
             }
         }
         catch(Exception ex) {
+            closeDataSocket();
             log.warn("FtpDataConnection.getDataSocket()", ex);
         }
         
@@ -243,17 +247,32 @@ class FtpDataConnection {
     }
     
     /**
-     * Is the data connection active?
+     * Check the data connection idle status.
      */
-    public boolean isActive() {
-        return dataSoc != null;
-    }
-    
-    /**
-     * Get the request time.
-     */
-    public long getRequestTime() {
-        return requestTime;
+    public synchronized boolean isTimeout(long currTime) {
+        
+        // data connection not requested - not a timeout
+        if(requestTime == 0L) {
+            return false;
+        }
+        
+        // data connection active - not a timeout
+        if(dataSoc != null) {
+            return false;
+        }
+        
+        // no idle time limit - not a timeout
+        int maxIdleTime = fconfig.getDataConnectionConfig().getMaxIdleTimeMillis();
+        if(maxIdleTime == 0) {
+            return false;
+        }
+        
+        // idle time is within limit - not a timeout
+        if( (currTime - requestTime) < maxIdleTime ) {
+            return false;
+        }
+        
+        return true;
     }
     
     /**

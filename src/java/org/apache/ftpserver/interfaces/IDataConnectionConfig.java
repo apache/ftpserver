@@ -29,6 +29,11 @@ public
 interface IDataConnectionConfig extends Component {
 
     /**
+     * Get the maximum idle time in millis.
+     */
+    int getMaxIdleTimeMillis();
+    
+    /**
      * Is active data connection enabled?
      */
     boolean isActiveEnabled();

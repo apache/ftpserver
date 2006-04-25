@@ -44,6 +44,7 @@
     <!-- Data connection configuration. If you want to support secure
          data connection, please specify the ssl block.
     <data-connection>
+        <idle-time>10</idle-time>
         <active>
             <enable>true</enable>
             <local-address>localhost<local-address>

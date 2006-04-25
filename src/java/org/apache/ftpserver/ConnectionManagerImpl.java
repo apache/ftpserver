@@ -233,7 +233,6 @@ class ConnectionManagerImpl implements IConnectionManager {
         
         // get inactive client connection list 
         synchronized(conList) {
-            long idleTimeMillis = defaultIdleSec*1000L;
             for( int i = conList.size(); --i>=0; ) {
                 IConnection con = (IConnection)conList.get(i);
                 if(con == null) {
@@ -247,6 +246,7 @@ class ConnectionManagerImpl implements IConnectionManager {
                 }
                 if(request.isTimeout(currTime)) {
                     inactiveCons.add(con);
+                    continue;
                 }
                 
                 // idle data connection
@@ -255,27 +255,16 @@ class ConnectionManagerImpl implements IConnectionManager {
                     continue;
                 }
                 synchronized(dataCon) {
-                    
-                    // data transfer is going on - no need to close
-                    if(dataCon.isActive()) {
-                        continue;
-                    }
-                    
-                    // data connection is already closed 
-                    long requestTime = dataCon.getRequestTime();
-                    if(requestTime == 0L) {
-                        continue;
-                    }
-                    
-                    // idle data connectin timeout - close it 
-                    if( (currTime - requestTime) > idleTimeMillis ) {
+
+                    // if the data connection is not active - close it
+                    if(dataCon.isTimeout(currTime)) {
                         log.info("Removing idle data connection for " + request.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
             }
         }
-        
+
         // close idle client connections
         for( Iterator conIt=inactiveCons.iterator(); conIt.hasNext(); ) {
             IConnection connection = (IConnection)conIt.next();

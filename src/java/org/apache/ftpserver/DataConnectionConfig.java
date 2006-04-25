@@ -37,6 +37,8 @@ class DataConnectionConfig implements IDataConnectionConfig {
     private Log log;
     private LogFactory logFactory;
     
+    private int maxIdleTimeMillis;
+    
     private boolean activeEnable;
     private boolean activeIpCheck;
     private InetAddress activeLocalAddress;
@@ -62,6 +64,9 @@ class DataConnectionConfig implements IDataConnectionConfig {
     public void configure(Configuration conf) throws FtpException {
         
         try {
+            
+            // get the maximum idle time in millis
+            maxIdleTimeMillis = conf.getInt("idle-time", 10) * 1000;
             
             // get the active data connection parameters
             Configuration activeConf = conf.subset("active");
@@ -115,6 +120,13 @@ class DataConnectionConfig implements IDataConnectionConfig {
         }
     }
 
+    /**
+     * Get the maximum idle time in millis.
+     */
+    public int getMaxIdleTimeMillis() {
+        return maxIdleTimeMillis;
+    }
+    
     /**
      * Is PORT enabled?
      */
@@ -180,7 +192,6 @@ class DataConnectionConfig implements IDataConnectionConfig {
                 catch(InterruptedException ex) {
                 }
             }
-
         }
         return dataPort;
     }

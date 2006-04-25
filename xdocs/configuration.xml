@@ -104,6 +104,8 @@ config
   |
   |---- data-connection
   |       |
+  |       |---- <b><a href="#config.data-connection.idle-time">idle-time</a></b> (10)
+  |       |
   |       |---- active
   |       |       |
   |       |       |---- <b><a href="#config.data-connection.active.enable">enable</a></b> (true)
@@ -283,6 +285,12 @@ config
                 <tr>
                     <td><a name="config.socket-factory.ssl.key-password">config.socket-factory.ssl.key-password</a></td>
                     <td>Key password. The default value is password.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.idle-time">config.data-connection.idle-time</a></td>
+                    <td>Maximum data connection idle time in second.
+                        0 means no limit. The default value is 10.
+                    </td>
                 </tr>
                 <tr>
                     <td><a name="config.data-connection.active.enable">config.data-connection.active.enable</a></td>

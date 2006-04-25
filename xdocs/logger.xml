@@ -49,14 +49,13 @@
                this file to configure log4j.
             </p>
             <source>
-   log4j.rootLogger=debug, R
+   log4j.rootLogger=DEBUG, R
    log4j.appender.R=org.apache.log4j.RollingFileAppender
    log4j.appender.R.File=./res/log/log.gen
    log4j.appender.R.MaxFileSize=10MB
    log4j.appender.R.MaxBackupIndex=10
    log4j.appender.R.layout=org.apache.log4j.PatternLayout
    log4j.appender.R.layout.ConversionPattern=[%5p] %d %m%n
-   log4j.logger.org.apache.catalina=DEBUG, R
             </source>
             <p>This log4j configuration sets up a file called log.gen in your
                FTP Server ./res/log folder with a maximum file size of 10MB
