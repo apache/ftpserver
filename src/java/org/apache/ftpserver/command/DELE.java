@@ -70,12 +70,21 @@ class DELE implements ICommand {
             fconfig.getConnectionManager().closeConnection(handler);
             return;
         }
-        
-        // get filename
-        FileObject file = request.getFileSystemView().getFileObject(fileName);
-        fileName = file.getFullName();
-        
+
+        // get file object
+        FileObject file = null;
+        try {
+            file = request.getFileSystemView().getFileObject(fileName);
+        }
+        catch(Exception ex) {
+        }
+        if(file == null) {
+            out.send(550, "DELE.invalid", fileName);
+            return;
+        }
+
         // check file
+        fileName = file.getFullName();
         if(!file.isFile()) {
             out.send(550, "DELE.invalid", fileName);
             return;

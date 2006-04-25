@@ -78,7 +78,9 @@ class STOU implements ICommand {
             FileObject file = null;
             try {
                 file = request.getFileSystemView().getFileObject("ftp.dat");
-                file = getUniqueFile(handler, file);
+                if(file != null) {
+                    file = getUniqueFile(handler, file);
+                }
             }
             catch(Exception ex) {
             }
@@ -169,6 +171,9 @@ class STOU implements ICommand {
         String fileName = newFile.getFullName();
         while( newFile.doesExist() ) {
             newFile = fsView.getFileObject(fileName + '.' + System.currentTimeMillis());
+            if(newFile == null) {
+                break;
+            }
         }
         return newFile;
     }
