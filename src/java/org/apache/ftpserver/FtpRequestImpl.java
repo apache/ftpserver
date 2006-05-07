@@ -26,12 +26,8 @@ import java.util.HashMap;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ftplet.*;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * FTP request object.
@@ -45,6 +41,10 @@ class FtpRequestImpl implements FtpRequest {
     private String command;
     private String argument;
     
+    /**
+     * Contains user name between USER and PASS commands
+     */
+    private String userArgument;
     private User user;
     private HashMap attributeMap;
     private InetAddress remoteAddr;
@@ -66,7 +66,8 @@ class FtpRequestImpl implements FtpRequest {
      */
     public FtpRequestImpl() {
         attributeMap = new HashMap();
-        user = new BaseUser();
+        userArgument = null;
+        user = null;
         connectionTime = System.currentTimeMillis();
     } 
     
@@ -103,7 +104,8 @@ class FtpRequestImpl implements FtpRequest {
      * Reinitialize request.
      */
     public void reinitialize() {
-        user = new BaseUser();
+	userArgument = null;
+        user = null;
         loginTime = 0L;
         fileSystemView = null;
         renameFrom = null;
@@ -240,7 +242,23 @@ class FtpRequestImpl implements FtpRequest {
     public void setRenameFrom(FileObject file) {
         renameFrom = file;
     }
-    
+
+    /**
+     * Returns user name entered in USER command
+     * 
+     * @return user name entered in USER command
+     */
+    public String getUserArgument() {
+        return userArgument;
+    }
+
+    /**
+     * Set user name entered from USER command
+     */
+    public void setUserArgument(String tmpUserName) {
+        this.userArgument = tmpUserName;
+    }
+
     /**
      * Get the ftp command.
      */
@@ -288,6 +306,10 @@ class FtpRequestImpl implements FtpRequest {
      */
     public User getUser() {
         return user;
+    }
+    
+    public void setUser(User user) {
+	this.user = user;
     }
     
     /**

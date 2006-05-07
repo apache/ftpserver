@@ -21,12 +21,11 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
-import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
@@ -47,7 +46,7 @@ class USER implements ICommand {
      */
     public void execute(RequestHandler handler, 
                         FtpRequestImpl request, 
-                        FtpWriter out) throws IOException, FtpException {
+                        FtpWriter out) throws IOException {
     
         boolean bSuccess = false;
         IFtpConfig fconfig = handler.getConfig();
@@ -66,8 +65,8 @@ class USER implements ICommand {
             }
             
             // already logged-in
-            BaseUser user = (BaseUser)request.getUser();
             if(request.isLoggedIn()) {
+                User user = request.getUser();
                 if( userName.equals(user.getName()) ) {
                     out.send(230, "USER", null);
                     bSuccess = true;
@@ -103,7 +102,7 @@ class USER implements ICommand {
             
             // finally set the user name
             bSuccess = true;
-            user.setName(userName);
+            request.setUserArgument(userName);
             if(bAnonymous) {
                 out.send(331, "USER.anonymous", userName);
             }

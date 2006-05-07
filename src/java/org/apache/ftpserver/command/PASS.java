@@ -23,18 +23,11 @@ import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FileSystemManager;
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.ftplet.*;
 import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.IConnectionManager;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.IFtpStatistics;
-import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * <code>PASS &lt;SP&gt; <password> &lt;CRLF&gt;</code><br>
@@ -73,8 +66,7 @@ class PASS implements ICommand {
             }
             
             // check user name
-            User user = request.getUser();
-            String userName = user.getName();
+            String userName = request.getUserArgument();
             if(userName == null) {
                 out.send(503, "PASS", null);
                 return;
@@ -106,32 +98,28 @@ class PASS implements ICommand {
             
             // authenticate user
             UserManager userManager = fconfig.getUserManager();
+            User user = null;
             try {
                 if(bAnonymous) {
                     bSuccess = userManager.doesExist("anonymous");
+                    if (bSuccess)
+                	user = userManager.getUserByName("anonymous");
                 }
                 else {
                     bSuccess = userManager.authenticate(userName, password);
+                    if (bSuccess)
+                	user = userManager.getUserByName(userName);
                 }
             }
             catch(Exception ex) {
                 bSuccess = false;
                 log.warn("PASS.execute()", ex);
             }
-            if(!bSuccess) {
+            if(bSuccess) {
+                request.setUser(user);
+                request.setUserArgument(null);
+            } else {
                 log.warn("Login failure - " + userName);
-                out.send(530, "PASS", userName);
-                return;
-            }
-            
-            // populate user information
-            try {
-                populateUser(handler, userName);
-            }
-            catch(FtpException ex) {
-                bSuccess = false;
-            }
-            if(!bSuccess) {
                 out.send(530, "PASS", userName);
                 return;
             }
@@ -167,26 +155,5 @@ class PASS implements ICommand {
                 conManager.closeConnection(handler);
             }
         }
-    }
-
-    /**
-     * Populate user.
-     */
-    private void populateUser(RequestHandler handler,
-                              String login) throws FtpException {
-        
-        User user = handler.getConfig().getUserManager().getUserByName(login);
-        if(user == null) {
-            throw new FtpException(login + " : does not exist.");
-        }
-        
-        BaseUser reqUser = (BaseUser)handler.getRequest().getUser();
-        reqUser.setName(user.getName());
-        reqUser.setEnabled(user.getEnabled());
-        reqUser.setHomeDirectory(user.getHomeDirectory());
-        reqUser.setMaxUploadRate(user.getMaxUploadRate());
-        reqUser.setMaxDownloadRate(user.getMaxDownloadRate());
-        reqUser.setMaxIdleTime(user.getMaxIdleTime());
-        reqUser.setWritePermission(user.getWritePermission());
     }
 }
