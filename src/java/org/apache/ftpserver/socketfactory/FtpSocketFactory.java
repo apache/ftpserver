@@ -59,7 +59,12 @@ class FtpSocketFactory implements ISocketFactory {
             
             // get server address
             String serverAddress = conf.getString("address", null);
-            if(serverAddress != null) {
+            /*
+             * We should not use InetAddress of loopback adapter when address is
+             * not specified, because it would limit connection source only to
+             * localhost.
+             */
+            if (serverAddress != null) {
                 this.serverAddress = InetAddress.getByName(serverAddress);
             }
             
