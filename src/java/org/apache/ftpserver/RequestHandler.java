@@ -26,13 +26,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Structure;
+import org.apache.ftpserver.ftplet.*;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.ICommand;
 import org.apache.ftpserver.interfaces.ICommandFactory;
@@ -326,7 +320,8 @@ class RequestHandler implements IConnection {
         if(request != null) {
             
             // log message
-            String userName = request.getUser().getName();
+            User user = request.getUser();
+            String userName = user != null ? user.getName() : "<Not loginned>";
             InetAddress clientAddr = request.getRemoteAddress(); 
             log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
