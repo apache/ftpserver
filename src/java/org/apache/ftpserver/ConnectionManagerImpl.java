@@ -16,12 +16,7 @@
  */
 package org.apache.ftpserver;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +26,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
 import org.apache.ftpserver.interfaces.IConnection;
 import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
  * Connection service to manage all the connections (request handlers).
@@ -114,6 +108,10 @@ class ConnectionManagerImpl implements IConnectionManager {
         return anonEnabled;
     }
     
+    public int getDefaultIdleSec() {
+        return defaultIdleSec;
+    }
+    
     /**
      * Get maximum anonymous logins
      */
@@ -156,9 +154,11 @@ class ConnectionManagerImpl implements IConnectionManager {
             observer.updatedConnection(connection);
         }
         
-        // set default idle time
-        BaseUser user = (BaseUser)connection.getRequest().getUser();
-        user.setMaxIdleTime(defaultIdleSec);
+        /*
+         * set default idle time for request. This value should be overrided
+         * after user login
+         */
+        connection.getRequest().setMaxIdleTime(defaultIdleSec);
         
         // now start a new thread to serve this connection
         new Thread(connection).start();

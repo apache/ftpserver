@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Date;
 
+import org.apache.ftpserver.ConnectionManagerImpl;
+
 /**
  * Defines an object to provide client request information to a ftplet.
  * Ftplet methods will always get the same instance of Ftplet request.
@@ -67,6 +69,20 @@ interface FtpRequest {
      * Get last access time.
      */
     Date getLastAccessTime();
+
+    /**
+     * Returns maximum idle time. This time equals to
+     * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
+     * {@link User#getMaxIdleTime()} after user login.
+     */
+    int getMaxIdleTime();
+    
+    /**
+     * Set maximum idle time in seconds. This time equals to
+     * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
+     * {@link User#getMaxIdleTime()} after user login.
+     */
+    void setMaxIdleTime(int maxIdleTimeSec);
     
     /**
      * Get user object.

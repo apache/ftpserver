@@ -51,6 +51,7 @@ class FtpRequestImpl implements FtpRequest {
     private ConnectionObserver observer;
     private String language;
     
+    private int maxIdleTime = 0;
     private long connectionTime = 0L;
     private long loginTime = 0L;
     private long lastAccessTime = 0L;
@@ -403,7 +404,7 @@ class FtpRequestImpl implements FtpRequest {
      */
     public boolean isTimeout(long currTime) {
          boolean bActive = true;
-         int maxIdleTime = user.getMaxIdleTime();
+         int maxIdleTime = getMaxIdleTime();
          if(maxIdleTime > 0) {
              long currIdleTimeMillis = currTime - lastAccessTime;
              long maxIdleTimeMillis = maxIdleTime * 1000L;
@@ -417,5 +418,13 @@ class FtpRequestImpl implements FtpRequest {
      */
     public boolean isTimeout() {
         return isTimeout(System.currentTimeMillis());
+    }
+
+    public int getMaxIdleTime() {
+        return this.maxIdleTime;
+    }
+
+    public void setMaxIdleTime(int maxIdleTimeSec) {
+        this.maxIdleTime = maxIdleTimeSec;
     }
 }

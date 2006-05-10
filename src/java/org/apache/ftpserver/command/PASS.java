@@ -118,6 +118,7 @@ class PASS implements ICommand {
             if(bSuccess) {
                 request.setUser(user);
                 request.setUserArgument(null);
+                request.setMaxIdleTime(user.getMaxIdleTime());
             } else {
                 log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
