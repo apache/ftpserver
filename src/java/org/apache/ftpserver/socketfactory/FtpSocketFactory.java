@@ -104,6 +104,10 @@ class FtpSocketFactory implements ISocketFactory {
             
     /**
      * Get server address.
+     * 
+     * @return {@link InetAddress} obtained from host address from
+     *         {@link ISocketFactory} configuration, or <code>null</code> if
+     *         not specified.
      */
     public InetAddress getServerAddress() {
         return serverAddress;

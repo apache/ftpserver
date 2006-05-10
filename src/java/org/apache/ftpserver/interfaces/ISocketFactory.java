@@ -37,6 +37,10 @@ interface ISocketFactory extends Component {
     
     /**
      * Get server address.
+     * 
+     * @return {@link InetAddress} obtained from host address from
+     *         {@link ISocketFactory} configuration, or <code>null</code> if
+     *         not specified.
      */
     InetAddress getServerAddress();
     
