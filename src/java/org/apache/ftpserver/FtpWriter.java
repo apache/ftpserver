@@ -520,7 +520,7 @@ class FtpWriter implements FtpResponse {
         
         // client login name
         else if(varName.equals(CLIENT_LOGIN_NAME)) {
-            varVal = request.getUser().getName();
+            varVal = request.getUserArgument();
         }
         
         // client login time

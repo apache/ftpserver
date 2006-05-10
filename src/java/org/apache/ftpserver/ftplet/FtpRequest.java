@@ -83,11 +83,18 @@ interface FtpRequest {
      * {@link User#getMaxIdleTime()} after user login.
      */
     void setMaxIdleTime(int maxIdleTimeSec);
-    
+
     /**
      * Get user object.
      */
     User getUser();
+
+    /**
+     * Returns user name entered in USER command
+     * 
+     * @return user name entered in USER command
+     */
+    String getUserArgument();
     
     /**
      * Get the requested language.
