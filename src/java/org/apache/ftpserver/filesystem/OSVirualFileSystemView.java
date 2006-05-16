@@ -42,7 +42,7 @@ class OSVirualFileSystemView implements FileSystemView {
     // will always end with '/'.
     private String rootName;
     
-    private FileObject currDir;
+    private OSVirtualFileObject currDir;
     private boolean hasWritePermission;
     
     /**
@@ -86,7 +86,7 @@ class OSVirualFileSystemView implements FileSystemView {
      * Change current directory.
      */
     public boolean changeDirectory(String dir) throws FtpException {
-        FileObject dirObj = getFileObject(dir);
+        OSVirtualFileObject dirObj = (OSVirtualFileObject) getFileObject(dir);
         boolean retVal = false;
         if(dirObj.isDirectory()) {
             currDir = dirObj;
@@ -108,7 +108,7 @@ class OSVirualFileSystemView implements FileSystemView {
                 physicalFile = new File(rootName, fileStr.substring(1));
             }
             else {
-                File physicalCurrDir = ((OSVirtualFileObject)currDir).getPhysicalFile();
+                File physicalCurrDir = currDir.getPhysicalFile();
                 physicalFile = new File(physicalCurrDir, fileStr);
             }
 
