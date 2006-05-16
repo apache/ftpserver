@@ -57,7 +57,7 @@ class PropertiesConfiguration implements Configuration {
      * Constructor - set the properties.
      */
     public PropertiesConfiguration(Properties prop) {
-        this.prop = new Properties(prop);
+        this.prop = (Properties) prop.clone();
     }    
     
 
