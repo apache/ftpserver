@@ -116,7 +116,7 @@ class STOU implements ICommand {
                 
                 // open streams
                 bis = IoUtils.getBufferedInputStream(is);
-                bos = IoUtils.getBufferedOutputStream( file.createOutputStream(false) );
+                bos = IoUtils.getBufferedOutputStream( file.createOutputStream(0L) );
                 
                 // transfer data
                 int maxRate = handler.getRequest().getUser().getMaxUploadRate();

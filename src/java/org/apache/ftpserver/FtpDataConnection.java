@@ -43,7 +43,7 @@ class FtpDataConnection {
     private ServerSocket  servSoc;
     
     private InetAddress  address = null;
-    private int          port   = 0;
+    private int          port    = 0;
     
     private long requestTime = 0L;
     
@@ -97,7 +97,7 @@ class FtpDataConnection {
     /**
      * Port command.
      */
-    public synchronized void setPortCommand(InetAddress addr, int port) {
+    public synchronized void setPortCommand(InetAddress addr, int activePort) {
         
         // close old sockets if any
         closeDataSocket();
@@ -106,7 +106,7 @@ class FtpDataConnection {
         isPort = true;
         isPasv = false;
         address = addr;
-        this.port = port;
+        port = activePort;
         requestTime = System.currentTimeMillis();
     } 
     
@@ -119,8 +119,8 @@ class FtpDataConnection {
         closeDataSocket(); 
         
         // get the passive port
-        int port = fconfig.getDataConnectionConfig().getPassivePort();
-        if(port == -1) {
+        int passivePort = fconfig.getDataConnectionConfig().getPassivePort();
+        if(passivePort == -1) {
             log.warn("Cannot find an available passive port.");
             servSoc = null;
             return false;
@@ -136,13 +136,13 @@ class FtpDataConnection {
                 if(ssl == null) {
                     throw new FtpException("Data connection SSL not configured.");
                 }
-                servSoc = ssl.createServerSocket(null, address, this.port);
+                servSoc = ssl.createServerSocket(null, address, passivePort);
             }
             else {
-                servSoc = new ServerSocket(port, 1, address);   
+                servSoc = new ServerSocket(passivePort, 1, address);
             }
             servSoc.setSoTimeout(dataCfg.getMaxIdleTimeMillis());
-            this.port = servSoc.getLocalPort();          
+            port = servSoc.getLocalPort();
 
             // set different state variables
             isPort = false;

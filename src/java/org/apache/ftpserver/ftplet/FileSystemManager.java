@@ -26,7 +26,7 @@ public
 interface FileSystemManager extends Component {
     
     /**
-     * Get user file system view
+     * Create user specific file system view.
      */
     FileSystemView createFileSystemView(User user) throws FtpException;
     

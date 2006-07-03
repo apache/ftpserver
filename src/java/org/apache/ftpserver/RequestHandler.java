@@ -380,16 +380,17 @@ class RequestHandler implements IConnection {
             return false;
         }
         return request.isLoggedIn() ||
-        cmd.equals("USER")            || 
-        cmd.equals("PASS")            ||
-        cmd.equals("AUTH")            ||
-        cmd.equals("HELP")            ||
-        cmd.equals("SYST")            ||
-        cmd.equals("FEAT")            ||
-        cmd.equals("PBSZ")            ||
-        cmd.equals("PROT")            ||
-        cmd.equals("LANG")            ||
-        cmd.equals("QUIT");
+               cmd.equals("USER")   || 
+		       cmd.equals("PASS")   ||
+		       cmd.equals("QUIT")   ||
+		       cmd.equals("AUTH")   ||
+		       cmd.equals("HELP")   ||
+		       cmd.equals("SYST")   ||
+		       cmd.equals("FEAT")   ||
+		       cmd.equals("PBSZ")   ||
+		       cmd.equals("PROT")   ||
+	           cmd.equals("LANG")   ||
+	           cmd.equals("ACCT");
     }    
     
     /**

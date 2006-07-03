@@ -232,27 +232,36 @@ class NativeFileObject implements FileObject {
     }
     
     /**
-     * Create output stream for writing.
+     * List files. If not a directory or does not exist, null
+     * will be returned. 
      */
-    public OutputStream createOutputStream(boolean append) throws IOException {
-        
-        // permission check
-        if(!hasWritePermission()) {
-            throw new IOException("No write permission : " + file.getName());
+    public FileObject[] listFiles() {
+    	
+    	// is a directory
+    	if(!file.isDirectory()) {
+    		return null;
+    	}
+    	
+        // directory - return all the files
+        File[] files = file.listFiles();
+        if(files == null) {
+            return null;
         }
         
-        // create output stream
-        OutputStream out = null;
-        if(append && file.exists()) {
-            RandomAccessFile raf = new RandomAccessFile(file, "rw");
-            raf.seek(raf.length());
-            out = new FileOutputStream(raf.getFD());
-        }
-        else {
-            out = new FileOutputStream(file);
+        // get the virtual name of the base directory
+        String virtualFileStr = getFullName();
+        if(virtualFileStr.charAt(virtualFileStr.length() - 1) != '/') {
+            virtualFileStr += '/';
         }
         
-        return out;
+        // now return all the files under the directory
+        FileObject[] virtualFiles = new FileObject[files.length];
+        for(int i=0; i<files.length; ++i) {
+            File fileObj = files[i];
+            String fileName = virtualFileStr + fileObj.getName();
+            virtualFiles[i] = new NativeFileObject(fileName, fileObj, writePermission);
+        }
+        return virtualFiles;
     }
     
     /**

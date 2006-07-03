@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * This is an abstraction over the file.
+ * This is the file abstraction used by the server.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
@@ -109,22 +109,27 @@ interface FileObject {
     boolean delete();
     
     /**
-     * Move file
+     * Move file.
      */
     boolean move(FileObject destination);
     
     /**
-     * Create output stream for writing.
+     * List file objects. If not a directory or does not exist,
+     * null will be returned.
      */
-    OutputStream createOutputStream(boolean append) throws IOException;
+    FileObject[] listFiles();
     
     /**
-     * Create output stream for writing.
+     * Create output stream for writing. If the file is
+     * not random accessible, any offset other than zero
+     * will throw an exception.
      */
     OutputStream createOutputStream(long offset) throws IOException;
     
     /**
-     * Create input stream for reading.
+     * Create input stream for reading. If the file is
+     * not random accessible, any offset other than zero
+     * will throw an exception.
      */
     InputStream createInputStream(long offset) throws IOException;
 }

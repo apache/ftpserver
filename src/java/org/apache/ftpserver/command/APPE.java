@@ -123,9 +123,15 @@ class APPE implements ICommand {
             BufferedOutputStream bos = null;
             try {
                 
+            	// find offset
+            	long offset = 0L;
+            	if(file.doesExist()) {
+            		offset = file.getSize();
+            	}
+            	
                 // open streams
                 bis = IoUtils.getBufferedInputStream(is);
-                bos = IoUtils.getBufferedOutputStream( file.createOutputStream(true) );
+                bos = IoUtils.getBufferedOutputStream( file.createOutputStream(offset) );
                     
                 // transfer data
                 int maxRate = handler.getRequest().getUser().getMaxUploadRate();

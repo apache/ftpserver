@@ -26,9 +26,9 @@ public
 interface FileSystemView {
 
     /**
-     * Get the user root directory.
+     * Get the user home directory.
      */
-    FileObject getRootDirectory() throws FtpException;
+    FileObject getHomeDirectory() throws FtpException;
     
     /**
      * Get user current directory.
@@ -46,9 +46,9 @@ interface FileSystemView {
     FileObject getFileObject(String file) throws FtpException;
     
     /**
-     * List file objects
+     * Does the file system support random file access? 
      */
-    FileObject[] listFiles(String file) throws FtpException;
+    boolean isRandomAccessible() throws FtpException; 
     
     /**
      * Dispose file system view.

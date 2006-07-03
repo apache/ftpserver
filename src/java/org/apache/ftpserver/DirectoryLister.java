@@ -123,12 +123,7 @@ class DirectoryLister {
         }
         
         // get all the file objects
-        FileObject[] files = null;
-        try {
-            files = fileSystemView.listFiles(file);
-        }
-        catch(FtpException ex) {
-        }
+        FileObject[] files = listFiles();
         if(files == null) {
             return false;
         }
@@ -174,12 +169,8 @@ class DirectoryLister {
             return false;
         }
         
-        FileObject[] files = null;
-        try {
-            files = fileSystemView.listFiles(file);
-        }
-        catch(FtpException ex) {
-        }
+        // get all the file objects
+        FileObject[] files = listFiles();
         if(files == null) {
             return false;
         }
@@ -254,12 +245,8 @@ class DirectoryLister {
             return false;
         }
         
-        FileObject[] files = null;
-        try {
-            files = fileSystemView.listFiles(file);
-        }
-        catch(FtpException ex) {
-        }
+        // get all the file objects
+        FileObject[] files = listFiles();
         if(files == null) {
             return false;
         }
@@ -382,6 +369,25 @@ class DirectoryLister {
     }
     
     /**
+     * Get the file list.
+     */
+    private FileObject[] listFiles() {
+    	FileObject[] files = null;
+    	try {
+	    	FileObject virtualFile = fileSystemView.getFileObject(file);
+	    	if(virtualFile.isFile()) {
+	    		files = new FileObject[] {virtualFile};
+	    	}
+	    	else {
+	    		files = virtualFile.listFiles();
+	    	}
+    	}
+    	catch(FtpException ex) {
+    	}
+    	return files;
+    }
+    
+    /**
      * Get each directory line.
      */
     private void printLine(FileObject file, Writer out) throws IOException {
@@ -401,7 +407,6 @@ class DirectoryLister {
         out.write(DELIM);
         out.write(file.getShortName());
     }
-    
     
     /**
      * Get permission string.

@@ -60,9 +60,10 @@ class NativeFileSystemView implements FileSystemView {
     }
     
     /**
-     * Get the root directory.
+     * Get the user home directory. It would be the file system root 
+     * for the user. 
      */
-    public FileObject getRootDirectory() {
+    public FileObject getHomeDirectory() {
         return new NativeFileObject("/", new File(rootDir), writePermission);
     }
     
@@ -116,47 +117,13 @@ class NativeFileSystemView implements FileSystemView {
         
         currDir = dir;
         return true;
-    } 
+    }
     
     /**
-     * List files.
+     * Is the file content random accessible?
      */
-    public FileObject[] listFiles(String str) {
-        
-        // get the physical file object
-        FileObject virtualFile = getFileObject(str);
-        File physicalFile = ((NativeFileObject)virtualFile).getPhysicalFile();
-        
-        // does not exist - return null
-        if(!physicalFile.exists()) {
-            return null;
-        } 
-        
-        // file - return a single element array 
-        if(physicalFile.isFile()) {
-            return new FileObject[] { virtualFile };
-        }
-        
-        // directory - return all the files
-        File[] physicalFiles = physicalFile.listFiles();
-        if(physicalFiles == null) {
-            return null;
-        }
-        
-        // get the virtual name of the base directory
-        String virtualFileStr = virtualFile.getFullName();
-        if(virtualFileStr.charAt(virtualFileStr.length() - 1) != '/') {
-            virtualFileStr += '/';
-        }
-        
-        // now return all the files under the directory
-        FileObject[] virtualFiles = new FileObject[physicalFiles.length];
-        for(int i=0; i<physicalFiles.length; ++i) {
-            File fileObj = physicalFiles[i];
-            String fileName = virtualFileStr + fileObj.getName();
-            virtualFiles[i] = new NativeFileObject(fileName, fileObj, writePermission);
-        }
-        return virtualFiles;
+    public boolean isRandomAccessible() {
+    	return true;
     }
     
     /**
