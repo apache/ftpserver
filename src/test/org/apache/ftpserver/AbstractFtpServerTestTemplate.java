@@ -28,7 +28,7 @@ import org.apache.ftpserver.interfaces.ISocketFactory;
  * 
  * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
-public abstract class AbstractFtpServerTest extends TestCase {
+public abstract class AbstractFtpServerTestTemplate extends TestCase {
 
     private FtpServer ftpServer;
 

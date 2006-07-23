@@ -21,7 +21,7 @@ import java.net.SocketTimeoutException;
 
 import javax.net.SocketFactory;
 
-import org.apache.ftpserver.AbstractFtpServerTest;
+import org.apache.ftpserver.AbstractFtpServerTestTemplate;
 import org.apache.ftpserver.interfaces.ICommand;
 
 /**
@@ -29,7 +29,7 @@ import org.apache.ftpserver.interfaces.ICommand;
  * 
  * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
-public abstract class AbstractCommandTest extends AbstractFtpServerTest {
+public abstract class AbstractCommandTestTemplate extends AbstractFtpServerTestTemplate {
 
     private static final String ENCODING = "ISO-8859-1";
 
@@ -39,7 +39,7 @@ public abstract class AbstractCommandTest extends AbstractFtpServerTest {
 
     private Socket socket;
 
-    public AbstractCommandTest() {
+    public AbstractCommandTestTemplate() {
         super();
     }
 

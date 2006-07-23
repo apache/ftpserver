@@ -22,7 +22,7 @@ import java.io.IOException;
  * 
  * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
-public class PASSTest extends AbstractCommandTest {
+public class PASSTest extends AbstractCommandTestTemplate {
 
     public void testAnonymousOk() throws IOException {
         wait("220 ", 1000);

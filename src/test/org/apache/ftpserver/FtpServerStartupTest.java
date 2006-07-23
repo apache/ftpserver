@@ -20,7 +20,7 @@ package org.apache.ftpserver;
  * 
  * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
-public class FtpServerStartupTest extends AbstractFtpServerTest {
+public class FtpServerStartupTest extends AbstractFtpServerTestTemplate {
 
     /**
      * Test startup and shutdown of FTPServer
