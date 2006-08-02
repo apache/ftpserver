@@ -47,9 +47,9 @@
         <idle-time>10</idle-time>
         <active>
             <enable>true</enable>
-            <local-address>localhost<local-address>
+            <local-address>localhost</local-address>
             <local-port>20</local-port>
-            <ip-check>false<ip-check>
+            <ip-check>false</ip-check>
         </active>
         <passive>
             <address>localhost</address>
@@ -76,7 +76,7 @@
     <!-- Ftp message configuration block
     <message>
         <class>org.apache.ftpserver.message.MessageResourceImpl</class>
-        <custom-message-dir>./res</custom-message-file>
+        <custom-message-dir>./res</custom-message-dir>
         <languages>en,zh-tw</languages>
     </message>
     -->
