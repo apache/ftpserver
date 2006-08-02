@@ -1,21 +1,24 @@
 package org.apache.ftpserver.config;
 
-import java.util.Iterator;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.apache.ftpserver.ftplet.Configuration;
 
-public class PropertiesConfigurationTest extends TestCase {
+public class PropertiesConfigurationTest extends ConfigurationTest {
 
-    public void testPropertiesConfigurationProperties() {
-        Properties a = new Properties();
-        a.setProperty("config.abc", "xyz");
+    protected Configuration createConfiguration() throws Exception {
+        Properties properties = new Properties();
+        properties.setProperty("config.socket-factory.address", "localhost");
+        properties.setProperty("config.socket-factory.booltrue", "true");
+        properties.setProperty("config.socket-factory.boolfalse", "false");
+        properties.setProperty("config.socket-factory.port", "21");
+        properties.setProperty("config.socket-factory.double", "1.234");
+        properties.setProperty("config.socket-factory.ssl.ssl-protocol", "TLS");
+        properties.setProperty("config.socket-factory.ssl.client-authentication", "false");
+        properties.setProperty("config.empty", "");
 
-        PropertiesConfiguration configuration = new PropertiesConfiguration(a);
-        Iterator keys = configuration.getKeys();
-
-        assertTrue(keys.hasNext());
-        assertEquals("abc", keys.next());
+        return new PropertiesConfiguration(properties);
     }
+    
 
 }

@@ -65,7 +65,7 @@ interface Configuration {
     /**
      * Get boolean - if not found throws FtpException.
      */
-    boolean getBoolean(String patram) throws FtpException;
+    boolean getBoolean(String param) throws FtpException;
     
     /**
      * Get boolean - if not found returns the default value.

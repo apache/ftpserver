@@ -230,7 +230,14 @@ class PropertiesConfiguration implements Configuration {
                 continue;
             }
             key = key.substring(prefix.length());
-            arr.add(key);
+            int indexOfNextDot = key.indexOf('.');
+            if(indexOfNextDot > -1) {
+                key = key.substring(0, indexOfNextDot);
+            }
+            
+            if(!arr.contains(key)) {
+                arr.add(key);
+            }
         }
         return arr.iterator();
     }
