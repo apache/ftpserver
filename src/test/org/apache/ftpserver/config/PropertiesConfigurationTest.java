@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.Configuration;
 
-public class PropertiesConfigurationTest extends ConfigurationTest {
+public class PropertiesConfigurationTest extends ConfigurationTestTemplate {
 
     protected Configuration createConfiguration() throws Exception {
         Properties properties = new Properties();

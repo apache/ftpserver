@@ -20,7 +20,7 @@ import java.io.FileInputStream;
 
 import org.apache.ftpserver.ftplet.Configuration;
 
-public class XmlConfigurationTest extends ConfigurationTest {
+public class XmlConfigurationTest extends ConfigurationTestTemplate {
 
     protected Configuration createConfiguration() throws Exception {
         FileInputStream fis = new FileInputStream("src/test/XmlConfigurationHandler-test.xml");

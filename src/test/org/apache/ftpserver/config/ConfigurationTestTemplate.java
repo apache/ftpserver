@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 
-public abstract class ConfigurationTest extends TestCase {
+public abstract class ConfigurationTestTemplate extends TestCase {
 
     protected Configuration config;
 
