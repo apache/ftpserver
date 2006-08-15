@@ -218,7 +218,7 @@ class MessagePanel extends PluginPanel {
         }
         
         // store existing text value
-        String key = (String)comboBox.getSelectedItem();
+        String key = list.getSelectedValue().toString();
         String val = txtArea.getText();
         messageProps.setProperty(key, val);
         
