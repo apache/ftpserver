@@ -265,6 +265,8 @@ class DbUserManager implements UserManager {
             map.put( BaseUser.ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
             map.put( BaseUser.ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()) );
             map.put( BaseUser.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()) ); 
+            map.put( BaseUser.ATTR_MAX_LOGIN_NUMBER, new Integer(user.getMaxLoginNumber()));
+            map.put( BaseUser.ATTR_MAX_LOGIN_PER_IP, new Integer(user.getMaxLoginPerIP()));
             
             String sql = null;      
             if( !doesExist(user.getName()) ) {
@@ -325,6 +327,8 @@ class DbUserManager implements UserManager {
                 thisUser.setHomeDirectory(rs.getString(BaseUser.ATTR_HOME));
                 thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(BaseUser.ATTR_ENABLE)));
                 thisUser.setWritePermission(trueStr.equalsIgnoreCase(rs.getString(BaseUser.ATTR_WRITE_PERM)));
+                thisUser.setMaxLoginNumber(rs.getInt(BaseUser.ATTR_MAX_LOGIN_NUMBER));
+                thisUser.setMaxLoginPerIP(rs.getInt(BaseUser.ATTR_MAX_LOGIN_PER_IP));
                 thisUser.setMaxIdleTime(rs.getInt(BaseUser.ATTR_MAX_IDLE_TIME));
                 thisUser.setMaxUploadRate(rs.getInt(BaseUser.ATTR_MAX_UPLOAD_RATE));
                 thisUser.setMaxDownloadRate(rs.getInt(BaseUser.ATTR_MAX_DOWNLOAD_RATE));

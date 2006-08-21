@@ -132,6 +132,8 @@ class FtpConfigImpl implements IFtpConfig {
             adminUser.setPassword(adminName);
             adminUser.setEnabled(true);
             adminUser.setWritePermission(true);
+            adminUser.setMaxLoginNumber(0);
+            adminUser.setMaxLoginPerIP(0);
             adminUser.setMaxUploadRate(0);
             adminUser.setMaxDownloadRate(0);
             adminUser.setHomeDirectory("./res/home");
@@ -147,6 +149,8 @@ class FtpConfigImpl implements IFtpConfig {
             anonUser.setPassword("");
             anonUser.setEnabled(true);
             anonUser.setWritePermission(false);
+            anonUser.setMaxLoginNumber(20);
+            anonUser.setMaxLoginPerIP(2);
             anonUser.setMaxUploadRate(4800);
             anonUser.setMaxDownloadRate(4800);
             anonUser.setHomeDirectory("./res/home");

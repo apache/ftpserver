@@ -16,7 +16,9 @@
  */
 package org.apache.ftpserver;
 
+import java.net.InetAddress;
 import java.util.Date;
+import java.util.Hashtable;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -33,8 +35,7 @@ import org.apache.ftpserver.interfaces.StatisticsObserver;
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public 
-class FtpStatisticsImpl implements IFtpStatistics {
+public class FtpStatisticsImpl implements IFtpStatistics {
 
     private StatisticsObserver observer = null;
     private FileObserver fileObserver   = null;
@@ -59,6 +60,14 @@ class FtpStatisticsImpl implements IFtpStatistics {
     
     private long bytesUpload       = 0L;
     private long bytesDownload     = 0L;
+    
+    /**
+     *The user login information. The structure of the hashtable: 
+     * userLoginTable {user.getName ==> Hashtable {IP_address String ==> Login_Number}}
+     */
+    Hashtable userLoginTable = new Hashtable();
+    
+    public static final String LOGIN_NUMBER = "login_number";
     
     
     /**
@@ -194,6 +203,42 @@ class FtpStatisticsImpl implements IFtpStatistics {
         return currAnonLogins;
     }
     
+    /**
+     * Get the login number for the specific user
+     */
+    public int getCurrentUserLoginNumber(User user) {
+      Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+      if(statisticsTable == null){//not found the login user's statistics info
+        return 0;
+      } else{
+       Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
+       if(loginNumber == null){
+         return 0;
+       } else{
+         return loginNumber.intValue();
+       }
+      }
+    }
+
+    /**
+     * Get the login number for the specific user from the ipAddress
+     * @param user login user account
+     * @param ipAddress the ip address of the remote user
+     */
+    public int getCurrentUserLoginNumber(User user, InetAddress ipAddress) {
+      Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+      if(statisticsTable == null){//not found the login user's statistics info
+        return 0;
+      } else{
+        Integer loginNumber = (Integer) statisticsTable.get(ipAddress.getHostAddress());
+        if(loginNumber == null){
+          return 0;
+        } else{
+          return loginNumber.intValue();
+        }
+      }
+    }
+    
     
     ////////////////////////////////////////////////////////
     /////////////////  All setter methods  /////////////////
@@ -267,6 +312,29 @@ class FtpStatisticsImpl implements IFtpStatistics {
             ++currAnonLogins;
             ++totalAnonLogins;
         }
+        
+        synchronized(user){//thread safety is needed. Since the login occurrs at low frequency, this overhead is endurable
+          Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+          if(statisticsTable == null){
+            //the hash table that records the login information of the user and its ip address.
+            //structure: IP_Address String ==> login_number
+            statisticsTable = new Hashtable();
+            userLoginTable.put(user.getName(), statisticsTable);
+            //new login, put 1 in the login number
+            statisticsTable.put(LOGIN_NUMBER, new Integer(1));
+            statisticsTable.put(connection.getRequest().getRemoteAddress().getHostAddress(), new Integer(1));
+          } else{
+            Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
+            statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() + 1));
+            Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getRequest().getRemoteAddress().getHostAddress());
+            if(loginNumberPerIP == null){//new connection from this ip
+              statisticsTable.put(connection.getRequest().getRemoteAddress().getHostAddress(), new Integer(1));
+            } else{//this ip has connections already
+              statisticsTable.put(connection.getRequest().getRemoteAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() + 1));
+            }
+          }
+        }
+        
         notifyLogin(connection);
     }
      
@@ -279,6 +347,21 @@ class FtpStatisticsImpl implements IFtpStatistics {
         if( "anonymous".equals(user.getName()) ) {
             --currAnonLogins;
         }
+        
+        synchronized(user){
+          Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+          Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
+          statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() - 1));
+          Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getRequest().getRemoteAddress().getHostAddress());
+          if(loginNumberPerIP != null){//this should always be true
+            if(loginNumberPerIP.intValue() <= 1){//the last login from this ip, remove this ip address
+              statisticsTable.remove(connection.getRequest().getRemoteAddress().getHostAddress());
+            }
+          } else{//this ip has other logins, reduce the number
+            statisticsTable.put(connection.getRequest().getRemoteAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() - 1));
+          }
+        }
+        
         notifyLogout(connection);
     }
     
@@ -414,4 +497,6 @@ class FtpStatisticsImpl implements IFtpStatistics {
             observer.notifyLogout(anonymous);
         }
     } 
+
+  
 }

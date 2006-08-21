@@ -50,6 +50,8 @@ class BaseUser implements User, Serializable {
     public static final String ATTR_MAX_IDLE_TIME     = "idletime";
     public static final String ATTR_MAX_UPLOAD_RATE   = "uploadrate";
     public static final String ATTR_MAX_DOWNLOAD_RATE = "downloadrate";
+    public static final String ATTR_MAX_LOGIN_NUMBER = "maxloginnumber";
+    public static final String ATTR_MAX_LOGIN_PER_IP = "maxloginperip";
     
     private String name        = null;
     private String password    = null;
@@ -57,6 +59,9 @@ class BaseUser implements User, Serializable {
     private int maxIdleTimeSec  = 0; // no limit
     private int maxUploadRate   = 0; // no limit
     private int maxDownloadRate = 0; // no limit
+    
+    private int maxLoginNumber = 0; //no limit
+    private int maxLoginPerIP = 0; //no limit
 
     private boolean hasWritePermission;
     
@@ -81,6 +86,8 @@ class BaseUser implements User, Serializable {
         hasWritePermission = user.getWritePermission();
         homeDir = user.getHomeDirectory();
         isEnabled = user.getEnabled();
+        maxLoginNumber = user.getMaxLoginNumber();
+        maxLoginPerIP = user.getMaxLoginPerIP();
     }
     
     /**
@@ -184,7 +191,37 @@ class BaseUser implements User, Serializable {
      */
     public void setHomeDirectory(String home) {
         homeDir = home;
-    } 
+    }
+    
+    /**
+     *Get maximum login number allowed for this user account
+     */
+    public int getMaxLoginNumber() {
+      return maxLoginNumber;
+    }
+
+    /**
+     * set this user's allowed maximum login number.
+     * Less than or equal to zero means no limit
+     */
+    public void setMaxLoginNumber(int loginNumber) {
+      maxLoginNumber = loginNumber;
+    }
+    
+    /**
+     *Get maximum login number allowed from the same IP address when using this user account
+     */
+    public int getMaxLoginPerIP() {
+      return maxLoginPerIP;
+    }
+    
+    /**
+     * Set the allowed maximum login number from the same IP address and logged as this user account
+     * Less than or equal to zero means no limit
+     */
+    public void setMaxLoginPerIP(int loginPerIP) {
+      maxLoginPerIP = loginPerIP;
+    }
         
     /**
      * Get write permission.

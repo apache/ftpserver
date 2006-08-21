@@ -118,6 +118,8 @@ class PropertiesUserManager implements UserManager {
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_NUMBER, usr.getMaxLoginNumber());
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_PER_IP, usr.getMaxLoginPerIP());
    
        // save user data
        FileOutputStream fos = null;
@@ -248,6 +250,8 @@ class PropertiesUserManager implements UserManager {
         user.setEnabled(userDataProp.getBoolean(baseKey + BaseUser.ATTR_ENABLE, true));
         user.setHomeDirectory( userDataProp.getProperty(baseKey + BaseUser.ATTR_HOME, "/") );
         user.setWritePermission(userDataProp.getBoolean(baseKey + BaseUser.ATTR_WRITE_PERM, false));
+        user.setMaxLoginNumber(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_LOGIN_NUMBER, 0));
+        user.setMaxLoginPerIP(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_LOGIN_PER_IP, 0));
         user.setMaxIdleTime(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_IDLE_TIME, 0));
         user.setMaxUploadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_UPLOAD_RATE, 0));
         user.setMaxDownloadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_DOWNLOAD_RATE, 0));

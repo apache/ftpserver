@@ -55,6 +55,16 @@ interface User {
     int getMaxDownloadRate();
     
     /**
+     * Get maximum login number allowed for this user account
+     */
+    int getMaxLoginNumber();
+    
+    /**
+     * Get maximum login number allowed from the same IP address when using this user account
+     */
+    int getMaxLoginPerIP();
+    
+    /**
      * get user home directory
      */
     String getHomeDirectory();

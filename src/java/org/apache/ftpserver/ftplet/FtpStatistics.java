@@ -16,6 +16,7 @@
  */
 package org.apache.ftpserver.ftplet;
 
+import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -95,4 +96,16 @@ interface FtpStatistics {
      * Get current anonymous login number.
      */
     int getCurrentAnonymousLoginNumber();
+    
+    /**
+     * Get the login number for the specific user
+     */
+    int getCurrentUserLoginNumber(User user);
+
+    /**
+     * Get the login number for the specific user from the ipAddress
+     * @param user login user account
+     * @param ipAddress the ip address of the remote user
+     */
+    int getCurrentUserLoginNumber(User user, InetAddress ipAddress);
 }
