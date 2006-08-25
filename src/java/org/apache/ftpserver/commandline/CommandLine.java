@@ -131,7 +131,6 @@ class CommandLine {
         FileInputStream in = null;
         try {
             if(args.length == 0) {
-                usage();
                 System.out.println("Using default configuration....");
                 config = EmptyConfiguration.INSTANCE;
             }
