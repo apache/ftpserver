@@ -127,7 +127,7 @@ class USER implements ICommand {
             
             // finally set the user name
             bSuccess = true;
-            user.setName(userName);
+            request.setUserArgument(userName);
             if(bAnonymous) {
                 out.send(331, "USER.anonymous", userName);
             }
