@@ -133,6 +133,11 @@ class FtpServer implements Runnable {
      * Listen for client requests.
      */
     public void run() {
+        // ftpConfig might be null if stop has been called
+        if(ftpConfig == null) {
+            return;
+        }
+        
         IConnectionManager conManager = ftpConfig.getConnectionManager();
         while (runner != null) {
             try {
