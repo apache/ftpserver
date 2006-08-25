@@ -165,10 +165,17 @@ limitations under the License.
             <artifactId>log4j</artifactId>
             <version>1.2.12</version>
         </dependency>
+        
+        <!-- Only used for testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>1.4.0</version>
         </dependency>
     </dependencies>
 

@@ -153,7 +153,8 @@ class PASS implements ICommand {
             
             // if login failed - close connection
             if(!bSuccess) {
-                conManager.closeConnection(handler);
+                request.setUserArgument(null);
+                //conManager.closeConnection(handler);
             }
         }
     }
