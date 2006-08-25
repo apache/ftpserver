@@ -38,6 +38,15 @@
                 </source>
             </subsection>
 
+            <subsection name="ACCT">
+                <p>Provides the user's account. Not used by FtpServer.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            202 Command ACCT not implemented.
+                </source>
+            </subsection>
+
             <subsection name="APPE">
                 <p>Appends data to the end of a file on the remote host.
                    If the file does not already exist, it is created.
@@ -85,6 +94,18 @@
                 <source>
             250 Command okay.
             550 No such directory.
+                </source>
+            </subsection>
+
+            <subsection name="DELE">
+                <p>Deletes the file specified by the provided path.</p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            250 Command okay.
+            450 No permission to delete.
+            450 Can't delete file.
+            550 Not a valid file.
+            501 Syntax error in parameters or arguments.
                 </source>
             </subsection>
 
@@ -197,6 +218,20 @@
                 </source>
             </subsection>
 
+            <subsection name="MLSD">
+                <p>Causes a list to be sent from the server to the passive DTP
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            150 File status okay; about to open data connection.
+            226 Closing data connection.
+            425 Can't open data connection.
+            426 Data connection error.
+            501 Syntax error in parameters or arguments.
+            551 File listing failed.
+                </source>
+            </subsection>
+
             <subsection name="MODE">
                 <p>Set data transfer mode. The valid values are S and Z.
                 </p>
@@ -233,6 +268,18 @@
                 <p><strong>Server Replies:</strong></p>
                 <source>
             200 Command okay.
+                </source>
+            </subsection>
+
+            <subsection name="NOOP">
+                <p>Cause the server use optional features for the command specified.
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            500 Execution failed.
+            501 Syntax error in parameters or arguments.
+            502 Command OPTS not implemented for ...
+            Additional return codes available for different OPTS commands.
                 </source>
             </subsection>
 
@@ -330,6 +377,15 @@
                 <p><strong>Server Replies:</strong></p>
                 <source>
             200 Goodbye.
+                </source>
+            </subsection>
+
+            <subsection name="REIN">
+                <p>Flushes a user, without affecting transfers in progress
+                </p>
+                <p><strong>Server Replies:</strong></p>
+                <source>
+            220 Service ready for new user.
                 </source>
             </subsection>
 
