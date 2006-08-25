@@ -321,7 +321,7 @@ class RequestHandler implements IConnection {
             
             // log message
             User user = request.getUser();
-            String userName = user != null ? user.getName() : "<Not loginned>";
+            String userName = user != null ? user.getName() : "<Not logged in>";
             InetAddress clientAddr = request.getRemoteAddress(); 
             log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
