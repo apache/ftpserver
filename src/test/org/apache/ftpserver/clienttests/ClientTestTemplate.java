@@ -16,15 +16,18 @@
 
 package org.apache.ftpserver.clienttests;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpConfigImpl;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.util.IoUtils;
 
 import junit.framework.TestCase;
 
@@ -34,32 +37,49 @@ public abstract class ClientTestTemplate extends TestCase {
 
     private FtpServer server;
 
-    private int port = -1;
+    protected int port = -1;
+
     private IFtpConfig config;
 
     protected FTPClient client;
 
+    private File testTmpDir = new File("test-tmp");
+    private File rootDir = new File(testTmpDir, "ftproot");
+    
     /*
      * (non-Javadoc)
      * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
+        testTmpDir.mkdirs();
+        
         initPort();
 
         Properties configProps = new Properties();
         configProps.setProperty("config.socket-factory.port", Integer
                 .toString(port));
+        configProps.setProperty("config.user-manager.class",
+                "org.apache.ftpserver.usermanager.PropertiesUserManager");
+        configProps.setProperty("config.user-manager.admin", "admin");
+        configProps.setProperty("config.user-manager.prop-password-encrypt", "false");
+        configProps.setProperty("config.user-manager.prop-file",
+                "src/test/users.gen");
+        configProps.setProperty("config.create-default-user", "false");
 
         config = new FtpConfigImpl(new PropertiesConfiguration(configProps));
         server = new FtpServer(config);
         server.start();
 
         client = new FTPClient();
-        client.connect("localhost", port);
+        
+        try{
+            client.connect("localhost", port);
+        } catch(FTPConnectionClosedException e) {
+            // tryu again
+            client.connect("localhost", port);
+        }
     }
-    
-
 
     /**
      * Attempts to find a free port or fallback to a default
@@ -87,7 +107,6 @@ public abstract class ClientTestTemplate extends TestCase {
         }
     }
 
-
     /*
      * (non-Javadoc)
      * 
@@ -95,6 +114,8 @@ public abstract class ClientTestTemplate extends TestCase {
      */
     protected void tearDown() throws Exception {
         server.stop();
+        
+        IoUtils.delete(testTmpDir);
     }
-    
+
 }
