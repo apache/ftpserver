@@ -217,4 +217,32 @@ class IoUtils {
         copy(reader, writer, 1024);
         return writer.toString();
     } 
+    
+    public final static void delete(File file) throws IOException {
+        if(file.isDirectory()) {
+            deleteDir(file);
+        } else {
+            deleteFile(file);
+        }
+    }
+    
+    private final static void deleteDir(File dir) throws IOException {
+        File[] children = dir.listFiles();
+        
+        for (int i = 0; i < children.length; i++) {
+            File file = children[i];
+            delete(file);
+        }
+        
+        if(!dir.delete()) {
+            throw new IOException("Failed to delete directory: " + dir);
+        }
+
+    }
+
+    private final static void deleteFile(File file) throws IOException {
+        if(!file.delete()) {
+            throw new IOException("Failed to delete file: " + file);
+        }
+    }
 }    
