@@ -20,10 +20,10 @@ limitations under the License.
     <!-- POM Definition -->
     <pomVersion>3</pomVersion>
     <id>ftpserver</id>
-    <groupId>apache</groupId>
+    <groupId>org.apache.incubator.ftpserver</groupId>
     <artifactId>ftpserver</artifactId>
     <name>Apache FTP Server</name>
-    <currentVersion>dev</currentVersion>
+    <currentVersion>1.0-incubator-SNAPSHOT</currentVersion>
 
 
     <!-- Organizational Information -->
