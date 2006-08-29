@@ -83,9 +83,10 @@ under the License.
             <ant:fileset dir="${maven.docs.src}"/>
         </ant:copy>
 
-        <!-- Copy all script files -->
+        <!-- Copy all script files and NOTICE -->
         <ant:copy todir="${maven.dist.src.assembly.dir}">
             <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
+            <ant:fileset dir="${basedir}" includes="NOTICE"/>
         </ant:copy>
         <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="lf" eof="remove" includes="*.sh"/>
         <ant:fixcrlf srcdir="${maven.dist.src.assembly.dir}" eol="crlf" includes="*.bat"/>
@@ -119,9 +120,10 @@ under the License.
             <ant:copy file="${lib.path}" todir="${maven.dist.bin.assembly.dir}/common/lib"/>
         </j:forEach>
 
-        <!-- Copy all the scripts -->
+        <!-- Copy all the scripts and NOTICE -->
         <ant:copy todir="${maven.dist.bin.assembly.dir}">
             <ant:fileset dir="${basedir}" includes="*.bat,*.sh"/>
+            <ant:fileset dir="${basedir}" includes="NOTICE"/>
         </ant:copy>
         <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="lf" eof="remove" includes="*.sh"/>
         <ant:fixcrlf srcdir="${maven.dist.bin.assembly.dir}" eol="crlf" includes="*.bat"/>
@@ -132,5 +134,14 @@ under the License.
             <ant:fileset dir="${basedir}/res" excludes="**/*.gen"/>
         </ant:copy>
     </postGoal>
+
+    <!-- ================================================= -->
+    <!-- Include NOTICE in JAR -->
+    <!-- ================================================= -->
+    <preGoal name="jar:jar">
+        <ant:copy todir="${maven.build.dest}/META-INF">
+            <ant:fileset dir="${basedir}" includes="NOTICE"/>
+        </ant:copy>
+	</preGoal>
 
 </project>
