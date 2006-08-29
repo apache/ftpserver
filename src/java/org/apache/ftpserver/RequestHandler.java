@@ -164,6 +164,10 @@ class RequestHandler implements IConnection {
      * Server one FTP client connection.
      */
     public void run() {
+        if(request == null) {
+            return;
+        }
+        
         
         InetAddress clientAddr = request.getRemoteAddress();
         IConnectionManager conManager = fconfig.getConnectionManager();

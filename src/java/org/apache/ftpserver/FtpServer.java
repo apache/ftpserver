@@ -83,13 +83,8 @@ class FtpServer implements Runnable {
             }
             serverSocket = null;
         }  
-         
-        // release server resources
-        if (ftpConfig != null) {
-            ftpConfig.dispose();
-            ftpConfig = null;
-        }
 
+        
         // wait for the runner thread to terminate
         if( (runner != null) && runner.isAlive() ) {
             try {
@@ -99,6 +94,15 @@ class FtpServer implements Runnable {
             }
             runner = null;
         }
+
+        
+        
+        // release server resources
+        if (ftpConfig != null) {
+            ftpConfig.dispose();
+            ftpConfig = null;
+        }
+
     }
 
     /**
