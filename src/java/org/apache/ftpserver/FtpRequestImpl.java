@@ -108,7 +108,7 @@ class FtpRequestImpl implements FtpRequest {
      * Reinitialize request.
      */
     public void reinitialize() {
-	userArgument = null;
+        userArgument = null;
         user = null;
         loginTime = 0L;
         fileSystemView = null;

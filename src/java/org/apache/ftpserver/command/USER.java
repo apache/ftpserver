@@ -53,7 +53,7 @@ class USER implements ICommand {
                         FtpRequestImpl request, 
                         FtpWriter out) throws IOException, FtpException {
     
-        boolean bSuccess = false;
+        boolean success = false;
         IFtpConfig fconfig = handler.getConfig();
         IConnectionManager conManager = fconfig.getConnectionManager();
         IFtpStatistics stat = (IFtpStatistics)fconfig.getFtpStatistics();
@@ -74,7 +74,7 @@ class USER implements ICommand {
             if(request.isLoggedIn()) {
                 if( userName.equals(user.getName()) ) {
                     out.send(230, "USER", null);
-                    bSuccess = true;
+                    success = true;
                 }
                 else {
                     out.send(530, "USER.invalid", null);
@@ -83,8 +83,8 @@ class USER implements ICommand {
             }
             
             // anonymous login is not enabled
-            boolean bAnonymous = userName.equals("anonymous");
-            if( bAnonymous && (!conManager.isAnonymousLoginEnabled()) ) {
+            boolean anonymous = userName.equals("anonymous");
+            if( anonymous && (!conManager.isAnonymousLoginEnabled()) ) {
                 out.send(530, "USER.anonymous", null);
                 return;
             }
@@ -92,7 +92,7 @@ class USER implements ICommand {
             // anonymous login limit check
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
-            if( bAnonymous && (currAnonLogin >= maxAnonLogin) ) {
+            if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
                 out.send(421, "USER.anonymous", null);
                 return;
             }
@@ -129,9 +129,9 @@ class USER implements ICommand {
             }
             
             // finally set the user name
-            bSuccess = true;
+            success = true;
             request.setUserArgument(userName);
-            if(bAnonymous) {
+            if(anonymous) {
                 out.send(331, "USER.anonymous", userName);
             }
             else {
@@ -141,7 +141,7 @@ class USER implements ICommand {
         finally {
 
             // if not ok - close connection
-            if(!bSuccess) {
+            if(!success) {
                 conManager.closeConnection(handler);
             }
         }

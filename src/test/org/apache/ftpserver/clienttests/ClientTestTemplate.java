@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Properties;
 
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpConfigImpl;
@@ -31,11 +33,14 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.util.IoUtils;
+import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
 
 public abstract class ClientTestTemplate extends TestCase {
 
+    private static final Logger log = Logger.getLogger(ClientTestTemplate.class);
+    
     private static final int FALLBACK_PORT = 12321;
 
     private FtpServer server;
@@ -49,16 +54,11 @@ public abstract class ClientTestTemplate extends TestCase {
     private File testTmpDir = new File("test-tmp");
     private File rootDir = new File(testTmpDir, "ftproot");
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        testTmpDir.mkdirs();
-        
-        initPort();
+    protected Properties createConfig() {
+        return createDefaultConfig();
+    }
 
+    protected Properties createDefaultConfig() {
         Properties configProps = new Properties();
         configProps.setProperty("config.socket-factory.port", Integer
                 .toString(port));
@@ -70,11 +70,34 @@ public abstract class ClientTestTemplate extends TestCase {
                 "src/test/users.gen");
         configProps.setProperty("config.create-default-user", "false");
 
-        config = new FtpConfigImpl(new PropertiesConfiguration(configProps));
+        return configProps;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see junit.framework.TestCase#setUp()
+     */
+    protected void setUp() throws Exception {
+        testTmpDir.mkdirs();
+        
+        initPort();
+
+        config = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
         server = new FtpServer(config);
         server.start();
 
         client = new FTPClient();
+        client.addProtocolCommandListener(new ProtocolCommandListener(){
+
+            public void protocolCommandSent(ProtocolCommandEvent event) {
+                log.debug("> " + event.getMessage().trim());
+                
+            }
+
+            public void protocolReplyReceived(ProtocolCommandEvent event) {
+                log.debug("< " + event.getMessage().trim());
+            }});
         
         try{
             client.connect("localhost", port);

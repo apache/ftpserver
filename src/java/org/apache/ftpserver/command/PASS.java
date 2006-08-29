@@ -51,7 +51,7 @@ class PASS implements ICommand {
                         FtpRequestImpl request, 
                         FtpWriter out) throws IOException, FtpException {
     
-        boolean bSuccess = false;
+        boolean success = false;
         IFtpConfig fconfig = handler.getConfig();
         Log log = fconfig.getLogFactory().getInstance(getClass());
         IConnectionManager conManager = fconfig.getConnectionManager();
@@ -70,7 +70,8 @@ class PASS implements ICommand {
             
             // check user name
             String userName = request.getUserArgument();
-            if(userName == null) {
+            User user = request.getUser();
+            if(userName == null && user == null) {
                 out.send(503, "PASS", null);
                 return;
             }
@@ -78,15 +79,15 @@ class PASS implements ICommand {
             // already logged-in
             if(request.isLoggedIn()) {
                 out.send(202, "PASS", null);
-                bSuccess = true;
+                success = true;
                 return;
             }
             
             // anonymous login limit check
-            boolean bAnonymous = userName.equals("anonymous");
+            boolean anonymous = userName.equals("anonymous");
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
-            if( bAnonymous && (currAnonLogin >= maxAnonLogin) ) {
+            if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
                 out.send(421, "PASS.anonymous", null);
                 return;
             }
@@ -101,24 +102,26 @@ class PASS implements ICommand {
             
             // authenticate user
             UserManager userManager = fconfig.getUserManager();
-            User user = null;
+            user = null;
             try {
-                if(bAnonymous) {
-                    bSuccess = userManager.doesExist("anonymous");
-                    if (bSuccess)
-                	user = userManager.getUserByName("anonymous");
+                if(anonymous) {
+                    success = userManager.doesExist("anonymous");
+                    if (success) {
+                        user = userManager.getUserByName("anonymous");
+                    }
                 }
                 else {
-                    bSuccess = userManager.authenticate(userName, password);
-                    if (bSuccess)
-                	user = userManager.getUserByName(userName);
+                    success = userManager.authenticate(userName, password);
+                    if (success) {
+                        user = userManager.getUserByName(userName);
+                    }
                 }
             }
             catch(Exception ex) {
-                bSuccess = false;
+                success = false;
                 log.warn("PASS.execute()", ex);
             }
-            if(bSuccess) {
+            if(success) {
                 request.setUser(user);
                 request.setUserArgument(null);
                 request.setMaxIdleTime(user.getMaxIdleTime());
@@ -137,7 +140,7 @@ class PASS implements ICommand {
 
             // everything is fine - send login ok message
             out.send(230, "PASS", userName);
-            if(bAnonymous) {
+            if(anonymous) {
                 log.info("Anonymous login success - " + password);
             }
             else {
@@ -146,18 +149,19 @@ class PASS implements ICommand {
             
             // call Ftplet.onLogin() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onLogin(request, out);
-            if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
-                return;
-            }    
+            if(ftpletContainer != null) {
+                FtpletEnum ftpletRet = ftpletContainer.onLogin(request, out);
+                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
+                    fconfig.getConnectionManager().closeConnection(handler);
+                    return;
+                }    
+            }
         }
         finally {
             
-            // if login failed - close connection
-            if(!bSuccess) {
-                request.setUserArgument(null);
-                //conManager.closeConnection(handler);
+            // if login failed - reset user
+            if(!success) {
+                request.reinitialize();
             }
         }
     }
