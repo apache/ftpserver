@@ -125,6 +125,13 @@ class PASS implements ICommand {
                 return;
             }
             
+            // update different objects
+            FileSystemManager fmanager = fconfig.getFileSystemManager(); 
+            FileSystemView fsview = fmanager.createFileSystemView(user);
+            handler.setDirectoryLister(new DirectoryLister(fsview));
+            request.setLogin(fsview);
+            stat.setLogin(handler);
+
             // everything is fine - send login ok message
             out.send(230, "PASS", userName);
             if(bAnonymous) {
@@ -133,13 +140,6 @@ class PASS implements ICommand {
             else {
                 log.info("Login success - " + userName);
             }
-            
-            // update different objects
-            FileSystemManager fmanager = fconfig.getFileSystemManager(); 
-            FileSystemView fsview = fmanager.createFileSystemView(user);
-            handler.setDirectoryLister(new DirectoryLister(fsview));
-            request.setLogin(fsview);
-            stat.setLogin(handler);
             
             // call Ftplet.onLogin() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
