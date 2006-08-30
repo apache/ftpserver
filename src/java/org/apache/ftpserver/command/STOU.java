@@ -77,10 +77,19 @@ class STOU implements ICommand {
                 return;
             }
             
+            String dirName = request.getArgument();
+            
+            String filePrefix;
+            if(dirName == null) {
+                filePrefix = "ftp.dat";
+            } else {
+                filePrefix = dirName + "/ftp.dat";
+            }
+            
             // get filenames
             FileObject file = null;
             try {
-                file = request.getFileSystemView().getFileObject("ftp.dat");
+                file = request.getFileSystemView().getFileObject(filePrefix);
                 if(file != null) {
                     file = getUniqueFile(handler, file);
                 }
@@ -122,7 +131,7 @@ class STOU implements ICommand {
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(0L) );
                 
                 // transfer data
-                int maxRate = handler.getRequest().getUser().getMaxUploadRate();
+                int maxRate = request.getUser().getMaxUploadRate();
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message

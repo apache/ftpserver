@@ -143,7 +143,11 @@ class FtpWriter implements FtpResponse {
     public void send(int code, String subId, String basicMsg) throws IOException {
         IMessageResource resource = fconfig.getMessageResource();
         String lang = request.getLanguage();
-        String msg = resource.getMessage(code, subId, lang);
+        
+        String msg = null;
+        if(resource != null ) {
+            msg = resource.getMessage(code, subId, lang);
+        }
         if(msg == null) {
             log.error("Message not found : " + code + ',' + subId + ',' + lang);
             msg = "";
