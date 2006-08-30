@@ -76,6 +76,7 @@ class DELE implements ICommand {
 
         // get file object
         FileObject file = null;
+        
         try {
             file = request.getFileSystemView().getFileObject(fileName);
         }
@@ -88,10 +89,10 @@ class DELE implements ICommand {
 
         // check file
         fileName = file.getFullName();
-        if(!file.isFile()) {
-            out.send(550, "DELE.invalid", fileName);
-            return;
-        }
+//        if(!file.isFile()) {
+//            out.send(550, "DELE.invalid", fileName);
+//            return;
+//        }
         if( !file.hasDeletePermission() ) {
             out.send(450, "DELE.permission", fileName);
             return;
@@ -99,7 +100,6 @@ class DELE implements ICommand {
         
         // now delete
         if(file.delete()) {
-            out.send(250, "DELE", fileName); 
             
             // log message
             String userName = request.getUser().getName();
@@ -110,6 +110,8 @@ class DELE implements ICommand {
             IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
             ftpStat.setDelete(handler, file);
             
+            out.send(250, "DELE", fileName); 
+
             // call Ftplet.onDeleteEnd() method
             ftpletRet = ftpletContainer.onDeleteEnd(request, out);
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

@@ -60,8 +60,8 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected FTPClient client;
 
-    private File testTmpDir = new File("test-tmp");
-    protected File rootDir = new File(testTmpDir, "ftproot");
+    private static final File TEST_TMP_DIR = new File("test-tmp");
+    protected static File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
     
     protected Properties createConfig() {
         return createDefaultConfig();
@@ -90,8 +90,8 @@ public abstract class ClientTestTemplate extends TestCase {
     protected void setUp() throws Exception {
         cleanTmpDirs();
         
-        testTmpDir.mkdirs();
-        rootDir.mkdirs();
+        TEST_TMP_DIR.mkdirs();
+        ROOT_DIR.mkdirs();
         
         initPort();
 
@@ -146,7 +146,7 @@ public abstract class ClientTestTemplate extends TestCase {
     }
 
     private void cleanTmpDirs() throws IOException {
-        IoUtils.delete(testTmpDir);
+        IoUtils.delete(TEST_TMP_DIR);
     }
     
     /*

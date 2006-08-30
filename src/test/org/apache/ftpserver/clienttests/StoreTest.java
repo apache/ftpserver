@@ -46,7 +46,7 @@ public class StoreTest extends ClientTestTemplate {
 
 
     public void testStore() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
 
         assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
         
@@ -55,7 +55,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreEmptyFile() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
         assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(new byte[0])));
         
@@ -64,7 +64,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreWithExistingFile() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         testFile.createNewFile();
         
         assertTrue(testFile.exists());
@@ -77,7 +77,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreWithPath() throws Exception {
-        File dir = new File(rootDir, "foo/bar");
+        File dir = new File(ROOT_DIR, "foo/bar");
         dir.mkdirs();
         File testFile = new File(dir, TEST_FILENAME);
         
@@ -88,7 +88,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreWithNonExistingPath() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
 
         assertFalse(client.storeFile("foo/bar/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
 
@@ -96,7 +96,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreWithoutWriteAccess() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
         client.rein();
         client.login("anonymous", "foo@bar.com");
@@ -109,25 +109,25 @@ public class StoreTest extends ClientTestTemplate {
 
         assertTrue(client.storeUniqueFile(new ByteArrayInputStream(testData)));
         
-        doAssertOfUniqueFile(client, rootDir);
+        doAssertOfUniqueFile(client, ROOT_DIR);
     }
 
     public void testStoreUniqueWithDirectory() throws Exception {
-        File dir = new File(rootDir, "foo/bar");
+        File dir = new File(ROOT_DIR, "foo/bar");
         dir.mkdirs();
 
         assertTrue(client.storeUniqueFile("foo/bar", new ByteArrayInputStream(testData)));
         
-        doAssertOfUniqueFile(client, rootDir);
+        doAssertOfUniqueFile(client, ROOT_DIR);
     }
 
     public void testStoreUniqueWithDirectoryWithTrailingSlash() throws Exception {
-        File dir = new File(rootDir, "foo/bar");
+        File dir = new File(ROOT_DIR, "foo/bar");
         dir.mkdirs();
         
         assertTrue(client.storeUniqueFile("foo/bar/", new ByteArrayInputStream(testData)));
         
-        doAssertOfUniqueFile(client, rootDir);
+        doAssertOfUniqueFile(client, ROOT_DIR);
     }
 
 

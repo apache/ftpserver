@@ -61,7 +61,7 @@ public class RetrieveTest extends ClientTestTemplate {
     }
 
     public void testRetrieve() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
         writeDataToFile(testFile, testData);
 
@@ -75,7 +75,7 @@ public class RetrieveTest extends ClientTestTemplate {
     }
 
     public void testRetrieveWithPath() throws Exception {
-        File dir = new File(rootDir, "foo/bar");
+        File dir = new File(ROOT_DIR, "foo/bar");
         dir.mkdirs();
         
         File testFile = new File(dir, TEST_FILENAME);
@@ -92,7 +92,7 @@ public class RetrieveTest extends ClientTestTemplate {
     }
 
     public void testRetrieveNonExistingFile() throws Exception {
-        File testFile = new File(rootDir, TEST_FILENAME);
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
         assertFalse(testFile.exists());
         
