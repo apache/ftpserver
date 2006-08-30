@@ -29,6 +29,20 @@ public class TestUtil {
         }
     }
     
+    public static void assertInArrays(Object expected, Object[] actual) {
+        boolean found = false;
+        for (int i = 0; i < actual.length; i++) {
+            Object object = actual[i];
+            if(object.equals(expected)) {
+                found = true;
+                break;
+            }
+        }
+        
+        if(!found) {
+            TestCase.fail("Expected value not in array");
+        }
+    }
     public static void assertArraysEqual(byte[] expected, byte[] actual) {
         if(actual.length != expected.length) {
             TestCase.fail("Arrays are of different length");
@@ -39,6 +53,5 @@ public class TestUtil {
                 TestCase.fail("Arrays differ at position " + i);
             }
         }
-        
     }
 }
