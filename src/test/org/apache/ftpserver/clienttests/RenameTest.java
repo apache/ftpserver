@@ -109,7 +109,7 @@ public class RenameTest extends ClientTestTemplate {
     }
 
     
-    public void testRenameNoWriteAccess() throws Exception {
+    public void testRenameWithoutWriteAccess() throws Exception {
         client.rein();
         client.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD);
         

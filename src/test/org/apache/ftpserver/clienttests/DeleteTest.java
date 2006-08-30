@@ -46,6 +46,19 @@ public class DeleteTest extends ClientTestTemplate {
         assertFalse(TEST_FILE1.exists());
     }
 
+    public void testDeleteWithoutWriteAccess() throws Exception {
+        client.rein();
+        client.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD);
+        
+        TEST_FILE1.createNewFile();
+        
+        assertTrue(TEST_FILE1.exists());
+        
+        assertFalse(client.deleteFile(TEST_FILE1.getName()));
+        
+        assertTrue(TEST_FILE1.exists());
+    }
+
     public void testDeleteDir() throws Exception {
         TEST_DIR1.mkdirs();
         

@@ -30,7 +30,6 @@ import org.apache.ftpserver.util.IoUtils;
 
 public class RetrieveTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
-    private static final String DEFAULT_UNIQUE_FILENAME = "ftp.dat";
 
     private static byte[] testData = null;
     
