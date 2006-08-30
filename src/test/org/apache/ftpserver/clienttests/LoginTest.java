@@ -30,13 +30,6 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
 
 public class LoginTest extends ClientTestTemplate {
-    private static final String ANONYMOUS_PASSWORD = "foo@bar.com";
-    private static final String ANONYMOUS_USERNAME = "anonymous";
-    private static final String TESTUSER2_USERNAME = "testuser2";
-    private static final String TESTUSER1_USERNAME = "testuser1";
-    private static final String TESTUSER_PASSWORD = "password";
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin";
     private static final String UNKNOWN_USERNAME = "foo";
     private static final String UNKNOWN_PASSWORD = "bar";
 

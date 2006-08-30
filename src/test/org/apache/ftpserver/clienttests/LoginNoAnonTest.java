@@ -23,8 +23,6 @@ import java.util.Properties;
 
 
 public class LoginNoAnonTest extends ClientTestTemplate {
-    private static final String ANONYMOUS_PASSWORD = "foo@bar.com";
-    private static final String ANONYMOUS_USERNAME = "anonymous";
 
     /* (non-Javadoc)
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()

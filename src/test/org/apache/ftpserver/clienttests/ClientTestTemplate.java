@@ -41,6 +41,15 @@ public abstract class ClientTestTemplate extends TestCase {
 
     private static final Logger log = Logger.getLogger(ClientTestTemplate.class);
     
+    protected static final String ADMIN_PASSWORD = "admin";
+    protected static final String ADMIN_USERNAME = "admin";
+    protected static final String ANONYMOUS_PASSWORD = "foo@bar.com";
+    protected static final String ANONYMOUS_USERNAME = "anonymous";
+    protected static final String TESTUSER2_USERNAME = "testuser2";
+    protected static final String TESTUSER1_USERNAME = "testuser1";
+    protected static final String TESTUSER_PASSWORD = "password";
+
+    
     private static final int FALLBACK_PORT = 12321;
 
     private FtpServer server;

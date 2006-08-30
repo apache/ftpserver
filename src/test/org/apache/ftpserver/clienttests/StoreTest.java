@@ -30,9 +30,6 @@ public class StoreTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
     private static final String DEFAULT_UNIQUE_FILENAME = "ftp.dat";
 
-    private static final String ADMIN_PASSWORD = "admin";
-    private static final String ADMIN_USERNAME = "admin";
-    
     private static byte[] testData = null;
     
     /* (non-Javadoc)
