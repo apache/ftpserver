@@ -98,7 +98,7 @@ class APPE implements ICommand {
             fileName = file.getFullName();
             
             // check file existance
-            if( !(file.doesExist() && file.isFile()) ) {
+            if(file.doesExist() && !file.isFile()) {
                 out.send(550, "APPE.invalid", fileName);
                 return;
             }

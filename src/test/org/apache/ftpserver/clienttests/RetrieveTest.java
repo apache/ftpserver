@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -42,21 +43,6 @@ public class RetrieveTest extends ClientTestTemplate {
         testData = "TESTDATA".getBytes("UTF-8");
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        client.setRemoteVerificationEnabled(false);
-        client.enterLocalPassiveMode();
-    }
-
-
-    private void writeDataToFile(File file, byte[] data) throws IOException {
-        FileOutputStream fos = null;
-        
-        try{
-            fos = new FileOutputStream(file);
-            
-            fos.write(data);
-        } finally {
-            IoUtils.close(fos);
-        }
     }
 
     public void testRetrieve() throws Exception {
@@ -73,6 +59,28 @@ public class RetrieveTest extends ClientTestTemplate {
         TestUtil.assertArraysEqual(testData, baos.toByteArray());
     }
 
+    public void testRetrieveWithRestart() throws Exception {
+        int skipLen = 4;
+        
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        
+        writeDataToFile(testFile, testData);
+        
+        assertTrue(testFile.exists());
+        
+        client.setRestartOffset(4);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        assertTrue(client.retrieveFile(TEST_FILENAME, baos));
+        
+        int len = testData.length - skipLen;
+        byte[] expected = new byte[len];
+        System.arraycopy(testData, skipLen, expected, 0, len);
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertArraysEqual(expected, baos.toByteArray());
+    }
+    
     public void testRetrieveWithPath() throws Exception {
         File dir = new File(ROOT_DIR, "foo/bar");
         dir.mkdirs();

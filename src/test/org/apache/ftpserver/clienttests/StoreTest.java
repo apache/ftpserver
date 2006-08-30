@@ -27,10 +27,20 @@ import org.apache.ftpserver.test.TestUtil;
 
 
 public class StoreTest extends ClientTestTemplate {
-    private static final String TEST_FILENAME = "test.txt";
-    private static final String DEFAULT_UNIQUE_FILENAME = "ftp.dat";
+    private static final String TESTDATA = "TESTDATA";
 
+    private static final String ENCODING = "UTF-8";
+
+    private static final String TEST_FILENAME = "test.txt";
+
+    private static final int SKIP_LEN = 4;
+    
+    
+    private static final File TEST_DIR = new File(ROOT_DIR, "foo/bar");
+    
     private static byte[] testData = null;
+    private static byte[] doubleTestData = null;
+    private static byte[] oneAndAHalfTestData = null;
     
     /* (non-Javadoc)
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
@@ -38,12 +48,12 @@ public class StoreTest extends ClientTestTemplate {
     protected void setUp() throws Exception {
         super.setUp();
 
-        testData = "TESTDATA".getBytes("UTF-8");
-        
+        testData = TESTDATA.getBytes(ENCODING);
+        doubleTestData = (TESTDATA + TESTDATA).getBytes(ENCODING);
+        oneAndAHalfTestData = ("TEST" + TESTDATA).getBytes(ENCODING);
+                
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
-
-
 
     public void testStore() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
@@ -52,6 +62,17 @@ public class StoreTest extends ClientTestTemplate {
         
         assertTrue(testFile.exists());
         TestUtil.assertFileEqual(testData, testFile);
+    }
+
+    public void testStoreWithRestart() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        writeDataToFile(testFile, testData);
+        
+        client.setRestartOffset(4);
+        assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(oneAndAHalfTestData, testFile);
     }
 
     public void testStoreEmptyFile() throws Exception {
@@ -76,10 +97,20 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(testData, testFile);
     }
 
+    public void testStoreWithDirectoryInPlace() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        testFile.mkdirs();
+        
+        assertTrue(testFile.exists());
+        assertFalse(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        assertTrue(testFile.isDirectory());
+    }
+    
     public void testStoreWithPath() throws Exception {
-        File dir = new File(ROOT_DIR, "foo/bar");
-        dir.mkdirs();
-        File testFile = new File(dir, TEST_FILENAME);
+        TEST_DIR.mkdirs();
+        File testFile = new File(TEST_DIR, TEST_FILENAME);
         
         assertTrue(client.storeFile("foo/bar/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
         
@@ -88,7 +119,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreWithNonExistingPath() throws Exception {
-        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        File testFile = new File(TEST_DIR, TEST_FILENAME);
 
         assertFalse(client.storeFile("foo/bar/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
 
@@ -113,8 +144,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreUniqueWithDirectory() throws Exception {
-        File dir = new File(ROOT_DIR, "foo/bar");
-        dir.mkdirs();
+        TEST_DIR.mkdirs();
 
         assertTrue(client.storeUniqueFile("foo/bar", new ByteArrayInputStream(testData)));
         
@@ -122,8 +152,7 @@ public class StoreTest extends ClientTestTemplate {
     }
 
     public void testStoreUniqueWithDirectoryWithTrailingSlash() throws Exception {
-        File dir = new File(ROOT_DIR, "foo/bar");
-        dir.mkdirs();
+        TEST_DIR.mkdirs();
         
         assertTrue(client.storeUniqueFile("foo/bar/", new ByteArrayInputStream(testData)));
         
@@ -145,4 +174,60 @@ public class StoreTest extends ClientTestTemplate {
         assertTrue(testFile.exists());
         TestUtil.assertFileEqual(testData, testFile);
     }
+
+    public void testAppend() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        
+        writeDataToFile(testFile, testData);
+
+        assertTrue(client.appendFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(doubleTestData, testFile);
+    }
+
+    public void testAppendWithDirectoryInPlace() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        testFile.mkdirs();
+        
+        assertTrue(testFile.exists());
+        assertFalse(client.appendFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        assertTrue(testFile.isDirectory());
+    }
+    
+    public void testAppendWithPath() throws Exception {
+        TEST_DIR.mkdirs();
+        File testFile = new File(TEST_DIR, TEST_FILENAME);
+        
+        writeDataToFile(testFile, testData);
+        
+        assertTrue(client.appendFile("foo/bar/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(doubleTestData, testFile);
+    }
+    
+    public void testAppendWithoutWriteAccess() throws Exception {
+        client.rein();
+        client.login("anonymous", "foo@bar.com");
+
+        
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+
+        assertFalse(client.appendFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertFalse(testFile.exists());
+    }
+    
+    public void testAppendToNoExistingFile() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        
+        assertTrue(client.appendFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(testData, testFile);
+    }
+
 }

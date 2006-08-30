@@ -20,6 +20,7 @@
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Properties;
@@ -147,6 +148,18 @@ public abstract class ClientTestTemplate extends TestCase {
 
     private void cleanTmpDirs() throws IOException {
         IoUtils.delete(TEST_TMP_DIR);
+    }
+    
+    protected void writeDataToFile(File file, byte[] data) throws IOException {
+        FileOutputStream fos = null;
+        
+        try{
+            fos = new FileOutputStream(file);
+            
+            fos.write(data);
+        } finally {
+            IoUtils.close(fos);
+        }
     }
     
     /*
