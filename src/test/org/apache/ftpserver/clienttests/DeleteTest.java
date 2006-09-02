@@ -24,6 +24,7 @@ import java.io.File;
 
 public class DeleteTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+    private static final File TEST_FILE_WITH_SPACE = new File(ROOT_DIR, "test 2.txt");
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
     private static final File TEST_FILE_IN_DIR1 = new File(TEST_DIR1, "test2.txt");
 
@@ -44,6 +45,16 @@ public class DeleteTest extends ClientTestTemplate {
         assertTrue(client.deleteFile(TEST_FILE1.getName()));
         
         assertFalse(TEST_FILE1.exists());
+    }
+
+    public void testDeleteWithSpaceInFileName() throws Exception {
+        TEST_FILE_WITH_SPACE.createNewFile();
+        
+        assertTrue(TEST_FILE_WITH_SPACE.exists());
+        
+        assertTrue(client.deleteFile(TEST_FILE_WITH_SPACE.getName()));
+        
+        assertFalse(TEST_FILE_WITH_SPACE.exists());
     }
 
     public void testDeleteWithoutWriteAccess() throws Exception {

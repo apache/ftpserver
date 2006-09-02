@@ -21,12 +21,8 @@ package org.apache.ftpserver.clienttests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
-import org.apache.ftpserver.util.IoUtils;
 
 
 public class RetrieveTest extends ClientTestTemplate {

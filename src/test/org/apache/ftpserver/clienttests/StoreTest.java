@@ -68,7 +68,7 @@ public class StoreTest extends ClientTestTemplate {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
         writeDataToFile(testFile, testData);
         
-        client.setRestartOffset(4);
+        client.setRestartOffset(SKIP_LEN);
         assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
         
         assertTrue(testFile.exists());

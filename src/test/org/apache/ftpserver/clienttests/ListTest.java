@@ -21,13 +21,8 @@ package org.apache.ftpserver.clienttests;
 
 import java.io.File;
 
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPFileEntryParser;
-import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.ftp.parser.FTPFileEntryParserFactory;
-import org.apache.commons.net.ftp.parser.UnixFTPEntryParser;
 import org.apache.ftpserver.test.TestUtil;
 
 
