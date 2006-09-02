@@ -55,6 +55,7 @@ under the License.
             <item name="RFC2228"             href="/rfc2228.html"/>
             <item name="RFC2389"             href="/rfc2389.html"/>
             <item name="RFC2428"             href="/rfc2428.html"/>
+            <item name="draft-twine-ftpmd5-00" href="/draft-twine-ftpmd5-00.html"/>
         </menu>
     </body>
 </project>

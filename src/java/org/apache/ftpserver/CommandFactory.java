@@ -69,6 +69,8 @@ class CommandFactory implements ICommandFactory {
         commandMap.put("HELP", new org.apache.ftpserver.command.HELP());
         commandMap.put("LANG", new org.apache.ftpserver.command.LANG());
         commandMap.put("LIST", new org.apache.ftpserver.command.LIST());
+        commandMap.put("MD5", new org.apache.ftpserver.command.MD5());
+        commandMap.put("MMD5", new org.apache.ftpserver.command.MD5());
         commandMap.put("MDTM", new org.apache.ftpserver.command.MDTM());
         commandMap.put("MLST", new org.apache.ftpserver.command.MLST());
         commandMap.put("MKD",  new org.apache.ftpserver.command.MKD());
