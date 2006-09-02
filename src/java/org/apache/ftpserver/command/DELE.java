@@ -81,6 +81,7 @@ class DELE implements ICommand {
             file = request.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
+            // TODO: handle exception
         }
         if(file == null) {
             out.send(550, "DELE.invalid", fileName);
@@ -89,10 +90,7 @@ class DELE implements ICommand {
 
         // check file
         fileName = file.getFullName();
-//        if(!file.isFile()) {
-//            out.send(550, "DELE.invalid", fileName);
-//            return;
-//        }
+
         if( !file.hasDeletePermission() ) {
             out.send(450, "DELE.permission", fileName);
             return;
