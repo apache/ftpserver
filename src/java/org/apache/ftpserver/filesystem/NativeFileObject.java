@@ -29,6 +29,7 @@ import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.util.IoUtils;
 
 /**
  * This class wraps native file object. 
@@ -211,6 +212,14 @@ class NativeFileObject implements FileObject {
         boolean retVal = false;
         if(dest.hasWritePermission() && hasReadPermission()) {
             File destFile = ((NativeFileObject)dest).file;
+            
+            if(destFile.exists()) {
+                try {
+                    IoUtils.delete(destFile);
+                } catch (IOException e) {
+                    return false;
+                }
+            }
             retVal = file.renameTo(destFile);
         }
         return retVal;
