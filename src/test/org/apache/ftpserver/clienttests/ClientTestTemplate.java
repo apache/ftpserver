@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.Properties;
 
 import org.apache.commons.net.ProtocolCommandEvent;
@@ -51,7 +52,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected static final String TESTUSER_PASSWORD = "password";
 
     
-    private static final int FALLBACK_PORT = 12321;
+    private static final int DEFAULT_PORT = 12321;
 
     private FtpServer server;
 
@@ -100,7 +101,7 @@ public abstract class ClientTestTemplate extends TestCase {
         server = new FtpServer(config);
         server.start();
 
-        client = new FTPClient();
+        client = createFTPClient();
         client.addProtocolCommandListener(new ProtocolCommandListener(){
 
             public void protocolCommandSent(ProtocolCommandEvent event) {
@@ -112,10 +113,22 @@ public abstract class ClientTestTemplate extends TestCase {
                 log.debug("< " + event.getMessage().trim());
             }});
         
+        connect();
+    }
+
+    protected FTPClient createFTPClient() throws Exception {
+        return new FTPClient();
+    }
+
+    /**
+     * @throws SocketException
+     * @throws IOException
+     */
+    protected void connect() throws SocketException, IOException {
         try{
             client.connect("localhost", port);
         } catch(FTPConnectionClosedException e) {
-            // tryu again
+            // try again
             client.connect("localhost", port);
         }
     }
@@ -128,12 +141,20 @@ public abstract class ClientTestTemplate extends TestCase {
     private void initPort() {
         if (port == -1) {
             ServerSocket tmpSocket = null;
+            // first try the default port
             try {
-                tmpSocket = new ServerSocket();
+                tmpSocket = new ServerSocket(DEFAULT_PORT);
                 tmpSocket.bind(null);
-                port = tmpSocket.getLocalPort();
+                port = DEFAULT_PORT;
             } catch (IOException e) {
-                port = FALLBACK_PORT;
+                // didn't work, try to find one dynamically
+                try {
+                    tmpSocket = new ServerSocket();
+                    tmpSocket.bind(null);
+                    port = tmpSocket.getLocalPort();
+                } catch (IOException e1) {
+                    fail("Failed to find a port to use for testing: " + e1.getMessage());
+                }
             } finally {
                 if (tmpSocket != null) {
                     try {
@@ -141,6 +162,7 @@ public abstract class ClientTestTemplate extends TestCase {
                     } catch (IOException e) {
                         // ignore
                     }
+                    tmpSocket = null;
                 }
             }
         }
