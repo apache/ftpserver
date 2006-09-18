@@ -149,9 +149,14 @@ public abstract class ClientTestTemplate extends TestCase {
             } catch (IOException e) {
                 // didn't work, try to find one dynamically
                 try {
-                    tmpSocket = new ServerSocket();
-                    tmpSocket.bind(null);
-                    port = tmpSocket.getLocalPort();
+                    int attempts = 0;
+                    
+                    while(port < 1024 && attempts < 1000) {
+                        tmpSocket = new ServerSocket();
+                        tmpSocket.bind(null);
+                        port = tmpSocket.getLocalPort();
+                    }
+                    
                 } catch (IOException e1) {
                     fail("Failed to find a port to use for testing: " + e1.getMessage());
                 }
@@ -165,6 +170,8 @@ public abstract class ClientTestTemplate extends TestCase {
                     tmpSocket = null;
                 }
             }
+            
+            System.out.println(port);
         }
     }
 
