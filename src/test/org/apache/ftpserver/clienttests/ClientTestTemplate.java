@@ -34,6 +34,7 @@ import org.apache.ftpserver.FtpConfigImpl;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.log4j.Logger;
 
@@ -50,9 +51,6 @@ public abstract class ClientTestTemplate extends TestCase {
     protected static final String TESTUSER2_USERNAME = "testuser2";
     protected static final String TESTUSER1_USERNAME = "testuser1";
     protected static final String TESTUSER_PASSWORD = "password";
-
-    
-    private static final int DEFAULT_PORT = 12321;
 
     private FtpServer server;
 
@@ -135,43 +133,13 @@ public abstract class ClientTestTemplate extends TestCase {
 
     /**
      * Attempts to find a free port or fallback to a default
+     * @throws IOException 
      * 
      * @throws IOException
      */
-    private void initPort() {
+    private void initPort() throws IOException {
         if (port == -1) {
-            ServerSocket tmpSocket = null;
-            // first try the default port
-            try {
-                tmpSocket = new ServerSocket(DEFAULT_PORT);
-                tmpSocket.bind(null);
-                port = DEFAULT_PORT;
-            } catch (IOException e) {
-                // didn't work, try to find one dynamically
-                try {
-                    int attempts = 0;
-                    
-                    while(port < 1024 && attempts < 1000) {
-                        tmpSocket = new ServerSocket();
-                        tmpSocket.bind(null);
-                        port = tmpSocket.getLocalPort();
-                    }
-                    
-                } catch (IOException e1) {
-                    fail("Failed to find a port to use for testing: " + e1.getMessage());
-                }
-            } finally {
-                if (tmpSocket != null) {
-                    try {
-                        tmpSocket.close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                    tmpSocket = null;
-                }
-            }
-            
-            System.out.println(port);
+            port = TestUtil.findFreePort();
         }
     }
 

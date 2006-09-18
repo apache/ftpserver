@@ -20,12 +20,14 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.ftplet.EmptyConfiguration;
+import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.IFtpConfig;
 import org.apache.ftpserver.interfaces.ISocketFactory;
+import org.apache.ftpserver.test.TestUtil;
 
 /**
  * Abstract test case class, which starts and shutdown FtpServer.
@@ -52,12 +54,21 @@ public abstract class AbstractFtpServerTestTemplate extends TestCase {
         return serverPort;
     }
 
+    protected Properties createConfig() {
+        Properties configProps = new Properties();
+        configProps.setProperty("config.socket-factory.port", Integer
+                .toString(serverPort));
+
+        return configProps;
+    }
+    
     protected void setUp() throws Exception {
         super.setUp();
 
+        this.serverPort = TestUtil.findFreePort();
+        
         // create root configuration object
-        final IFtpConfig ftpConfig = new FtpConfigImpl(
-                EmptyConfiguration.INSTANCE);
+        final IFtpConfig ftpConfig = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
 
         // start the server
         this.ftpServer = new FtpServer(ftpConfig);
@@ -67,7 +78,6 @@ public abstract class AbstractFtpServerTestTemplate extends TestCase {
         this.serverAddress = socketFactory.getServerAddress() != null ? socketFactory
                 .getServerAddress()
                 : InetAddress.getByName(null);
-        this.serverPort = socketFactory.getPort();
     }
 
     protected void tearDown() throws Exception {
