@@ -214,13 +214,13 @@ class NativeFileObject implements FileObject {
             File destFile = ((NativeFileObject)dest).file;
             
             if(destFile.exists()) {
-                try {
-                    IoUtils.delete(destFile);
-                } catch (IOException e) {
-                    return false;
-                }
+                // renameTo behaves differently on different platforms
+                // this check verifies that if the destination already exists, 
+                // we fail
+                retVal = false;
+            } else {
+                retVal = file.renameTo(destFile);
             }
-            retVal = file.renameTo(destFile);
         }
         return retVal;
     }
