@@ -28,6 +28,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLException;
+
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.*;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
@@ -243,11 +245,11 @@ class RequestHandler implements IConnection {
                 service(request, writer);
             }
             while(!isConnectionClosed);
-        }
-        catch(SocketException ex) {
+        } catch(SocketException ex) {
             // socket closed - no need to do anything
-        }
-        catch(Exception ex) {
+        } catch(SSLException ex) {
+            log.warn("The client did not initiate the SSL connection correctly", ex);
+        } catch(Exception ex) {
             log.warn("RequestHandler.run()", ex);
         }
         finally {
