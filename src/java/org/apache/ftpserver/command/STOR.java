@@ -77,7 +77,12 @@ class STOR implements ICommand {
             
             // call Ftplet.onUploadStart() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onUploadStart(request, out);
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftpletContainer.onUploadStart(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 return;
             }
@@ -154,14 +159,19 @@ class STOR implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "STOR", fileName);
                 
                 // call Ftplet.onUploadEnd() method
-                ftpletRet = ftpletContainer.onUploadEnd(request, out);
+                try {
+                    ftpletRet = ftpletContainer.onUploadEnd(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
+
+                out.send(226, "STOR", fileName);
             }
         }
         finally {

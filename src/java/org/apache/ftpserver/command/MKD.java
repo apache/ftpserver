@@ -67,7 +67,12 @@ class MKD implements ICommand {
         
         // call Ftplet.onMkdirStart() method
         Ftplet ftpletContainer = fconfig.getFtpletContainer();
-        FtpletEnum ftpletRet = ftpletContainer.onMkdirStart(request, out);
+        FtpletEnum ftpletRet;
+        try{
+            ftpletRet = ftpletContainer.onMkdirStart(request, out);
+        } catch(Exception e) {
+            ftpletRet = FtpletEnum.RET_DISCONNECT;
+        }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
             return;
         }
@@ -103,7 +108,6 @@ class MKD implements ICommand {
         
         // now create directory
         if(file.mkdir()) {
-            out.send(250, "MKD", fileName);
             
             // write log message
             String userName = request.getUser().getName();
@@ -115,11 +119,17 @@ class MKD implements ICommand {
             ftpStat.setMkdir(handler, file);
             
             // call Ftplet.onMkdirEnd() method
-            ftpletRet = ftpletContainer.onMkdirEnd(request, out);
+            try{
+                ftpletRet = ftpletContainer.onMkdirEnd(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                 fconfig.getConnectionManager().closeConnection(handler);
                 return;
             }
+
+            out.send(250, "MKD", fileName);
         }
         else {
             out.send(550, "MKD", fileName);

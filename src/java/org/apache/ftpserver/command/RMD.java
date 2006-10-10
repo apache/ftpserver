@@ -67,7 +67,12 @@ class RMD implements ICommand {
         
         // call Ftplet.onRmdirStart() method
         Ftplet ftpletContainer = fconfig.getFtpletContainer();
-        FtpletEnum ftpletRet = ftpletContainer.onRmdirStart(request, out);
+        FtpletEnum ftpletRet;
+        try{
+            ftpletRet = ftpletContainer.onRmdirStart(request, out);
+        } catch(Exception e) {
+            ftpletRet = FtpletEnum.RET_DISCONNECT;
+        }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
             return;
         }
@@ -103,7 +108,6 @@ class RMD implements ICommand {
         
         // now delete directory
         if(file.delete()) {
-            out.send(250, "RMD", fileName); 
             
             // write log message
             String userName = request.getUser().getName();
@@ -115,11 +119,17 @@ class RMD implements ICommand {
             ftpStat.setRmdir(handler, file);
             
             // call Ftplet.onRmdirEnd() method
-            ftpletRet = ftpletContainer.onRmdirEnd(request, out);
+            try{
+                ftpletRet = ftpletContainer.onRmdirEnd(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                 fconfig.getConnectionManager().closeConnection(handler);
                 return;
             }
+
+            out.send(250, "RMD", fileName); 
         }
         else {
             out.send(450, "RMD", fileName);

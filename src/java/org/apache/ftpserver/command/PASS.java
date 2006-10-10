@@ -121,6 +121,22 @@ class PASS implements ICommand {
                 success = false;
                 log.warn("PASS.execute()", ex);
             }
+
+            // call Ftplet.onLogin() method
+            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            if(ftpletContainer != null) {
+                FtpletEnum ftpletRet;
+                try{
+                    ftpletRet = ftpletContainer.onLogin(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
+                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
+                    fconfig.getConnectionManager().closeConnection(handler);
+                    return;
+                }    
+            }
+            
             if(success) {
                 request.setUser(user);
                 request.setUserArgument(null);
@@ -147,15 +163,6 @@ class PASS implements ICommand {
                 log.info("Login success - " + userName);
             }
             
-            // call Ftplet.onLogin() method
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            if(ftpletContainer != null) {
-                FtpletEnum ftpletRet = ftpletContainer.onLogin(request, out);
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    fconfig.getConnectionManager().closeConnection(handler);
-                    return;
-                }    
-            }
         }
         finally {
             

@@ -64,7 +64,12 @@ class RNTO implements ICommand {
             // call Ftplet.onRenameStart() method
             IFtpConfig fconfig = handler.getConfig();
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onRenameStart(request, out);
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftpletContainer.onRenameStart(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 return;
             }
@@ -110,14 +115,19 @@ class RNTO implements ICommand {
                 Log log = fconfig.getLogFactory().getInstance(getClass());
                 log.info("File rename (" + request.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
-                out.send(250, "RNTO", toFileStr);
                 
                 // call Ftplet.onRenameEnd() method
-                ftpletRet = ftpletContainer.onRenameEnd(request, out);
+                try {
+                    ftpletRet = ftpletContainer.onRenameEnd(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
+
+                out.send(250, "RNTO", toFileStr);
             }
             else {
                 out.send(553, "RNTO", toFileStr);

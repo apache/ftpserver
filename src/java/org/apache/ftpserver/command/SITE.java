@@ -54,7 +54,12 @@ class SITE implements ICommand {
         // call Ftplet.onSite method
         IFtpConfig fconfig = handler.getConfig();
         Ftplet ftpletContainer = fconfig.getFtpletContainer();
-        FtpletEnum ftpletRet = ftpletContainer.onSite(request, out);
+        FtpletEnum ftpletRet;
+        try {
+            ftpletRet = ftpletContainer.onSite(request, out);
+        } catch(Exception e) {
+            ftpletRet = FtpletEnum.RET_DISCONNECT;
+        }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
             return;
         }

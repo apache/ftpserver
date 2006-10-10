@@ -65,7 +65,12 @@ class DELE implements ICommand {
         
         // call Ftplet.onDeleteStart() method
         Ftplet ftpletContainer = fconfig.getFtpletContainer();
-        FtpletEnum ftpletRet = ftpletContainer.onDeleteStart(request, out);
+        FtpletEnum ftpletRet;
+        try {
+            ftpletRet = ftpletContainer.onDeleteStart(request, out);
+        } catch(Exception e) {
+            ftpletRet = FtpletEnum.RET_DISCONNECT;
+        }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
             return;
         }
@@ -108,14 +113,18 @@ class DELE implements ICommand {
             IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
             ftpStat.setDelete(handler, file);
             
-            out.send(250, "DELE", fileName); 
-
             // call Ftplet.onDeleteEnd() method
-            ftpletRet = ftpletContainer.onDeleteEnd(request, out);
+            try{
+                ftpletRet = ftpletContainer.onDeleteEnd(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                 fconfig.getConnectionManager().closeConnection(handler);
                 return;
             }
+
+            out.send(250, "DELE", fileName); 
         }
         else {
             out.send(450, "DELE", fileName);

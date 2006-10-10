@@ -68,7 +68,12 @@ class STOU implements ICommand {
             
             // call Ftplet.onUploadUniqueStart() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onUploadUniqueStart(request, out);
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftpletContainer.onUploadUniqueStart(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 return;
             }
@@ -129,7 +134,7 @@ class STOU implements ICommand {
                 // open streams
                 bis = IoUtils.getBufferedInputStream(is);
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(0L) );
-                
+
                 // transfer data
                 int maxRate = request.getUser().getMaxUploadRate();
                 long transSz = handler.transfer(bis, bos, maxRate);
@@ -141,7 +146,9 @@ class STOU implements ICommand {
                 
                 // notify the statistics component
                 IFtpStatistics ftpStat = (IFtpStatistics)fconfig.getFtpStatistics();
-                ftpStat.setUpload(handler, file, transSz);
+                if(ftpStat != null) {
+                    ftpStat.setUpload(handler, file, transSz);
+                }
             }
             catch(SocketException ex) {
                 failure = true;
@@ -158,14 +165,19 @@ class STOU implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "STOU", fileName);
                 
                 // call Ftplet.onUploadUniqueEnd() method
-                ftpletRet = ftpletContainer.onUploadUniqueEnd(request, out);
+                try {
+                    ftpletRet = ftpletContainer.onUploadUniqueEnd(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
+
+                out.send(226, "STOU", fileName);
             }
         }
         finally {

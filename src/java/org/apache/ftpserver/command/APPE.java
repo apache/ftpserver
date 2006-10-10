@@ -75,7 +75,12 @@ class APPE implements ICommand {
             
             // call Ftplet.onAppendStart() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onAppendStart(request, out);
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftpletContainer.onAppendStart(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 return;
             }
@@ -164,14 +169,19 @@ class APPE implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "APPE", fileName);
                 
                 // call Ftplet.onAppendEnd() method
-                ftpletRet = ftpletContainer.onAppendEnd(request, out);
+                try {
+                    ftpletRet = ftpletContainer.onAppendEnd(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
+
+                out.send(226, "APPE", fileName);
             }
         }
         finally {

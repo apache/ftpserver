@@ -22,9 +22,9 @@ package org.apache.ftpserver.clienttests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.SocketException;
 import java.util.Properties;
+
+import junit.framework.TestCase;
 
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
@@ -38,8 +38,6 @@ import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.log4j.Logger;
 
-import junit.framework.TestCase;
-
 public abstract class ClientTestTemplate extends TestCase {
 
     private static final Logger log = Logger.getLogger(ClientTestTemplate.class);
@@ -52,7 +50,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected static final String TESTUSER1_USERNAME = "testuser1";
     protected static final String TESTUSER_PASSWORD = "password";
 
-    private FtpServer server;
+    protected FtpServer server;
 
     protected int port = -1;
 
@@ -61,7 +59,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected FTPClient client;
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
-    protected static File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
+    protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
     
     protected Properties createConfig() {
         return createDefaultConfig();
@@ -88,17 +86,44 @@ public abstract class ClientTestTemplate extends TestCase {
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
+        initDirs();
+        
+        initServer();
+
+        connectClient();
+    }
+
+    /**
+     * @throws IOException
+     */
+    protected void initDirs() throws IOException {
         cleanTmpDirs();
         
         TEST_TMP_DIR.mkdirs();
         ROOT_DIR.mkdirs();
-        
+    }
+
+    /**
+     * @throws IOException
+     * @throws Exception
+     */
+    protected void initServer() throws IOException, Exception {
         initPort();
 
         config = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
         server = new FtpServer(config);
+        
         server.start();
+    }
 
+    protected FTPClient createFTPClient() throws Exception {
+        return new FTPClient();
+    }
+
+    /**
+     * @throws Exception 
+     */
+    protected void connectClient() throws Exception {
         client = createFTPClient();
         client.addProtocolCommandListener(new ProtocolCommandListener(){
 
@@ -111,18 +136,6 @@ public abstract class ClientTestTemplate extends TestCase {
                 log.debug("< " + event.getMessage().trim());
             }});
         
-        connect();
-    }
-
-    protected FTPClient createFTPClient() throws Exception {
-        return new FTPClient();
-    }
-
-    /**
-     * @throws SocketException
-     * @throws IOException
-     */
-    protected void connect() throws SocketException, IOException {
         try{
             client.connect("localhost", port);
         } catch(FTPConnectionClosedException e) {
@@ -143,8 +156,10 @@ public abstract class ClientTestTemplate extends TestCase {
         }
     }
 
-    private void cleanTmpDirs() throws IOException {
-        IoUtils.delete(TEST_TMP_DIR);
+    protected void cleanTmpDirs() throws IOException {
+        if(TEST_TMP_DIR.exists()) {
+            IoUtils.delete(TEST_TMP_DIR);
+        }
     }
     
     protected void writeDataToFile(File file, byte[] data) throws IOException {
@@ -165,7 +180,9 @@ public abstract class ClientTestTemplate extends TestCase {
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception {
-        server.stop();
+        if(server != null) {
+            server.stop();
+        }
         
         cleanTmpDirs();
     }

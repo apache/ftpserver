@@ -76,7 +76,12 @@ class RETR implements ICommand {
     
             // call Ftplet.onDownloadStart() method
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
-            FtpletEnum ftpletRet = ftpletContainer.onDownloadStart(request, out);
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftpletContainer.onDownloadStart(request, out);
+            } catch(Exception e) {
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 return;
             }
@@ -165,14 +170,19 @@ class RETR implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "RETR", fileName);
                 
                 // call Ftplet.onDownloadEnd() method
-                ftpletRet = ftpletContainer.onDownloadEnd(request, out);
+                try {
+                    ftpletRet = ftpletContainer.onDownloadEnd(request, out);
+                } catch(Exception e) {
+                    ftpletRet = FtpletEnum.RET_DISCONNECT;
+                }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
+
+                out.send(226, "RETR", fileName);
             }
         }
         finally {
