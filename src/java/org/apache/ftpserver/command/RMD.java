@@ -108,6 +108,7 @@ class RMD implements ICommand {
         
         // now delete directory
         if(file.delete()) {
+            out.send(250, "RMD", fileName); 
             
             // write log message
             String userName = request.getUser().getName();
@@ -129,7 +130,6 @@ class RMD implements ICommand {
                 return;
             }
 
-            out.send(250, "RMD", fileName); 
         }
         else {
             out.send(450, "RMD", fileName);

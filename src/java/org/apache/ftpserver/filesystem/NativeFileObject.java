@@ -29,7 +29,6 @@ import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * This class wraps native file object. 

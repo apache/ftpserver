@@ -112,6 +112,8 @@ class RNTO implements ICommand {
             
             // now rename
             if( frFile.move(toFile) ) { 
+                out.send(250, "RNTO", toFileStr);
+
                 Log log = fconfig.getLogFactory().getInstance(getClass());
                 log.info("File rename (" + request.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
@@ -126,8 +128,6 @@ class RNTO implements ICommand {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
                 }
-
-                out.send(250, "RNTO", toFileStr);
             }
             else {
                 out.send(553, "RNTO", toFileStr);

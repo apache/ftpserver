@@ -165,6 +165,7 @@ class STOU implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
+                out.send(226, "STOU", fileName);
                 
                 // call Ftplet.onUploadUniqueEnd() method
                 try {
@@ -177,7 +178,6 @@ class STOU implements ICommand {
                     return;
                 }
 
-                out.send(226, "STOU", fileName);
             }
         }
         finally {

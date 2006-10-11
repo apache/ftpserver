@@ -108,6 +108,7 @@ class MKD implements ICommand {
         
         // now create directory
         if(file.mkdir()) {
+            out.send(250, "MKD", fileName);
             
             // write log message
             String userName = request.getUser().getName();
@@ -129,7 +130,6 @@ class MKD implements ICommand {
                 return;
             }
 
-            out.send(250, "MKD", fileName);
         }
         else {
             out.send(550, "MKD", fileName);

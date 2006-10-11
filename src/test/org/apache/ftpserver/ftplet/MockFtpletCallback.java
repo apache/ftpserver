@@ -20,164 +20,95 @@
 package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MockFtpletCallback implements Ftplet {
 
-    public static List calls = new ArrayList();
+    public static FtpletEnum returnValue;
     
     public void destroy() {
-        System.out.println("##### destroy");
-        
-        calls.add("destroy");
     }
 
     public void init(FtpConfig ftpConfig, Configuration config) throws FtpException {
-        System.out.println("##### init");
-
-        calls.add("init");
     }
 
     public FtpletEnum onAppendEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onAppendEnd");
-
-        calls.add("onAppendEnd");
-        
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onAppendStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onAppendStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onConnect(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onConnect");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onDeleteEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onDeleteEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onDeleteStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onDeleteStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onDisconnect(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onDisconnect");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onDownloadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onDownloadEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onDownloadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onDownloadStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onLogin");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onMkdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onMkdirEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onMkdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onMkdirStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onRenameEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onRenameEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onRenameStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onRenameStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onRmdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onRmdirEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onRmdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onRmdirStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onSite(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onSite");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onUploadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onUploadEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onUploadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onUploadStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onUploadUniqueEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onUploadUniqueEnd");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
     public FtpletEnum onUploadUniqueStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-        System.out.println("##### onUploadUniqueStart");
-        calls.add("init");
-
-        return null;
+        return returnValue;
     }
 
 

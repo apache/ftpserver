@@ -72,6 +72,7 @@ class DELE implements ICommand {
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
+            out.send(450, "DELE", fileName);
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
@@ -103,6 +104,7 @@ class DELE implements ICommand {
         
         // now delete
         if(file.delete()) {
+            out.send(250, "DELE", fileName); 
             
             // log message
             String userName = request.getUser().getName();
@@ -124,7 +126,6 @@ class DELE implements ICommand {
                 return;
             }
 
-            out.send(250, "DELE", fileName); 
         }
         else {
             out.send(450, "DELE", fileName);

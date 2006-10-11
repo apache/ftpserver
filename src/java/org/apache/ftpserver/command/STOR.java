@@ -159,6 +159,7 @@ class STOR implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
+                out.send(226, "STOR", fileName);
                 
                 // call Ftplet.onUploadEnd() method
                 try {
@@ -171,7 +172,6 @@ class STOR implements ICommand {
                     return;
                 }
 
-                out.send(226, "STOR", fileName);
             }
         }
         finally {

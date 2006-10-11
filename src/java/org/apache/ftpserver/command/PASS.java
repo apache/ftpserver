@@ -134,7 +134,9 @@ class PASS implements ICommand {
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
                     fconfig.getConnectionManager().closeConnection(handler);
                     return;
-                }    
+                } else if(ftpletRet == FtpletEnum.RET_SKIP) {
+                    success = false;
+                }
             }
             
             if(success) {

@@ -170,6 +170,7 @@ class RETR implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
+                out.send(226, "RETR", fileName);
                 
                 // call Ftplet.onDownloadEnd() method
                 try {
@@ -182,7 +183,6 @@ class RETR implements ICommand {
                     return;
                 }
 
-                out.send(226, "RETR", fileName);
             }
         }
         finally {

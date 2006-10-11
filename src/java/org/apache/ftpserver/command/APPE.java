@@ -169,6 +169,7 @@ class APPE implements ICommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
+                out.send(226, "APPE", fileName);
                 
                 // call Ftplet.onAppendEnd() method
                 try {
@@ -181,7 +182,6 @@ class APPE implements ICommand {
                     return;
                 }
 
-                out.send(226, "APPE", fileName);
             }
         }
         finally {
