@@ -51,6 +51,21 @@ class NativeFileObject implements FileObject {
      * Constructor.
      */
     protected NativeFileObject(String fileName, File file, boolean writePerm) {
+        if(fileName == null) {
+            throw new IllegalArgumentException("fileName can not be null");
+        } 
+        if(file == null) {
+            throw new IllegalArgumentException("file can not be null");
+        } 
+        fileName = fileName.trim();
+        if(fileName.length() == 0) {
+            throw new IllegalArgumentException("fileName can not be empty");
+        } else if(fileName.charAt(0) != '/') {
+            throw new IllegalArgumentException("fileName must be an absolut path");
+        }
+        
+        
+        
         this.fileName = fileName;
         this.file = file;
         this.writePermission = writePerm;
@@ -84,12 +99,12 @@ class NativeFileObject implements FileObject {
         // strip the last '/'
         String shortName = fileName;
         int filelen = fileName.length();
-        if(fileName.charAt(filelen - 1) == '/') {
+        if(shortName.charAt(filelen - 1) == '/') {
             shortName = shortName.substring(0, filelen - 1);
         }
         
         // return from the last '/'
-        int slashIndex = fileName.lastIndexOf('/');
+        int slashIndex = shortName.lastIndexOf('/');
         if(slashIndex != -1) {
             shortName = shortName.substring(slashIndex + 1);
         }
@@ -321,12 +336,10 @@ class NativeFileObject implements FileObject {
      * Get the physical canonical file name. It works like 
      * File.getCanonicalPath().
      * 
-     * @param rootDir The root directory. The path separator will always 
-     * be '/'. It will always end with '/'.
+     * @param rootDir The root directory. 
      * 
      * @param currDir The current directory. It will always be with
-     * respect to the root directory. The first and last characters 
-     * will always be '/'.
+     * respect to the root directory. 
      * 
      * @param fileName The input file name.
      * 
@@ -338,9 +351,35 @@ class NativeFileObject implements FileObject {
                                                String fileName) {
         
         // get the starting directory
+        rootDir = rootDir.trim();
+        fileName = fileName.trim();
+        
+        rootDir = normalizeSeparateChar(rootDir);
+        if(rootDir.charAt(rootDir.length() - 1) != '/') {
+            rootDir += '/';
+        }
+        
         fileName = normalizeSeparateChar(fileName);
         String resArg;
         if(fileName.charAt(0) != '/') {
+            if(currDir == null) {
+                currDir = "/";
+            }
+            currDir = currDir.trim();
+            if(currDir.length() == 0) {
+                currDir = "/";
+            }
+            
+            currDir = normalizeSeparateChar(currDir);
+            
+            if(currDir.charAt(0) != '/') {
+                currDir = '/' + currDir;
+            }
+            if(currDir.charAt(currDir.length() - 1) != '/') {
+                currDir += '/';
+            }
+
+            
             resArg = rootDir + currDir.substring(1);
         }
         else {

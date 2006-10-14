@@ -49,6 +49,20 @@ class NativeFileSystemView implements FileSystemView {
      * Constructor - set the user object.
      */
     protected NativeFileSystemView(User user) throws FtpException {
+        this(user, false);
+    }
+    
+    /**
+     * Constructor - set the user object.
+     */
+    protected NativeFileSystemView(User user, boolean caseInsensitive) throws FtpException {
+        if(user == null) {
+            throw new IllegalArgumentException("user can not be null");
+        }
+        if(user.getHomeDirectory() == null) {
+            throw new IllegalArgumentException("User home directory can not be null");
+        }
+        
         
         // add last '/' if necessary
         String rootDir = user.getHomeDirectory();
@@ -107,7 +121,7 @@ class NativeFileSystemView implements FileSystemView {
         
         // not a directory - return false
         dir = NativeFileObject.getPhysicalName(rootDir, currDir, dir);
-        File dirObj = new File(dir); 
+        File dirObj = new File(dir);
         if(!dirObj.isDirectory()) {
             return false;
         }
