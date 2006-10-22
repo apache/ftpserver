@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -139,6 +140,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+        	// OK
         }
         
         assertFalse(TEST_FILE1.exists());
@@ -178,6 +181,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+        	// OK
         }
         
         assertTrue(TEST_DIR1.exists());
@@ -221,6 +226,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+        	// OK
         }
         
         assertFalse(TEST_DIR1.exists());
@@ -282,6 +289,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+        	// OK
         }
 
         assertFalse(TEST_FILE1.exists());

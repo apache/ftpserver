@@ -169,13 +169,23 @@ class RequestHandler implements IConnection {
      * Server one FTP client connection.
      */
     public void run() {
-        if(request == null) {
+        if(request == null ) {
             return;
         }
-        
+        if(fconfig == null) {
+        	return;
+        }
         
         InetAddress clientAddr = request.getRemoteAddress();
         IConnectionManager conManager = fconfig.getConnectionManager();
+        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        
+        if(conManager == null) {
+        	return;
+        }
+        if(ftpletContainer == null) {
+        	return;
+        }
         try {
             
             // write log message
@@ -188,7 +198,7 @@ class RequestHandler implements IConnection {
             
             // call Ftplet.onConnect() method
             boolean isSkipped = false;
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+
             FtpletEnum ftpletRet = ftpletContainer.onConnect(request, writer);
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 isSkipped = true;

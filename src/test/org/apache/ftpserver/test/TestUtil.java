@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
 import junit.framework.TestCase;
@@ -26,16 +27,19 @@ public class TestUtil {
         // first try the default port
         try {
             tmpSocket = new ServerSocket(DEFAULT_PORT);
-            tmpSocket.bind(null);
+            
             port = DEFAULT_PORT;
         } catch (IOException e) {
-            // didn't work, try to find one dynamically
+            System.out.println("Failed to use default port");
+        	// didn't work, try to find one dynamically
             try {
                 int attempts = 0;
 
                 while (port < 1024 && attempts < 1000) {
-                    tmpSocket = new ServerSocket();
-                    tmpSocket.bind(null);
+                	attempts++;
+
+                	tmpSocket = new ServerSocket(0);
+
                     port = tmpSocket.getLocalPort();
                 }
 

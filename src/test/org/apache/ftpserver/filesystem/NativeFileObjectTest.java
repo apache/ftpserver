@@ -26,7 +26,7 @@ import org.apache.ftpserver.util.IoUtils;
 
 import junit.framework.TestCase;
 
-public class NativeFileSystemObjectTest extends TestCase {
+public class NativeFileObjectTest extends TestCase {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
     private static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
@@ -118,6 +118,14 @@ public class NativeFileSystemObjectTest extends TestCase {
                         + TEST_FILE2_IN_DIR1.getName()));
     }
 
+    public void testGetPhysicalNameCaseInsensitive() {
+        assertEquals(FULL_PATH, NativeFileObject.getPhysicalName(
+                ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1.getName().toUpperCase(), true));
+        
+        
+    }
+
+    
     public void testConstructorWithNullFileName() {
         try{
             new NativeFileObject(null, TEST_FILE2_IN_DIR1, true);

@@ -43,6 +43,8 @@ class NativeFileSystemView implements FileSystemView {
     private String currDir;
     
     private boolean writePermission;
+
+	private boolean caseInsensitive = false;
     
     
     /**
@@ -63,6 +65,7 @@ class NativeFileSystemView implements FileSystemView {
             throw new IllegalArgumentException("User home directory can not be null");
         }
         
+        this.caseInsensitive  = caseInsensitive;
         
         // add last '/' if necessary
         String rootDir = user.getHomeDirectory();
@@ -120,7 +123,7 @@ class NativeFileSystemView implements FileSystemView {
     public boolean changeDirectory(String dir) {
         
         // not a directory - return false
-        dir = NativeFileObject.getPhysicalName(rootDir, currDir, dir);
+        dir = NativeFileObject.getPhysicalName(rootDir, currDir, dir, caseInsensitive);
         File dirObj = new File(dir);
         if(!dirObj.isDirectory()) {
             return false;

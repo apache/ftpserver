@@ -23,9 +23,9 @@ import java.io.File;
 
 
 public class CdTest extends ClientTestTemplate {
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
-    private static final File TEST_DIR2 = new File(ROOT_DIR, "dir2");
-    private static final File TEST_DIR_IN_DIR1 = new File(TEST_DIR1, "dir3");
+    protected static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+    protected static final File TEST_DIR2 = new File(ROOT_DIR, "dir2");
+    protected static final File TEST_DIR_IN_DIR1 = new File(TEST_DIR1, "dir3");
 
     /* (non-Javadoc)
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()

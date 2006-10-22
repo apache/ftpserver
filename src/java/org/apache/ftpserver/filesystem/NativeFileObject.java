@@ -347,8 +347,14 @@ class NativeFileObject implements FileObject {
      * It will never be null.
      */
     public final static String getPhysicalName(String rootDir, 
+    		String currDir, 
+    		String fileName) {
+    	return getPhysicalName(rootDir, currDir, fileName, false);
+    }
+    
+    public final static String getPhysicalName(String rootDir, 
                                                String currDir, 
-                                               String fileName) {
+                                               String fileName, boolean caseInsensitive) {
         
         // get the starting directory
         rootDir = rootDir.trim();
@@ -396,7 +402,7 @@ class NativeFileObject implements FileObject {
         StringTokenizer st = new StringTokenizer(fileName, "/");
         while(st.hasMoreTokens()) {
             String tok = st.nextToken().trim();
-            
+                        
             // . => current directory
             if(tok.equals(".")) {
                 continue;
@@ -417,6 +423,14 @@ class NativeFileObject implements FileObject {
             if (tok.equals("~")) {
                 resArg = rootDir.substring(0, rootDir.length()-1);
                 continue;
+            }
+            
+            if(caseInsensitive) {
+            	File[] matches = new File(resArg).listFiles(new NameEqualsFileFilter(tok, true));            	
+            	
+            	if(matches.length > 0) {
+            		tok = matches[0].getName();
+            	}
             }
             
             resArg = resArg + '/' + tok;

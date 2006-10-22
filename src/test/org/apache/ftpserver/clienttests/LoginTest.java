@@ -115,7 +115,7 @@ public class LoginTest extends ClientTestTemplate {
         
         return (String[]) hostIps.toArray(new String[0]);
     }
-
+/*
     public void testLoginWithMaxConnectionsPerIp() throws Exception {
         String[] ips = getHostAddresses();
         
@@ -146,7 +146,7 @@ public class LoginTest extends ClientTestTemplate {
             // ignore test
         }
     }
-    
+  */  
     public void testLoginWithMaxConnectionsMulti() throws Exception {
         for(int i = 0; i<50; i++) {
             testLoginWithMaxConnections();

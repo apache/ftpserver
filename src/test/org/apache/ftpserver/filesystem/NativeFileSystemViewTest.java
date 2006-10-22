@@ -97,7 +97,7 @@ public class NativeFileSystemViewTest extends TestCase {
         assertEquals("/", view.getCurrentDirectory().getFullName());
         
         assertTrue(view.changeDirectory("/DIR1"));
-        assertEquals("/DIR1", view.getCurrentDirectory().getFullName());
+        assertEquals("/dir1", view.getCurrentDirectory().getFullName());
         assertTrue(view.getCurrentDirectory().doesExist());
         
         assertTrue(view.changeDirectory("/dir1"));
@@ -105,7 +105,7 @@ public class NativeFileSystemViewTest extends TestCase {
         assertTrue(view.getCurrentDirectory().doesExist());
 
         assertTrue(view.changeDirectory("/DiR1"));
-        assertEquals("/DiR1", view.getCurrentDirectory().getFullName());
+        assertEquals("/dir1", view.getCurrentDirectory().getFullName());
         assertTrue(view.getCurrentDirectory().doesExist());
     }
 

@@ -39,6 +39,7 @@ class NativeFileSystemManager implements FileSystemManager {
 
     private Log log;
     private boolean createHome;
+    private boolean caseInsensitive;
     
     
     /**
@@ -53,6 +54,7 @@ class NativeFileSystemManager implements FileSystemManager {
      */
     public void configure(Configuration conf) throws FtpException {
         createHome  = conf.getBoolean("create-home", false); 
+        caseInsensitive  = conf.getBoolean("case-insensitive", false); 
     }
     
     /**
@@ -80,7 +82,7 @@ class NativeFileSystemManager implements FileSystemManager {
             }
         }
         
-        FileSystemView fsView = new NativeFileSystemView(user);
+        FileSystemView fsView = new NativeFileSystemView(user, caseInsensitive);
         return fsView;
     }
     
