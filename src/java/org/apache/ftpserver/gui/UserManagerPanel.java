@@ -493,13 +493,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         
         UserManager userManager = fconfig.getUserManager();
         try {
-            Iterator userIt = userManager.getAllUserNames().iterator();
-            boolean hasUser = false;
-            while(userIt.hasNext()) {
-                hasUser = true;
-                userLst.addItem(userIt.next());
+            String[] userNames = userManager.getAllUserNames();
+            
+            for (int i = 0; i < userNames.length; i++) {
+                userLst.addItem(userNames[i]);
             }
-            if(hasUser) {
+
+            if(userNames.length > 0) {
                 userLst.setSelectedIndex(0);
             }
         }

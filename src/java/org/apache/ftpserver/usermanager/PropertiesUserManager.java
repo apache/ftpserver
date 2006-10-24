@@ -216,7 +216,7 @@ class PropertiesUserManager implements UserManager {
     /**
      * Get all user names.
      */
-    public synchronized Collection getAllUserNames() {
+    public synchronized String[] getAllUserNames() {
 
         // get all user names
         String suffix = '.' + BaseUser.ATTR_HOME;
@@ -235,7 +235,7 @@ class PropertiesUserManager implements UserManager {
         }
         
         Collections.sort(ulst);
-        return ulst;
+        return (String[]) ulst.toArray(new String[0]);
     }
 
     /**

@@ -136,7 +136,7 @@ class LdapUserManager implements UserManager {
     /**
      * Get all user names.
      */
-    public synchronized Collection getAllUserNames() throws FtpException {
+    public synchronized String[] getAllUserNames() throws FtpException {
         
         try {
             // search ldap
@@ -154,7 +154,7 @@ class LdapUserManager implements UserManager {
                 allUsers.add(cn);
             }
             Collections.sort(allUsers);
-            return allUsers;
+            return (String[]) allUsers.toArray(new String[0]);
         }
         catch(NamingException ex) {
             log.error("LdapUserManager.getAllUserNames()", ex);

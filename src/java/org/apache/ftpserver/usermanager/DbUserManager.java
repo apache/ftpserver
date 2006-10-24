@@ -409,7 +409,7 @@ class DbUserManager implements UserManager {
     /**
      * Get all user names from the database.
      */
-    public synchronized Collection getAllUserNames() throws FtpException {
+    public synchronized String[] getAllUserNames() throws FtpException {
         
         Statement stmt = null;
         ResultSet rs = null;
@@ -429,7 +429,7 @@ class DbUserManager implements UserManager {
             while(rs.next()) {
                 names.add(rs.getString(BaseUser.ATTR_LOGIN));
             }
-            return names;
+            return (String[]) names.toArray(new String[0]);
         }
         catch(SQLException ex) {
             log.error("DbUserManager.getAllUserNames()", ex);

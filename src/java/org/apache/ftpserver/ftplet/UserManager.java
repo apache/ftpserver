@@ -37,7 +37,7 @@ interface UserManager extends Component {
     /**
      * Get all user names in the system.
      */
-    Collection getAllUserNames() throws FtpException;
+    String[] getAllUserNames() throws FtpException;
     
     /**
      * Delete the user from the system.
