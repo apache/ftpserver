@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.util.Collection;
 
 /**
  * User manager interface.
