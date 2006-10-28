@@ -32,7 +32,7 @@ under the License.
             <p>This document explains how to enable Apache FTP Server to use
                Transport Layer Security (TLS) for encrypted client-server communication.
             </p>
-            <p>James uses the Sun Java Secure Sockets Extension (JSSE) infrastructure
+            <p>FtpServer uses the Java Secure Sockets Extension (JSSE) infrastructure
                to provide TLS/SSL sockets. JSSE comes packaged with several vendor
                Java distributions (i.e. Sun Java 1.4.x, IBM Java 1.3.x). For these
                distributions, please follow the vendor provided instructions for
