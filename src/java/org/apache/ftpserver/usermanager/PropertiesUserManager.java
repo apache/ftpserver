@@ -114,7 +114,12 @@ class PropertiesUserManager implements UserManager {
        
        // set other properties
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_PASSWORD,          getPassword(usr));
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_HOME,              usr.getHomeDirectory());
+       
+       String home = usr.getHomeDirectory();
+       if(home == null) {
+           home = "/";
+       }
+       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_HOME,              home);
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_ENABLE,            usr.getEnabled());
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_WRITE_PERM,        usr.getWritePermission());
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
@@ -123,19 +128,26 @@ class PropertiesUserManager implements UserManager {
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_NUMBER, usr.getMaxLoginNumber());
        userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_PER_IP, usr.getMaxLoginPerIP());
    
-       // save user data
-       FileOutputStream fos = null;
-       try {
-           fos = new FileOutputStream(userDataFile);
-           userDataProp.store(fos, "Generated file - don't edit (please)");
-       }
-       catch(IOException ex) {
-           log.error("PropertiesUserManager.save()", ex);
-           throw new FtpException("PropertiesUserManager.save()", ex);
-       }
-       finally {
-           IoUtils.close(fos);
-       }
+       saveUserData();
+    }
+
+    /**
+     * @throws FtpException
+     */
+    private void saveUserData() throws FtpException {
+        // save user data
+           FileOutputStream fos = null;
+           try {
+               fos = new FileOutputStream(userDataFile);
+               userDataProp.store(fos, "Generated file - don't edit (please)");
+           }
+           catch(IOException ex) {
+               log.error("Failed saving user data", ex);
+               throw new FtpException("Failed saving user data", ex);
+           }
+           finally {
+               IoUtils.close(fos);
+           }
     }
      
     /**
@@ -159,19 +171,7 @@ class PropertiesUserManager implements UserManager {
             userDataProp.remove(remKeysIt.next().toString());
         }
         
-        // save user data
-        FileOutputStream fos = null;
-        try {    
-            fos = new FileOutputStream(userDataFile);
-            userDataProp.store(fos, "Generated file - don't edit (please)");
-        }
-        catch(IOException ex) {
-            log.error("PropertiesUserManager.delete()", ex);
-            throw new FtpException("PropertiesUserManager.delete()", ex);
-        }
-        finally {
-            IoUtils.close(fos);
-        }
+        saveUserData();
     }
     
     /**
