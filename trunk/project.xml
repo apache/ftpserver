@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+<project>
+
+    <!-- POM Definition -->
+    <pomVersion>3</pomVersion>
+    <id>ftpserver-admin-gui</id>
+    <groupId>org.apache.incubator.ftpserver</groupId>
+    <artifactId>ftpserver-admin-gui</artifactId>
+    <name>Apache FTP Server Administrative GUI</name>
+    <currentVersion>1.0-incubator-SNAPSHOT</currentVersion>
+
+
+    <!-- Organizational Information -->
+    <organization>
+        <name>Apache Software Foundation</name>
+        <url>http://www.apache.org/</url>
+        <logo>/images/group-logo.gif</logo>
+    </organization>
+
+
+    <!-- Project Information -->
+    <inceptionYear>2003</inceptionYear>
+    <package>org.apache.ftpserver</package>
+    <logo>/images/project-logo.gif</logo>
+    <url>http://incubator.apache.org/ftpserver/</url>
+    <issueTrackingUrl>http://issues.apache.org/jira/browse/FTPSERVER</issueTrackingUrl>
+
+
+    <!-- Project scm repository -->
+    <repository>
+        <connection>scm:svn://svn.apache.org/repos/asf/incubator/ftpserver/trunk/</connection>
+        <url>http://svn.apache.org/viewcvs.cgi/incubator/ftpserver/trunk/</url>
+    </repository>
+
+
+    <!-- Developer list -->
+    <developers>
+        <developer>
+            <name>Rana Battacharyya</name>
+            <id>rana_b</id>
+            <email>rana_b.{aT}.yahoo.{d0T}.com</email>
+            <organization/>
+        </developer>
+        <developer>
+            <name>Paul Hammant</name>
+            <id>hammant</id>
+            <email>paul.{aT}.hammant.{d0T}.org</email>
+            <organization/>
+        </developer>
+        <developer>
+            <name>Niklas Gustavsson</name>
+            <id>ngn</id>
+            <email>niklas.{aT}.protocol7.{d0T}.com</email>
+            <organization/>
+        </developer>
+        <developer>
+            <name>Sergey M Vladimirov</name>
+            <id>sergey</id>
+            <email>vlsergey.{aT}.gmail.{d0T}.com</email>
+            <organization>Netcracker corp.</organization>
+        </developer>
+    </developers>
+
+
+    <!-- Contributor list -->
+    <contributors>
+        <contributor>
+            <name>Birkir A. Barkarson</name>
+            <organization/>
+            <email/>
+        </contributor>
+        <contributor>
+            <name>David H. DeWolf</name>
+            <organization>Vivare, INC</organization>
+            <email>ddewolf.{aT}.apache.{d0T}.org</email>
+        </contributor>
+        <contributor>
+            <name>Luis Sanabria</name>
+            <organization/>
+            <email/>
+        </contributor>
+        <contributor>
+            <name>Daniel Hagen</name>
+            <organization/>
+            <email/>
+        </contributor>
+        <contributor>
+            <name>KwangYul Seo</name>
+            <organization/>
+            <email/>
+        </contributor>
+        <contributor>
+            <name>Dave Roberts</name>
+            <organization>SAA Consultants Ltd</organization>
+            <email/>
+        </contributor>
+        <contributor>
+            <name>Nick Vincent</name>
+            <organization/>
+            <email/>
+        </contributor>
+    </contributors>
+
+
+    <!-- Mailing lists -->
+    <mailingLists>
+        <mailingList>
+            <name>Apache FTP Server Mailing List</name>
+            <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
+            <post>ftpserver-dev@incubator.apache.org</post>
+            <archive>http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/</archive>
+        </mailingList>
+    </mailingLists>
+
+
+    <!-- Build information -->
+    <build>
+        <sourceDirectory>src/java</sourceDirectory>
+        <defaultGoal>ftpserver:usage</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        
+        <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+        </unitTest>
+        
+    </build>
+
+
+    <!-- Dependency list -->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.incubator.ftpserver</groupId>
+            <artifactId>ftpserver-ftplet-api</artifactId>
+            <version>1.0-incubator-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.incubator.ftpserver</groupId>
+            <artifactId>ftpserver</artifactId>
+            <version>1.0-incubator-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.13</version>
+        </dependency>
+    </dependencies>
+
+
+    <!-- report list -->
+    <reports>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-license-plugin</report>
+        <report>maven-faq-plugin</report>
+    </reports>
+
+</project>
