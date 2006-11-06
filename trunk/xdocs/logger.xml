@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: Logger</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="FTP Server Logging">
+            <p>FTP Server uses <a href="http://jakarta.apache.org/commons/logging">
+               Commons Logging</a> throughout its internal code allowing the developer
+               to choose a logging configuration that suits their needs, e.g
+               java.util.logging or <a href="http://logging.apache.org/log4j">Log4J</a>.
+               Commons Logging provides FTP Server the ability to log hierarchially
+               across various log levels without needing to rely on a particular
+               logging implementation.
+            </p>
+        </section>
+
+        <section name="log4j">
+            <p>If you need to setup detailed logging from within FTP Server's code,
+               then you can use a simple log4j configuration. Note that this logging
+               can be very verbose depending on the log level you chose to use. The
+               log4j jar is bundled with the binary distribution. This is an optional
+               jar file. If you remove this jar file, other logging implementation
+               will be autometically selected by the commons-logging.
+            </p>
+            <p>The log4j configuration file location is
+               &lt;INSTALL_DIR&gt;/common/classes/log4j.properties. You can modify
+               this file to configure log4j.
+            </p>
+            <source>
+   log4j.rootLogger=DEBUG, R
+   log4j.appender.R=org.apache.log4j.RollingFileAppender
+   log4j.appender.R.File=./res/log/log.gen
+   log4j.appender.R.MaxFileSize=10MB
+   log4j.appender.R.MaxBackupIndex=10
+   log4j.appender.R.layout=org.apache.log4j.PatternLayout
+   log4j.appender.R.layout.ConversionPattern=[%5p] %d %m%n
+            </source>
+            <p>This log4j configuration sets up a file called log.gen in your
+               FTP Server ./res/log folder with a maximum file size of 10MB
+               and up to 10 backups. DEBUG log level is specified.
+            </p>
+            <p>you should consult the
+               <a href="http://logging.apache.org/log4j/docs/documentation.html">log4j
+               documentation</a> for more options.
+            </p>
+        </section>
+
+        <section name="java.util.logging">
+            <p>In order to configure JDK logging you should have JDK 1.4+. In the JDK's
+               logging.properties file. Check your JAVA_HOME environment setting to see
+               which JDK FTP Server is using. The file will be in $JAVA_HOME/jre/lib.
+               Alternately, it can also use a global configuration file located elsewhere
+               by using the system property java.util.logging.config.file, or programmatic
+               configuration using java.util.logging.config.class.
+            </p>
+            <p>The default logging.properties specifies a ConsoleHandler for routing
+               logging to stdout and also a FileHandler. A handler's log level threshold
+               can be set using SEVERE, CONFIG, INFO, WARN, FINE, FINEST or ALL. The
+               logging.properties shipped with JDK is set to INFO. Please refer to Sun's
+               java.util.logging documentation for the complete details.
+            </p>
+        </section>
+
+        <section name="Log UI">
+            <p>All the log messages are displayed in FTP server UI.</p>
+            <img src="images/ftp_log.jpg"/>
+        </section>
+    </body>
+</document>

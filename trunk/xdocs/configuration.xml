@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: Configuration</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link rel="icon" href="favicon.ico"/>
+    </head>
+    <body>
+        <section name="Overview">
+            <p>This document explains the Apache FTP Server configuration parameters.
+               All the configuration parameters are grouped depending on the component
+               where it has been used. This configuration format is very much open to
+               suite the user requirements. The server comes with two different
+               configuration implementations - properties file based and XML file based
+               configurations (./res/ftpd.properties and ./res/ftpd.xml). You can have
+               your own Configuration implementation. You just need to implement
+               <em>org.apache.ftpserver.ftplet.Configuration</em> interface. Most of the
+               configuration parameters have default values. So you do not have to
+               specify all the configuration parameters.
+            </p>
+            <p>The configuration parameters follow a tree hierarchy.</p>
+            <source>
+          n1
+          |
+          |--- n2
+               |
+               |--- n3
+               |
+               |--- n4
+            </source>
+            <p>Only the leaf nodes can have configuration values. That is in the above
+               hierarchy only n3 and n4 can have values. If we assume that the value of
+               n3 is v3 and the value of n4 is v4.
+            </p>
+            <p>The properties based configuration will look like:</p>
+            <source>
+          n1.n2.n3=v3
+          n1.n2.n4=v4
+            </source>
+            <p>Similarly the XML based configuration will look like:</p>
+            <source><![CDATA[
+          <n1>
+              <n2>
+                  <n3>v3</n3>
+                  <n4>v4</n4>
+              </n2>
+          <n1>
+            ]]></source>
+            <p>We shall use "." as the configuration path separator. That
+               is we shall use <em>n1.n2.n3</em> and <em>n1.n2.n4</em> to identify
+               <em>n3</em> and <em>n4</em> configuration parameters.
+            </p>
+        </section>
+
+        <section name="Configuration Structure">
+            <p>The following diagram shows the Apache FTP Server configuration structure.
+               The values in brackets are the default values.
+            </p>
+            <source>
+config
+  |
+  |---- socket-factory
+  |       |
+  |       |---- <b><a href="#config.socket-factory.class">class</a></b> (org.apache.ftpserver.socketfactory.FtpSocketFactory)
+  |       |
+  |       |---- <b><a href="#config.socket-factory.address">address</a></b> (&lt;none&gt;)
+  |       |
+  |       |---- <b><a href="#config.socket-factory.port">port</a></b> (21)
+  |       |
+  |       |---- ssl
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.keystore-file">keystore-file</a></b> (./res/.keystore)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.keystore-password">keystore-password</a></b> (password)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.keystore-type">keystore-type</a></b> (JKS)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.keystore-algorithm">keystore-algorithm</a></b> (SunX509)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.ssl-protocol">ssl-protocol</a></b> (TLS)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.client-authentication">client-authentication</a></b> (false)
+  |               |
+  |               |---- <b><a href="#config.socket-factory.ssl.key-password">key-password</a></b> (password)
+  |
+  |---- data-connection
+  |       |
+  |       |---- <b><a href="#config.data-connection.idle-time">idle-time</a></b> (10)
+  |       |
+  |       |---- active
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.enable">enable</a></b> (true)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.local-address">local-address</a></b> (&lt;none&gt;)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.local-port">local-port</a></b> (0)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.active.ip-check">ip-check</a></b> (false)
+  |       |
+  |       |---- passive
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.passive.address">address</a></b> (&lt;none&gt;)
+  |       |       |
+  |       |       |---- <b><a href="#config.data-connection.passive.ports">ports</a></b> (0)
+  |       |
+  |       |---- ssl
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.keystore-file">keystore-file</a></b> (./res/.keystore)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.keystore-password">keystore-password</a></b> (password)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.keystore-type">keystore-type</a></b> (JKS)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.keystore-algorithm">keystore-algorithm</a></b> (SunX509)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.ssl-protocol">ssl-protocol</a></b> (TLS)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.client-authentication">client-authentication</a></b> (false)
+  |               |
+  |               |---- <b><a href="#config.data-connection.ssl.key-password">key-password</a></b> (password)
+  |
+  |---- <b><a href="#config.create-default-user">create-default-user</a></b> (true)
+  |
+  |---- message
+  |       |
+  |       |---- <b><a href="#config.message.class">class</a></b> (org.apache.ftpserver.message.MessageResourceImpl)
+  |       |
+  |       |---- <b><a href="#config.message.custom-message-dir">custom-message-dir</a></b> (./res)
+  |       |
+  |       |---- <b><a href="#config.message.languages">languages</a></b> (&lt;none&gt;)
+  |
+  |---- connection-manager
+  |       |
+  |       |---- <b><a href="#config.connection-manager.max-connection">max-connection</a></b> (20)
+  |       |
+  |       |---- <b><a href="#config.connection-manager.max-login">max-login</a></b> (10)
+  |       |
+  |       |---- <b><a href="#config.connection-manager.anonymous-login-enabled">anonymous-login-enabled</a></b> (true)
+  |       |
+  |       |---- <b><a href="#config.connection-manager.max-anonymous-login">max-anonymous-login</a></b> (10)
+  |       |
+  |       |---- <b><a href="#config.connection-manager.default-idle-time">default-idle-time</a></b> (60)
+  |       |
+  |       |---- <b><a href="#config.connection-manager.timeout-poll-interval">timeout-poll-inverval</a></b> (60)
+  |
+  |---- command-factory
+  |       |
+  |       |---- command
+  |               |
+  |               |---- <b><i><a href="#config.command-factory.command.command-name">command-name</a></i></b>
+  |
+  |---- ip-restrictor
+  |       |
+  |       |---- <b><a href="#config.ip-restrictor.class">class</a></b> (org.apache.ftpserver.iprestrictor.FileIpRestrictor)
+  |       |
+  |       |---- <b><a href="#config.ip-restrictor.file">file</a></b> (./res/ip.gen)
+  |
+  |---- user-manager
+  |       |
+  |       |---- <b><a href="#config.user-manager.class">class</a></b> (org.apache.ftpserver.usermanager.PropertiesUserManager)
+  |       |
+  |       |---- <b><a href="#config.user-manager.admin">admin</a></b> (admin)
+  |       |
+  |       |---- <b><a href="#config.user-manager.prop-file">prop-file</a></b> (./res/user.gen)
+  |       |
+  |       |---- <b><a href="#config.user-manager.prop-password.encrypt">prop-password-encrypt</a></b> (true)
+  |       |
+  |       |---- <b><a href="#config.user-manager.jdbc-driver">jdbc-driver</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.jdbc-url">jdbc-url</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.jdbc-user">jdbc-user</a></b> (null)
+  |       |
+  |       |---- <b><a href="#config.user-manager.jdbc-password">jdbc-password</a></b> (null)
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-insert">sql-user-insert</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-update">sql-user-update</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-delete">sql-user-delete</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-select">sql-user-select</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-select-all">sql-user-select-all</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-authenticate">sql-user-authenticate</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.sql-user-admin">sql-user-admin</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.ldap-url">ldap-url</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.ldap-admin-dn">ldap-admin-dn</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.ldap-admin-password">ldap-admin-password</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.ldap-authentication">ldap-authentication</a></b>
+  |       |
+  |       |---- <b><a href="#config.user-manager.ldap-user-base-dn">ldap-user-base-dn</a></b>
+  |
+  |
+  |---- file-system-manager
+  |       |
+  |       |---- <b><a href="#config.file-system-manager.class">class</a></b> (org.apache.ftpserver.filesystem.NativeFileSystemManager)
+  |       |
+  |       |---- <b><a href="#config.file-system-manager.create-home">create-home</a></b> (false)
+  |
+  |----- <b><a href="#config.ftplets">ftplets</a></b> (&lt;none&gt;)
+  |
+  |----- ftplet
+           |
+           |---- <i>name</i>
+                   |
+                   |---- <b><a href="#config.ftplet.name.class">class</a></b>
+                   |
+                   |---- <b><i><a href="#config.ftplet.name.param">param</a></i></b>
+            </source>
+        </section>
+
+        <section id="Configuration Parameters">
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.class">config.socket-factory.class</a></td>
+                    <td>The socket factory class
+                        <ul>
+                            <li>org.apache.ftpserver.socketfactory.FtpSocketFactory : Plain socket - supports explicit SSL connection (AUTH SSL)</li>
+                            <li>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory : implicit SSL socket</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.address">config.socket-factory.address</a></td>
+                    <td>FTP server address</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.port">config.socket-factory.port</a></td>
+                    <td>FTP server port</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.keystore-file">config.socket-factory.ssl.keystore-file</a></td>
+                    <td>Keystore file location. The default path is ./res/.keystore</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.keystore-password">config.socket-factory.ssl.keystore-password</a></td>
+                    <td>Keystore password. The default value is password.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.keystore-type">config.socket-factory.ssl.keystore-type</a></td>
+                    <td>Keystore type. The default value is JKS.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.keystore-algorithm">config.socket-factory.ssl.keystore-algorithm</a></td>
+                    <td>Keystore algorithm. The default value is SunX509.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.ssl-protocol">config.socket-factory.ssl.ssl-protocol</a></td>
+                    <td>SSL protocol. The default value is TLS.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.client-authentication">config.socket-factory.ssl.client-authentication</a></td>
+                    <td>Client authentication. The default value is false.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.socket-factory.ssl.key-password">config.socket-factory.ssl.key-password</a></td>
+                    <td>Key password. The default value is password.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.idle-time">config.data-connection.idle-time</a></td>
+                    <td>Maximum data connection idle time in second.
+                        0 means no limit. The default value is 10.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.enable">config.data-connection.active.enable</a></td>
+                    <td>PORT data connection enabled. The default value is true.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.local-address">config.data-connection.active.local-address</a></td>
+                    <td>The localhost address used when local port specified in active data transfer.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.local-port">config.data-connection.active.local-port</a></td>
+                    <td>The local port to be used during active data transfer. According to the
+                        specifications, it should be 20. The default value is 0. It means that any free
+                        port will be used.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.active.ip-check">config.data-connection.active.ip-check</a></td>
+                    <td>Check the PORT IP with the client IP. The default value is false.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.passive.address">config.data-connection.passive.address</a></td>
+                    <td>FTP passive (PASV) address The default value is localhost.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.passive.ports">config.data-connection.passive.ports</a></td>
+                    <td>Allowed passive ports (comma separated).
+                        0 means any free port. The default value is 0.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.keystore-file">config.data-connection.ssl.keystore-file</a></td>
+                    <td>Keystore file location. The default value is ./res/.keystore</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.keystore-password">config.data-connection.ssl.keystore-password</a></td>
+                    <td>Keystore password. The default value is password.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.keystore-type">config.data-connection.ssl.keystore-type</a></td>
+                    <td>Keystore type. The default value is JKS.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.keystore-algorithm">config.data-connection.ssl.keystore-algorithm</a></td>
+                    <td>Keystore algorithm. The default value is SunX509.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.ssl-protocol">config.data-connection.ssl.ssl-protocol</a></td>
+                    <td>SSL protocol. The default value is TLS.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.client-authentication">config.data-connection.ssl.client-authentication</a></td>
+                    <td>Need client authentication? The default value is false.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.data-connection.ssl.key-password">config.data-connection.ssl.key-password</a></td>
+                    <td>Key password. The default value is password.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.create-default-user">config.create-default-user</a></td>
+                    <td>Flag to indicate whether the standard users
+                        (admin and anonymous) will be created by default if not found. The
+                        admin user password will be same as admin user name.
+                        The default value is true.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.message.class">config.message.class</a></td>
+                    <td>org.apache.ftpserver.message.MessageResourceImpl</td>
+                </tr>
+                <tr>
+                    <td><a name="config.message.custom-message-dir">config.message.custom-message-dir</a></td>
+                    <td>The directory where user defined custom FTP server replies will be
+                        stored. The default value is ./res
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.message.languages">config.message.languages</a></td>
+                    <td>Comma separated values of all the languages supported.
+                        The default value is null.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.max-connection">config.connection-manager.max-connection</a></td>
+                    <td>Maximum simultaneous connections (0 means no limit).
+                        The default value is 20.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.max-login">config.connection-manager.max-login</a></td>
+                    <td>Maximum simultaneous logins (0 means no limit).
+                        The default value is 10.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.anonymous-login-enabled">config.connection-manager.anonymous-login-enabled</a></td>
+                    <td>Flag to indicate annonymous login support. By default the server
+                        allows anonymous connections. That is the default value is true.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.max-anonymous-login">config.connection-manager.max-anonymous-login</a></td>
+                    <td>Maximum anonymous simultaneous logins (0 means no limit).
+                        Should be less than or equal to the maximum number of simultaneous
+                        logins. It will not be used if the sever does not allow anonymous
+                        login. The default value is 10.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.default-idle-time">config.connection-manager.default-idle-time</a></td>
+                    <td>Default idle time in seconds. It is used to close idle
+                        data connection and non-logged-in connections. The default value
+                        is 60.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.connection-manager.timeout-poll-interval">config.connection-manager.timeout-poll-interval</a></td>
+                    <td>Polling interval in seconds to disconnect idle users. The default
+                        value is 60.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.command-factory.command.command-name">config.command-factory.command.command-name</a></td>
+                    <td>Command name and fully qualified command implementation class name mapping. The default 
+                        implementations are already set in the server. You can overwrite or add your own command 
+                        implementations.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.ip-restrictor.class">config.ip-restrictor.class</a></td>
+                    <td>IP restrictor implementation - org.apache.ftpserver.iprestrictor.FileIpRestrictor</td>
+                </tr>
+                <tr>
+                    <td><a name="config.ip-restrictor.file">config.ip-restrictor.file</a></td>
+                    <td>The file where IP restriction information will be stored.
+                        The default is ./res/ip.gen
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.class">config.user-manager.class</a></td>
+                    <td>The user manager implementation class.
+                        <ul>
+                            <li>org.apache.ftpserver.usermanager.PropertiesUserManager - Properties file based defaul user manager class.</li>
+                            <li>org.apache.ftpserver.usermanager.DbUserManager - Database based user manager class.</li>
+                            <li>org.apache.ftpserver.usermanager.LdapUserManager - Ldap based user manager class.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.admin">config.user-manager.admin</a></td>
+                    <td>FTP server administrator name. It is used in properties, database
+                        and LDAP based user managers. The default value is admin.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.prop-file">config.user-manager.prop-file</a></td>
+                    <td>The properies file location - used in properties file based user manager.
+                        The default value is ./res/user.gen
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.prop-password-encrypt">config.user-manager.prop-password-encrypt</a></td>
+                    <td>Flag to indicate whether the encrypted password will be stored in the properties file.
+                        It is used in properties file based user manager. The default value is true.
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.jdbc-driver">config.user-manager.jdbc-driver</a></td>
+                    <td>JDBC driver class name - used in database based user manager.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.jdbc-url">config.user-manager.jdbc-url</a></td>
+                    <td>JDBC URL used in database based user manager.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.jdbc-user">config.user-manager.jdbc-user</a></td>
+                    <td>Database user used in database based user manager. The default value is null.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.jdbc-password">config.user-manager.jdbc-password</a></td>
+                    <td>Database password - used in database based user manager. The default is null.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-insert">config.user-manager.sql-user-insert</a></td>
+                    <td>SQL INSERT statement used to add a new user. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source><![CDATA[
+    INSERT INTO FTP_USER
+        (uid, userpassword,
+         homedirectory, enableflag,
+         writepermission, idletime,
+         uploadrate, downloadrate)
+    VALUES ('{uid}', '{userpassword}',
+            '{homedirectory}',
+            '{enableflag}',
+            '{writepermission}', {idletime},
+            {uploadrate}, {downloadrate})
+                        ]]></source>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-update">config.user-manager.sql-user-update</a></td>
+                    <td>SQL UPDATE statement used to update an existing user. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source><![CDATA[
+    UPDATE FTP_USER SET
+        userpassword='{userpassword}',
+        homedirectory='{homedirectory}',
+        enableflag='{enableflag}',
+        writepermission='{writepermission}',
+        idletime={idletime},
+        uploadrate={uploadrate},
+        downloadrate={downloadrate}
+    WHERE uid='{uid}'
+                        ]]></source>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-delete">config.user-manager.sql-user-delete</a></td>
+                    <td>SQL DELETE statement used to delete an existing user. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source>DELETE FROM FTP_USER WHERE uid = '{uid}'</source>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-select">config.user-manager.sql-user-select</a></td>
+                    <td>SQL SELECT statement used to select an existing user. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source><![CDATA[
+    SELECT uid, userpassword, homedirectory,
+           enableflag, writepermission,
+           idletime, uploadrate,
+           downloadrate
+    FROM FTP_USER
+    WHERE uid = '{uid}'
+                        ]]></source>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-all">config.user-manager.sql-user-all</a></td>
+                    <td>SQL SELECT statement used to select all user ids. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source>SELECT uid FROM FTP_USER ORDER BY uid</source>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.sql-user-authenticate">config.user-manager.sql-user-authenticate</a></td>
+                    <td>SQL SELECT statement used to authenticate user. All the
+                        dynamic values will be replaced during runtime. Sample query:
+                        <source><![CDATA[
+    SELECT uid
+    FROM FTP_USER
+    WHERE uid='{uid}' AND 
+          userpassword='{userpassword}'
+                        ]]></source>
+                    </td>
+                </tr>
+                <tr>
+                        <td><a name="config.user-manager.sql-user-admin">config.user-manager.sql-user-admin</a></td>
+                        <td>SQL SELECT statement used to find whether an user is admin or not.
+                            All the dynamic values will be replaced during runtime.
+                            Sample query:
+                            <source><![CDATA[
+    SELECT uid
+    FROM FTP_USER
+    WHERE uid='{uid}' AND 
+          uid='admin'
+                            ]]></source>
+                        </td>
+                    </tr>
+                <tr>
+                    <td><a name="config.user-manager.ldap-url">config.user-manager.ldap-url</a></td>
+                    <td>LDAP URL (eg. ldap://localhost:389)</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.ldap-admin-dn">config.user-manager.ldap-admin-dn</a></td>
+                    <td>LDAP administrator (eg. cn=Directory Manager)</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.ldap-admin-password">config.user-manager.ldap-admin-password</a></td>
+                    <td>LDAP administrator password</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.ldap-authentication">config.user-manager.ldap-authentication</a></td>
+                    <td>LDAP server authentication type. The default value is simple.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.user-manager.ldap-user-base-dn">config.user-manager.ldap-user-base-dn</a></td>
+                    <td>LDAP server root where all users are stored (eg. ou=people,o=yoursite.com).</td>
+                </tr>
+                <tr>
+                    <td><a name="config.file-system-manager.class">config.file-system-manager.class</a></td>
+                    <td>File system manager implementation class - org.apache.ftpserver.filesystem.NativeFileSystemManager</td>
+                </tr>
+                <tr>
+                    <td><a name="config.file-system-manager.create-home">config.file-system-manager.create-home</a></td>
+                    <td>Flag to indicate whether user home directory will be created if not exists.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.ftplets">config.ftplets</a></td>
+                    <td>Comma separated ftplet names.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.ftplet.name.class">config.ftplet.<i>name</i>.class</a></td>
+                    <td>For each ftplet there must be one configuration parameter. This is ftplet implementation class.</td>
+                </tr>
+                <tr>
+                    <td><a name="config.ftplet.name.param">config.ftplet.<i>name.param</i></a></td>
+                    <td>Each ftplet can have its own configuration parameters.</td>
+                </tr>
+            </table>
+        </section>
+    </body>
+</document>

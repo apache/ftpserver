@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: Overview</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+
+    <body>
+        <section name="Overview">
+            <p>The Apache FTP Server is a 100% pure Java FTP server. We have designed
+              it to be a complete and portable ftp server engine solution based on
+              currently available open protocols.
+            </p>
+            <p>It is also a FTP application platform. We have developed a Java API
+               to let you write Java code to process FTP event notifications that
+               we call the Ftplet API. Apache FTP Server provides an implementation
+               of FTP server to support this API.
+            </p>
+        </section>
+        <section name="Features">
+            <ol>
+                <li>100% pure Java, free, open source resumable FTP server!!!</li>
+                <li>Multi platform support and multithreaded design.</li>
+                <li>User virtual directory, write permission, idle time-out and upload/download bandwidth limitation support.</li>
+                <li>You can monitor all the user activities.</li>
+                <li>Anonymous login support.</li>
+                <li>Both upload and download files are resumable.</li>
+                <li>Handles both ASCII and binary data transfers.</li>
+                <li>IP restriction support to allow/ban IPs.</li>
+                <li>Database and LDAP can be used to store user data.</li>
+                <li>All the FTP messages are customizable.</li>
+                <li>Implicit/explicit SSL/TLS support.</li>
+                <li>MDTM support - your users can change the date-time stamp of files.</li>
+                <li>"MODE Z" support for faster data upload/download.</li>
+                <li>Custom user manager, IP restrictor, logger can be added easily.</li>
+                <li>User event notifications can be added (Ftplet).</li>
+            </ol>
+        </section>
+        <section name="Disclaimers">
+            <p>Ftpserver is an effort undergoing incubation at the 
+               Apache Software Foundation (ASF), sponsored by the Incubator PMC. 
+               Incubation is required of all newly accepted projects until a further 
+               review indicates that the infrastructure, communications, and decision
+               making process have stabilized in a manner consistent with other 
+               successful ASF projects. While incubation status is not necessarily a 
+               reflection of the completeness or stability of the code, it does 
+               indicate that the project has yet to be fully endorsed by the ASF.
+            </p>
+        </section>    
+    </body>
+</document>
