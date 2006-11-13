@@ -21,7 +21,7 @@ package org.apache.ftpserver.gui;
 
 import javax.swing.JComponent;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This is the plugin panel container.
@@ -70,10 +70,10 @@ interface PluginPanelContainer {
     /**
      * Refresh with new ftp configuration object.
      */
-    void refresh(IFtpConfig config);
+    void refresh(ServerFtpConfig config);
     
     /**
      * Get current ftp config
      */
-    IFtpConfig getFtpConfig();
+    ServerFtpConfig getFtpConfig();
 }

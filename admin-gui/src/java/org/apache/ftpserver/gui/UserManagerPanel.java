@@ -44,7 +44,7 @@ import javax.swing.SwingConstants;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.usermanager.BaseUser;
 
 /**
@@ -96,7 +96,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
       new Integer(8)
     };
     
-    private IFtpConfig fconfig;                  
+    private ServerFtpConfig fconfig;                  
     
     private JComboBox userLst;
     private JTextField nameTxt;
@@ -483,7 +483,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(IFtpConfig config) {
+    public void refresh(ServerFtpConfig config) {
         fconfig = config;
         userLst.removeAllItems();
         if(fconfig == null) {

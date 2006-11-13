@@ -32,10 +32,10 @@ import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.util.DateUtils;
 
 
@@ -53,16 +53,16 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                                                "Last Access Time",    
                                                "IP"};
     private List connections = new Vector();
-    private IFtpConfig fonfig;
+    private ServerFtpConfig fonfig;
     private EventListenerList listeners = new EventListenerList();
     
     /**
      * Reload the model.
      */
-    public void refresh(IFtpConfig cfg) {
+    public void refresh(ServerFtpConfig cfg) {
         fonfig = cfg;
         if (fonfig != null) {
-            IConnectionManager conManager = fonfig.getConnectionManager();
+            ConnectionManager conManager = fonfig.getConnectionManager();
             connections = conManager.getAllConnections();
             conManager.setObserver(this);
         }
@@ -134,9 +134,9 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
         
         // error check
         String retVal = "";
-        IConnection thisCon = null;
+        Connection thisCon = null;
         if (row < connections.size()) {
-            thisCon = (IConnection)connections.get(row);
+            thisCon = (Connection)connections.get(row);
         }
         if (thisCon == null) {
             return retVal;
@@ -187,9 +187,9 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     /**
      * Get connection at an index.
      */
-    public IConnection getConnection(int index) {
+    public Connection getConnection(int index) {
         if(index < connections.size()) {
-            return (IConnection)connections.get(index);
+            return (Connection)connections.get(index);
         }
         return null;
     }
@@ -228,7 +228,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     /**
      * Add a new connection
      */
-    public void openedConnection(final IConnection con) {
+    public void openedConnection(final Connection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 connections.add(con);
@@ -246,7 +246,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     /**
      * Closed connection.
      */
-    public void closedConnection(final IConnection con) {
+    public void closedConnection(final Connection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 int index = connections.indexOf(con);
@@ -266,7 +266,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     /**
      * Existing connected connection update notification.
      */
-    public void updatedConnection(final IConnection con) {
+    public void updatedConnection(final Connection con) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 int index = connections.indexOf(con);

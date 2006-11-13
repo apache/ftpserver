@@ -35,10 +35,10 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FileObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IFtpStatistics;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.StatisticsObserver;
 import org.apache.ftpserver.util.DateUtils;
 
@@ -90,8 +90,8 @@ class StatisticsPanel extends PluginPanel
             "Total connections"
     };
 
-    private IFtpConfig ftpConfig;
-    private IFtpStatistics statistics;
+    private ServerFtpConfig ftpConfig;
+    private ServerFtpStatistics statistics;
     private String data[] = new String[STAT_NAMES.length];
     private EventListenerList listeners = new EventListenerList();
     
@@ -228,10 +228,10 @@ class StatisticsPanel extends PluginPanel
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         this.ftpConfig = ftpConfig;
         if (this.ftpConfig != null) {
-            statistics = (IFtpStatistics)this.ftpConfig.getFtpStatistics();
+            statistics = (ServerFtpStatistics)this.ftpConfig.getFtpStatistics();
             statistics.setObserver(this);
             statistics.setFileObserver(this);
             
@@ -261,7 +261,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyUpload() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalUpload = stat.getTotalUploadNumber();
                     setValue(I_FILE_UPLOAD, String.valueOf(totalUpload));
@@ -277,7 +277,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * File upload notification.
      */
-    public void notifyUpload(final IConnection connection, final FileObject file, final long size) {
+    public void notifyUpload(final Connection connection, final FileObject file, final long size) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
@@ -293,7 +293,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyDownload() {
         Runnable runnable = new Runnable() {
             public void run() {
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalDownload = stat.getTotalDownloadNumber();
                     setValue(I_FILE_DOWNLOAD, String.valueOf(totalDownload));
@@ -309,7 +309,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * File download notification.
      */
-    public void notifyDownload(final IConnection connection, final FileObject file, final long size) {
+    public void notifyDownload(final Connection connection, final FileObject file, final long size) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
@@ -325,7 +325,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyDelete() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalDelete = stat.getTotalDeleteNumber();
                     setValue(I_FILE_REMOVED, String.valueOf(totalDelete));
@@ -338,7 +338,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * File delete notification.
      */
-    public void notifyDelete(final IConnection connection, final FileObject file) {
+    public void notifyDelete(final Connection connection, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
@@ -354,7 +354,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyLogin(final boolean anonymous) {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int loginNbr = stat.getCurrentLoginNumber();
                     setValue(I_CURR_LOGINS, String.valueOf(loginNbr));
@@ -388,7 +388,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyOpenConnection() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int currCon = stat.getCurrentConnectionNumber();
                     setValue(I_CURR_CONS, String.valueOf(currCon));
@@ -414,7 +414,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyMkdir() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalMkdir = stat.getTotalDirectoryCreated();
                     setValue(I_DIR_CREATED, String.valueOf(totalMkdir));
@@ -427,7 +427,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * Make directry notification.
      */
-    public void notifyMkdir(final IConnection connection, final FileObject file) {
+    public void notifyMkdir(final Connection connection, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 DirectoryPanel dirPanel = (DirectoryPanel)getContainer().getPluginPanel(PluginPanelContainer.DIR_INDEX);
@@ -443,7 +443,7 @@ class StatisticsPanel extends PluginPanel
     public void notifyRmdir() {
         Runnable runnable = new Runnable() {
             public void run() { 
-                IFtpStatistics stat = statistics;
+                ServerFtpStatistics stat = statistics;
                 if(stat != null) {
                     int totalRmdir = stat.getTotalDirectoryRemoved();
                     setValue(I_DIR_REMOVED, String.valueOf(totalRmdir));
@@ -456,7 +456,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * Remove directry notification.
      */
-    public void notifyRmdir(final IConnection connection, final FileObject file) {
+    public void notifyRmdir(final Connection connection, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 DirectoryPanel dirPanel = (DirectoryPanel)getContainer().getPluginPanel(PluginPanelContainer.DIR_INDEX);

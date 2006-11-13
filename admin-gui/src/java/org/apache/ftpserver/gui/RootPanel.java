@@ -51,7 +51,7 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.config.XmlConfigurationHandler;
 import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -292,7 +292,7 @@ class RootPanel extends PluginPanel {
     /**
      * Refresh the panel with the new ftp config.
      */
-    public void refresh(IFtpConfig ftpCOnfig) {
+    public void refresh(ServerFtpConfig ftpCOnfig) {
     }
     
     
@@ -348,7 +348,7 @@ class RootPanel extends PluginPanel {
             }
             
             // create ftp configuration object
-            IFtpConfig fconfig = new FtpConfigImpl(config);
+            ServerFtpConfig fconfig = new FtpConfigImpl(config);
             
             // start server
             server = new FtpServer(fconfig);

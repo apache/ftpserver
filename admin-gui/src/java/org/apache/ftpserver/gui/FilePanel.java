@@ -33,8 +33,8 @@ import javax.swing.JTable;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This panel displays all user file upload, download and remove activities.
@@ -52,7 +52,7 @@ class FilePanel extends PluginPanel {
             "Deleted"
     };
     
-    private IFtpConfig        fconfig;
+    private ServerFtpConfig        fconfig;
     private FtpFileTableModel[] models;
     
     
@@ -116,7 +116,7 @@ class FilePanel extends PluginPanel {
     /**
      * File upload notification.
      */
-    public void notifyUpload(IConnection con, FileObject file, long sz) {
+    public void notifyUpload(Connection con, FileObject file, long sz) {
         User user = con.getRequest().getUser();
         models[0].newEntry(file.getFullName(), user);
     }
@@ -124,7 +124,7 @@ class FilePanel extends PluginPanel {
     /**
      * File download notification.
      */
-    public void notifyDownload(IConnection con, FileObject file, long sz) {
+    public void notifyDownload(Connection con, FileObject file, long sz) {
         User user = con.getRequest().getUser();
         models[1].newEntry(file.getFullName(), user);
     }
@@ -132,7 +132,7 @@ class FilePanel extends PluginPanel {
     /**
      * File delete notification.
      */
-    public void notifyDelete(IConnection con, FileObject file) {
+    public void notifyDelete(Connection con, FileObject file) {
         User user = con.getRequest().getUser();
         models[2].newEntry(file.getFullName(), user);
     }
@@ -141,7 +141,7 @@ class FilePanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(IFtpConfig config) {
+    public void refresh(ServerFtpConfig config) {
         fconfig = config;
     }
     

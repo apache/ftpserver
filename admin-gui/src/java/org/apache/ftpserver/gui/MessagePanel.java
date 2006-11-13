@@ -42,8 +42,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IMessageResource;
+import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This is FTP server response panel. User can customize server responses.
@@ -55,7 +55,7 @@ class MessagePanel extends PluginPanel {
 
     private static final long serialVersionUID = -68038181884794057L;
     
-    private IFtpConfig fconfig;
+    private ServerFtpConfig fconfig;
     private JComboBox comboBox;
     
     private JList list;
@@ -162,7 +162,7 @@ class MessagePanel extends PluginPanel {
         }
         
         // get properties
-        IMessageResource msgRes = fconfig.getMessageResource();
+        MessageResource msgRes = fconfig.getMessageResource();
         Properties prop = msgRes.getMessages(language);
         Vector keyList = new Vector();
         for(Enumeration keys = prop.propertyNames(); keys.hasMoreElements();) {
@@ -238,7 +238,7 @@ class MessagePanel extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         fconfig = ftpConfig;
         comboBox.removeAllItems();
         list.removeAll();
@@ -248,7 +248,7 @@ class MessagePanel extends PluginPanel {
         }
         
         // populate language list
-        IMessageResource msgRes = fconfig.getMessageResource();
+        MessageResource msgRes = fconfig.getMessageResource();
         languages = msgRes.getAvailableLanguages();
         comboBox.addItem("<default>");
         if(languages != null) {

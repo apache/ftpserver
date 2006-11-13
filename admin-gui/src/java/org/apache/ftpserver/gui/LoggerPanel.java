@@ -42,7 +42,7 @@ import javax.swing.text.StyleConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpLogFactory;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -80,7 +80,7 @@ class LoggerPanel extends PluginPanel implements Log {
     
     private int logLevel = LEVEL_INFO;
 
-    private IFtpConfig ftpConfig;
+    private ServerFtpConfig ftpConfig;
     
     private JComboBox logCombo;
     private JTextPane logTxt;
@@ -205,7 +205,7 @@ class LoggerPanel extends PluginPanel implements Log {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         
         // remove old log messages
         try {

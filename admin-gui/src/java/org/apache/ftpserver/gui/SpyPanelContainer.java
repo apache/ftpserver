@@ -30,8 +30,8 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This panel monitors user request/replies.
@@ -46,7 +46,7 @@ class SpyPanelContainer extends PluginPanel {
     private JTabbedPane tabbedPane;
     private JLabel defaultComp;
     
-    private IFtpConfig fconfig;
+    private ServerFtpConfig fconfig;
     
     
     /**
@@ -81,7 +81,7 @@ class SpyPanelContainer extends PluginPanel {
     /**
      * Monitor connection.
      */
-    public void monitorConnection(IConnection con) {    
+    public void monitorConnection(Connection con) {    
         String userName = getCaption(con); 
         
         // don't add another tab if already being monitored
@@ -89,7 +89,7 @@ class SpyPanelContainer extends PluginPanel {
         for(int i=0; i<tabCount; i++) {
             Component selComp = tabbedPane.getComponentAt(i);
             if ( (selComp != null) && (selComp != defaultComp) ) {
-                IConnection tabcon = ((SpyPanel)selComp).getConnection();
+                Connection tabcon = ((SpyPanel)selComp).getConnection();
                 if (tabcon == con) {
                     tabbedPane.setTitleAt(i, userName);
                     tabbedPane.setSelectedIndex(i);
@@ -108,7 +108,7 @@ class SpyPanelContainer extends PluginPanel {
     /**
      * Get tab caption.
      */
-    private String getCaption(IConnection con) {
+    private String getCaption(Connection con) {
         User user = con.getRequest().getUser();
         String name = "UNKNOWN";
         if(user != null) {
@@ -123,7 +123,7 @@ class SpyPanelContainer extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         fconfig = ftpConfig;
         int tabCount = tabbedPane.getTabCount();
         for(int i=tabCount; --i>=0; ) {

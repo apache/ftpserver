@@ -33,8 +33,8 @@ import javax.swing.JTable;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This panel monitor all user directory create and remove activities.
@@ -51,7 +51,7 @@ class DirectoryPanel extends PluginPanel {
             "Removed"
     };
     
-    private IFtpConfig        fconfig;
+    private ServerFtpConfig        fconfig;
     private FtpDirectoryTableModel[] models;
     
     
@@ -114,7 +114,7 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Make directory notification.
      */
-    public void notifyMkdir(IConnection con, FileObject file) {
+    public void notifyMkdir(Connection con, FileObject file) {
         User user = con.getRequest().getUser();
         models[0].newEntry(file.getFullName(), user);
     }
@@ -123,7 +123,7 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Remove directory notification.
      */
-    public void notifyRmdir(IConnection con, FileObject file) {
+    public void notifyRmdir(Connection con, FileObject file) {
         User user = con.getRequest().getUser();
         models[1].newEntry(file.getFullName(), user);
     }
@@ -132,7 +132,7 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(IFtpConfig config) {
+    public void refresh(ServerFtpConfig config) {
         fconfig = config;
         models[0].clear();
         models[1].clear();

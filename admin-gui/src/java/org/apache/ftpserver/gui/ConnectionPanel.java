@@ -30,8 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.ftplet.FtpConfig;
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * This panel shows all the connections.
@@ -43,7 +44,7 @@ class ConnectionPanel extends PluginPanel {
 
     private static final long serialVersionUID = 3774741162954995177L;
     
-    private IFtpConfig fconfig;
+    private ServerFtpConfig fconfig;
     private JTable conTable;   
     private FtpConnectionTableModel model;
     
@@ -123,7 +124,7 @@ class ConnectionPanel extends PluginPanel {
         }
         
         for(int i=indices.length; --i>=0; ) {
-            IConnection con = model.getConnection(indices[i]);
+            Connection con = model.getConnection(indices[i]);
             if(con != null) {
                 fconfig.getConnectionManager().closeConnection(con);
             }
@@ -144,7 +145,7 @@ class ConnectionPanel extends PluginPanel {
         // monitor all the selected users
         SpyPanelContainer spyContainer = (SpyPanelContainer)getContainer().getPluginPanel(PluginPanelContainer.SPY_INDEX);
         for(int i=indices.length; --i>=0; ) {   
-            IConnection con = model.getConnection(indices[i]);
+            Connection con = model.getConnection(indices[i]);
             if (con != null) {
                 spyContainer.monitorConnection(con); 
             }
@@ -158,7 +159,7 @@ class ConnectionPanel extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         fconfig = ftpConfig;
         model.refresh(ftpConfig);
     }

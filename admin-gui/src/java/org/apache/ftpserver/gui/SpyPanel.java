@@ -38,10 +38,10 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.IConnection;
-import org.apache.ftpserver.interfaces.IConnectionManager;
-import org.apache.ftpserver.interfaces.IFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 
 /**
@@ -58,8 +58,8 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private JTabbedPane parent = null;
     private JComponent defaultTab = null;
     
-    private IFtpConfig fconfig   = null;
-    private IConnection connection = null;
+    private ServerFtpConfig fconfig   = null;
+    private Connection connection = null;
     
     private SimpleAttributeSet reqAttrs = null;
     private SimpleAttributeSet resAttrs = null;
@@ -68,8 +68,8 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     /**
      * Instantiate this dialog box
      */
-    public SpyPanel(IFtpConfig config, 
-                    IConnection con, 
+    public SpyPanel(ServerFtpConfig config, 
+                    Connection con, 
                     JTabbedPane parent,
                     JComponent defaultTab) {
         
@@ -189,7 +189,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private void disconnectUser() {
         boolean bConf = GuiUtils.getConfirmation(this, "Do you want to close the connection?");
         if(bConf) {
-            IConnectionManager manager = fconfig.getConnectionManager();
+            ConnectionManager manager = fconfig.getConnectionManager();
             if (manager != null) {
                 manager.closeConnection(connection);
             }
@@ -200,7 +200,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     /**
      * Get the connection object being monitored.
      */
-    public IConnection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 }

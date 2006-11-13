@@ -28,8 +28,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.apache.ftpserver.interfaces.IFtpConfig;
-import org.apache.ftpserver.interfaces.IIpRestrictor;
+import org.apache.ftpserver.interfaces.IpRestrictor;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
 /**
  * IP restrictor panel.
@@ -41,7 +41,7 @@ class IPRestrictorPanel extends PluginPanel {
 
     private static final long serialVersionUID = -1871174667851171193L;
 
-    private IFtpConfig fconfig;
+    private ServerFtpConfig fconfig;
     private IPRestrictorTable table;
 
     /**
@@ -88,7 +88,7 @@ class IPRestrictorPanel extends PluginPanel {
      */
     private void saveData() {
         try {
-            IIpRestrictor restrictor = fconfig.getIpRestrictor();
+            IpRestrictor restrictor = fconfig.getIpRestrictor();
             restrictor.setPermissions(table.getData());
         }
         catch(Exception ex) {
@@ -103,7 +103,7 @@ class IPRestrictorPanel extends PluginPanel {
         try {
             Object[][] perms = null;
             if(fconfig != null) {
-                IIpRestrictor restrictor = fconfig.getIpRestrictor();
+                IpRestrictor restrictor = fconfig.getIpRestrictor();
                 perms = restrictor.getPermissions();
             }
             table.setData(perms);
@@ -116,7 +116,7 @@ class IPRestrictorPanel extends PluginPanel {
     /**
      * Refresh - set the ftp config.
      */
-    public void refresh(IFtpConfig ftpConfig) {
+    public void refresh(ServerFtpConfig ftpConfig) {
         fconfig = ftpConfig;
         reloadData();
     }
