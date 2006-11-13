@@ -39,9 +39,10 @@ import org.apache.log4j.Logger;
 
 public abstract class SSLTestTemplate extends TestCase {
 
-    private static final File FTPCLIENT_KEYSTORE = new File("src/test/client.jks");
+    private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
+    private static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
 
-    private static final File FTPSERVER_KEYSTORE = new File("src/test/ftpserver.jks");
+    private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/ftpserver.jks");
 
     private static final Logger log = Logger.getLogger(SSLTestTemplate.class);
 
@@ -63,6 +64,16 @@ public abstract class SSLTestTemplate extends TestCase {
 
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
 
+    public static File getBaseDir() {
+        // check Maven system prop first and use if set
+        String basedir = System.getProperty("basedir");
+        if(basedir != null) {
+            return new File(basedir);
+        } else {
+            return new File("");
+        }
+    }
+    
     protected Properties createConfig() {
         assertTrue(FTPSERVER_KEYSTORE.exists());
         
@@ -75,7 +86,7 @@ public abstract class SSLTestTemplate extends TestCase {
         configProps.setProperty("config.user-manager.prop-password-encrypt",
                 "false");
         configProps.setProperty("config.user-manager.prop-file",
-                "src/test/users.gen");
+                USERS_FILE.getAbsolutePath());
         configProps.setProperty("config.create-default-user", "false");
 
         configProps.setProperty("config.socket-factory.class",

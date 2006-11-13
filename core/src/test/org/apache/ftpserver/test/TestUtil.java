@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
 import junit.framework.TestCase;
@@ -34,6 +33,16 @@ public class TestUtil {
 
     private static final int DEFAULT_PORT = 12321;
 
+    public static File getBaseDir() {
+        // check Maven system prop first and use if set
+        String basedir = System.getProperty("basedir");
+        if(basedir != null) {
+            return new File(basedir);
+        } else {
+            return new File("");
+        }
+    }
+    
     /**
      * Attempts to find a free port or fallback to a default
      * @throws IOException 

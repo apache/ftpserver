@@ -58,6 +58,8 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected FTPClient client;
 
+   
+    private static final File USERS_FILE = new File(TestUtil.getBaseDir(), "src/test/users.gen");
     private static final File TEST_TMP_DIR = new File("test-tmp");
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
     
@@ -66,6 +68,8 @@ public abstract class ClientTestTemplate extends TestCase {
     }
 
     protected Properties createDefaultConfig() {
+        assertTrue("users.gen must exist", USERS_FILE.exists());
+        
         Properties configProps = new Properties();
         configProps.setProperty("config.socket-factory.port", Integer
                 .toString(port));
@@ -74,7 +78,7 @@ public abstract class ClientTestTemplate extends TestCase {
         configProps.setProperty("config.user-manager.admin", "admin");
         configProps.setProperty("config.user-manager.prop-password-encrypt", "false");
         configProps.setProperty("config.user-manager.prop-file",
-                "src/test/users.gen");
+                USERS_FILE.getAbsolutePath());
         configProps.setProperty("config.create-default-user", "false");
 
         return configProps;

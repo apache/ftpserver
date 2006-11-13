@@ -19,14 +19,17 @@
 
 package org.apache.ftpserver.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.test.TestUtil;
 
 public class XmlConfigurationTest extends ConfigurationTestTemplate {
 
     protected Configuration createConfiguration() throws Exception {
-        FileInputStream fis = new FileInputStream("src/test/XmlConfigurationHandler-test.xml");
+        File xmlFile = new File(TestUtil.getBaseDir(), "src/test/XmlConfigurationHandler-test.xml");
+        FileInputStream fis = new FileInputStream(xmlFile);
         XmlConfigurationHandler handler = new XmlConfigurationHandler(fis);
         
         return handler.parse();
