@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: TLS/SSL Support</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="TLS/SSL Support">
+            <p>This document explains how to enable Apache FTP Server to use
+               Transport Layer Security (TLS) for encrypted client-server communication.
+            </p>
+            <p>FtpServer uses the Java Secure Sockets Extension (JSSE) infrastructure
+               to provide TLS/SSL sockets. JSSE comes packaged with several vendor
+               Java distributions (i.e. Sun Java 1.4.x, IBM Java 1.3.x). For these
+               distributions, please follow the vendor provided instructions for
+               configuring the JVM to use JSSE services.
+            </p>
+        </section>
+        <section name="Implicit Security">
+            <p>If you want to use <strong>implicit</strong> SSL connection. The first
+               thing you need to do is to set appropriate server socket factory.
+               (<strong>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory</strong>).
+               If you use SSLFtpSocketFactory, you must specify the &quot;ssl&quot;
+               configuration parameters.
+            </p>
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.class</td>
+                    <td>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.address</td>
+                    <td>FTP server address</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.port</td>
+                    <td>FTP server port</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-file</td>
+                    <td>Keystore file location. One sample keystore file
+                        (<strong>res/.keystore</strong>) has been provided with
+                        the distribution.
+                    </td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-password</td>
+                    <td>Keystore password. The sample keystore password : password</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-type</td>
+                    <td>The keystore type. The sample keystore type : JKS</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-algorithm</td>
+                    <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.client-authentication</td>
+                    <td>Client authentication is required. The default is false.</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.key-password</td>
+                    <td>Key password. The sample keystore key password : password</td>
+                </tr>
+            </table>
+            <p>Implicit secure socket does not ensure encrypted data transfer.
+               To use SSL/TLS in data connection, client has to send "PROT P" command.
+               You also need to set the keystore configuration parameters. Encrypted
+               data transfer is supported for FTP passive (PASV) mode only.
+            </p>
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.keystore-file</td>
+                    <td>Keystore file location. One sample keystore file
+                        (<strong>res/.keystore</strong>) has been provided with
+                        the distribution.
+                    </td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.keystore-password</td>
+                    <td>Keystore password. The sample keystore password : password</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.keystore-type</td>
+                    <td>The keystore type. The sample keystore type : JKS</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.keystore-algorithm</td>
+                    <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.client-authentication</td>
+                    <td>Client authentication is required. The default is false.</td>
+                </tr>
+                <tr>
+                    <td>config.data-connection.ssl.key-password</td>
+                    <td>Key password. The sample keystore key password : password</td>
+                </tr>
+            </table>
+        </section>
+
+        <section name="Explicit Security">
+            <p>In this mode server supports both secure and non-secure connection. Upon
+               request from client (AUTH SSL) the server switches to the SSL/TLS mode.
+            </p>
+            <p>In this case, the default server socket factory
+               (org.apache.ftpserver.socketfactory.FtpSocketFactory) has to be used.
+            </p>
+            <table>
+                <tr>
+                    <th>Configuration Parameter</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.class</td>
+                    <td>org.apache.ftpserver.socketfactory.FtpSocketFactory</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.address</td>
+                    <td>FTP server address</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.port</td>
+                    <td>FTP server port</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-file</td>
+                    <td>Keystore file location. One sample keystore file
+                        (<strong>res/.keystore</strong>) has been provided with
+                        the distribution.
+                    </td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-password</td>
+                    <td>Keystore password. The sample keystore password : password</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-type</td>
+                    <td>The keystore type. The sample keystore type : JKS</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.keystore-algorithm</td>
+                    <td>Keystore algorithm. The sample keystore algorithm : SunX509</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.ssl-protocol</td>
+                    <td>SSL protocol. The default SSL protocol is TLS</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.client-authentication</td>
+                    <td>Client authentication is required. The default is false.</td>
+                </tr>
+                <tr>
+                    <td>config.socket-factory.ssl.key-password</td>
+                    <td>Key password. The sample keystore key password : password</td>
+                </tr>
+            </table>
+            <p>If you want to use secure data transfer, you have to set
+               config.data-connection.ssl parameters like implicit security.
+            </p>
+        </section>
+    </body>
+</document>
