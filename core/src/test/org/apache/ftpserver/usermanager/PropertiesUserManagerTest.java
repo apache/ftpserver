@@ -24,11 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.IoUtils;
 
