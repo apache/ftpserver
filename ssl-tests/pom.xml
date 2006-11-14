@@ -61,11 +61,35 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>avalon-framework</groupId>
+                    <artifactId>avalon-framework</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>logkit</groupId>
+                    <artifactId>logkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.13</version>
             <scope>test</scope>
         </dependency>
         <dependency>

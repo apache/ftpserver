@@ -39,7 +39,7 @@ public class TestUtil {
         if(basedir != null) {
             return new File(basedir);
         } else {
-            return new File("");
+            return new File(".");
         }
     }
     

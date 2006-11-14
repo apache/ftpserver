@@ -88,7 +88,7 @@ Comments
    Comments should be directed to James R. Twine (jtwine@jrtwine.com).
 
 J.Twine                      Internet-Draft                   [Page 1]
-
+
 INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
 Table of Contents
@@ -147,7 +147,7 @@ Table of Contents
 
 
 J.Twine                      Internet-Draft                   [Page 2]
-
+
 INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
 1.  Introduction
@@ -206,7 +206,7 @@ INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
 
 J.Twine                      Internet-Draft                   [Page 3]
-
+
 INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
    A Server implementation could even take that approach one step
@@ -265,7 +265,7 @@ INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
    directory:
 
 J.Twine                      Internet-Draft                   [Page 4]
-
+
 INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
 	  C> MD5 ".."
@@ -324,7 +324,7 @@ INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
 
 
 J.Twine                      Internet-Draft                   [Page 5]
-
+
 INTERNET-DRAFT   The 'MD5' and "MMD5" FTP Command Extensions   May 2002
    
    This second example demonstrates a request for the MD5 checksums 

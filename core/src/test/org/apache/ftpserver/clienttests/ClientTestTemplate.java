@@ -68,7 +68,7 @@ public abstract class ClientTestTemplate extends TestCase {
     }
 
     protected Properties createDefaultConfig() {
-        assertTrue("users.gen must exist", USERS_FILE.exists());
+        assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE.exists());
         
         Properties configProps = new Properties();
         configProps.setProperty("config.socket-factory.port", Integer
@@ -144,6 +144,7 @@ public abstract class ClientTestTemplate extends TestCase {
             client.connect("localhost", port);
         } catch(FTPConnectionClosedException e) {
             // try again
+            Thread.sleep(200);
             client.connect("localhost", port);
         }
     }

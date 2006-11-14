@@ -26,6 +26,8 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -35,7 +37,6 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.util.IoUtils;
-import org.apache.log4j.Logger;
 
 public abstract class SSLTestTemplate extends TestCase {
 
@@ -44,7 +45,7 @@ public abstract class SSLTestTemplate extends TestCase {
 
     private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/ftpserver.jks");
 
-    private static final Logger log = Logger.getLogger(SSLTestTemplate.class);
+    private static final Log log = LogFactory.getLog(SSLTestTemplate.class);
 
     private static final int DEFAULT_PORT = 12321;
 
@@ -205,6 +206,7 @@ public abstract class SSLTestTemplate extends TestCase {
             client.connect("localhost", port);
         } catch (FTPConnectionClosedException e) {
             // try again
+            Thread.sleep(200);
             client.connect("localhost", port);
         }
     }
