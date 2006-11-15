@@ -47,6 +47,10 @@ public class DeleteTest extends ClientTestTemplate {
         assertFalse(TEST_FILE1.exists());
     }
 
+    public void testDeleteNoFileName() throws Exception {
+        assertEquals(501, client.sendCommand("DELE"));
+    }
+    
     public void testDeleteWithSpaceInFileName() throws Exception {
         TEST_FILE_WITH_SPACE.createNewFile();
         

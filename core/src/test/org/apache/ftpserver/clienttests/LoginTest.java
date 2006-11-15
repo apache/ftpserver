@@ -42,7 +42,9 @@ public class LoginTest extends ClientTestTemplate {
     }
 
     public void testLoginWithAccount() throws Exception {
-        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD, UNKNOWN_PASSWORD));
+        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+        
+        assertTrue(FTPReply.isPositiveCompletion(client.acct("FOO")));
     }
 
     public void testLoginWithEmptyPassword() throws Exception {

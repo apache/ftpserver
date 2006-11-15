@@ -67,6 +67,7 @@ public class StoreTest extends ClientTestTemplate {
     public void testStoreNoFileName() throws Exception {
         assertEquals(501, client.sendCommand("STOR"));
     }
+    
     /* TODO: this test now fails as we don't detect the invalid file name
      * A future improvment would be to detect this and report an error
     public void testStoreInValidFileName() throws Exception {
@@ -160,6 +161,10 @@ public class StoreTest extends ClientTestTemplate {
         
         doAssertOfUniqueFile(client, ROOT_DIR);
     }
+    
+    public void testStoreUniqueNoFileName() throws Exception {
+        assertEquals(501, client.sendCommand("STOU"));
+    }
 
     public void testStoreUniqueWithDirectoryWithTrailingSlash() throws Exception {
         TEST_DIR.mkdirs();
@@ -196,6 +201,10 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(doubleTestData, testFile);
     }
 
+    public void testAppendNoFileName() throws Exception {
+        assertEquals(501, client.sendCommand("APPE"));
+    }
+    
     public void testAppendWithDirectoryInPlace() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
         testFile.mkdirs();
