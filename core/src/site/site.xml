@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Maven">
+<project name="Apache FTP Server">
     <bannerLeft>
         <name>Maven</name>
-        <src>http://maven.apache.org/images/apache-maven-project.png</src>
+        <src>http://incubator.apache.org/ftpserver/images/project-logo.gif</src>
         <href>http://maven.apache.org/</href>
     </bannerLeft>
-    <bannerRight>
-        <src>http://maven.apache.org/images/maven-small.gif</src>
-    </bannerRight>
     <body>
         <links>
             <item name="Apache" href="http://www.apache.org/" />
@@ -32,7 +29,6 @@
             <item name="FTP Commands"        href="ftp_commands.html"/>
             <item name="SITE Commands"       href="site_commands.html"/>
             <item name="Ftplet"              href="ftplet.html"/>
-            <item name="Javadoc"             href="apidocs/index.html"/>
         </menu>
         <menu name="RFCs">
             <item name="RFC959"              href="rfc959.html"/>

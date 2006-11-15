@@ -31,6 +31,66 @@
     <name>Apache Incubator FtpServer</name>
     <url>http://incubator.apache.org/ftpserver/</url>
     <inceptionYear>2003</inceptionYear>
+    
+    <issueManagement>
+        <system>Jira</system>
+        <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
+    </issueManagement>
+    <!--
+    <developers>
+        <developer>
+            <name>Rana Battacharyya</name>
+            <id>rana_b</id>
+            <email>rana_b.{aT}.yahoo.{d0T}.com</email>
+        </developer>
+        <developer>
+            <name>Paul Hammant</name>
+            <id>hammant</id>
+            <email>paul.{aT}.hammant.{d0T}.org</email>
+        </developer>
+        <developer>
+            <name>Niklas Gustavsson</name>
+            <id>ngn</id>
+            <email>niklas.{aT}.protocol7.{d0T}.com</email>
+        </developer>
+        <developer>
+            <name>Sergey M Vladimirov</name>
+            <id>sergey</id>
+            <email>vlsergey.{aT}.gmail.{d0T}.com</email>
+            <organization>Netcracker corp.</organization>
+        </developer>
+    </developers>
+    -->
+    
+    <!-- Contributor list -->
+    <!--
+    <contributors>
+        <contributor>
+            <name>Birkir A. Barkarson</name>
+        </contributor>
+        <contributor>
+            <name>David H. DeWolf</name>
+            <organization>Vivare, INC</organization>
+            <email>ddewolf.{aT}.apache.{d0T}.org</email>
+        </contributor>
+        <contributor>
+            <name>Luis Sanabria</name>
+        </contributor>
+        <contributor>
+            <name>Daniel Hagen</name>
+        </contributor>
+        <contributor>
+            <name>KwangYul Seo</name>
+        </contributor>
+        <contributor>
+            <name>Dave Roberts</name>
+            <organization>SAA Consultants Ltd</organization>
+        </contributor>
+        <contributor>
+            <name>Nick Vincent</name>
+        </contributor>
+    </contributors>
+    -->
     <distributionManagement>
 
         <!--
@@ -79,8 +139,8 @@
                 <otherArchive>http://www.mail-archive.com/general%40incubator.apache.org/</otherArchive>
             </otherArchives>
         </mailingList>
-
     </mailingLists>
+    
     <build>
         <sourceDirectory>src/java</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
@@ -99,6 +159,18 @@
                 <configuration>
                     <jdkLevel>${maven.compile.source}</jdkLevel>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <!-- This should possibly better be done by using a resource
@@ -234,7 +306,6 @@
                 <modules>
                     <module>ssl-tests</module>
                 </modules>
-            
         </profile>
     </profiles>
 

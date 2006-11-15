@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.apache.ftpserver.ftplet.FtpConfig;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
