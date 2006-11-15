@@ -64,6 +64,16 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(testData, testFile);
     }
 
+    public void testStoreNoFileName() throws Exception {
+        assertEquals(501, client.sendCommand("STOR"));
+    }
+    /* TODO: this test now fails as we don't detect the invalid file name
+     * A future improvment would be to detect this and report an error
+    public void testStoreInValidFileName() throws Exception {
+        assertEquals(550 ,client.sendCommand("STOR foo:bar;foo"));
+    }
+    */
+    
     public void testStoreWithRestart() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
         writeDataToFile(testFile, testData);

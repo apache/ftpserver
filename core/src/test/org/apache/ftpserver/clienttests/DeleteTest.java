@@ -64,7 +64,7 @@ public class DeleteTest extends ClientTestTemplate {
         TEST_FILE1.createNewFile();
         
         assertTrue(TEST_FILE1.exists());
-        
+
         assertFalse(client.deleteFile(TEST_FILE1.getName()));
         
         assertTrue(TEST_FILE1.exists());

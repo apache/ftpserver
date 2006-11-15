@@ -61,6 +61,11 @@ class MD5 implements Command {
         
         // print file information
         String argument = request.getArgument();
+        
+        if(argument == null || argument.trim().length() == 0) {
+            out.send(504, "MD5.invalid", null);
+            return;
+        }
 
         String[] fileNames = null;
         if(isMMD5) {

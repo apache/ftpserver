@@ -45,6 +45,14 @@ public class DirectoryTest extends ClientTestTemplate {
         assertTrue(TEST_DIR1.exists());
     }
 
+    public void testMkdirNoDirectoryName() throws Exception {
+        assertEquals(501 ,client.sendCommand("MKD"));
+    }
+
+    public void testMkdirInValidDirectoryName() throws Exception {
+        assertEquals(550 ,client.sendCommand("MKD foo:bar;foo"));
+    }
+
     public void testMkdirDouble() throws Exception {
         assertFalse(TEST_DIR1.exists());
         assertFalse(TEST_DIR_IN_DIR1.exists());

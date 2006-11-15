@@ -26,6 +26,7 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 
 
+
 public class FtpMd5Test extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
     private static final File TEST_FILE_WITH_SPACE = new File(ROOT_DIR, "test 2.txt");
@@ -65,6 +66,18 @@ public class FtpMd5Test extends ClientTestTemplate {
         assertEquals(251, client.sendCommand("MD5 " + fileName));
 
         assertHash(testDataHash, client.getReplyString(), fileName);
+    }
+    
+    public void testMd5NoFileName() throws Exception {        
+        assertEquals(504, client.sendCommand("MD5"));
+    }
+
+    public void testMd5NonExistingFile() throws Exception {
+        assertFalse(TEST_FILE1.exists());
+        
+        String fileName = TEST_FILE1.getName();
+        
+        assertEquals(504, client.sendCommand("MD5 " + fileName));
     }
 
     public void testMd5WithSpaceInFileName() throws Exception {

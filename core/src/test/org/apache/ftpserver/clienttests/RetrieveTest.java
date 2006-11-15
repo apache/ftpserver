@@ -27,6 +27,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 public class RetrieveTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
+    private static final File TEST_FILE = new File(ROOT_DIR, TEST_FILENAME);
 
     private static byte[] testData = null;
     
@@ -42,27 +43,37 @@ public class RetrieveTest extends ClientTestTemplate {
     }
 
     public void testRetrieve() throws Exception {
-        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
-        writeDataToFile(testFile, testData);
+        writeDataToFile(TEST_FILE, testData);
 
-        assertTrue(testFile.exists());
+        assertTrue(TEST_FILE.exists());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         assertTrue(client.retrieveFile(TEST_FILENAME, baos));
         
-        assertTrue(testFile.exists());
+        assertTrue(TEST_FILE.exists());
         TestUtil.assertArraysEqual(testData, baos.toByteArray());
     }
 
+    public void testRetrieveNoFileName() throws Exception {
+        assertEquals(501, client.sendCommand("RETR"));
+    }
+    
+    public void testRetrieveInValidFileName() throws Exception {
+        assertEquals(550 ,client.sendCommand("RETR foo:bar;foo"));
+    }
+
+    public void testRetrieveDirectory() throws Exception {
+        TEST_FILE.mkdirs();
+        assertEquals(550, client.sendCommand("RETR "+ TEST_FILE.getName()));
+    }
+    
     public void testRetrieveWithRestart() throws Exception {
         int skipLen = 4;
         
-        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        writeDataToFile(TEST_FILE, testData);
         
-        writeDataToFile(testFile, testData);
-        
-        assertTrue(testFile.exists());
+        assertTrue(TEST_FILE.exists());
         
         client.setRestartOffset(4);
 
@@ -73,7 +84,7 @@ public class RetrieveTest extends ClientTestTemplate {
         byte[] expected = new byte[len];
         System.arraycopy(testData, skipLen, expected, 0, len);
         
-        assertTrue(testFile.exists());
+        assertTrue(TEST_FILE.exists());
         TestUtil.assertArraysEqual(expected, baos.toByteArray());
     }
     
@@ -95,9 +106,8 @@ public class RetrieveTest extends ClientTestTemplate {
     }
 
     public void testRetrieveNonExistingFile() throws Exception {
-        File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
-        assertFalse(testFile.exists());
+        assertFalse(TEST_FILE.exists());
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         assertFalse(client.retrieveFile(TEST_FILENAME, baos));
