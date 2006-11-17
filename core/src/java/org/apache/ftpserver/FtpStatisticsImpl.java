@@ -112,7 +112,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Get server start time.
      */
     public Date getStartTime() {
-        return startTime;
+        return (Date) startTime.clone();
     }
      
     /**
@@ -300,7 +300,9 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Decrement open connection count.
      */
     public void setCloseConnection(Connection connection) {
-        --currConnections;
+        if(currConnections > 0) {
+            --currConnections;
+        }
         notifyCloseConnection(connection);
     }
     

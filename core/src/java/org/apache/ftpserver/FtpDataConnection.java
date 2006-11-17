@@ -45,7 +45,7 @@ class FtpDataConnection {
     private Socket        dataSoc;
     private ServerSocket  servSoc;
     
-    private InetAddress  address = null;
+    private InetAddress  address;
     private int          port    = 0;
     
     private long requestTime = 0L;

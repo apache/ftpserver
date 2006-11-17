@@ -67,7 +67,11 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-    </plugin>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
         </plugins>
     </reporting>
 
@@ -122,7 +126,7 @@
             </exclusions>
         </dependency>
 
-      <!--Only used for testing -->
+        <!--Only used for testing -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

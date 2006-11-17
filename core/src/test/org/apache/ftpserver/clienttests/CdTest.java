@@ -51,7 +51,7 @@ public class CdTest extends ClientTestTemplate {
         assertTrue(client.changeWorkingDirectory(TEST_DIR_IN_DIR1.getName()));
         assertEquals("/dir1/dir3", client.printWorkingDirectory());
 
-        assertTrue(client.changeWorkingDirectory("/" + TEST_DIR2.getName()));
+        assertTrue(client.changeWorkingDirectory('/' + TEST_DIR2.getName()));
         assertEquals("/dir2", client.printWorkingDirectory());
 
         assertTrue(client.changeWorkingDirectory("/"));
@@ -67,14 +67,14 @@ public class CdTest extends ClientTestTemplate {
         assertEquals("/", client.printWorkingDirectory());
 
         assertTrue(client.changeWorkingDirectory(
-                TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName()));
+                TEST_DIR1.getName() + '/' + TEST_DIR_IN_DIR1.getName()));
         assertEquals("/dir1/dir3", client.printWorkingDirectory());
     }
     
     public void testCDUP() throws Exception {
         
         assertTrue(client.changeWorkingDirectory(
-                TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName()));
+                TEST_DIR1.getName() + '/' + TEST_DIR_IN_DIR1.getName()));
         assertEquals("/dir1/dir3", client.printWorkingDirectory());
 
         assertTrue(client.changeToParentDirectory());

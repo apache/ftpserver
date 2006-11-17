@@ -75,6 +75,7 @@ class SITE_DESCUSER implements Command {
             }
         }
         catch(FtpException ex) {
+            user = null;
         }
         if(user == null) {
             out.send(501, "SITE.DESCUSER", userName);
@@ -84,14 +85,14 @@ class SITE_DESCUSER implements Command {
         // send the user information
         StringBuffer sb = new StringBuffer(128);
         sb.append("\n");
-        sb.append("uid             : " + user.getName() + "\n");
+        sb.append("uid             : ").append(user.getName()).append("\n");
         sb.append("userpassword    : ********\n");
-        sb.append("homedirectory   : " + user.getHomeDirectory() + "\n");
-        sb.append("writepermission : " + user.getWritePermission() + "\n");
-        sb.append("enableflag      : " + user.getEnabled() + "\n");
-        sb.append("idletime        : " + user.getMaxIdleTime() + "\n");
-        sb.append("uploadrate      : " + user.getMaxUploadRate() + "\n");
-        sb.append("downloadrate    : " + user.getMaxDownloadRate() + "\n");
+        sb.append("homedirectory   : ").append(user.getHomeDirectory()).append("\n");
+        sb.append("writepermission : ").append(user.getWritePermission()).append("\n");
+        sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
+        sb.append("idletime        : ").append(user.getMaxIdleTime()).append("\n");
+        sb.append("uploadrate      : ").append(user.getMaxUploadRate()).append("\n");
+        sb.append("downloadrate    : ").append(user.getMaxDownloadRate()).append("\n");
         sb.append('\n');
         out.write(200, sb.toString());
     }

@@ -105,7 +105,7 @@ public class DeleteTest extends ClientTestTemplate {
         assertTrue(TEST_FILE_IN_DIR1.exists());
         
         assertTrue(client.deleteFile(
-                TEST_DIR1.getName() + "/" + TEST_FILE_IN_DIR1.getName()));
+                TEST_DIR1.getName() + '/' + TEST_FILE_IN_DIR1.getName()));
         
         assertTrue(TEST_DIR1.exists());
         assertFalse(TEST_FILE_IN_DIR1.exists());

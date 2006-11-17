@@ -30,10 +30,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class FtpMd5Test extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
     private static final File TEST_FILE_WITH_SPACE = new File(ROOT_DIR, "test 2.txt");
-    private static final File TEST_FILE3 = new File(ROOT_DIR, "test3.txt");
 
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
-    private static final File TEST_DIR2 = new File(ROOT_DIR, "dir2");
     private static final File TEST_FILE_IN_DIR1 = new File(TEST_DIR1, "test4.txt");
 
     private static byte[] testData = null;

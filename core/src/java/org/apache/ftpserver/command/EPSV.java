@@ -65,7 +65,7 @@ class EPSV implements Command {
         int servPort = dataCon.getPort();
         
         // send connection info to client
-        String portStr = "|||" + servPort + "|";
+        String portStr = "|||" + servPort + '|';
         out.send(229, "EPSV", portStr);
     }
 }

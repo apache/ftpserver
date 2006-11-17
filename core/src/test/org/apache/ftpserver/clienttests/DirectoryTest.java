@@ -58,7 +58,7 @@ public class DirectoryTest extends ClientTestTemplate {
         assertFalse(TEST_DIR_IN_DIR1.exists());
         
         assertTrue(FTPReply.isPositiveCompletion(client.mkd(
-                TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName())));
+                TEST_DIR1.getName() + '/' + TEST_DIR_IN_DIR1.getName())));
         
         assertTrue(TEST_DIR1.exists());
         assertTrue(TEST_DIR_IN_DIR1.exists());
@@ -70,7 +70,7 @@ public class DirectoryTest extends ClientTestTemplate {
         assertFalse(TEST_DIR_IN_DIR1.exists());
         
         assertTrue(FTPReply.isPositiveCompletion(client.mkd(
-                TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName())));
+                TEST_DIR1.getName() + '/' + TEST_DIR_IN_DIR1.getName())));
         
         assertTrue(TEST_DIR1.exists());
         assertTrue(TEST_DIR_IN_DIR1.exists());
