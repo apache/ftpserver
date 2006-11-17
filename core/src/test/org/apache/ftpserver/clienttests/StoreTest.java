@@ -161,10 +161,6 @@ public class StoreTest extends ClientTestTemplate {
         
         doAssertOfUniqueFile(client, ROOT_DIR);
     }
-    
-    public void testStoreUniqueNoFileName() throws Exception {
-        assertEquals(501, client.sendCommand("STOU"));
-    }
 
     public void testStoreUniqueWithDirectoryWithTrailingSlash() throws Exception {
         TEST_DIR.mkdirs();

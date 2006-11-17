@@ -66,9 +66,8 @@ class BaseProperties extends Properties {
         try {
             fis = new FileInputStream(fl);
             load(fis);
-        } catch(IOException e) {
+        } finally {
             IoUtils.close(fis);
-            throw e;
         }
     }
     
