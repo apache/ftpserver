@@ -163,7 +163,11 @@ class MessageResourceImpl implements MessageResource {
      * Get all the available languages.
      */
     public String[] getAvailableLanguages() {
-        return (String[]) languages.clone();
+        if(languages == null) {
+            return null;
+        } else {         
+            return (String[]) languages.clone();
+        }
     }
     
     /**

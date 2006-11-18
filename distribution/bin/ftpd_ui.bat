@@ -21,15 +21,15 @@ if "%OS%"=="Windows_NT" @setlocal
 if "%OS%"=="WINNT" @setlocal
 
 rem ----- use the location of this script to infer $FTPD_HOME -------
-if NOT "%OS%"=="Windows_NT" set DEFAULT_FTPD_HOME=.
-if "%OS%"=="Windows_NT" set DEFAULT_FTPD_HOME=%~dp0
-if "%OS%"=="WINNT" set DEFAULT_FTPD_HOME=%~dp0
+if NOT "%OS%"=="Windows_NT" set DEFAULT_FTPD_HOME=..
+if "%OS%"=="Windows_NT" set DEFAULT_FTPD_HOME=%~dp0/..
+if "%OS%"=="WINNT" set DEFAULT_FTPD_HOME=%~dp0/..
 if "%FTPD_HOME%"=="" set FTPD_HOME=%DEFAULT_FTPD_HOME%
 
 rem ----- Create CLASSPATH --------------------------------------------
-set FTPD_CLASSPATH=%CLASSPATH%;%FTPD_HOME%\common\classes;%FTPD_HOME%\target\classes;
+set FTPD_CLASSPATH=%CLASSPATH%;%FTPD_HOME%\common\classes;
 cd /d "%FTPD_HOME%\common\lib"
-for %%i in ("*.jar") do call "%FTPD_HOME%\appendcp.bat" "%FTPD_HOME%\common\lib\%%i"
+for %%i in ("*.jar") do call "%FTPD_HOME%\bin\appendcp.bat" "%FTPD_HOME%\common\lib\%%i"
 cd /d %FTPD_HOME%
 
 rem ----- call java.. ---------------------------------------------------

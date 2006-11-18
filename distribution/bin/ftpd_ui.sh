@@ -53,7 +53,7 @@ if [ -z "$FTPD_HOME" ] ; then
       realpath=$whereami/$whoami
       ;;
   esac
-  FTPD_HOME=`dirname "$realpath"`
+  FTPD_HOME=`dirname "$realpath"`/..
 fi
 
 

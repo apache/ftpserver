@@ -24,7 +24,7 @@
         <version>3</version>
     </parent>
     <groupId>org.apache.ftpserver</groupId>
-    <artifactId>ftpserver</artifactId>
+    <artifactId>ftpserver-parent</artifactId>
     <packaging>pom</packaging>
     <!-- TODO: dummy version. In Maven 2.1, this will be auto-versioned being a generic parent -->
     <version>1.0-incubator-SNAPSHOT</version>
@@ -160,7 +160,7 @@
                     <jdkLevel>${maven.compile.source}</jdkLevel>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <executions>
@@ -171,7 +171,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <!-- This should possibly better be done by using a resource
 		     definition. However, if we declare a resource with
