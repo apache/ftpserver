@@ -1,0 +1,21 @@
+<assembly>
+    <id>source</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <outputDirectory>META-INF</outputDirectory>
+            <includes>
+                <include>README*</include>
+                <include>LICENSE*</include>
+                <include>NOTICE*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/sources</directory>
+            <outputDirectory/>
+        </fileSet>
+    </fileSets>
+</assembly>

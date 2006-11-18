@@ -53,9 +53,8 @@ if [ -z "$FTPD_HOME" ] ; then
       realpath=$whereami/$whoami
       ;;
   esac
-  FTPD_HOME=`dirname "$realpath"`
+  FTPD_HOME=`dirname "$realpath"`/..
 fi
-
 
 #
 # For Cygwin, ensure paths are in UNIX format before anything is touched
@@ -108,9 +107,9 @@ fi
 # Build classpath
 #
 if [ "$cygwin" = "true" ] ; then
-    FTPD_CLASSPATH=$CLASSPATH$S`cygpath -w $FTPD_HOME/common/classes`$S`cygpath -w $FTPD_HOME/target/classes`
+    FTPD_CLASSPATH=$CLASSPATH$S`cygpath -w $FTPD_HOME/common/classes`
 else
-    FTPD_CLASSPATH=$CLASSPATH$S$FTPD_HOME/common/classes$S$FTPD_HOME/target/classes
+    FTPD_CLASSPATH=$CLASSPATH$S$FTPD_HOME/common/classes
 fi
 
 for i in $FTPD_HOME/common/lib/*.jar; do
