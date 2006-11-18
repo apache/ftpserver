@@ -57,7 +57,6 @@ class SYST implements Command {
             systemName = systemName.toUpperCase();
             systemName = systemName.replace(' ', '-');
         }
-        System.out.println(systemName);
         // print server system info
         out.send(215, "SYST", systemName);
     }

@@ -19,9 +19,9 @@
 
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.interfaces.ServerFtpStatisticsTest;
+import org.apache.ftpserver.interfaces.ServerFtpStatisticsTestTemplate;
 
-public class FtpStatisticsImplTest extends ServerFtpStatisticsTest {
+public class FtpStatisticsImplTest extends ServerFtpStatisticsTestTemplate {
 
     protected FtpStatisticsImpl createStatistics() {
         return new FtpStatisticsImpl();

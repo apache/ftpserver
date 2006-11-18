@@ -26,7 +26,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 
 import junit.framework.TestCase;
 
-public abstract class ServerFtpStatisticsTest extends TestCase {
+public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
     public static class MockConnection implements Connection {
 
