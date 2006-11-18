@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: Download</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="Download">
+            <p>Please download the source or binary distributions from the following locations.
+            </p>
+            <table>
+                <tr>
+                    <td rowspan="2"><b>Source</b></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev-src.zip">ftpserver-dev-src.zip</a></td>
+                </tr>
+                <tr>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev-src.tar.gz">ftpserver-dev-src.tar.gz</a></td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><b>Binary</b></td>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev.zip">ftpserver-dev.zip</a></td>
+                </tr>
+                <tr>
+                    <td><a href="http://incubator.apache.org/ftpserver/download/ftpserver-dev.tar.gz">ftpserver-dev.tar.gz</a></td>
+                </tr>
+            </table>
+            <div class="infomessage">This is not the release version. As Ftpserver is not yet 
+               fully accepted as part of the Apache Software Foundation, any software releases
+               (including code held in publically available CVS and SVN) will not be endorsed 
+               by the ASF. For more details, please visit the 
+               <a href="http://incubator.apache.org/incubation/Incubation_Policy.html">Incubation Policy</a> page.
+            </div>
+            <p>Old Avalon based FTP Server can be downloaded from
+               <a href="http://people.apache.org/~rana_b/incubator/ftpserver/">here</a>.
+            </p>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<faqs title="Frequently Asked Questions">
+
+    <part id="general">
+        <title>General</title>
+
+        <faq id="other_language">
+            <question>How can I add other language translations?</question>
+            <answer>
+                <p>First you need to specify your language name in config.message.languages
+                   configuration parameter. Then if you start the FTP server UI, you will
+                   see your language entry in the message panel. Translate messages and
+                   finally save your translated messages.
+                </p>
+            </answer>
+        </faq>
+
+        <faq id="embed_ftpd">
+            <question>How can I embed the FTP server in my application?</question>
+            <answer>
+                <p>The following script shows how the FTP server can be embedded.</p>
+                <source>
+      // get the configuration object
+      Configuration config = getConfiguration();
+
+      // create FTP config
+      IFtpConfig ftpConfig = new FtpConfigImpl(config);
+
+      // create the server object and start it
+      FtpServer server = new FtpServer(ftpConfig);
+      server.start();
+                </source>
+                <p>If you want to stop the FTP server:</p>
+                <source>
+      server.stop();
+                </source>
+            </answer>
+        </faq>
+
+        <faq id="upload_ftplet">
+            <question>How can I send binary data stored in a database when the FTP Server
+                      gets the RETR command.
+            </question>
+            <answer>You can write your own ftplet to do this. The following code will
+                    clarify this.
+                <source>
+   // overwrite onDownloadStart() method
+   public FtpletEnum onDownloadStart(FtpRequest request,
+                                     FtpResponse response) throws FtpException,
+                                                                  IOException {
+
+       String requestedFile = request.getArgument();
+
+       // get input stream from database - BLOB data
+       InputStream in = ...;
+       if(in == null) {
+           response.write(550, "Cannot find file " + requestedFile);
+           return FtpletEnum.RET_SKIP;
+       }
+
+       // gata FTP data output stream
+       OutputStream out = null;
+       response.write(150, "Getting data connection.");
+       try {
+           out = request.getDataOutputStream();
+       }
+       catch(Exception ex) {
+       }
+       if(out == null) {
+           response.write(425, "Cannot open data connection.");
+           return FtpletEnum.RET_SKIP;
+       }
+
+       // now copy bytes
+       try {
+           ....
+           response.write(226, "Data transfer okay.");
+       }
+       catch(Exception ex) {
+           response.write(551, "Data transfer failed.");
+       }
+       finally {
+           out.close();
+           in.close();
+       }
+       return FtpletEnum.RET_SKIP;
+   }
+                </source>
+            </answer>
+        </faq>
+
+        <faq id="db_class_not_found">
+            <question>Why I am getting ClassNotFoundException when I am trying to use
+                      database based user manager?
+            </question>
+            <answer>
+                <ol>
+                    <li>JDBC driver Jar file should be in CLASSPATH or it has to
+                        be copied in the &lt;INSTALL_DIR&gt;/common/lib directory.
+                    </li>
+                    <li>
+                        Did you specify fully qualified JDBC driver class name in
+                        config.user-manager.jdbc-driver configuration parameter?
+                    </li>
+                </ol>
+            </answer>
+        </faq>
+
+        <faq id="ldap_jdk_version">
+            <question>I have updated the JDK version. After that the LDAP user
+                      manager is not working.
+            </question>
+            <answer>
+                <p>LDAP based user manager stores the user object in LDAP. This binary
+                   format is JDK specific.
+                </p>
+            </answer>
+        </faq>
+
+        <faq id="ftpserver_service">
+            <question>Can I run the FTP Server as Windows service?
+            </question>
+            <answer>
+                <p>We have deployed the FTP server as Windows service using 
+                <a href="http://javaservice.objectweb.org/">JavaService</a>. Please 
+                   install JavaService 2.0.6 and copy JavaService.exe to &lt;Ftpserver&gt;\bin
+                   directory. 
+                </p>
+                <p>Install service using the following batch. Of course, local paths 
+                   would have to be adapted, commandline parameters would have to be 
+                   changed if another configuration type should be used.
+                </p>
+                <source>
+@echo off
+
+SET FTPSERVER_HOME=C:\personal\apache\ftpserver\trunk
+SET FTPSERVER_LIB=%FTPSERVER_HOME%\common\lib
+SET FTPSERVER_CLASSES=%FTPSERVER_HOME%\common\classes
+SET JAVA_HOME=C:\jdk1.5.0_04
+
+SET SERVER_CLASSPATH=%JAVA_HOME%\lib\tools.jar
+SET SERVER_CLASSPATH=%SERVER_CLASSPATH%;%FTPSERVER_CLASSES%
+SET SERVER_CLASSPATH=%SERVER_CLASSPATH%;%FTPSERVER_LIB%\commons-logging-1.0.3.jar
+SET SERVER_CLASSPATH=%SERVER_CLASSPATH%;%FTPSERVER_LIB%\log4j-1.2.12.jar
+SET SERVER_CLASSPATH=%SERVER_CLASSPATH%;%FTPSERVER_LIB%\ftpserver-dev.jar
+SET SERVER_CLASSPATH=%SERVER_CLASSPATH%;%FTPSERVER_HOME%\target\classes
+
+SET MAIN_CLASS=org.apache.ftpserver.commandline.CommandLine
+SET JVM_DLL=%JAVA_HOME%\jre\bin\server\jvm.dll
+SET CONF_XML=%FTPSERVER_HOME%/res/conf/ftpd.xml
+SET STDOUT_LOG=%FTPSERVER_HOME%\stdout.log
+SET STDERR_LOG=%FTPSERVER_HOME%\stderr.log
+
+JavaService.exe -uninstall ApacheFtpServer
+JavaService.exe -install ApacheFtpServer %JVM_DLL% 
+                                         -Djava.class.path=%SERVER_CLASSPATH% 
+                                         -start %MAIN_CLASS% 
+                                         -params -xml %CONF_XML% 
+                                         -out %STDOUT_LOG% 
+                                         -err %STDERR_LOG% 
+                                         -current %FTPSERVER_HOME%
+                </source>
+                <p>Everything after &quot;JavaService.exe -install&quot; will be in a 
+                   single line. For clarity we have shown it in multiple lines.
+                </p>
+                <p>If you want to uninstall the service, please execute the following 
+                   command.
+                </p>
+                <source>
+JavaService.exe -uninstall ApacheFtpServer
+                </source>
+            </answer>
+        </faq>
+        
+    </part>
+</faqs>

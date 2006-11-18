@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<!-- XML file based configuration -->
+<config>
+
+    <!-- Standard socket factory. If you want to support explicit
+         secure connection, please specify the ssl block
+    <socket-factory>
+        <class>org.apache.ftpserver.socketfactory.FtpSocketFactory</class>
+        <address>localhost</address>
+        <port>21</port>
+        <ssl>
+            <keystore-file>./res/.keystore</keystore-file>
+            <keystore-password>password</keystore-password>
+            <keystore-type>JKS</keystore-type>
+            <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
+            <client-authentication>false</client-authentication>
+            <key-password>password</key-password>
+        </ssl>
+    </socket-factory>
+    -->
+
+
+    <!-- Secure server socket factory. In this case you have to
+         specify the ssl block
+    <socket-factory>
+        <class>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory</class>
+        <address>localhost</address>
+        <port>21</port>
+        <ssl>
+            <keystore-file>./res/.keystore</keystore-file>
+            <keystore-password>password</keystore-password>
+            <keystore-type>JKS</keystore-type>
+            <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
+            <client-authentication>false</client-authentication>
+            <key-password>password</key-password>
+        </ssl>
+    </socket-factory>
+    -->
+
+
+    <!-- Data connection configuration. If you want to support secure
+         data connection, please specify the ssl block.
+    <data-connection>
+        <idle-time>10</idle-time>
+        <active>
+            <enable>true</enable>
+            <local-address>localhost</local-address>
+            <local-port>20</local-port>
+            <ip-check>false</ip-check>
+        </active>
+        <passive>
+            <address>localhost</address>
+            <ports>0</ports>
+        </passive>
+        <ssl>
+            <keystore-file>./res/.keystore</keystore-file>
+            <keystore-password>password</keystore-password>
+            <keystore-type>JKS</keystore-type>
+            <keystore-algorithm>SunX509</keystore-algorithm>
+            <ssl-protocol>TLS</ssl-protocol>
+            <client-authentication>false</client-authentication>
+            <key-password>password</key-password>
+        </ssl>
+    </data-connection>
+    -->
+
+
+    <!-- Standard users admin and anonymous will be created by default.
+    <create-default-user>true</create-default-user>
+    -->
+
+
+    <!-- Ftp message configuration block
+    <message>
+        <class>org.apache.ftpserver.message.MessageResourceImpl</class>
+        <custom-message-dir>./res</custom-message-dir>
+        <languages>en,zh-tw</languages>
+    </message>
+    -->
+
+
+    <!-- Connection manager configuration block
+    <connection-manager>
+        <max-connection>20</max-connection>
+        <max-login>10</max-login>
+        <anonymous-login-enabled>true</anonymous-login-enabled>
+        <max-anonymous-login>10</max-anonymous-login>
+        <default-idle-time>60</default-idle-time>
+        <timeout-poll-inverval>60</timeout-poll-inverval>
+    </connection-manager>
+    -->
+
+
+    <!-- Command factory configuration block
+    <command-factory>
+        <command>
+            <command-name>fully-qualified-command-class-name</command-name>
+        </command>
+    </command-factory>
+    -->
+
+
+    <!-- IP restrictor configuration block
+    <ip-restrictor>
+        <class>org.apache.ftpserver.iprestrictor.FileIpRestrictor</class>
+        <file>./res/ip.gen</file>
+    </ip-restrictor>
+    -->
+
+
+    <!-- Default properties file based user manager configuration block
+    <user-manager>
+        <class>org.apache.ftpserver.usermanager.PropertiesUserManager</class>
+        <admin>admin</admin>
+        <prop-file>./res/user.gen</prop-file>
+        <prop-password-encrypt>true</prop-password-encrypt>
+    </user-manager>
+    -->
+
+
+    <!-- Database based user manager configuration
+    <user-manager>
+        <class>org.apache.ftpserver.usermanager.DbUserManager</class>
+        <admin>admin</admin>
+        <jdbc-driver>org.gjt.mm.mysql.Driver</jdbc-driver>
+        <jdbc-url>jdbc:mysql://localhost:3306/data</jdbc-url>
+        <jdbc-user>user</jdbc-user>
+        <jdbc-password>password</jdbc-password>
+        <sql-user-insert>INSERT INTO FTP_USER (uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate) VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate})</sql-user-insert>
+        <sql-user-update>UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate} WHERE uid='{uid}'</sql-user-update>
+        <sql-user-delete>DELETE FROM FTP_USER WHERE uid = '{uid}'</sql-user-delete>
+        <sql-user-select>SELECT uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate FROM FTP_USER WHERE uid = '{uid}'</sql-user-select>
+        <sql-user-select-all>SELECT uid FROM FTP_USER ORDER BY uid</sql-user-select-all>
+        <sql-user-authenticate>SELECT uid from FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'</sql-user-authenticate>
+        <sql-user-admin>SELECT uid FROM FTP_USER WHERE uid='{uid}' AND uid='admin'</sql-user-admin>
+    </user-manager>
+    -->
+
+
+    <!-- LDAP based user manager
+    <user-manager>
+        <class>org.apache.ftpserver.usermanager.LdapUserManager</class>
+        <admin>admin</admin>
+        <ldap-url>ldap://localhost:389</ldap-url>
+        <ldap-admin-dn>cn=Manager,dc=apache,dc=org</ldap-admin-dn>
+        <ldap-admin-password>secret</ldap-admin-password>
+        <ldap-authentication>simple</ldap-authentication>
+        <ldap-user-base-dn>dc=apache,dc=org</ldap-user-base-dn>
+    </user-manager>
+    -->
+
+
+    <!--  file system manager configuration block
+    <file-system-manager>
+        <class>org.apache.ftpserver.filesystem.NativeFileSystemManager</class>
+        <create-home>false</create-home>
+    </file-system-manager>
+    -->
+
+
+    <!-- All ftplets
+    <ftplets>f1,f2</ftplets>
+    -->
+
+
+    <!-- Ftplet configuration
+    <ftplet>
+        <f1>
+            <class>org.apache.ftpserver.ftplet.Ftplet1</class>
+            <param>value1</param>
+        </f1>
+        <f2>
+            <class>org.apache.ftpserver.ftplet.Ftplet2</class>
+            <param>value2</param>
+        </f2>
+    </ftplet>
+    -->
+
+</config>

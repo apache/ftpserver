@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+ -->
+
+<document>
+    <properties>
+        <title>Apache FTP Server :: Mailing Lists</title>
+        <author email="rana_b@yahoo.com">Rana Bhattacharyya</author>
+    </properties>
+    <head>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="icon" href="favicon.ico" />
+    </head>
+    <body>
+        <section name="Mailing List">
+            <p>General information about the jakarta mailing lists can be found
+               <a href="http://jakarta.apache.org/site/mail.html">here</a>.
+               Please read these guidelines before subscribing or posting to the lists.
+            </p>
+
+            <p>FTP Server Development mailing list:</p>
+            <table>
+                <tr>
+                    <td><b>Subscribe</b></td>
+                    <td><a href="mailto:ftpserver-dev-subscribe@incubator.apache.org">ftpserver-dev-subscribe@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Unsubscribe</b></td>
+                    <td><a href="mailto:ftpserver-dev-unsubscribe@incubator.apache.org">ftpserver-dev-unsubscribe@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Post</b></td>
+                    <td><a href="mailto:ftpserver-dev@incubator.apache.org">ftpserver-dev@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Archive</b></td>
+                    <td><a href="http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/">http://www.mail-archive.com/ftpserver-dev@incubator.apache.org/</a></td>
+                </tr>
+            </table>
+
+            <p>Incubator General mailing list</p>
+            <table>
+                <tr>
+                    <td><b>Subscribe</b></td>
+                    <td><a href="mailto:general-subscribe@incubator.apache.org">general-subscribe@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Unsubscribe</b></td>
+                    <td><a href="mailto:general-unsubscribe@incubator.apache.org">general-unsubscribe@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Post</b></td>
+                    <td><a href="mailto:general@incubator.apache.org">general@incubator.apache.org</a></td>
+                </tr>
+                <tr>
+                    <td><b>Archive</b></td>
+                    <td><a href="http://www.mail-archive.com/general%40incubator.apache.org/">http://www.mail-archive.com/general@incubator.apache.org/</a></td>
+                </tr>
+            </table>
+
+            <div class="infomessage">If you want to post anything FTP Server related in
+                  Incubator General mailing list, please add <em>[Ftpserver]</em> prefix to
+                  identify Ftpserver related messages easily.
+            </div>
+        </section>
+    </body>
+</document>

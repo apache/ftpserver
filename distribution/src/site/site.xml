@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Apache FTP Server">
+    <bannerLeft>
+        <name>Maven</name>
+        <src>http://incubator.apache.org/ftpserver/images/project-logo.gif</src>
+        <href>http://maven.apache.org/</href>
+    </bannerLeft>
+    <body>
+        <links>
+            <item name="Apache" href="http://www.apache.org/" />
+            <item name="Incubator" href="http://incubator.apache.org/"/>
+        </links>
+        
+        <menu name="Apache FTP Server">
+            <item name="Welcome"             href="index.html"/>
+            <item name="FAQ"                 href="faq.html"/>
+            <item name="Download"            href="downloads.html"/>
+        </menu>
+        <menu name="Setup">
+            <item name="Installation"        href="installation.html"/>
+            <item name="Configuration"       href="configuration.html"/>
+            <item name="TLS/SSL Support"     href="ssl.html"/>
+            <item name="User Manager"        href="user_manager.html"/>
+            <item name="IP Restrictor"       href="ip_restrictor.html"/>
+            <item name="Logger"              href="logger.html"/>
+            <item name="Messages"            href="messages.html"/>
+        </menu>
+        <menu name="Advanced">
+            <item name="FTP Commands"        href="ftp_commands.html"/>
+            <item name="SITE Commands"       href="site_commands.html"/>
+            <item name="Ftplet"              href="ftplet.html"/>
+        </menu>
+        <menu name="RFCs">
+            <item name="RFC959"              href="rfc959.html"/>
+            <item name="RFC2228"             href="rfc2228.html"/>
+            <item name="RFC2389"             href="rfc2389.html"/>
+            <item name="RFC2428"             href="rfc2428.html"/>
+            <item name="draft-twine-ftpmd5-00" href="draft-twine-ftpmd5-00.html"/>
+        </menu>
+        
+        ${reports}
+
+    </body>
+</project>
