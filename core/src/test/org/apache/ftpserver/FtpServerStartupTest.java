@@ -28,8 +28,11 @@ public class FtpServerStartupTest extends AbstractFtpServerTestTemplate {
 
     /**
      * Test startup and shutdown of FTPServer
+     * @throws InterruptedException 
      */
-    public void testStartup() {
+    public void testStartup() throws InterruptedException {
+        // allow server to start
+        Thread.sleep(200);
         // NOOP
     }
 

@@ -15,36 +15,36 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
-
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
- * thread. <code>Server</code> implementation is used to create the server 
+ * thread. <code>Server</code> implementation is used to create the server
  * socket and handle client connection.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public 
-class FtpServer implements Runnable {
+public class FtpServer {
 
     private Thread runner;
-    private ServerSocket serverSocket;
+
     private ServerFtpConfig ftpConfig;
+
     private Log log;
+
     private boolean suspended;
-    
+
+    private List listeners = new ArrayList();
 
     /**
      * Constructor. Set the server object.
@@ -52,54 +52,38 @@ class FtpServer implements Runnable {
     public FtpServer(ServerFtpConfig ftpConfig) {
         this.ftpConfig = ftpConfig;
         log = this.ftpConfig.getLogFactory().getInstance(getClass());
+
+        // for now just create one 
+        listeners.add(new DefaultListener(ftpConfig));
     }
 
     /**
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-        if (runner == null) {
-            serverSocket = ftpConfig.getSocketFactory().createServerSocket();            
-            runner = new Thread(this);
-            runner.start();
-            System.out.println("Server ready :: Apache FTP Server");
-            log.info("------- Apache FTP Server started ------");
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            Listener listener = (Listener) iter.next();
+            
+            listener.start();
         }
-    }
+        
+        System.out.println("Server ready :: Apache FTP Server");
+        log.info("------- Apache FTP Server started ------");
 
+    }
+    
     /**
      * Stop the server. Stop the listener thread.
      */
     public void stop() {
-        
-        // first interrupt the server engine thread
-        if (runner != null) {
-            runner.interrupt();
+
+        // stop all listeners
+        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+            Listener listener = (Listener) iter.next();
+            
+            listener.stop();
         }
 
-        // close server socket
-        if (serverSocket != null) {
-            try {
-                serverSocket.close();
-            }
-            catch(IOException ex){
-            }
-            serverSocket = null;
-        }  
-
-        
-        // wait for the runner thread to terminate
-        if( (runner != null) && runner.isAlive() ) {
-            try {
-                runner.join();
-            }
-            catch(InterruptedException ex) {
-            }
-            runner = null;
-        }
-
-        
-        
         // release server resources
         if (ftpConfig != null) {
             ftpConfig.dispose();
@@ -137,46 +121,7 @@ class FtpServer implements Runnable {
     }
 
     /**
-     * Listen for client requests.
-     */
-    public void run() {
-        // ftpConfig might be null if stop has been called
-        if(ftpConfig == null) {
-            return;
-        }
-        
-        ConnectionManager conManager = ftpConfig.getConnectionManager();
-        while (runner != null) {
-            try {
-                
-                // closed - return
-                if(serverSocket == null) {
-                    return;
-                }
-                
-                // accept new connection .. if suspended 
-                // close immediately.
-                Socket soc = serverSocket.accept();
-                if(suspended) {
-                    try {
-                        soc.close();
-                    }
-                    catch(Exception ex) {
-                    }
-                    continue;
-                }
-                
-                Connection connection = new RequestHandler(ftpConfig, soc);
-                conManager.newConnection(connection);
-            }
-            catch (Exception ex) {
-                return;
-            }
-        }
-    }
-    
-    /**
-     * Get the root server configuration object. 
+     * Get the root server configuration object.
      */
     public ServerFtpConfig getFtpConfig() {
         return ftpConfig;
