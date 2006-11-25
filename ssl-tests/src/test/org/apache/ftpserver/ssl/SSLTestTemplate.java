@@ -41,7 +41,8 @@ import org.apache.ftpserver.util.IoUtils;
 public abstract class SSLTestTemplate extends TestCase {
 
     private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
-    private static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
+    protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
+    protected static final char[] KEYSTORE_PASSWORD = "password".toCharArray();
 
     private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/ftpserver.jks");
 
@@ -71,7 +72,7 @@ public abstract class SSLTestTemplate extends TestCase {
         if(basedir != null) {
             return new File(basedir);
         } else {
-            return new File("");
+            return new File(".");
         }
     }
     

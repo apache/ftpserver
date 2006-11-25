@@ -21,14 +21,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
 
 /**
  * FTP over SSL processing. If desired, the JVM property -Djavax.net.debug=all can be used to 
@@ -76,6 +82,10 @@ public class FTPSClient extends FTPClient {
     private String[] suites = null;
     /** The protocol versions */
     private String[] protocols = null;
+    /** Client keystore */
+    private KeyStore keystore;
+    /** Client keystore password */
+    private char[] keystorePassword;
     
     /** The FTPS {@link TrustManager} implementation. */
     private TrustManager trustManager = new FTPSTrustManager();
@@ -194,10 +204,22 @@ public class FTPSClient extends FTPClient {
         planeSocket = _socket_;
         
         try {
-			context.init(null, new TrustManager[] { getTrustManager() } , null);
+            if(keystore != null) {
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                kmf.init(keystore, keystorePassword);
+    			context.init(kmf.getKeyManagers(), new TrustManager[] { getTrustManager() } , null);
+            } else  {
+                context.init(null, new TrustManager[] { getTrustManager() } , null);
+            }
 		} catch (KeyManagementException e) {
 			e.printStackTrace();
-		}
+		} catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
 
         SSLSocketFactory ssf = context.getSocketFactory();
         String ip = _socket_.getInetAddress().getHostAddress();
@@ -478,6 +500,34 @@ public class FTPSClient extends FTPClient {
 	public void setTrustManager(TrustManager trustManager) {
 		this.trustManager = trustManager;
 	}
+
+    /**
+     * @return the keystore
+     */
+    public KeyStore getKeystore() {
+        return keystore;
+    }
+
+    /**
+     * @param keystore the keystore to set
+     */
+    public void setKeystore(KeyStore keystore) {
+        this.keystore = keystore;
+    }
+
+    /**
+     * @return the keystorePassword
+     */
+    public char[] getKeystorePassword() {
+        return keystorePassword;
+    }
+
+    /**
+     * @param keystorePassword the keystorePassword to set
+     */
+    public void setKeystorePassword(char[] keystorePassword) {
+        this.keystorePassword = keystorePassword;
+    }
     
     
     
