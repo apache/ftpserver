@@ -92,7 +92,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
             
             String pasvAddress = passiveConf.getString("address", null);
             if(pasvAddress == null) {
-                passiveAddress = InetAddress.getLocalHost();
+                passiveAddress = null;
             }
             else {
                 passiveAddress = InetAddress.getByName(pasvAddress);

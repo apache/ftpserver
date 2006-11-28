@@ -106,22 +106,6 @@ public class LoginTest extends ClientTestTemplate {
         assertFalse(client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD));
     }
     
-    private String[] getHostAddresses() throws Exception {
-        Enumeration nifs = NetworkInterface.getNetworkInterfaces();
-        
-        List hostIps = new ArrayList();
-        while (nifs.hasMoreElements()) {
-            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
-            Enumeration ips = nif.getInetAddresses();
-            
-            while (ips.hasMoreElements()) {
-                InetAddress ip = (InetAddress) ips.nextElement();
-                hostIps.add(ip.getHostAddress());
-            }
-        }
-        
-        return (String[]) hostIps.toArray(new String[0]);
-    }
 /*
     public void testLoginWithMaxConnectionsPerIp() throws Exception {
         String[] ips = getHostAddresses();

@@ -78,6 +78,7 @@ class RequestHandler implements Connection {
         // data connection object
         FtpDataConnection dataCon = new FtpDataConnection();
         dataCon.setFtpConfig(this.fconfig);
+        dataCon.setServerControlAddress(controlSocket.getLocalAddress());
         
         // reader object
         request = new FtpRequestImpl();

@@ -140,15 +140,21 @@ public abstract class ClientTestTemplate extends TestCase {
                 log.debug("< " + event.getMessage().trim());
             }});
         
-        try{
-            client.connect("localhost", port);
-        } catch(FTPConnectionClosedException e) {
-            // try again
-            Thread.sleep(200);
-            client.connect("localhost", port);
+        if(isConnectClient()) {
+            try{
+                client.connect("localhost", port);
+            } catch(FTPConnectionClosedException e) {
+                // try again
+                Thread.sleep(200);
+                client.connect("localhost", port);
+            }
         }
     }
 
+    protected boolean isConnectClient() {
+        return true;
+    }
+    
     /**
      * Attempts to find a free port or fallback to a default
      * @throws IOException 

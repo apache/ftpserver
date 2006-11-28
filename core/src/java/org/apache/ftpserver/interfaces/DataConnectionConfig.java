@@ -57,7 +57,7 @@ interface DataConnectionConfig extends Component {
     int getActiveLocalPort(); 
     
     /**
-     * Get passive server address.
+     * Get passive server address. null, if not set in the configuration.
      */
     InetAddress getPassiveAddress();
     

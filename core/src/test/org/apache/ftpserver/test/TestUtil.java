@@ -23,7 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -89,6 +94,23 @@ public class TestUtil {
         return port;
     }
 
+    public static String[] getHostAddresses() throws Exception {
+        Enumeration nifs = NetworkInterface.getNetworkInterfaces();
+        
+        List hostIps = new ArrayList();
+        while (nifs.hasMoreElements()) {
+            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
+            Enumeration ips = nif.getInetAddresses();
+            
+            while (ips.hasMoreElements()) {
+                InetAddress ip = (InetAddress) ips.nextElement();
+                hostIps.add(ip.getHostAddress());
+            }
+        }
+        
+        return (String[]) hostIps.toArray(new String[0]);
+    }
+    
     public static void assertFileEqual(byte[] expected, File file)
             throws Exception {
         ByteArrayOutputStream baos = null;

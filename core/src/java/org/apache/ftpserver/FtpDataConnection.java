@@ -55,6 +55,8 @@ class FtpDataConnection {
     
     private boolean secure   = false;
     private boolean isZip    = false;
+
+    private InetAddress serverControlAddress;
     
     
     /**
@@ -134,6 +136,9 @@ class FtpDataConnection {
         try {
             DataConnectionConfig dataCfg = fconfig.getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
+            if(address == null) {
+                address = serverControlAddress;
+            }
             if(secure) {
                 Ssl ssl = dataCfg.getSSL();
                 if(ssl == null) {
@@ -283,6 +288,13 @@ class FtpDataConnection {
      */ 
     public void dispose() {
         closeDataSocket();
+    }
+
+    /**
+     * Sets the server's control address. 
+     */
+    public void setServerControlAddress(InetAddress serverControlAddress) {
+        this.serverControlAddress = serverControlAddress;
     }
 }
     

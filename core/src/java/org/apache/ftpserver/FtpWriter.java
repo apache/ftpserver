@@ -96,12 +96,14 @@ class FtpWriter implements FtpResponse {
     private ConnectionObserver observer;
     private ServerFtpConfig fconfig;
     private FtpRequest request;
+    private InetAddress serverAddress;
 
         
     /**
      * Set the control socket.
      */
     public void setControlSocket(Socket soc) throws IOException {
+        serverAddress = soc.getLocalAddress();
         writer = new OutputStreamWriter(soc.getOutputStream(), "UTF-8");
     }
     
@@ -312,6 +314,9 @@ class FtpWriter implements FtpResponse {
         // server address
         if(varName.equals(SERVER_IP)) {
             InetAddress addr = fconfig.getDataConnectionConfig().getPassiveAddress();
+            if(addr == null) {
+                addr = serverAddress;
+            }
             varVal = addr.getHostAddress();
         }
         
