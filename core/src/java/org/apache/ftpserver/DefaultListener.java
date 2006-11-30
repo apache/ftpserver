@@ -9,6 +9,10 @@ import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
 
+/**
+ * The default {@link Listener} implementation.
+ *
+ */
 public class DefaultListener implements Listener, Runnable {
 
     private Log log;
@@ -21,12 +25,20 @@ public class DefaultListener implements Listener, Runnable {
 
     private boolean suspended = false;
 
+    /**
+     * Constructs a listener based on the configuration object
+     * 
+     * @param ftpConfig Configuration for the listener
+     */
     public DefaultListener(ServerFtpConfig ftpConfig) {
         this.ftpConfig = ftpConfig;
         
         log = ftpConfig.getLogFactory().getInstance(getClass());
     }
 
+    /**
+     * @see Listener#start()
+     */
     public void start() throws Exception {
         serverSocket = ftpConfig.getSocketFactory().createServerSocket();
 
@@ -35,6 +47,9 @@ public class DefaultListener implements Listener, Runnable {
 
     }
 
+    /**
+     * The main thread method for the listener
+     */
     public void run() {
         if(serverSocket == null) {
             throw new IllegalStateException("start() must be called before run()");
@@ -78,6 +93,9 @@ public class DefaultListener implements Listener, Runnable {
         }
     }
 
+    /**
+     * @see Listener#stop()
+     */
     public synchronized void stop() {
         // close server socket
         if (serverSocket != null) {
@@ -102,19 +120,31 @@ public class DefaultListener implements Listener, Runnable {
         }
     }
 
+    /**
+     * @see Listener#isStopped()
+     */
     public boolean isStopped() {
         return listenerThread == null;
 
     }
 
+    /**
+     * @see Listener#isSuspended()
+     */
     public boolean isSuspended() {
         return suspended;
     }
 
+    /**
+     * @see Listener#resume()
+     */
     public void resume() {
         suspended = false;
     }
 
+    /**
+     * @see Listener#suspend()
+     */
     public void suspend() {
         suspended = true;
     }
