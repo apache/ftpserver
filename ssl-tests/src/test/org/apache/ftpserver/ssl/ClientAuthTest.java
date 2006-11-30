@@ -22,6 +22,8 @@ package org.apache.ftpserver.ssl;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 
+import javax.net.ssl.KeyManagerFactory;
+
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 
@@ -42,10 +44,14 @@ public class ClientAuthTest extends SSLTestTemplate {
     protected FTPSClient createFTPClient() throws Exception {
         FTPSClient client = new FTPSClient();
         client.setNeedClientAuth(true);
+        
         KeyStore ks = KeyStore.getInstance("JKS");
         ks.load(new FileInputStream(FTPCLIENT_KEYSTORE), KEYSTORE_PASSWORD);
-        client.setKeystore(ks);
-        client.setKeystorePassword(KEYSTORE_PASSWORD);
+        
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        kmf.init(ks, KEYSTORE_PASSWORD);
+
+        client.setKeyManager(kmf.getKeyManagers()[0]);
 
         return client;
     }
