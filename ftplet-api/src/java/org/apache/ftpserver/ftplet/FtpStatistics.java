@@ -86,6 +86,11 @@ interface FtpStatistics {
     int getTotalLoginNumber();
     
     /**
+     * Get total failed login number.
+     */
+    int getTotalFailedLoginNumber();
+    
+    /**
      * Get current login number
      */
     int getCurrentLoginNumber();

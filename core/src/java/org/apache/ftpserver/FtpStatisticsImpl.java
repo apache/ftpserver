@@ -54,6 +54,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     
     private int currLogins         = 0;
     private int totalLogins        = 0;
+    private int totalFailedLogins  = 0;
     
     private int currAnonLogins     = 0;
     private int totalAnonLogins    = 0;
@@ -185,6 +186,13 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
         return totalLogins;
     }
      
+    /**
+     * Get total failed login number.
+     */
+    public int getTotalFailedLoginNumber() {
+        return totalFailedLogins;
+    }
+
     /**
      * Get current number of logins.
      */
@@ -342,7 +350,15 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
         
         notifyLogin(connection);
     }
-     
+    
+    /**
+     * Increment failed login count.
+     */
+    public void setLoginFail(Connection connection) {
+        ++totalFailedLogins;
+        notifyLoginFail(connection);
+    }
+    
     /**
      * User logout
      */
@@ -487,6 +503,16 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     }
     
     /**
+     * Observer failed login notification.
+     */
+    private void notifyLoginFail(Connection connection) {
+        StatisticsObserver observer = this.observer;
+        if (observer != null) {
+            observer.notifyLoginFail(connection.getRequest().getRemoteAddress());
+        }
+    }
+    
+    /**
      * Observer logout notification.
      */
     private void notifyLogout(Connection connection) {
@@ -503,5 +529,25 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
         }
     } 
 
-  
+    /**
+     * Reset the cumulative counters.
+     */
+    public void resetStatisticsCounters() {
+        startTime = new Date();
+        
+        uploadCount        = 0;
+        downloadCount      = 0;
+        deleteCount        = 0;
+        
+        mkdirCount         = 0;
+        rmdirCount         = 0;
+        
+        totalLogins        = 0;
+        totalFailedLogins  = 0;
+        totalAnonLogins    = 0;
+        totalConnections   = 0;
+        
+        bytesUpload        = 0;
+        bytesDownload      = 0;
+    }
 }

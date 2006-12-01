@@ -146,6 +146,7 @@ class PASS implements Command {
             } else {
                 log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
+                stat.setLoginFail(handler);
                 return;
             }
             

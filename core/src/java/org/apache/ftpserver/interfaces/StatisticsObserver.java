@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.interfaces;
 
+import java.net.InetAddress;
+
 /**
  * Ftp statistics observer interface.
  *
@@ -58,6 +60,12 @@ interface StatisticsObserver {
     void notifyLogin(boolean anonymous);
     
     /**
+     * Failed user login notification.
+     * @param address Remote address that the failure came from
+     */
+    void notifyLoginFail(InetAddress address);
+    
+    /**
      * User logout notification.
      */
     void notifyLogout(boolean anonymous);
@@ -71,4 +79,5 @@ interface StatisticsObserver {
      * Connection close notification
      */
     void notifyCloseConnection();
+
 }    

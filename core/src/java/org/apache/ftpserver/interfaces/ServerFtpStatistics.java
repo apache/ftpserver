@@ -83,7 +83,18 @@ interface ServerFtpStatistics extends FtpStatistics, Component {
     void setLogin(Connection connection);
     
     /**
+     * Increment failed login count.
+     */
+    void setLoginFail(Connection connection);
+    
+    /**
      * Decrement current login count.
      */
     void setLogout(Connection connection);
+    
+    /**
+     * Reset all cumulative total counters. Do not reset current counters, like 
+     * current logins, otherwise these will become negative when someone disconnects.
+     */
+    void resetStatisticsCounters();
 }

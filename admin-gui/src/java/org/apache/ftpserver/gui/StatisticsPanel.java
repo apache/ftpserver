@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -65,8 +66,9 @@ class StatisticsPanel extends PluginPanel
     private final static int I_TOTAL_LOGINS      = 9;
     private final static int I_CURR_ANON_LOGINS  = 10;
     private final static int I_TOTAL_ANON_LOGINS = 11;
-    private final static int I_CURR_CONS         = 12;
-    private final static int I_TOTAL_CONS        = 13;
+    private final static int I_TOTAL_LOGIN_FAILS = 12;
+    private final static int I_CURR_CONS         = 13;
+    private final static int I_TOTAL_CONS        = 14;
     
     private final static String[] COL_NAMES = {
             "Name",  
@@ -86,6 +88,7 @@ class StatisticsPanel extends PluginPanel
             "Total logins",
             "Current anonymous logins",
             "Total anonymous logins",
+            "Total failed logins",
             "Current connections",
             "Total connections"
     };
@@ -133,6 +136,14 @@ class StatisticsPanel extends PluginPanel
         reloadButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 refresh(ftpConfig);
+            }
+        });
+
+        JButton resetButton = new JButton("Reset");
+        btnPanel.add(resetButton);
+        resetButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                resetStats(ftpConfig);
             }
         });
     }
@@ -244,6 +255,7 @@ class StatisticsPanel extends PluginPanel
             notifyDownload();
             notifyDelete();
             notifyLogin(true);
+            notifyLoginFail(null);
             notifyOpenConnection();
         }
         else {
@@ -252,6 +264,16 @@ class StatisticsPanel extends PluginPanel
                 statistics.setFileObserver(null);
             }
             statistics = null;
+        }
+    }
+    
+    public void resetStats(ServerFtpConfig ftpConfig) {
+        this.ftpConfig = ftpConfig;
+        if (this.ftpConfig != null) {
+            statistics = (ServerFtpStatistics)this.ftpConfig.getFtpStatistics();
+            statistics.resetStatisticsCounters();
+            
+            refresh(ftpConfig);
         }
     }
 
@@ -381,6 +403,22 @@ class StatisticsPanel extends PluginPanel
     public void notifyLogout(boolean anonymous) {
         notifyLogin(anonymous);
     } 
+
+    /** 
+     * User failed login notification.
+     */
+    public void notifyLoginFail(InetAddress address) {
+        Runnable runnable = new Runnable() {
+            public void run() { 
+                ServerFtpStatistics stat = statistics;
+                if(stat != null) {
+                    int failedNbr = stat.getTotalFailedLoginNumber();
+                    setValue(I_TOTAL_LOGIN_FAILS, String.valueOf(failedNbr));
+                }
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
+    }
      
     /**
      * Notify open connection
@@ -479,4 +517,5 @@ class StatisticsPanel extends PluginPanel
     public String toString() {
         return "Statistics";
     }
+
 }
