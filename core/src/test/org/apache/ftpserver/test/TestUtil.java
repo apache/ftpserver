@@ -22,6 +22,7 @@ package org.apache.ftpserver.test;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -109,6 +110,18 @@ public class TestUtil {
         }
         
         return (String[]) hostIps.toArray(new String[0]);
+    }
+    
+    public static void writeDataToFile(File file, byte[] data) throws IOException {
+        FileOutputStream fos = null;
+        
+        try{
+            fos = new FileOutputStream(file);
+            
+            fos.write(data);
+        } finally {
+            IoUtils.close(fos);
+        }
     }
     
     public static void assertFileEqual(byte[] expected, File file)

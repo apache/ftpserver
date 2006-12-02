@@ -44,7 +44,7 @@ public class RetrieveTest extends ClientTestTemplate {
 
     public void testRetrieve() throws Exception {
         
-        writeDataToFile(TEST_FILE, testData);
+        TestUtil.writeDataToFile(TEST_FILE, testData);
 
         assertTrue(TEST_FILE.exists());
 
@@ -71,7 +71,7 @@ public class RetrieveTest extends ClientTestTemplate {
     public void testRetrieveWithRestart() throws Exception {
         int skipLen = 4;
         
-        writeDataToFile(TEST_FILE, testData);
+        TestUtil.writeDataToFile(TEST_FILE, testData);
         
         assertTrue(TEST_FILE.exists());
         
@@ -94,7 +94,7 @@ public class RetrieveTest extends ClientTestTemplate {
         
         File testFile = new File(dir, TEST_FILENAME);
         
-        writeDataToFile(testFile, testData);
+        TestUtil.writeDataToFile(testFile, testData);
         
         assertTrue(testFile.exists());
         

@@ -107,7 +107,7 @@ public class ListTest extends ClientTestTemplate {
         TEST_DIR1.mkdirs();
         TEST_DIR2.mkdirs();
         
-        writeDataToFile(TEST_FILE1, testData);
+        TestUtil.writeDataToFile(TEST_FILE1, testData);
         
         FTPFile[] files = client.listFiles();
 
@@ -145,6 +145,13 @@ public class ListTest extends ClientTestTemplate {
         assertTrue(file.isDirectory());
     }
 
+    public void testListFileNonExistingFile() throws Exception {
+
+        FTPFile[] files = client.listFiles("foo");
+        
+        assertEquals(0, files.length);
+    }
+    
     public void testListNames() throws Exception {
         TEST_FILE1.createNewFile();
         TEST_FILE2.createNewFile();

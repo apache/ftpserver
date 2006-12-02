@@ -173,18 +173,6 @@ public abstract class ClientTestTemplate extends TestCase {
         }
     }
     
-    protected void writeDataToFile(File file, byte[] data) throws IOException {
-        FileOutputStream fos = null;
-        
-        try{
-            fos = new FileOutputStream(file);
-            
-            fos.write(data);
-        } finally {
-            IoUtils.close(fos);
-        }
-    }
-    
     /*
      * (non-Javadoc)
      * 

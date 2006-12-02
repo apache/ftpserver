@@ -22,6 +22,7 @@ package org.apache.ftpserver.clienttests;
 import java.io.File;
 
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.ftpserver.test.TestUtil;
 
 
 public class SizeTest extends ClientTestTemplate {
@@ -47,7 +48,7 @@ public class SizeTest extends ClientTestTemplate {
     }
     
     public void testSizeOnFile() throws Exception {
-        writeDataToFile(TEST_FILE1, TEST_DATA1);
+        TestUtil.writeDataToFile(TEST_FILE1, TEST_DATA1);
         
         assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("SIZE " + TEST_FILE1.getName())));
         assertSizeReply(client.getReplyString(), TEST_DATA1.length);

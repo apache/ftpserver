@@ -110,7 +110,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -131,7 +131,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.deleteFile(TEST_FILE1.getName()));
@@ -258,7 +258,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -280,7 +280,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
@@ -306,7 +306,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -325,7 +325,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -348,7 +348,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -369,7 +369,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));

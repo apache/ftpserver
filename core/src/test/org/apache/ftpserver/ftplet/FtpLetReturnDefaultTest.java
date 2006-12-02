@@ -71,7 +71,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testDelete() throws Exception {
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.deleteFile(TEST_FILE1.getName()));
@@ -98,7 +98,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testRename() throws Exception {
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
@@ -108,7 +108,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testDownload() throws Exception {
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         
@@ -119,7 +119,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testAppend() throws Exception {
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
             

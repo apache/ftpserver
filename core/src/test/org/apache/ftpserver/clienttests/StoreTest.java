@@ -77,7 +77,7 @@ public class StoreTest extends ClientTestTemplate {
     
     public void testStoreWithRestart() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
-        writeDataToFile(testFile, testData);
+        TestUtil.writeDataToFile(testFile, testData);
         
         client.setRestartOffset(SKIP_LEN);
         assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
@@ -189,7 +189,7 @@ public class StoreTest extends ClientTestTemplate {
     public void testAppend() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
         
-        writeDataToFile(testFile, testData);
+        TestUtil.writeDataToFile(testFile, testData);
 
         assertTrue(client.appendFile(TEST_FILENAME, new ByteArrayInputStream(testData)));
         
@@ -216,7 +216,7 @@ public class StoreTest extends ClientTestTemplate {
         TEST_DIR.mkdirs();
         File testFile = new File(TEST_DIR, TEST_FILENAME);
         
-        writeDataToFile(testFile, testData);
+        TestUtil.writeDataToFile(testFile, testData);
         
         assertTrue(client.appendFile("foo/bar/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
         

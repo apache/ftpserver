@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.ftpserver.test.TestUtil;
 
 
 
@@ -55,7 +56,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
 
     public void testMd5() throws Exception {
-        writeDataToFile(TEST_FILE1, testData);
+        TestUtil.writeDataToFile(TEST_FILE1, testData);
         
         assertTrue(TEST_FILE1.exists());
         
@@ -79,7 +80,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
 
     public void testMd5WithSpaceInFileName() throws Exception {
-        writeDataToFile(TEST_FILE_WITH_SPACE, testData);
+        TestUtil.writeDataToFile(TEST_FILE_WITH_SPACE, testData);
         
         assertTrue(TEST_FILE_WITH_SPACE.exists());
         
@@ -110,7 +111,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     public void testMd5WithPath() throws Exception {
         TEST_DIR1.mkdirs();
         assertTrue(TEST_DIR1.exists());
-        writeDataToFile(TEST_FILE_IN_DIR1, testData);
+        TestUtil.writeDataToFile(TEST_FILE_IN_DIR1, testData);
         assertTrue(TEST_FILE_IN_DIR1.exists());
         
         String fileName = TEST_DIR1.getName() + "/" + TEST_FILE_IN_DIR1.getName();
@@ -126,8 +127,8 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
     
     public void testMMd5() throws Exception {
-        writeDataToFile(TEST_FILE1, testData);
-        writeDataToFile(TEST_FILE_WITH_SPACE, testData2);
+        TestUtil.writeDataToFile(TEST_FILE1, testData);
+        TestUtil.writeDataToFile(TEST_FILE_WITH_SPACE, testData2);
         
         assertTrue(TEST_FILE1.exists());
         assertTrue(TEST_FILE_WITH_SPACE.exists());
@@ -141,7 +142,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
 
     public void testMMd5SingleFile() throws Exception {
-        writeDataToFile(TEST_FILE1, testData);
+        TestUtil.writeDataToFile(TEST_FILE1, testData);
         
         assertTrue(TEST_FILE1.exists());
         
@@ -153,7 +154,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
 
     public void testMMd5MixedFilesAndDirs() throws Exception {
-        writeDataToFile(TEST_FILE1, testData);
+        TestUtil.writeDataToFile(TEST_FILE1, testData);
         TEST_DIR1.mkdirs();
         
         assertTrue(TEST_FILE1.exists());
