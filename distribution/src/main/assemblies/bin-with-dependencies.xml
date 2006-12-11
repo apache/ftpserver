@@ -5,13 +5,14 @@
         <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
-    <includeSiteDirectory>true</includeSiteDirectory>
+    <includeSiteDirectory>false</includeSiteDirectory>
     <fileSets>
         <fileSet>
             <includes>
                 <include>README*</include>
-                <include>LICENSE*</include>
-                <include>NOTICE*</include>
+                <include>LICENSE.txt</include>
+                <include>NOTICE.txt</include>
+                <include>DISCLAIMER.txt</include>
                 <include>common/**</include>
             </includes>
         </fileSet>

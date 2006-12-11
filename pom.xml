@@ -61,7 +61,7 @@
         </developer>
     </developers>
     -->
-    
+
     <!-- Contributor list -->
     <!--
     <contributors>
@@ -188,7 +188,8 @@
                                 <copy todir="${project.build.outputDirectory}/META-INF">
                                     <fileset dir="${basedir}">
                                         <include name="LICENSE.txt"/>
-                                        <include name="NOTICE"/>
+                                        <include name="NOTICE.txt"/>
+                                        <include name="DISCLAIMER.txt"/>
                                     </fileset>
                                 </copy>
                             </tasks>
