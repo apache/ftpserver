@@ -23,7 +23,9 @@ import java.io.File;
 
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.util.DateUtils;
 
 
 public class ListTest extends ClientTestTemplate {
@@ -82,6 +84,7 @@ public class ListTest extends ClientTestTemplate {
         assertTrue(file.isDirectory());
         
     }
+    
     public void testListFile() throws Exception {
         
         TEST_DIR1.mkdirs();
@@ -99,6 +102,22 @@ public class ListTest extends ClientTestTemplate {
         assertEquals("user", file.getUser());
         assertTrue(file.isFile());
         assertFalse(file.isDirectory());
+    }
+    
+    public void testListFileNoArgument() throws Exception {
+        TEST_DIR1.mkdirs();
+        
+        FTPFile[] files = client.listFiles();
+        
+        assertEquals(1, files.length);
+        
+        FTPFile file = getFile(files, TEST_DIR1.getName());
+        assertEquals(TEST_DIR1.getName(), file.getName());
+        assertEquals(0, file.getSize());
+        assertEquals("group", file.getGroup());
+        assertEquals("user", file.getUser());
+        assertFalse(file.isFile());
+        assertTrue(file.isDirectory());
     }
 
     public void testListFiles() throws Exception {
@@ -178,6 +197,33 @@ public class ListTest extends ClientTestTemplate {
         assertEquals(1, files.length);
         
         TestUtil.assertInArrays(TEST_FILE2.getName(), files);
+    }
+    
+    public void testMLST() throws Exception {
+        TEST_FILE1.createNewFile();
+        
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST " + TEST_FILE1.getName())));
+        
+        String[] reply = client.getReplyString().split("\\r\\n");
+        
+        assertEquals("Size=0;Modify=" + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + ";Type=file; " + TEST_FILE1.getName(), reply[1]);
+    }
+    
+    public void testOPTSMLST() throws Exception {
+        TEST_FILE1.createNewFile();
+        
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("OPTS MLST Size;Modify")));
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST " + TEST_FILE1.getName())));
+        
+        String[] reply = client.getReplyString().split("\\r\\n");
+        
+        assertEquals("Size=0;Modify=" + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + "; " + TEST_FILE1.getName(), reply[1]);
+    }
+    
+    public void testOPTSMLSTInvalidType() throws Exception {
+        TEST_FILE1.createNewFile();
+        
+        assertTrue(FTPReply.isNegativePermanent(client.sendCommand("OPTS MLST Foo;Size")));
     }
     
     private FTPFile getFile(FTPFile[] files, String name) {

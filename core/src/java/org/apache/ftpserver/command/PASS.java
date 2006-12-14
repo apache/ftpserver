@@ -22,11 +22,16 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.*;
+import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
@@ -153,7 +158,6 @@ class PASS implements Command {
             // update different objects
             FileSystemManager fmanager = fconfig.getFileSystemManager(); 
             FileSystemView fsview = fmanager.createFileSystemView(user);
-            handler.setDirectoryLister(new DirectoryLister(fsview));
             request.setLogin(fsview);
             stat.setLogin(handler);
 

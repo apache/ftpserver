@@ -22,7 +22,6 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
@@ -38,6 +37,13 @@ import org.apache.ftpserver.interfaces.Command;
  */
 public 
 class OPTS_MLST implements Command {
+    
+    private final static String[] AVAILABLE_TYPES = {
+        "Size",
+        "Modify",
+        "Type",
+        "Perm"
+    };
     
     /**
      * Execute command.
@@ -66,12 +72,40 @@ class OPTS_MLST implements Command {
         }
         
         // set the list types
-        DirectoryLister dirLister = handler.getDirectoryLister();
-        if(dirLister.setSelectedTypes(types)) {
+        String[] validatedTypes = validateSelectedTypes(types);
+        if(validatedTypes != null) {
+            handler.setAttribute("MLST.types", validatedTypes);
             out.send(200, "OPTS.MLST", listTypes);
         }
         else {
             out.send(501, "OPTS.MLST", listTypes);
         }
+    }
+    
+    private String[] validateSelectedTypes(String types[]) {
+        
+        // ignore null types
+        if(types == null) {
+            return null;
+        }
+        
+        // check all the types
+        for(int i=0; i<types.length; ++i) {
+            boolean bMatch = false;
+            for(int j=0; j<AVAILABLE_TYPES.length; ++j) {
+                if(AVAILABLE_TYPES[j].equals(types[i])) {
+                    bMatch = true;
+                    break;
+                }
+            }
+            if(!bMatch) {
+                return null;
+            }
+        }
+        
+        // set the user types
+        String[] selectedTypes = new String[types.length];
+        System.arraycopy(types, 0, selectedTypes, 0, types.length);
+        return selectedTypes;
     }
 }

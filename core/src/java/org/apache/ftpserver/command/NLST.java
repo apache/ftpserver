@@ -25,12 +25,17 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketException;
 
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.listing.DirectoryLister;
+import org.apache.ftpserver.listing.FileFormater;
+import org.apache.ftpserver.listing.LISTFileFormater;
+import org.apache.ftpserver.listing.ListArgument;
+import org.apache.ftpserver.listing.ListArgumentParser;
+import org.apache.ftpserver.listing.NLSTFileFormater;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -48,6 +53,10 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class NLST implements Command {
 
+    private static final NLSTFileFormater NLST_FILE_FORMATER = new NLSTFileFormater();
+    private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
+    private DirectoryLister directoryLister = new DirectoryLister();
+    
     /**
      * Execute command
      */
@@ -73,16 +82,23 @@ class NLST implements Command {
             
             // print listing data
             boolean failure = false;
-            boolean syntaxError = false;
             Writer writer = null;
             try {
                 
                 // open stream
                 writer = new OutputStreamWriter(os, "UTF-8");
                 
-                // transfer data
-                DirectoryLister dirLister = handler.getDirectoryLister();
-                syntaxError = !dirLister.doNLST(request.getArgument(), writer);
+                // parse argument
+                ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
+                
+                FileFormater formater;
+                if(parsedArg.hasOption('l')) {
+                    formater = LIST_FILE_FORMATER;
+                } else {
+                    formater = NLST_FILE_FORMATER;
+                }
+                
+                writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
                 failure = true;
@@ -91,14 +107,12 @@ class NLST implements Command {
             catch(IOException ex) {
                 failure = true;
                 out.send(551, "NLST", null);
-            }
-            finally {
+            } catch(IllegalArgumentException e) {
+                // if listing syntax error - send message
+                out.send(501, "LIST", null);
+            } finally {
+                writer.flush();
                 IoUtils.close(writer);
-            }
-            
-            // if listing syntax error - send message
-            if(syntaxError) {
-                out.send(501, "NLST", null);
             }
             
             // if data transfer ok - send transfer complete message

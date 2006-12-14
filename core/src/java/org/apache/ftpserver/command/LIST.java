@@ -25,12 +25,15 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketException;
 
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.listing.DirectoryLister;
+import org.apache.ftpserver.listing.LISTFileFormater;
+import org.apache.ftpserver.listing.ListArgument;
+import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -49,6 +52,9 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public 
 class LIST implements Command {
+    
+    private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
+    private DirectoryLister directoryLister = new DirectoryLister();
     
     /**
      * Execute command.
@@ -75,16 +81,16 @@ class LIST implements Command {
             
             // transfer listing data
             boolean failure = false;
-            boolean syntaxError = false;
             Writer writer = null;
             try {
             
                 // open stream
                 writer = new OutputStreamWriter(os, "UTF-8");
                 
-                // transfer data
-                DirectoryLister dirLister = handler.getDirectoryLister();
-                syntaxError = !dirLister.doLIST(request.getArgument(), writer);
+                // parse argument
+                ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
+                
+                writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), LIST_FILE_FORMATER));
             }
             catch(SocketException ex) {
                 ex.printStackTrace();
@@ -95,14 +101,12 @@ class LIST implements Command {
                 ex.printStackTrace();
                 failure = true;
                 out.send(551, "LIST", null);
-            }
-            finally {
-                IoUtils.close(writer);
-            }
-            
-            // if listing syntax error - send message
-            if(syntaxError) {
+            } catch(IllegalArgumentException e) {
+                // if listing syntax error - send message
                 out.send(501, "LIST", null);
+            } finally {
+                writer.flush();
+                IoUtils.close(writer);
             }
             
             // if data transfer ok - send transfer complete message

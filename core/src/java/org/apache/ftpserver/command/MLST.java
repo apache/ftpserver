@@ -20,13 +20,17 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.listing.FileFormater;
+import org.apache.ftpserver.listing.ListArgument;
+import org.apache.ftpserver.listing.ListArgumentParser;
+import org.apache.ftpserver.listing.MLSTFileFormater;
 
 /**
  * <code>MLST &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -48,16 +52,21 @@ class MLST implements Command {
         // reset state variables
         request.resetState();
         
-        // print file information
-        DirectoryLister dirLister = handler.getDirectoryLister();
-        StringWriter sw = new StringWriter();
-        if(!dirLister.doMLST(request.getArgument(), sw)) {
+//      parse argument
+        ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
+        
+        FileObject file = null;
+        try {
+            file = request.getFileSystemView().getFileObject(parsedArg.getFile());
+            if(file != null && file.doesExist()) {
+                FileFormater formater = new MLSTFileFormater((String[])handler.getAttribute("MLST.types"));
+                out.send(250, "MLST", formater.format(file));
+            } else {            
+                out.send(501, "MLST", null);
+            }
+        }
+        catch(FtpException ex) {
             out.send(501, "MLST", null);
-        }
-        else {
-            String output = sw.toString();
-            out.send(250, "MLST", output);
-        }
-        sw.close();
+        }     
     }   
 }

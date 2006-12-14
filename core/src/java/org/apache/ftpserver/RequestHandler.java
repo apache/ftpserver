@@ -27,20 +27,30 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.SSLException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.ftplet.*;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.Structure;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
+import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpConfig;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.util.IoUtils;
 
 
@@ -65,6 +75,7 @@ class RequestHandler implements Connection {
     private DirectoryLister directoryLister;
     private DataType dataType    = DataType.ASCII;
     private Structure structure  = Structure.FILE;
+    private Map attributes = new HashMap();
     
     
     /**
@@ -116,20 +127,6 @@ class RequestHandler implements Connection {
     public ServerFtpConfig getConfig() {
         return fconfig;
     }
-    
-    /**
-     * Get directory lister.
-     */
-    public DirectoryLister getDirectoryLister() {
-        return directoryLister;
-    }
-    
-    /**
-     * Set directory lister.
-     */
-    public void setDirectoryLister(DirectoryLister lister) {
-        directoryLister = lister;
-    }
                 
     /**
      * Get the data type.
@@ -150,6 +147,25 @@ class RequestHandler implements Connection {
      */
     public Structure getStructure() {
         return structure;
+    }
+    
+    /**
+     * Get a session attribute.
+     * @param name The name of the attribute
+     * 
+     * @return The attribute value, or null if the attribute does not exist
+     */
+    public Object getAttribute(String name) {
+        return attributes.get(name);
+    }
+    
+    /**
+     * Set a session attribute.
+     * @param name The name of the attribute
+     * @param value The value of the attribute
+     */
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
     
     /**

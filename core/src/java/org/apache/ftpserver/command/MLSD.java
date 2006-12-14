@@ -25,12 +25,16 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketException;
 
-import org.apache.ftpserver.DirectoryLister;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.listing.DirectoryLister;
+import org.apache.ftpserver.listing.FileFormater;
+import org.apache.ftpserver.listing.ListArgument;
+import org.apache.ftpserver.listing.ListArgumentParser;
+import org.apache.ftpserver.listing.MLSTFileFormater;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -47,6 +51,8 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class MLSD implements Command {
 
+    private DirectoryLister directoryLister = new DirectoryLister();
+    
     /**
      * Execute command.
      */
@@ -72,16 +78,17 @@ class MLSD implements Command {
             
             // print listing data
             boolean failure = false;
-            boolean syntaxError = false;
             Writer writer = null;
             try {
                 
                 // open stream
                 writer = new OutputStreamWriter(os, "UTF-8");
                 
-                // transfer data
-                DirectoryLister dirLister = handler.getDirectoryLister();
-                syntaxError = !dirLister.doMLSD(request.getArgument(), writer);
+                // parse argument
+                ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
+                
+                FileFormater formater = new MLSTFileFormater((String[])handler.getAttribute("MLST.types"));
+                writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
                 failure = true;
@@ -90,14 +97,13 @@ class MLSD implements Command {
             catch(IOException ex) {
                 failure = true;
                 out.send(551, "MLSD", null);
+            } catch(IllegalArgumentException e) {
+                // if listing syntax error - send message
+                out.send(501, "MLSD", null);
             }
             finally {
+                writer.flush();
                 IoUtils.close(writer);
-            }
-            
-            // if listing syntax error - send message
-            if(syntaxError) {
-                out.send(501, "MLSD", null);
             }
             
             // if data transfer ok - send transfer complete message
