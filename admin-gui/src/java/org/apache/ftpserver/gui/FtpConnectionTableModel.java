@@ -35,7 +35,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
 
 
@@ -53,13 +53,13 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                                                "Last Access Time",    
                                                "IP"};
     private List connections = new Vector();
-    private ServerFtpConfig fonfig;
+    private FtpServerContext fonfig;
     private EventListenerList listeners = new EventListenerList();
     
     /**
      * Reload the model.
      */
-    public void refresh(ServerFtpConfig cfg) {
+    public void refresh(FtpServerContext cfg) {
         fonfig = cfg;
         if (fonfig != null) {
             ConnectionManager conManager = fonfig.getConnectionManager();

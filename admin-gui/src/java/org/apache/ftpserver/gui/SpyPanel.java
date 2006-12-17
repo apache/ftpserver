@@ -41,7 +41,7 @@ import javax.swing.text.StyleConstants;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 
 /**
@@ -58,7 +58,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private JTabbedPane parent = null;
     private JComponent defaultTab = null;
     
-    private ServerFtpConfig fconfig   = null;
+    private FtpServerContext fconfig   = null;
     private Connection connection = null;
     
     private SimpleAttributeSet reqAttrs = null;
@@ -68,7 +68,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     /**
      * Instantiate this dialog box
      */
-    public SpyPanel(ServerFtpConfig config, 
+    public SpyPanel(FtpServerContext config, 
                     Connection con, 
                     JTabbedPane parent,
                     JComponent defaultTab) {

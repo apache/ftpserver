@@ -34,7 +34,7 @@ import javax.swing.JTable;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This panel displays all user file upload, download and remove activities.
@@ -52,7 +52,7 @@ class FilePanel extends PluginPanel {
             "Deleted"
     };
     
-    private ServerFtpConfig        fconfig;
+    private FtpServerContext        fconfig;
     private FtpFileTableModel[] models;
     
     
@@ -141,7 +141,7 @@ class FilePanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(ServerFtpConfig config) {
+    public void refresh(FtpServerContext config) {
         fconfig = config;
     }
     

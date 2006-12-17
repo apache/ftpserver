@@ -21,7 +21,7 @@ package org.apache.ftpserver.gui;
 
 import javax.swing.JPanel;
 
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This is the base class of all the ftp panels.
@@ -50,7 +50,7 @@ abstract class PluginPanel extends JPanel {
     /**
      * Refresh the panel with the new ftp config
      */
-    public abstract void refresh(ServerFtpConfig ftpConfig);
+    public abstract void refresh(FtpServerContext ftpConfig);
     
     
     /**

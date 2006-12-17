@@ -34,7 +34,7 @@ import javax.swing.JTable;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This panel monitor all user directory create and remove activities.
@@ -51,7 +51,7 @@ class DirectoryPanel extends PluginPanel {
             "Removed"
     };
     
-    private ServerFtpConfig        fconfig;
+    private FtpServerContext        fconfig;
     private FtpDirectoryTableModel[] models;
     
     
@@ -132,7 +132,7 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(ServerFtpConfig config) {
+    public void refresh(FtpServerContext config) {
         fconfig = config;
         models[0].clear();
         models[1].clear();

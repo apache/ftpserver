@@ -31,7 +31,7 @@ import javax.swing.JTabbedPane;
 
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This panel monitors user request/replies.
@@ -46,7 +46,7 @@ class SpyPanelContainer extends PluginPanel {
     private JTabbedPane tabbedPane;
     private JLabel defaultComp;
     
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     
     
     /**
@@ -123,7 +123,7 @@ class SpyPanelContainer extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(ServerFtpConfig ftpConfig) {
+    public void refresh(FtpServerContext ftpConfig) {
         fconfig = ftpConfig;
         int tabCount = tabbedPane.getTabCount();
         for(int i=tabCount; --i>=0; ) {

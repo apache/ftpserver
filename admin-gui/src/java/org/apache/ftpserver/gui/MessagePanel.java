@@ -43,7 +43,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This is FTP server response panel. User can customize server responses.
@@ -55,7 +55,7 @@ class MessagePanel extends PluginPanel {
 
     private static final long serialVersionUID = -68038181884794057L;
     
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     private JComboBox comboBox;
     
     private JList list;
@@ -238,7 +238,7 @@ class MessagePanel extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(ServerFtpConfig ftpConfig) {
+    public void refresh(FtpServerContext ftpConfig) {
         fconfig = ftpConfig;
         comboBox.removeAllItems();
         list.removeAll();

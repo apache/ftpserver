@@ -35,7 +35,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * Tree plugin panel container.
@@ -53,7 +53,7 @@ class TreePluginPanelContainer extends JSplitPane
     private ArrayList pluginPanels = new ArrayList();
     private Vector treeListeners = new Vector();
     
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     
     private JPanel rightPane;
     private JTree tree;
@@ -193,7 +193,7 @@ class TreePluginPanelContainer extends JSplitPane
     /**
      * Get ftp config.
      */
-    public void refresh(ServerFtpConfig ftpConfig) {
+    public void refresh(FtpServerContext ftpConfig) {
         fconfig = ftpConfig;
         for(int i=0; i<pluginPanels.size(); ++i) {
             PluginPanel ppanel = (PluginPanel)pluginPanels.get(i);
@@ -204,7 +204,7 @@ class TreePluginPanelContainer extends JSplitPane
     /**
      * Get ftp config.
      */
-    public ServerFtpConfig getFtpConfig() {
+    public FtpServerContext getFtpConfig() {
         return fconfig;
     }
 }

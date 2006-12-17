@@ -31,7 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This panel shows all the connections.
@@ -43,7 +43,7 @@ class ConnectionPanel extends PluginPanel {
 
     private static final long serialVersionUID = 3774741162954995177L;
     
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     private JTable conTable;   
     private FtpConnectionTableModel model;
     
@@ -158,7 +158,7 @@ class ConnectionPanel extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(ServerFtpConfig ftpConfig) {
+    public void refresh(FtpServerContext ftpConfig) {
         fconfig = ftpConfig;
         model.refresh(ftpConfig);
     }
