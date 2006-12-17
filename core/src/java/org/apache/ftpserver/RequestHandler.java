@@ -237,7 +237,7 @@ class RequestHandler implements Connection {
                 
                 // connection limit check
                 int maxConnections = conManager.getMaxConnections();
-                System.out.println(ftpStat.getCurrentConnectionNumber() + " -- " + maxConnections);
+                
                 if(maxConnections != 0 && ftpStat.getCurrentConnectionNumber() > maxConnections) {
                     log.warn("Maximum connection limit reached.");
                     writer.send(530, "connection.limit", null);
