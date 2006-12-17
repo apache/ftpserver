@@ -313,5 +313,9 @@
     <properties>
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
+        
+        <commons-logging-version>1.1</commons-logging-version>
+        <junit-version>3.8.1</junit-version>
+        <log4j-version>1.2.13</log4j-version>
     </properties>
 </project>
