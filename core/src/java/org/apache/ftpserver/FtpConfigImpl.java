@@ -20,22 +20,26 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
 import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
-import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
 
@@ -92,11 +96,9 @@ class FtpConfigImpl implements ServerFtpConfig {
                 createDefaultUsers();
             }
             
-            // create and initialize ftlets
-            ftpletContainer = new FtpletContainer();
-            String ftpletNames = conf.getString("ftplets", null);
-            Configuration ftpletConf = conf.subset("ftplet");
-            ftpletContainer.init(this, ftpletNames, ftpletConf);        
+            ftpletContainer    = (FtpletContainer) createComponent(conf, "ftplet-container",     DefaultFtpletContainer.class.getName());
+       
+            initFtplets(ftpletContainer, conf);
         }
         catch(Exception ex) {
             dispose();
@@ -104,6 +106,49 @@ class FtpConfigImpl implements ServerFtpConfig {
         }
     }
 
+    /**
+     * create and initialize ftlets
+     * @param container
+     * @param conf
+     * @throws FtpException
+     */
+    private void initFtplets(FtpletContainer container, Configuration conf) throws FtpException {
+        String ftpletNames = conf.getString("ftplets", null);
+        Configuration ftpletConf = conf.subset("ftplet");
+                
+        if(ftpletNames == null) {
+            return;
+        }
+        
+        //log = ftpConfig.getLogFactory().getInstance(getClass());
+        StringTokenizer st = new StringTokenizer(ftpletNames, " ,;\r\n\t");
+        try {
+            while(st.hasMoreTokens()) {
+                String ftpletName = st.nextToken();
+                log.info("Configuring ftplet : " + ftpletName);
+                
+                // get ftplet specific configuration
+                Configuration subConfig = ftpletConf.subset(ftpletName);
+                String className = subConfig.getString("class", null);
+                if(className == null) {
+                    continue;
+                }
+                Ftplet ftplet = (Ftplet)Class.forName(className).newInstance();
+                ftplet.init(this, subConfig);
+                container.addFtplet(ftpletName, ftplet);
+            }
+        }
+        catch(FtpException ex) {
+            container.destroy();
+            throw ex;
+        }
+        catch(Exception ex) {
+            container.destroy();
+            log.fatal("FtpletContainer.init()", ex);
+            throw new FtpException("FtpletContainer.init()", ex);
+        }
+    }
+    
     /**
      * Create component. 
      */
@@ -276,7 +321,9 @@ class FtpConfigImpl implements ServerFtpConfig {
         }
         
         if(ftpletContainer != null) {
-            ftpletContainer.destroy();
+            if(ftpletContainer instanceof Component) {
+                ((Component)ftpletContainer).dispose();
+            }
             ftpletContainer = null;
         }
         

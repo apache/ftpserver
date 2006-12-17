@@ -17,20 +17,14 @@
  * under the License.
  */  
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpConfig;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
@@ -38,10 +32,10 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class FtpletContainer implements Ftplet {
+class DefaultFtpletContainer implements Component, FtpletContainer {
     
     private Log log;
-    private ArrayList ftplets = new ArrayList();
+    private List ftplets = new ArrayList();
     
     private static class FtpletEntry {
         public FtpletEntry(String name, Ftplet ftplet) {
@@ -52,50 +46,54 @@ class FtpletContainer implements Ftplet {
         final Ftplet ftplet;
     }
     
-    /**
-     * Dummy method - does nothing.
-     */
-    public void init(FtpConfig ftpConfig, Configuration config) throws FtpException {
+    public void configure(Configuration config) throws FtpException {
+        // do nothing
     }
-    
-    /**
-     * Initializes all the ftplets registered.
-     */
-    public void init(FtpConfig ftpConfig, 
-                     String ftpletNames, 
-                     Configuration ftpletConf) throws FtpException {
-        
-        if(ftpletNames == null) {
-            return;
-        }
-        
-        log = ftpConfig.getLogFactory().getInstance(getClass());
-        StringTokenizer st = new StringTokenizer(ftpletNames, " ,;\r\n\t");
-        try {
-            while(st.hasMoreTokens()) {
-                String ftpletName = st.nextToken();
-                log.info("Configuring ftplet : " + ftpletName);
-                
-                // get ftplet specific configuration
-                Configuration subConfig = ftpletConf.subset(ftpletName);
-                String className = subConfig.getString("class", null);
-                if(className == null) {
-                    continue;
-                }
-                Ftplet ftplet = (Ftplet)Class.forName(className).newInstance();
-                ftplet.init(ftpConfig, subConfig);
-                ftplets.add(new FtpletEntry(ftpletName, ftplet));
+
+    public void dispose() {
+        int sz = ftplets.size();
+        for(int i=0; i<sz; ++i) {
+            FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
+            try {
+                ftpletEnt.ftplet.destroy();
+            }
+            catch(Exception ex) {
+                log.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
             }
         }
-        catch(FtpException ex) {
-            destroy();
-            throw ex;
+        ftplets.clear();
+        
+    }
+
+    public void setLogFactory(LogFactory logFact) {
+        log = logFact.getInstance(DefaultFtpletContainer.class);
+        
+    }
+    
+    public void addFtplet(String name, Ftplet ftplet) {
+        if(getFtplet(name) != null) {
+            throw new IllegalArgumentException("Ftplet with name \"" + name + "\" already registred with container");
         }
-        catch(Exception ex) {
-            destroy();
-            log.fatal("FtpletContainer.init()", ex);
-            throw new FtpException("FtpletContainer.init()", ex);
+        
+        ftplets.add(new FtpletEntry(name, ftplet));
+    }
+
+    public Ftplet removeFtplet(String name) {
+        int sz = ftplets.size();
+        Ftplet removedFtplet = null;
+        for (int i=0; i<sz; i++) {
+            FtpletEntry entry = (FtpletEntry) ftplets.get(i);
+            
+            if(name.equals(entry.name)) {
+                ftplets.remove(i);
+                removedFtplet = entry.ftplet;
+                break;
+            }
+            
         }
+        
+        return removedFtplet;
+        
     }
     
     /**
@@ -122,17 +120,7 @@ class FtpletContainer implements Ftplet {
      * Destroy all ftplets.
      */
     public void destroy() {
-        int sz = ftplets.size();
-        for(int i=0; i<sz; ++i) {
-            FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            try {
-                ftpletEnt.ftplet.destroy();
-            }
-            catch(Exception ex) {
-                log.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
-            }
-        }
-        ftplets.clear();
+        dispose();
     }
     
     /**
@@ -555,4 +543,10 @@ class FtpletContainer implements Ftplet {
         }
         return retVal;
     }
+
+    public void init(FtpConfig ftpConfig, Configuration config) throws FtpException {
+        // dummy, forces by Ftplet API       
+    }
+
+
 }
