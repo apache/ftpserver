@@ -17,57 +17,54 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.ftplet;
 
-import org.apache.ftpserver.ftplet.FtpConfig;
-import org.apache.ftpserver.ftplet.Ftplet;
+import java.net.InetAddress;
+
+import org.apache.commons.logging.LogFactory;
 
 /**
- * This is basically <code>org.apache.ftpserver.ftplet.FtpConfig</code> with added
- * connection manager, message resource functionalities.
+ * A ftplet configuration object used by a ftplet container used to pass 
+ * information to a ftplet during initialization. The configuration information 
+ * contains initialization parameters.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-interface ServerFtpConfig extends FtpConfig {
+interface FtpletContext {
 
     /**
-     * Get connection manager.
+     * Get the log factory.
      */
-    ConnectionManager getConnectionManager();
+    public LogFactory getLogFactory();
     
     /**
-     * Get message resource.
+     * Get the user manager.
      */
-    MessageResource getMessageResource();
+    UserManager getUserManager();
+     
+    /**
+     * Get file system manager
+     */
+    FileSystemManager getFileSystemManager();
+     
+    /**
+     * Get ftp statistics.
+     */
+    FtpStatistics getFtpStatistics();
     
     /**
-     * Get IP restrictor.
+     * Get Ftplet.
      */
-    IpRestrictor getIpRestrictor();
+    Ftplet getFtplet(String name);
     
     /**
-     * Get ftplet container.
+     * Get server address.
      */
-    Ftplet getFtpletContainer();
-    
-    /**
-     * Get server socket factory.
-     */
-    SocketFactory getSocketFactory();
+    InetAddress getServerAddress();
         
     /**
-     * Get data connection config.
-     */
-    DataConnectionConfig getDataConnectionConfig();
-    
-    /**
-     * Get the command factory.
-     */
-    CommandFactory getCommandFactory();
-    
-    /**
-     * Release all components.
-     */
-    void dispose();
+     * Get server port.
+     */ 
+    int getServerPort();
 }

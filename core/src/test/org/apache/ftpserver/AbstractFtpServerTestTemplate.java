@@ -25,7 +25,7 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.config.PropertiesConfiguration;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.test.TestUtil;
 
@@ -68,7 +68,7 @@ public abstract class AbstractFtpServerTestTemplate extends TestCase {
         this.serverPort = TestUtil.findFreePort();
         
         // create root configuration object
-        final ServerFtpConfig ftpConfig = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
+        final FtpServerContext ftpConfig = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
 
         // start the server
         this.ftpServer = new FtpServer(ftpConfig);

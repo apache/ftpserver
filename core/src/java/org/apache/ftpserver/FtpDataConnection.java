@@ -26,7 +26,7 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
 
 
@@ -41,7 +41,7 @@ class FtpDataConnection {
     
     private Log log;
     
-    private ServerFtpConfig    fconfig;
+    private FtpServerContext    fconfig;
     private Socket        dataSoc;
     private ServerSocket  servSoc;
     
@@ -62,7 +62,7 @@ class FtpDataConnection {
     /**
      * Set the ftp config.
      */
-    public void setFtpConfig(ServerFtpConfig cfg) {
+    public void setFtpConfig(FtpServerContext cfg) {
         fconfig = cfg;
         log = fconfig.getLogFactory().getInstance(getClass());
     }

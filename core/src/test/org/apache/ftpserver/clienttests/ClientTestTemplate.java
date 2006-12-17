@@ -33,7 +33,7 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpConfigImpl;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.log4j.Logger;
@@ -54,7 +54,7 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected int port = -1;
 
-    private ServerFtpConfig config;
+    private FtpServerContext config;
 
     protected FTPClient client;
 

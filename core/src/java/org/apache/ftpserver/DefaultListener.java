@@ -7,7 +7,7 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * The default {@link Listener} implementation.
@@ -17,7 +17,7 @@ public class DefaultListener implements Listener, Runnable {
 
     private Log log;
     
-    private ServerFtpConfig ftpConfig;
+    private FtpServerContext ftpConfig;
 
     private ServerSocket serverSocket;
 
@@ -30,7 +30,7 @@ public class DefaultListener implements Listener, Runnable {
      * 
      * @param ftpConfig Configuration for the listener
      */
-    public DefaultListener(ServerFtpConfig ftpConfig) {
+    public DefaultListener(FtpServerContext ftpConfig) {
         this.ftpConfig = ftpConfig;
         
         log = ftpConfig.getLogFactory().getInstance(getClass());

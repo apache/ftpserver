@@ -27,7 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * Data channel protection level.
@@ -62,7 +62,7 @@ class PROT implements Command {
             out.send(200, "PROT", null);
         }
         else if(arg.equals("P")) {
-            ServerFtpConfig fconfig = handler.getConfig();
+            FtpServerContext fconfig = handler.getConfig();
             if(fconfig.getDataConnectionConfig().getSSL() == null) {
                 out.send(431, "PROT", null);
             }

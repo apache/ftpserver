@@ -17,54 +17,57 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.interfaces;
 
-import java.net.InetAddress;
-
-import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.FtpletContext;
+import org.apache.ftpserver.ftplet.Ftplet;
 
 /**
- * A ftplet configuration object used by a ftplet container used to pass 
- * information to a ftplet during initialization. The configuration information 
- * contains initialization parameters.
+ * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with added
+ * connection manager, message resource functionalities.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-interface FtpConfig {
+interface FtpServerContext extends FtpletContext {
 
     /**
-     * Get the log factory.
+     * Get connection manager.
      */
-    public LogFactory getLogFactory();
+    ConnectionManager getConnectionManager();
     
     /**
-     * Get the user manager.
+     * Get message resource.
      */
-    UserManager getUserManager();
-     
-    /**
-     * Get file system manager
-     */
-    FileSystemManager getFileSystemManager();
-     
-    /**
-     * Get ftp statistics.
-     */
-    FtpStatistics getFtpStatistics();
+    MessageResource getMessageResource();
     
     /**
-     * Get Ftplet.
+     * Get IP restrictor.
      */
-    Ftplet getFtplet(String name);
+    IpRestrictor getIpRestrictor();
     
     /**
-     * Get server address.
+     * Get ftplet container.
      */
-    InetAddress getServerAddress();
+    Ftplet getFtpletContainer();
+    
+    /**
+     * Get server socket factory.
+     */
+    SocketFactory getSocketFactory();
         
     /**
-     * Get server port.
-     */ 
-    int getServerPort();
+     * Get data connection config.
+     */
+    DataConnectionConfig getDataConnectionConfig();
+    
+    /**
+     * Get the command factory.
+     */
+    CommandFactory getCommandFactory();
+    
+    /**
+     * Release all components.
+     */
+    void dispose();
 }

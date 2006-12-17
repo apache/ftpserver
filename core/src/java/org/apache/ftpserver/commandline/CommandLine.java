@@ -27,7 +27,7 @@ import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.config.XmlConfigurationHandler;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.EmptyConfiguration;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -76,7 +76,7 @@ class CommandLine {
             }
 
             // create root configuration object
-            ServerFtpConfig ftpConfig = new FtpConfigImpl(config);
+            FtpServerContext ftpConfig = new FtpConfigImpl(config);
 
             // start the server
             FtpServer server = new FtpServer(ftpConfig);

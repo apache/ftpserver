@@ -55,13 +55,13 @@ interface Ftplet {
      * the ftplet. The init method must complete successfully before the ftplet can 
      * receive any requests.
      */
-    void init(FtpConfig ftpConfig, Configuration config) throws FtpException;
+    void init(FtpletContext ftpletContext, Configuration config) throws FtpException;
     
     /**
      * Called by the servlet container to indicate to a ftplet that the ftplet is 
      * being taken out of service. This method is only called once all threads within 
      * the ftplet's service method have exited. After the ftplet container calls this 
-     * method, callback methods will not be executed. If the ftplet initializarion 
+     * method, callback methods will not be executed. If the ftplet initialization 
      * method fails, this method will not be called. 
      */
     void destroy();

@@ -27,7 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This server supports explicit SSL support.
@@ -55,7 +55,7 @@ class AUTH implements Command {
         }
         
         // check SSL configuration
-        ServerFtpConfig fconfig = handler.getConfig();
+        FtpServerContext fconfig = handler.getConfig();
         Log log = fconfig.getLogFactory().getInstance(getClass());
         if(fconfig.getSocketFactory().getSSL() == null) {
             out.send(431, "AUTH", null);

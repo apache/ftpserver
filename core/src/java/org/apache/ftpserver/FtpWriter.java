@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.IoUtils;
@@ -94,7 +94,7 @@ class FtpWriter implements FtpResponse {
     private Log log;
     private Writer writer;
     private ConnectionObserver observer;
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     private FtpRequest request;
     private InetAddress serverAddress;
 
@@ -110,7 +110,7 @@ class FtpWriter implements FtpResponse {
     /**
      * Set ftp config.
      */
-    public void setFtpConfig(ServerFtpConfig fconfig) {
+    public void setFtpConfig(FtpServerContext fconfig) {
         this.fconfig = fconfig;
         log = this.fconfig.getLogFactory().getInstance(getClass());
     }

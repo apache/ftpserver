@@ -30,7 +30,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 
 /**
@@ -52,7 +52,7 @@ class SITE implements Command {
                         FtpWriter out) throws IOException, FtpException {
         
         // call Ftplet.onSite method
-        ServerFtpConfig fconfig = handler.getConfig();
+        FtpServerContext fconfig = handler.getConfig();
         Ftplet ftpletContainer = fconfig.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {

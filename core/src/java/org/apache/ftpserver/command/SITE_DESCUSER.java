@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FtpConfig;
+import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
@@ -66,7 +66,7 @@ class SITE_DESCUSER implements Command {
         String userName = argument.substring(spIndex + 1);
         
         // check the user existance
-        FtpConfig fconfig = handler.getConfig();
+        FtpletContext fconfig = handler.getConfig();
         UserManager usrManager = fconfig.getUserManager();
         User user = null;
         try {

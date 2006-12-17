@@ -24,6 +24,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
@@ -38,10 +39,14 @@ import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.SocketFactory;
+import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
+import org.apache.ftpserver.message.MessageResourceImpl;
+import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.PropertiesUserManager;
 
 /**
  * FTP server configuration implementation. It holds all 
@@ -50,7 +55,7 @@ import org.apache.ftpserver.usermanager.BaseUser;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpConfigImpl implements ServerFtpConfig {
+class FtpConfigImpl implements FtpServerContext {
 
     private LogFactory logFactory;
     private SocketFactory socketFactory;
@@ -80,15 +85,15 @@ class FtpConfigImpl implements ServerFtpConfig {
             log        = logFactory.getInstance(FtpConfigImpl.class);
             
             // create all the components
-            socketFactory     = (SocketFactory)        createComponent(conf, "socket-factory",      "org.apache.ftpserver.socketfactory.FtpSocketFactory");
-            dataConConfig     = (DataConnectionConfig) createComponent(conf, "data-connection",     "org.apache.ftpserver.DefaultDataConnectionConfig"); 
-            messageResource   = (MessageResource)      createComponent(conf, "message",             "org.apache.ftpserver.message.MessageResourceImpl");
-            connectionManager = (ConnectionManager)    createComponent(conf, "connection-manager",  "org.apache.ftpserver.ConnectionManagerImpl");
-            ipRestrictor      = (IpRestrictor)         createComponent(conf, "ip-restrictor",       "org.apache.ftpserver.iprestrictor.FileIpRestrictor");
-            userManager       = (UserManager)           createComponent(conf, "user-manager",        "org.apache.ftpserver.usermanager.PropertiesUserManager");
-            fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", "org.apache.ftpserver.filesystem.NativeFileSystemManager");
-            statistics        = (ServerFtpStatistics)        createComponent(conf, "statistics",          "org.apache.ftpserver.FtpStatisticsImpl");
-            commandFactory    = (CommandFactory)       createComponent(conf, "command-factory",     "org.apache.ftpserver.DefaultCommandFactory");
+            socketFactory     = (SocketFactory)        createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());
+            dataConConfig     = (DataConnectionConfig) createComponent(conf, "data-connection",     DefaultDataConnectionConfig.class.getName()); 
+            messageResource   = (MessageResource)      createComponent(conf, "message",             MessageResourceImpl.class.getName());
+            connectionManager = (ConnectionManager)    createComponent(conf, "connection-manager",  ConnectionManagerImpl.class.getName());
+            ipRestrictor      = (IpRestrictor)         createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
+            userManager       = (UserManager)           createComponent(conf, "user-manager",        PropertiesUserManager.class.getName());
+            fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", NativeFileSystemManager.class.getName());
+            statistics        = (ServerFtpStatistics)        createComponent(conf, "statistics",          FtpStatisticsImpl.class.getName());
+            commandFactory    = (CommandFactory)       createComponent(conf, "command-factory",     DefaultCommandFactory.class.getName());
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);

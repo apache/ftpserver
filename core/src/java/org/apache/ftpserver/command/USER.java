@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.ConnectionManager;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.BaseUser;
 
@@ -54,7 +54,7 @@ class USER implements Command {
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
-        ServerFtpConfig fconfig = handler.getConfig();
+        FtpServerContext fconfig = handler.getConfig();
         ConnectionManager conManager = fconfig.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)fconfig.getFtpStatistics();
         try {
@@ -100,7 +100,7 @@ class USER implements Command {
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
-            if(currLogin >= maxLogin) {
+            if(maxLogin != 0 && currLogin >= maxLogin) {
                 out.send(421, "USER.login", null);
                 return;
             }

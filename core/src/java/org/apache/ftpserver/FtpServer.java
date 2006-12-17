@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
@@ -38,7 +38,7 @@ public class FtpServer {
 
     private Thread runner;
 
-    private ServerFtpConfig ftpConfig;
+    private FtpServerContext ftpConfig;
 
     private Log log;
 
@@ -49,7 +49,7 @@ public class FtpServer {
     /**
      * Constructor. Set the server object.
      */
-    public FtpServer(ServerFtpConfig ftpConfig) {
+    public FtpServer(FtpServerContext ftpConfig) {
         this.ftpConfig = ftpConfig;
         log = this.ftpConfig.getLogFactory().getInstance(getClass());
 
@@ -123,7 +123,7 @@ public class FtpServer {
     /**
      * Get the root server configuration object.
      */
-    public ServerFtpConfig getFtpConfig() {
+    public FtpServerContext getFtpConfig() {
         return ftpConfig;
     }
 }

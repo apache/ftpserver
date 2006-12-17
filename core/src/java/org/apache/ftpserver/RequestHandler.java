@@ -47,7 +47,7 @@ import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.IpRestrictor;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listing.DirectoryLister;
@@ -63,7 +63,7 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class RequestHandler implements Connection {
     
-    private ServerFtpConfig fconfig;
+    private FtpServerContext fconfig;
     private Log log;
     
     private Socket controlSocket;
@@ -81,7 +81,7 @@ class RequestHandler implements Connection {
     /**
      * Constructor - set the control socket.
      */
-    public RequestHandler(ServerFtpConfig fconfig, Socket controlSocket) throws IOException {
+    public RequestHandler(FtpServerContext fconfig, Socket controlSocket) throws IOException {
         this.fconfig = fconfig;
         this.controlSocket = controlSocket;
         log = this.fconfig.getLogFactory().getInstance(getClass());
@@ -124,7 +124,7 @@ class RequestHandler implements Connection {
     /**
      * Get the configuration object.
      */
-    public ServerFtpConfig getConfig() {
+    public FtpServerContext getConfig() {
         return fconfig;
     }
                 
@@ -237,7 +237,8 @@ class RequestHandler implements Connection {
                 
                 // connection limit check
                 int maxConnections = conManager.getMaxConnections();
-                if(ftpStat.getCurrentConnectionNumber() > maxConnections) {
+                System.out.println(ftpStat.getCurrentConnectionNumber() + " -- " + maxConnections);
+                if(maxConnections != 0 && ftpStat.getCurrentConnectionNumber() > maxConnections) {
                     log.warn("Maximum connection limit reached.");
                     writer.send(530, "connection.limit", null);
                     return;

@@ -71,7 +71,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
 /*    public void testExceptionDuringInit() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public void init(FtpConfig ftpConfig, Configuration config)
+            public void init(FtpletContext ftpConfig, Configuration config)
                     throws FtpException {
                 throw new RuntimeException();
             }

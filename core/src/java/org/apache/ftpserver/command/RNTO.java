@@ -30,7 +30,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * <code>RNTO &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -62,7 +62,7 @@ class RNTO implements Command {
             }
             
             // call Ftplet.onRenameStart() method
-            ServerFtpConfig fconfig = handler.getConfig();
+            FtpServerContext fconfig = handler.getConfig();
             Ftplet ftpletContainer = fconfig.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
