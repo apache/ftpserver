@@ -43,7 +43,7 @@ class ConnectionPanel extends PluginPanel {
 
     private static final long serialVersionUID = 3774741162954995177L;
     
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     private JTable conTable;   
     private FtpConnectionTableModel model;
     
@@ -101,7 +101,7 @@ class ConnectionPanel extends PluginPanel {
         
         jReloadBtn.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
-                refresh(fconfig);
+                refresh(serverContext);
              }
         });
     }
@@ -125,7 +125,7 @@ class ConnectionPanel extends PluginPanel {
         for(int i=indices.length; --i>=0; ) {
             Connection con = model.getConnection(indices[i]);
             if(con != null) {
-                fconfig.getConnectionManager().closeConnection(con);
+                serverContext.getConnectionManager().closeConnection(con);
             }
         }
     }
@@ -159,7 +159,7 @@ class ConnectionPanel extends PluginPanel {
      * Refresh the ftp configuration
      */
     public void refresh(FtpServerContext ftpConfig) {
-        fconfig = ftpConfig;
+        serverContext = ftpConfig;
         model.refresh(ftpConfig);
     }
 
@@ -168,7 +168,7 @@ class ConnectionPanel extends PluginPanel {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
 
     

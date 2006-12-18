@@ -93,7 +93,7 @@ class StatisticsPanel extends PluginPanel
             "Total connections"
     };
 
-    private FtpServerContext ftpConfig;
+    private FtpServerContext serverContext;
     private ServerFtpStatistics statistics;
     private String data[] = new String[STAT_NAMES.length];
     private EventListenerList listeners = new EventListenerList();
@@ -135,7 +135,7 @@ class StatisticsPanel extends PluginPanel
         btnPanel.add(reloadButton);
         reloadButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                refresh(ftpConfig);
+                refresh(serverContext);
             }
         });
 
@@ -143,7 +143,7 @@ class StatisticsPanel extends PluginPanel
         btnPanel.add(resetButton);
         resetButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                resetStats(ftpConfig);
+                resetStats(serverContext);
             }
         });
     }
@@ -239,10 +239,10 @@ class StatisticsPanel extends PluginPanel
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(FtpServerContext ftpConfig) {
-        this.ftpConfig = ftpConfig;
-        if (this.ftpConfig != null) {
-            statistics = (ServerFtpStatistics)this.ftpConfig.getFtpStatistics();
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
+        if (this.serverContext != null) {
+            statistics = (ServerFtpStatistics)this.serverContext.getFtpStatistics();
             statistics.setObserver(this);
             statistics.setFileObserver(this);
             
@@ -267,13 +267,13 @@ class StatisticsPanel extends PluginPanel
         }
     }
     
-    public void resetStats(FtpServerContext ftpConfig) {
-        this.ftpConfig = ftpConfig;
-        if (this.ftpConfig != null) {
-            statistics = (ServerFtpStatistics)this.ftpConfig.getFtpStatistics();
+    public void resetStats(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
+        if (this.serverContext != null) {
+            statistics = (ServerFtpStatistics)this.serverContext.getFtpStatistics();
             statistics.resetStatisticsCounters();
             
-            refresh(ftpConfig);
+            refresh(serverContext);
         }
     }
 
@@ -508,7 +508,7 @@ class StatisticsPanel extends PluginPanel
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (ftpConfig != null);
+        return (serverContext != null);
     }
 
     /**

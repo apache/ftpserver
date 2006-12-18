@@ -70,10 +70,10 @@ interface PluginPanelContainer {
     /**
      * Refresh with new ftp configuration object.
      */
-    void refresh(FtpServerContext config);
+    void refresh(FtpServerContext serverContext);
     
     /**
      * Get current ftp config
      */
-    FtpServerContext getFtpConfig();
+    FtpServerContext getServerContext();
 }

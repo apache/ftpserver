@@ -56,7 +56,7 @@ class MKD implements Command {
         
         // reset state
         request.resetState(); 
-        FtpServerContext fconfig = handler.getConfig();
+        FtpServerContext serverContext = handler.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
@@ -66,7 +66,7 @@ class MKD implements Command {
         }
         
         // call Ftplet.onMkdirStart() method
-        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try{
             ftpletRet = ftpletContainer.onMkdirStart(request, out);
@@ -77,7 +77,7 @@ class MKD implements Command {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            fconfig.getConnectionManager().closeConnection(handler);
+            serverContext.getConnectionManager().closeConnection(handler);
             return;
         }
         
@@ -112,11 +112,11 @@ class MKD implements Command {
             
             // write log message
             String userName = request.getUser().getName();
-            Log log = fconfig.getLogFactory().getInstance(getClass());
+            Log log = serverContext.getLogFactory().getInstance(getClass());
             log.info("Directory create : " + userName + " - " + fileName);
             
             // notify statistics object
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)handler.getConfig().getFtpStatistics();
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)handler.getServerContext().getFtpStatistics();
             ftpStat.setMkdir(handler, file);
             
             // call Ftplet.onMkdirEnd() method
@@ -126,7 +126,7 @@ class MKD implements Command {
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(handler);
                 return;
             }
 

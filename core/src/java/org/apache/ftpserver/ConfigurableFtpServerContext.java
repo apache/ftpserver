@@ -55,7 +55,7 @@ import org.apache.ftpserver.usermanager.PropertiesUserManager;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpConfigImpl implements FtpServerContext {
+class ConfigurableFtpServerContext implements FtpServerContext {
 
     private LogFactory logFactory;
     private SocketFactory socketFactory;
@@ -75,14 +75,14 @@ class FtpConfigImpl implements FtpServerContext {
     /**
      * Constructor - set the root configuration.
      */
-    public FtpConfigImpl(Configuration conf) throws Exception {
+    public ConfigurableFtpServerContext(Configuration conf) throws Exception {
         
         try {
             
             // get the log classes
             logFactory = LogFactory.getFactory();
             logFactory = new FtpLogFactory(logFactory);
-            log        = logFactory.getInstance(FtpConfigImpl.class);
+            log        = logFactory.getInstance(ConfigurableFtpServerContext.class);
             
             // create all the components
             socketFactory     = (SocketFactory)        createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());

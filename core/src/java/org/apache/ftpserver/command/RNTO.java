@@ -62,8 +62,8 @@ class RNTO implements Command {
             }
             
             // call Ftplet.onRenameStart() method
-            FtpServerContext fconfig = handler.getConfig();
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            FtpServerContext serverContext = handler.getServerContext();
+            Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
                 ftpletRet = ftpletContainer.onRenameStart(request, out);
@@ -74,7 +74,7 @@ class RNTO implements Command {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(handler);
                 return;
             }
             
@@ -114,7 +114,7 @@ class RNTO implements Command {
             if( frFile.move(toFile) ) { 
                 out.send(250, "RNTO", toFileStr);
 
-                Log log = fconfig.getLogFactory().getInstance(getClass());
+                Log log = serverContext.getLogFactory().getInstance(getClass());
                 log.info("File rename (" + request.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
                 
@@ -125,7 +125,7 @@ class RNTO implements Command {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    fconfig.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(handler);
                     return;
                 }
             }

@@ -45,7 +45,7 @@ class QUIT implements Command {
                         FtpWriter out) throws IOException {
         request.resetState();
         out.send(221, "QUIT", null);
-        handler.getConfig().getConnectionManager().closeConnection(handler);
+        handler.getServerContext().getConnectionManager().closeConnection(handler);
     }
 
 }

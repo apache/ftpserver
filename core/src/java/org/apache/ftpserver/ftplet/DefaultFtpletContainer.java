@@ -545,7 +545,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     }
 
     public void init(FtpletContext ftpletContext, Configuration config) throws FtpException {
-        // dummy, forces by Ftplet API       
+        // dummy, forced by Ftplet API       
     }
 
 

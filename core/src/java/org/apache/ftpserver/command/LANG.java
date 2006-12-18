@@ -58,7 +58,7 @@ class LANG implements Command {
         
         // check and set language
         language = language.toLowerCase();
-        MessageResource msgResource = handler.getConfig().getMessageResource();
+        MessageResource msgResource = handler.getServerContext().getMessageResource();
         String[] availableLanguages = msgResource.getAvailableLanguages();
         if(availableLanguages != null) {
             for(int i=0; i<availableLanguages.length; ++i) {

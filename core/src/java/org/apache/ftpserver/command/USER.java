@@ -54,9 +54,9 @@ class USER implements Command {
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
-        FtpServerContext fconfig = handler.getConfig();
-        ConnectionManager conManager = fconfig.getConnectionManager();
-        ServerFtpStatistics stat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+        FtpServerContext serverContext = handler.getServerContext();
+        ConnectionManager conManager = serverContext.getConnectionManager();
+        ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
         try {
             
             // reset state variables
@@ -105,7 +105,7 @@ class USER implements Command {
                 return;
             }
             
-            User configUser = handler.getConfig().getUserManager().getUserByName(userName);
+            User configUser = handler.getServerContext().getUserManager().getUserByName(userName);
             if(configUser != null){
               //user login limit check
               int maxUserLoginNumber = configUser.getMaxLoginNumber();

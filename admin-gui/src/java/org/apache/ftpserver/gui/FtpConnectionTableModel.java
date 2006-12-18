@@ -53,16 +53,16 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                                                "Last Access Time",    
                                                "IP"};
     private List connections = new Vector();
-    private FtpServerContext fonfig;
+    private FtpServerContext serverContext;
     private EventListenerList listeners = new EventListenerList();
     
     /**
      * Reload the model.
      */
-    public void refresh(FtpServerContext cfg) {
-        fonfig = cfg;
-        if (fonfig != null) {
-            ConnectionManager conManager = fonfig.getConnectionManager();
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
+        if (this.serverContext != null) {
+            ConnectionManager conManager = this.serverContext.getConnectionManager();
             connections = conManager.getAllConnections();
             conManager.setObserver(this);
         }

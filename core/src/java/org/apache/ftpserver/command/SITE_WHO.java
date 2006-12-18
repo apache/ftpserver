@@ -55,7 +55,7 @@ class SITE_WHO implements Command {
         request.resetState();
         
         // only administrator can execute this
-        UserManager userManager = handler.getConfig().getUserManager(); 
+        UserManager userManager = handler.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(request.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
@@ -64,7 +64,7 @@ class SITE_WHO implements Command {
         
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
-        List allCons = handler.getConfig().getConnectionManager().getAllConnections();
+        List allCons = handler.getServerContext().getConnectionManager().getAllConnections();
         
         sb.append('\n');
         for(Iterator conIt = allCons.iterator(); conIt.hasNext(); ) {

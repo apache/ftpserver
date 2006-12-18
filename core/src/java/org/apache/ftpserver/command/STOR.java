@@ -66,7 +66,7 @@ class STOR implements Command {
         
             // get state variable
             long skipLen = request.getFileOffset();
-            FtpServerContext fconfig = handler.getConfig();
+            FtpServerContext serverContext = handler.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
@@ -76,7 +76,7 @@ class STOR implements Command {
             }
             
             // call Ftplet.onUploadStart() method
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
                 ftpletRet = ftpletContainer.onUploadStart(request, out);
@@ -87,7 +87,7 @@ class STOR implements Command {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(handler);
                 return;
             }
             
@@ -137,11 +137,11 @@ class STOR implements Command {
                 
                 // log message
                 String userName = request.getUser().getName();
-                Log log = fconfig.getLogFactory().getInstance(getClass());
+                Log log = serverContext.getLogFactory().getInstance(getClass());
                 log.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
-                ServerFtpStatistics ftpStat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+                ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
                 ftpStat.setUpload(handler, file, transSz);
             }
             catch(SocketException ex) {
@@ -168,7 +168,7 @@ class STOR implements Command {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    fconfig.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(handler);
                     return;
                 }
 

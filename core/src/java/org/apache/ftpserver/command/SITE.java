@@ -52,8 +52,8 @@ class SITE implements Command {
                         FtpWriter out) throws IOException, FtpException {
         
         // call Ftplet.onSite method
-        FtpServerContext fconfig = handler.getConfig();
-        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        FtpServerContext serverContext = handler.getServerContext();
+        Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
             ftpletRet = ftpletContainer.onSite(request, out);
@@ -64,7 +64,7 @@ class SITE implements Command {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            fconfig.getConnectionManager().closeConnection(handler);
+            serverContext.getConnectionManager().closeConnection(handler);
             return;
         }
         
@@ -98,7 +98,7 @@ class SITE implements Command {
             }
         }
         catch(Exception ex) {
-            Log log = fconfig.getLogFactory().getInstance(getClass());
+            Log log = serverContext.getLogFactory().getInstance(getClass());
             log.warn("SITE.execute()", ex);
             request.resetState();
             out.send(500, "SITE", null);

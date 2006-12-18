@@ -41,7 +41,7 @@ class FtpDataConnection {
     
     private Log log;
     
-    private FtpServerContext    fconfig;
+    private FtpServerContext    serverContext;
     private Socket        dataSoc;
     private ServerSocket  servSoc;
     
@@ -62,9 +62,9 @@ class FtpDataConnection {
     /**
      * Set the ftp config.
      */
-    public void setFtpConfig(FtpServerContext cfg) {
-        fconfig = cfg;
-        log = fconfig.getLogFactory().getInstance(getClass());
+    public void setServerContext(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
+        log = serverContext.getLogFactory().getInstance(getClass());
     }
     
     /**
@@ -91,7 +91,7 @@ class FtpDataConnection {
             catch(Exception ex) {
                 log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
-            fconfig.getDataConnectionConfig().releasePassivePort(port);
+            serverContext.getDataConnectionConfig().releasePassivePort(port);
             servSoc = null;
         }
         
@@ -124,7 +124,7 @@ class FtpDataConnection {
         closeDataSocket(); 
         
         // get the passive port
-        int passivePort = fconfig.getDataConnectionConfig().getPassivePort();
+        int passivePort = serverContext.getDataConnectionConfig().getPassivePort();
         if(passivePort == -1) {
             log.warn("Cannot find an available passive port.");
             servSoc = null;
@@ -134,7 +134,7 @@ class FtpDataConnection {
         // open passive server socket and get parameters
         boolean bRet = false;
         try {
-            DataConnectionConfig dataCfg = fconfig.getDataConnectionConfig();
+            DataConnectionConfig dataCfg = serverContext.getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
             if(address == null) {
                 address = serverControlAddress;
@@ -187,7 +187,7 @@ class FtpDataConnection {
 
         // get socket depending on the selection
         dataSoc = null;
-        DataConnectionConfig dataConfig = fconfig.getDataConnectionConfig();
+        DataConnectionConfig dataConfig = serverContext.getDataConnectionConfig();
         try {
             if(isPort) {
                 int localPort = dataConfig.getActiveLocalPort();
@@ -270,7 +270,7 @@ class FtpDataConnection {
         }
         
         // no idle time limit - not a timeout
-        int maxIdleTime = fconfig.getDataConnectionConfig().getMaxIdleTimeMillis();
+        int maxIdleTime = serverContext.getDataConnectionConfig().getMaxIdleTimeMillis();
         if(maxIdleTime == 0) {
             return false;
         }

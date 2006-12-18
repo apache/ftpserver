@@ -81,7 +81,7 @@ class OPTS implements Command {
             }
         }
         catch(Exception ex) {
-            Log log = handler.getConfig().getLogFactory().getInstance(getClass());
+            Log log = handler.getServerContext().getLogFactory().getInstance(getClass());
             log.warn("OPTS.execute()", ex);
             request.resetState();
             out.send(500, "OPTS", null);

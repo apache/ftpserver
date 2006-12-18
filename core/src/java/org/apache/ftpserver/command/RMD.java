@@ -56,7 +56,7 @@ class RMD implements Command {
         
         // reset state variables
         request.resetState();
-        FtpServerContext fconfig = handler.getConfig();
+        FtpServerContext serverContext = handler.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
@@ -66,7 +66,7 @@ class RMD implements Command {
         }
         
         // call Ftplet.onRmdirStart() method
-        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try{
             ftpletRet = ftpletContainer.onRmdirStart(request, out);
@@ -77,7 +77,7 @@ class RMD implements Command {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            fconfig.getConnectionManager().closeConnection(handler);
+            serverContext.getConnectionManager().closeConnection(handler);
             return;
         }
         
@@ -112,11 +112,11 @@ class RMD implements Command {
             
             // write log message
             String userName = request.getUser().getName();
-            Log log = fconfig.getLogFactory().getInstance(getClass());
+            Log log = serverContext.getLogFactory().getInstance(getClass());
             log.info("Directory remove : " + userName + " - " + fileName);
             
             // notify statistics object
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
             ftpStat.setRmdir(handler, file);
             
             // call Ftplet.onRmdirEnd() method
@@ -126,7 +126,7 @@ class RMD implements Command {
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(handler);
                 return;
             }
 

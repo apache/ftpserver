@@ -63,7 +63,7 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class RequestHandler implements Connection {
     
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     private Log log;
     
     private Socket controlSocket;
@@ -81,14 +81,14 @@ class RequestHandler implements Connection {
     /**
      * Constructor - set the control socket.
      */
-    public RequestHandler(FtpServerContext fconfig, Socket controlSocket) throws IOException {
-        this.fconfig = fconfig;
+    public RequestHandler(FtpServerContext serverContext, Socket controlSocket) throws IOException {
+        this.serverContext = serverContext;
         this.controlSocket = controlSocket;
-        log = this.fconfig.getLogFactory().getInstance(getClass());
+        log = this.serverContext.getLogFactory().getInstance(getClass());
         
         // data connection object
         FtpDataConnection dataCon = new FtpDataConnection();
-        dataCon.setFtpConfig(this.fconfig);
+        dataCon.setServerContext(this.serverContext);
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
         
         // reader object
@@ -99,7 +99,7 @@ class RequestHandler implements Connection {
         // writer object
         writer = new FtpWriter();
         writer.setControlSocket(this.controlSocket);
-        writer.setFtpConfig(this.fconfig);
+        writer.setServerContext(this.serverContext);
         writer.setFtpRequest(request);
     }
     
@@ -124,8 +124,8 @@ class RequestHandler implements Connection {
     /**
      * Get the configuration object.
      */
-    public FtpServerContext getConfig() {
-        return fconfig;
+    public FtpServerContext getServerContext() {
+        return serverContext;
     }
                 
     /**
@@ -189,13 +189,13 @@ class RequestHandler implements Connection {
         if(request == null ) {
             return;
         }
-        if(fconfig == null) {
+        if(serverContext == null) {
         	return;
         }
         
         InetAddress clientAddr = request.getRemoteAddress();
-        ConnectionManager conManager = fconfig.getConnectionManager();
-        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        ConnectionManager conManager = serverContext.getConnectionManager();
+        Ftplet ftpletContainer = serverContext.getFtpletContainer();
         
         if(conManager == null) {
         	return;
@@ -210,7 +210,7 @@ class RequestHandler implements Connection {
             log.info("Open connection - " + hostAddress);
             
             // notify ftp statistics
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
             ftpStat.setOpenConnection(this);
             
             // call Ftplet.onConnect() method
@@ -228,7 +228,7 @@ class RequestHandler implements Connection {
             if(!isSkipped) {
 
                 // IP permission check
-                IpRestrictor ipRestrictor = fconfig.getIpRestrictor();
+                IpRestrictor ipRestrictor = serverContext.getIpRestrictor();
                 if( !ipRestrictor.hasPermission(clientAddr) ) {
                     log.warn("No permission to access from " + hostAddress);
                     writer.send(530, "ip.restricted", null);
@@ -293,7 +293,7 @@ class RequestHandler implements Connection {
      */
     protected void notifyObserver() {
         request.updateLastAccessTime();
-        fconfig.getConnectionManager().updateConnection(this);
+        serverContext.getConnectionManager().updateConnection(this);
     }
 
     /**
@@ -302,7 +302,7 @@ class RequestHandler implements Connection {
     public void service(FtpRequestImpl request, FtpWriter out) throws IOException, FtpException {
         try {
             String commandName = request.getCommand();
-            CommandFactory commandFactory = fconfig.getCommandFactory();
+            CommandFactory commandFactory = serverContext.getCommandFactory();
             Command command = commandFactory.getCommand(commandName);
             if(command != null) {
                 command.execute(this, request, out);
@@ -344,7 +344,7 @@ class RequestHandler implements Connection {
         
         // call Ftplet.onDisconnect() method.
         try {
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            Ftplet ftpletContainer = serverContext.getFtpletContainer();
             ftpletContainer.onDisconnect(request, writer);
         }
         catch(Exception ex) {
@@ -352,7 +352,7 @@ class RequestHandler implements Connection {
         }
 
         // notify statistics object and close request
-        ServerFtpStatistics ftpStat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+        ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
 
         if(request != null) {
             
@@ -496,7 +496,7 @@ class RequestHandler implements Connection {
     public void createSecureSocket(String protocol) throws Exception {
 
         // change socket to SSL socket
-        Ssl ssl = fconfig.getSocketFactory().getSSL();
+        Ssl ssl = serverContext.getSocketFactory().getSSL();
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }

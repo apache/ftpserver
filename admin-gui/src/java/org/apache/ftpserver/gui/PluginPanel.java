@@ -50,7 +50,7 @@ abstract class PluginPanel extends JPanel {
     /**
      * Refresh the panel with the new ftp config
      */
-    public abstract void refresh(FtpServerContext ftpConfig);
+    public abstract void refresh(FtpServerContext serverContext);
     
     
     /**

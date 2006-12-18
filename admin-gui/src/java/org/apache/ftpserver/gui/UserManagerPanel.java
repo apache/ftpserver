@@ -96,7 +96,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
       new Integer(8)
     };
     
-    private FtpServerContext fconfig;                  
+    private FtpServerContext serverContext;                  
     
     private JComboBox userLst;
     private JTextField nameTxt;
@@ -435,7 +435,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         JButton reloadBtn = new JButton("Reload");
         reloadBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                refresh(fconfig);
+                refresh(serverContext);
             }
         });
         btnPanel.add(reloadBtn);
@@ -483,14 +483,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(FtpServerContext config) {
-        fconfig = config;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         userLst.removeAllItems();
-        if(fconfig == null) {
+        if(this.serverContext == null) {
             return;
         }
         
-        UserManager userManager = fconfig.getUserManager();
+        UserManager userManager = this.serverContext.getUserManager();
         try {
             String[] userNames = userManager.getAllUserNames();
             
@@ -516,10 +516,10 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         try {      
             if(selVal != null) {
                 String userName = selVal.toString();
-                User user = fconfig.getUserManager().getUserByName(userName);
+                User user = serverContext.getUserManager().getUserByName(userName);
                 if (user == null) {
                     GuiUtils.showErrorMessage(this, userName + " : does not exist.");
-                    refresh(fconfig);
+                    refresh(serverContext);
                 }
                 else {
                     
@@ -568,8 +568,8 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                 user.setMaxIdleTime(getMaxIdleTime(idleLst));
                 user.setMaxUploadRate(getBytesTransferRate(uploadLst));
                 user.setMaxDownloadRate(getBytesTransferRate(downloadLst));
-                fconfig.getUserManager().save(user);
-                refresh(fconfig);
+                serverContext.getUserManager().save(user);
+                refresh(serverContext);
                 GuiUtils.showInformationMessage(this, "Saved user - " + user.getName());
             }
         }
@@ -585,7 +585,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
     private boolean setPassword(BaseUser usr) throws FtpException {
         
         String userName = usr.getName();
-        boolean bNewUser = !fconfig.getUserManager().doesExist(userName);
+        boolean bNewUser = !serverContext.getUserManager().doesExist(userName);
         boolean bPassSet = passwordChkBox.isSelected();
         String password = new String(passwordTxt.getPassword());
         String repassword = new String(retypePasswordTxt.getPassword()); 
@@ -736,7 +736,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
       String userName = JOptionPane.showInputDialog("User Name:");
       if(userName != null && !userName.trim().equals("")){
         try{
-          if(fconfig.getUserManager().doesExist(userName)){
+          if(serverContext.getUserManager().doesExist(userName)){
             GuiUtils.showInformationMessage(this, "User Name already exists!");
           } else{
             BaseUser user = new BaseUser();
@@ -749,8 +749,8 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             user.setHomeDirectory("./res/home");
             user.setMaxIdleTime(0);
             
-            fconfig.getUserManager().save(user);
-            refresh(fconfig);
+            serverContext.getUserManager().save(user);
+            refresh(serverContext);
             userLst.setSelectedItem(userName);
           }
         } catch(FtpException ex){
@@ -775,8 +775,8 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
         }
         
         try {
-            fconfig.getUserManager().delete(userName);
-            refresh(fconfig);
+            serverContext.getUserManager().delete(userName);
+            refresh(serverContext);
             GuiUtils.showInformationMessage(this, "Deleted user - " + userName);
         }
         catch(Exception ex) {
@@ -789,7 +789,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
      * Can this panel be displayed.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
     
     

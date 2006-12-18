@@ -29,10 +29,10 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.ftpserver.FtpConfigImpl;
+import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.IoUtils;
 
 public abstract class PerformanceTestTemplate extends TestCase {
@@ -91,7 +91,7 @@ public abstract class PerformanceTestTemplate extends TestCase {
 
     protected int port = DEFAULT_PORT;
 
-    private ServerFtpConfig config;
+    private FtpServerContext serverContext;
 
     private long startTime;
 
@@ -121,16 +121,18 @@ public abstract class PerformanceTestTemplate extends TestCase {
                 .exists());
 
         Properties configProps = new Properties();
-        configProps.setProperty("config.socket-factory.port", Integer
+        configProps.setProperty("serverContext.socket-factory.port", Integer
                 .toString(port));
-        configProps.setProperty("config.user-manager.class",
+        configProps.setProperty("serverContext.user-manager.class",
                 "org.apache.ftpserver.usermanager.PropertiesUserManager");
-        configProps.setProperty("config.user-manager.admin", "admin");
-        configProps.setProperty("config.user-manager.prop-password-encrypt",
+        configProps.setProperty("serverContext.user-manager.admin", "admin");
+        configProps.setProperty("serverContext.user-manager.prop-password-encrypt",
                 "false");
-        configProps.setProperty("config.user-manager.prop-file", USERS_FILE
+        configProps.setProperty("serverContext.user-manager.prop-file", USERS_FILE
                 .getAbsolutePath());
-        configProps.setProperty("config.create-default-user", "false");
+        configProps.setProperty("serverContext.create-default-user", "false");
+        configProps.setProperty("serverContext.connection-manager.max-connection", "0");
+        configProps.setProperty("serverContext.connection-manager.max-login", "0");
 
         return configProps;
     }
@@ -161,8 +163,8 @@ public abstract class PerformanceTestTemplate extends TestCase {
      * @throws Exception
      */
     protected void initServer() throws IOException, Exception {
-        config = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
-        server = new FtpServer(config);
+        serverContext = new ConfigurableFtpServerContext(new PropertiesConfiguration(createConfig()));
+        server = new FtpServer(serverContext);
 
         server.start();
         Thread.sleep(200);

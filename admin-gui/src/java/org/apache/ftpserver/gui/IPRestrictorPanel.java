@@ -41,7 +41,7 @@ class IPRestrictorPanel extends PluginPanel {
 
     private static final long serialVersionUID = -1871174667851171193L;
 
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     private IPRestrictorTable table;
 
     /**
@@ -88,7 +88,7 @@ class IPRestrictorPanel extends PluginPanel {
      */
     private void saveData() {
         try {
-            IpRestrictor restrictor = fconfig.getIpRestrictor();
+            IpRestrictor restrictor = serverContext.getIpRestrictor();
             restrictor.setPermissions(table.getData());
         }
         catch(Exception ex) {
@@ -102,8 +102,8 @@ class IPRestrictorPanel extends PluginPanel {
     private void reloadData() {
         try {
             Object[][] perms = null;
-            if(fconfig != null) {
-                IpRestrictor restrictor = fconfig.getIpRestrictor();
+            if(serverContext != null) {
+                IpRestrictor restrictor = serverContext.getIpRestrictor();
                 perms = restrictor.getPermissions();
             }
             table.setData(perms);
@@ -116,8 +116,8 @@ class IPRestrictorPanel extends PluginPanel {
     /**
      * Refresh - set the ftp config.
      */
-    public void refresh(FtpServerContext ftpConfig) {
-        fconfig = ftpConfig;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         reloadData();
     }
 
@@ -126,7 +126,7 @@ class IPRestrictorPanel extends PluginPanel {
      * running that is ftp config is not null.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
 
     /**

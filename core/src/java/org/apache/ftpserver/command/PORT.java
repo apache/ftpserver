@@ -76,7 +76,7 @@ class PORT implements Command {
         }
         
         // is port enabled
-        DataConnectionConfig dataCfg = handler.getConfig().getDataConnectionConfig();
+        DataConnectionConfig dataCfg = handler.getServerContext().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
             out.send(510, "PORT.disabled", null);
             return;

@@ -94,7 +94,7 @@ class FtpWriter implements FtpResponse {
     private Log log;
     private Writer writer;
     private ConnectionObserver observer;
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     private FtpRequest request;
     private InetAddress serverAddress;
 
@@ -110,9 +110,9 @@ class FtpWriter implements FtpResponse {
     /**
      * Set ftp config.
      */
-    public void setFtpConfig(FtpServerContext fconfig) {
-        this.fconfig = fconfig;
-        log = this.fconfig.getLogFactory().getInstance(getClass());
+    public void setServerContext(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
+        log = this.serverContext.getLogFactory().getInstance(getClass());
     }
 
     /**
@@ -143,7 +143,7 @@ class FtpWriter implements FtpResponse {
      * Generate and send ftp server response.
      */
     public void send(int code, String subId, String basicMsg) throws IOException {
-        MessageResource resource = fconfig.getMessageResource();
+        MessageResource resource = serverContext.getMessageResource();
         String lang = request.getLanguage();
         
         String msg = null;
@@ -313,7 +313,7 @@ class FtpWriter implements FtpResponse {
         
         // server address
         if(varName.equals(SERVER_IP)) {
-            InetAddress addr = fconfig.getDataConnectionConfig().getPassiveAddress();
+            InetAddress addr = serverContext.getDataConnectionConfig().getPassiveAddress();
             if(addr == null) {
                 addr = serverAddress;
             }
@@ -322,7 +322,7 @@ class FtpWriter implements FtpResponse {
         
         // server port
         else if(varName.equals(SERVER_PORT)) {
-            varVal = String.valueOf(fconfig.getServerPort());
+            varVal = String.valueOf(serverContext.getServerPort());
         }
         
         return varVal;
@@ -359,7 +359,7 @@ class FtpWriter implements FtpResponse {
     private String getStatisticalVariableValue(String varName) {
     
         String varVal = null;
-        FtpStatistics stat = fconfig.getFtpStatistics();
+        FtpStatistics stat = serverContext.getFtpStatistics();
         
         // server start time
         if(varName.equals(STAT_START_TIME)) {
@@ -394,7 +394,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalConnectionVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = fconfig.getFtpStatistics();
+        FtpStatistics stat = serverContext.getFtpStatistics();
         
         // total connection number
         if(varName.equals(STAT_CON_TOTAL)) {
@@ -414,7 +414,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalLoginVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = fconfig.getFtpStatistics();
+        FtpStatistics stat = serverContext.getFtpStatistics();
         
         // total login number
         if(varName.equals(STAT_LOGIN_TOTAL)) {
@@ -444,7 +444,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalFileVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = fconfig.getFtpStatistics();
+        FtpStatistics stat = serverContext.getFtpStatistics();
         
         // total number of file upload
         if(varName.equals(STAT_FILE_UPLOAD_COUNT)) {
@@ -479,7 +479,7 @@ class FtpWriter implements FtpResponse {
      */
     private String getStatisticalDirectoryVariableValue(String varName) {
         String varVal = null;
-        FtpStatistics stat = fconfig.getFtpStatistics();
+        FtpStatistics stat = serverContext.getFtpStatistics();
         
         // total directory created
         if(varName.equals(STAT_DIR_CREATE_COUNT)) {

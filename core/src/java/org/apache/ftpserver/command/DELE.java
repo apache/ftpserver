@@ -54,7 +54,7 @@ class DELE implements Command {
         
         // reset state variables
         request.resetState(); 
-        FtpServerContext fconfig = handler.getConfig();
+        FtpServerContext serverContext = handler.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
@@ -64,7 +64,7 @@ class DELE implements Command {
         }
         
         // call Ftplet.onDeleteStart() method
-        Ftplet ftpletContainer = fconfig.getFtpletContainer();
+        Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
             ftpletRet = ftpletContainer.onDeleteStart(request, out);
@@ -76,7 +76,7 @@ class DELE implements Command {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            fconfig.getConnectionManager().closeConnection(handler);
+            serverContext.getConnectionManager().closeConnection(handler);
             return;
         }
 
@@ -108,11 +108,11 @@ class DELE implements Command {
             
             // log message
             String userName = request.getUser().getName();
-            Log log = fconfig.getLogFactory().getInstance(getClass());
+            Log log = serverContext.getLogFactory().getInstance(getClass());
             log.info("File delete : " + userName + " - " + fileName);
             
             // notify statistics object
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
             ftpStat.setDelete(handler, file);
             
             // call Ftplet.onDeleteEnd() method
@@ -122,7 +122,7 @@ class DELE implements Command {
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                fconfig.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(handler);
                 return;
             }
 

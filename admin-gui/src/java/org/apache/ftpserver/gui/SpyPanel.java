@@ -58,7 +58,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private JTabbedPane parent = null;
     private JComponent defaultTab = null;
     
-    private FtpServerContext fconfig   = null;
+    private FtpServerContext serverContext   = null;
     private Connection connection = null;
     
     private SimpleAttributeSet reqAttrs = null;
@@ -68,12 +68,12 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     /**
      * Instantiate this dialog box
      */
-    public SpyPanel(FtpServerContext config, 
+    public SpyPanel(FtpServerContext serverContext, 
                     Connection con, 
                     JTabbedPane parent,
                     JComponent defaultTab) {
         
-        fconfig = config;
+        this.serverContext = serverContext;
         connection = con;
         this.parent = parent;
         this.defaultTab = defaultTab;
@@ -189,7 +189,7 @@ class SpyPanel extends JPanel implements ConnectionObserver {
     private void disconnectUser() {
         boolean bConf = GuiUtils.getConfirmation(this, "Do you want to close the connection?");
         if(bConf) {
-            ConnectionManager manager = fconfig.getConnectionManager();
+            ConnectionManager manager = serverContext.getConnectionManager();
             if (manager != null) {
                 manager.closeConnection(connection);
             }

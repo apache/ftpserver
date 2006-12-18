@@ -68,13 +68,13 @@ public abstract class AbstractFtpServerTestTemplate extends TestCase {
         this.serverPort = TestUtil.findFreePort();
         
         // create root configuration object
-        final FtpServerContext ftpConfig = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
+        final FtpServerContext serverContext = new ConfigurableFtpServerContext(new PropertiesConfiguration(createConfig()));
 
         // start the server
-        this.ftpServer = new FtpServer(ftpConfig);
+        this.ftpServer = new FtpServer(serverContext);
         this.ftpServer.start();
 
-        final SocketFactory socketFactory = ftpConfig.getSocketFactory();
+        final SocketFactory socketFactory = serverContext.getSocketFactory();
         this.serverAddress = socketFactory.getServerAddress() != null ? socketFactory
                 .getServerAddress()
                 : InetAddress.getByName(null);

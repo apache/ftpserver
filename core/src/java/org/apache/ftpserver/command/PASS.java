@@ -57,10 +57,10 @@ class PASS implements Command {
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
-        FtpServerContext fconfig = handler.getConfig();
-        Log log = fconfig.getLogFactory().getInstance(getClass());
-        ConnectionManager conManager = fconfig.getConnectionManager();
-        ServerFtpStatistics stat = (ServerFtpStatistics)fconfig.getFtpStatistics();
+        FtpServerContext serverContext = handler.getServerContext();
+        Log log = serverContext.getLogFactory().getInstance(getClass());
+        ConnectionManager conManager = serverContext.getConnectionManager();
+        ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
         try {
             
             // reset state variables
@@ -106,7 +106,7 @@ class PASS implements Command {
             }
             
             // authenticate user
-            UserManager userManager = fconfig.getUserManager();
+            UserManager userManager = serverContext.getUserManager();
             user = null;
             try {
                 if(anonymous) {
@@ -128,7 +128,7 @@ class PASS implements Command {
             }
 
             // call Ftplet.onLogin() method
-            Ftplet ftpletContainer = fconfig.getFtpletContainer();
+            Ftplet ftpletContainer = serverContext.getFtpletContainer();
             if(ftpletContainer != null) {
                 FtpletEnum ftpletRet;
                 try{
@@ -137,7 +137,7 @@ class PASS implements Command {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    fconfig.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(handler);
                     return;
                 } else if(ftpletRet == FtpletEnum.RET_SKIP) {
                     success = false;
@@ -156,7 +156,7 @@ class PASS implements Command {
             }
             
             // update different objects
-            FileSystemManager fmanager = fconfig.getFileSystemManager(); 
+            FileSystemManager fmanager = serverContext.getFileSystemManager(); 
             FileSystemView fsview = fmanager.createFileSystemView(user);
             request.setLogin(fsview);
             stat.setLogin(handler);

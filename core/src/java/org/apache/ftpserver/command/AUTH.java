@@ -55,9 +55,9 @@ class AUTH implements Command {
         }
         
         // check SSL configuration
-        FtpServerContext fconfig = handler.getConfig();
-        Log log = fconfig.getLogFactory().getInstance(getClass());
-        if(fconfig.getSocketFactory().getSSL() == null) {
+        FtpServerContext serverContext = handler.getServerContext();
+        Log log = serverContext.getLogFactory().getInstance(getClass());
+        if(serverContext.getSocketFactory().getSSL() == null) {
             out.send(431, "AUTH", null);
             return;
         }

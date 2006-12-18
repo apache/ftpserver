@@ -38,7 +38,7 @@ public class FtpServer {
 
     private Thread runner;
 
-    private FtpServerContext ftpConfig;
+    private FtpServerContext serverContext;
 
     private Log log;
 
@@ -50,8 +50,8 @@ public class FtpServer {
      * Constructor. Set the server object.
      */
     public FtpServer(FtpServerContext ftpConfig) {
-        this.ftpConfig = ftpConfig;
-        log = this.ftpConfig.getLogFactory().getInstance(getClass());
+        this.serverContext = ftpConfig;
+        log = this.serverContext.getLogFactory().getInstance(getClass());
 
         // for now just create one 
         listeners.add(new DefaultListener(ftpConfig));
@@ -85,9 +85,9 @@ public class FtpServer {
         }
 
         // release server resources
-        if (ftpConfig != null) {
-            ftpConfig.dispose();
-            ftpConfig = null;
+        if (serverContext != null) {
+            serverContext.dispose();
+            serverContext = null;
         }
 
     }
@@ -121,9 +121,9 @@ public class FtpServer {
     }
 
     /**
-     * Get the root server configuration object.
+     * Get the root server context.
      */
-    public FtpServerContext getFtpConfig() {
-        return ftpConfig;
+    public FtpServerContext getServerContext() {
+        return serverContext;
     }
 }

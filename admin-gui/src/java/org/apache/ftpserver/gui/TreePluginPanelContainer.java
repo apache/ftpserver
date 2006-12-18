@@ -53,7 +53,7 @@ class TreePluginPanelContainer extends JSplitPane
     private ArrayList pluginPanels = new ArrayList();
     private Vector treeListeners = new Vector();
     
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     
     private JPanel rightPane;
     private JTree tree;
@@ -193,18 +193,18 @@ class TreePluginPanelContainer extends JSplitPane
     /**
      * Get ftp config.
      */
-    public void refresh(FtpServerContext ftpConfig) {
-        fconfig = ftpConfig;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         for(int i=0; i<pluginPanels.size(); ++i) {
             PluginPanel ppanel = (PluginPanel)pluginPanels.get(i);
-            ppanel.refresh(fconfig);
+            ppanel.refresh(this.serverContext);
         }
     }
     
     /**
      * Get ftp config.
      */
-    public FtpServerContext getFtpConfig() {
-        return fconfig;
+    public FtpServerContext getServerContext() {
+        return serverContext;
     }
 }

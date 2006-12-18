@@ -24,11 +24,11 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This SITE command returns the specified user information.
@@ -49,7 +49,7 @@ class SITE_DESCUSER implements Command {
         request.resetState();
         
         // only administrator can execute this
-        UserManager userManager = handler.getConfig().getUserManager(); 
+        UserManager userManager = handler.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(request.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
@@ -66,8 +66,8 @@ class SITE_DESCUSER implements Command {
         String userName = argument.substring(spIndex + 1);
         
         // check the user existance
-        FtpletContext fconfig = handler.getConfig();
-        UserManager usrManager = fconfig.getUserManager();
+        FtpServerContext serverContext = handler.getServerContext();
+        UserManager usrManager = serverContext.getUserManager();
         User user = null;
         try {
             if(usrManager.doesExist(userName)) {

@@ -46,7 +46,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import org.apache.ftpserver.FtpConfigImpl;
+import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.config.XmlConfigurationHandler;
@@ -292,7 +292,7 @@ class RootPanel extends PluginPanel {
     /**
      * Refresh the panel with the new ftp config.
      */
-    public void refresh(FtpServerContext ftpCOnfig) {
+    public void refresh(FtpServerContext serverContext) {
     }
     
     
@@ -348,10 +348,10 @@ class RootPanel extends PluginPanel {
             }
             
             // create ftp configuration object
-            FtpServerContext fconfig = new FtpConfigImpl(config);
+            FtpServerContext serverContext = new ConfigurableFtpServerContext(config);
             
             // start server
-            server = new FtpServer(fconfig);
+            server = new FtpServer(serverContext);
             server.start();
             
             // enabled/disable components
@@ -367,7 +367,7 @@ class RootPanel extends PluginPanel {
             suspendButton.setSelected(false);
             
             // refresh the container
-            getContainer().refresh(server.getFtpConfig());
+            getContainer().refresh(server.getServerContext());
         }
         catch(Exception ex) {
             server = null;

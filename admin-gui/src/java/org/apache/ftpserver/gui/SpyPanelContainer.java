@@ -46,7 +46,7 @@ class SpyPanelContainer extends PluginPanel {
     private JTabbedPane tabbedPane;
     private JLabel defaultComp;
     
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     
     
     /**
@@ -99,7 +99,7 @@ class SpyPanelContainer extends PluginPanel {
         }
         
         // add new tab
-        SpyPanel spyPane = new SpyPanel(fconfig, con, tabbedPane, defaultComp);
+        SpyPanel spyPane = new SpyPanel(serverContext, con, tabbedPane, defaultComp);
         tabbedPane.remove(defaultComp);
         tabbedPane.add(userName, spyPane);
         tabbedPane.setSelectedComponent(spyPane);
@@ -123,8 +123,8 @@ class SpyPanelContainer extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(FtpServerContext ftpConfig) {
-        fconfig = ftpConfig;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         int tabCount = tabbedPane.getTabCount();
         for(int i=tabCount; --i>=0; ) {
             Component tabComp = tabbedPane.getComponentAt(i);
@@ -138,7 +138,7 @@ class SpyPanelContainer extends PluginPanel {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
 
     /**

@@ -55,7 +55,7 @@ class MessagePanel extends PluginPanel {
 
     private static final long serialVersionUID = -68038181884794057L;
     
-    private FtpServerContext fconfig;
+    private FtpServerContext serverContext;
     private JComboBox comboBox;
     
     private JList list;
@@ -162,7 +162,7 @@ class MessagePanel extends PluginPanel {
         }
         
         // get properties
-        MessageResource msgRes = fconfig.getMessageResource();
+        MessageResource msgRes = serverContext.getMessageResource();
         Properties prop = msgRes.getMessages(language);
         Vector keyList = new Vector();
         for(Enumeration keys = prop.propertyNames(); keys.hasMoreElements();) {
@@ -228,7 +228,7 @@ class MessagePanel extends PluginPanel {
         
         // save custom messages
         try {
-            fconfig.getMessageResource().save(messageProps, language);
+            serverContext.getMessageResource().save(messageProps, language);
         }
         catch(FtpException ex) {
             GuiUtils.showErrorMessage(this, "Cannot save messages.");
@@ -238,17 +238,17 @@ class MessagePanel extends PluginPanel {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(FtpServerContext ftpConfig) {
-        fconfig = ftpConfig;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         comboBox.removeAllItems();
         list.removeAll();
         oldKeySelIndex = -1;
-        if(fconfig == null) {
+        if(this.serverContext == null) {
             return;
         }
         
         // populate language list
-        MessageResource msgRes = fconfig.getMessageResource();
+        MessageResource msgRes = this.serverContext.getMessageResource();
         languages = msgRes.getAvailableLanguages();
         comboBox.addItem("<default>");
         if(languages != null) {
@@ -263,7 +263,7 @@ class MessagePanel extends PluginPanel {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
     
     /**

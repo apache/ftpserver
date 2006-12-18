@@ -17,7 +17,7 @@ public class DefaultListener implements Listener, Runnable {
 
     private Log log;
     
-    private FtpServerContext ftpConfig;
+    private FtpServerContext serverContext;
 
     private ServerSocket serverSocket;
 
@@ -28,19 +28,19 @@ public class DefaultListener implements Listener, Runnable {
     /**
      * Constructs a listener based on the configuration object
      * 
-     * @param ftpConfig Configuration for the listener
+     * @param serverContext Configuration for the listener
      */
-    public DefaultListener(FtpServerContext ftpConfig) {
-        this.ftpConfig = ftpConfig;
+    public DefaultListener(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         
-        log = ftpConfig.getLogFactory().getInstance(getClass());
+        log = serverContext.getLogFactory().getInstance(getClass());
     }
 
     /**
      * @see Listener#start()
      */
     public void start() throws Exception {
-        serverSocket = ftpConfig.getSocketFactory().createServerSocket();
+        serverSocket = serverContext.getSocketFactory().createServerSocket();
 
         listenerThread = new Thread(this);
         listenerThread.start();
@@ -57,12 +57,12 @@ public class DefaultListener implements Listener, Runnable {
         
         log.info("Listener started on port " + serverSocket.getLocalPort());
 
-        // ftpConfig might be null if stop has been called
-        if (ftpConfig == null) {
+        // serverContext might be null if stop has been called
+        if (serverContext == null) {
             return;
         }
 
-        ConnectionManager conManager = ftpConfig.getConnectionManager();
+        ConnectionManager conManager = serverContext.getConnectionManager();
         
         while (true) {
             try {
@@ -85,7 +85,7 @@ public class DefaultListener implements Listener, Runnable {
                     continue;
                 }
 
-                Connection connection = new RequestHandler(ftpConfig, soc);
+                Connection connection = new RequestHandler(serverContext, soc);
                 conManager.newConnection(connection);
             } catch (Exception ex) {
                 return;

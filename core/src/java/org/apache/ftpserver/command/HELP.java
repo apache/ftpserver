@@ -59,7 +59,7 @@ class HELP implements Command {
         
         // print command specific help if available
         String ftpCmd = request.getArgument().toUpperCase();
-        MessageResource resource = handler.getConfig().getMessageResource();
+        MessageResource resource = handler.getServerContext().getMessageResource();
         if(resource.getMessage(214, ftpCmd, request.getLanguage()) == null) {
             ftpCmd = null;
         }

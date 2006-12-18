@@ -80,7 +80,7 @@ class LoggerPanel extends PluginPanel implements Log {
     
     private int logLevel = LEVEL_INFO;
 
-    private FtpServerContext ftpConfig;
+    private FtpServerContext serverContext;
     
     private JComboBox logCombo;
     private JTextPane logTxt;
@@ -205,7 +205,7 @@ class LoggerPanel extends PluginPanel implements Log {
     /** 
      * Refresh the ftp configuration
      */
-    public void refresh(FtpServerContext ftpConfig) {
+    public void refresh(FtpServerContext serverContext) {
         
         // remove old log messages
         try {
@@ -216,17 +216,17 @@ class LoggerPanel extends PluginPanel implements Log {
         }
         
         // remove from the previous log factory
-        if(this.ftpConfig != null) {
-            FtpLogFactory factory = (FtpLogFactory)this.ftpConfig.getLogFactory();
+        if(this.serverContext != null) {
+            FtpLogFactory factory = (FtpLogFactory)this.serverContext.getLogFactory();
             if(factory != null) {
                 factory.removeLog(this);
             }
         }
 
         // add this logger
-        this.ftpConfig = ftpConfig;
-        if(ftpConfig != null) {
-            FtpLogFactory factory = (FtpLogFactory)ftpConfig.getLogFactory();
+        this.serverContext = serverContext;
+        if(serverContext != null) {
+            FtpLogFactory factory = (FtpLogFactory)serverContext.getLogFactory();
             factory.addLog(this);
         }
     }
@@ -235,7 +235,7 @@ class LoggerPanel extends PluginPanel implements Log {
      * This can be displayed only when the server is running.
      */
     public boolean canBeDisplayed() {
-        return (ftpConfig != null);
+        return (serverContext != null);
     }
 
     /**

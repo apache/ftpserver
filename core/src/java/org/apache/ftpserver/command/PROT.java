@@ -62,8 +62,8 @@ class PROT implements Command {
             out.send(200, "PROT", null);
         }
         else if(arg.equals("P")) {
-            FtpServerContext fconfig = handler.getConfig();
-            if(fconfig.getDataConnectionConfig().getSSL() == null) {
+            FtpServerContext serverContext = handler.getServerContext();
+            if(serverContext.getDataConnectionConfig().getSSL() == null) {
                 out.send(431, "PROT", null);
             }
             else {

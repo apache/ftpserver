@@ -52,7 +52,7 @@ class FilePanel extends PluginPanel {
             "Deleted"
     };
     
-    private FtpServerContext        fconfig;
+    private FtpServerContext        serverContext;
     private FtpFileTableModel[] models;
     
     
@@ -141,8 +141,8 @@ class FilePanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(FtpServerContext config) {
-        fconfig = config;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
     }
     
     
@@ -150,7 +150,7 @@ class FilePanel extends PluginPanel {
      * Can this panel be displayed.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
  
     

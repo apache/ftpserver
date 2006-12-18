@@ -51,7 +51,7 @@ class DirectoryPanel extends PluginPanel {
             "Removed"
     };
     
-    private FtpServerContext        fconfig;
+    private FtpServerContext        serverContext;
     private FtpDirectoryTableModel[] models;
     
     
@@ -132,8 +132,8 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Refresh the panel - set the ftp config.
      */
-    public void refresh(FtpServerContext config) {
-        fconfig = config;
+    public void refresh(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         models[0].clear();
         models[1].clear();
     }
@@ -143,7 +143,7 @@ class DirectoryPanel extends PluginPanel {
      * Can this panel be displayed.
      */
     public boolean canBeDisplayed() {
-        return (fconfig != null);
+        return (serverContext != null);
     }
  
     

@@ -21,7 +21,7 @@ package org.apache.ftpserver.commandline;
 
 import java.io.FileInputStream;
 
-import org.apache.ftpserver.FtpConfigImpl;
+import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.config.XmlConfigurationHandler;
@@ -76,10 +76,10 @@ class CommandLine {
             }
 
             // create root configuration object
-            FtpServerContext ftpConfig = new FtpConfigImpl(config);
+            FtpServerContext serverContext = new ConfigurableFtpServerContext(config);
 
             // start the server
-            FtpServer server = new FtpServer(ftpConfig);
+            FtpServer server = new FtpServer(serverContext);
             server.start();
 
             // add shutdown hook if possible

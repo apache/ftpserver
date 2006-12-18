@@ -49,7 +49,7 @@ class SITE_STAT implements Command {
         request.resetState();
         
         // only administrator can execute this
-        UserManager userManager = handler.getConfig().getUserManager(); 
+        UserManager userManager = handler.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(request.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
@@ -57,7 +57,7 @@ class SITE_STAT implements Command {
         }
         
         // get statistics information
-        FtpStatistics stat = handler.getConfig().getFtpStatistics();
+        FtpStatistics stat = handler.getServerContext().getFtpStatistics();
         StringBuffer sb = new StringBuffer(256);
         sb.append('\n');
         sb.append("Start Time               : ").append( DateUtils.getISO8601Date(stat.getStartTime().getTime()) ).append('\n');
