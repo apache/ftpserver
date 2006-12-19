@@ -49,6 +49,9 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         users.setProperty("FtpServer.user.user2.maxloginnumber", "3");
         users.setProperty("FtpServer.user.user2.maxloginperip", "4");
 
+        users.setProperty("FtpServer.user.user3.userpassword", "");
+        users.setProperty("FtpServer.user.user3.homedirectory", "home");
+        
         FileOutputStream fos = new FileOutputStream(USERS_FILE);
         users.store(fos, null);
         

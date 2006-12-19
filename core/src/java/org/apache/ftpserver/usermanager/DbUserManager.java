@@ -29,6 +29,8 @@ import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Authentication;
+import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -518,52 +520,81 @@ class DbUserManager implements UserManager {
     /**
      * User authentication.
      */
-    public synchronized boolean authenticate(String user, 
-                                             String password) throws FtpException {
-        
-        // check input
-        if( (user == null) || (password == null) ) {
-            return false;
-        }
-        
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
+    public synchronized User authenticate(Authentication authentication) throws AuthenticationFailedException {
+        if(authentication instanceof UsernamePasswordAuthentication) {
+            UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
             
-            // create the sql query
-            HashMap map = new HashMap();
-            map.put( BaseUser.ATTR_LOGIN, escapeString(user) );
-            map.put( BaseUser.ATTR_PASSWORD, escapeString(password) );
-            String sql = StringUtils.replaceString(authenticateStmt, map);
-            log.info(sql);
+            String user = upauth.getUsername(); 
+            String password = upauth.getPassword(); 
+        
+            if(user == null) {
+                throw new AuthenticationFailedException("Authentication failed");
+            }
             
-            // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
-            rs = stmt.executeQuery(sql);
-            return rs.next();
-        }
-        catch(SQLException ex) {
-            log.error("DbUserManager.authenticate()", ex);
-            throw new FtpException("DbUserManager.authenticate()", ex);
-        }
-        finally {
-            if(rs != null) {
-                try { 
-                    rs.close(); 
-                } 
-                catch(Exception ex) {
-                    log.error("DbUserManager.authenticate()", ex);
+            if(password == null) {
+                password = "";
+            }
+            
+            Statement stmt = null;
+            ResultSet rs = null;
+            try {
+                
+                // create the sql query
+                HashMap map = new HashMap();
+                map.put( BaseUser.ATTR_LOGIN, escapeString(user) );
+                map.put( BaseUser.ATTR_PASSWORD, escapeString(password) );
+                String sql = StringUtils.replaceString(authenticateStmt, map);
+                log.info(sql);
+                
+                // execute query
+                prepareConnection();
+                stmt = connection.createStatement();
+                rs = stmt.executeQuery(sql);
+                if(rs.next()) {
+                    try {
+                        return getUserByName(user);
+                    } catch(FtpException e) {
+                        throw new AuthenticationFailedException("Authentication failed", e);
+                    }
+                } else {
+                    throw new AuthenticationFailedException("Authentication failed");
+                }
+            } catch(SQLException ex) {
+                log.error("DbUserManager.authenticate()", ex);
+                throw new AuthenticationFailedException("Authentication failed", ex);
+            }
+            finally {
+                if(rs != null) {
+                    try { 
+                        rs.close(); 
+                    } 
+                    catch(Exception ex) {
+                        log.error("DbUserManager.authenticate()", ex);
+                    }
+                }
+                if(stmt != null) {
+                    try { 
+                        stmt.close(); 
+                    } 
+                    catch(Exception ex) {
+                        log.error("DbUserManager.authenticate()", ex);
+                    }
                 }
             }
-            if(stmt != null) {
-                try { 
-                    stmt.close(); 
-                } 
-                catch(Exception ex) {
-                    log.error("DbUserManager.authenticate()", ex);
+        } else if(authentication instanceof AnonymousAuthentication) {
+            try {
+                if(doesExist("anonymous")) {
+                    return getUserByName("anonymous");
+                } else {
+                    throw new AuthenticationFailedException("Authentication failed");
                 }
+            } catch(AuthenticationFailedException e) {
+                throw e;
+            } catch(FtpException e) {
+                throw new AuthenticationFailedException("Authentication failed", e);
             }
+        } else {
+            throw new IllegalArgumentException("Authentication not supported by this user manager");
         }
     }
     

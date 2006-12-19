@@ -29,6 +29,8 @@ import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Authentication;
+import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -271,16 +273,41 @@ class PropertiesUserManager implements UserManager {
     /**
      * User authenticate method
      */
-    public synchronized boolean authenticate(String user, String password) {
-        if(password == null) {
-            password = "";
-        }
+    public synchronized User authenticate(Authentication authentication) throws AuthenticationFailedException {
         
-        String passVal = userDataProp.getProperty(PREFIX + user + '.' + BaseUser.ATTR_PASSWORD);
-        if (isPasswordEncrypt) {
-            password = EncryptUtils.encryptMD5(password);
+        if(authentication instanceof UsernamePasswordAuthentication) {
+            UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
+            
+            String user = upauth.getUsername(); 
+            String password = upauth.getPassword(); 
+        
+            if(user == null) {
+                throw new AuthenticationFailedException("Authentication failed");
+            }
+            
+            if(password == null) {
+                password = "";
+            }
+            
+            String passVal = userDataProp.getProperty(PREFIX + user + '.' + BaseUser.ATTR_PASSWORD);
+            if (isPasswordEncrypt) {
+                password = EncryptUtils.encryptMD5(password);
+            }
+            if(password.equals(passVal)) {
+                return getUserByName(user);
+            } else {
+                throw new AuthenticationFailedException("Authentication failed");
+            }
+            
+        } else if(authentication instanceof AnonymousAuthentication) {
+            if(doesExist("anonymous")) {
+                return getUserByName("anonymous");
+            } else {
+                throw new AuthenticationFailedException("Authentication failed");
+            }
+        } else {
+            throw new IllegalArgumentException("Authentication not supported by this user manager");
         }
-        return password.equals(passVal);
     }
         
     /**

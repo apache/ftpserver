@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -36,15 +36,17 @@ import javax.naming.directory.SearchResult;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Authentication;
+import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
-/** 
+/**
  * Ldap based user manager class where the object class is ftpusers. This has
- * been tested with OpenLDAP. The BaseUser object will be serialized in LDAP. 
- * Here the assumption is that the java object schema is available (RFC 2713). 
+ * been tested with OpenLDAP. The BaseUser object will be serialized in LDAP.
+ * Here the assumption is that the java object schema is available (RFC 2713).
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
@@ -82,7 +84,7 @@ class LdapUserManager implements UserManager {
         
         try {
             
-            // get admin name 
+            // get admin name
             adminName = config.getString("admin", "admin");
             
             // get ldap parameters
@@ -181,14 +183,47 @@ class LdapUserManager implements UserManager {
     /**
      * User authentication.
      */
-    public boolean authenticate(String login, String password) throws FtpException {
-        boolean success = false;
-        User user = getUserByName(login);
-        if(user != null) {
-            success = (password != null) &&
-                      (password.equals(user.getPassword()));
+    public User authenticate(Authentication authentication) throws AuthenticationFailedException {
+        if(authentication instanceof UsernamePasswordAuthentication) {
+            UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
+            
+            String login = upauth.getUsername(); 
+            String password = upauth.getPassword(); 
+            
+            if(login == null) {
+                throw new AuthenticationFailedException("Authentication failed");
+            }
+            
+            if(password == null) {
+                password = "";
+            }
+            
+            User user;
+            try {
+                user = getUserByName(login);
+            } catch (FtpException e) {
+                throw new AuthenticationFailedException("Authentication failed", e); 
+            }
+            
+            if(user != null && password.equals(user.getPassword())) {
+                    return user;
+            } else {
+                    throw new AuthenticationFailedException("Authentication failed"); 
+            }
+        } else if(authentication instanceof AnonymousAuthentication) {
+            try {
+                if(doesExist("anonymous")) {
+                    return getUserByName("anonymous");
+                } else {
+                    throw new AuthenticationFailedException("Authentication failed");
+                }
+            } catch (FtpException e) {
+                throw new AuthenticationFailedException("Authentication failed", e);
+            }
+        } else {
+            throw new IllegalArgumentException("Authentication not supported by this user manager");
         }
-        return success;
+
     }
     
     /**
@@ -200,7 +235,7 @@ class LdapUserManager implements UserManager {
             String dn = getDN(name);
             BaseUser newUser = new BaseUser(user);
             
-            // if password is not available, 
+            // if password is not available,
             // do not change the existing password
             User existUser = getUserByName(name);
             if( (existUser != null) && (newUser.getPassword() == null) ) {

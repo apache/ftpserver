@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -36,6 +37,8 @@ import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
+import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 
 /**
  * <code>PASS &lt;SP&gt; <password> &lt;CRLF&gt;</code><br>
@@ -109,18 +112,14 @@ class PASS implements Command {
             UserManager userManager = serverContext.getUserManager();
             user = null;
             try {
+                Authentication auth;
                 if(anonymous) {
-                    success = userManager.doesExist("anonymous");
-                    if (success) {
-                        user = userManager.getUserByName("anonymous");
-                    }
+                    auth = new AnonymousAuthentication();
                 }
                 else {
-                    success = userManager.authenticate(userName, password);
-                    if (success) {
-                        user = userManager.getUserByName(userName);
-                    }
+                    auth = new UsernamePasswordAuthentication(userName, password);
                 }
+                user = userManager.authenticate(auth);
             }
             catch(Exception ex) {
                 success = false;

@@ -62,7 +62,7 @@ interface UserManager extends Component {
     /**
      * Authenticate user
      */
-    boolean authenticate(String login, String password) throws FtpException;
+    User authenticate(Authentication authentication) throws AuthenticationFailedException;
     
     /**
      * Get admin user name

@@ -24,6 +24,8 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.config.PropertiesConfiguration;
+import org.apache.ftpserver.ftplet.Authentication;
+import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
@@ -40,23 +42,58 @@ public abstract class UserManagerTestTemplate extends TestCase {
         userManager = createUserManager();
     }
 
-    /**
-     * @return
-     */
     protected abstract Properties createConfig();
 
     public void testAuthenticate() throws Exception {
-        assertTrue(userManager.authenticate("user1", "pw1"));
+        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user1", "pw1")));
     }
 
     public void testAuthenticateWrongPassword() throws Exception {
-        assertFalse(userManager.authenticate("user1", "foo"));
+        try {
+            userManager.authenticate(new UsernamePasswordAuthentication("user1", "foo"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
     }
 
     public void testAuthenticateUnknownUser() throws Exception {
-        assertFalse(userManager.authenticate("foo", "foo"));
+        try {
+            userManager.authenticate(new UsernamePasswordAuthentication("foo", "foo"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
+    }
+    
+    public void testAuthenticateEmptyPassword() throws Exception {
+        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user3", "")));
     }
 
+    public void testAuthenticateNullPassword() throws Exception {
+        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user3", null)));
+    }
+
+    public static class FooAuthentication implements Authentication {}
+    
+    public void testAuthenticateNullUser() throws Exception {
+        try {
+            userManager.authenticate(new UsernamePasswordAuthentication(null, "foo"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
+    }
+    
+    public void testAuthenticateUnknownAuthentication() throws Exception {
+        try {
+            userManager.authenticate(new FooAuthentication());
+            fail("Must throw IllegalArgumentException");
+        } catch(IllegalArgumentException e) {
+            // ok
+        }
+    }
+    
     public void testDoesExist() throws Exception {
         assertTrue(userManager.doesExist("user1"));
         assertTrue(userManager.doesExist("user2"));
