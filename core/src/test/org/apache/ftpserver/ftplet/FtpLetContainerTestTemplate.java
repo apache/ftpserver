@@ -35,8 +35,8 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
     private final List calls = new ArrayList();
     
     protected void setUp() throws Exception {
-        //MockFtplet.callback = new MockFtpletCallback();
-        //MockFtplet.callback.returnValue = FtpletEnum.RET_DEFAULT;
+        MockFtplet.callback = new MockFtpletCallback();
+        MockFtplet.callback.returnValue = FtpletEnum.RET_DEFAULT;
      } 
     
     protected abstract FtpletContainer createFtpletContainer();

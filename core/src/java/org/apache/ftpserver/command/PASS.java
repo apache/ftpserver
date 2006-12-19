@@ -120,6 +120,7 @@ class PASS implements Command {
                     auth = new UsernamePasswordAuthentication(userName, password);
                 }
                 user = userManager.authenticate(auth);
+                success = true;
             }
             catch(Exception ex) {
                 success = false;
