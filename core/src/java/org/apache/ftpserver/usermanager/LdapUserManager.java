@@ -41,7 +41,6 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ftplet.UserManager;
 
 /**
  * Ldap based user manager class where the object class is ftpusers. This has
@@ -51,7 +50,7 @@ import org.apache.ftpserver.ftplet.UserManager;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class LdapUserManager implements UserManager {
+class LdapUserManager extends AbstractUserManager {
     
     // LDAP attributes
     private final static String CN         = "cn";

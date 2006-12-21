@@ -34,7 +34,6 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
 import org.apache.ftpserver.util.IoUtils;
@@ -47,7 +46,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class PropertiesUserManager implements UserManager {
+class PropertiesUserManager extends AbstractUserManager {
 
     private final static String PREFIX    = "FtpServer.user.";
 
@@ -115,20 +114,20 @@ class PropertiesUserManager implements UserManager {
        String thisPrefix = PREFIX + usr.getName() + '.';
        
        // set other properties
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_PASSWORD,          getPassword(usr));
+       userDataProp.setProperty(thisPrefix + ATTR_PASSWORD,          getPassword(usr));
        
        String home = usr.getHomeDirectory();
        if(home == null) {
            home = "/";
        }
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_HOME,              home);
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_ENABLE,            usr.getEnabled());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_WRITE_PERM,        usr.getWritePermission());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_NUMBER, usr.getMaxLoginNumber());
-       userDataProp.setProperty(thisPrefix + BaseUser.ATTR_MAX_LOGIN_PER_IP, usr.getMaxLoginPerIP());
+       userDataProp.setProperty(thisPrefix + ATTR_HOME,              home);
+       userDataProp.setProperty(thisPrefix + ATTR_ENABLE,            usr.getEnabled());
+       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.getWritePermission());
+       userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
+       userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
+       userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
+       userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, usr.getMaxLoginNumber());
+       userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, usr.getMaxLoginPerIP());
    
        saveUserData();
     }
@@ -204,7 +203,7 @@ class PropertiesUserManager implements UserManager {
             }
             
             if( doesExist(name) ) {
-                String key = PREFIX + name + '.' + BaseUser.ATTR_PASSWORD;
+                String key = PREFIX + name + '.' + ATTR_PASSWORD;
                 password = userDataProp.getProperty(key, blankPassword);
             }
             else {
@@ -220,7 +219,7 @@ class PropertiesUserManager implements UserManager {
     public synchronized String[] getAllUserNames() {
 
         // get all user names
-        String suffix = '.' + BaseUser.ATTR_HOME;
+        String suffix = '.' + ATTR_HOME;
         ArrayList ulst = new ArrayList();
         Enumeration allKeys = userDataProp.propertyNames();
         int prefixlen = PREFIX.length();
@@ -251,14 +250,14 @@ class PropertiesUserManager implements UserManager {
         String baseKey = PREFIX + userName + '.';
         BaseUser user = new BaseUser();
         user.setName(userName);
-        user.setEnabled(userDataProp.getBoolean(baseKey + BaseUser.ATTR_ENABLE, true));
-        user.setHomeDirectory( userDataProp.getProperty(baseKey + BaseUser.ATTR_HOME, "/") );
-        user.setWritePermission(userDataProp.getBoolean(baseKey + BaseUser.ATTR_WRITE_PERM, false));
-        user.setMaxLoginNumber(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_LOGIN_NUMBER, 0));
-        user.setMaxLoginPerIP(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_LOGIN_PER_IP, 0));
-        user.setMaxIdleTime(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_IDLE_TIME, 0));
-        user.setMaxUploadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_UPLOAD_RATE, 0));
-        user.setMaxDownloadRate(userDataProp.getInteger(baseKey + BaseUser.ATTR_MAX_DOWNLOAD_RATE, 0));
+        user.setEnabled(userDataProp.getBoolean(baseKey + ATTR_ENABLE, true));
+        user.setHomeDirectory( userDataProp.getProperty(baseKey + ATTR_HOME, "/") );
+        user.setWritePermission(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false));
+        user.setMaxLoginNumber(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER, 0));
+        user.setMaxLoginPerIP(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_PER_IP, 0));
+        user.setMaxIdleTime(userDataProp.getInteger(baseKey + ATTR_MAX_IDLE_TIME, 0));
+        user.setMaxUploadRate(userDataProp.getInteger(baseKey + ATTR_MAX_UPLOAD_RATE, 0));
+        user.setMaxDownloadRate(userDataProp.getInteger(baseKey + ATTR_MAX_DOWNLOAD_RATE, 0));
         return user;
     }
     
@@ -266,7 +265,7 @@ class PropertiesUserManager implements UserManager {
      * User existance check
      */
     public synchronized boolean doesExist(String name) {
-        String key = PREFIX + name + '.' + BaseUser.ATTR_HOME;
+        String key = PREFIX + name + '.' + ATTR_HOME;
         return userDataProp.containsKey(key);
     }
     
@@ -289,7 +288,7 @@ class PropertiesUserManager implements UserManager {
                 password = "";
             }
             
-            String passVal = userDataProp.getProperty(PREFIX + user + '.' + BaseUser.ATTR_PASSWORD);
+            String passVal = userDataProp.getProperty(PREFIX + user + '.' + ATTR_PASSWORD);
             if (isPasswordEncrypt) {
                 password = EncryptUtils.encryptMD5(password);
             }

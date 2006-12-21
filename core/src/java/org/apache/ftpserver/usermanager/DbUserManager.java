@@ -34,7 +34,6 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.StringUtils;
 
 /**
@@ -49,7 +48,7 @@ import org.apache.ftpserver.util.StringUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class DbUserManager implements UserManager {
+class DbUserManager extends AbstractUserManager {
     
     private Log log;
     
@@ -132,7 +131,7 @@ class DbUserManager implements UserManager {
             
             // create the sql query
             HashMap map = new HashMap();
-            map.put( BaseUser.ATTR_LOGIN, escapeString(login) );
+            map.put( ATTR_LOGIN, escapeString(login) );
             String sql = StringUtils.replaceString(isAdminStmt, map);
             log.info(sql);
             
@@ -219,7 +218,7 @@ class DbUserManager implements UserManager {
         
         // create sql query
         HashMap map = new HashMap();
-        map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
+        map.put( ATTR_LOGIN, escapeString(name) );
         String sql = StringUtils.replaceString(deleteUserStmt, map);
         log.info(sql);
         
@@ -261,16 +260,16 @@ class DbUserManager implements UserManager {
             
             // create sql query
             HashMap map = new HashMap();
-            map.put( BaseUser.ATTR_LOGIN, escapeString(user.getName()) );
-            map.put( BaseUser.ATTR_PASSWORD, escapeString(getPassword(user)) );
-            map.put( BaseUser.ATTR_HOME, escapeString(user.getHomeDirectory()) );
-            map.put( BaseUser.ATTR_ENABLE, String.valueOf(user.getEnabled()) );
-            map.put( BaseUser.ATTR_WRITE_PERM, String.valueOf(user.getWritePermission()) );
-            map.put( BaseUser.ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
-            map.put( BaseUser.ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()) );
-            map.put( BaseUser.ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()) ); 
-            map.put( BaseUser.ATTR_MAX_LOGIN_NUMBER, new Integer(user.getMaxLoginNumber()));
-            map.put( BaseUser.ATTR_MAX_LOGIN_PER_IP, new Integer(user.getMaxLoginPerIP()));
+            map.put( ATTR_LOGIN, escapeString(user.getName()) );
+            map.put( ATTR_PASSWORD, escapeString(getPassword(user)) );
+            map.put( ATTR_HOME, escapeString(user.getHomeDirectory()) );
+            map.put( ATTR_ENABLE, String.valueOf(user.getEnabled()) );
+            map.put( ATTR_WRITE_PERM, String.valueOf(user.getWritePermission()) );
+            map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
+            map.put( ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()) );
+            map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()) ); 
+            map.put( ATTR_MAX_LOGIN_NUMBER, new Integer(user.getMaxLoginNumber()));
+            map.put( ATTR_MAX_LOGIN_PER_IP, new Integer(user.getMaxLoginPerIP()));
             
             String sql = null;      
             if( !doesExist(user.getName()) ) {
@@ -313,7 +312,7 @@ class DbUserManager implements UserManager {
             
             // create sql query
             HashMap map = new HashMap();
-            map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
+            map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
             log.info(sql);
             
@@ -327,15 +326,15 @@ class DbUserManager implements UserManager {
             String trueStr = Boolean.TRUE.toString();
             if(rs.next()) {
                 thisUser = new BaseUser();
-                thisUser.setName(rs.getString(BaseUser.ATTR_LOGIN));
-                thisUser.setHomeDirectory(rs.getString(BaseUser.ATTR_HOME));
-                thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(BaseUser.ATTR_ENABLE)));
-                thisUser.setWritePermission(trueStr.equalsIgnoreCase(rs.getString(BaseUser.ATTR_WRITE_PERM)));
-                thisUser.setMaxLoginNumber(rs.getInt(BaseUser.ATTR_MAX_LOGIN_NUMBER));
-                thisUser.setMaxLoginPerIP(rs.getInt(BaseUser.ATTR_MAX_LOGIN_PER_IP));
-                thisUser.setMaxIdleTime(rs.getInt(BaseUser.ATTR_MAX_IDLE_TIME));
-                thisUser.setMaxUploadRate(rs.getInt(BaseUser.ATTR_MAX_UPLOAD_RATE));
-                thisUser.setMaxDownloadRate(rs.getInt(BaseUser.ATTR_MAX_DOWNLOAD_RATE));
+                thisUser.setName(rs.getString(ATTR_LOGIN));
+                thisUser.setHomeDirectory(rs.getString(ATTR_HOME));
+                thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(ATTR_ENABLE)));
+                thisUser.setWritePermission(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM)));
+                thisUser.setMaxLoginNumber(rs.getInt(ATTR_MAX_LOGIN_NUMBER));
+                thisUser.setMaxLoginPerIP(rs.getInt(ATTR_MAX_LOGIN_PER_IP));
+                thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
+                thisUser.setMaxUploadRate(rs.getInt(ATTR_MAX_UPLOAD_RATE));
+                thisUser.setMaxDownloadRate(rs.getInt(ATTR_MAX_DOWNLOAD_RATE));
             }
             return thisUser;
         }
@@ -373,7 +372,7 @@ class DbUserManager implements UserManager {
             
             // create the sql
             HashMap map = new HashMap();
-            map.put( BaseUser.ATTR_LOGIN, escapeString(name) );
+            map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
             log.info(sql);
             
@@ -428,7 +427,7 @@ class DbUserManager implements UserManager {
             // populate list
             ArrayList names = new ArrayList();
             while(rs.next()) {
-                names.add(rs.getString(BaseUser.ATTR_LOGIN));
+                names.add(rs.getString(ATTR_LOGIN));
             }
             return (String[]) names.toArray(new String[0]);
         }
@@ -477,7 +476,7 @@ class DbUserManager implements UserManager {
 
         // create sql query
         HashMap map = new HashMap();
-        map.put( BaseUser.ATTR_LOGIN, escapeString(user.getName()) );
+        map.put( ATTR_LOGIN, escapeString(user.getName()) );
         String sql = StringUtils.replaceString(selectUserStmt, map);
         log.info(sql);
         
@@ -489,7 +488,7 @@ class DbUserManager implements UserManager {
             stmt = connection.createStatement();
             rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                password = rs.getString(BaseUser.ATTR_PASSWORD);
+                password = rs.getString(ATTR_PASSWORD);
             }
         }
         finally {
@@ -541,8 +540,8 @@ class DbUserManager implements UserManager {
                 
                 // create the sql query
                 HashMap map = new HashMap();
-                map.put( BaseUser.ATTR_LOGIN, escapeString(user) );
-                map.put( BaseUser.ATTR_PASSWORD, escapeString(password) );
+                map.put( ATTR_LOGIN, escapeString(user) );
+                map.put( ATTR_PASSWORD, escapeString(password) );
                 String sql = StringUtils.replaceString(authenticateStmt, map);
                 log.info(sql);
                 
