@@ -32,10 +32,10 @@ import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.FtpConfigImpl;
+import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
-import org.apache.ftpserver.interfaces.ServerFtpConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.IoUtils;
 
 public abstract class SSLTestTemplate extends TestCase {
@@ -58,7 +58,7 @@ public abstract class SSLTestTemplate extends TestCase {
 
     protected int port = DEFAULT_PORT;
 
-    private ServerFtpConfig config;
+    private FtpServerContext context;
 
     protected FTPSClient client;
 
@@ -168,8 +168,8 @@ public abstract class SSLTestTemplate extends TestCase {
      * @throws Exception
      */
     protected void initServer() throws IOException, Exception {
-        config = new FtpConfigImpl(new PropertiesConfiguration(createConfig()));
-        server = new FtpServer(config);
+        context = new ConfigurableFtpServerContext(new PropertiesConfiguration(createConfig()));
+        server = new FtpServer(context);
 
         server.start();
     }

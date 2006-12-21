@@ -19,11 +19,21 @@
 
 package org.apache.ftpserver.ssl;
 
+import java.util.Properties;
 
-public class ImplicitTLSTest extends ImplicitSecurityTestTemplate {
 
-    protected String getAuthValue() {
-        return "TLS";
+public class ImplicitClientAuthTest extends ClientAuthTest {
+
+    protected Properties createConfig() {
+        Properties config = super.createConfig();
+        config.setProperty("config.socket-factory.class",
+                "org.apache.ftpserver.socketfactory.SSLFtpSocketFactory");
+
+        return config;
+    }
+
+    protected boolean useImplicit() {
+        return true;
     }
 
 }

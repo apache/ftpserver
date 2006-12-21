@@ -23,7 +23,7 @@ package org.apache.ftpserver.ssl;
 public class ExplicitSSLTest extends ExplicitSecurityTestTemplate {
 
     protected String getAuthValue() {
-        return "TLS";
+        return "SSL";
     }
 
 }

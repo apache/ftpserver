@@ -30,19 +30,15 @@ import org.apache.commons.net.ftp.FTPSClient;
 
 public class ClientAuthTest extends SSLTestTemplate {
 
-    
-    
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+    protected boolean useImplicit() {
+        return false;
     }
-
+    
     /* (non-Javadoc)
      * @see org.apache.ftpserver.ssl.SSLTestTemplate#createFTPClient()
      */
     protected FTPSClient createFTPClient() throws Exception {
-        FTPSClient client = new FTPSClient();
+        FTPSClient client = new FTPSClient(useImplicit());
         client.setNeedClientAuth(true);
         
         KeyStore ks = KeyStore.getInstance("JKS");
@@ -65,7 +61,9 @@ public class ClientAuthTest extends SSLTestTemplate {
     }
     
     public void testCommandChannel() throws Exception {
+        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
+
 
 }
