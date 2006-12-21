@@ -509,4 +509,12 @@ class RequestHandler implements Connection {
         // set control socket
         controlSocket = ssoc;
     }
+    
+    /**
+     * Retrive the socket used for the control channel
+     * @return The control socket
+     */
+    public Socket getControlSocket() {
+        return controlSocket;
+    }
 }

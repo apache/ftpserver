@@ -21,34 +21,60 @@ package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.ftplet.Authentication;
 
-
+/**
+ * Class representing a normal authentication attempt using
+ * username and password
+ */
 public
 class UsernamePasswordAuthentication implements Authentication {
 
     private String username;
     private String password;
+    private UserMetadata userMetadata;
     
     /**
-     * @param username
-     * @param password
+     * Constructor with the minimal data for an authentication
+     * @param username The user name
+     * @param password The password, can be null
      */
     public UsernamePasswordAuthentication(String username, String password) {
         this.username = username;
         this.password = password;
     }
+    
+    /**
+     * Constructor with an additonal parameter for user metadata
+     * @param username The user name
+     * @param password The password, can be null
+     * @param userMetadata The user metadata
+     */
+    public UsernamePasswordAuthentication(String username, String password, UserMetadata userMetadata) {
+        this(username, password);
+        this.userMetadata = userMetadata;
+    }
 
     /**
-     * @return the password
+     * Retrive the password
+     * @return The password
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * @return the username
+     * Retrive the user name
+     * @return The user name
      */
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Retrive the user metadata
+     * @return The user metadata
+     */
+    public UserMetadata getUserMetadata() {
+        return userMetadata;
     }
     
     

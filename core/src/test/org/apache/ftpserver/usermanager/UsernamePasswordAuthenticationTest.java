@@ -19,38 +19,29 @@
 
 package org.apache.ftpserver.usermanager;
 
-import org.apache.ftpserver.ftplet.Authentication;
+import junit.framework.TestCase;
 
-/**
- * Class representing an anonymous authentication attempt
- */
-public class AnonymousAuthentication implements Authentication {
-   
-    private UserMetadata userMetadata;
-
-    /**
-     * Default constructor
-     */
-    public AnonymousAuthentication() {
-        // empty
-    }
+public class UsernamePasswordAuthenticationTest extends TestCase {
     
-    
-    /**
-     * Constructor with an additional user metadata parameter
-     * @param userMetadata User metadata
-     */
-    public AnonymousAuthentication(UserMetadata userMetadata) {
-        this.userMetadata = userMetadata;
+    public void testConstructor() {
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication("user", "pass");
+        
+        assertEquals("user", auth.getUsername());
+        assertEquals("pass", auth.getPassword());
     }
 
-
-    /**
-     * Retrive the user metadata
-     * @return The user metadata
-     */
-    public UserMetadata getUserMetadata() {
-        return userMetadata;
+    public void testConstructorNullUsername() {
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication(null, "pass");
+        
+        assertNull(auth.getUsername());
+        assertEquals("pass", auth.getPassword());
+    }
+    
+    public void testConstructorNullPassword() {
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication("user", null);
+        
+        assertEquals("user", auth.getUsername());
+        assertNull(auth.getPassword());
     }
     
 }

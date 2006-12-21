@@ -20,6 +20,10 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.net.Socket;
+
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSocket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpRequestImpl;
@@ -38,6 +42,7 @@ import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
+import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 
 /**
@@ -112,12 +117,26 @@ class PASS implements Command {
             UserManager userManager = serverContext.getUserManager();
             user = null;
             try {
+                UserMetadata userMetadata = new UserMetadata();
+                Socket controlSocket = handler.getControlSocket();
+                userMetadata.setInetAddress(controlSocket.getInetAddress());
+                
+                if(controlSocket instanceof SSLSocket) {
+                    SSLSocket sslControlSocket = (SSLSocket) controlSocket;
+                    
+                    try {
+                        userMetadata.setCertificateChain(sslControlSocket.getSession().getPeerCertificates());
+                    } catch(SSLPeerUnverifiedException e) {
+                        // ignore
+                    }
+                }
+                
                 Authentication auth;
                 if(anonymous) {
-                    auth = new AnonymousAuthentication();
+                    auth = new AnonymousAuthentication(userMetadata);
                 }
                 else {
-                    auth = new UsernamePasswordAuthentication(userName, password);
+                    auth = new UsernamePasswordAuthentication(userName, password, userMetadata);
                 }
                 user = userManager.authenticate(auth);
                 success = true;
