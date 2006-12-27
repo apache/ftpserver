@@ -75,6 +75,7 @@ class EPRT extends AbstractCommand {
             port = arg.substring(lastDelimIdx+1, arg.length() - 1);
         }
         catch(Exception ex) {
+            log.debug("Exception parsing host and port: " + arg, ex);
             out.send(510, "EPRT", null);
             return;
         }
@@ -85,6 +86,7 @@ class EPRT extends AbstractCommand {
             dataAddr = InetAddress.getByName(host);
         }
         catch(UnknownHostException ex) {
+            log.debug("Unknown host: " + host, ex);
             out.send(553, "EPRT.host", null);
             return;
         }
@@ -104,6 +106,7 @@ class EPRT extends AbstractCommand {
             dataPort = Integer.parseInt(port);     
         }
         catch(NumberFormatException ex) {
+            log.debug("Invalid port: " + port, ex);
             out.send(552, "EPRT.invalid", null); 
             return; 
         }

@@ -174,6 +174,7 @@ class LdapUserManager extends AbstractUserManager {
             user = (User)adminContext.lookup(dn);
         }
         catch(NamingException ex) {
+            log.debug("Failed to retrive user: " + name, ex);
             user = null;
         }
         return user;

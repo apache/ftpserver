@@ -70,6 +70,7 @@ class RMD extends AbstractCommand {
         try{
             ftpletRet = ftpletContainer.onRmdirStart(request, out);
         } catch(Exception e) {
+            log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -86,6 +87,7 @@ class RMD extends AbstractCommand {
             file = request.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
+            log.debug("Exception getting file object", ex);
         }
         if(file == null) {
             out.send(550, "RMD.permission", fileName);
@@ -122,6 +124,7 @@ class RMD extends AbstractCommand {
             try{
                 ftpletRet = ftpletContainer.onRmdirEnd(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

@@ -71,6 +71,7 @@ class STOU extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onUploadUniqueStart(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -99,6 +100,7 @@ class STOU extends AbstractCommand {
                 }
             }
             catch(Exception ex) {
+                log.debug("Exception getting file object", ex);
             }
             if(file == null) {
                 out.send(550, "STOU", null);
@@ -119,6 +121,7 @@ class STOU extends AbstractCommand {
                 is = request.getDataInputStream();
             }
             catch(IOException ex) {
+                log.debug("Exception getting the input data stream", ex);
                 out.send(425, "STOU", fileName);
                 return;
             }
@@ -150,10 +153,12 @@ class STOU extends AbstractCommand {
                 }
             }
             catch(SocketException ex) {
+                log.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.send(426, "STOU", fileName);
             }
             catch(IOException ex) {
+                log.debug("IOException during data transfer", ex);
                 failure = true;
                 out.send(551, "STOU", fileName);
             }
@@ -170,6 +175,7 @@ class STOU extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onUploadUniqueEnd(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

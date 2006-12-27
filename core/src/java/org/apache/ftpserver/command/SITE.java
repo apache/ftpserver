@@ -58,6 +58,7 @@ class SITE extends AbstractCommand {
         try {
             ftpletRet = ftpletContainer.onSite(request, out);
         } catch(Exception e) {
+            log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {

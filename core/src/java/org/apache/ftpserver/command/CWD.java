@@ -64,6 +64,7 @@ class CWD extends AbstractCommand {
             success = fsview.changeDirectory(dirName);
         }
         catch(Exception ex) {
+            log.debug("Failed to change directory in file system", ex);
         }
         if(success) {
             dirName = fsview.getCurrentDirectory().getFullName();

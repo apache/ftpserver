@@ -89,6 +89,7 @@ class PORT extends AbstractCommand {
             dataAddr = InetAddress.getByName(dataSrvName);
         }
         catch(UnknownHostException ex) {
+            log.debug("Unknown host: " + dataSrvName, ex);
             out.send(553, "PORT.host", null);
             return;
         }
@@ -110,6 +111,7 @@ class PORT extends AbstractCommand {
             dataPort = (hi << 8) | lo;     
         }
         catch(NumberFormatException ex) {
+            log.debug("Invalid data port: " + request.getArgument(), ex);
             out.send(552, "PORT.invalid", null); 
             return; 
         }

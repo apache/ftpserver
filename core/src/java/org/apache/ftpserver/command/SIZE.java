@@ -60,6 +60,7 @@ class SIZE extends AbstractCommand {
             file = request.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
+            log.debug("Exception getting file object", ex);
         }
         if(file == null) {
             out.send(550, "SIZE.missing", fileName);

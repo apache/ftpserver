@@ -70,6 +70,7 @@ class REST extends AbstractCommand {
             }
         }
         catch(NumberFormatException ex) {
+            log.debug("Invalid restart position: " + argument, ex);
             out.send(501, "REST.invalid", null); 
         }
         

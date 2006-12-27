@@ -79,6 +79,7 @@ class RETR extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onDownloadStart(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -95,6 +96,7 @@ class RETR extends AbstractCommand {
                 file = request.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
+                log.debug("Exception getting file object", ex);
             }
             if(file == null) {
                 out.send(550, "RETR.missing", fileName);
@@ -127,6 +129,7 @@ class RETR extends AbstractCommand {
                 os = request.getDataOutputStream();
             }
             catch(IOException ex) {
+                log.debug("Exception getting the output data stream", ex);
                 out.send(425, "RETR", null);
                 return;
             }
@@ -155,10 +158,12 @@ class RETR extends AbstractCommand {
                 ftpStat.setDownload(handler, file, transSz);
             }
             catch(SocketException ex) {
+                log.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.send(426, "RETR", fileName);
             }
             catch(IOException ex) {
+                log.debug("IOException during data transfer", ex);
                 failure = true;
                 out.send(551, "RETR", fileName);
             }
@@ -175,6 +180,7 @@ class RETR extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onDownloadEnd(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

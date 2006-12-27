@@ -65,6 +65,7 @@ class MLST extends AbstractCommand {
             }
         }
         catch(FtpException ex) {
+            log.debug("Exception sending the file listing", ex);
             out.send(501, "MLST", null);
         }     
     }   

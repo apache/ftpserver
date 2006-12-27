@@ -60,6 +60,7 @@ class STRU extends AbstractCommand {
             out.send(200, "STRU", null);
         } 
         catch(IllegalArgumentException e) {
+            log.debug("Illegal structure argument: " + request.getArgument(), e);
             out.send(504, "STRU", null);
         }
     }

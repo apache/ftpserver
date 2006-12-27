@@ -74,6 +74,7 @@ class LIST extends AbstractCommand {
                 os = request.getDataOutputStream();
             }
             catch(IOException ex) {
+                log.debug("Exception getting the output data stream", ex);
                 out.send(425, "LIST", null);
                 return;
             }
@@ -92,15 +93,16 @@ class LIST extends AbstractCommand {
                 writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), LIST_FILE_FORMATER));
             }
             catch(SocketException ex) {
-                ex.printStackTrace();
+                log.debug("Socket exception during list transfer", ex);
                 failure = true;
                 out.send(426, "LIST", null);
             }
             catch(IOException ex) {
-                ex.printStackTrace();
+                log.debug("IOException during list transfer", ex);
                 failure = true;
                 out.send(551, "LIST", null);
             } catch(IllegalArgumentException e) {
+                log.debug("Illegal list syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.send(501, "LIST", null);
             } finally {

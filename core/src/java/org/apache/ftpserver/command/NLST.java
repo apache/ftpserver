@@ -75,6 +75,7 @@ class NLST extends AbstractCommand {
                 os = request.getDataOutputStream();
             }
             catch(IOException ex) {
+                log.debug("Exception getting the output data stream", ex);
                 out.send(425, "NLST", null);
                 return;
             }
@@ -100,13 +101,16 @@ class NLST extends AbstractCommand {
                 writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
+                log.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.send(426, "NLST", null);
             }
             catch(IOException ex) {
+                log.debug("IOException during data transfer", ex);
                 failure = true;
                 out.send(551, "NLST", null);
             } catch(IllegalArgumentException e) {
+                log.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.send(501, "LIST", null);
             } finally {

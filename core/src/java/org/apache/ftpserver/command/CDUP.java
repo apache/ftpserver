@@ -58,6 +58,7 @@ class CDUP extends AbstractCommand {
             success = fsview.changeDirectory("..");
         }
         catch(Exception ex) {
+            log.debug("Failed to change directory in file system", ex);
         }
         if(success) {
             String dirName = fsview.getCurrentDirectory().getFullName();

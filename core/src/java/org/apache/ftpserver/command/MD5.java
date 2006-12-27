@@ -84,6 +84,7 @@ class MD5 extends AbstractCommand {
                 file = request.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
+                log.debug("Exception getting the file object: " + fileName, ex);
                 // TODO: handle exception
             }
             
@@ -112,6 +113,7 @@ class MD5 extends AbstractCommand {
                 sb.append(md5Hash);
                 
             } catch(NoSuchAlgorithmException e) {
+                log.debug("MD5 algorithm not available", e);
                 out.send(502, "MD5.notimplemened", null);
             } finally {
                 IoUtils.close(is);

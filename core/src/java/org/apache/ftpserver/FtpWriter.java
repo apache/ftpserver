@@ -223,6 +223,7 @@ class FtpWriter implements FtpResponse {
             sr.close();
         }
         catch(IOException ex) {
+            log.debug("Exception creating output line", ex);
         }
         return buff.toString();
     }
@@ -558,6 +559,7 @@ class FtpWriter implements FtpResponse {
                     varVal = fsView.getCurrentDirectory().getFullName();
                 }
                 catch(Exception ex) {
+                    log.debug("Exception getting name of file object", ex);
                 }
             }
         }

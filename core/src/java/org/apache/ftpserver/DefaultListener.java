@@ -3,6 +3,7 @@ package org.apache.ftpserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.Connection;
@@ -87,7 +88,10 @@ public class DefaultListener implements Listener, Runnable {
 
                 Connection connection = new RequestHandler(serverContext, soc);
                 conManager.newConnection(connection);
+            } catch (SocketException ex) {
+                return;
             } catch (Exception ex) {
+                log.debug("Listener ending", ex);
                 return;
             }
         }
@@ -103,6 +107,7 @@ public class DefaultListener implements Listener, Runnable {
             try {
                 serverSocket.close();
             } catch (IOException ex) {
+                // ignore
             }
             serverSocket = null;
         }

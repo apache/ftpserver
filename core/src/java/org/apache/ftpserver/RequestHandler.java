@@ -72,7 +72,6 @@ class RequestHandler implements Connection {
     private BufferedReader reader;
     private boolean isConnectionClosed;
     
-    private DirectoryLister directoryLister;
     private DataType dataType    = DataType.ASCII;
     private Structure structure  = Structure.FILE;
     private Map attributes = new HashMap();

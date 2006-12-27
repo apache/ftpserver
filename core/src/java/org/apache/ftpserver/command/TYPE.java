@@ -58,6 +58,7 @@ class TYPE extends AbstractCommand {
             out.send(200, "TYPE", null);
         } 
         catch(IllegalArgumentException e) {
+            log.debug("Illegal type argument: " + request.getArgument(), e);
             out.send(504, "TYPE", null);
         }
     }

@@ -67,6 +67,7 @@ class RNTO extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onRenameStart(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -90,6 +91,7 @@ class RNTO extends AbstractCommand {
                 toFile = request.getFileSystemView().getFileObject(toFileStr);
             }
             catch(Exception ex) {
+                log.debug("Exception getting file object", ex);
             }
             if(toFile == null) {
                 out.send(553, "RNTO.invalid", null);
@@ -121,6 +123,7 @@ class RNTO extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onRenameEnd(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

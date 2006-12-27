@@ -68,6 +68,7 @@ class DELE extends AbstractCommand {
         try {
             ftpletRet = ftpletContainer.onDeleteStart(request, out);
         } catch(Exception e) {
+            log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -86,7 +87,7 @@ class DELE extends AbstractCommand {
             file = request.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
-            // TODO: handle exception
+            log.debug("Could not get file " + fileName, ex);
         }
         if(file == null) {
             out.send(550, "DELE.invalid", fileName);
@@ -118,6 +119,7 @@ class DELE extends AbstractCommand {
             try{
                 ftpletRet = ftpletContainer.onDeleteEnd(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

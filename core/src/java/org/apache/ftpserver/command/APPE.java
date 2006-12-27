@@ -78,7 +78,7 @@ class APPE extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onAppendStart(request, out);
             } catch(Exception e) {
-                
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -94,7 +94,8 @@ class APPE extends AbstractCommand {
             try {
                 file = request.getFileSystemView().getFileObject(fileName);
             }
-            catch(Exception ex) {
+            catch(Exception e) {
+                log.debug("File system threw exception", e);
             }
             if(file == null) {
                 out.send(550, "APPE.invalid", fileName);
@@ -120,7 +121,8 @@ class APPE extends AbstractCommand {
             try {
                 is = request.getDataInputStream();
             }
-            catch(IOException ex) {
+            catch(IOException e) {
+                log.debug("Exception when getting data input stream", e);
                 out.send(425, "APPE", fileName);
                 return;
             }
@@ -154,11 +156,13 @@ class APPE extends AbstractCommand {
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
                 ftpStat.setUpload(handler, file, transSz);
             }
-            catch(SocketException ex) {
+            catch(SocketException e) {
+                log.debug("SocketException during file upload", e);
                 failure = true;
                 out.send(426, "APPE", fileName);
             }
-            catch(IOException ex) {
+            catch(IOException e) {
+                log.debug("IOException during file upload", e);
                 failure = true;
                 out.send(551, "APPE", fileName);
             }
@@ -175,6 +179,7 @@ class APPE extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onAppendEnd(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

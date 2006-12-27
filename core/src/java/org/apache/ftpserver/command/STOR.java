@@ -80,6 +80,7 @@ class STOR extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onUploadStart(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -96,6 +97,7 @@ class STOR extends AbstractCommand {
                 file = request.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
+                log.debug("Exception getting file object", ex);
             }
             if(file == null) {
                 out.send(550, "STOR.invalid", fileName);
@@ -116,6 +118,7 @@ class STOR extends AbstractCommand {
                 is = request.getDataInputStream();
             }
             catch(IOException ex) {
+                log.debug("Exception getting the input data stream", ex);
                 out.send(425, "STOR", fileName);
                 return;
             }
@@ -144,10 +147,12 @@ class STOR extends AbstractCommand {
                 ftpStat.setUpload(handler, file, transSz);
             }
             catch(SocketException ex) {
+                log.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.send(426, "STOR", fileName);
             }
             catch(IOException ex) {
+                log.debug("IOException during data transfer", ex);
                 failure = true;
                 out.send(551, "STOR", fileName);
             }
@@ -164,6 +169,7 @@ class STOR extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onUploadEnd(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

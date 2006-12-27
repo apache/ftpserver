@@ -127,7 +127,7 @@ class PASS extends AbstractCommand {
                     try {
                         userMetadata.setCertificateChain(sslControlSocket.getSession().getPeerCertificates());
                     } catch(SSLPeerUnverifiedException e) {
-                        // ignore
+                        // ignore, certificate will not be available to UserManager
                     }
                 }
                 
@@ -174,6 +174,7 @@ class PASS extends AbstractCommand {
                 try{
                     ftpletRet = ftpletContainer.onLogin(request, out);
                 } catch(Exception e) {
+                    log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

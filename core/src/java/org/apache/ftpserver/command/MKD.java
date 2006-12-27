@@ -70,6 +70,7 @@ class MKD extends AbstractCommand {
         try{
             ftpletRet = ftpletContainer.onMkdirStart(request, out);
         } catch(Exception e) {
+            log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -86,6 +87,7 @@ class MKD extends AbstractCommand {
             file = request.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
+            log.debug("Exception getting file object", ex);
         }
         if(file == null) {
             out.send(550, "MKD.invalid", fileName);
@@ -122,6 +124,7 @@ class MKD extends AbstractCommand {
             try{
                 ftpletRet = ftpletContainer.onMkdirEnd(request, out);
             } catch(Exception e) {
+                log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
