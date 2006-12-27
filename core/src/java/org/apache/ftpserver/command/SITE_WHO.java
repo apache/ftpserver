@@ -30,7 +30,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.StringUtils;
@@ -42,7 +41,7 @@ import org.apache.ftpserver.util.StringUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_WHO implements Command {
+class SITE_WHO extends AbstractCommand {
     
     /**
      * Execute command.

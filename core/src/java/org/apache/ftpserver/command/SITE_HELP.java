@@ -25,7 +25,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 
 
 /**
@@ -34,7 +33,7 @@ import org.apache.ftpserver.interfaces.Command;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_HELP implements Command {
+class SITE_HELP extends AbstractCommand {
     
     /**
      * Execute command.

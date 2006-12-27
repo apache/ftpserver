@@ -29,7 +29,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.LISTFileFormater;
@@ -51,7 +50,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class NLST implements Command {
+class NLST extends AbstractCommand {
 
     private static final NLSTFileFormater NLST_FILE_FORMATER = new NLSTFileFormater();
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();

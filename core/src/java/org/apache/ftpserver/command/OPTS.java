@@ -39,7 +39,7 @@ import org.apache.ftpserver.interfaces.Command;
  * @author Birkir A. Barkarson
  */
 public 
-class OPTS implements Command {
+class OPTS extends AbstractCommand {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
     

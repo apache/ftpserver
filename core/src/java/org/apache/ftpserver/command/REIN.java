@@ -24,7 +24,6 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.interfaces.Command;
 
 /**
   * <code>REIN &lt;CRLF&gt;</code><br>
@@ -35,7 +34,7 @@ import org.apache.ftpserver.interfaces.Command;
   * @author Birkir A. Barkarson
   */
 public 
-class REIN implements Command {
+class REIN extends AbstractCommand {
 
     /**
      * Execute command.

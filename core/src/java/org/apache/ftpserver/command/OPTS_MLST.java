@@ -26,7 +26,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 
 /**
  * Client-Server listing negotation.
@@ -36,7 +35,7 @@ import org.apache.ftpserver.interfaces.Command;
  * @author Birkir A. Barkarson
  */
 public 
-class OPTS_MLST implements Command {
+class OPTS_MLST extends AbstractCommand {
     
     private final static String[] AVAILABLE_TYPES = {
         "Size",

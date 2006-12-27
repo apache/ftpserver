@@ -27,7 +27,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 
 /**
  * <code>PASV &lt;CRLF&gt;</code><br>
@@ -41,7 +40,7 @@ import org.apache.ftpserver.interfaces.Command;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class PASV implements Command {
+class PASV extends AbstractCommand {
 
     /**
      * Execute command

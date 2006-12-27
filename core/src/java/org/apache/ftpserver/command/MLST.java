@@ -26,7 +26,6 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
@@ -40,7 +39,7 @@ import org.apache.ftpserver.listing.MLSTFileFormater;
  * @author Birkir A. Barkarson
  */
 public 
-class MLST implements Command {
+class MLST extends AbstractCommand {
 
     /**
      * Execute command.

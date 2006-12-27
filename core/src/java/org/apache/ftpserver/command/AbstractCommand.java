@@ -21,34 +21,33 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-
+import org.apache.ftpserver.interfaces.Command;
 
 /**
- * Client-Server encoding negotiation.
- * Force server from default encoding to UTF-8 and back.
- * Note that the servers default encoding is UTF-8.
- * So this command has no effect.
- *
- * @author Birkir A. Barkarson
+ * Common base class recommended for {@link Command} implementations
  */
-public 
-class OPTS_UTF8 extends AbstractCommand {
+public abstract class AbstractCommand implements Command {
+
+    protected Log log;
+    
+    public AbstractCommand() {
+        log = LogFactory.getLog(getClass());
+    }
+
+    public void setLogFactory(LogFactory logFactory) {
+        log = logFactory.getInstance(getClass());
+    }
     
     /**
-     * Execute command.
+     * Execute command
      */
-    public void execute(RequestHandler handler,
+    public abstract void execute(RequestHandler handler,
                         FtpRequestImpl request, 
-                        FtpWriter out) throws IOException, FtpException {
-        
-        // reset state
-        request.resetState();
-        
-        // send default message
-        out.send(200, "OPTS.UTF8", null);
-    }
+                        FtpWriter out) throws IOException, FtpException;   
 }

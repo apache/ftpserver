@@ -26,7 +26,6 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -44,7 +43,7 @@ import org.apache.ftpserver.usermanager.BaseUser;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class USER implements Command {
+class USER extends AbstractCommand {
     
     /**
      * Execute command.

@@ -27,7 +27,6 @@ import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -36,7 +35,7 @@ import org.apache.ftpserver.util.DateUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_STAT implements Command {
+class SITE_STAT extends AbstractCommand {
 
     /**
      * Execute command.

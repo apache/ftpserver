@@ -29,7 +29,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -41,7 +40,7 @@ import org.apache.ftpserver.util.IoUtils;
  * 
  */
 public 
-class MD5 implements Command {
+class MD5 extends AbstractCommand {
 
     /**
      * Execute command.

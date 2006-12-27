@@ -39,7 +39,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE implements Command {
+class SITE extends AbstractCommand {
 
     private static final HashMap COMMAND_MAP = new HashMap(16);
     

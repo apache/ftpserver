@@ -25,7 +25,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.interfaces.Command;
 
 /**
  * <code>TYPE &lt;SP&gt; &lt;type-code&gt; &lt;CRLF&gt;</code><br>
@@ -35,7 +34,7 @@ import org.apache.ftpserver.interfaces.Command;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class TYPE implements Command {
+class TYPE extends AbstractCommand {
     
     /**
      * Execute command

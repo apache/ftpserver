@@ -19,11 +19,13 @@
 
 package org.apache.ftpserver;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
@@ -39,6 +41,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 public 
 class DefaultCommandFactory implements CommandFactory {
 
+    private LogFactory logFactory;
     private Log log;
     private HashMap commandMap = new HashMap();  
     
@@ -47,6 +50,7 @@ class DefaultCommandFactory implements CommandFactory {
      * Set the log factory.
      */
     public void setLogFactory(LogFactory factory) {
+        this.logFactory = factory;
         log = factory.getInstance(getClass());
     }
     
@@ -127,6 +131,17 @@ class DefaultCommandFactory implements CommandFactory {
             catch(Exception ex) {
                 log.error("DefaultCommandFactory.configure()", ex);
                 throw new FtpException("DefaultCommandFactory.configure()", ex);
+            }
+        }
+        
+        Collection commandEntries = commandMap.values();
+        
+        for (Iterator iter = commandEntries.iterator(); iter.hasNext();) {
+            Command command = (Command) iter.next();
+            
+            if(command instanceof AbstractCommand) {
+                AbstractCommand abstractCommand = (AbstractCommand) command;
+                abstractCommand.setLogFactory(logFactory);
             }
         }
     }

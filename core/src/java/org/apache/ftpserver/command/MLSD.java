@@ -29,7 +29,6 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
@@ -49,7 +48,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author Birkir A. Barkarson
  */
 public 
-class MLSD implements Command {
+class MLSD extends AbstractCommand {
 
     private DirectoryLister directoryLister = new DirectoryLister();
     
