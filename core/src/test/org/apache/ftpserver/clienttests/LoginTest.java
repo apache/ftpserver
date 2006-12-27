@@ -19,12 +19,6 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
@@ -86,7 +80,7 @@ public class LoginTest extends ClientTestTemplate {
     }
 
     public void testOnlyPass() throws Exception {
-        int reply = client.pass(UNKNOWN_PASSWORD);
+        int reply = client.pass(ADMIN_PASSWORD);
         assertTrue(FTPReply.isNegativePermanent(reply));
     }
 

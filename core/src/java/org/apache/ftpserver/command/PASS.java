@@ -30,6 +30,7 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authentication;
+import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -83,8 +84,8 @@ class PASS implements Command {
             
             // check user name
             String userName = request.getUserArgument();
-            User user = request.getUser();
-            if(userName == null && user == null) {
+
+            if(userName == null && request.getUser() == null) {
                 out.send(503, "PASS", null);
                 return;
             }
@@ -115,7 +116,7 @@ class PASS implements Command {
             
             // authenticate user
             UserManager userManager = serverContext.getUserManager();
-            user = null;
+            User authenticatedUser = null;
             try {
                 UserMetadata userMetadata = new UserMetadata();
                 Socket controlSocket = handler.getControlSocket();
@@ -138,14 +139,35 @@ class PASS implements Command {
                 else {
                     auth = new UsernamePasswordAuthentication(userName, password, userMetadata);
                 }
-                user = userManager.authenticate(auth);
+                authenticatedUser = userManager.authenticate(auth);
                 success = true;
-            }
-            catch(Exception ex) {
+            } catch(AuthenticationFailedException e) { 
                 success = false;
-                log.warn("PASS.execute()", ex);
+                authenticatedUser = null;
+                log.warn("User failed to log in", e);                
+            }
+            catch(Exception e) {
+                success = false;
+                authenticatedUser = null;
+                log.warn("PASS.execute()", e);
             }
 
+            // set the user so that the Ftplets will be able to verify it
+            
+            // first save old values so that we can reset them if Ftplets
+            // tell us to fail
+            User oldUser = request.getUser();
+            String oldUserArgument = request.getUserArgument();
+            int oldMaxIdleTime = request.getMaxIdleTime();
+
+            if(success) {
+                request.setUser(authenticatedUser);
+                request.setUserArgument(null);
+                request.setMaxIdleTime(authenticatedUser.getMaxIdleTime());
+            } else {
+                request.setUser(null);
+            }
+            
             // call Ftplet.onLogin() method
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             if(ftpletContainer != null) {
@@ -163,11 +185,12 @@ class PASS implements Command {
                 }
             }
             
-            if(success) {
-                request.setUser(user);
-                request.setUserArgument(null);
-                request.setMaxIdleTime(user.getMaxIdleTime());
-            } else {
+            if(!success) {
+                // reset due to failure
+                request.setUser(oldUser);
+                request.setUserArgument(oldUserArgument);
+                request.setMaxIdleTime(oldMaxIdleTime);
+                
                 log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
                 stat.setLoginFail(handler);
@@ -176,7 +199,7 @@ class PASS implements Command {
             
             // update different objects
             FileSystemManager fmanager = serverContext.getFileSystemManager(); 
-            FileSystemView fsview = fmanager.createFileSystemView(user);
+            FileSystemView fsview = fmanager.createFileSystemView(authenticatedUser);
             request.setLogin(fsview);
             stat.setLogin(handler);
 

@@ -77,7 +77,10 @@ interface Ftplet {
     FtpletEnum onDisconnect(FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
-     * Client successful login notification method.
+     * Client successful login notification method. 
+     * If the user has successfully authenticated, the 
+     * {@link FtpRequest#getUser()} method will return the user,
+     * otherwise it will return null.
      */
     FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException;
             

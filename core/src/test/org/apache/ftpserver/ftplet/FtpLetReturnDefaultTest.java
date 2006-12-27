@@ -22,6 +22,7 @@ package org.apache.ftpserver.ftplet;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPReply;
@@ -67,6 +68,16 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testLogin() throws Exception {
+        MockFtplet.callback = new MockFtpletCallback() {
+            public FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+                assertNotNull(request.getUser());
+                
+                return super.onLogin(request, response);
+            }
+            
+        };
+        MockFtplet.callback.returnValue = FtpletEnum.RET_DEFAULT;
+        
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
 
