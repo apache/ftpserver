@@ -26,11 +26,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -264,7 +266,7 @@ class DbUserManager extends AbstractUserManager {
             map.put( ATTR_PASSWORD, escapeString(getPassword(user)) );
             map.put( ATTR_HOME, escapeString(user.getHomeDirectory()) );
             map.put( ATTR_ENABLE, String.valueOf(user.getEnabled()) );
-            map.put( ATTR_WRITE_PERM, String.valueOf(user.getWritePermission()) );
+            map.put( ATTR_WRITE_PERM, String.valueOf(user.authorize(new WriteRequest())) );
             map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
             map.put( ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()) );
             map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()) ); 
@@ -329,12 +331,19 @@ class DbUserManager extends AbstractUserManager {
                 thisUser.setName(rs.getString(ATTR_LOGIN));
                 thisUser.setHomeDirectory(rs.getString(ATTR_HOME));
                 thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(ATTR_ENABLE)));
-                thisUser.setWritePermission(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM)));
                 thisUser.setMaxLoginNumber(rs.getInt(ATTR_MAX_LOGIN_NUMBER));
                 thisUser.setMaxLoginPerIP(rs.getInt(ATTR_MAX_LOGIN_PER_IP));
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
                 thisUser.setMaxUploadRate(rs.getInt(ATTR_MAX_UPLOAD_RATE));
                 thisUser.setMaxDownloadRate(rs.getInt(ATTR_MAX_DOWNLOAD_RATE));
+                
+                List authorities = new ArrayList();
+                
+                if(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM))) {
+                    authorities.add(new WritePermission());
+                }
+                
+                thisUser.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
             }
             return thisUser;
         }

@@ -26,11 +26,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -122,7 +124,7 @@ class PropertiesUserManager extends AbstractUserManager {
        }
        userDataProp.setProperty(thisPrefix + ATTR_HOME,              home);
        userDataProp.setProperty(thisPrefix + ATTR_ENABLE,            usr.getEnabled());
-       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.getWritePermission());
+       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.authorize(new WriteRequest()));
        userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
        userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
        userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
@@ -252,7 +254,16 @@ class PropertiesUserManager extends AbstractUserManager {
         user.setName(userName);
         user.setEnabled(userDataProp.getBoolean(baseKey + ATTR_ENABLE, true));
         user.setHomeDirectory( userDataProp.getProperty(baseKey + ATTR_HOME, "/") );
-        user.setWritePermission(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false));
+        
+        List authorities = new ArrayList();
+        
+        if(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false)) {
+            authorities.add(new WritePermission());
+        }
+        
+        user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+        
+        //user.setWritePermission(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false));
         user.setMaxLoginNumber(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER, 0));
         user.setMaxLoginPerIP(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_PER_IP, 0));
         user.setMaxIdleTime(userDataProp.getInteger(baseKey + ATTR_MAX_IDLE_TIME, 0));

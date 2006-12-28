@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
@@ -37,9 +38,9 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
@@ -47,6 +48,7 @@ import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.WritePermission;
 
 /**
  * FTP server configuration implementation. It holds all 
@@ -71,6 +73,12 @@ class ConfigurableFtpServerContext implements FtpServerContext {
     
     private Log log;
     
+    private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
+        new WritePermission()
+    };
+
+    private static final Authority[] ANON_AUTHORITIES = new Authority[]{
+    };
     
     /**
      * Constructor - set the root configuration.
@@ -184,7 +192,9 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
             adminUser.setEnabled(true);
-            adminUser.setWritePermission(true);
+            
+            adminUser.setAuthorities(ADMIN_AUTHORITIES);
+
             adminUser.setMaxLoginNumber(0);
             adminUser.setMaxLoginPerIP(0);
             adminUser.setMaxUploadRate(0);
@@ -200,8 +210,10 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             BaseUser anonUser = new BaseUser();
             anonUser.setName("anonymous");
             anonUser.setPassword("");
+            
+            anonUser.setAuthorities(ANON_AUTHORITIES);
+            
             anonUser.setEnabled(true);
-            anonUser.setWritePermission(false);
             anonUser.setMaxLoginNumber(20);
             anonUser.setMaxLoginPerIP(2);
             anonUser.setMaxUploadRate(4800);

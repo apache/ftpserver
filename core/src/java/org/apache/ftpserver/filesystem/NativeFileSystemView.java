@@ -42,10 +42,11 @@ class NativeFileSystemView implements FileSystemView {
     // It is always with respect to the root directory.
     private String currDir;
     
-    private boolean writePermission;
+    private User user;
+    
+    //private boolean writePermission;
 
 	private boolean caseInsensitive = false;
-    
     
     /**
      * Constructor - set the user object.
@@ -75,7 +76,8 @@ class NativeFileSystemView implements FileSystemView {
         }
         this.rootDir = rootDir;
         
-        writePermission = user.getWritePermission();
+        this.user = user;
+        
         currDir = "/";
     }
     
@@ -84,7 +86,7 @@ class NativeFileSystemView implements FileSystemView {
      * for the user. 
      */
     public FileObject getHomeDirectory() {
-        return new NativeFileObject("/", new File(rootDir), writePermission);
+        return new NativeFileObject("/", new File(rootDir), user);
     }
     
     /**
@@ -93,11 +95,11 @@ class NativeFileSystemView implements FileSystemView {
     public FileObject getCurrentDirectory() {
         FileObject fileObj = null;
         if(currDir.equals("/")) {
-            fileObj = new NativeFileObject("/", new File(rootDir), writePermission); 
+            fileObj = new NativeFileObject("/", new File(rootDir), user); 
         }
         else {
             File file = new File(rootDir, currDir.substring(1));
-            fileObj = new NativeFileObject(currDir, file, writePermission);
+            fileObj = new NativeFileObject(currDir, file, user);
             
         }
         return fileObj;
@@ -114,7 +116,7 @@ class NativeFileSystemView implements FileSystemView {
         
         // strip the root directory and return
         String userFileName = physicalName.substring(rootDir.length() - 1);
-        return new NativeFileObject(userFileName, fileObj, writePermission);
+        return new NativeFileObject(userFileName, fileObj, user);
     }
     
     /**

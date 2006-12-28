@@ -27,8 +27,9 @@ import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.usermanager.WritePermission;
+import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
  * This SITE command returns the specified user information.
@@ -36,7 +37,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class SITE_DESCUSER implements Command {
+class SITE_DESCUSER extends AbstractCommand {
 
     /**
      * Execute command.
@@ -75,6 +76,7 @@ class SITE_DESCUSER implements Command {
             }
         }
         catch(FtpException ex) {
+            log.debug("Exception trying to get user from user manager", ex);
             user = null;
         }
         if(user == null) {
@@ -88,7 +90,7 @@ class SITE_DESCUSER implements Command {
         sb.append("uid             : ").append(user.getName()).append("\n");
         sb.append("userpassword    : ********\n");
         sb.append("homedirectory   : ").append(user.getHomeDirectory()).append("\n");
-        sb.append("writepermission : ").append(user.getWritePermission()).append("\n");
+        sb.append("writepermission : ").append(user.authorize(new WriteRequest())).append("\n");
         sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
         sb.append("idletime        : ").append(user.getMaxIdleTime()).append("\n");
         sb.append("uploadrate      : ").append(user.getMaxUploadRate()).append("\n");

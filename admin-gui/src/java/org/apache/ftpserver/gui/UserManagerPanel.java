@@ -28,6 +28,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -41,11 +43,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.WritePermission;
+import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
  * User management panel.
@@ -530,7 +535,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                     passwordChkBox.setSelected(false);
                     directoryTxt.setText(user.getHomeDirectory());
                     enabledChkBox.setSelected(user.getEnabled());
-                    writeChkBox.setSelected(user.getWritePermission());
+                    writeChkBox.setSelected(user.authorize(new WriteRequest()));
                     setLoginNumberCombo(loginNumberLst, user.getMaxLoginNumber());
                     setLoginPerIPCombo(loginPerIPLst, user.getMaxLoginPerIP());
                     setIdleTimeCombo(idleLst, user.getMaxIdleTime());
@@ -562,7 +567,15 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             if(setPassword(user)) {
                 user.setHomeDirectory(directoryTxt.getText());
                 user.setEnabled(enabledChkBox.isSelected());
-                user.setWritePermission(writeChkBox.isSelected());
+                
+                List authorities = new ArrayList();
+                
+                if(writeChkBox.isSelected()) {
+                    authorities.add(new WritePermission());
+                }
+                
+                user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+                
                 user.setMaxLoginNumber(getMaxLoginNumber(loginNumberLst));
                 user.setMaxLoginPerIP(getMaxLoginPerIP(loginPerIPLst));
                 user.setMaxIdleTime(getMaxIdleTime(idleLst));
@@ -742,8 +755,12 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             BaseUser user = new BaseUser();
             user.setName(userName);
             user.setPassword(userName);
+            
+            List authorities = new ArrayList();
+            
+            user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+            
             user.setEnabled(true);
-            user.setWritePermission(false);
             user.setMaxUploadRate(0);
             user.setMaxDownloadRate(0);
             user.setHomeDirectory("./res/home");

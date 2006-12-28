@@ -22,6 +22,8 @@ package org.apache.ftpserver.filesystem;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.ftpserver.ftplet.AuthorizationRequest;
+import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.util.IoUtils;
 
 import junit.framework.TestCase;
@@ -43,6 +45,14 @@ public class NativeFileObjectTest extends TestCase {
     private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
             + TEST_FILE2_IN_DIR1.getName();
 
+    public static class AlwaysAuthorizedUser extends BaseUser {
+
+        public boolean authorize(AuthorizationRequest request) {
+            return true;
+        }
+        
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -128,7 +138,7 @@ public class NativeFileObjectTest extends TestCase {
     
     public void testConstructorWithNullFileName() {
         try{
-            new NativeFileObject(null, TEST_FILE2_IN_DIR1, true);
+            new NativeFileObject(null, TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -137,7 +147,7 @@ public class NativeFileObjectTest extends TestCase {
 
     public void testEmptyFileName() {
         try{
-            new NativeFileObject("", TEST_FILE2_IN_DIR1, true);
+            new NativeFileObject("", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -146,7 +156,7 @@ public class NativeFileObjectTest extends TestCase {
 
     public void testNonLeadingSlash() {
         try{
-            new NativeFileObject("foo", TEST_FILE2_IN_DIR1, true);
+            new NativeFileObject("foo", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -155,7 +165,7 @@ public class NativeFileObjectTest extends TestCase {
 
     public void testWhiteSpaceFileName() {
         try{
-            new NativeFileObject(" \t", TEST_FILE2_IN_DIR1, true);
+            new NativeFileObject(" \t", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -164,7 +174,7 @@ public class NativeFileObjectTest extends TestCase {
 
     public void testConstructorWithNullFile() {
         try{
-            new NativeFileObject("foo", null, true);
+            new NativeFileObject("foo", null, new AlwaysAuthorizedUser());
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -174,25 +184,25 @@ public class NativeFileObjectTest extends TestCase {
     
     public void testFullName() {
         NativeFileObject fileObject = new NativeFileObject("/dir1/file2",
-                TEST_FILE2_IN_DIR1, true);
+                TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
         assertEquals("/dir1/file2", fileObject.getFullName());
 
-        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, true);
+        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, new AlwaysAuthorizedUser());
         assertEquals("/dir1", fileObject.getFullName());
 
-        fileObject = new NativeFileObject("/dir1", TEST_DIR1, true);
+        fileObject = new NativeFileObject("/dir1", TEST_DIR1, new AlwaysAuthorizedUser());
         assertEquals("/dir1", fileObject.getFullName());
     }
 
     public void testShortName() {
         NativeFileObject fileObject = new NativeFileObject("/dir1/file2",
-                TEST_FILE2_IN_DIR1, true);
+                TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
         assertEquals("file2", fileObject.getShortName());
 
-        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, true);
+        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, new AlwaysAuthorizedUser());
         assertEquals("dir1", fileObject.getShortName());
 
-        fileObject = new NativeFileObject("/dir1", TEST_DIR1, true);
+        fileObject = new NativeFileObject("/dir1", TEST_DIR1, new AlwaysAuthorizedUser());
         assertEquals("dir1", fileObject.getShortName());
     }
 

@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.usermanager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -26,6 +28,7 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
@@ -137,7 +140,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(0, user.getMaxLoginNumber());
         assertEquals(0, user.getMaxLoginPerIP());
         assertEquals(0, user.getMaxUploadRate());
-        assertFalse(user.getWritePermission());
+        assertFalse(user.authorize(new WriteRequest()));
         assertTrue(user.getEnabled());
     }
 
@@ -152,7 +155,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(3, user.getMaxLoginNumber());
         assertEquals(4, user.getMaxLoginPerIP());
         assertEquals(5, user.getMaxUploadRate());
-        assertTrue(user.getWritePermission());
+        assertTrue(user.authorize(new WriteRequest()));
         assertFalse(user.getEnabled());
     }
 
@@ -172,7 +175,10 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setMaxLoginPerIP(4);
         user.setMaxUploadRate(5);
 
-        user.setWritePermission(true);
+        List authorities = new ArrayList();
+        authorities.add(new WritePermission());
+        user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+
         userManager.save(user);
         
         UserManager newUserManager = new PropertiesUserManager();
@@ -185,7 +191,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertNull(actualUser.getPassword());
         assertEquals(user.getHomeDirectory(), actualUser.getHomeDirectory());
         assertEquals(user.getEnabled(), actualUser.getEnabled());
-        assertEquals(user.getWritePermission(), actualUser.getWritePermission());
+        assertTrue(user.authorize(new WriteRequest()));
         assertEquals(user.getMaxDownloadRate(), actualUser.getMaxDownloadRate());
         assertEquals(user.getMaxIdleTime(), actualUser.getMaxIdleTime());
         assertEquals(user.getMaxLoginNumber(), actualUser.getMaxLoginNumber());
@@ -209,7 +215,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(0, actualUser.getMaxLoginNumber());
         assertEquals(0, actualUser.getMaxLoginPerIP());
         assertEquals(0, actualUser.getMaxUploadRate());
-        assertFalse(actualUser.getWritePermission());
+        assertFalse(user.authorize(new WriteRequest()));
         assertTrue(actualUser.getEnabled());
     }
 
@@ -228,7 +234,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertNull(actualUser.getPassword());
         assertEquals("/", actualUser.getHomeDirectory());
         assertEquals(true, actualUser.getEnabled());
-        assertEquals(false, actualUser.getWritePermission());
+        assertFalse(user.authorize(new WriteRequest()));
         assertEquals(0, actualUser.getMaxDownloadRate());
         assertEquals(0, actualUser.getMaxIdleTime());
         assertEquals(0, actualUser.getMaxLoginNumber());

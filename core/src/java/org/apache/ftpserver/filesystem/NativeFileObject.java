@@ -29,6 +29,8 @@ import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
  * This class wraps native file object. 
@@ -44,13 +46,14 @@ class NativeFileObject implements FileObject {
     private String fileName;
     
     private File file;
-    private boolean writePermission;
+    
+    private User user;
     
     
     /**
      * Constructor.
      */
-    protected NativeFileObject(String fileName, File file, boolean writePerm) {
+    protected NativeFileObject(String fileName, File file, User user) {
         if(fileName == null) {
             throw new IllegalArgumentException("fileName can not be null");
         } 
@@ -68,7 +71,7 @@ class NativeFileObject implements FileObject {
         
         this.fileName = fileName;
         this.file = file;
-        this.writePermission = writePerm;
+        this.user = user;
     }
     
     /**
@@ -182,10 +185,10 @@ class NativeFileObject implements FileObject {
     }
     
     /**
-     * Chech file write permission.
+     * Check file write permission.
      */
     public boolean hasWritePermission() {
-        if(!writePermission) {
+        if(!user.authorize(new WriteRequest(getFullName()))) {
             return false;
         }
         
@@ -285,7 +288,7 @@ class NativeFileObject implements FileObject {
         for(int i=0; i<files.length; ++i) {
             File fileObj = files[i];
             String fileName = virtualFileStr + fileObj.getName();
-            virtualFiles[i] = new NativeFileObject(fileName, fileObj, writePermission);
+            virtualFiles[i] = new NativeFileObject(fileName, fileObj, user);
         }
         return virtualFiles;
     }

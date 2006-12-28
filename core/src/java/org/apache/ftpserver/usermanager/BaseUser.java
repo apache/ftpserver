@@ -21,6 +21,8 @@ package org.apache.ftpserver.usermanager;
 
 import java.io.Serializable;
 
+import org.apache.ftpserver.ftplet.Authority;
+import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.User;
 
 /**
@@ -55,10 +57,10 @@ class BaseUser implements User, Serializable {
     private int maxLoginNumber = 0; //no limit
     private int maxLoginPerIP = 0; //no limit
 
-    private boolean hasWritePermission;
-    
     private String homeDir    = null;
     private boolean isEnabled = true;
+
+    private Authority[] authorities = new Authority[0];
     
     /**
      * Default constructor.
@@ -72,10 +74,10 @@ class BaseUser implements User, Serializable {
     public BaseUser(User user) {
         name = user.getName();
         password = user.getPassword();
+        authorities = user.getAuthorities();
         maxIdleTimeSec = user.getMaxIdleTime();
         maxUploadRate = user.getMaxUploadRate();
         maxDownloadRate = user.getMaxDownloadRate();
-        hasWritePermission = user.getWritePermission();
         homeDir = user.getHomeDirectory();
         isEnabled = user.getEnabled();
         maxLoginNumber = user.getMaxLoginNumber();
@@ -110,6 +112,14 @@ class BaseUser implements User, Serializable {
         password = pass;
     }
 
+    public Authority[] getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Authority[] authorities) {
+        this.authorities = authorities;
+    }
+    
     /**
      * Get the maximum idle time in second.
      */
@@ -214,25 +224,29 @@ class BaseUser implements User, Serializable {
     public void setMaxLoginPerIP(int loginPerIP) {
       maxLoginPerIP = loginPerIP;
     }
-        
-    /**
-     * Get write permission.
-     */
-    public boolean getWritePermission() {
-        return hasWritePermission;
-    }
-    
-    /**
-     * Set write permission.
-     */
-    public void setWritePermission(boolean writePerm) {
-        hasWritePermission = writePerm;
-    } 
 
     /** 
      * String representation.
      */
     public String toString() {
         return name;
-    }    
+    }  
+    
+    /**
+     * @see User#authorize(AuthorizationRequest)
+     */
+    public boolean authorize(AuthorizationRequest request) {
+        Authority[] authorities = getAuthorities();
+        
+        for (int i = 0; i < authorities.length; i++) {
+            Authority authority = authorities[i];
+            
+            if(authority.canAuthorize(request)) {
+                return authority.authorize(request);
+            }
+            
+        }
+        
+        return false;
+    }
 }

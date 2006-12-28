@@ -38,6 +38,19 @@ interface User {
     String getPassword();
     
     /**
+     * Get all authorities granted to this user
+     * @return All authorities
+     */
+    Authority[] getAuthorities();
+
+    /**
+     * Authorize a {@link AuthorizationRequest} for this user
+     * @param request The {@link AuthorizationRequest} to authorize
+     * @return True if the user is allowed to perform the action, false otherwise
+     */
+    boolean authorize(AuthorizationRequest request);
+    
+    /**
      * Get the maximum idle time in seconds. Zero or less idle time means no limit.
      */
     int getMaxIdleTime();
@@ -71,9 +84,4 @@ interface User {
      * get user home directory
      */
     String getHomeDirectory();
-    
-    /**
-     * Get write permission
-     */
-    boolean getWritePermission();
 }
