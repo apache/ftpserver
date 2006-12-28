@@ -20,7 +20,6 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
-import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,9 +47,10 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     private int activeLocalPort;
     
     private InetAddress passiveAddress;
-    private int passivePorts[][];
     
     private Ssl ssl;
+    
+    private PassivePorts passivePorts;
 
     
     /**
@@ -99,12 +99,8 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
             }
             
             String pasvPorts = passiveConf.getString("ports", "0");
-            StringTokenizer st = new StringTokenizer(pasvPorts, " ,;\t\n\r\f");
-            passivePorts = new int[st.countTokens()][2];
-            for(int i=0; i<passivePorts.length; i++) {
-                passivePorts[i][0] = Integer.parseInt(st.nextToken());
-                passivePorts[i][1] = 0;
-            }
+            
+            passivePorts = PassivePorts.parse(pasvPorts);
             
             // get SSL parameters if available 
             Configuration sslConf = conf.subset("ssl");
@@ -177,15 +173,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
         while( (dataPort==-1) && (--loopTimes >= 0)  && (!currThread.isInterrupted()) ) {
 
             // search for a free port            
-            for(int i=0; i<passivePorts.length; i++) {
-                if(passivePorts[i][1] == 0) {
-                    if(passivePorts[i][0] != 0) {
-                        passivePorts[i][1] = 1;
-                    }
-                    dataPort = passivePorts[i][0];
-                    break;
-                }
-            }
+            dataPort = passivePorts.reserveNextPort();
 
             // no available free port - wait for the release notification
             if(dataPort == -1) {
@@ -203,12 +191,8 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
      * Release data port
      */
     public synchronized void releasePassivePort(int port) {
-        for(int i=0; i<passivePorts.length; i++) {
-            if(passivePorts[i][0] == port) {
-                passivePorts[i][1] = 0;
-                break;
-            }
-        }
+        passivePorts.releasePort(port);
+
         notify();
     }
     

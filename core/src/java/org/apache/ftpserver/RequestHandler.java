@@ -46,11 +46,10 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
-import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.Ssl;
-import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.util.IoUtils;
 
 
