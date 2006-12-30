@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.usermanager.WritePermission;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
@@ -93,8 +93,17 @@ class SITE_DESCUSER extends AbstractCommand {
         sb.append("writepermission : ").append(user.authorize(new WriteRequest())).append("\n");
         sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
         sb.append("idletime        : ").append(user.getMaxIdleTime()).append("\n");
-        sb.append("uploadrate      : ").append(user.getMaxUploadRate()).append("\n");
-        sb.append("downloadrate    : ").append(user.getMaxDownloadRate()).append("\n");
+        
+        TransferRatePermission[] maxTransferRates = (TransferRatePermission[]) 
+            user.getAuthorities(TransferRatePermission.class);
+        
+        if(maxTransferRates.length > 0) {
+            sb.append("uploadrate      : ").append(maxTransferRates[0].getMaxUploadRate()).append("\n");
+            sb.append("downloadrate    : ").append(maxTransferRates[0].getMaxDownloadRate()).append("\n");
+        } else {
+            sb.append("uploadrate      : 0\n");
+            sb.append("downloadrate    : 0\n");
+        }
         sb.append('\n');
         out.write(200, sb.toString());
     }

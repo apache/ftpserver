@@ -268,10 +268,34 @@ class DbUserManager extends AbstractUserManager {
             map.put( ATTR_ENABLE, String.valueOf(user.getEnabled()) );
             map.put( ATTR_WRITE_PERM, String.valueOf(user.authorize(new WriteRequest())) );
             map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
-            map.put( ATTR_MAX_UPLOAD_RATE, new Integer(user.getMaxUploadRate()) );
-            map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(user.getMaxDownloadRate()) ); 
-            map.put( ATTR_MAX_LOGIN_NUMBER, new Integer(user.getMaxLoginNumber()));
-            map.put( ATTR_MAX_LOGIN_PER_IP, new Integer(user.getMaxLoginPerIP()));
+            
+            
+            
+            Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+            
+            if(maxTransferRates.length > 0) {
+                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate()) );
+                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate()) ); 
+            } else {
+                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(0));
+                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(0) ); 
+            }
+
+            
+            Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+            
+            if(concurrentLoginPermissions.length > 0) {
+                map.put( ATTR_MAX_LOGIN_NUMBER, 
+                        new Integer(((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins()));
+                map.put( ATTR_MAX_LOGIN_PER_IP, 
+                        new Integer(((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP()));
+            } else {
+                map.put( ATTR_MAX_LOGIN_NUMBER, new Integer(0));
+                map.put( ATTR_MAX_LOGIN_PER_IP, new Integer(0));
+                
+            }
+            
+
             
             String sql = null;      
             if( !doesExist(user.getName()) ) {
@@ -331,17 +355,16 @@ class DbUserManager extends AbstractUserManager {
                 thisUser.setName(rs.getString(ATTR_LOGIN));
                 thisUser.setHomeDirectory(rs.getString(ATTR_HOME));
                 thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(ATTR_ENABLE)));
-                thisUser.setMaxLoginNumber(rs.getInt(ATTR_MAX_LOGIN_NUMBER));
-                thisUser.setMaxLoginPerIP(rs.getInt(ATTR_MAX_LOGIN_PER_IP));
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
-                thisUser.setMaxUploadRate(rs.getInt(ATTR_MAX_UPLOAD_RATE));
-                thisUser.setMaxDownloadRate(rs.getInt(ATTR_MAX_DOWNLOAD_RATE));
                 
                 List authorities = new ArrayList();
                 
                 if(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM))) {
                     authorities.add(new WritePermission());
                 }
+                
+                authorities.add(new ConcurrentLoginPermission(rs.getInt(ATTR_MAX_LOGIN_NUMBER), rs.getInt(ATTR_MAX_LOGIN_PER_IP)));
+                authorities.add(new TransferRatePermission(rs.getInt(ATTR_MAX_UPLOAD_RATE), rs.getInt(ATTR_MAX_DOWNLOAD_RATE)));
                 
                 thisUser.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
             }

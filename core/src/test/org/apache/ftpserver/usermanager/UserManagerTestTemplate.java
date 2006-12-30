@@ -135,11 +135,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals("user1", user.getName());
         assertNull("Password must not be set", user.getPassword());
         assertEquals("home", user.getHomeDirectory());
-        assertEquals(0, user.getMaxDownloadRate());
+        assertEquals(0, getMaxDownloadRate(user));
         assertEquals(0, user.getMaxIdleTime());
-        assertEquals(0, user.getMaxLoginNumber());
-        assertEquals(0, user.getMaxLoginPerIP());
-        assertEquals(0, user.getMaxUploadRate());
+        assertEquals(0, getMaxLoginNumber(user));
+        assertEquals(0, getMaxLoginPerIP(user));
+        assertEquals(0, getMaxUploadRate(user));
         assertFalse(user.authorize(new WriteRequest()));
         assertTrue(user.getEnabled());
     }
@@ -150,11 +150,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals("user2", user.getName());
         assertNull("Password must not be set", user.getPassword());
         assertEquals("home", user.getHomeDirectory());
-        assertEquals(1, user.getMaxDownloadRate());
+        assertEquals(1, getMaxDownloadRate(user));
         assertEquals(2, user.getMaxIdleTime());
-        assertEquals(3, user.getMaxLoginNumber());
-        assertEquals(4, user.getMaxLoginPerIP());
-        assertEquals(5, user.getMaxUploadRate());
+        assertEquals(3, getMaxLoginNumber(user));
+        assertEquals(4, getMaxLoginPerIP(user));
+        assertEquals(5, getMaxUploadRate(user));
         assertTrue(user.authorize(new WriteRequest()));
         assertFalse(user.getEnabled());
     }
@@ -163,20 +163,58 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertNull(userManager.getUserByName("foo"));
     }
 
+    private int getMaxDownloadRate(User user) {
+        Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+    
+        if(maxTransferRates.length > 0) {
+            return ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate();
+        } else {
+            return 0;
+        }
+    }
+
+    private int getMaxUploadRate(User user) {
+        Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+    
+        if(maxTransferRates.length > 0) {
+            return ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate();
+        } else {
+            return 0;
+        } 
+    }
+
+    private int getMaxLoginNumber(User user) {
+        Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+        
+        if(concurrentLoginPermissions.length > 0) {
+            return ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins();
+        } else {
+            return 0;
+        } 
+    }
+
+    private int getMaxLoginPerIP(User user) {
+        Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+        
+        if(concurrentLoginPermissions.length > 0) {
+            return ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP();
+        } else {
+            return 0;
+        } 
+    }
+    
     public void testSave() throws Exception {
         BaseUser user = new BaseUser();
         user.setName("newuser");
         user.setPassword("newpw");
         user.setHomeDirectory("newhome");
         user.setEnabled(false);
-        user.setMaxDownloadRate(1);
         user.setMaxIdleTime(2);
-        user.setMaxLoginNumber(3);
-        user.setMaxLoginPerIP(4);
-        user.setMaxUploadRate(5);
 
         List authorities = new ArrayList();
         authorities.add(new WritePermission());
+        authorities.add(new ConcurrentLoginPermission(3, 4));
+        authorities.add(new TransferRatePermission(1, 5));
         user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
 
         userManager.save(user);
@@ -192,11 +230,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(user.getHomeDirectory(), actualUser.getHomeDirectory());
         assertEquals(user.getEnabled(), actualUser.getEnabled());
         assertTrue(user.authorize(new WriteRequest()));
-        assertEquals(user.getMaxDownloadRate(), actualUser.getMaxDownloadRate());
+        assertEquals(getMaxDownloadRate(user), getMaxDownloadRate(actualUser));
         assertEquals(user.getMaxIdleTime(), actualUser.getMaxIdleTime());
-        assertEquals(user.getMaxLoginNumber(), actualUser.getMaxLoginNumber());
-        assertEquals(user.getMaxLoginPerIP(), actualUser.getMaxLoginPerIP());
-        assertEquals(user.getMaxUploadRate(), actualUser.getMaxUploadRate());
+        assertEquals(getMaxLoginNumber(user), getMaxLoginNumber(actualUser));
+        assertEquals(getMaxLoginPerIP(user), getMaxLoginPerIP(actualUser));
+        assertEquals(getMaxUploadRate(user), getMaxUploadRate(actualUser));
     }
 
     public void testSaveWithExistingUser() throws Exception {
@@ -210,11 +248,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals("user2", actualUser.getName());
         assertNull(actualUser.getPassword());
         assertEquals("newhome", actualUser.getHomeDirectory());
-        assertEquals(0, actualUser.getMaxDownloadRate());
+        assertEquals(0, getMaxDownloadRate(actualUser));
         assertEquals(0, actualUser.getMaxIdleTime());
-        assertEquals(0, actualUser.getMaxLoginNumber());
-        assertEquals(0, actualUser.getMaxLoginPerIP());
-        assertEquals(0, actualUser.getMaxUploadRate());
+        assertEquals(0, getMaxLoginNumber(actualUser));
+        assertEquals(0, getMaxLoginPerIP(actualUser));
+        assertEquals(0, getMaxUploadRate(actualUser));
         assertFalse(user.authorize(new WriteRequest()));
         assertTrue(actualUser.getEnabled());
     }
@@ -235,10 +273,10 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals("/", actualUser.getHomeDirectory());
         assertEquals(true, actualUser.getEnabled());
         assertFalse(user.authorize(new WriteRequest()));
-        assertEquals(0, actualUser.getMaxDownloadRate());
+        assertEquals(0, getMaxDownloadRate(actualUser));
         assertEquals(0, actualUser.getMaxIdleTime());
-        assertEquals(0, actualUser.getMaxLoginNumber());
-        assertEquals(0, actualUser.getMaxLoginPerIP());
-        assertEquals(0, actualUser.getMaxUploadRate());
+        assertEquals(0, getMaxLoginNumber(actualUser));
+        assertEquals(0, getMaxLoginPerIP(actualUser));
+        assertEquals(0, getMaxUploadRate(actualUser));
     }
 }

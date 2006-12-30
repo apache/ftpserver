@@ -29,12 +29,14 @@ import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -144,7 +146,13 @@ class APPE extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(offset) );
                     
                 // transfer data
-                int maxRate = handler.getRequest().getUser().getMaxUploadRate();
+                Authority[] maxUploadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+                
+                int maxRate = 0;
+                if(maxUploadRates.length > 0) {
+                    maxRate = ((TransferRatePermission)maxUploadRates[0]).getMaxUploadRate();
+                }
+                
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message

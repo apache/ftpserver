@@ -43,6 +43,8 @@ interface User {
      */
     Authority[] getAuthorities();
 
+    Authority[] getAuthorities(Class clazz);
+
     /**
      * Authorize a {@link AuthorizationRequest} for this user
      * @param request The {@link AuthorizationRequest} to authorize
@@ -63,22 +65,22 @@ interface User {
     /**
      * Get maximum user upload rate in bytes/sec. Zero or less means no limit.
      */
-    int getMaxUploadRate();
+    //int getMaxUploadRate();
     
     /**
      * Get maximum user download rate in bytes/sec. Zero or less means no limit.
      */
-    int getMaxDownloadRate();
+    //int getMaxDownloadRate();
     
     /**
      * Get maximum login number allowed for this user account
      */
-    int getMaxLoginNumber();
+    //int getMaxLoginNumber();
     
     /**
      * Get maximum login number allowed from the same IP address when using this user account
      */
-    int getMaxLoginPerIP();
+    //int getMaxLoginPerIP();
     
     /**
      * get user home directory

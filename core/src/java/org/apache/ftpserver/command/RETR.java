@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -37,6 +38,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -145,7 +147,13 @@ class RETR extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream(os);
                 
                 // transfer data
-                int maxRate = handler.getRequest().getUser().getMaxDownloadRate();
+                Authority[] maxDownloadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+            
+                int maxRate = 0;
+                if(maxDownloadRates.length > 0) {
+                    maxRate = ((TransferRatePermission)maxDownloadRates[0]).getMaxDownloadRate();
+                }
+                
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message

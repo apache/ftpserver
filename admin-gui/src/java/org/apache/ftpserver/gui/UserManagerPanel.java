@@ -49,6 +49,8 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WritePermission;
 import org.apache.ftpserver.usermanager.WriteRequest;
 
@@ -536,11 +538,32 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                     directoryTxt.setText(user.getHomeDirectory());
                     enabledChkBox.setSelected(user.getEnabled());
                     writeChkBox.setSelected(user.authorize(new WriteRequest()));
-                    setLoginNumberCombo(loginNumberLst, user.getMaxLoginNumber());
-                    setLoginPerIPCombo(loginPerIPLst, user.getMaxLoginPerIP());
+                    
+                    
+                    
+                    Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+                    
+                    if(maxTransferRates.length > 0) {
+                        setByteRateCombo(uploadLst, ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate());
+                        setByteRateCombo(downloadLst, ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate());
+                    } else {
+                        setByteRateCombo(uploadLst, 0);
+                        setByteRateCombo(downloadLst, 0);
+                    }
+                    
+                    Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+                    
+                    if(concurrentLoginPermissions.length > 0) {
+                        setLoginNumberCombo(loginNumberLst, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins());
+                        setLoginPerIPCombo(loginPerIPLst, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP());
+                    } else {
+                        setLoginNumberCombo(loginNumberLst, 0);
+                        setLoginPerIPCombo(loginPerIPLst, 0);
+                    }
+                    
+                    
+
                     setIdleTimeCombo(idleLst, user.getMaxIdleTime());
-                    setByteRateCombo(uploadLst, user.getMaxUploadRate());
-                    setByteRateCombo(downloadLst, user.getMaxDownloadRate());
                 }
             }
         }
@@ -574,13 +597,13 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                     authorities.add(new WritePermission());
                 }
                 
+                authorities.add(new TransferRatePermission(getBytesTransferRate(downloadLst), getBytesTransferRate(uploadLst)));
+                authorities.add(new ConcurrentLoginPermission(getMaxLoginNumber(loginNumberLst), getMaxLoginPerIP(loginPerIPLst)));
+                
                 user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
                 
-                user.setMaxLoginNumber(getMaxLoginNumber(loginNumberLst));
-                user.setMaxLoginPerIP(getMaxLoginPerIP(loginPerIPLst));
                 user.setMaxIdleTime(getMaxIdleTime(idleLst));
-                user.setMaxUploadRate(getBytesTransferRate(uploadLst));
-                user.setMaxDownloadRate(getBytesTransferRate(downloadLst));
+                
                 serverContext.getUserManager().save(user);
                 refresh(serverContext);
                 GuiUtils.showInformationMessage(this, "Saved user - " + user.getName());
@@ -756,13 +779,14 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
             user.setName(userName);
             user.setPassword(userName);
             
-            List authorities = new ArrayList();
+            Authority[] authorities = new Authority[]{
+                 new TransferRatePermission(0, 0)   
+            };
             
-            user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+            
+            user.setAuthorities(authorities);
             
             user.setEnabled(true);
-            user.setMaxUploadRate(0);
-            user.setMaxDownloadRate(0);
             user.setHomeDirectory("./res/home");
             user.setMaxIdleTime(0);
             

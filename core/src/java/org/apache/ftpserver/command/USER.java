@@ -30,6 +30,7 @@ import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
 
 /**
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
@@ -106,25 +107,16 @@ class USER extends AbstractCommand {
             
             User configUser = handler.getServerContext().getUserManager().getUserByName(userName);
             if(configUser != null){
-              //user login limit check
-              int maxUserLoginNumber = configUser.getMaxLoginNumber();
-              if(maxUserLoginNumber > 0){// has a limit on user login
-                int currUserLogin = stat.getCurrentUserLoginNumber(configUser);
-                if(currUserLogin >= maxUserLoginNumber){
-                  out.send(421, "USER.login", null);
-                  return;
+                //user login limit check
+                
+                ConcurrentLoginRequest loginRequest = new  ConcurrentLoginRequest(
+                        stat.getCurrentUserLoginNumber(configUser) + 1,
+                        stat.getCurrentUserLoginNumber(configUser, request.getRemoteAddress()) + 1);
+                
+                if(!configUser.authorize(loginRequest)) {
+                    out.send(421, "USER.login", null);
+                    return;
                 }
-              }
-              
-              //user login from same IP check
-              int maxUserLoginPerIP = configUser.getMaxLoginPerIP();
-              if(maxUserLoginPerIP > 0){// has a limit on user login per ip
-                int currUserLoginPerIP = stat.getCurrentUserLoginNumber(configUser, request.getRemoteAddress());
-                if(currUserLoginPerIP >= maxUserLoginPerIP){
-                  out.send(421, "USER.login", null);
-                  return;
-                }
-              }
             }
             
             // finally set the user name

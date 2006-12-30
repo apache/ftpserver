@@ -47,6 +47,8 @@ import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.usermanager.WritePermission;
 
@@ -78,6 +80,8 @@ class ConfigurableFtpServerContext implements FtpServerContext {
     };
 
     private static final Authority[] ANON_AUTHORITIES = new Authority[]{
+        new ConcurrentLoginPermission(20, 2),
+        new TransferRatePermission(4800, 4800)
     };
     
     /**
@@ -195,10 +199,6 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             
             adminUser.setAuthorities(ADMIN_AUTHORITIES);
 
-            adminUser.setMaxLoginNumber(0);
-            adminUser.setMaxLoginPerIP(0);
-            adminUser.setMaxUploadRate(0);
-            adminUser.setMaxDownloadRate(0);
             adminUser.setHomeDirectory("./res/home");
             adminUser.setMaxIdleTime(0);
             userManager.save(adminUser);
@@ -214,10 +214,7 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             anonUser.setAuthorities(ANON_AUTHORITIES);
             
             anonUser.setEnabled(true);
-            anonUser.setMaxLoginNumber(20);
-            anonUser.setMaxLoginPerIP(2);
-            anonUser.setMaxUploadRate(4800);
-            anonUser.setMaxDownloadRate(4800);
+
             anonUser.setHomeDirectory("./res/home");
             anonUser.setMaxIdleTime(300);
             userManager.save(anonUser);

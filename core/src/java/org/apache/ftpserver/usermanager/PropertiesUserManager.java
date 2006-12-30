@@ -126,11 +126,29 @@ class PropertiesUserManager extends AbstractUserManager {
        userDataProp.setProperty(thisPrefix + ATTR_ENABLE,            usr.getEnabled());
        userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.authorize(new WriteRequest()));
        userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-       userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   usr.getMaxUploadRate());
-       userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, usr.getMaxDownloadRate());
-       userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, usr.getMaxLoginNumber());
-       userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, usr.getMaxLoginPerIP());
-   
+       
+       Authority[] maxTransferRates = usr.getAuthorities(TransferRatePermission.class);
+       
+       if(maxTransferRates.length > 0) {
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   
+                   ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate());
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, 
+                   ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate());
+       } else {
+           userDataProp.remove(thisPrefix + ATTR_MAX_UPLOAD_RATE);
+           userDataProp.remove(thisPrefix + ATTR_MAX_DOWNLOAD_RATE);       
+       }
+       
+       Authority[] concurrentLoginPermissions = usr.getAuthorities(ConcurrentLoginPermission.class);
+       
+       if(concurrentLoginPermissions.length > 0) {
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins());
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP());
+       } else {
+           userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_NUMBER);
+           userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_PER_IP);   
+       }
+       
        saveUserData();
     }
 
@@ -261,14 +279,20 @@ class PropertiesUserManager extends AbstractUserManager {
             authorities.add(new WritePermission());
         }
         
+        int maxLogin = userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER, 0);
+        int maxLoginPerIP = userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_PER_IP, 0);
+        
+        authorities.add(new ConcurrentLoginPermission(maxLogin, maxLoginPerIP));
+
+        int uploadRate = userDataProp.getInteger(baseKey + ATTR_MAX_UPLOAD_RATE, 0);
+        int downloadRate = userDataProp.getInteger(baseKey + ATTR_MAX_DOWNLOAD_RATE, 0);
+        
+        authorities.add(new TransferRatePermission(downloadRate, uploadRate));
+        
         user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
         
-        //user.setWritePermission(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false));
-        user.setMaxLoginNumber(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER, 0));
-        user.setMaxLoginPerIP(userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_PER_IP, 0));
         user.setMaxIdleTime(userDataProp.getInteger(baseKey + ATTR_MAX_IDLE_TIME, 0));
-        user.setMaxUploadRate(userDataProp.getInteger(baseKey + ATTR_MAX_UPLOAD_RATE, 0));
-        user.setMaxDownloadRate(userDataProp.getInteger(baseKey + ATTR_MAX_DOWNLOAD_RATE, 0));
+
         return user;
     }
     

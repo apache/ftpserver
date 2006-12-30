@@ -128,7 +128,7 @@ class MD5 extends AbstractCommand {
 
     /**
      * @param is InputStream for which the MD5 hash is calculated
-     * @return
+     * @return The hash of the content in the input stream
      * @throws IOException
      * @throws NoSuchAlgorithmException 
      */

@@ -32,6 +32,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseMaxValue() {
+        System.out.println(Short.MAX_VALUE);
         PassivePorts ports = PassivePorts.parse("65535");
         
         assertEquals(65535, ports.reserveNextPort());
