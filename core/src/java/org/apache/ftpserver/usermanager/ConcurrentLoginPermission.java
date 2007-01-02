@@ -38,20 +38,23 @@ public class ConcurrentLoginPermission implements Authority {
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
-    public boolean authorize(AuthorizationRequest request) {
+    public AuthorizationRequest authorize(AuthorizationRequest request) {
         if (request instanceof ConcurrentLoginRequest) {
             ConcurrentLoginRequest concurrentLoginRequest = (ConcurrentLoginRequest) request;
             
             if(maxConcurrentLogins != 0 && maxConcurrentLogins < concurrentLoginRequest.getConcurrentLogins()) {
-                return false; 
+                return null; 
             } else if(maxConcurrentLoginsPerIP != 0 
                     && maxConcurrentLoginsPerIP < concurrentLoginRequest.getConcurrentLoginsFromThisIP()) {
-                return false;
+                return null;
             } else {
-                return true;
+                concurrentLoginRequest.setMaxConcurrentLogins(maxConcurrentLogins);
+                concurrentLoginRequest.setMaxConcurrentLoginsPerIP(maxConcurrentLoginsPerIP);
+                
+                return concurrentLoginRequest;
             }
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -60,19 +63,5 @@ public class ConcurrentLoginPermission implements Authority {
      */
     public boolean canAuthorize(AuthorizationRequest request) {
         return request instanceof ConcurrentLoginRequest;
-    }
-
-    /**
-     * @return the maxConcurrentLogins
-     */
-    public int getMaxConcurrentLogins() {
-        return maxConcurrentLogins;
-    }
-
-    /**
-     * @return the maxConcurrentLoginsPerIP
-     */
-    public int getMaxConcurrentLoginsPerIP() {
-        return maxConcurrentLoginsPerIP;
     }
 }

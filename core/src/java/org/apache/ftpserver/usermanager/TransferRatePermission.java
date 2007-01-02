@@ -38,31 +38,23 @@ public class TransferRatePermission implements Authority {
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
-    public boolean authorize(AuthorizationRequest request) {
-        return false;
+    public AuthorizationRequest authorize(AuthorizationRequest request) {
+        if (request instanceof TransferRateRequest) {
+            TransferRateRequest transferRateRequest = (TransferRateRequest) request;
+            
+            transferRateRequest.setMaxDownloadRate(maxDownloadRate);
+            transferRateRequest.setMaxUploadRate(maxUploadRate);
+            
+            return transferRateRequest;
+        } else {
+            return null;
+        }
     }
 
     /**
      * @see Authority#canAuthorize(AuthorizationRequest)
      */
     public boolean canAuthorize(AuthorizationRequest request) {
-        return false;
+        return request instanceof TransferRateRequest;
     }
-
-    /**
-     * @return the maxUploadRate
-     */
-    public int getMaxUploadRate() {
-        return maxUploadRate;
-    }
-
-    /**
-     * @return the maxUploadRate
-     */
-    public int getMaxDownloadRate() {
-        return maxDownloadRate;
-    }
-   
-
-    
 }

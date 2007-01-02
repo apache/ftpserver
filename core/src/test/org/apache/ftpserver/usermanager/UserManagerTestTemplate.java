@@ -140,7 +140,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(0, getMaxLoginNumber(user));
         assertEquals(0, getMaxLoginPerIP(user));
         assertEquals(0, getMaxUploadRate(user));
-        assertFalse(user.authorize(new WriteRequest()));
+        assertNull(user.authorize(new WriteRequest()));
         assertTrue(user.getEnabled());
     }
 
@@ -155,7 +155,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(3, getMaxLoginNumber(user));
         assertEquals(4, getMaxLoginPerIP(user));
         assertEquals(5, getMaxUploadRate(user));
-        assertTrue(user.authorize(new WriteRequest()));
+        assertNotNull(user.authorize(new WriteRequest()));
         assertFalse(user.getEnabled());
     }
 
@@ -164,40 +164,44 @@ public abstract class UserManagerTestTemplate extends TestCase {
     }
 
     private int getMaxDownloadRate(User user) {
-        Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+        TransferRateRequest transferRateRequest = new TransferRateRequest();
+        transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
     
-        if(maxTransferRates.length > 0) {
-            return ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate();
+        if(transferRateRequest != null) {
+            return transferRateRequest.getMaxDownloadRate();
         } else {
             return 0;
         }
     }
 
     private int getMaxUploadRate(User user) {
-        Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
+        TransferRateRequest transferRateRequest = new TransferRateRequest();
+        transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
     
-        if(maxTransferRates.length > 0) {
-            return ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate();
+        if(transferRateRequest != null) {
+            return transferRateRequest.getMaxUploadRate();
         } else {
             return 0;
         } 
     }
 
     private int getMaxLoginNumber(User user) {
-        Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+        ConcurrentLoginRequest  concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
+        concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
         
-        if(concurrentLoginPermissions.length > 0) {
-            return ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins();
+        if(concurrentLoginRequest != null) {
+            return concurrentLoginRequest.getMaxConcurrentLogins();
         } else {
             return 0;
         } 
     }
 
     private int getMaxLoginPerIP(User user) {
-        Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+        ConcurrentLoginRequest  concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
+        concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
         
-        if(concurrentLoginPermissions.length > 0) {
-            return ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP();
+        if(concurrentLoginRequest != null) {
+            return concurrentLoginRequest.getMaxConcurrentLoginsPerIP();
         } else {
             return 0;
         } 
@@ -229,7 +233,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertNull(actualUser.getPassword());
         assertEquals(user.getHomeDirectory(), actualUser.getHomeDirectory());
         assertEquals(user.getEnabled(), actualUser.getEnabled());
-        assertTrue(user.authorize(new WriteRequest()));
+        assertNotNull(user.authorize(new WriteRequest()));
         assertEquals(getMaxDownloadRate(user), getMaxDownloadRate(actualUser));
         assertEquals(user.getMaxIdleTime(), actualUser.getMaxIdleTime());
         assertEquals(getMaxLoginNumber(user), getMaxLoginNumber(actualUser));
@@ -253,7 +257,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(0, getMaxLoginNumber(actualUser));
         assertEquals(0, getMaxLoginPerIP(actualUser));
         assertEquals(0, getMaxUploadRate(actualUser));
-        assertFalse(user.authorize(new WriteRequest()));
+        assertNull(user.authorize(new WriteRequest()));
         assertTrue(actualUser.getEnabled());
     }
 
@@ -272,7 +276,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertNull(actualUser.getPassword());
         assertEquals("/", actualUser.getHomeDirectory());
         assertEquals(true, actualUser.getEnabled());
-        assertFalse(user.authorize(new WriteRequest()));
+        assertNull(user.authorize(new WriteRequest()));
         assertEquals(0, getMaxDownloadRate(actualUser));
         assertEquals(0, actualUser.getMaxIdleTime());
         assertEquals(0, getMaxLoginNumber(actualUser));

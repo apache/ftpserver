@@ -270,29 +270,29 @@ class DbUserManager extends AbstractUserManager {
             map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
             
             
+            TransferRateRequest transferRateRequest = new TransferRateRequest();
+            transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
             
-            Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
-            
-            if(maxTransferRates.length > 0) {
-                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate()) );
-                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate()) ); 
+            if(transferRateRequest != null) {
+                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(transferRateRequest.getMaxUploadRate()) );
+                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(transferRateRequest.getMaxDownloadRate()) ); 
             } else {
                 map.put( ATTR_MAX_UPLOAD_RATE, new Integer(0));
                 map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(0) ); 
             }
 
+            // request that always will succeed
+            ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
+            concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
             
-            Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
-            
-            if(concurrentLoginPermissions.length > 0) {
+            if(concurrentLoginRequest != null) {
                 map.put( ATTR_MAX_LOGIN_NUMBER, 
-                        new Integer(((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins()));
+                        new Integer(concurrentLoginRequest.getMaxConcurrentLogins()));
                 map.put( ATTR_MAX_LOGIN_PER_IP, 
-                        new Integer(((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP()));
+                        new Integer(concurrentLoginRequest.getMaxConcurrentLoginsPerIP()));
             } else {
                 map.put( ATTR_MAX_LOGIN_NUMBER, new Integer(0));
                 map.put( ATTR_MAX_LOGIN_PER_IP, new Integer(0));
-                
             }
             
 

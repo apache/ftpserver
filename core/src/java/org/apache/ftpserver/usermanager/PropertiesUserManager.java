@@ -124,26 +124,31 @@ class PropertiesUserManager extends AbstractUserManager {
        }
        userDataProp.setProperty(thisPrefix + ATTR_HOME,              home);
        userDataProp.setProperty(thisPrefix + ATTR_ENABLE,            usr.getEnabled());
-       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.authorize(new WriteRequest()));
+       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.authorize(new WriteRequest()) != null);
        userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
        
-       Authority[] maxTransferRates = usr.getAuthorities(TransferRatePermission.class);
+       TransferRateRequest transferRateRequest = new TransferRateRequest();
+       transferRateRequest = (TransferRateRequest) usr.authorize(transferRateRequest);
        
-       if(maxTransferRates.length > 0) {
+       if(transferRateRequest != null) {
            userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   
-                   ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate());
+                   transferRateRequest.getMaxUploadRate());
            userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, 
-                   ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate());
+                   transferRateRequest.getMaxDownloadRate());
        } else {
            userDataProp.remove(thisPrefix + ATTR_MAX_UPLOAD_RATE);
            userDataProp.remove(thisPrefix + ATTR_MAX_DOWNLOAD_RATE);       
        }
        
-       Authority[] concurrentLoginPermissions = usr.getAuthorities(ConcurrentLoginPermission.class);
+       // request that always will succeed
+       ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
+       concurrentLoginRequest = (ConcurrentLoginRequest) usr.authorize(concurrentLoginRequest);
        
-       if(concurrentLoginPermissions.length > 0) {
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins());
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP());
+       if(concurrentLoginRequest != null) {
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, 
+                   concurrentLoginRequest.getMaxConcurrentLogins());
+           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, 
+                   concurrentLoginRequest.getMaxConcurrentLoginsPerIP());
        } else {
            userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_NUMBER);
            userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_PER_IP);   

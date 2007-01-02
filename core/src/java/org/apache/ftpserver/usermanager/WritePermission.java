@@ -47,15 +47,19 @@ public class WritePermission implements Authority {
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
-    public boolean authorize(AuthorizationRequest request) {
+    public AuthorizationRequest authorize(AuthorizationRequest request) {
         if(request instanceof WriteRequest) {
             WriteRequest writeRequest = (WriteRequest) request;
             
             String requestFile = writeRequest.getFile();
 
-            return requestFile.startsWith(permissionRoot);
+            if(requestFile.startsWith(permissionRoot)) {
+                return writeRequest;
+            } else {
+                return null;
+            }
         } else {
-            return false;
+            return null;
         }
     }
 

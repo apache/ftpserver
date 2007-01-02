@@ -47,8 +47,8 @@ public class NativeFileObjectTest extends TestCase {
 
     public static class AlwaysAuthorizedUser extends BaseUser {
 
-        public boolean authorize(AuthorizationRequest request) {
-            return true;
+        public AuthorizationRequest authorize(AuthorizationRequest request) {
+            return request;
         }
         
     }

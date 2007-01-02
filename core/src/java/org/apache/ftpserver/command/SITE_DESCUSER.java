@@ -30,6 +30,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
+import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
@@ -96,12 +97,12 @@ class SITE_DESCUSER extends AbstractCommand {
         sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
         sb.append("idletime        : ").append(user.getMaxIdleTime()).append("\n");
         
-        TransferRatePermission[] maxTransferRates = (TransferRatePermission[]) 
-            user.getAuthorities(TransferRatePermission.class);
+        TransferRateRequest transferRateRequest = new TransferRateRequest();
+        transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
         
-        if(maxTransferRates.length > 0) {
-            sb.append("uploadrate      : ").append(maxTransferRates[0].getMaxUploadRate()).append("\n");
-            sb.append("downloadrate    : ").append(maxTransferRates[0].getMaxDownloadRate()).append("\n");
+        if(transferRateRequest != null) {
+            sb.append("uploadrate      : ").append(transferRateRequest.getMaxUploadRate()).append("\n");
+            sb.append("downloadrate    : ").append(transferRateRequest.getMaxDownloadRate()).append("\n");
         } else {
             sb.append("uploadrate      : 0\n");
             sb.append("downloadrate    : 0\n");

@@ -169,19 +169,31 @@ class BaseUser implements User, Serializable {
     /**
      * @see User#authorize(AuthorizationRequest)
      */
-    public boolean authorize(AuthorizationRequest request) {
+    public AuthorizationRequest authorize(AuthorizationRequest request) {
         Authority[] authorities = getAuthorities();
         
+        boolean someoneCouldAuthorize = false;
         for (int i = 0; i < authorities.length; i++) {
             Authority authority = authorities[i];
             
             if(authority.canAuthorize(request)) {
-                return authority.authorize(request);
+                someoneCouldAuthorize = true;
+                
+                request = authority.authorize(request);
+                
+                // authorization failed, return null
+                if(request == null) {
+                    return null;
+                }
             }
             
         }
         
-        return false;
+        if(someoneCouldAuthorize) {
+            return request;
+        } else {
+            return null;
+        }
     }
 
     public Authority[] getAuthorities(Class clazz) {

@@ -188,7 +188,7 @@ class NativeFileObject implements FileObject {
      * Check file write permission.
      */
     public boolean hasWritePermission() {
-        if(!user.authorize(new WriteRequest(getFullName()))) {
+        if(user.authorize(new WriteRequest(getFullName())) == null) {
             return false;
         }
         

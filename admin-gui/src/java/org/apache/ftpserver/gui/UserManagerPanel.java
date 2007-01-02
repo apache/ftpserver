@@ -50,7 +50,9 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
+import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
+import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WritePermission;
 import org.apache.ftpserver.usermanager.WriteRequest;
 
@@ -537,31 +539,30 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                     passwordChkBox.setSelected(false);
                     directoryTxt.setText(user.getHomeDirectory());
                     enabledChkBox.setSelected(user.getEnabled());
-                    writeChkBox.setSelected(user.authorize(new WriteRequest()));
+                    writeChkBox.setSelected(user.authorize(new WriteRequest()) != null);
                     
                     
+                    TransferRateRequest transferRateRequest = new TransferRateRequest();
+                    transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
                     
-                    Authority[] maxTransferRates = user.getAuthorities(TransferRatePermission.class);
-                    
-                    if(maxTransferRates.length > 0) {
-                        setByteRateCombo(uploadLst, ((TransferRatePermission)maxTransferRates[0]).getMaxUploadRate());
-                        setByteRateCombo(downloadLst, ((TransferRatePermission)maxTransferRates[0]).getMaxDownloadRate());
+                    if(transferRateRequest != null) {
+                        setByteRateCombo(uploadLst, transferRateRequest.getMaxUploadRate());
+                        setByteRateCombo(downloadLst, transferRateRequest.getMaxDownloadRate());
                     } else {
                         setByteRateCombo(uploadLst, 0);
                         setByteRateCombo(downloadLst, 0);
                     }
                     
-                    Authority[] concurrentLoginPermissions = user.getAuthorities(ConcurrentLoginPermission.class);
+                    ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
+                    concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
                     
-                    if(concurrentLoginPermissions.length > 0) {
-                        setLoginNumberCombo(loginNumberLst, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLogins());
-                        setLoginPerIPCombo(loginPerIPLst, ((ConcurrentLoginPermission)concurrentLoginPermissions[0]).getMaxConcurrentLoginsPerIP());
+                    if(concurrentLoginRequest != null) {
+                        setLoginNumberCombo(loginNumberLst, concurrentLoginRequest.getMaxConcurrentLogins());
+                        setLoginPerIPCombo(loginPerIPLst, concurrentLoginRequest.getMaxConcurrentLoginsPerIP());
                     } else {
                         setLoginNumberCombo(loginNumberLst, 0);
                         setLoginPerIPCombo(loginPerIPLst, 0);
                     }
-                    
-                    
 
                     setIdleTimeCombo(idleLst, user.getMaxIdleTime());
                 }

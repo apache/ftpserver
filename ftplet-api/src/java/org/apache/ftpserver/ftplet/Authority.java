@@ -39,5 +39,5 @@ public interface Authority {
      *   If the request can not be authorized (as checked by {@link #canAuthorize(AuthorizationRequest)} 
      *   by this Authority, false is returned.
      */
-    boolean authorize(AuthorizationRequest request);
+    AuthorizationRequest authorize(AuthorizationRequest request);
 }

@@ -40,6 +40,7 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
+import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -149,11 +150,12 @@ class RETR extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream(os);
                 
                 // transfer data
-                Authority[] maxDownloadRates = session.getUser().getAuthorities(TransferRatePermission.class);
+                TransferRateRequest transferRateRequest = new TransferRateRequest();
+                transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
             
                 int maxRate = 0;
-                if(maxDownloadRates.length > 0) {
-                    maxRate = ((TransferRatePermission)maxDownloadRates[0]).getMaxDownloadRate();
+                if(transferRateRequest != null) {
+                    maxRate = transferRateRequest.getMaxDownloadRate();
                 }
                 
                 long transSz = handler.transfer(bis, bos, maxRate);

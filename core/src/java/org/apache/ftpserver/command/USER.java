@@ -115,7 +115,7 @@ class USER extends AbstractCommand {
                         stat.getCurrentUserLoginNumber(configUser) + 1,
                         stat.getCurrentUserLoginNumber(configUser, session.getRemoteAddress()) + 1);
                 
-                if(!configUser.authorize(loginRequest)) {
+                if(configUser.authorize(loginRequest) == null) {
                     out.send(421, "USER.login", null);
                     return;
                 }

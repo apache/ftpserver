@@ -36,42 +36,42 @@ public class ConcurrentLoginPermissionTest extends TestCase {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(4, 2);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(1, 1);
         
-        assertTrue(permission.authorize(request));
+        assertNotNull(permission.authorize(request));
     }
 
     public void testMaxValuesBoth() {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(4, 2);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(4, 2);
         
-        assertTrue(permission.authorize(request));
+        assertNotNull(permission.authorize(request));
     }
 
     public void testMaxLoginsTooLarge() {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(4, 2);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(5, 2);
         
-        assertFalse(permission.authorize(request));
+        assertNull(permission.authorize(request));
     }
 
     public void testMaxLoginsPerIPTooLarge() {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(4, 2);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(3, 3);
         
-        assertFalse(permission.authorize(request));
+        assertNull(permission.authorize(request));
     }
 
     public void testAllowAnyMaxLogins() {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(0, 2);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(5, 2);
         
-        assertTrue(permission.authorize(request));
+        assertNotNull(permission.authorize(request));
     }
 
     public void testAllowAnyMaxLoginsPerIP() {
         ConcurrentLoginPermission permission = new ConcurrentLoginPermission(4, 0);
         ConcurrentLoginRequest request = new ConcurrentLoginRequest(3, 3);
         
-        assertTrue(permission.authorize(request));
+        assertNotNull(permission.authorize(request));
     }
     
 }

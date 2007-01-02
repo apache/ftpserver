@@ -48,9 +48,10 @@ interface User {
     /**
      * Authorize a {@link AuthorizationRequest} for this user
      * @param request The {@link AuthorizationRequest} to authorize
-     * @return True if the user is allowed to perform the action, false otherwise
+     * @return A populated AuthorizationRequest if the user was 
+     * authorized, null otherwise.
      */
-    boolean authorize(AuthorizationRequest request);
+    AuthorizationRequest authorize(AuthorizationRequest request);
     
     /**
      * Get the maximum idle time in seconds. Zero or less idle time means no limit.
