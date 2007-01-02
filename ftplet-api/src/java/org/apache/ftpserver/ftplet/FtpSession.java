@@ -115,6 +115,16 @@ interface FtpSession {
     FileObject getRenameFrom();
     
     /**
+     * Get the data type.
+     */
+    DataType getDataType();
+    
+    /**
+     * Get structure.
+     */
+    Structure getStructure();
+    
+    /**
      * Get data input stream.
      */
     InputStream getDataInputStream() throws IOException;

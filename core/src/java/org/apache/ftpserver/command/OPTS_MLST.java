@@ -75,7 +75,7 @@ class OPTS_MLST extends AbstractCommand {
         // set the list types
         String[] validatedTypes = validateSelectedTypes(types);
         if(validatedTypes != null) {
-            handler.setAttribute("MLST.types", validatedTypes);
+            session.setAttribute("MLST.types", validatedTypes);
             out.send(200, "OPTS.MLST", listTypes);
         }
         else {

@@ -146,7 +146,7 @@ class RETR extends AbstractCommand {
             try {
                 
                 // open streams
-                bis = IoUtils.getBufferedInputStream(openInputStream(handler, file, skipLen) );
+                bis = IoUtils.getBufferedInputStream(openInputStream(handler, session, file, skipLen) );
                 bos = IoUtils.getBufferedOutputStream(os);
                 
                 // transfer data
@@ -212,10 +212,11 @@ class RETR extends AbstractCommand {
      * Skip length and open input stream.
      */
     public InputStream openInputStream(RequestHandler handler,
+                                       FtpSessionImpl session, 
                                        FileObject file, 
                                        long skipLen) throws IOException {
         InputStream in;
-        if(handler.getDataType() == DataType.ASCII) {
+        if(session.getDataType() == DataType.ASCII) {
             int c;
             long offset = 0L;
             in = new BufferedInputStream(file.createInputStream(0L));

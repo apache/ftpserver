@@ -58,7 +58,7 @@ class STRU extends AbstractCommand {
         // set structure
         char stru = request.getArgument().charAt(0);
         try  {
-            handler.setStructure(Structure.parseArgument(stru));
+            session.setStructure(Structure.parseArgument(stru));
             out.send(200, "STRU", null);
         } 
         catch(IllegalArgumentException e) {

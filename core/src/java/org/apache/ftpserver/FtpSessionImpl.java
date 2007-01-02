@@ -29,10 +29,12 @@ import java.util.HashMap;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
+import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 
@@ -63,6 +65,9 @@ public class FtpSessionImpl implements FtpSession {
     private FileObject renameFrom;
     private long fileOffset;
     private FtpRequest request;
+    
+    private DataType dataType    = DataType.ASCII;
+    private Structure structure  = Structure.FILE;
     
     /**
      * Default constructor.
@@ -380,5 +385,34 @@ public class FtpSessionImpl implements FtpSession {
     
     public void setCurrentRequest(FtpRequest request) {
         this.request = request;
+    }
+    
+    
+    /**
+     * Get the data type.
+     */
+    public DataType getDataType() {
+        return dataType;
+    }
+    
+    /**
+     * Set the data type.
+     */
+    public void setDataType(DataType type) {
+        dataType = type;
+    }
+
+    /**
+     * Get structure.
+     */
+    public Structure getStructure() {
+        return structure;
+    }
+    
+    /**
+     * Set structure
+     */
+    public void setStructure(Structure stru) {
+        structure = stru;
     }
 }

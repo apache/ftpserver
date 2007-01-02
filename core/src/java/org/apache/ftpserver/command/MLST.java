@@ -60,7 +60,7 @@ class MLST extends AbstractCommand {
         try {
             file = session.getFileSystemView().getFileObject(parsedArg.getFile());
             if(file != null && file.doesExist()) {
-                FileFormater formater = new MLSTFileFormater((String[])handler.getAttribute("MLST.types"));
+                FileFormater formater = new MLSTFileFormater((String[])session.getAttribute("MLST.types"));
                 out.send(250, "MLST", formater.format(file));
             } else {            
                 out.send(501, "MLST", null);

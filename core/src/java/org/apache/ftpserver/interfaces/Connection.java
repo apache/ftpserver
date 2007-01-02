@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 
 /**

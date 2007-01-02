@@ -56,7 +56,7 @@ class TYPE extends AbstractCommand {
         
         // set type
         try {
-            handler.setDataType(DataType.parseArgument(type));
+            session.setDataType(DataType.parseArgument(type));
             out.send(200, "TYPE", null);
         } 
         catch(IllegalArgumentException e) {

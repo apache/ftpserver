@@ -89,7 +89,7 @@ class MLSD extends AbstractCommand {
                 // parse argument
                 ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
                 
-                FileFormater formater = new MLSTFileFormater((String[])handler.getAttribute("MLST.types"));
+                FileFormater formater = new MLSTFileFormater((String[])session.getAttribute("MLST.types"));
                 writer.write(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
             }
             catch(SocketException ex) {

@@ -27,8 +27,6 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.net.ssl.SSLException;
 
@@ -40,7 +38,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
@@ -71,10 +68,6 @@ class RequestHandler implements Connection {
     private FtpWriter writer;
     private BufferedReader reader;
     private boolean isConnectionClosed;
-    
-    private DataType dataType    = DataType.ASCII;
-    private Structure structure  = Structure.FILE;
-    private Map attributes = new HashMap();
     
     
     /**
@@ -126,53 +119,7 @@ class RequestHandler implements Connection {
     public FtpServerContext getServerContext() {
         return serverContext;
     }
-                
-    /**
-     * Get the data type.
-     */
-    public DataType getDataType() {
-        return dataType;
-    }
-    
-    /**
-     * Set the data type.
-     */
-    public void setDataType(DataType type) {
-        dataType = type;
-    }
 
-    /**
-     * Get structure.
-     */
-    public Structure getStructure() {
-        return structure;
-    }
-    
-    /**
-     * Get a session attribute.
-     * @param name The name of the attribute
-     * 
-     * @return The attribute value, or null if the attribute does not exist
-     */
-    public Object getAttribute(String name) {
-        return attributes.get(name);
-    }
-    
-    /**
-     * Set a session attribute.
-     * @param name The name of the attribute
-     * @param value The value of the attribute
-     */
-    public void setAttribute(String name, Object value) {
-        attributes.put(name, value);
-    }
-    
-    /**
-     * Set structure
-     */
-    public void setStructure(Structure stru) {
-        structure = stru;
-    }
         
     /**
      * Get request.
@@ -442,7 +389,7 @@ class RequestHandler implements Connection {
                                BufferedOutputStream out,
                                int maxRate) throws IOException {
         
-        boolean isAscii = dataType == DataType.ASCII;
+        boolean isAscii = session.getDataType() == DataType.ASCII;
         long startTime = System.currentTimeMillis();
         long transferredSize = 0L;
         byte[] buff = new byte[4096];
