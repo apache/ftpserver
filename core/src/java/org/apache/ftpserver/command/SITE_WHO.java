@@ -23,11 +23,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.Connection;
@@ -47,15 +48,16 @@ class SITE_WHO extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // only administrator can execute this
         UserManager userManager = handler.getServerContext().getUserManager(); 
-        boolean isAdmin = userManager.isAdmin(request.getUser().getName());
+        boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
             return;
@@ -68,7 +70,7 @@ class SITE_WHO extends AbstractCommand {
         sb.append('\n');
         for(Iterator conIt = allCons.iterator(); conIt.hasNext(); ) {
             Connection tmpCon = (Connection)conIt.next();
-            FtpRequest tmpReq = tmpCon.getRequest();
+            FtpSession tmpReq = tmpCon.getSession();
             if(!tmpReq.isLoggedIn()) {
                 continue;
             }

@@ -25,10 +25,11 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -46,11 +47,12 @@ class MD5 extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
 
         boolean isMMD5 = false;
         
@@ -81,11 +83,10 @@ class MD5 extends AbstractCommand {
             FileObject file = null;
             
             try {
-                file = request.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
                 log.debug("Exception getting the file object: " + fileName, ex);
-                // TODO: handle exception
             }
             
             if(file == null) {

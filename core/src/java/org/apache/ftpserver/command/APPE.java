@@ -26,12 +26,13 @@ import java.io.InputStream;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -58,13 +59,14 @@ class APPE extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         try {
         
             // reset state variables
-            request.resetState();
+            session.resetState();
             FtpServerContext serverContext = handler.getServerContext();
             
             // argument check
@@ -78,7 +80,7 @@ class APPE extends AbstractCommand {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onAppendStart(request, out);
+                ftpletRet = ftpletContainer.onAppendStart(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -94,7 +96,7 @@ class APPE extends AbstractCommand {
             // get filenames
             FileObject file = null;
             try {
-                file = request.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception e) {
                 log.debug("File system threw exception", e);
@@ -121,7 +123,7 @@ class APPE extends AbstractCommand {
             out.send(150, "APPE", fileName);
             InputStream is = null;
             try {
-                is = request.getDataInputStream();
+                is = session.getDataInputStream();
             }
             catch(IOException e) {
                 log.debug("Exception when getting data input stream", e);
@@ -146,7 +148,7 @@ class APPE extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(offset) );
                     
                 // transfer data
-                Authority[] maxUploadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+                Authority[] maxUploadRates = session.getUser().getAuthorities(TransferRatePermission.class);
                 
                 int maxRate = 0;
                 if(maxUploadRates.length > 0) {
@@ -156,7 +158,7 @@ class APPE extends AbstractCommand {
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message
-                String userName = request.getUser().getName();
+                String userName = session.getUser().getName();
                 Log log = serverContext.getLogFactory().getInstance(getClass());
                 log.info("File upload : " + userName + " - " + fileName);
                 
@@ -185,7 +187,7 @@ class APPE extends AbstractCommand {
                 
                 // call Ftplet.onAppendEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onAppendEnd(request, out);
+                    ftpletRet = ftpletContainer.onAppendEnd(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -198,7 +200,7 @@ class APPE extends AbstractCommand {
             }
         }
         finally {
-            request.getFtpDataConnection().closeDataSocket();
+            session.getFtpDataConnection().closeDataSocket();
         }
     }
 }

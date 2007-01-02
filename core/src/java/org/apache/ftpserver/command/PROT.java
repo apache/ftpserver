@@ -22,10 +22,11 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpDataConnection;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
@@ -40,11 +41,12 @@ class PROT extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // check argument
         String arg = request.getArgument();
@@ -55,7 +57,7 @@ class PROT extends AbstractCommand {
         
         // check argument
         arg = arg.toUpperCase();
-        FtpDataConnection dcon = request.getFtpDataConnection();
+        FtpDataConnection dcon = session.getFtpDataConnection();
         if(arg.equals("C")) {
             dcon.setSecure(false);
             out.send(200, "PROT", null);

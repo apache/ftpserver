@@ -21,11 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * <code>RNFR &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -43,11 +44,12 @@ class RNFR extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variable
-        request.resetState();
+        session.resetState();
         
         // argument check
         String fileName = request.getArgument();
@@ -59,7 +61,7 @@ class RNFR extends AbstractCommand {
         // get filename
         FileObject renFr = null;
         try {
-            renFr = request.getFileSystemView().getFileObject(fileName);
+            renFr = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
             log.debug("Exception getting file object", ex);
@@ -70,7 +72,7 @@ class RNFR extends AbstractCommand {
             out.send(550, "RNFR", fileName);
         }
         else {
-            request.setRenameFrom(renFr);
+            session.setRenameFrom(renFr);
             fileName = renFr.getFullName();
             out.send(350, "RNFR", fileName);    
         }

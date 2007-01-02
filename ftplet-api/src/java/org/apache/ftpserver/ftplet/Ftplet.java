@@ -69,103 +69,103 @@ interface Ftplet {
     /**
      * Client connect notification method.
      */
-    FtpletEnum onConnect(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onConnect(FtpSession session, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Client disconnect notification method. This is the last callback method.
      */
-    FtpletEnum onDisconnect(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onDisconnect(FtpSession session, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Client successful login notification method. 
      * If the user has successfully authenticated, the 
-     * {@link FtpRequest#getUser()} method will return the user,
+     * {@link FtpSession#getUser()} method will return the user,
      * otherwise it will return null.
      */
-    FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
             
     /**
      * File delete request notification method.
      */
-    FtpletEnum onDeleteStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * File delete success notification method.
      */
-    FtpletEnum onDeleteEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * File upload request notification method.
      */
-    FtpletEnum onUploadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
 
     /**
      * File upload success notification method.
      */
-    FtpletEnum onUploadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * File download request notification method.
      */
-    FtpletEnum onDownloadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * File download success notification method.
      */
-    FtpletEnum onDownloadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Remove directory request notification method.
      */
-    FtpletEnum onRmdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Directory removal success notification method.
      */
-    FtpletEnum onRmdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Directory creation request notification method.
      */
-    FtpletEnum onMkdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Directory creation success notification method.
      */
-    FtpletEnum onMkdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
             
     /**
      * File append request notification method.
      */
-    FtpletEnum onAppendStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * File append success notification method.
      */
-    FtpletEnum onAppendEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Unique file create request notification method.
      */
-    FtpletEnum onUploadUniqueStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Unique file create success notification method.
      */
-    FtpletEnum onUploadUniqueEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Rename start notification method.
      */
-    FtpletEnum onRenameStart(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * Rename end notification method.
      */
-    FtpletEnum onRenameEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
     
     /**
      * SITE command notification method.
      */
-    FtpletEnum onSite(FtpRequest request, FtpResponse response) throws FtpException, IOException;
+    FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException;
 }

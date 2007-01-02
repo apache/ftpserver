@@ -23,9 +23,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 
 /**
@@ -45,11 +46,12 @@ class EPRT extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // argument check
         String arg = request.getArgument();
@@ -93,7 +95,7 @@ class EPRT extends AbstractCommand {
         
         // check IP
         if(dataCfg.isActiveIpCheck()) {
-            InetAddress clientAddr = handler.getRequest().getRemoteAddress();
+            InetAddress clientAddr = session.getRemoteAddress();
             if(!dataAddr.equals(clientAddr)) {
                 out.send(510, "EPRT.mismatch", null);
                 return;
@@ -111,7 +113,7 @@ class EPRT extends AbstractCommand {
             return; 
         }
         
-        request.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
+        session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
         out.send(200, "EPRT", null);
     }
 }

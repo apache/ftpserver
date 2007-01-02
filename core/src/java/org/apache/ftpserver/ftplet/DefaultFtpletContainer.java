@@ -126,12 +126,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onConnect.
      */
-    public FtpletEnum onConnect(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onConnect(FtpSession session, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onConnect(request, response);
+            retVal = ftpletEnt.ftplet.onConnect(session, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -147,12 +147,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDisconnect.
      */
-    public FtpletEnum onDisconnect(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDisconnect(FtpSession session, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onDisconnect(request, response);
+            retVal = ftpletEnt.ftplet.onDisconnect(session, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -168,12 +168,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onLogin.
      */
-    public FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onLogin(request, response);
+            retVal = ftpletEnt.ftplet.onLogin(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -189,12 +189,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /** 
      * Call ftplet onDeleteStart.
      */
-    public FtpletEnum onDeleteStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onDeleteStart(request, response);
+            retVal = ftpletEnt.ftplet.onDeleteStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -211,12 +211,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDeleteEnd.
      */
-    public FtpletEnum onDeleteEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onDeleteEnd(request, response);
+            retVal = ftpletEnt.ftplet.onDeleteEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -232,12 +232,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadStart.
      */
-    public FtpletEnum onUploadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onUploadStart(request, response);
+            retVal = ftpletEnt.ftplet.onUploadStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -253,12 +253,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadEnd.
      */
-    public FtpletEnum onUploadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onUploadEnd(request, response);
+            retVal = ftpletEnt.ftplet.onUploadEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -274,12 +274,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDownloadStart.
      */
-    public FtpletEnum onDownloadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onDownloadStart(request, response);
+            retVal = ftpletEnt.ftplet.onDownloadStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -295,12 +295,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDownloadEnd.
      */
-    public FtpletEnum onDownloadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onDownloadEnd(request, response);
+            retVal = ftpletEnt.ftplet.onDownloadEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -316,12 +316,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRmdirStart.
      */
-    public FtpletEnum onRmdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onRmdirStart(request, response);
+            retVal = ftpletEnt.ftplet.onRmdirStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -337,12 +337,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRmdirEnd.
      */
-    public FtpletEnum onRmdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onRmdirEnd(request, response);
+            retVal = ftpletEnt.ftplet.onRmdirEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -358,12 +358,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onMkdirStart.
      */
-    public FtpletEnum onMkdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onMkdirStart(request, response);
+            retVal = ftpletEnt.ftplet.onMkdirStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -379,12 +379,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /** 
      * Call ftplet onMkdirEnd.
      */
-    public FtpletEnum onMkdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onMkdirEnd(request, response);
+            retVal = ftpletEnt.ftplet.onMkdirEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -400,12 +400,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onAppendStart.
      */
-    public FtpletEnum onAppendStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onAppendStart(request, response);
+            retVal = ftpletEnt.ftplet.onAppendStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -421,12 +421,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onAppendEnd.
      */
-    public FtpletEnum onAppendEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onAppendEnd(request, response);
+            retVal = ftpletEnt.ftplet.onAppendEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -442,12 +442,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadUniqueStart.
      */
-    public FtpletEnum onUploadUniqueStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onUploadUniqueStart(request, response);
+            retVal = ftpletEnt.ftplet.onUploadUniqueStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -463,12 +463,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadUniqueEnd.
      */
-    public FtpletEnum onUploadUniqueEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onUploadUniqueEnd(request, response);
+            retVal = ftpletEnt.ftplet.onUploadUniqueEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -484,12 +484,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRenameStart.
      */
-    public FtpletEnum onRenameStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onRenameStart(request, response);
+            retVal = ftpletEnt.ftplet.onRenameStart(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -505,12 +505,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRenameEnd.
      */
-    public FtpletEnum onRenameEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onRenameEnd(request, response);
+            retVal = ftpletEnt.ftplet.onRenameEnd(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -526,12 +526,12 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onSite.
      */
-    public FtpletEnum onSite(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
             FtpletEntry ftpletEnt = (FtpletEntry)ftplets.get(i);
-            retVal = ftpletEnt.ftplet.onSite(request, response);
+            retVal = ftpletEnt.ftplet.onSite(session, request, response);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }

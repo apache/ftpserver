@@ -22,11 +22,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -50,11 +51,12 @@ class RMD extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         FtpServerContext serverContext = handler.getServerContext();
         
         // argument check
@@ -68,7 +70,7 @@ class RMD extends AbstractCommand {
         Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try{
-            ftpletRet = ftpletContainer.onRmdirStart(request, out);
+            ftpletRet = ftpletContainer.onRmdirStart(session, request, out);
         } catch(Exception e) {
             log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -84,7 +86,7 @@ class RMD extends AbstractCommand {
         // get file object
         FileObject file = null;
         try {
-            file = request.getFileSystemView().getFileObject(fileName);
+            file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
             log.debug("Exception getting file object", ex);
@@ -112,7 +114,7 @@ class RMD extends AbstractCommand {
             out.send(250, "RMD", fileName); 
             
             // write log message
-            String userName = request.getUser().getName();
+            String userName = session.getUser().getName();
             Log log = serverContext.getLogFactory().getInstance(getClass());
             log.info("Directory remove : " + userName + " - " + fileName);
             
@@ -122,7 +124,7 @@ class RMD extends AbstractCommand {
             
             // call Ftplet.onRmdirEnd() method
             try{
-                ftpletRet = ftpletContainer.onRmdirEnd(request, out);
+                ftpletRet = ftpletContainer.onRmdirEnd(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;

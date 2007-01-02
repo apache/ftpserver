@@ -20,6 +20,7 @@
 package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 
 /**
  * This is the connection request handler interface.
@@ -30,9 +31,9 @@ public
 interface Connection extends Runnable {
 
     /**
-     * Get current request.
+     * Get current session.
      */
-    FtpRequest getRequest();
+    FtpSession getSession();
     
     /**
      * Close handler.

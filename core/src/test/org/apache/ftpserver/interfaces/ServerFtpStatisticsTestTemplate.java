@@ -21,10 +21,10 @@ package org.apache.ftpserver.interfaces;
 
 import java.util.Date;
 
-import org.apache.ftpserver.FtpStatisticsImpl;
-import org.apache.ftpserver.ftplet.FtpRequest;
-
 import junit.framework.TestCase;
+
+import org.apache.ftpserver.FtpStatisticsImpl;
+import org.apache.ftpserver.ftplet.FtpSession;
 
 public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
@@ -33,7 +33,7 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         public void close() {
         }
 
-        public FtpRequest getRequest() {
+        public FtpSession getSession() {
             return null;
         }
 

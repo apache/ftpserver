@@ -22,9 +22,10 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpDataConnection;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * The EPSV command requests that a server listen on a data port and
@@ -47,14 +48,15 @@ class EPSV extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // set data connection
-        FtpDataConnection dataCon = request.getFtpDataConnection();
+        FtpDataConnection dataCon = session.getFtpDataConnection();
         if (!dataCon.setPasvCommand()) {
             out.send(425, "EPSV", null);
             return;   

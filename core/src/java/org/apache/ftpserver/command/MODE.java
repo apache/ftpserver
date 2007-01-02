@@ -21,9 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * <code>MODE &lt;SP&gt; <mode-code> &lt;CRLF&gt;</code><br>
@@ -41,11 +42,12 @@ class MODE extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler,
-                       FtpRequestImpl request, 
+                       FtpRequest request,
+                       FtpSessionImpl session, 
                        FtpWriter out) throws IOException {
         
         // reset state
-        request.resetState();
+        session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
@@ -57,11 +59,11 @@ class MODE extends AbstractCommand {
         char md = request.getArgument().charAt(0);
         md = Character.toUpperCase(md);
         if(md == 'S') {
-            request.getFtpDataConnection().setZipMode(false);
+            session.getFtpDataConnection().setZipMode(false);
             out.send(200, "MODE", "S");
         }
         else if(md == 'Z') {
-            request.getFtpDataConnection().setZipMode(true);
+            session.getFtpDataConnection().setZipMode(true);
             out.send(200, "MODE", "Z");
         }
         else {

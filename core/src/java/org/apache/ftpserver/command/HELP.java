@@ -21,9 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.MessageResource;
 
 /**
@@ -44,11 +45,12 @@ class HELP extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // print global help
         if(!request.hasArgument()) {
@@ -59,7 +61,7 @@ class HELP extends AbstractCommand {
         // print command specific help if available
         String ftpCmd = request.getArgument().toUpperCase();
         MessageResource resource = handler.getServerContext().getMessageResource();
-        if(resource.getMessage(214, ftpCmd, request.getLanguage()) == null) {
+        if(resource.getMessage(214, ftpCmd, session.getLanguage()) == null) {
             ftpCmd = null;
         }
         out.send(214, ftpCmd, null);

@@ -22,11 +22,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -48,11 +49,12 @@ class DELE extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variables
-        request.resetState(); 
+        session.resetState(); 
         FtpServerContext serverContext = handler.getServerContext();
         
         // argument check
@@ -66,7 +68,7 @@ class DELE extends AbstractCommand {
         Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
-            ftpletRet = ftpletContainer.onDeleteStart(request, out);
+            ftpletRet = ftpletContainer.onDeleteStart(session, request, out);
         } catch(Exception e) {
             log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -84,7 +86,7 @@ class DELE extends AbstractCommand {
         FileObject file = null;
         
         try {
-            file = request.getFileSystemView().getFileObject(fileName);
+            file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
             log.debug("Could not get file " + fileName, ex);
@@ -107,7 +109,7 @@ class DELE extends AbstractCommand {
             out.send(250, "DELE", fileName); 
             
             // log message
-            String userName = request.getUser().getName();
+            String userName = session.getUser().getName();
             Log log = serverContext.getLogFactory().getInstance(getClass());
             log.info("File delete : " + userName + " - " + fileName);
             
@@ -117,7 +119,7 @@ class DELE extends AbstractCommand {
             
             // call Ftplet.onDeleteEnd() method
             try{
-                ftpletRet = ftpletContainer.onDeleteEnd(request, out);
+                ftpletRet = ftpletContainer.onDeleteEnd(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;

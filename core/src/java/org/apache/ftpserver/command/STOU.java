@@ -26,13 +26,15 @@ import java.io.InputStream;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -58,20 +60,21 @@ class STOU extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         try {
         
             // reset state variables
-            request.resetState();
+            session.resetState();
             FtpServerContext serverContext = handler.getServerContext();
             
             // call Ftplet.onUploadUniqueStart() method
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onUploadUniqueStart(request, out);
+                ftpletRet = ftpletContainer.onUploadUniqueStart(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -96,9 +99,9 @@ class STOU extends AbstractCommand {
             // get filenames
             FileObject file = null;
             try {
-                file = request.getFileSystemView().getFileObject(filePrefix);
+                file = session.getFileSystemView().getFileObject(filePrefix);
                 if(file != null) {
-                    file = getUniqueFile(handler, file);
+                    file = getUniqueFile(handler, session, file);
                 }
             }
             catch(Exception ex) {
@@ -120,7 +123,7 @@ class STOU extends AbstractCommand {
             out.send(150, "STOU", null);
             InputStream is = null;
             try {
-                is = request.getDataInputStream();
+                is = session.getDataInputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the input data stream", ex);
@@ -140,7 +143,7 @@ class STOU extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(0L) );
 
                 // transfer data
-                Authority[] maxUploadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+                Authority[] maxUploadRates = session.getUser().getAuthorities(TransferRatePermission.class);
                 
                 int maxRate = 0;
                 if(maxUploadRates.length > 0) {
@@ -149,8 +152,7 @@ class STOU extends AbstractCommand {
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message
-                String userName = request.getUser().getName();
-                Log log = serverContext.getLogFactory().getInstance(getClass());
+                String userName = session.getUser().getName();
                 log.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
@@ -180,7 +182,7 @@ class STOU extends AbstractCommand {
                 
                 // call Ftplet.onUploadUniqueEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onUploadUniqueEnd(request, out);
+                    ftpletRet = ftpletContainer.onUploadUniqueEnd(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -193,7 +195,7 @@ class STOU extends AbstractCommand {
             }
         }
         finally {
-            request.getFtpDataConnection().closeDataSocket();
+            session.getFtpDataConnection().closeDataSocket();
         }
         
     }
@@ -201,9 +203,9 @@ class STOU extends AbstractCommand {
     /**
      * Get unique file object.
      */
-    protected FileObject getUniqueFile(RequestHandler handler, FileObject oldFile) throws FtpException {
+    protected FileObject getUniqueFile(RequestHandler handler, FtpSession session, FileObject oldFile) throws FtpException {
         FileObject newFile = oldFile;
-        FileSystemView fsView = handler.getRequest().getFileSystemView();
+        FileSystemView fsView = session.getFileSystemView();
         String fileName = newFile.getFullName();
         while( newFile.doesExist() ) {
             newFile = fsView.getFileObject(fileName + '.' + System.currentTimeMillis());

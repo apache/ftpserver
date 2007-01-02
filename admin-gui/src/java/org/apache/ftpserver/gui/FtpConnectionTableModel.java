@@ -31,6 +31,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
@@ -142,12 +143,12 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
             return retVal;
         }
         
-        FtpRequest request = thisCon.getRequest();
-        if(request == null) {
+        FtpSession session = thisCon.getSession();
+        if(session == null) {
             return retVal;
         }
         
-        User user = request.getUser();
+        User user = session.getUser();
         InetAddress addr = null;
         Date date = null;
         switch(col) {
@@ -161,21 +162,21 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                 break;
                 
             case 1:
-                date = request.getLoginTime();
+                date = session.getLoginTime();
                 if(date != null) {
                     retVal = DateUtils.getISO8601Date(date.getTime());
                 }
                 break;
                 
             case 2:
-                date = request.getLastAccessTime();
+                date = session.getLastAccessTime();
                 if(date != null) {
                     retVal = DateUtils.getISO8601Date(date.getTime());
                 }
                 break;
                 
             case 3:
-                addr = request.getRemoteAddress();
+                addr = session.getRemoteAddress();
                 if (addr != null) {
                     retVal = addr.getHostAddress();
                 }

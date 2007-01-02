@@ -26,12 +26,13 @@ import java.io.InputStream;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -60,13 +61,14 @@ class STOR extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         try {
         
             // get state variable
-            long skipLen = request.getFileOffset();
+            long skipLen = session.getFileOffset();
             FtpServerContext serverContext = handler.getServerContext();
             
             // argument check
@@ -80,7 +82,7 @@ class STOR extends AbstractCommand {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onUploadStart(request, out);
+                ftpletRet = ftpletContainer.onUploadStart(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -96,7 +98,7 @@ class STOR extends AbstractCommand {
             // get filename
             FileObject file = null;
             try {
-                file = request.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
                 log.debug("Exception getting file object", ex);
@@ -117,7 +119,7 @@ class STOR extends AbstractCommand {
             out.send(150, "STOR", fileName);
             InputStream is = null;
             try {
-                is = request.getDataInputStream();
+                is = session.getDataInputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the input data stream", ex);
@@ -136,7 +138,7 @@ class STOR extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream( file.createOutputStream(skipLen) );
                 
                 // transfer data
-                Authority[] maxUploadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+                Authority[] maxUploadRates = session.getUser().getAuthorities(TransferRatePermission.class);
             
                 int maxRate = 0;
                 if(maxUploadRates.length > 0) {
@@ -145,8 +147,7 @@ class STOR extends AbstractCommand {
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message
-                String userName = request.getUser().getName();
-                Log log = serverContext.getLogFactory().getInstance(getClass());
+                String userName = session.getUser().getName();
                 log.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
@@ -174,7 +175,7 @@ class STOR extends AbstractCommand {
                 
                 // call Ftplet.onUploadEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onUploadEnd(request, out);
+                    ftpletRet = ftpletContainer.onUploadEnd(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -187,8 +188,8 @@ class STOR extends AbstractCommand {
             }
         }
         finally {
-            request.resetState();
-            request.getFtpDataConnection().closeDataSocket();
+            session.resetState();
+            session.getFtpDataConnection().closeDataSocket();
         }
     }
 }

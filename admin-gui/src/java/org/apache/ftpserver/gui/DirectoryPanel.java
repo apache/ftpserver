@@ -115,7 +115,7 @@ class DirectoryPanel extends PluginPanel {
      * Make directory notification.
      */
     public void notifyMkdir(Connection con, FileObject file) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         models[0].newEntry(file.getFullName(), user);
     }
     
@@ -124,7 +124,7 @@ class DirectoryPanel extends PluginPanel {
      * Remove directory notification.
      */
     public void notifyRmdir(Connection con, FileObject file) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         models[1].newEntry(file.getFullName(), user);
     }
     

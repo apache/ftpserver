@@ -23,10 +23,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.Command;
 
 
@@ -48,11 +49,12 @@ class OPTS extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state
-        request.resetState();
+        session.resetState();
         
         // no params
         String argument = request.getArgument();
@@ -73,17 +75,17 @@ class OPTS extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( optsRequest );
         try {
             if(command != null) {
-                command.execute(handler, request, out);
+                command.execute(handler, request, session, out);
             }
             else {
-                request.resetState();
+                session.resetState();
                 out.send(502, "OPTS.not.implemented", argument);
             }
         }
         catch(Exception ex) {
             Log log = handler.getServerContext().getLogFactory().getInstance(getClass());
             log.warn("OPTS.execute()", ex);
-            request.resetState();
+            session.resetState();
             out.send(500, "OPTS", null);
         }
     }

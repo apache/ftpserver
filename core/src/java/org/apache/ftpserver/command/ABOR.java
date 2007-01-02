@@ -21,9 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * <code>ABOR &lt;CRLF&gt;</code><br>
@@ -46,14 +47,15 @@ class ABOR extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // and abort any data connection
-        request.getFtpDataConnection().closeDataSocket();
+        session.getFtpDataConnection().closeDataSocket();
         out.send(226, "ABOR", null);
     }   
 }

@@ -21,10 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * The FEAT command (introduced in [RFC-2389]) allows servers with
@@ -38,11 +39,12 @@ public
 class FEAT extends AbstractCommand {
 
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
 
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         out.send(211, "FEAT", null);
     }

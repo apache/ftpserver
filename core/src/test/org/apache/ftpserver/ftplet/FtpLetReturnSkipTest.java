@@ -66,7 +66,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 return FtpletEnum.RET_SKIP;
             }
         };

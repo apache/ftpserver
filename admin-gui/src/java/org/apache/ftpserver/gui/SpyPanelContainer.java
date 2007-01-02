@@ -109,7 +109,7 @@ class SpyPanelContainer extends PluginPanel {
      * Get tab caption.
      */
     private String getCaption(Connection con) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         String name = "UNKNOWN";
         if(user != null) {
             String tmp = user.getName();

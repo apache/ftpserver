@@ -69,10 +69,10 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpRequest request, FtpResponse response) throws FtpException, IOException {
-                assertNotNull(request.getUser());
+            public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+                assertNotNull(session.getUser());
                 
-                return super.onLogin(request, response);
+                return super.onLogin(session, request, response);
             }
             
         };

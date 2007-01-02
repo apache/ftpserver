@@ -117,7 +117,7 @@ class FilePanel extends PluginPanel {
      * File upload notification.
      */
     public void notifyUpload(Connection con, FileObject file, long sz) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         models[0].newEntry(file.getFullName(), user);
     }
     
@@ -125,7 +125,7 @@ class FilePanel extends PluginPanel {
      * File download notification.
      */
     public void notifyDownload(Connection con, FileObject file, long sz) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         models[1].newEntry(file.getFullName(), user);
     }
     
@@ -133,7 +133,7 @@ class FilePanel extends PluginPanel {
      * File delete notification.
      */
     public void notifyDelete(Connection con, FileObject file) {
-        User user = con.getRequest().getUser();
+        User user = con.getSession().getUser();
         models[2].newEntry(file.getFullName(), user);
     }
     

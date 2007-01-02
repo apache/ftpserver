@@ -19,14 +19,8 @@
 
 package org.apache.ftpserver.command;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ftpserver.FtpRequestImpl;
-import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
 
 /**
@@ -42,12 +36,5 @@ public abstract class AbstractCommand implements Command {
 
     public void setLogFactory(LogFactory logFactory) {
         log = logFactory.getInstance(getClass());
-    }
-    
-    /**
-     * Execute command
-     */
-    public abstract void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
-                        FtpWriter out) throws IOException, FtpException;   
+    }  
 }

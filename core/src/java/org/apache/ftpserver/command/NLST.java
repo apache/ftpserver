@@ -25,10 +25,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.LISTFileFormater;
@@ -60,19 +61,20 @@ class NLST extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         try {
             
             // reset state
-            request.resetState();
+            session.resetState();
             
             // get data connection
             out.send(150, "NLST", null);
             OutputStream os = null;
             try {
-                os = request.getDataOutputStream();
+                os = session.getDataOutputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the output data stream", ex);
@@ -98,7 +100,7 @@ class NLST extends AbstractCommand {
                     formater = NLST_FILE_FORMATER;
                 }
                 
-                writer.write(directoryLister.listFiles(parsedArg, request.getFileSystemView(), formater));
+                writer.write(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
@@ -124,7 +126,7 @@ class NLST extends AbstractCommand {
             }
         }
         finally {
-            request.getFtpDataConnection().closeDataSocket();
+            session.getFtpDataConnection().closeDataSocket();
         }
     }
 }

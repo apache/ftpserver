@@ -22,11 +22,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -49,7 +50,8 @@ class RNTO extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         try {
             
@@ -65,7 +67,7 @@ class RNTO extends AbstractCommand {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onRenameStart(request, out);
+                ftpletRet = ftpletContainer.onRenameStart(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -79,7 +81,7 @@ class RNTO extends AbstractCommand {
             }
             
             // get the "rename from" file object
-            FileObject frFile = request.getRenameFrom();
+            FileObject frFile = session.getRenameFrom();
             if( frFile == null ) {
                 out.send(503, "RNTO", null);
                 return;
@@ -88,7 +90,7 @@ class RNTO extends AbstractCommand {
             // get target file
             FileObject toFile = null;
             try {
-                toFile = request.getFileSystemView().getFileObject(toFileStr);
+                toFile = session.getFileSystemView().getFileObject(toFileStr);
             }
             catch(Exception ex) {
                 log.debug("Exception getting file object", ex);
@@ -116,12 +118,12 @@ class RNTO extends AbstractCommand {
                 out.send(250, "RNTO", toFileStr);
 
                 Log log = serverContext.getLogFactory().getInstance(getClass());
-                log.info("File rename (" + request.getUser().getName() + ") " 
+                log.info("File rename (" + session.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
                 
                 // call Ftplet.onRenameEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onRenameEnd(request, out);
+                    ftpletRet = ftpletContainer.onRenameEnd(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -137,7 +139,7 @@ class RNTO extends AbstractCommand {
         
         }
         finally {
-            request.resetState(); 
+            session.resetState(); 
         }
     } 
 

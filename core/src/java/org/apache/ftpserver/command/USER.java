@@ -21,10 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -50,7 +51,8 @@ class USER extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
@@ -60,7 +62,7 @@ class USER extends AbstractCommand {
         try {
             
             // reset state variables
-            request.resetState();
+            session.resetState();
             
             // argument check
             String userName = request.getArgument();
@@ -70,8 +72,8 @@ class USER extends AbstractCommand {
             }
             
             // already logged-in
-            BaseUser user = (BaseUser)request.getUser();
-            if(request.isLoggedIn()) {
+            BaseUser user = (BaseUser)session.getUser();
+            if(session.isLoggedIn()) {
                 if( userName.equals(user.getName()) ) {
                     out.send(230, "USER", null);
                     success = true;
@@ -111,7 +113,7 @@ class USER extends AbstractCommand {
                 
                 ConcurrentLoginRequest loginRequest = new  ConcurrentLoginRequest(
                         stat.getCurrentUserLoginNumber(configUser) + 1,
-                        stat.getCurrentUserLoginNumber(configUser, request.getRemoteAddress()) + 1);
+                        stat.getCurrentUserLoginNumber(configUser, session.getRemoteAddress()) + 1);
                 
                 if(!configUser.authorize(loginRequest)) {
                     out.send(421, "USER.login", null);
@@ -121,7 +123,7 @@ class USER extends AbstractCommand {
             
             // finally set the user name
             success = true;
-            request.setUserArgument(userName);
+            session.setUserArgument(userName);
             if(anonymous) {
                 out.send(331, "USER.anonymous", userName);
             }

@@ -31,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -95,7 +96,7 @@ class FtpWriter implements FtpResponse {
     private Writer writer;
     private ConnectionObserver observer;
     private FtpServerContext serverContext;
-    private FtpRequest request;
+    private FtpSession session;
     private InetAddress serverAddress;
 
         
@@ -118,8 +119,8 @@ class FtpWriter implements FtpResponse {
     /**
      * Set ftp request.
      */
-    public void setFtpRequest(FtpRequest request) {
-        this.request = request;
+    public void setFtpSession(FtpSession session) {
+        this.session = session;
     }
     
     /**
@@ -144,7 +145,7 @@ class FtpWriter implements FtpResponse {
      */
     public void send(int code, String subId, String basicMsg) throws IOException {
         MessageResource resource = serverContext.getMessageResource();
-        String lang = request.getLanguage();
+        String lang = session.getLanguage();
         
         String msg = null;
         if(resource != null ) {
@@ -270,7 +271,7 @@ class FtpWriter implements FtpResponse {
     /**
      * Get the variable value.
      */
-    public String getVariableValue(int code, String basicMsg, String varName) {
+    private String getVariableValue(int code, String basicMsg, String varName) {
         
         String varVal = null;
         
@@ -335,6 +336,12 @@ class FtpWriter implements FtpResponse {
     private String getRequestVariableValue(String varName) {
         
         String varVal = null;
+        
+        FtpRequest request = session.getCurrentRequest();
+        
+        if(request == null) {
+            return "";
+        }
         
         // request line
         if(varName.equals(REQUEST_LINE)) {
@@ -523,37 +530,37 @@ class FtpWriter implements FtpResponse {
         
         // client ip
         if(varName.equals(CLIENT_IP)) {
-            varVal = request.getRemoteAddress().getHostAddress();
+            varVal = session.getRemoteAddress().getHostAddress();
         }
         
         // client connection time
         else if(varName.equals(CLIENT_CON_TIME)) {
-            varVal = DateUtils.getISO8601Date(request.getConnectionTime().getTime());
+            varVal = DateUtils.getISO8601Date(session.getConnectionTime().getTime());
         }
         
         // client login name
         else if(varName.equals(CLIENT_LOGIN_NAME)) {
-            varVal = request.getUserArgument();
+            varVal = session.getUserArgument();
         }
         
         // client login time
         else if(varName.equals(CLIENT_LOGIN_TIME)) {
-            varVal = DateUtils.getISO8601Date(request.getLoginTime().getTime());
+            varVal = DateUtils.getISO8601Date(session.getLoginTime().getTime());
         }
         
         // client last access time
         else if(varName.equals(CLIENT_ACCESS_TIME)) {
-            varVal = DateUtils.getISO8601Date(request.getLastAccessTime().getTime());
+            varVal = DateUtils.getISO8601Date(session.getLastAccessTime().getTime());
         }
         
         // client home
         else if(varName.equals(CLIENT_HOME)) {
-            varVal = request.getUser().getHomeDirectory();
+            varVal = session.getUser().getHomeDirectory();
         }
         
         // client directory
         else if(varName.equals(CLIENT_DIR)) {
-            FileSystemView fsView = request.getFileSystemView();
+            FileSystemView fsView = session.getFileSystemView();
             if(fsView != null) {
                 try {
                     varVal = fsView.getCurrentDirectory().getFullName();

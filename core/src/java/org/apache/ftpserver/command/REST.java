@@ -21,9 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * <code>REST &lt;SP&gt; <marker> &lt;CRLF&gt;</code><br>
@@ -44,7 +45,8 @@ class REST extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // argument check
@@ -55,7 +57,7 @@ class REST extends AbstractCommand {
         }
         
         // get offset number
-        request.resetState();
+        session.resetState();
         long skipLen = 0L;
         try {
             skipLen = Long.parseLong(argument);
@@ -74,7 +76,7 @@ class REST extends AbstractCommand {
             out.send(501, "REST.invalid", null); 
         }
         
-        request.setFileOffset(skipLen);
+        session.setFileOffset(skipLen);
     } 
     
 }

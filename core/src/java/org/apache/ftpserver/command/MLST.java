@@ -21,11 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
@@ -45,18 +46,19 @@ class MLST extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
 //      parse argument
         ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
         
         FileObject file = null;
         try {
-            file = request.getFileSystemView().getFileObject(parsedArg.getFile());
+            file = session.getFileSystemView().getFileObject(parsedArg.getFile());
             if(file != null && file.doesExist()) {
                 FileFormater formater = new MLSTFileFormater((String[])handler.getAttribute("MLST.types"));
                 out.send(250, "MLST", formater.format(file));

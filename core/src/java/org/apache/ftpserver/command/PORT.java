@@ -24,9 +24,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 
 /**
@@ -56,11 +57,12 @@ class PORT extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
@@ -96,7 +98,7 @@ class PORT extends AbstractCommand {
         
         // check IP
         if(dataCfg.isActiveIpCheck()) {
-            InetAddress clientAddr = handler.getRequest().getRemoteAddress();
+            InetAddress clientAddr = session.getRemoteAddress();
             if(!dataAddr.equals(clientAddr)) {
                 out.send(510, "PORT.mismatch", null);
                 return;
@@ -116,7 +118,7 @@ class PORT extends AbstractCommand {
             return; 
         }
         
-        request.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
+        session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
         out.send(200, "PORT", null);
     }
     

@@ -23,10 +23,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * Displays the FTP server timezone in RFC 822 format.
@@ -42,11 +43,12 @@ class SITE_ZONE extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-            FtpRequestImpl request, 
+            FtpRequest request,
+            FtpSessionImpl session, 
             FtpWriter out) throws IOException, FtpException {
   
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // send timezone data
         String timezone = TIMEZONE_FMT.format(new Date());

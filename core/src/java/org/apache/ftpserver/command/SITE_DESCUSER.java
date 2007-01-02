@@ -21,10 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -43,15 +44,16 @@ class SITE_DESCUSER extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request,
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // only administrator can execute this
         UserManager userManager = handler.getServerContext().getUserManager(); 
-        boolean isAdmin = userManager.isAdmin(request.getUser().getName());
+        boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
             return;

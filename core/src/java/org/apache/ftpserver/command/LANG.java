@@ -21,10 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.MessageResource;
 
 /**
@@ -41,16 +42,17 @@ class LANG extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state
-        request.resetState();
+        session.resetState();
         
         // default language
         String language = request.getArgument();
         if(language == null) {
-            request.setLanguage(null);
+            session.setLanguage(null);
             out.send(200, "LANG", null);
             return;
         }
@@ -62,7 +64,7 @@ class LANG extends AbstractCommand {
         if(availableLanguages != null) {
             for(int i=0; i<availableLanguages.length; ++i) {
                 if(availableLanguages[i].equals(language)) {
-                    request.setLanguage(language);
+                    session.setLanguage(language);
                     out.send(200, "LANG", null);
                     return;
                 }

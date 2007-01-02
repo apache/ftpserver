@@ -23,10 +23,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
@@ -48,7 +49,8 @@ class SITE extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // call Ftplet.onSite method
@@ -56,7 +58,7 @@ class SITE extends AbstractCommand {
         Ftplet ftpletContainer = serverContext.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
-            ftpletRet = ftpletContainer.onSite(request, out);
+            ftpletRet = ftpletContainer.onSite(session, request, out);
         } catch(Exception e) {
             log.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -81,7 +83,7 @@ class SITE extends AbstractCommand {
         
         // no params
         if(argument == null) {
-            request.resetState();
+            session.resetState();
             out.send(200, "SITE", null);
             return;
         }
@@ -91,17 +93,17 @@ class SITE extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( siteRequest );
         try {
             if(command != null) {
-                command.execute(handler, request, out);
+                command.execute(handler, request, session, out);
             }
             else {
-                request.resetState();
+                session.resetState();
                 out.send(502, "SITE", argument);
             }
         }
         catch(Exception ex) {
             Log log = serverContext.getLogFactory().getInstance(getClass());
             log.warn("SITE.execute()", ex);
-            request.resetState();
+            session.resetState();
             out.send(500, "SITE", null);
         }
     

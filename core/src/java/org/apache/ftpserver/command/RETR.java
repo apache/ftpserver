@@ -27,13 +27,14 @@ import java.io.OutputStream;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -59,13 +60,14 @@ class RETR extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         try {
         
             // get state variable
-            long skipLen = request.getFileOffset();
+            long skipLen = session.getFileOffset();
             FtpServerContext serverContext = handler.getServerContext();
             
             // argument check
@@ -79,7 +81,7 @@ class RETR extends AbstractCommand {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onDownloadStart(request, out);
+                ftpletRet = ftpletContainer.onDownloadStart(session, request, out);
             } catch(Exception e) {
                 log.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -95,7 +97,7 @@ class RETR extends AbstractCommand {
             // get file object
             FileObject file = null;
             try {
-                file = request.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
                 log.debug("Exception getting file object", ex);
@@ -128,7 +130,7 @@ class RETR extends AbstractCommand {
             out.send(150, "RETR", null);
             OutputStream os = null;
             try {
-                os = request.getDataOutputStream();
+                os = session.getDataOutputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the output data stream", ex);
@@ -147,7 +149,7 @@ class RETR extends AbstractCommand {
                 bos = IoUtils.getBufferedOutputStream(os);
                 
                 // transfer data
-                Authority[] maxDownloadRates = handler.getRequest().getUser().getAuthorities(TransferRatePermission.class);
+                Authority[] maxDownloadRates = session.getUser().getAuthorities(TransferRatePermission.class);
             
                 int maxRate = 0;
                 if(maxDownloadRates.length > 0) {
@@ -157,7 +159,7 @@ class RETR extends AbstractCommand {
                 long transSz = handler.transfer(bis, bos, maxRate);
                 
                 // log message
-                String userName = request.getUser().getName();
+                String userName = session.getUser().getName();
                 Log log = serverContext.getLogFactory().getInstance(getClass());
                 log.info("File download : " + userName + " - " + fileName);
                 
@@ -186,7 +188,7 @@ class RETR extends AbstractCommand {
                 
                 // call Ftplet.onDownloadEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onDownloadEnd(request, out);
+                    ftpletRet = ftpletContainer.onDownloadEnd(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -199,8 +201,8 @@ class RETR extends AbstractCommand {
             }
         }
         finally {
-            request.resetState();
-            request.getFtpDataConnection().closeDataSocket();
+            session.resetState();
+            session.getFtpDataConnection().closeDataSocket();
         }
     }
     

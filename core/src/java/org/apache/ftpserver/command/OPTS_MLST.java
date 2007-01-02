@@ -22,10 +22,11 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * Client-Server listing negotation.
@@ -48,11 +49,12 @@ class OPTS_MLST extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state
-        request.resetState();
+        session.resetState();
         
         // get the listing types
         String argument = request.getArgument();

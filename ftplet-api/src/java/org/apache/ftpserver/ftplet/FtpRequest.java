@@ -19,22 +19,11 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.util.Date;
 
 /**
- * Defines an object to provide client request information to a ftplet.
- * Ftplet methods will always get the same instance of Ftplet request.
- * So the attributes set by <code>setAttribute()</code> will be always 
- * available later unless that attribute is removed.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
+ * One FtpRequest made by the client. 
  */
-public 
-interface FtpRequest {
+public interface FtpRequest {
 
     /**
      * Get the client request string.
@@ -52,105 +41,8 @@ interface FtpRequest {
     String getArgument();
     
     /**
-     * Returns the IP address of the client that sent the request.
+     * Check if request contains an argument
+     * @return true if an argument is available
      */
-    InetAddress getRemoteAddress();
-    
-    /**
-     * Get connection time.
-     */
-    Date getConnectionTime();
-    
-    /**
-     * Get the login time.
-     */
-    Date getLoginTime();
-    
-    /**
-     * Get last access time.
-     */
-    Date getLastAccessTime();
-
-    /**
-     * Returns maximum idle time. This time equals to
-     * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
-     * {@link User#getMaxIdleTime()} after user login.
-     */
-    int getMaxIdleTime();
-    
-    /**
-     * Set maximum idle time in seconds. This time equals to
-     * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
-     * {@link User#getMaxIdleTime()} after user login.
-     */
-    void setMaxIdleTime(int maxIdleTimeSec);
-
-    /**
-     * Get user object.
-     */
-    User getUser();
-
-    /**
-     * Returns user name entered in USER command
-     * 
-     * @return user name entered in USER command
-     */
-    String getUserArgument();
-    
-    /**
-     * Get the requested language.
-     */
-    String getLanguage();
-    
-    /**
-     * Is the user logged in?
-     */
-    boolean isLoggedIn();
-
-    /**
-     * Get user file system view.
-     */
-    FileSystemView getFileSystemView();
-    
-    /**
-     * Get file upload/download offset.
-     */
-    long getFileOffset();
-    
-    /**
-     * Get rename from file object.
-     */
-    FileObject getRenameFrom();
-    
-    /**
-     * Get data input stream.
-     */
-    InputStream getDataInputStream() throws IOException;
-    
-    /**
-     * Get data output stream.
-     */
-    OutputStream getDataOutputStream() throws IOException;
-    
-    /**
-     * Returns the value of the named attribute as an Object, 
-     * or null if no attribute of the given name exists.
-     */
-    Object getAttribute(String name);
-    
-    /**
-     * Stores an attribute in this request. It will be available 
-     * until it was removed or when the connection ends. 
-     */
-    void setAttribute(String name, Object value);
-    
-    /**
-     * Removes an attribute from this request.
-     */
-    void removeAttribute(String name);
-    
-    /**
-     * Clear all attributes
-     */
-    void clear();
+    boolean hasArgument();
 }

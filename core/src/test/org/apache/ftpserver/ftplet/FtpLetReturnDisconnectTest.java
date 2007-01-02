@@ -87,7 +87,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpRequest request, FtpResponse response)
+            public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -104,7 +104,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -125,7 +125,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -149,7 +149,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -168,7 +168,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -190,7 +190,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -211,7 +211,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -235,7 +235,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringSite() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onSite(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -252,7 +252,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -274,7 +274,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -300,7 +300,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -319,7 +319,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -342,7 +342,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -363,7 +363,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -385,7 +385,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -404,7 +404,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -424,7 +424,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -443,7 +443,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
                 throwException();
                 
                 return mockReturnValue;

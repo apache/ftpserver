@@ -26,7 +26,7 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocket;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authentication;
@@ -34,6 +34,7 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.User;
@@ -61,7 +62,8 @@ class PASS extends AbstractCommand {
      * Execute command.
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request,
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
@@ -72,7 +74,7 @@ class PASS extends AbstractCommand {
         try {
             
             // reset state variables
-            request.resetState();
+            session.resetState();
             
             // argument check
             String password = request.getArgument();
@@ -82,15 +84,15 @@ class PASS extends AbstractCommand {
             }
             
             // check user name
-            String userName = request.getUserArgument();
+            String userName = session.getUserArgument();
 
-            if(userName == null && request.getUser() == null) {
+            if(userName == null && session.getUser() == null) {
                 out.send(503, "PASS", null);
                 return;
             }
             
             // already logged-in
-            if(request.isLoggedIn()) {
+            if(session.isLoggedIn()) {
                 out.send(202, "PASS", null);
                 success = true;
                 return;
@@ -155,16 +157,16 @@ class PASS extends AbstractCommand {
             
             // first save old values so that we can reset them if Ftplets
             // tell us to fail
-            User oldUser = request.getUser();
-            String oldUserArgument = request.getUserArgument();
-            int oldMaxIdleTime = request.getMaxIdleTime();
+            User oldUser = session.getUser();
+            String oldUserArgument = session.getUserArgument();
+            int oldMaxIdleTime = session.getMaxIdleTime();
 
             if(success) {
-                request.setUser(authenticatedUser);
-                request.setUserArgument(null);
-                request.setMaxIdleTime(authenticatedUser.getMaxIdleTime());
+                session.setUser(authenticatedUser);
+                session.setUserArgument(null);
+                session.setMaxIdleTime(authenticatedUser.getMaxIdleTime());
             } else {
-                request.setUser(null);
+                session.setUser(null);
             }
             
             // call Ftplet.onLogin() method
@@ -172,7 +174,7 @@ class PASS extends AbstractCommand {
             if(ftpletContainer != null) {
                 FtpletEnum ftpletRet;
                 try{
-                    ftpletRet = ftpletContainer.onLogin(request, out);
+                    ftpletRet = ftpletContainer.onLogin(session, request, out);
                 } catch(Exception e) {
                     log.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -187,9 +189,9 @@ class PASS extends AbstractCommand {
             
             if(!success) {
                 // reset due to failure
-                request.setUser(oldUser);
-                request.setUserArgument(oldUserArgument);
-                request.setMaxIdleTime(oldMaxIdleTime);
+                session.setUser(oldUser);
+                session.setUserArgument(oldUserArgument);
+                session.setMaxIdleTime(oldMaxIdleTime);
                 
                 log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
@@ -200,7 +202,7 @@ class PASS extends AbstractCommand {
             // update different objects
             FileSystemManager fmanager = serverContext.getFileSystemManager(); 
             FileSystemView fsview = fmanager.createFileSystemView(authenticatedUser);
-            request.setLogin(fsview);
+            session.setLogin(fsview);
             stat.setLogin(handler);
 
             // everything is fine - send login ok message
@@ -217,7 +219,7 @@ class PASS extends AbstractCommand {
             
             // if login failed - reset user
             if(!success) {
-                request.reinitialize();
+                session.reinitialize();
             }
         }
     }

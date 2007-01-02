@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
 import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
@@ -161,7 +162,7 @@ class ConnectionManagerImpl implements ConnectionManager {
          * set default idle time for request. This value should be overrided
          * after user login
          */
-        connection.getRequest().setMaxIdleTime(defaultIdleSec);
+        connection.getSession().setMaxIdleTime(defaultIdleSec);
         
         // now start a new thread to serve this connection
         new Thread(connection).start();
@@ -243,17 +244,17 @@ class ConnectionManagerImpl implements ConnectionManager {
                 }
                     
                 // idle client connection
-                FtpRequestImpl request = (FtpRequestImpl)con.getRequest();
-                if(request == null) {
+                FtpSessionImpl session = (FtpSessionImpl)con.getSession();
+                if(session == null) {
                     continue;
                 }
-                if(request.isTimeout(currTime)) {
+                if(session.isTimeout(currTime)) {
                     inactiveCons.add(con);
                     continue;
                 }
                 
                 // idle data connection
-                FtpDataConnection dataCon = request.getFtpDataConnection();
+                FtpDataConnection dataCon = session.getFtpDataConnection();
                 if(dataCon == null) {
                     continue;
                 }
@@ -261,7 +262,7 @@ class ConnectionManagerImpl implements ConnectionManager {
 
                     // if the data connection is not active - close it
                     if(dataCon.isTimeout(currTime)) {
-                        log.info("Removing idle data connection for " + request.getUser());
+                        log.info("Removing idle data connection for " + session.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
@@ -275,12 +276,12 @@ class ConnectionManagerImpl implements ConnectionManager {
                 continue;
             }
             
-            FtpRequest request = connection.getRequest();
-            if(request == null) {
+            FtpSession session = connection.getSession();
+            if(session == null) {
                 continue;
             }
             
-            log.info("Removing idle user " + request.getUser());
+            log.info("Removing idle user " + session.getUser());
             closeConnection(connection);
         }
     }

@@ -37,6 +37,7 @@ import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.Structure;
@@ -66,7 +67,7 @@ class RequestHandler implements Connection {
     private Log log;
     
     private Socket controlSocket;
-    private FtpRequestImpl request;
+    private FtpSessionImpl session;
     private FtpWriter writer;
     private BufferedReader reader;
     private boolean isConnectionClosed;
@@ -90,15 +91,15 @@ class RequestHandler implements Connection {
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
         
         // reader object
-        request = new FtpRequestImpl();
-        request.setClientAddress(this.controlSocket.getInetAddress());
-        request.setFtpDataConnection(dataCon);
+        session = new FtpSessionImpl();
+        session.setClientAddress(this.controlSocket.getInetAddress());
+        session.setFtpDataConnection(dataCon);
         
         // writer object
         writer = new FtpWriter();
         writer.setControlSocket(this.controlSocket);
         writer.setServerContext(this.serverContext);
-        writer.setFtpRequest(request);
+        writer.setFtpSession(session);
     }
     
     /**
@@ -113,9 +114,9 @@ class RequestHandler implements Connection {
         }
         
         // set request observer
-        FtpRequestImpl request = this.request;
-        if(request != null) {
-            request.setObserver(observer);
+        FtpSessionImpl session = this.session;
+        if(session != null) {
+            session.setObserver(observer);
         }
     }   
     
@@ -176,22 +177,22 @@ class RequestHandler implements Connection {
     /**
      * Get request.
      */
-    public FtpRequest getRequest() {
-        return request;
+    public FtpSession getSession() {
+        return session;
     }
     
     /**
      * Server one FTP client connection.
      */
     public void run() {
-        if(request == null ) {
+        if(session == null ) {
             return;
         }
         if(serverContext == null) {
         	return;
         }
         
-        InetAddress clientAddr = request.getRemoteAddress();
+        InetAddress clientAddr = session.getRemoteAddress();
         ConnectionManager conManager = serverContext.getConnectionManager();
         Ftplet ftpletContainer = serverContext.getFtpletContainer();
         
@@ -214,7 +215,7 @@ class RequestHandler implements Connection {
             // call Ftplet.onConnect() method
             boolean isSkipped = false;
 
-            FtpletEnum ftpletRet = ftpletContainer.onConnect(request, writer);
+            FtpletEnum ftpletRet = ftpletContainer.onConnect(session, writer);
             if(ftpletRet == FtpletEnum.RET_SKIP) {
                 isSkipped = true;
             }
@@ -261,14 +262,20 @@ class RequestHandler implements Connection {
                 }
                 
                 // parse and check permission
-                request.parse(commandLine);
-                if(!hasPermission()) {
+                FtpRequestImpl request = new FtpRequestImpl(commandLine);
+                session.setCurrentRequest(request);
+                
+                if(!hasPermission(request)) {
                     writer.send(530, "permission", null);
                     continue;
                 }
 
                 // execute command
-                service(request, writer);
+                service(request, session, writer);
+                
+                if(session != null) {
+                    session.setCurrentRequest(null);
+                }
             }
             while(!isConnectionClosed);
         } catch(SocketException ex) {
@@ -290,20 +297,20 @@ class RequestHandler implements Connection {
      * Notify connection manager observer.
      */
     protected void notifyObserver() {
-        request.updateLastAccessTime();
+        session.updateLastAccessTime();
         serverContext.getConnectionManager().updateConnection(this);
     }
 
     /**
      * Execute the ftp command.
      */
-    public void service(FtpRequestImpl request, FtpWriter out) throws IOException, FtpException {
+    public void service(FtpRequestImpl request, FtpSessionImpl session, FtpWriter out) throws IOException, FtpException {
         try {
             String commandName = request.getCommand();
             CommandFactory commandFactory = serverContext.getCommandFactory();
             Command command = commandFactory.getCommand(commandName);
             if(command != null) {
-                command.execute(this, request, out);
+                command.execute(this, request, session, out);
             }
             else {
                 out.send(502, "not.implemented", null);
@@ -343,7 +350,7 @@ class RequestHandler implements Connection {
         // call Ftplet.onDisconnect() method.
         try {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
-            ftpletContainer.onDisconnect(request, writer);
+            ftpletContainer.onDisconnect(session, writer);
         }
         catch(Exception ex) {
             log.warn("RequestHandler.close()", ex);
@@ -352,30 +359,30 @@ class RequestHandler implements Connection {
         // notify statistics object and close request
         ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
 
-        if(request != null) {
+        if(session != null) {
             
             // log message
-            User user = request.getUser();
+            User user = session.getUser();
             String userName = user != null ? user.getName() : "<Not logged in>";
-            InetAddress clientAddr = request.getRemoteAddress(); 
+            InetAddress clientAddr = session.getRemoteAddress(); 
             log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
             // logout if necessary and notify statistics
-            if(request.isLoggedIn()) {
-                request.setLogout();
+            if(session.isLoggedIn()) {
+                session.setLogout();
                 ftpStat.setLogout(this);
             }
             ftpStat.setCloseConnection(this);
             
             // clear request
-            request.clear();
-            request.setObserver(null);
-            request.getFtpDataConnection().dispose();
-            FileSystemView fview = request.getFileSystemView();
+            session.clear();
+            session.setObserver(null);
+            session.getFtpDataConnection().dispose();
+            FileSystemView fview = session.getFileSystemView();
             if(fview != null) {
                 fview.dispose();
             }
-            request = null;
+            session = null;
         }
                 
         // close ftp writer
@@ -409,12 +416,12 @@ class RequestHandler implements Connection {
     /**
      * Check user permission to execute ftp command. 
      */
-    protected boolean hasPermission() {
+    protected boolean hasPermission(FtpRequest request) {
         String cmd = request.getCommand();
         if(cmd == null) {
             return false;
         }
-        return request.isLoggedIn() ||
+        return session.isLoggedIn() ||
                cmd.equals("USER")   || 
 		       cmd.equals("PASS")   ||
 		       cmd.equals("QUIT")   ||

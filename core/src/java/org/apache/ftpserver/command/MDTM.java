@@ -21,11 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -42,11 +43,12 @@ class MDTM extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler,
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state
-        request.resetState();
+        session.resetState();
         
         // argument check
         String fileName = request.getArgument();
@@ -58,7 +60,7 @@ class MDTM extends AbstractCommand {
         // get file object
         FileObject file = null;
         try {
-            file = request.getFileSystemView().getFileObject(fileName);
+            file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
             log.debug("Exception getting file object", ex);

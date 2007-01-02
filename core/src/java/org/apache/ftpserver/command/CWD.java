@@ -21,11 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
  * <code>CWD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -45,11 +46,12 @@ class CWD extends AbstractCommand {
      * Execute command
      */
     public void execute(RequestHandler handler, 
-                        FtpRequestImpl request, 
+                        FtpRequest request, 
+                        FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variables
-        request.resetState();
+        session.resetState();
         
         // get new directory name
         String dirName = "/";
@@ -58,7 +60,7 @@ class CWD extends AbstractCommand {
         } 
         
         // change directory
-        FileSystemView fsview = request.getFileSystemView();
+        FileSystemView fsview = session.getFileSystemView();
         boolean success = false;
         try {
             success = fsview.changeDirectory(dirName);
