@@ -26,7 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * <code>CDUP &lt;CRLF&gt;</code><br>

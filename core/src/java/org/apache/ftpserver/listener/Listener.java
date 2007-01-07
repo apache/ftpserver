@@ -17,9 +17,8 @@
  * under the License.
  */ 
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.listener;
 
-import org.apache.ftpserver.interfaces.Connection;
 
 /**
  * Interface for the component responsible for waiting for incoming

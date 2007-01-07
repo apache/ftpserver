@@ -20,6 +20,7 @@
 package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * This is the file related activity observer.

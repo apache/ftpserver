@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.listener.io.IOListener;
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
@@ -54,7 +56,7 @@ public class FtpServer {
         log = this.serverContext.getLogFactory().getInstance(getClass());
 
         // for now just create one 
-        listeners.add(new DefaultListener(ftpConfig));
+        listeners.add(new IOListener(ftpConfig));
     }
 
     /**

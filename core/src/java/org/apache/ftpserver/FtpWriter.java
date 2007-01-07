@@ -33,9 +33,9 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.FtpStatistics;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.IoUtils;
 

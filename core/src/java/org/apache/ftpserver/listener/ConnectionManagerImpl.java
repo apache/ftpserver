@@ -17,19 +17,22 @@
  * under the License.
  */  
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.listener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.FtpDataConnection;
+import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
-import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
 
 /**
  * Connection service to manage all the connections (request handlers).

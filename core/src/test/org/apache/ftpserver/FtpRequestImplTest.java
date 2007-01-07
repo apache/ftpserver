@@ -33,6 +33,24 @@ public class FtpRequestImplTest extends TestCase {
         assertNull(request.getArgument());
     }
 
+    public void testCommandWithLeadingWhitespace() {
+        FtpRequestImpl request = new FtpRequestImpl("\rfoo");
+        
+        assertEquals("foo", request.getRequestLine());
+        assertEquals("FOO", request.getCommand());
+        assertFalse(request.hasArgument());
+        assertNull(request.getArgument());
+    }
+
+    public void testCommandWithTrailingWhitespace() {
+        FtpRequestImpl request = new FtpRequestImpl("foo\r");
+        
+        assertEquals("foo", request.getRequestLine());
+        assertEquals("FOO", request.getCommand());
+        assertFalse(request.hasArgument());
+        assertNull(request.getArgument());
+    }
+
     public void testCommandAndSingleArgument() {
         FtpRequestImpl request = new FtpRequestImpl("foo bar");
         

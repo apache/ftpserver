@@ -25,7 +25,7 @@ import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * The EPSV command requests that a server listen on a data port and

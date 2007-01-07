@@ -29,7 +29,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

@@ -26,8 +26,8 @@ import java.net.UnknownHostException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * The EPRT command allows for the specification of an extended address

@@ -20,7 +20,7 @@
 package org.apache.ftpserver;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
+import org.apache.ftpserver.listener.ConnectionObserver;
 
 /**
  * FTP request object.
@@ -50,7 +50,7 @@ public class FtpRequestImpl implements FtpRequest {
         spyRequest(lineToParse);
         
         // parse request
-        line = lineToParse;
+        line = lineToParse.trim();
         command = null;
         argument = null;
         int spInd = line.indexOf(' ');

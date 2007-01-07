@@ -30,7 +30,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.StringUtils;
 

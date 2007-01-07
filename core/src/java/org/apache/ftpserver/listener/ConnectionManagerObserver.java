@@ -17,26 +17,29 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.listener;
 
 
 /**
- * This interface is used to monitor connection request & replies.
+ * This observer interface monitors all the ftp connections.
  * 
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-interface ConnectionObserver {
-
+interface ConnectionManagerObserver {
+    
     /**
-     * Write user request.
+     * New ftp connection.
      */
-    void request(String msg);
-
-
+    void openedConnection(Connection connection);
+    
     /**
-     * Write server response.
+     * Closing ftp connection
      */
-    void response(String msg);
-
-}
+    void closedConnection(Connection connection);
+    
+    /**
+     * Connected user property change 
+     */
+    void updatedConnection(Connection connection);
+}    

@@ -17,7 +17,7 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.listener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This is the connection request handler interface.

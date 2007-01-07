@@ -27,8 +27,8 @@ import java.util.StringTokenizer;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>

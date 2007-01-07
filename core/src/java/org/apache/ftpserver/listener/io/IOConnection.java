@@ -17,7 +17,7 @@
  * under the License.
  */  
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.listener.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,6 +33,10 @@ import java.net.SocketException;
 import javax.net.ssl.SSLException;
 
 import org.apache.commons.logging.Log;
+import org.apache.ftpserver.FtpDataConnection;
+import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -43,13 +47,13 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.listener.ConnectionManager;
+import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.ftpserver.util.IoUtils;
 
 

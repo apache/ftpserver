@@ -17,7 +17,7 @@
  * under the License.
  */ 
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.listener.io;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,15 +25,16 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.listener.ConnectionManager;
+import org.apache.ftpserver.listener.Listener;
 
 /**
  * The default {@link Listener} implementation.
  *
  */
-public class DefaultListener implements Listener, Runnable {
+public class IOListener implements Listener, Runnable {
 
     private Log log;
     
@@ -50,7 +51,7 @@ public class DefaultListener implements Listener, Runnable {
      * 
      * @param serverContext Configuration for the listener
      */
-    public DefaultListener(FtpServerContext serverContext) {
+    public IOListener(FtpServerContext serverContext) {
         this.serverContext = serverContext;
         
         log = serverContext.getLogFactory().getInstance(getClass());

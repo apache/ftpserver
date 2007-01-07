@@ -24,8 +24,8 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * <code>HELP [&lt;SP&gt; <string>] &lt;CRLF&gt;</code><br>

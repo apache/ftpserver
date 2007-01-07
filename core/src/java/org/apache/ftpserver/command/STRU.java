@@ -25,7 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Structure;
-import org.apache.ftpserver.interfaces.Connection;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * <code>STRU &lt;SP&gt; &lt;structure-code&gt; &lt;CRLF&gt;</code><br>

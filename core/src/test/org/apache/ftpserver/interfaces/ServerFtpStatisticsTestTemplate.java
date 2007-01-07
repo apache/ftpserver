@@ -29,6 +29,8 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpStatisticsImpl;
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.listener.ConnectionObserver;
 
 public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 

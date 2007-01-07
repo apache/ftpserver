@@ -21,6 +21,7 @@ package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.listener.ConnectionManager;
 
 /**
  * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with added
