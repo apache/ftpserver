@@ -24,9 +24,9 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
@@ -40,7 +40,7 @@ class PROT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -63,7 +63,7 @@ class PROT extends AbstractCommand {
             out.send(200, "PROT", null);
         }
         else if(arg.equals("P")) {
-            FtpServerContext serverContext = handler.getServerContext();
+            FtpServerContext serverContext = connection.getServerContext();
             if(serverContext.getDataConnectionConfig().getSSL() == null) {
                 out.send(431, "PROT", null);
             }

@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 
 /**
  * The FEAT command (introduced in [RFC-2389]) allows servers with
@@ -38,7 +38,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 public 
 class FEAT extends AbstractCommand {
 
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request, 
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {

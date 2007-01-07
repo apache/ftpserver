@@ -25,11 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -37,9 +34,9 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -60,7 +57,7 @@ class STOU extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -69,7 +66,7 @@ class STOU extends AbstractCommand {
         
             // reset state variables
             session.resetState();
-            FtpServerContext serverContext = handler.getServerContext();
+            FtpServerContext serverContext = connection.getServerContext();
             
             // call Ftplet.onUploadUniqueStart() method
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
@@ -84,7 +81,7 @@ class STOU extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(connection);
                 return;
             }
             
@@ -102,7 +99,7 @@ class STOU extends AbstractCommand {
             try {
                 file = session.getFileSystemView().getFileObject(filePrefix);
                 if(file != null) {
-                    file = getUniqueFile(handler, session, file);
+                    file = getUniqueFile(connection, session, file);
                 }
             }
             catch(Exception ex) {
@@ -151,7 +148,7 @@ class STOU extends AbstractCommand {
                 if(transferRateRequest != null) {
                     maxRate = transferRateRequest.getMaxUploadRate();
                 }
-                long transSz = handler.transfer(bis, bos, maxRate);
+                long transSz = connection.transfer(bis, bos, maxRate);
                 
                 // log message
                 String userName = session.getUser().getName();
@@ -160,7 +157,7 @@ class STOU extends AbstractCommand {
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
                 if(ftpStat != null) {
-                    ftpStat.setUpload(handler, file, transSz);
+                    ftpStat.setUpload(connection, file, transSz);
                 }
             }
             catch(SocketException ex) {
@@ -190,7 +187,7 @@ class STOU extends AbstractCommand {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(connection);
                     return;
                 }
 
@@ -205,7 +202,7 @@ class STOU extends AbstractCommand {
     /**
      * Get unique file object.
      */
-    protected FileObject getUniqueFile(RequestHandler handler, FtpSession session, FileObject oldFile) throws FtpException {
+    protected FileObject getUniqueFile(Connection connection, FtpSession session, FileObject oldFile) throws FtpException {
         FileObject newFile = oldFile;
         FileSystemView fsView = session.getFileSystemView();
         String fileName = newFile.getFullName();

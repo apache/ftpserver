@@ -28,16 +28,14 @@ import java.net.SocketException;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -59,7 +57,7 @@ class APPE extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request, 
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -68,7 +66,7 @@ class APPE extends AbstractCommand {
         
             // reset state variables
             session.resetState();
-            FtpServerContext serverContext = handler.getServerContext();
+            FtpServerContext serverContext = connection.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
@@ -90,7 +88,7 @@ class APPE extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(connection);
                 return;
             }
             
@@ -158,7 +156,7 @@ class APPE extends AbstractCommand {
                     maxRate = transferRateRequest.getMaxUploadRate();
                 }
                 
-                long transSz = handler.transfer(bis, bos, maxRate);
+                long transSz = connection.transfer(bis, bos, maxRate);
                 
                 // log message
                 String userName = session.getUser().getName();
@@ -167,7 +165,7 @@ class APPE extends AbstractCommand {
                 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-                ftpStat.setUpload(handler, file, transSz);
+                ftpStat.setUpload(connection, file, transSz);
             }
             catch(SocketException e) {
                 log.debug("SocketException during file upload", e);
@@ -196,7 +194,7 @@ class APPE extends AbstractCommand {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(connection);
                     return;
                 }
 

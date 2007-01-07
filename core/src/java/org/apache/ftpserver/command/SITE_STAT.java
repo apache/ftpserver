@@ -23,11 +23,11 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -41,7 +41,7 @@ class SITE_STAT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
             FtpRequest request,
             FtpSessionImpl session, 
             FtpWriter out) throws IOException, FtpException {
@@ -50,7 +50,7 @@ class SITE_STAT extends AbstractCommand {
         session.resetState();
         
         // only administrator can execute this
-        UserManager userManager = handler.getServerContext().getUserManager(); 
+        UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
@@ -58,7 +58,7 @@ class SITE_STAT extends AbstractCommand {
         }
         
         // get statistics information
-        FtpStatistics stat = handler.getServerContext().getFtpStatistics();
+        FtpStatistics stat = connection.getServerContext().getFtpStatistics();
         StringBuffer sb = new StringBuffer(256);
         sb.append('\n');
         sb.append("Start Time               : ").append( DateUtils.getISO8601Date(stat.getStartTime().getTime()) ).append('\n');

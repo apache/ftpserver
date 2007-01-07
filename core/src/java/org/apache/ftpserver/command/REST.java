@@ -23,8 +23,8 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 
 /**
  * <code>REST &lt;SP&gt; <marker> &lt;CRLF&gt;</code><br>
@@ -44,7 +44,7 @@ class REST extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException {

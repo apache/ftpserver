@@ -23,10 +23,10 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 
 /**
  * <code>CWD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -45,7 +45,7 @@ class CWD extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request, 
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {

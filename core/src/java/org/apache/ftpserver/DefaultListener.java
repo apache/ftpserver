@@ -105,7 +105,7 @@ public class DefaultListener implements Listener, Runnable {
                     continue;
                 }
 
-                Connection connection = new RequestHandler(serverContext, soc);
+                Connection connection = new IOConnection(serverContext, soc);
                 conManager.newConnection(connection);
             } catch (SocketException ex) {
                 return;

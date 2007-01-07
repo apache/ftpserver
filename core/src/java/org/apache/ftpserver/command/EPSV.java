@@ -24,8 +24,8 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 
 /**
  * The EPSV command requests that a server listen on a data port and
@@ -47,7 +47,7 @@ class EPSV extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException {

@@ -24,12 +24,12 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 
@@ -50,14 +50,14 @@ class RMD extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
-        FtpServerContext serverContext = handler.getServerContext();
+        FtpServerContext serverContext = connection.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
@@ -79,7 +79,7 @@ class RMD extends AbstractCommand {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            serverContext.getConnectionManager().closeConnection(handler);
+            serverContext.getConnectionManager().closeConnection(connection);
             return;
         }
         
@@ -120,7 +120,7 @@ class RMD extends AbstractCommand {
             
             // notify statistics object
             ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-            ftpStat.setRmdir(handler, file);
+            ftpStat.setRmdir(connection, file);
             
             // call Ftplet.onRmdirEnd() method
             try{
@@ -130,7 +130,7 @@ class RMD extends AbstractCommand {
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(connection);
                 return;
             }
 

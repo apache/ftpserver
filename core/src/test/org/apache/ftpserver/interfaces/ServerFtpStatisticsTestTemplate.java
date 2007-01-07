@@ -19,6 +19,10 @@
 
 package org.apache.ftpserver.interfaces;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.Date;
 
 import junit.framework.TestCase;
@@ -41,6 +45,22 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         }
 
         public void run() {            
+        }
+
+        public void createSecureSocket(String type) throws Exception {
+            
+        }
+
+        public Socket getControlSocket() {
+            return null;
+        }
+
+        public FtpServerContext getServerContext() {
+            return null;
+        }
+
+        public long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException {
+            return 0;
         }
         
     }

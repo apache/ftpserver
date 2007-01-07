@@ -19,6 +19,11 @@
 
 package org.apache.ftpserver.interfaces;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 import org.apache.ftpserver.ftplet.FtpSession;
 
 /**
@@ -43,5 +48,24 @@ interface Connection extends Runnable {
      * Set connection observer.
      */
     void setObserver(ConnectionObserver observer);
+    
+    /**
+     * Return the server context
+     * @return The servet context
+     */
+    FtpServerContext getServerContext();
+
+    /**
+     * Secure the control socket
+     * @param type The type of security to use, i.e. SSL or TLS
+     * @throws Exception
+     * TODO: Limit exception type.
+     * TODO: Rename without create (indicates factory)
+     */
+    void createSecureSocket(String type) throws Exception;
+
+    long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException;
+
+    Socket getControlSocket();
 }
  

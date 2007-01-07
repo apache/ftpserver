@@ -26,8 +26,8 @@ import java.util.StringTokenizer;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 
 /**
@@ -56,7 +56,7 @@ class PORT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
@@ -77,7 +77,7 @@ class PORT extends AbstractCommand {
         }
         
         // is port enabled
-        DataConnectionConfig dataCfg = handler.getServerContext().getDataConnectionConfig();
+        DataConnectionConfig dataCfg = connection.getServerContext().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
             out.send(510, "PORT.disabled", null);
             return;

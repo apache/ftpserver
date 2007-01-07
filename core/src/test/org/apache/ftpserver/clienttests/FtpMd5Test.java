@@ -165,11 +165,6 @@ public class FtpMd5Test extends ClientTestTemplate {
         assertEquals(504, client.sendCommand("MMD5 " + fileNames));
     }
     
-    /**
-     * @param fileName
-     * @param reply
-     * @return
-     */
     private Map parseReplyHash(String reply) {
         String s = reply.substring(4);
         s = s.trim();

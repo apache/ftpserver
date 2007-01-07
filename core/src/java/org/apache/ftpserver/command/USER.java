@@ -23,10 +23,10 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -50,13 +50,13 @@ class USER extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
-        FtpServerContext serverContext = handler.getServerContext();
+        FtpServerContext serverContext = connection.getServerContext();
         ConnectionManager conManager = serverContext.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
         try {
@@ -107,7 +107,7 @@ class USER extends AbstractCommand {
                 return;
             }
             
-            User configUser = handler.getServerContext().getUserManager().getUserByName(userName);
+            User configUser = connection.getServerContext().getUserManager().getUserByName(userName);
             if(configUser != null){
                 //user login limit check
                 
@@ -135,7 +135,7 @@ class USER extends AbstractCommand {
 
             // if not ok - close connection
             if(!success) {
-                conManager.closeConnection(handler);
+                conManager.closeConnection(connection);
             }
         }
     }

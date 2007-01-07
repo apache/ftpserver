@@ -28,7 +28,6 @@ import javax.net.ssl.SSLSocket;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.FileSystemManager;
@@ -39,6 +38,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.ConnectionManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -61,13 +61,13 @@ class PASS extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
     
         boolean success = false;
-        FtpServerContext serverContext = handler.getServerContext();
+        FtpServerContext serverContext = connection.getServerContext();
         Log log = serverContext.getLogFactory().getInstance(getClass());
         ConnectionManager conManager = serverContext.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
@@ -120,7 +120,7 @@ class PASS extends AbstractCommand {
             User authenticatedUser = null;
             try {
                 UserMetadata userMetadata = new UserMetadata();
-                Socket controlSocket = handler.getControlSocket();
+                Socket controlSocket = connection.getControlSocket();
                 userMetadata.setInetAddress(controlSocket.getInetAddress());
                 
                 if(controlSocket instanceof SSLSocket) {
@@ -180,7 +180,7 @@ class PASS extends AbstractCommand {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(connection);
                     return;
                 } else if(ftpletRet == FtpletEnum.RET_SKIP) {
                     success = false;
@@ -195,7 +195,7 @@ class PASS extends AbstractCommand {
                 
                 log.warn("Login failure - " + userName);
                 out.send(530, "PASS", userName);
-                stat.setLoginFail(handler);
+                stat.setLoginFail(connection);
                 return;
             }
             
@@ -203,7 +203,7 @@ class PASS extends AbstractCommand {
             FileSystemManager fmanager = serverContext.getFileSystemManager(); 
             FileSystemView fsview = fmanager.createFileSystemView(authenticatedUser);
             session.setLogin(fsview);
-            stat.setLogin(handler);
+            stat.setLogin(connection);
 
             // everything is fine - send login ok message
             out.send(230, "PASS", userName);

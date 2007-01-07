@@ -23,7 +23,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -58,7 +60,7 @@ import org.apache.ftpserver.util.IoUtils;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-class RequestHandler implements Connection {
+class IOConnection implements Connection {
     
     private FtpServerContext serverContext;
     private Log log;
@@ -73,7 +75,7 @@ class RequestHandler implements Connection {
     /**
      * Constructor - set the control socket.
      */
-    public RequestHandler(FtpServerContext serverContext, Socket controlSocket) throws IOException {
+    public IOConnection(FtpServerContext serverContext, Socket controlSocket) throws IOException {
         this.serverContext = serverContext;
         this.controlSocket = controlSocket;
         log = this.serverContext.getLogFactory().getInstance(getClass());
@@ -251,7 +253,7 @@ class RequestHandler implements Connection {
     /**
      * Execute the ftp command.
      */
-    public void service(FtpRequestImpl request, FtpSessionImpl session, FtpWriter out) throws IOException, FtpException {
+    public void service(FtpRequest request, FtpSessionImpl session, FtpWriter out) throws IOException, FtpException {
         try {
             String commandName = request.getCommand();
             CommandFactory commandFactory = serverContext.getCommandFactory();
@@ -385,9 +387,12 @@ class RequestHandler implements Connection {
     /**
      * Transfer data.
      */
-    public final long transfer(BufferedInputStream in, 
-                               BufferedOutputStream out,
+    public final long transfer(InputStream in, 
+                               OutputStream out,
                                int maxRate) throws IOException {
+        
+        BufferedInputStream bis = IoUtils.getBufferedInputStream(in);
+        BufferedOutputStream bos = IoUtils.getBufferedOutputStream( out );
         
         boolean isAscii = session.getDataType() == DataType.ASCII;
         long startTime = System.currentTimeMillis();
@@ -415,7 +420,7 @@ class RequestHandler implements Connection {
             }
             
             // read data
-            int count = in.read(buff);
+            int count = bis.read(buff);
             if(count == -1) {
                 break;
             }
@@ -426,13 +431,13 @@ class RequestHandler implements Connection {
                 for(int i=0; i<count; ++i) {
                     byte b = buff[i];
                     if(b == '\n') {
-                        out.write('\r');
+                        bos.write('\r');
                     }
-                    out.write(b);
+                    bos.write(b);
                 }
             }
             else {
-                out.write(buff, 0, count);
+                bos.write(buff, 0, count);
             }
             
             transferredSize += count;

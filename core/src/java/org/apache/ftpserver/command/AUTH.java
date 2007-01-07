@@ -24,9 +24,9 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
@@ -41,7 +41,7 @@ class AUTH extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request, 
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -56,7 +56,7 @@ class AUTH extends AbstractCommand {
         }
         
         // check SSL configuration
-        FtpServerContext serverContext = handler.getServerContext();
+        FtpServerContext serverContext = connection.getServerContext();
         Log log = serverContext.getLogFactory().getInstance(getClass());
         if(serverContext.getSocketFactory().getSSL() == null) {
             out.send(431, "AUTH", null);
@@ -68,7 +68,7 @@ class AUTH extends AbstractCommand {
         if(authType.equals("SSL")) {
             out.send(234, "AUTH.SSL", null);
             try {
-                handler.createSecureSocket("SSL");
+                connection.createSecureSocket("SSL");
             }
             catch(FtpException ex) {
                 throw ex;
@@ -81,7 +81,7 @@ class AUTH extends AbstractCommand {
         else if(authType.equals("TLS")) {
             out.send(234, "AUTH.TLS", null);
             try {
-                handler.createSecureSocket("TLS");
+                connection.createSecureSocket("TLS");
             }
             catch(FtpException ex) {
                 throw ex;

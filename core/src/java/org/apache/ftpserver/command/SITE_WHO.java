@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
@@ -47,7 +46,7 @@ class SITE_WHO extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler,
+    public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -56,7 +55,7 @@ class SITE_WHO extends AbstractCommand {
         session.resetState();
         
         // only administrator can execute this
-        UserManager userManager = handler.getServerContext().getUserManager(); 
+        UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
             out.send(530, "SITE", null);
@@ -65,7 +64,7 @@ class SITE_WHO extends AbstractCommand {
         
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
-        List allCons = handler.getServerContext().getConnectionManager().getAllConnections();
+        List allCons = connection.getServerContext().getConnectionManager().getAllConnections();
         
         sb.append('\n');
         for(Iterator conIt = allCons.iterator(); conIt.hasNext(); ) {

@@ -25,19 +25,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.RequestHandler;
-import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -61,7 +58,7 @@ class STOR extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(RequestHandler handler, 
+    public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException, FtpException {
@@ -70,7 +67,7 @@ class STOR extends AbstractCommand {
         
             // get state variable
             long skipLen = session.getFileOffset();
-            FtpServerContext serverContext = handler.getServerContext();
+            FtpServerContext serverContext = connection.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
@@ -92,7 +89,7 @@ class STOR extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(handler);
+                serverContext.getConnectionManager().closeConnection(connection);
                 return;
             }
             
@@ -146,7 +143,7 @@ class STOR extends AbstractCommand {
                 if(transferRateRequest != null) {
                     maxRate = transferRateRequest.getMaxUploadRate();
                 }
-                long transSz = handler.transfer(bis, bos, maxRate);
+                long transSz = connection.transfer(bis, bos, maxRate);
                 
                 // log message
                 String userName = session.getUser().getName();
@@ -154,7 +151,7 @@ class STOR extends AbstractCommand {
                 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-                ftpStat.setUpload(handler, file, transSz);
+                ftpStat.setUpload(connection, file, transSz);
             }
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
@@ -183,7 +180,7 @@ class STOR extends AbstractCommand {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(handler);
+                    serverContext.getConnectionManager().closeConnection(connection);
                     return;
                 }
 
