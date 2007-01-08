@@ -107,7 +107,7 @@ public class PassivePorts {
      */
     private static void fillRange(List passivePortsList, Integer beginPort, Integer endPort) {
         for(int i = beginPort.intValue(); i<=endPort.intValue(); i++ ) {
-            Integer rangePort = Integer.valueOf(i);
+            Integer rangePort = new Integer(i);
             addPort(passivePortsList, rangePort);
         }
     }
