@@ -36,11 +36,11 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FileObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.StatisticsObserver;
+import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 
 /**

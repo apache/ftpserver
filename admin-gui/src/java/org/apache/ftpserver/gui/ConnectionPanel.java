@@ -30,8 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * This panel shows all the connections.

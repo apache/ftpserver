@@ -30,8 +30,8 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * This panel monitors user request/replies.

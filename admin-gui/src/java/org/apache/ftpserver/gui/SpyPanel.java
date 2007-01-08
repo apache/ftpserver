@@ -38,10 +38,10 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
-import org.apache.ftpserver.interfaces.ConnectionObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.listener.ConnectionManager;
+import org.apache.ftpserver.listener.ConnectionObserver;
 
 
 /**

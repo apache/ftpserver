@@ -33,8 +33,8 @@ import javax.swing.JTable;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.Connection;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
 
 /**
  * This panel monitor all user directory create and remove activities.

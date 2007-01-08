@@ -33,10 +33,10 @@ import javax.swing.table.TableModel;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.Connection;
-import org.apache.ftpserver.interfaces.ConnectionManager;
-import org.apache.ftpserver.interfaces.ConnectionManagerObserver;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.listener.ConnectionManager;
+import org.apache.ftpserver.listener.ConnectionManagerObserver;
 import org.apache.ftpserver.util.DateUtils;
 
 
