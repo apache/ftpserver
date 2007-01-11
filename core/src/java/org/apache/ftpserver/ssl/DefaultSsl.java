@@ -23,8 +23,8 @@ import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.SecureRandom;
 import java.util.HashMap;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -124,7 +124,7 @@ public class DefaultSsl implements Ssl {
     /**
      * Get SSL Context.
      */
-    private synchronized SSLContext getSSLContext(String protocol) throws Exception {
+    public synchronized SSLContext getSSLContext(String protocol) throws GeneralSecurityException {
         
         // null value check
         if(protocol == null) {
@@ -137,15 +137,11 @@ public class DefaultSsl implements Ssl {
             return ctx;
         }
         
-        // create new secure random object
-        SecureRandom random = new SecureRandom();
-        random.nextInt();
-        
         // create SSLContext
         ctx = SSLContext.getInstance(protocol);
         ctx.init(keyManagerFactory.getKeyManagers(), 
                  trustManagerFactory.getTrustManagers(), 
-                 random);
+                 null);
 
         // store it in map
         sslContextMap.put(protocol, ctx);
@@ -259,5 +255,13 @@ public class DefaultSsl implements Ssl {
      * Dispose - does nothing.
      */
     public void dispose() {
+    }
+
+    public boolean getClientAuthenticationRequired() {
+        return clientAuthReqd;
+    }
+
+    public SSLContext getSSLContext() throws GeneralSecurityException {
+        return getSSLContext(sslProtocol);
     }
 }

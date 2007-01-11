@@ -33,7 +33,6 @@ public class FtpRequestImpl implements FtpRequest {
     
     private ConnectionObserver observer;
 
-    
     /**
      * Default constructor.
      */
@@ -104,9 +103,16 @@ public class FtpRequestImpl implements FtpRequest {
 
     /**
      * Has argument.
-     * TODO: should be in interface?
      */
     public boolean hasArgument() {
         return getArgument() != null;
+    }
+
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return getRequestLine();
     }
 }

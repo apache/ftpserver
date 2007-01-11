@@ -21,6 +21,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpResponseImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -107,7 +108,7 @@ class SITE_DESCUSER extends AbstractCommand {
             sb.append("downloadrate    : 0\n");
         }
         sb.append('\n');
-        out.write(200, sb.toString());
+        out.write(new FtpResponseImpl(200, sb.toString()));
     }
 
 }

@@ -167,8 +167,11 @@ class ConnectionManagerImpl implements ConnectionManager {
          */
         connection.getSession().setMaxIdleTime(defaultIdleSec);
         
-        // now start a new thread to serve this connection
-        new Thread(connection).start();
+        // now start a new thread to serve this connection if needed
+        if(connection instanceof Runnable) {
+            new Thread((Runnable)connection).start();
+        }
+        
     }
     
     /**

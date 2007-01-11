@@ -50,13 +50,14 @@ public class FtpServer {
 
     /**
      * Constructor. Set the server object.
+     * @throws Exception 
      */
-    public FtpServer(FtpServerContext ftpConfig) {
-        this.serverContext = ftpConfig;
+    public FtpServer(FtpServerContext serverContext) throws Exception {
+        this.serverContext = serverContext;
         log = this.serverContext.getLogFactory().getInstance(getClass());
 
         // for now just create one 
-        listeners.add(new IOListener(ftpConfig));
+        listeners.add(new IOListener(serverContext));
     }
 
     /**

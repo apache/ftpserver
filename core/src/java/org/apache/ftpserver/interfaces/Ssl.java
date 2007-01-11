@@ -22,6 +22,9 @@ package org.apache.ftpserver.interfaces;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.ftpserver.ftplet.Component;
 
@@ -32,7 +35,13 @@ import org.apache.ftpserver.ftplet.Component;
  */
 public 
 interface Ssl extends Component {
-
+    
+    SSLContext getSSLContext() throws GeneralSecurityException;
+    SSLContext getSSLContext(String protocol) throws GeneralSecurityException;
+    
+    boolean getClientAuthenticationRequired();
+    
+    
     /**
      * Create secure server socket.
      */

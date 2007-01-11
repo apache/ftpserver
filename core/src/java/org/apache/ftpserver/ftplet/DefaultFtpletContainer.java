@@ -126,7 +126,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onConnect.
      */
-    public FtpletEnum onConnect(FtpSession session, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onConnect(FtpSession session, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -147,7 +147,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDisconnect.
      */
-    public FtpletEnum onDisconnect(FtpSession session, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDisconnect(FtpSession session, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -168,7 +168,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onLogin.
      */
-    public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -189,7 +189,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /** 
      * Call ftplet onDeleteStart.
      */
-    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -211,7 +211,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDeleteEnd.
      */
-    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -232,7 +232,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadStart.
      */
-    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -253,7 +253,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadEnd.
      */
-    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -274,7 +274,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDownloadStart.
      */
-    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -295,7 +295,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onDownloadEnd.
      */
-    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -316,7 +316,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRmdirStart.
      */
-    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -337,7 +337,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRmdirEnd.
      */
-    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -358,7 +358,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onMkdirStart.
      */
-    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -379,7 +379,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /** 
      * Call ftplet onMkdirEnd.
      */
-    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -400,7 +400,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onAppendStart.
      */
-    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -421,7 +421,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onAppendEnd.
      */
-    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -442,7 +442,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadUniqueStart.
      */
-    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -463,7 +463,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onUploadUniqueEnd.
      */
-    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -484,7 +484,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRenameStart.
      */
-    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -505,7 +505,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onRenameEnd.
      */
-    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {
@@ -526,7 +526,7 @@ class DefaultFtpletContainer implements Component, FtpletContainer {
     /**
      * Call ftplet onSite.
      */
-    public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponse response) throws FtpException, IOException {
+    public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         int sz = ftplets.size();
         for(int i=0; i<sz; ++i) {

@@ -49,7 +49,7 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         public void run() {            
         }
 
-        public void createSecureSocket(String type) throws Exception {
+        public void secureControlChannel(String type) throws Exception {
             
         }
 

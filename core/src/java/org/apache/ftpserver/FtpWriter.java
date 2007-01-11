@@ -19,36 +19,27 @@
 
 package org.apache.ftpserver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.Writer;
 import java.net.InetAddress;
-import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpResponseOutput;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.ftpserver.util.DateUtils;
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * FTP response object. The server uses this to send server messages
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public 
-class FtpWriter implements FtpResponse {
+public abstract class FtpWriter implements FtpResponseOutput {
 
-    private final static String CRLF     = "\r\n";
-    
     ///////////////////////// All Server Vatiables /////////////////////////
     public static final String SERVER_IP   = "server.ip";
     public static final String SERVER_PORT = "server.port";
@@ -92,22 +83,10 @@ class FtpWriter implements FtpResponse {
     
     /////////////////////////////////////////////////////////////////////////////
     
-    private Log log;
-    private Writer writer;
+    protected Log log;
     private ConnectionObserver observer;
     private FtpServerContext serverContext;
     private FtpSession session;
-    private InetAddress serverAddress;
-
-        
-    /**
-     * Set the control socket.
-     */
-    public void setControlSocket(Socket soc) throws IOException {
-        serverAddress = soc.getLocalAddress();
-        writer = new OutputStreamWriter(soc.getOutputStream(), "UTF-8");
-    }
-    
     /**
      * Set ftp config.
      */
@@ -133,7 +112,7 @@ class FtpWriter implements FtpResponse {
     /**
      * Spy print. Monitor server response.
      */
-    private void spyResponse(String str) {
+    protected void spyResponse(String str) {
         ConnectionObserver observer = this.observer;
         if(observer != null) {
             observer.response(str);
@@ -156,77 +135,8 @@ class FtpWriter implements FtpResponse {
             msg = "";
         }
         msg = replaceVariables(code, basicMsg, msg);
-        write(code, msg);
-    }
-
-    /**
-     * Send the ftp server reply code to client.
-     */
-    public void write(int code) throws IOException {
-        write(code, null);
-    }
-    
-    /**
-     * Send the ftp code and message to client
-     */
-    public void write(int code, String msg) throws IOException {
-        if(msg == null) {
-            msg = "";
-        }
         
-        msg = processNewLine(code, msg);
-        spyResponse(msg);
-        writer.write(msg);
-        writer.flush();
-    }
-    
-    /**
-     * Close writer.
-     */
-    public void close() {
-        IoUtils.close(writer);
-    }
-    
-    /**
-     * Process ftp response new line character.
-     */
-    private String processNewLine(int code, String msg) {
-        
-        // no newline
-        if(msg.indexOf('\n') == -1) {
-            return code + " " + msg + CRLF;
-        }
-        
-        StringBuffer buff = new StringBuffer(256);
-        try {
-            BufferedReader sr = new BufferedReader(new StringReader(msg));
-        
-            buff.append(code);
-            buff.append('-');
-        
-            String line = sr.readLine();
-            for(;;) {
-                String nextLine = sr.readLine();    
-            
-                if(nextLine != null) {
-                    buff.append(line);
-                    buff.append(CRLF);
-                }
-                else {
-                    buff.append(code);
-                    buff.append(' ');
-                    buff.append(line);
-                    buff.append(CRLF);
-                    break;
-                }
-                line = nextLine;
-            }
-            sr.close();
-        }
-        catch(IOException ex) {
-            log.debug("Exception creating output line", ex);
-        }
-        return buff.toString();
+        write(new FtpResponseImpl(code, msg));
     }
     
     /**
@@ -306,6 +216,8 @@ class FtpWriter implements FtpResponse {
         return varVal;
     } 
     
+    protected abstract InetAddress getFallbackServerAddress();
+    
     /**
      * Get server variable value.
      */
@@ -317,9 +229,11 @@ class FtpWriter implements FtpResponse {
         if(varName.equals(SERVER_IP)) {
             InetAddress addr = serverContext.getDataConnectionConfig().getPassiveAddress();
             if(addr == null) {
-                addr = serverAddress;
+                addr = getFallbackServerAddress();
             }
-            varVal = addr.getHostAddress();
+            if(addr != null) {
+                varVal = addr.getHostAddress();
+            }
         }
         
         // server port
@@ -530,7 +444,7 @@ class FtpWriter implements FtpResponse {
         
         // client ip
         if(varName.equals(CLIENT_IP)) {
-            varVal = session.getRemoteAddress().getHostAddress();
+            varVal = session.getClientAddress().getHostAddress();
         }
         
         // client connection time
@@ -572,4 +486,6 @@ class FtpWriter implements FtpResponse {
         }
         return varVal; 
     }
+    
+    public abstract void close();
 }

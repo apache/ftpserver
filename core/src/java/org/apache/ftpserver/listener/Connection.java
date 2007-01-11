@@ -22,7 +22,6 @@ package org.apache.ftpserver.listener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
 
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -33,7 +32,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-interface Connection extends Runnable {
+interface Connection {
 
     /**
      * Get current session.
@@ -60,13 +59,9 @@ interface Connection extends Runnable {
      * Secure the control socket
      * @param type The type of security to use, i.e. SSL or TLS
      * @throws Exception
-     * TODO: Limit exception type.
-     * TODO: Rename without create (indicates factory)
      */
-    void createSecureSocket(String type) throws Exception;
+    void secureControlChannel(String type) throws Exception;
 
     long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException;
-
-    Socket getControlSocket();
 }
  

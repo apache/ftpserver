@@ -21,6 +21,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpResponseImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -76,7 +77,7 @@ class SITE_STAT extends AbstractCommand {
         sb.append("Current Connections      : ").append( stat.getCurrentConnectionNumber() ).append('\n');
         sb.append("Total Connections        : ").append( stat.getTotalConnectionNumber() ).append('\n');
         sb.append('\n');
-        out.write(200, sb.toString());
+        out.write(new FtpResponseImpl(200, sb.toString()));
     }
     
 }

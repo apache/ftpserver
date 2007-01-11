@@ -20,10 +20,6 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
-import java.net.Socket;
-
-import javax.net.ssl.SSLPeerUnverifiedException;
-import javax.net.ssl.SSLSocket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
@@ -120,18 +116,8 @@ class PASS extends AbstractCommand {
             User authenticatedUser = null;
             try {
                 UserMetadata userMetadata = new UserMetadata();
-                Socket controlSocket = connection.getControlSocket();
-                userMetadata.setInetAddress(controlSocket.getInetAddress());
-                
-                if(controlSocket instanceof SSLSocket) {
-                    SSLSocket sslControlSocket = (SSLSocket) controlSocket;
-                    
-                    try {
-                        userMetadata.setCertificateChain(sslControlSocket.getSession().getPeerCertificates());
-                    } catch(SSLPeerUnverifiedException e) {
-                        // ignore, certificate will not be available to UserManager
-                    }
-                }
+                userMetadata.setInetAddress(session.getClientAddress());
+                userMetadata.setCertificateChain(session.getClientCertificates());
                 
                 Authentication auth;
                 if(anonymous) {

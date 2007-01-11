@@ -113,7 +113,7 @@ class USER extends AbstractCommand {
                 
                 ConcurrentLoginRequest loginRequest = new  ConcurrentLoginRequest(
                         stat.getCurrentUserLoginNumber(configUser) + 1,
-                        stat.getCurrentUserLoginNumber(configUser, session.getRemoteAddress()) + 1);
+                        stat.getCurrentUserLoginNumber(configUser, session.getClientAddress()) + 1);
                 
                 if(configUser.authorize(loginRequest) == null) {
                     out.send(421, "USER.login", null);

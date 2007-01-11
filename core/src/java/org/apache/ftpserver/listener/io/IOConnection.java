@@ -19,41 +19,26 @@
 
 package org.apache.ftpserver.listener.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSocket;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpSession;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.IpRestrictor;
-import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.Ssl;
-import org.apache.ftpserver.listener.Connection;
-import org.apache.ftpserver.listener.ConnectionManager;
+import org.apache.ftpserver.listener.AbstractConnection;
 import org.apache.ftpserver.listener.ConnectionObserver;
+import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.ftpserver.util.IoUtils;
 
 
@@ -63,26 +48,26 @@ import org.apache.ftpserver.util.IoUtils;
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public 
-class IOConnection implements Connection {
-    
-    private FtpServerContext serverContext;
-    private Log log;
+public class IOConnection extends AbstractConnection implements Runnable {
     
     private Socket controlSocket;
-    private FtpSessionImpl session;
-    private FtpWriter writer;
+    private IOFtpResponseOutput writer;
     private BufferedReader reader;
     private boolean isConnectionClosed;
+    
+    private FtpProtocolHandler protocolHandler;
     
     
     /**
      * Constructor - set the control socket.
      */
     public IOConnection(FtpServerContext serverContext, Socket controlSocket) throws IOException {
-        this.serverContext = serverContext;
+        super(serverContext);
+        
         this.controlSocket = controlSocket;
-        log = this.serverContext.getLogFactory().getInstance(getClass());
+        
+        // TODO how can we share this between all connections?
+        protocolHandler = new FtpProtocolHandler(serverContext);
         
         // data connection object
         FtpDataConnection dataCon = new FtpDataConnection();
@@ -90,15 +75,25 @@ class IOConnection implements Connection {
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
         
         // reader object
-        session = new FtpSessionImpl();
-        session.setClientAddress(this.controlSocket.getInetAddress());
-        session.setFtpDataConnection(dataCon);
+        ftpSession = new FtpSessionImpl();
+        ftpSession.setClientAddress(this.controlSocket.getInetAddress());
+        ftpSession.setFtpDataConnection(dataCon);
+        
+        if(this.controlSocket instanceof SSLSocket) {
+            SSLSocket sslControlSocket = (SSLSocket) this.controlSocket;
+            
+            try {
+                ftpSession.setClientCertificates(sslControlSocket.getSession().getPeerCertificates());
+            } catch(SSLPeerUnverifiedException e) {
+                // ignore, certificate will not be available to the session
+            }
+        }
         
         // writer object
-        writer = new FtpWriter();
+        writer = new IOFtpResponseOutput();
         writer.setControlSocket(this.controlSocket);
         writer.setServerContext(this.serverContext);
-        writer.setFtpSession(session);
+        writer.setFtpSession(ftpSession);
     }
     
     /**
@@ -112,93 +107,22 @@ class IOConnection implements Connection {
             writer.setObserver(observer);
         }
         
-        // set request observer
-        FtpSessionImpl session = this.session;
-        if(session != null) {
-            session.setObserver(observer);
-        }
+        super.setObserver(observer);
     }   
-    
-    /**
-     * Get the configuration object.
-     */
-    public FtpServerContext getServerContext() {
-        return serverContext;
-    }
-
-        
-    /**
-     * Get request.
-     */
-    public FtpSession getSession() {
-        return session;
-    }
     
     /**
      * Server one FTP client connection.
      */
     public void run() {
-        if(session == null ) {
+        if(ftpSession == null ) {
             return;
         }
         if(serverContext == null) {
         	return;
         }
         
-        InetAddress clientAddr = session.getRemoteAddress();
-        ConnectionManager conManager = serverContext.getConnectionManager();
-        Ftplet ftpletContainer = serverContext.getFtpletContainer();
-        
-        if(conManager == null) {
-        	return;
-        }
-        if(ftpletContainer == null) {
-        	return;
-        }
         try {
-            
-            // write log message
-            String hostAddress = clientAddr.getHostAddress();
-            log.info("Open connection - " + hostAddress);
-            
-            // notify ftp statistics
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-            ftpStat.setOpenConnection(this);
-            
-            // call Ftplet.onConnect() method
-            boolean isSkipped = false;
-
-            FtpletEnum ftpletRet = ftpletContainer.onConnect(session, writer);
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                isSkipped = true;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                conManager.closeConnection(this);
-                return;
-            }
-            
-            if(!isSkipped) {
-
-                // IP permission check
-                IpRestrictor ipRestrictor = serverContext.getIpRestrictor();
-                if( !ipRestrictor.hasPermission(clientAddr) ) {
-                    log.warn("No permission to access from " + hostAddress);
-                    writer.send(530, "ip.restricted", null);
-                    return;
-                }
-                
-                // connection limit check
-                int maxConnections = conManager.getMaxConnections();
-                
-                if(maxConnections != 0 && ftpStat.getCurrentConnectionNumber() > maxConnections) {
-                    log.warn("Maximum connection limit reached.");
-                    writer.send(530, "connection.limit", null);
-                    return;
-                }
-                
-                // everything is fine - go ahead 
-                writer.send(220, null, null);
-            }
+            protocolHandler.onConnectionOpened(this, ftpSession, writer);
             
             reader = new BufferedReader(new InputStreamReader(controlSocket.getInputStream(), "UTF-8"));
             do {
@@ -214,21 +138,12 @@ class IOConnection implements Connection {
                     continue;
                 }
                 
+                spyRequest(commandLine);
+                
                 // parse and check permission
                 FtpRequestImpl request = new FtpRequestImpl(commandLine);
-                session.setCurrentRequest(request);
                 
-                if(!hasPermission(request)) {
-                    writer.send(530, "permission", null);
-                    continue;
-                }
-
-                // execute command
-                service(request, session, writer);
-                
-                if(session != null) {
-                    session.setCurrentRequest(null);
-                }
+                protocolHandler.onRequestReceived(this, ftpSession, writer, request);
             }
             while(!isConnectionClosed);
         } catch(SocketException ex) {
@@ -241,52 +156,11 @@ class IOConnection implements Connection {
         finally {
             // close all resources if not done already
             if(!isConnectionClosed) {
-                 conManager.closeConnection(this);
+                 serverContext.getConnectionManager().closeConnection(this);
             }
         }
-    }
-    
-    /**
-     * Notify connection manager observer.
-     */
-    protected void notifyObserver() {
-        session.updateLastAccessTime();
-        serverContext.getConnectionManager().updateConnection(this);
     }
 
-    /**
-     * Execute the ftp command.
-     */
-    public void service(FtpRequest request, FtpSessionImpl session, FtpWriter out) throws IOException, FtpException {
-        try {
-            String commandName = request.getCommand();
-            CommandFactory commandFactory = serverContext.getCommandFactory();
-            Command command = commandFactory.getCommand(commandName);
-            if(command != null) {
-                command.execute(this, request, session, out);
-            }
-            else {
-                out.send(502, "not.implemented", null);
-            }
-        }
-        catch(Exception ex) {
-            
-            // send error reply
-            try { 
-                out.send(550, null, null);
-            }
-            catch(Exception ex1) {
-            }
-            
-            if (ex instanceof java.io.IOException) {
-               throw (IOException)ex;
-            }
-            else {
-                log.warn("RequestHandler.service()", ex);
-            }
-        }
-    }
-    
     /**
      * Close connection. This is called by the connection service.
      */
@@ -299,52 +173,8 @@ class IOConnection implements Connection {
             }
             isConnectionClosed = true;
         }
-        
-        // call Ftplet.onDisconnect() method.
-        try {
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
-            ftpletContainer.onDisconnect(session, writer);
-        }
-        catch(Exception ex) {
-            log.warn("RequestHandler.close()", ex);
-        }
 
-        // notify statistics object and close request
-        ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-
-        if(session != null) {
-            
-            // log message
-            User user = session.getUser();
-            String userName = user != null ? user.getName() : "<Not logged in>";
-            InetAddress clientAddr = session.getRemoteAddress(); 
-            log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
-            
-            // logout if necessary and notify statistics
-            if(session.isLoggedIn()) {
-                session.setLogout();
-                ftpStat.setLogout(this);
-            }
-            ftpStat.setCloseConnection(this);
-            
-            // clear request
-            session.clear();
-            session.setObserver(null);
-            session.getFtpDataConnection().dispose();
-            FileSystemView fview = session.getFileSystemView();
-            if(fview != null) {
-                fview.dispose();
-            }
-            session = null;
-        }
-                
-        // close ftp writer
-        FtpWriter writer = this.writer;
-        if(writer != null) {
-            writer.setObserver(null);
-            writer.close();
-            writer = null;
-        }
+        protocolHandler.onConnectionClosed(this, ftpSession, writer);
         
         // close buffered reader
         BufferedReader reader = this.reader;
@@ -364,97 +194,12 @@ class IOConnection implements Connection {
             }
             controlSocket = null;
         }
-    }
-
-    /**
-     * Check user permission to execute ftp command. 
-     */
-    protected boolean hasPermission(FtpRequest request) {
-        String cmd = request.getCommand();
-        if(cmd == null) {
-            return false;
-        }
-        return session.isLoggedIn() ||
-               cmd.equals("USER")   || 
-		       cmd.equals("PASS")   ||
-		       cmd.equals("QUIT")   ||
-		       cmd.equals("AUTH")   ||
-		       cmd.equals("HELP")   ||
-		       cmd.equals("SYST")   ||
-		       cmd.equals("FEAT")   ||
-		       cmd.equals("PBSZ")   ||
-		       cmd.equals("PROT")   ||
-	           cmd.equals("LANG")   ||
-	           cmd.equals("ACCT");
-    }    
-    
-    /**
-     * Transfer data.
-     */
-    public final long transfer(InputStream in, 
-                               OutputStream out,
-                               int maxRate) throws IOException {
-        
-        BufferedInputStream bis = IoUtils.getBufferedInputStream(in);
-        BufferedOutputStream bos = IoUtils.getBufferedOutputStream( out );
-        
-        boolean isAscii = session.getDataType() == DataType.ASCII;
-        long startTime = System.currentTimeMillis();
-        long transferredSize = 0L;
-        byte[] buff = new byte[4096];
-        
-        while(true) {
-            
-            // if current rate exceeds the max rate, sleep for 50ms 
-            // and again check the current transfer rate
-            if(maxRate > 0) {
-                
-                // prevent "divide by zero" exception
-                long interval = System.currentTimeMillis() - startTime;
-                if(interval == 0) {
-                    interval = 1;
-                }
-                
-                // check current rate
-                long currRate = (transferredSize*1000L)/interval;
-                if(currRate > maxRate) {
-                    try { Thread.sleep(50); } catch(InterruptedException ex) {break;}
-                    continue;
-                }
-            }
-            
-            // read data
-            int count = bis.read(buff);
-            if(count == -1) {
-                break;
-            }
-            
-            // write data
-            // if ascii, replace \n by \r\n
-            if(isAscii) {
-                for(int i=0; i<count; ++i) {
-                    byte b = buff[i];
-                    if(b == '\n') {
-                        bos.write('\r');
-                    }
-                    bos.write(b);
-                }
-            }
-            else {
-                bos.write(buff, 0, count);
-            }
-            
-            transferredSize += count;
-            notifyObserver();
-        }
-        
-        return transferredSize;
-    }       
+    }   
     
     /**
      * Create secure socket.
      */
-    public void createSecureSocket(String protocol) throws Exception {
+    public void secureControlChannel(String protocol) throws Exception {
 
         // change socket to SSL socket
         Ssl ssl = serverContext.getSocketFactory().getSSL();
@@ -469,13 +214,5 @@ class IOConnection implements Connection {
         
         // set control socket
         controlSocket = ssoc;
-    }
-    
-    /**
-     * Retrive the socket used for the control channel
-     * @return The control socket
-     */
-    public Socket getControlSocket() {
-        return controlSocket;
     }
 }

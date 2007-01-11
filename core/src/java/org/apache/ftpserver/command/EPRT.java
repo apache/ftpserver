@@ -95,7 +95,7 @@ class EPRT extends AbstractCommand {
         
         // check IP
         if(dataCfg.isActiveIpCheck()) {
-            InetAddress clientAddr = session.getRemoteAddress();
+            InetAddress clientAddr = session.getClientAddress();
             if(!dataAddr.equals(clientAddr)) {
                 out.send(510, "EPRT.mismatch", null);
                 return;

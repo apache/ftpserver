@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.cert.Certificate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.zip.DeflaterOutputStream;
@@ -51,8 +52,8 @@ public class FtpSessionImpl implements FtpSession {
     private User user;
     private HashMap attributeMap;
     private InetAddress remoteAddr;
-    private ConnectionObserver observer;
     private String language;
+    private Certificate[] clientCertificates;
     
     private int maxIdleTime = 0;
     private long connectionTime = 0L;
@@ -94,13 +95,6 @@ public class FtpSessionImpl implements FtpSession {
     }
     
     /**
-     * Get the observer object to get what the user is sending.
-     */
-    public void setObserver(ConnectionObserver observer) {
-        this.observer = observer;
-    } 
-    
-    /**
      * Reset temporary state variables.
      */
     public void resetState() {
@@ -119,16 +113,7 @@ public class FtpSessionImpl implements FtpSession {
         renameFrom = null;
         fileOffset = 0L;
     }
-    
-    /**
-     * Spy print. Monitor user request.
-     */
-    private void spyRequest(String str) {
-        ConnectionObserver observer = this.observer;
-        if(observer != null) {
-            observer.request(str + "\r\n");
-        }
-    }
+
     
     /**
      * Set login attribute & user file system view.
@@ -267,7 +252,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Get remote address
      */
-    public InetAddress getRemoteAddress() {
+    public InetAddress getClientAddress() {
         return remoteAddr;
     }
     
@@ -414,5 +399,13 @@ public class FtpSessionImpl implements FtpSession {
      */
     public void setStructure(Structure stru) {
         structure = stru;
+    }
+    
+    public Certificate[] getClientCertificates() {
+        return clientCertificates;
+    }
+    
+    public void setClientCertificates(Certificate[] certificates) {
+        this.clientCertificates = certificates;
     }
 }

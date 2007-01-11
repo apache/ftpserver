@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.ftpserver.FtpResponseImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -76,13 +77,13 @@ class SITE_WHO extends AbstractCommand {
             
             User tmpUsr = tmpReq.getUser();
             sb.append( StringUtils.pad(tmpUsr.getName(), ' ', true, 16) );
-            sb.append( StringUtils.pad(tmpReq.getRemoteAddress().getHostAddress(), ' ', true, 16) );
+            sb.append( StringUtils.pad(tmpReq.getClientAddress().getHostAddress(), ' ', true, 16) );
             sb.append( StringUtils.pad(DateUtils.getISO8601Date(tmpReq.getLoginTime().getTime()), ' ', true, 20) );
             sb.append( StringUtils.pad(DateUtils.getISO8601Date(tmpReq.getLastAccessTime().getTime()), ' ', true, 20) );
             sb.append('\n');
         }
         sb.append('\n');
-        out.write(200, sb.toString());
+        out.write(new FtpResponseImpl(200, sb.toString()));
     }
 
 }

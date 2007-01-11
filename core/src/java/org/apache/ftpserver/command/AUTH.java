@@ -68,7 +68,7 @@ class AUTH extends AbstractCommand {
         if(authType.equals("SSL")) {
             out.send(234, "AUTH.SSL", null);
             try {
-                connection.createSecureSocket("SSL");
+                connection.secureControlChannel("SSL");
             }
             catch(FtpException ex) {
                 throw ex;
@@ -81,7 +81,7 @@ class AUTH extends AbstractCommand {
         else if(authType.equals("TLS")) {
             out.send(234, "AUTH.TLS", null);
             try {
-                connection.createSecureSocket("TLS");
+                connection.secureControlChannel("TLS");
             }
             catch(FtpException ex) {
                 throw ex;
