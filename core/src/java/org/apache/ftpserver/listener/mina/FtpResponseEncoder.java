@@ -21,35 +21,20 @@ package org.apache.ftpserver.listener.mina;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
 
 /**
  * A {@link MessageEncoder} that encodes {@link FtpResponse}.
  */
-public class FtpResponseEncoder implements MessageEncoder
+public class FtpResponseEncoder extends ProtocolEncoderAdapter
 {
     private static final CharsetEncoder ENCODER = Charset.forName("UTF-8").newEncoder();
-
-    private static final Set TYPES;
-
-    static
-    {
-        Set types = new HashSet();
-        types.add( FtpResponse.class );
-        TYPES = Collections.unmodifiableSet( types );
-    }
-
-    public FtpResponseEncoder()
-    {
-    }
 
     public void encode( IoSession session, Object message,
             ProtocolEncoderOutput out ) throws Exception
@@ -62,11 +47,5 @@ public class FtpResponseEncoder implements MessageEncoder
         
         buf.flip();
         out.write(buf);
-
-    }
-
-    public Set getMessageTypes()
-    {
-        return TYPES;
     }
 }

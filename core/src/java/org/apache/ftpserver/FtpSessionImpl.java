@@ -37,7 +37,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.listener.ConnectionObserver;
 
 /**
  * FTP session

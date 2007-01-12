@@ -19,20 +19,20 @@
  */
 package org.apache.ftpserver.listener.mina;
 
-import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
+import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.apache.mina.filter.codec.ProtocolDecoder;
+import org.apache.mina.filter.codec.ProtocolEncoder;
 
-/**
- * Provides a protocol codec for HTTP server.
- * 
- * @author The Apache Directory Project (mina-dev@directory.apache.org)
- * @version $Rev: 448080 $, $Date: 2006-09-20 08:03:48 +0200 (on, 20 sep 2006) $
- */
-public class FtpServerProtocolCodecFactory extends
-        DemuxingProtocolCodecFactory
+public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory
 {
-    public FtpServerProtocolCodecFactory()
-    {
-        super.register( FtpRequestDecoder.class );
-        super.register( FtpResponseEncoder.class );
+    private FtpRequestDecoder decoder = new FtpRequestDecoder();
+    private FtpResponseEncoder encoder = new FtpResponseEncoder();
+
+    public ProtocolDecoder getDecoder() throws Exception {
+        return decoder;
+    }
+
+    public ProtocolEncoder getEncoder() throws Exception {
+        return encoder;
     }
 }

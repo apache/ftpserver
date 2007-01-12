@@ -75,8 +75,11 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
     {
         FtpRequest request = (FtpRequest) message;
 
+
         ConnectionObserver observer = (ConnectionObserver) session.getAttribute("observer");
-        observer.request(request.toString());
+        if(observer != null) {
+            observer.request(request.toString());
+        }        
         
         MinaConnection connection = (MinaConnection) session.getAttribute(CONNECTION_KEY);
         MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
