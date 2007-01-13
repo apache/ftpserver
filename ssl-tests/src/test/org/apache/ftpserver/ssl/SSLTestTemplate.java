@@ -236,6 +236,9 @@ public abstract class SSLTestTemplate extends TestCase {
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception {
+        
+        client.disconnect();
+
         if (server != null) {
             server.stop();
         }
