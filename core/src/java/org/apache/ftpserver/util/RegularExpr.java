@@ -154,7 +154,7 @@ class RegularExpr {
                     
                     
                 // * - skip zero or more characters
-                // No more patern character - return true    
+                // No more pattern character - return true    
                 // Increment strIndex till the rest of the pattern matches.
                 case '*' :
                 
