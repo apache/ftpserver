@@ -121,18 +121,18 @@ public abstract class PerformanceTestTemplate extends TestCase {
                 .exists());
 
         Properties configProps = new Properties();
-        configProps.setProperty("serverContext.socket-factory.port", Integer
+        configProps.setProperty("config.socket-factory.port", Integer
                 .toString(port));
-        configProps.setProperty("serverContext.user-manager.class",
+        configProps.setProperty("config.user-manager.class",
                 "org.apache.ftpserver.usermanager.PropertiesUserManager");
-        configProps.setProperty("serverContext.user-manager.admin", "admin");
-        configProps.setProperty("serverContext.user-manager.prop-password-encrypt",
+        configProps.setProperty("config.user-manager.admin", "admin");
+        configProps.setProperty("config.user-manager.prop-password-encrypt",
                 "false");
-        configProps.setProperty("serverContext.user-manager.prop-file", USERS_FILE
+        configProps.setProperty("config.user-manager.prop-file", USERS_FILE
                 .getAbsolutePath());
-        configProps.setProperty("serverContext.create-default-user", "false");
-        configProps.setProperty("serverContext.connection-manager.max-connection", "0");
-        configProps.setProperty("serverContext.connection-manager.max-login", "0");
+        configProps.setProperty("config.create-default-user", "false");
+        configProps.setProperty("config.connection-manager.max-connection", "0");
+        configProps.setProperty("config.connection-manager.max-login", "0");
 
         return configProps;
     }
