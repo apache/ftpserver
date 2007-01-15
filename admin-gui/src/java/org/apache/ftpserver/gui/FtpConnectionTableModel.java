@@ -176,7 +176,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                 break;
                 
             case 3:
-                addr = session.getRemoteAddress();
+                addr = session.getClientAddress();
                 if (addr != null) {
                     retVal = addr.getHostAddress();
                 }
