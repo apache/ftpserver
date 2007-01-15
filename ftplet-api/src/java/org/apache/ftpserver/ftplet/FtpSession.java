@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.security.cert.Certificate;
 import java.util.Date;
 
 /**
@@ -46,7 +47,9 @@ interface FtpSession {
     /**
      * Returns the IP address of the client that sent the request.
      */
-    InetAddress getRemoteAddress();
+    InetAddress getClientAddress();
+    
+    Certificate[] getClientCertificates();
     
     /**
      * Get connection time.
