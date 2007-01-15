@@ -27,16 +27,10 @@ import java.io.IOException;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
-interface FtpResponse {
+interface FtpResponseOutput {
 
     /**
      * Send the ftp server reply code to client.
      */
-    void write(int code) throws IOException;
-    
-    
-    /**
-     * Send the ftp code and message to client
-     */
-    void write(int code, String msg) throws IOException;
+    void write(FtpResponse response) throws IOException;
 }
