@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.net.ssl.SSLSession;
 
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
@@ -56,10 +57,14 @@ public class MinaConnection extends AbstractConnection {
         if(session.getFilterChain().contains("sslFilter")) {
             SSLFilter sslFilter = (SSLFilter) session.getFilterChain().get("sslFilter");
             
-            try {
-                ftpSession.setClientCertificates(sslFilter.getSSLSession(session).getPeerCertificates());
-            } catch(SSLPeerUnverifiedException e) {
-                // ignore, certificate will not be available to the session
+            SSLSession sslSession = sslFilter.getSSLSession(session);
+            
+            if(sslSession != null) {
+                try {
+                    ftpSession.setClientCertificates(sslFilter.getSSLSession(session).getPeerCertificates());
+                } catch(SSLPeerUnverifiedException e) {
+                    // ignore, certificate will not be available to the session
+                }
             }
         }
     }
@@ -76,10 +81,12 @@ public class MinaConnection extends AbstractConnection {
         
     }
 
-    public void secureControlChannel(String type) throws Exception {
+    public void beforeSecureControlChannel(String type) throws Exception {
         Ssl ssl = serverContext.getSocketFactory().getSSL();
         
         if(ssl != null) {
+            session.setAttribute(SSLFilter.DISABLE_ENCRYPTION_ONCE);
+            
             SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
             sslFilter.setNeedClientAuth(ssl.getClientAuthenticationRequired());
             session.getFilterChain().addFirst("sslSessionFilter", sslFilter);
@@ -89,6 +96,8 @@ public class MinaConnection extends AbstractConnection {
         }
         
     }
-    
-    // TODO do we need to override setObserver?
+
+    public void afterSecureControlChannel(String type) throws Exception {
+        // do nothing
+    }
 }

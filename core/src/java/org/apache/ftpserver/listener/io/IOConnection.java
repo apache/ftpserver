@@ -199,7 +199,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
     /**
      * Create secure socket.
      */
-    public void secureControlChannel(String protocol) throws Exception {
+    public void afterSecureControlChannel(String protocol) throws Exception {
 
         // change socket to SSL socket
         Ssl ssl = serverContext.getSocketFactory().getSSL();
@@ -214,5 +214,10 @@ public class IOConnection extends AbstractConnection implements Runnable {
         
         // set control socket
         controlSocket = ssoc;
+    }
+
+    public void beforeSecureControlChannel(String type) throws Exception {
+        // do nothing
+        
     }
 }

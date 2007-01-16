@@ -66,27 +66,25 @@ class AUTH extends AbstractCommand {
         // check parameter
         String authType = request.getArgument().toUpperCase();
         if(authType.equals("SSL")) {
-            out.send(234, "AUTH.SSL", null);
             try {
-                connection.secureControlChannel("SSL");
-            }
-            catch(FtpException ex) {
+                connection.beforeSecureControlChannel("SSL");
+                out.send(234, "AUTH.SSL", null);
+                connection.afterSecureControlChannel("SSL");
+            } catch(FtpException ex) {
                 throw ex;
-            }
-            catch(Exception ex) {
+            } catch(Exception ex) {
                 log.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
         }
         else if(authType.equals("TLS")) {
-            out.send(234, "AUTH.TLS", null);
             try {
-                connection.secureControlChannel("TLS");
-            }
-            catch(FtpException ex) {
+                connection.beforeSecureControlChannel("TLS");
+                out.send(234, "AUTH.TLS", null);
+                connection.afterSecureControlChannel("TLS");
+            } catch(FtpException ex) {
                 throw ex;
-            }
-            catch(Exception ex) {
+            } catch(Exception ex) {
                 log.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }

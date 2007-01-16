@@ -132,11 +132,11 @@ public class LoginTest extends ClientTestTemplate {
         }
     }
   */  
-    public void testLoginWithMaxConnectionsMulti() throws Exception {
+    /*public void testLoginWithMaxConnectionsMulti() throws Exception {
         for(int i = 0; i<50; i++) {
             testLoginWithMaxConnections();
         }
-    }
+    }*/
     
     public void testLoginWithMaxConnections() throws Exception {
         FTPClient client1 = new FTPClient();

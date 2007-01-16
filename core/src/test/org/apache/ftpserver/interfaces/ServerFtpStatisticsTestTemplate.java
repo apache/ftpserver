@@ -49,7 +49,7 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         public void run() {            
         }
 
-        public void secureControlChannel(String type) throws Exception {
+        public void beforeSecureControlChannel(String type) throws Exception {
             
         }
 
@@ -63,6 +63,10 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
         public long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException {
             return 0;
+        }
+
+        public void afterSecureControlChannel(String type) throws Exception {
+            
         }
         
     }

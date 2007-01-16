@@ -60,7 +60,9 @@ interface Connection {
      * @param type The type of security to use, i.e. SSL or TLS
      * @throws Exception
      */
-    void secureControlChannel(String type) throws Exception;
+    void beforeSecureControlChannel(String type) throws Exception;
+
+    void afterSecureControlChannel(String type) throws Exception;
 
     long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException;
 }
