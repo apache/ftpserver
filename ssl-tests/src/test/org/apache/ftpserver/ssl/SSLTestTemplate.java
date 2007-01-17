@@ -24,6 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.net.ssl.SSLException;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
@@ -203,13 +205,21 @@ public abstract class SSLTestTemplate extends TestCase {
             }
         });
 
-        try {
-            client.connect("localhost", port);
-        } catch (FTPConnectionClosedException e) {
-            // try again
-            Thread.sleep(200);
-            client.connect("localhost", port);
+        int attempts = 0;
+        
+        while(attempts < 5) {
+            try {
+                client.connect("localhost", port);
+                break;
+            } catch (SSLException e) {
+                // try again
+            } catch (FTPConnectionClosedException e) {
+                // try again
+            }
+            Thread.sleep(500);
+            attempts++;
         }
+        
     }
 
     protected void cleanTmpDirs() throws IOException {
