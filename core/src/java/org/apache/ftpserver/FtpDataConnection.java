@@ -91,7 +91,16 @@ class FtpDataConnection {
             catch(Exception ex) {
                 log.warn("FtpDataConnection.closeDataSocket()", ex);
             }
-            serverContext.getDataConnectionConfig().releasePassivePort(port);
+            
+            FtpServerContext ctx = serverContext;
+            
+            if(ctx != null) {
+                DataConnectionConfig dcc = ctx.getDataConnectionConfig();
+                if(dcc != null) {
+                    dcc.releasePassivePort(port);
+                }
+            }
+            
             servSoc = null;
         }
         
