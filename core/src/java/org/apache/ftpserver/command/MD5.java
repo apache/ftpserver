@@ -29,6 +29,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -64,7 +65,7 @@ class MD5 extends AbstractCommand {
         String argument = request.getArgument();
         
         if(argument == null || argument.trim().length() == 0) {
-            out.send(504, "MD5.invalid", null);
+            out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", null);
             return;
         }
 
@@ -90,13 +91,13 @@ class MD5 extends AbstractCommand {
             }
             
             if(file == null) {
-                out.send(504, "MD5.invalid", fileName);
+                out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName);
                 return;
             }
     
             // check file
             if(!file.isFile()) {
-                out.send(504, "MD5.invalid", fileName);
+                out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName);
                 return;
             }
             
@@ -115,7 +116,7 @@ class MD5 extends AbstractCommand {
                 
             } catch(NoSuchAlgorithmException e) {
                 log.debug("MD5 algorithm not available", e);
-                out.send(502, "MD5.notimplemened", null);
+                out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "MD5.notimplemened", null);
             } finally {
                 IoUtils.close(is);
             }

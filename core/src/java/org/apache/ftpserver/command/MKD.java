@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -62,7 +63,7 @@ class MKD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(501, "MKD", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null);
             return;  
         }
         
@@ -92,26 +93,26 @@ class MKD extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.send(550, "MKD.invalid", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName);
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasWritePermission() ) {
-            out.send(550, "MKD.permission", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.permission", fileName);
             return;
         }
         
         // check file existance
         if(file.doesExist()) {
-            out.send(550, "MKD.exists", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.exists", fileName);
             return;
         }
         
         // now create directory
         if(file.mkdir()) {
-            out.send(250, "MKD", fileName);
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MKD", fileName);
             
             // write log message
             String userName = session.getUser().getName();
@@ -136,7 +137,7 @@ class MKD extends AbstractCommand {
 
         }
         else {
-            out.send(550, "MKD", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName);
         }
     }
 }

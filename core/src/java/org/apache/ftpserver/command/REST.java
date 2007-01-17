@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -52,7 +53,7 @@ class REST extends AbstractCommand {
         // argument check
         String argument = request.getArgument();
         if(argument == null) {
-            out.send(501, "REST", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "REST", null);
             return;  
         }
         
@@ -65,15 +66,15 @@ class REST extends AbstractCommand {
             // check offset number
             if(skipLen < 0L) {
                 skipLen = 0L;
-                out.send(501, "REST.negetive", null);
+                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "REST.negetive", null);
             }
             else {
-                out.send(350, "REST", null);
+                out.send(FtpResponse.REPLY_350_REQUESTED_FILE_ACTION_PENDING_FURTHER_INFORMATION, "REST", null);
             }
         }
         catch(NumberFormatException ex) {
             log.debug("Invalid restart position: " + argument, ex);
-            out.send(501, "REST.invalid", null); 
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "REST.invalid", null); 
         }
         
         session.setFileOffset(skipLen);

@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -54,7 +55,7 @@ class RNFR extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(501, "RNFR", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RNFR", null);
             return;  
         }
                 
@@ -69,12 +70,12 @@ class RNFR extends AbstractCommand {
             
         // check file
         if(renFr == null) {
-            out.send(550, "RNFR", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RNFR", fileName);
         }
         else {
             session.setRenameFrom(renFr);
             fileName = renFr.getFullName();
-            out.send(350, "RNFR", fileName);    
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNFR", fileName);    
         }
     }
     

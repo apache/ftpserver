@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -64,10 +65,10 @@ class CDUP extends AbstractCommand {
         }
         if(success) {
             String dirName = fsview.getCurrentDirectory().getFullName();
-            out.send(250, "CDUP", dirName);
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CDUP", dirName);
         }
         else {
-            out.send(550, "CDUP", null);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "CDUP", null);
         }
     }
 }

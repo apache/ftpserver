@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -46,6 +47,6 @@ class FEAT extends AbstractCommand {
         // reset state variables
         session.resetState();
         
-        out.send(211, "FEAT", null);
+        out.send(FtpResponse.REPLY_211_SYSTEM_STATUS_REPLY, "FEAT", null);
     }
 }

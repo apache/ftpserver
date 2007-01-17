@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -49,7 +50,7 @@ class ACCT extends AbstractCommand {
         session.resetState();
         
         // and abort any data connection
-        out.send(202, "ACCT", null);
+        out.send(FtpResponse.REPLY_202_COMMAND_NOT_IMPLEMENTED, "ACCT", null);
     }   
 }
 

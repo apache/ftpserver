@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -60,7 +61,7 @@ class OPTS_MLST extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if(spIndex == -1) {
-            out.send(503, "OPTS.MLST", null);
+            out.send(FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "OPTS.MLST", null);
             return;
         }
         String listTypes = argument.substring(spIndex + 1);
@@ -76,10 +77,10 @@ class OPTS_MLST extends AbstractCommand {
         String[] validatedTypes = validateSelectedTypes(types);
         if(validatedTypes != null) {
             session.setAttribute("MLST.types", validatedTypes);
-            out.send(200, "OPTS.MLST", listTypes);
+            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "OPTS.MLST", listTypes);
         }
         else {
-            out.send(501, "OPTS.MLST", listTypes);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS.MLST", listTypes);
         }
     }
     

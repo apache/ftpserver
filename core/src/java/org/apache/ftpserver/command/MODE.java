@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -51,7 +52,7 @@ class MODE extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.send(501, "MODE", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MODE", null);
             return;  
         }
         
@@ -60,14 +61,14 @@ class MODE extends AbstractCommand {
         md = Character.toUpperCase(md);
         if(md == 'S') {
             session.getFtpDataConnection().setZipMode(false);
-            out.send(200, "MODE", "S");
+            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "S");
         }
         else if(md == 'Z') {
             session.getFtpDataConnection().setZipMode(true);
-            out.send(200, "MODE", "Z");
+            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "Z");
         }
         else {
-            out.send(504, "MODE", null);
+            out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MODE", null);
         }
     }
 }

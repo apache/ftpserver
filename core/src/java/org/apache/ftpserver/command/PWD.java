@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -49,7 +50,7 @@ class PWD extends AbstractCommand {
         session.resetState();
         FileSystemView fsview = session.getFileSystemView();
         String currDir = fsview.getCurrentDirectory().getFullName();
-        out.send(257, "PWD", currDir);
+        out.send(FtpResponse.REPLY_257_PATHNAME_CREATED, "PWD", currDir);
     }
     
 }

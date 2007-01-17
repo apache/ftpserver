@@ -31,6 +31,7 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
@@ -106,26 +107,26 @@ class STOU extends AbstractCommand {
                 log.debug("Exception getting file object", ex);
             }
             if(file == null) {
-                out.send(550, "STOU", null);
+                out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null);
                 return;
             }
             String fileName = file.getFullName();
             
             // check permission
             if(!file.hasWritePermission()) {
-                out.send(550, "STOU.permission", fileName);
+                out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU.permission", fileName);
                 return;
             }
             
             // get data connection
-            out.send(150, "STOU", null);
+            out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "STOU", null);
             InputStream is = null;
             try {
                 is = session.getDataInputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the input data stream", ex);
-                out.send(425, "STOU", fileName);
+                out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName);
                 return;
             }
             
@@ -133,7 +134,7 @@ class STOU extends AbstractCommand {
             boolean failure = false;
             BufferedInputStream bis = null;
             BufferedOutputStream bos = null;
-            out.send(250, "STOU", fileName);
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "STOU", fileName);
             try {
                 
                 // open streams
@@ -163,12 +164,12 @@ class STOU extends AbstractCommand {
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.send(426, "STOU", fileName);
+                out.send(FtpResponse.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName);
             }
             catch(IOException ex) {
                 log.debug("IOException during data transfer", ex);
                 failure = true;
-                out.send(551, "STOU", fileName);
+                out.send(FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName);
             }
             finally {
                 IoUtils.close(bis);
@@ -177,7 +178,7 @@ class STOU extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "STOU", fileName);
+                out.send(FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName);
                 
                 // call Ftplet.onUploadUniqueEnd() method
                 try {

@@ -29,6 +29,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.LISTFileFormater;
@@ -70,14 +71,14 @@ class LIST extends AbstractCommand {
             session.resetState();
             
             // get data connection
-            out.send(150, "LIST", null);
+            out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "LIST", null);
             OutputStream os = null;
             try {
                 os = session.getDataOutputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the output data stream", ex);
-                out.send(425, "LIST", null);
+                out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "LIST", null);
                 return;
             }
             
@@ -97,16 +98,16 @@ class LIST extends AbstractCommand {
             catch(SocketException ex) {
                 log.debug("Socket exception during list transfer", ex);
                 failure = true;
-                out.send(426, "LIST", null);
+                out.send(FtpResponse.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "LIST", null);
             }
             catch(IOException ex) {
                 log.debug("IOException during list transfer", ex);
                 failure = true;
-                out.send(551, "LIST", null);
+                out.send(FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "LIST", null);
             } catch(IllegalArgumentException e) {
                 log.debug("Illegal list syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
-                out.send(501, "LIST", null);
+                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "LIST", null);
             } finally {
                 writer.flush();
                 IoUtils.close(writer);
@@ -114,7 +115,7 @@ class LIST extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "LIST", null);
+                out.send(FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "LIST", null);
             }
         }
         finally {

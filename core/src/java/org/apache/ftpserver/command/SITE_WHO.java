@@ -28,6 +28,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
@@ -59,7 +60,7 @@ class SITE_WHO extends AbstractCommand {
         UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.send(530, "SITE", null);
+            out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null);
             return;
         }
         
@@ -83,7 +84,7 @@ class SITE_WHO extends AbstractCommand {
             sb.append('\n');
         }
         sb.append('\n');
-        out.write(new FtpResponseImpl(200, sb.toString()));
+        out.write(new FtpResponseImpl(FtpResponse.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
 
 }

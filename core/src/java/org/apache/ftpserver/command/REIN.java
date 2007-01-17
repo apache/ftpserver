@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -47,6 +48,6 @@ class REIN extends AbstractCommand {
         
         session.reinitialize();
         session.setLanguage(null);
-        out.send(220, "REIN", null);
+        out.send(FtpResponse.REPLY_220_SERVICE_READY, "REIN", null);
     }   
 }

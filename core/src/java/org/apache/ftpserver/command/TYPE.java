@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -57,11 +58,11 @@ class TYPE extends AbstractCommand {
         // set type
         try {
             session.setDataType(DataType.parseArgument(type));
-            out.send(200, "TYPE", null);
+            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "TYPE", null);
         } 
         catch(IllegalArgumentException e) {
             log.debug("Illegal type argument: " + request.getArgument(), e);
-            out.send(504, "TYPE", null);
+            out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "TYPE", null);
         }
     }
     

@@ -28,6 +28,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -53,6 +54,6 @@ class SITE_ZONE extends AbstractCommand {
         
         // send timezone data
         String timezone = TIMEZONE_FMT.format(new Date());
-        out.write(new FtpResponseImpl(200, timezone));
+        out.write(new FtpResponseImpl(FtpResponse.REPLY_200_COMMAND_OKAY, timezone));
     }
 }

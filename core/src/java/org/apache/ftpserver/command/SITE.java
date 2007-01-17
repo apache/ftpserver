@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
@@ -84,7 +85,7 @@ class SITE extends AbstractCommand {
         // no params
         if(argument == null) {
             session.resetState();
-            out.send(200, "SITE", null);
+            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "SITE", null);
             return;
         }
         
@@ -97,14 +98,14 @@ class SITE extends AbstractCommand {
             }
             else {
                 session.resetState();
-                out.send(502, "SITE", argument);
+                out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE", argument);
             }
         }
         catch(Exception ex) {
             Log log = serverContext.getLogFactory().getInstance(getClass());
             log.warn("SITE.execute()", ex);
             session.resetState();
-            out.send(500, "SITE", null);
+            out.send(FtpResponse.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "SITE", null);
         }
     
     }

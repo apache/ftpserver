@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -60,7 +61,7 @@ class DELE extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(501, "DELE", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "DELE", null);
             return;  
         }
         
@@ -74,7 +75,7 @@ class DELE extends AbstractCommand {
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
-            out.send(450, "DELE", fileName);
+            out.send(FtpResponse.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName);
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
@@ -92,7 +93,7 @@ class DELE extends AbstractCommand {
             log.debug("Could not get file " + fileName, ex);
         }
         if(file == null) {
-            out.send(550, "DELE.invalid", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "DELE.invalid", fileName);
             return;
         }
 
@@ -100,13 +101,13 @@ class DELE extends AbstractCommand {
         fileName = file.getFullName();
 
         if( !file.hasDeletePermission() ) {
-            out.send(450, "DELE.permission", fileName);
+            out.send(FtpResponse.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE.permission", fileName);
             return;
         }
         
         // now delete
         if(file.delete()) {
-            out.send(250, "DELE", fileName); 
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "DELE", fileName); 
             
             // log message
             String userName = session.getUser().getName();
@@ -131,7 +132,7 @@ class DELE extends AbstractCommand {
 
         }
         else {
-            out.send(450, "DELE", fileName);
+            out.send(FtpResponse.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName);
         }
     }
 

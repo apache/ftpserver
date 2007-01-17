@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -58,7 +59,7 @@ class EPSV extends AbstractCommand {
         // set data connection
         FtpDataConnection dataCon = session.getFtpDataConnection();
         if (!dataCon.setPasvCommand()) {
-            out.send(425, "EPSV", null);
+            out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null);
             return;   
         }
         

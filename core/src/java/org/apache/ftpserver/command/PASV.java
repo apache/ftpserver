@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -57,7 +58,7 @@ class PASV extends AbstractCommand {
         // set data connection
         FtpDataConnection dataCon = session.getFtpDataConnection();
         if (!dataCon.setPasvCommand()) {
-            out.send(425, "PASV", null);
+            out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "PASV", null);
             return;   
         }
         
@@ -67,6 +68,6 @@ class PASV extends AbstractCommand {
         
         // send connection info to client
         String addrStr = servAddr.getHostAddress().replace( '.', ',' ) + ',' + (servPort>>8) + ',' + (servPort&0xFF);
-        out.send(227, "PASV", addrStr);
+        out.send(FtpResponse.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr);
     }
 }

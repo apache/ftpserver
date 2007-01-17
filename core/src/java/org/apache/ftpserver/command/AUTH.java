@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 
@@ -51,7 +52,7 @@ class AUTH extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.send(501, "AUTH", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null);
             return;  
         }
         
@@ -90,7 +91,7 @@ class AUTH extends AbstractCommand {
             }
         }
         else {
-            out.send(502, "AUTH", null);
+            out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null);
         }
     }
 }

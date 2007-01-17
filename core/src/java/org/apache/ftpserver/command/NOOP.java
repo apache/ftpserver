@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 /**
@@ -48,6 +49,6 @@ class NOOP extends AbstractCommand {
                         FtpWriter out) throws IOException, FtpException {
         
         session.resetState();
-        out.send(200, "NOOP", null);
+        out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "NOOP", null);
     }
 }

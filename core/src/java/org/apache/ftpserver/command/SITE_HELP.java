@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 
 
@@ -48,7 +49,7 @@ class SITE_HELP extends AbstractCommand {
         session.resetState();
         
         // print help message
-        out.send(200, "SITE.HELP", null);
+        out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "SITE.HELP", null);
     }
 
 }

@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -62,7 +63,7 @@ class RMD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(501, "RMD", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RMD", null);
             return;  
         }
         
@@ -92,26 +93,26 @@ class RMD extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.send(550, "RMD.permission", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName);
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasDeletePermission() ) {
-            out.send(550, "RMD.permission", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName);
             return;
         }
         
         // check file
         if(!file.isDirectory()) {
-            out.send(550, "RMD.invalid", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.invalid", fileName);
             return;
         }
         
         // now delete directory
         if(file.delete()) {
-            out.send(250, "RMD", fileName); 
+            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RMD", fileName); 
             
             // write log message
             String userName = session.getUser().getName();
@@ -136,7 +137,7 @@ class RMD extends AbstractCommand {
 
         }
         else {
-            out.send(450, "RMD", fileName);
+            out.send(FtpResponse.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD", fileName);
         }
     }
 }

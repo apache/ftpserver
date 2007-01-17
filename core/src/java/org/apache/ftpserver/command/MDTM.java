@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 
@@ -53,7 +54,7 @@ class MDTM extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(501, "MDTM", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null);
             return;  
         }
         
@@ -66,7 +67,7 @@ class MDTM extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.send(550, "MDTM", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName);
             return;
         }
         
@@ -74,10 +75,10 @@ class MDTM extends AbstractCommand {
         fileName = file.getFullName();
         if(file.doesExist()) {
             String dateStr = DateUtils.getFtpDate( file.getLastModified() );
-            out.send(213, "MDTM", dateStr);
+            out.send(FtpResponse.REPLY_213_FILE_STATUS, "MDTM", dateStr);
         }
         else {
-            out.send(550, "MDTM", fileName);
+            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName);
         }
     } 
 }

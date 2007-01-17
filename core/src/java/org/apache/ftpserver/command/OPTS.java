@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listener.Connection;
 
@@ -58,7 +59,7 @@ class OPTS extends AbstractCommand {
         // no params
         String argument = request.getArgument();
         if(argument == null) {
-            out.send(501, "OPTS", null);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null);
             return;
         }
         
@@ -78,13 +79,13 @@ class OPTS extends AbstractCommand {
             }
             else {
                 session.resetState();
-                out.send(502, "OPTS.not.implemented", argument);
+                out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument);
             }
         }
         catch(Exception ex) {
             log.warn("OPTS.execute()", ex);
             session.resetState();
-            out.send(500, "OPTS", null);
+            out.send(FtpResponse.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null);
         }
     }
     

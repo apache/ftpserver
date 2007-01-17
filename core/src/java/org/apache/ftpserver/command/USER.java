@@ -25,6 +25,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -67,7 +68,7 @@ class USER extends AbstractCommand {
             // argument check
             String userName = request.getArgument();
             if(userName == null) {
-                out.send(501, "USER", null);
+                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "USER", null);
                 return;  
             }
             
@@ -75,7 +76,7 @@ class USER extends AbstractCommand {
             BaseUser user = (BaseUser)session.getUser();
             if(session.isLoggedIn()) {
                 if( userName.equals(user.getName()) ) {
-                    out.send(230, "USER", null);
+                    out.send(FtpResponse.REPLY_230_USER_LOGGED_IN, "USER", null);
                     success = true;
                 }
                 else {
@@ -87,7 +88,7 @@ class USER extends AbstractCommand {
             // anonymous login is not enabled
             boolean anonymous = userName.equals("anonymous");
             if( anonymous && (!conManager.isAnonymousLoginEnabled()) ) {
-                out.send(530, "USER.anonymous", null);
+                out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "USER.anonymous", null);
                 return;
             }
             
@@ -95,7 +96,7 @@ class USER extends AbstractCommand {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
             if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.send(421, "USER.anonymous", null);
+                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.anonymous", null);
                 return;
             }
             
@@ -103,7 +104,7 @@ class USER extends AbstractCommand {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
-                out.send(421, "USER.login", null);
+                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null);
                 return;
             }
             
@@ -116,7 +117,7 @@ class USER extends AbstractCommand {
                         stat.getCurrentUserLoginNumber(configUser, session.getClientAddress()) + 1);
                 
                 if(configUser.authorize(loginRequest) == null) {
-                    out.send(421, "USER.login", null);
+                    out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null);
                     return;
                 }
             }
@@ -125,10 +126,10 @@ class USER extends AbstractCommand {
             success = true;
             session.setUserArgument(userName);
             if(anonymous) {
-                out.send(331, "USER.anonymous", userName);
+                out.send(FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER.anonymous", userName);
             }
             else {
-                out.send(331, "USER", userName);
+                out.send(FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER", userName);
             }
         }
         finally {

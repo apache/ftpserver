@@ -29,6 +29,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.FileFormater;
@@ -67,14 +68,14 @@ class MLSD extends AbstractCommand {
             session.resetState();
             
             // get data connection
-            out.send(150, "MLSD", null);
+            out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "MLSD", null);
             OutputStream os = null;
             try {
                 os = session.getDataOutputStream();
             }
             catch(IOException ex) {
                 log.debug("Exception getting the output data stream", ex);
-                out.send(425, "MLSD", null);
+                out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD", null);
                 return;
             }
             
@@ -95,16 +96,16 @@ class MLSD extends AbstractCommand {
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.send(426, "MLSD", null);
+                out.send(FtpResponse.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "MLSD", null);
             }
             catch(IOException ex) {
                 log.debug("IOException during data transfer", ex);
                 failure = true;
-                out.send(551, "MLSD", null);
+                out.send(FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "MLSD", null);
             } catch(IllegalArgumentException e) {
                 log.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
-                out.send(501, "MLSD", null);
+                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLSD", null);
             }
             finally {
                 writer.flush();
@@ -113,7 +114,7 @@ class MLSD extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.send(226, "MLSD", null);
+                out.send(FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "MLSD", null);
             }
         }
         finally {

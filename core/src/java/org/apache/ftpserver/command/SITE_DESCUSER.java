@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -56,7 +57,7 @@ class SITE_DESCUSER extends AbstractCommand {
         UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.send(530, "SITE", null);
+            out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null);
             return;
         }
         
@@ -64,7 +65,7 @@ class SITE_DESCUSER extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if(spIndex == -1) {
-            out.send(503, "SITE.DESCUSER", null);
+            out.send(FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null);
             return;
         }
         String userName = argument.substring(spIndex + 1);
@@ -83,7 +84,7 @@ class SITE_DESCUSER extends AbstractCommand {
             user = null;
         }
         if(user == null) {
-            out.send(501, "SITE.DESCUSER", userName);
+            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName);
             return;
         }
         
@@ -108,7 +109,7 @@ class SITE_DESCUSER extends AbstractCommand {
             sb.append("downloadrate    : 0\n");
         }
         sb.append('\n');
-        out.write(new FtpResponseImpl(200, sb.toString()));
+        out.write(new FtpResponseImpl(FtpResponse.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
 
 }
