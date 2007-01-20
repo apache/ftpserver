@@ -15,7 +15,7 @@
  *
  */
 
-package org.apache.ftpserver.test;
+package org.apache.ftpserver.util;
 
 import java.util.Locale;
 

@@ -247,7 +247,16 @@ class IoUtils {
 
     private final static void deleteFile(File file) throws IOException {
         if(!file.delete()) {
-            throw new IOException("Failed to delete file: " + file);
+            if(OS.isFamilyWindows()) {
+                System.gc();
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+            }
+            if(!file.delete()) {
+                throw new IOException("Failed to delete file: " + file);
+            }
         }
     }
 }    
