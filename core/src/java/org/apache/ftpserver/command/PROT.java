@@ -21,7 +21,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpDataConnection;
+import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -58,7 +58,7 @@ class PROT extends AbstractCommand {
         
         // check argument
         arg = arg.toUpperCase();
-        FtpDataConnection dcon = session.getFtpDataConnection();
+        FtpDataConnectionFactory dcon = session.getFtpDataConnection();
         if(arg.equals("C")) {
             dcon.setSecure(false);
             out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "PROT", null);

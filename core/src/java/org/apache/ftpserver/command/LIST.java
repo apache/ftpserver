@@ -20,11 +20,9 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.SocketException;
 
+import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -35,7 +33,6 @@ import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.LISTFileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * <code>LIST [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
@@ -72,28 +69,25 @@ class LIST extends AbstractCommand {
             
             // get data connection
             out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "LIST", null);
-            OutputStream os = null;
+
+            FtpDataConnection dataConnection;
             try {
-                os = session.getDataOutputStream();
-            }
-            catch(IOException ex) {
-                log.debug("Exception getting the output data stream", ex);
+                dataConnection = session.getFtpDataConnection().openConnection();
+            } catch (Exception e) {
+                log.debug("Exception getting the output data stream", e);
                 out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "LIST", null);
                 return;
             }
             
+            
             // transfer listing data
             boolean failure = false;
-            Writer writer = null;
-            try {
             
-                // open stream
-                writer = new OutputStreamWriter(os, "UTF-8");
-                
+            try {
                 // parse argument
                 ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
                 
-                writer.write(directoryLister.listFiles(parsedArg, session.getFileSystemView(), LIST_FILE_FORMATER));
+                dataConnection.transferToClient(directoryLister.listFiles(parsedArg, session.getFileSystemView(), LIST_FILE_FORMATER));
             }
             catch(SocketException ex) {
                 log.debug("Socket exception during list transfer", ex);
@@ -108,9 +102,6 @@ class LIST extends AbstractCommand {
                 log.debug("Illegal list syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "LIST", null);
-            } finally {
-                writer.flush();
-                IoUtils.close(writer);
             }
             
             // if data transfer ok - send transfer complete message

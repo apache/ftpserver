@@ -19,12 +19,11 @@
 
 package org.apache.ftpserver.command;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.SocketException;
 
+import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
@@ -36,7 +35,6 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
-import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -116,35 +114,22 @@ class STOR extends AbstractCommand {
             
             // get data connection
             out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "STOR", fileName);
-            InputStream is = null;
+            
+            FtpDataConnection dataConnection;
             try {
-                is = session.getDataInputStream();
-            }
-            catch(IOException ex) {
-                log.debug("Exception getting the input data stream", ex);
+                dataConnection = session.getFtpDataConnection().openConnection();
+            } catch (Exception e) {
+                log.debug("Exception getting the input data stream", e);
                 out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOR", fileName);
                 return;
             }
             
-            // get data from client
+            // transfer data
             boolean failure = false;
-            BufferedInputStream bis = null;
-            BufferedOutputStream bos = null;
+            OutputStream outStream = null;
             try {
-            
-                // open streams
-                bis = IoUtils.getBufferedInputStream(is);
-                bos = IoUtils.getBufferedOutputStream( file.createOutputStream(skipLen) );
-                
-                // transfer data
-                TransferRateRequest transferRateRequest = new TransferRateRequest();
-                transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
-                
-                int maxRate = 0;
-                if(transferRateRequest != null) {
-                    maxRate = transferRateRequest.getMaxUploadRate();
-                }
-                long transSz = connection.transfer(bis, bos, maxRate);
+                outStream = file.createOutputStream(skipLen);
+                long transSz = dataConnection.transferFromClient(outStream);
                 
                 // log message
                 String userName = session.getUser().getName();
@@ -165,8 +150,7 @@ class STOR extends AbstractCommand {
                 out.send(FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOR", fileName);
             }
             finally {
-                IoUtils.close(bis);
-                IoUtils.close(bos);
+                IoUtils.close(outStream);
             }
             
             // if data transfer ok - send transfer complete message

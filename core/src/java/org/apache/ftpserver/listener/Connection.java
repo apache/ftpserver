@@ -19,10 +19,6 @@
 
 package org.apache.ftpserver.listener;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 
@@ -63,7 +59,5 @@ interface Connection {
     void beforeSecureControlChannel(String type) throws Exception;
 
     void afterSecureControlChannel(String type) throws Exception;
-
-    long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException;
 }
  

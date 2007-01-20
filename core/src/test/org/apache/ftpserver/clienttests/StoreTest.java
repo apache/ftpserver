@@ -110,7 +110,8 @@ public class StoreTest extends ClientTestTemplate {
 
     public void testStoreWithDirectoryInPlace() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
-        testFile.mkdirs();
+        assertFalse(testFile.exists());
+        assertTrue(testFile.mkdirs());
         
         assertTrue(testFile.exists());
         assertFalse(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(testData)));

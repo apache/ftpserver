@@ -20,11 +20,9 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.SocketException;
 
+import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -36,7 +34,6 @@ import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.MLSTFileFormater;
-import org.apache.ftpserver.util.IoUtils;
 
 /**
  * <code>MLSD [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
@@ -69,29 +66,26 @@ class MLSD extends AbstractCommand {
             
             // get data connection
             out.send(FtpResponse.REPLY_150_FILE_STATUS_OKAY, "MLSD", null);
-            OutputStream os = null;
+
+            
+            // print listing data
+            FtpDataConnection dataConnection;
             try {
-                os = session.getDataOutputStream();
-            }
-            catch(IOException ex) {
-                log.debug("Exception getting the output data stream", ex);
+                dataConnection = session.getFtpDataConnection().openConnection();
+            } catch (Exception e) {
+                log.debug("Exception getting the output data stream", e);
                 out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD", null);
                 return;
             }
             
-            // print listing data
             boolean failure = false;
-            Writer writer = null;
             try {
-                
-                // open stream
-                writer = new OutputStreamWriter(os, "UTF-8");
-                
                 // parse argument
                 ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
                 
                 FileFormater formater = new MLSTFileFormater((String[])session.getAttribute("MLST.types"));
-                writer.write(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
+                
+                dataConnection.transferToClient(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
@@ -106,10 +100,6 @@ class MLSD extends AbstractCommand {
                 log.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLSD", null);
-            }
-            finally {
-                writer.flush();
-                IoUtils.close(writer);
             }
             
             // if data transfer ok - send transfer complete message

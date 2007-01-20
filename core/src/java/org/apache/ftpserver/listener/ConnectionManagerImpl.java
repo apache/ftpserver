@@ -28,7 +28,7 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ftpserver.FtpDataConnection;
+import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -260,7 +260,7 @@ class ConnectionManagerImpl implements ConnectionManager {
                 }
                 
                 // idle data connection
-                FtpDataConnection dataCon = session.getFtpDataConnection();
+                FtpDataConnectionFactory dataCon = session.getFtpDataConnection();
                 if(dataCon == null) {
                     continue;
                 }

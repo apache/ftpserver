@@ -19,18 +19,12 @@
 
 package org.apache.ftpserver.listener;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.IoUtils;
 
 
 /**
@@ -94,67 +88,5 @@ public abstract class AbstractConnection implements Connection {
     protected void notifyObserver() {
         ftpSession.updateLastAccessTime();
         serverContext.getConnectionManager().updateConnection(this);
-    }
-
-
-    /**
-     * Transfer data.
-     */
-    public final long transfer(InputStream in, OutputStream out, int maxRate) throws IOException {
-        
-        BufferedInputStream bis = IoUtils.getBufferedInputStream(in);
-        BufferedOutputStream bos = IoUtils.getBufferedOutputStream( out );
-        
-        boolean isAscii = ftpSession.getDataType() == DataType.ASCII;
-        long startTime = System.currentTimeMillis();
-        long transferredSize = 0L;
-        byte[] buff = new byte[4096];
-        
-        while(true) {
-            
-            // if current rate exceeds the max rate, sleep for 50ms 
-            // and again check the current transfer rate
-            if(maxRate > 0) {
-                
-                // prevent "divide by zero" exception
-                long interval = System.currentTimeMillis() - startTime;
-                if(interval == 0) {
-                    interval = 1;
-                }
-                
-                // check current rate
-                long currRate = (transferredSize*1000L)/interval;
-                if(currRate > maxRate) {
-                    try { Thread.sleep(50); } catch(InterruptedException ex) {break;}
-                    continue;
-                }
-            }
-            
-            // read data
-            int count = bis.read(buff);
-            if(count == -1) {
-                break;
-            }
-            
-            // write data
-            // if ascii, replace \n by \r\n
-            if(isAscii) {
-                for(int i=0; i<count; ++i) {
-                    byte b = buff[i];
-                    if(b == '\n') {
-                        bos.write('\r');
-                    }
-                    bos.write(b);
-                }
-            }
-            else {
-                bos.write(buff, 0, count);
-            }
-            
-            transferredSize += count;
-            notifyObserver();
-        }
-        
-        return transferredSize;
     }
 }

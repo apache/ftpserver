@@ -25,7 +25,7 @@ import java.net.InetSocketAddress;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 
-import org.apache.ftpserver.FtpDataConnection;
+import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -45,13 +45,14 @@ public class MinaConnection extends AbstractConnection {
         this.session = session;
         
         // data connection object
-        FtpDataConnection dataCon = new FtpDataConnection();
-        dataCon.setServerContext(this.serverContext);
-        dataCon.setServerControlAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());
         
         // reader object
         ftpSession = new FtpSessionImpl();
         ftpSession.setClientAddress(((InetSocketAddress)session.getRemoteAddress()).getAddress());
+
+        FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
+        dataCon.setServerControlAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());
+        
         ftpSession.setFtpDataConnection(dataCon);
         
         if(session.getFilterChain().contains("sslFilter")) {

@@ -19,9 +19,6 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
@@ -126,16 +123,6 @@ interface FtpSession {
      * Get structure.
      */
     Structure getStructure();
-    
-    /**
-     * Get data input stream.
-     */
-    InputStream getDataInputStream() throws IOException;
-    
-    /**
-     * Get data output stream.
-     */
-    OutputStream getDataOutputStream() throws IOException;
     
     /**
      * Returns the value of the named attribute as an Object, 

@@ -25,6 +25,7 @@ import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -37,7 +38,7 @@ import org.apache.ftpserver.interfaces.Ssl;
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
-class FtpDataConnection {
+class FtpDataConnectionFactory {
     
     private Log log;
     
@@ -57,15 +58,16 @@ class FtpDataConnection {
     private boolean isZip    = false;
 
     private InetAddress serverControlAddress;
+
+    private FtpSessionImpl session;
     
-    
-    /**
-     * Set the ftp config.
-     */
-    public void setServerContext(FtpServerContext serverContext) {
+    public FtpDataConnectionFactory(FtpServerContext serverContext, FtpSessionImpl session) {
+        this.session = session;
         this.serverContext = serverContext;
         log = serverContext.getLogFactory().getInstance(getClass());
+        
     }
+
     
     /**
      * Close data socket.
@@ -189,10 +191,14 @@ class FtpDataConnection {
         return port;
     }
 
+    public FtpDataConnection openConnection() throws Exception {
+        return new FtpDataConnection(getDataSocket(), session, this);
+    }
+    
     /**
      * Get the data socket. In case of error returns null.
      */
-    public synchronized Socket getDataSocket() {
+    public synchronized Socket getDataSocket() throws Exception {
 
         // get socket depending on the selection
         dataSoc = null;
@@ -230,6 +236,7 @@ class FtpDataConnection {
         catch(Exception ex) {
             closeDataSocket();
             log.warn("FtpDataConnection.getDataSocket()", ex);
+            throw ex;
         }
         
         return dataSoc;

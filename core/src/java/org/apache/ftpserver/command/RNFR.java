@@ -75,7 +75,7 @@ class RNFR extends AbstractCommand {
         else {
             session.setRenameFrom(renFr);
             fileName = renFr.getFullName();
-            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNFR", fileName);    
+            out.send(FtpResponse.REPLY_350_REQUESTED_FILE_ACTION_PENDING_FURTHER_INFORMATION, "RNFR", fileName);    
         }
     }
     

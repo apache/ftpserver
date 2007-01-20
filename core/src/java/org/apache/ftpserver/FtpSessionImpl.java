@@ -19,16 +19,10 @@
 
 package org.apache.ftpserver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.security.cert.Certificate;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
 
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
@@ -59,7 +53,7 @@ public class FtpSessionImpl implements FtpSession {
     private long loginTime = 0L;
     private long lastAccessTime = 0L;
     
-    private FtpDataConnection dataConnection;
+    private FtpDataConnectionFactory dataConnection;
     private FileSystemView fileSystemView;
     
     private FileObject renameFrom;
@@ -89,7 +83,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Set FTP data connection.
      */
-    public void setFtpDataConnection(FtpDataConnection dataCon) {
+    public void setFtpDataConnection(FtpDataConnectionFactory dataCon) {
         dataConnection = dataCon;
     }
     
@@ -146,7 +140,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Get FTP data connection.
      */
-    public FtpDataConnection getFtpDataConnection() {
+    public FtpDataConnectionFactory getFtpDataConnection() {
         return dataConnection;
     }
     
@@ -255,55 +249,7 @@ public class FtpSessionImpl implements FtpSession {
         return remoteAddr;
     }
     
-    /**
-     * Get data input stream. The return value will never be null.
-     */
-    public InputStream getDataInputStream() throws IOException {
-        try {
-            
-            // get data socket
-            Socket dataSoc = dataConnection.getDataSocket();
-            if(dataSoc == null) {
-                throw new IOException("Cannot open data connection.");
-            }
-            
-            // create input stream
-            InputStream is = dataSoc.getInputStream();
-            if(dataConnection.isZipMode()) {
-                is = new InflaterInputStream(is);
-            }
-            return is;
-        }
-        catch(IOException ex) {
-            dataConnection.closeDataSocket();
-            throw ex;
-        }
-    }
-    
-    /**
-     * Get data output stream. The return value will never be null.
-     */
-    public OutputStream getDataOutputStream() throws IOException {
-        try {
-            
-            // get data socket
-            Socket dataSoc = dataConnection.getDataSocket();
-            if(dataSoc == null) {
-                throw new IOException("Cannot open data connection.");
-            }
-            
-            // create output stream
-            OutputStream os = dataSoc.getOutputStream();
-            if(dataConnection.isZipMode()) {
-                os = new DeflaterOutputStream(os);
-            }
-            return os;
-        }
-        catch(IOException ex) {
-            dataConnection.closeDataSocket();
-            throw ex;
-        }
-    }
+
     
     /**
      * Get attribute
