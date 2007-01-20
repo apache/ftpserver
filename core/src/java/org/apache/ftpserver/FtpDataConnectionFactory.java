@@ -23,6 +23,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocket;
+
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
@@ -241,6 +243,13 @@ class FtpDataConnectionFactory {
             closeDataSocket();
             log.warn("FtpDataConnection.getDataSocket()", ex);
             throw ex;
+        }
+        
+        // Make sure we initate the SSL handshake, or we'll
+        // get an error if we turn out not to send any data
+        // e.g. during the listing of an empty dir
+        if(dataSoc instanceof SSLSocket) {
+            ((SSLSocket)dataSoc).startHandshake();
         }
         
         return dataSoc;

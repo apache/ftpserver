@@ -21,10 +21,12 @@ package org.apache.ftpserver.ssl;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.ftpserver.util.IoUtils;
 
 
 public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
@@ -111,5 +113,35 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         
         assertTrue(TEST_FILE2.exists());
         assertEquals(TEST_DATA.length, TEST_FILE2.length());
+    }
+    
+    public void testListEmptyDir() throws Exception {
+        client.setRemoteVerificationEnabled(false);
+        client.enterLocalPassiveMode();
+        
+        client.execPROT("P");
+        
+        File dir = new File(ROOT_DIR, "dir");
+        dir.mkdir();
+        
+        client.listFiles(dir.getName());
+    }
+
+    public void testReceiveEmptyFile() throws Exception {
+        client.setRemoteVerificationEnabled(false);
+        client.enterLocalPassiveMode();
+        
+        client.execPROT("P");
+        
+        File file = new File(ROOT_DIR, "foo");
+        file.createNewFile();
+        
+        InputStream is = null;
+        try {
+            is = client.retrieveFileStream(file.getName());
+            assertEquals(-1, is.read(new byte[1024]));
+        } finally {
+            IoUtils.close(is);
+        }
     }
 }

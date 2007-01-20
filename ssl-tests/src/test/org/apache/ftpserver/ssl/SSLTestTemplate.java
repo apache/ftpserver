@@ -50,7 +50,7 @@ public abstract class SSLTestTemplate extends TestCase {
 
     private static final Log log = LogFactory.getLog(SSLTestTemplate.class);
 
-    private static final int DEFAULT_PORT = 12321;
+    private static final int DEFAULT_PORT = 12322;
 
     protected static final String ADMIN_PASSWORD = "admin";
 
@@ -216,6 +216,8 @@ public abstract class SSLTestTemplate extends TestCase {
             } catch (FTPConnectionClosedException e) {
                 // try again
             }
+            
+            System.out.println("Retrying!");
             Thread.sleep(500);
             attempts++;
         }
