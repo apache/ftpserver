@@ -31,17 +31,13 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FtpSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 
 /**
- * We can get the ftp data connection using this class.
- * It uses either PORT or PASV command.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
+ * An active open data connection, used for transfering data over the 
+ * data connection.
  */
 public
 class FtpDataConnection {
@@ -108,7 +104,11 @@ class FtpDataConnection {
     }
     
     /**
-     * Transfer data.
+     * Transfer data from the client (e.g. STOR).
+     * @param out The {@link OutputStream} containing the destination
+     * of the data from the client.
+     * @return The length of the transefered data
+     * @throws IOException
      */
     public final long transferFromClient(OutputStream out) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
@@ -126,6 +126,12 @@ class FtpDataConnection {
         }
     }
 
+    /**
+     * Transfer data to the client (e.g. RETR).
+     * @param in Data to be transfered to the client
+     * @return The length of the transefered data
+     * @throws IOException
+     */
     public final long transferToClient(InputStream in) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
         transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
@@ -142,6 +148,11 @@ class FtpDataConnection {
         }
     }
     
+    /**
+     * Transfer a string to the client, e.g. during LIST
+     * @param str The string to transfer
+     * @throws IOException
+     */
     public final void transferToClient(String str) throws IOException {
         OutputStream out = getDataOutputStream();
         Writer writer = null;

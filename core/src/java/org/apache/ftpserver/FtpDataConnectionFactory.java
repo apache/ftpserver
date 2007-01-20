@@ -25,7 +25,6 @@ import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -191,6 +190,11 @@ class FtpDataConnectionFactory {
         return port;
     }
 
+    /**
+     * Open an active data connection
+     * @return The open data connection
+     * @throws Exception
+     */
     public FtpDataConnection openConnection() throws Exception {
         return new FtpDataConnection(getDataSocket(), session, this);
     }
@@ -198,7 +202,7 @@ class FtpDataConnectionFactory {
     /**
      * Get the data socket. In case of error returns null.
      */
-    public synchronized Socket getDataSocket() throws Exception {
+    private synchronized Socket getDataSocket() throws Exception {
 
         // get socket depending on the selection
         dataSoc = null;
