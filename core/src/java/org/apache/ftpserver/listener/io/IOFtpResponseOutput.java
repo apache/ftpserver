@@ -22,7 +22,6 @@ package org.apache.ftpserver.listener.io;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import org.apache.ftpserver.FtpWriter;
@@ -32,7 +31,12 @@ import org.apache.ftpserver.util.IoUtils;
 public class IOFtpResponseOutput extends FtpWriter {
 
     private Writer writer;
-    private InetAddress serverAddress;
+
+    public IOFtpResponseOutput(Socket controlSocket) throws IOException {
+        if(controlSocket != null) {
+            writer = new OutputStreamWriter(controlSocket.getOutputStream(), "UTF-8");
+        }
+    }
 
     public void write(FtpResponse response) throws IOException {
 
@@ -47,7 +51,6 @@ public class IOFtpResponseOutput extends FtpWriter {
      * Set the control socket.
      */
     public void setControlSocket(Socket soc) throws IOException {
-        serverAddress = soc.getLocalAddress();
         writer = new OutputStreamWriter(soc.getOutputStream(), "UTF-8");
     }
         
@@ -57,10 +60,4 @@ public class IOFtpResponseOutput extends FtpWriter {
     public void close() {
         IoUtils.close(writer);
     }
-
-    protected InetAddress getFallbackServerAddress() {
-        return serverAddress;
-    }
-
-    
 }

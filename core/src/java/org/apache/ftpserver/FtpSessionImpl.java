@@ -28,14 +28,15 @@ import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.FtpServerSession;
 
 /**
  * FTP session
  */
-public class FtpSessionImpl implements FtpSession {
+public class FtpSessionImpl implements FtpServerSession {
 
     
     /**
@@ -45,6 +46,7 @@ public class FtpSessionImpl implements FtpSession {
     private User user;
     private HashMap attributeMap;
     private InetAddress remoteAddr;
+    private InetAddress serverAddr;
     private String language;
     private Certificate[] clientCertificates;
     
@@ -62,11 +64,13 @@ public class FtpSessionImpl implements FtpSession {
     
     private DataType dataType    = DataType.ASCII;
     private Structure structure  = Structure.FILE;
+    private FtpServerContext serverContext;
     
     /**
      * Default constructor.
      */
-    public FtpSessionImpl() {
+    public FtpSessionImpl(FtpServerContext serverContext) {
+        this.serverContext = serverContext;
         attributeMap = new HashMap();
         userArgument = null;
         user = null;
@@ -352,5 +356,17 @@ public class FtpSessionImpl implements FtpSession {
     
     public void setClientCertificates(Certificate[] certificates) {
         this.clientCertificates = certificates;
+    }
+
+    public InetAddress getServerAddress() {
+        return serverAddr;
+    }
+
+    public void setServerAddress(InetAddress adress) {
+        this.serverAddr = adress;
+    }
+
+    public FtpServerContext getServerContext() {
+        return serverContext;
     }
 }

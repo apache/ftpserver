@@ -38,6 +38,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 public class FtpProtocolHandler {
     
@@ -88,7 +89,7 @@ public class FtpProtocolHandler {
             IpRestrictor ipRestrictor = serverContext.getIpRestrictor();
             if( !ipRestrictor.hasPermission(clientAddr) ) {
                 log.warn("No permission to access from " + hostAddress);
-                writer.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "ip.restricted", null);
+                writer.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "ip.restricted", null));
                 return;
             }
             
@@ -97,12 +98,12 @@ public class FtpProtocolHandler {
             
             if(maxConnections != 0 && ftpStat.getCurrentConnectionNumber() > maxConnections) {
                 log.warn("Maximum connection limit reached.");
-                writer.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "connection.limit", null);
+                writer.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "connection.limit", null));
                 return;
             }
             
             // everything is fine - go ahead 
-            writer.send(FtpResponse.REPLY_220_SERVICE_READY, null, null);
+            writer.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_220_SERVICE_READY, null, null));
         }
     }
     
@@ -110,7 +111,7 @@ public class FtpProtocolHandler {
         session.setCurrentRequest(request);
         
         if(!hasPermission(session, request)) {
-            writer.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "permission", null);
+            writer.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "permission", null));
             return;
         }
 
@@ -182,14 +183,14 @@ public class FtpProtocolHandler {
                 command.execute(connection, request, session, out);
             }
             else {
-                out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "not.implemented", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "not.implemented", null));
             }
         }
         catch(Exception ex) {
             
             // send error reply
             try { 
-                out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, null, null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, null, null));
             }
             catch(Exception ex1) {
             }

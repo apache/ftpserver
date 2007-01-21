@@ -19,11 +19,11 @@
 
 package org.apache.ftpserver.socketfactory;
 
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
-
 import java.net.InetAddress;
 import java.net.ServerSocket;
+
+import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
 
 
 /**

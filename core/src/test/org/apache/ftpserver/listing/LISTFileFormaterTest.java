@@ -27,7 +27,6 @@ import java.util.Date;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.listing.LISTFileFormater;
 
 public class LISTFileFormaterTest extends TestCase {
 

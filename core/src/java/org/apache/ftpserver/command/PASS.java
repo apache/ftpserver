@@ -42,6 +42,7 @@ import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>PASS &lt;SP&gt; <password> &lt;CRLF&gt;</code><br>
@@ -76,7 +77,7 @@ class PASS extends AbstractCommand {
             // argument check
             String password = request.getArgument();
             if(password == null) {
-                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PASS", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PASS", null));
                 return; 
             }
             
@@ -84,13 +85,13 @@ class PASS extends AbstractCommand {
             String userName = session.getUserArgument();
 
             if(userName == null && session.getUser() == null) {
-                out.send(FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PASS", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PASS", null));
                 return;
             }
             
             // already logged-in
             if(session.isLoggedIn()) {
-                out.send(FtpResponse.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS", null));
                 success = true;
                 return;
             }
@@ -100,7 +101,7 @@ class PASS extends AbstractCommand {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
             if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
                 return;
             }
             
@@ -108,7 +109,7 @@ class PASS extends AbstractCommand {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
-                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.login", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.login", null));
                 return;
             }
             
@@ -181,7 +182,7 @@ class PASS extends AbstractCommand {
                 session.setMaxIdleTime(oldMaxIdleTime);
                 
                 log.warn("Login failure - " + userName);
-                out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "PASS", userName);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
                 stat.setLoginFail(connection);
                 return;
             }
@@ -193,7 +194,7 @@ class PASS extends AbstractCommand {
             stat.setLogin(connection);
 
             // everything is fine - send login ok message
-            out.send(FtpResponse.REPLY_230_USER_LOGGED_IN, "PASS", userName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_230_USER_LOGGED_IN, "PASS", userName));
             if(anonymous) {
                 log.info("Anonymous login success - " + password);
             }

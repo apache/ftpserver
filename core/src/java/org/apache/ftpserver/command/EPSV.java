@@ -27,6 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * The EPSV command requests that a server listen on a data port and
@@ -59,7 +60,7 @@ class EPSV extends AbstractCommand {
         // set data connection
         FtpDataConnectionFactory dataCon = session.getFtpDataConnection();
         if (!dataCon.setPasvCommand()) {
-            out.send(FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null));
             return;   
         }
         
@@ -68,6 +69,6 @@ class EPSV extends AbstractCommand {
         
         // send connection info to client
         String portStr = "|||" + servPort + '|';
-        out.send(229, "EPSV", portStr);
+        out.write(FtpReplyUtil.translate(session, 229, "EPSV", portStr));
     }
 }

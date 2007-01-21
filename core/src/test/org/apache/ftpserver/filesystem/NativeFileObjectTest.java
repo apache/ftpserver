@@ -22,11 +22,11 @@ package org.apache.ftpserver.filesystem;
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.util.IoUtils;
-
-import junit.framework.TestCase;
 
 public class NativeFileObjectTest extends TestCase {
 

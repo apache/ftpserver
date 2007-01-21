@@ -34,6 +34,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
+import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.StringUtils;
 
 
@@ -60,7 +61,7 @@ class SITE_WHO extends AbstractCommand {
         UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         

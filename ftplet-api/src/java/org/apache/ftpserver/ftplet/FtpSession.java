@@ -46,6 +46,8 @@ interface FtpSession {
      */
     InetAddress getClientAddress();
     
+    InetAddress getServerAddress();
+    
     Certificate[] getClientCertificates();
     
     /**

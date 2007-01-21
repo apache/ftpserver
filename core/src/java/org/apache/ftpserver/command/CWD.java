@@ -28,6 +28,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>CWD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -71,10 +72,10 @@ class CWD extends AbstractCommand {
         }
         if(success) {
             dirName = fsview.getCurrentDirectory().getFullName();
-            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CWD", dirName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CWD", dirName));
         }
         else {
-            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "CWD", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "CWD", null));
         }
     }
 }

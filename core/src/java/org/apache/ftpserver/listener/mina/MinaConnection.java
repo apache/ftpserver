@@ -47,8 +47,9 @@ public class MinaConnection extends AbstractConnection {
         // data connection object
         
         // reader object
-        ftpSession = new FtpSessionImpl();
+        ftpSession = new FtpSessionImpl(serverContext);
         ftpSession.setClientAddress(((InetSocketAddress)session.getRemoteAddress()).getAddress());
+        ftpSession.setServerAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());
 
         FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
         dataCon.setServerControlAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());

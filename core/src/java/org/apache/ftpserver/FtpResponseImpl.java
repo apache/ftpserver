@@ -54,7 +54,8 @@ public class FtpResponseImpl implements FtpResponse {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        String notNullMessage = message;
+        int code = getCode();
+        String notNullMessage = getMessage();
         if(notNullMessage == null) {
             notNullMessage = "";
         }

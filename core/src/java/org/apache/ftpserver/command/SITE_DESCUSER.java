@@ -33,6 +33,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WriteRequest;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * This SITE command returns the specified user information.
@@ -57,7 +58,7 @@ class SITE_DESCUSER extends AbstractCommand {
         UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         
@@ -65,7 +66,7 @@ class SITE_DESCUSER extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if(spIndex == -1) {
-            out.send(FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null));
             return;
         }
         String userName = argument.substring(spIndex + 1);
@@ -84,7 +85,7 @@ class SITE_DESCUSER extends AbstractCommand {
             user = null;
         }
         if(user == null) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName));
             return;
         }
         

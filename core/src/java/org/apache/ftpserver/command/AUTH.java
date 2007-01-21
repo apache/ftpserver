@@ -29,6 +29,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * This server supports explicit SSL support.
@@ -52,7 +53,7 @@ class AUTH extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
             return;  
         }
         
@@ -60,7 +61,7 @@ class AUTH extends AbstractCommand {
         FtpServerContext serverContext = connection.getServerContext();
         Log log = serverContext.getLogFactory().getInstance(getClass());
         if(serverContext.getSocketFactory().getSSL() == null) {
-            out.send(431, "AUTH", null);
+            out.write(FtpReplyUtil.translate(session, 431, "AUTH", null));
             return;
         }
         
@@ -69,7 +70,7 @@ class AUTH extends AbstractCommand {
         if(authType.equals("SSL")) {
             try {
                 connection.beforeSecureControlChannel("SSL");
-                out.send(234, "AUTH.SSL", null);
+                out.write(FtpReplyUtil.translate(session, 234, "AUTH.SSL", null));
                 connection.afterSecureControlChannel("SSL");
             } catch(FtpException ex) {
                 throw ex;
@@ -81,7 +82,7 @@ class AUTH extends AbstractCommand {
         else if(authType.equals("TLS")) {
             try {
                 connection.beforeSecureControlChannel("TLS");
-                out.send(234, "AUTH.TLS", null);
+                out.write(FtpReplyUtil.translate(session, 234, "AUTH.TLS", null));
                 connection.afterSecureControlChannel("TLS");
             } catch(FtpException ex) {
                 throw ex;
@@ -91,7 +92,7 @@ class AUTH extends AbstractCommand {
             }
         }
         else {
-            out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null));
         }
     }
 }

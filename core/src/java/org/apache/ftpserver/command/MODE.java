@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>MODE &lt;SP&gt; <mode-code> &lt;CRLF&gt;</code><br>
@@ -52,7 +53,7 @@ class MODE extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MODE", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MODE", null));
             return;  
         }
         
@@ -61,14 +62,14 @@ class MODE extends AbstractCommand {
         md = Character.toUpperCase(md);
         if(md == 'S') {
             session.getFtpDataConnection().setZipMode(false);
-            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "S");
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "S"));
         }
         else if(md == 'Z') {
             session.getFtpDataConnection().setZipMode(true);
-            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "Z");
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "MODE", "Z"));
         }
         else {
-            out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MODE", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MODE", null));
         }
     }
 }

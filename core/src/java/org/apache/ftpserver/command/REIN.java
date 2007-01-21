@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
   * <code>REIN &lt;CRLF&gt;</code><br>
@@ -48,6 +49,6 @@ class REIN extends AbstractCommand {
         
         session.reinitialize();
         session.setLanguage(null);
-        out.send(FtpResponse.REPLY_220_SERVICE_READY, "REIN", null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_220_SERVICE_READY, "REIN", null));
     }   
 }

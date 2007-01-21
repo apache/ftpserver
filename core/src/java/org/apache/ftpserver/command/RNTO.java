@@ -32,6 +32,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>RNTO &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -59,7 +60,7 @@ class RNTO extends AbstractCommand {
             // argument check
             String toFileStr = request.getArgument();
             if(toFileStr == null) {
-                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RNTO", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RNTO", null));
                 return;  
             }
             
@@ -84,7 +85,7 @@ class RNTO extends AbstractCommand {
             // get the "rename from" file object
             FileObject frFile = session.getRenameFrom();
             if( frFile == null ) {
-                out.send(FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "RNTO", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "RNTO", null));
                 return;
             }
             
@@ -97,26 +98,26 @@ class RNTO extends AbstractCommand {
                 log.debug("Exception getting file object", ex);
             }
             if(toFile == null) {
-                out.send(FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.invalid", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.invalid", null));
                 return;
             }
             toFileStr = toFile.getFullName();
             
             // check permission
             if( !toFile.hasWritePermission() ) {
-                out.send(FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.permission", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.permission", null));
                 return;
             }
             
             // check file existance
             if( !frFile.doesExist() ) {
-                out.send(FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.missing", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.missing", null));
                 return;
             }
             
             // now rename
             if( frFile.move(toFile) ) { 
-                out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO", toFileStr);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO", toFileStr));
 
                 Log log = serverContext.getLogFactory().getInstance(getClass());
                 log.info("File rename (" + session.getUser().getName() + ") " 
@@ -135,7 +136,7 @@ class RNTO extends AbstractCommand {
                 }
             }
             else {
-                out.send(FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO", toFileStr);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO", toFileStr));
             }
         
         }

@@ -27,6 +27,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * The FEAT command (introduced in [RFC-2389]) allows servers with
@@ -47,6 +48,6 @@ class FEAT extends AbstractCommand {
         // reset state variables
         session.resetState();
         
-        out.send(FtpResponse.REPLY_211_SYSTEM_STATUS_REPLY, "FEAT", null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_211_SYSTEM_STATUS_REPLY, "FEAT", null));
     }
 }

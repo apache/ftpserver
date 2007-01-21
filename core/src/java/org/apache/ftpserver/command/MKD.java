@@ -33,6 +33,7 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>MKD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -63,7 +64,7 @@ class MKD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null));
             return;  
         }
         
@@ -93,26 +94,26 @@ class MKD extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName));
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasWritePermission() ) {
-            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.permission", fileName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.permission", fileName));
             return;
         }
         
         // check file existance
         if(file.doesExist()) {
-            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.exists", fileName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.exists", fileName));
             return;
         }
         
         // now create directory
         if(file.mkdir()) {
-            out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MKD", fileName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MKD", fileName));
             
             // write log message
             String userName = session.getUser().getName();
@@ -137,7 +138,7 @@ class MKD extends AbstractCommand {
 
         }
         else {
-            out.send(FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName));
         }
     }
 }

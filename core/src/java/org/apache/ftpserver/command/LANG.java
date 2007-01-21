@@ -28,6 +28,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * A new command "LANG" is added to the FTP command set to allow
@@ -54,7 +55,7 @@ class LANG extends AbstractCommand {
         String language = request.getArgument();
         if(language == null) {
             session.setLanguage(null);
-            out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "LANG", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "LANG", null));
             return;
         }
         
@@ -66,13 +67,13 @@ class LANG extends AbstractCommand {
             for(int i=0; i<availableLanguages.length; ++i) {
                 if(availableLanguages[i].equals(language)) {
                     session.setLanguage(language);
-                    out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "LANG", null);
+                    out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "LANG", null));
                     return;
                 }
             }
         }
         
         // not found - send error message
-        out.send(FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "LANG", null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "LANG", null));
     }
 }

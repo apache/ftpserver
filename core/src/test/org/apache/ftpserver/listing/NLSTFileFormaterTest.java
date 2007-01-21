@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.listing.NLSTFileFormater;
 
 public class NLSTFileFormaterTest extends TestCase {
 

@@ -32,6 +32,7 @@ import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.MLSTFileFormater;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>MLST &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -62,14 +63,14 @@ class MLST extends AbstractCommand {
             file = session.getFileSystemView().getFileObject(parsedArg.getFile());
             if(file != null && file.doesExist()) {
                 FileFormater formater = new MLSTFileFormater((String[])session.getAttribute("MLST.types"));
-                out.send(FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MLST", formater.format(file));
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MLST", formater.format(file)));
             } else {            
-                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLST", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLST", null));
             }
         }
         catch(FtpException ex) {
             log.debug("Exception sending the file listing", ex);
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLST", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLST", null));
         }     
     }   
 }

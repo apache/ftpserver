@@ -49,8 +49,8 @@ import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
-import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WritePermission;
 
 /**

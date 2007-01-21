@@ -21,10 +21,10 @@ package org.apache.ftpserver.usermanager;
 
 
 
+import junit.framework.TestCase;
+
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
-
-import junit.framework.TestCase;
 
 public class BaseUserTest extends TestCase {
     

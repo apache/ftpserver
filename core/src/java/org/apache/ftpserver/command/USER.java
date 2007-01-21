@@ -33,6 +33,7 @@ import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
@@ -68,7 +69,7 @@ class USER extends AbstractCommand {
             // argument check
             String userName = request.getArgument();
             if(userName == null) {
-                out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "USER", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "USER", null));
                 return;  
             }
             
@@ -76,11 +77,11 @@ class USER extends AbstractCommand {
             BaseUser user = (BaseUser)session.getUser();
             if(session.isLoggedIn()) {
                 if( userName.equals(user.getName()) ) {
-                    out.send(FtpResponse.REPLY_230_USER_LOGGED_IN, "USER", null);
+                    out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_230_USER_LOGGED_IN, "USER", null));
                     success = true;
                 }
                 else {
-                    out.send(530, "USER.invalid", null);
+                    out.write(FtpReplyUtil.translate(session, 530, "USER.invalid", null));
                 }
                 return;
             }
@@ -88,7 +89,7 @@ class USER extends AbstractCommand {
             // anonymous login is not enabled
             boolean anonymous = userName.equals("anonymous");
             if( anonymous && (!conManager.isAnonymousLoginEnabled()) ) {
-                out.send(FtpResponse.REPLY_530_NOT_LOGGED_IN, "USER.anonymous", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "USER.anonymous", null));
                 return;
             }
             
@@ -96,7 +97,7 @@ class USER extends AbstractCommand {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = conManager.getMaxAnonymousLogins();
             if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.anonymous", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.anonymous", null));
                 return;
             }
             
@@ -104,7 +105,7 @@ class USER extends AbstractCommand {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
-                out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null));
                 return;
             }
             
@@ -117,7 +118,7 @@ class USER extends AbstractCommand {
                         stat.getCurrentUserLoginNumber(configUser, session.getClientAddress()) + 1);
                 
                 if(configUser.authorize(loginRequest) == null) {
-                    out.send(FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null);
+                    out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null));
                     return;
                 }
             }
@@ -126,10 +127,10 @@ class USER extends AbstractCommand {
             success = true;
             session.setUserArgument(userName);
             if(anonymous) {
-                out.send(FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER.anonymous", userName);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER.anonymous", userName));
             }
             else {
-                out.send(FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER", userName);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER", userName));
             }
         }
         finally {

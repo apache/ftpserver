@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>ACCT &lt;CRLF&gt;</code><br>
@@ -50,7 +51,7 @@ class ACCT extends AbstractCommand {
         session.resetState();
         
         // and abort any data connection
-        out.send(FtpResponse.REPLY_202_COMMAND_NOT_IMPLEMENTED, "ACCT", null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_202_COMMAND_NOT_IMPLEMENTED, "ACCT", null));
     }   
 }
 

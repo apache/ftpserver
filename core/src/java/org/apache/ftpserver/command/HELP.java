@@ -27,6 +27,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>HELP [&lt;SP&gt; <string>] &lt;CRLF&gt;</code><br>
@@ -55,7 +56,7 @@ class HELP extends AbstractCommand {
         
         // print global help
         if(!request.hasArgument()) {
-            out.send(FtpResponse.REPLY_214_HELP_MESSAGE, null, null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_214_HELP_MESSAGE, null, null));
             return;
         }
         
@@ -65,6 +66,6 @@ class HELP extends AbstractCommand {
         if(resource.getMessage(FtpResponse.REPLY_214_HELP_MESSAGE, ftpCmd, session.getLanguage()) == null) {
             ftpCmd = null;
         }
-        out.send(FtpResponse.REPLY_214_HELP_MESSAGE, ftpCmd, null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_214_HELP_MESSAGE, ftpCmd, null));
     }
 }

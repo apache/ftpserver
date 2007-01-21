@@ -21,8 +21,6 @@ package org.apache.ftpserver.listing;
 
 import java.util.Arrays;
 
-import org.apache.ftpserver.listing.ListArgument;
-
 import junit.framework.TestCase;
 
 public class ListArgumentTest extends TestCase {

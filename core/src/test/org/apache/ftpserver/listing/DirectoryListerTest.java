@@ -25,10 +25,6 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.filesystem.NativeFileSystemView;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.listing.DirectoryLister;
-import org.apache.ftpserver.listing.FileFormater;
-import org.apache.ftpserver.listing.ListArgument;
-import org.apache.ftpserver.listing.NLSTFileFormater;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.util.IoUtils;

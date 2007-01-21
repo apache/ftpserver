@@ -19,9 +19,6 @@
 
 package org.apache.ftpserver.listing;
 
-import org.apache.ftpserver.listing.ListArgument;
-import org.apache.ftpserver.listing.ListArgumentParser;
-
 import junit.framework.TestCase;
 
 public class ListArgumentParserTest extends TestCase {

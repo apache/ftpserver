@@ -54,8 +54,6 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
         session.setAttribute(CONNECTION_KEY, connection);
         
         MinaFtpResponseOutput output = new MinaFtpResponseOutput(session);
-        output.setServerContext(serverContext);
-        output.setFtpSession(connection.getSession());
         
         session.setAttribute(OUTPUT_KEY, output);
     }

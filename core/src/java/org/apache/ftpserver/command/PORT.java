@@ -30,6 +30,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>
@@ -67,20 +68,20 @@ class PORT extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
             return;  
         }
         
         StringTokenizer st = new StringTokenizer(request.getArgument(), ",");
         if(st.countTokens() != 6) {
-            out.send(510, "PORT", null);
+            out.write(FtpReplyUtil.translate(session, 510, "PORT", null));
             return;
         }
         
         // is port enabled
         DataConnectionConfig dataCfg = connection.getServerContext().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
-            out.send(510, "PORT.disabled", null);
+            out.write(FtpReplyUtil.translate(session, 510, "PORT.disabled", null));
             return;
         } 
         
@@ -93,7 +94,7 @@ class PORT extends AbstractCommand {
         }
         catch(UnknownHostException ex) {
             log.debug("Unknown host: " + dataSrvName, ex);
-            out.send(FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
             return;
         }
         
@@ -101,7 +102,7 @@ class PORT extends AbstractCommand {
         if(dataCfg.isActiveIpCheck()) {
             InetAddress clientAddr = session.getClientAddress();
             if(!dataAddr.equals(clientAddr)) {
-                out.send(510, "PORT.mismatch", null);
+                out.write(FtpReplyUtil.translate(session, 510, "PORT.mismatch", null));
                 return;
             }
         }
@@ -115,12 +116,12 @@ class PORT extends AbstractCommand {
         }
         catch(NumberFormatException ex) {
             log.debug("Invalid data port: " + request.getArgument(), ex);
-            out.send(FtpResponse.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null); 
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
             return; 
         }
         
         session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
-        out.send(FtpResponse.REPLY_200_COMMAND_OKAY, "PORT", null);
+        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
     
 }

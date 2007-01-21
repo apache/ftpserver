@@ -29,6 +29,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpResponse;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.util.FtpReplyUtil;
 
 
 /**
@@ -59,7 +60,7 @@ class OPTS extends AbstractCommand {
         // no params
         String argument = request.getArgument();
         if(argument == null) {
-            out.send(FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null));
             return;
         }
         
@@ -79,13 +80,13 @@ class OPTS extends AbstractCommand {
             }
             else {
                 session.resetState();
-                out.send(FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument);
+                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument));
             }
         }
         catch(Exception ex) {
             log.warn("OPTS.execute()", ex);
             session.resetState();
-            out.send(FtpResponse.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null);
+            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null));
         }
     }
     

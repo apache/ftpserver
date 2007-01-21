@@ -19,8 +19,8 @@
 
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.listener.ConnectionManager;
 
 /**

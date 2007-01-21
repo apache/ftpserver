@@ -72,8 +72,9 @@ public class IOConnection extends AbstractConnection implements Runnable {
         // data connection object
         
         // reader object
-        ftpSession = new FtpSessionImpl();
+        ftpSession = new FtpSessionImpl(serverContext);
         ftpSession.setClientAddress(this.controlSocket.getInetAddress());
+        ftpSession.setServerAddress(this.controlSocket.getLocalAddress());
 
         FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
@@ -91,10 +92,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
         }
         
         // writer object
-        writer = new IOFtpResponseOutput();
-        writer.setControlSocket(this.controlSocket);
-        writer.setServerContext(this.serverContext);
-        writer.setFtpSession(ftpSession);
+        writer = new IOFtpResponseOutput(this.controlSocket);
     }
     
     /**
