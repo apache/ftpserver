@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -52,7 +52,7 @@ class EPSV extends AbstractCommand {
     public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException {
+                        FtpReplyOutput out) throws IOException {
         
         // reset state variables
         session.resetState();

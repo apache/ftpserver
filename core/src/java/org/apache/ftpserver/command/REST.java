@@ -22,7 +22,7 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -49,7 +49,7 @@ class REST extends AbstractCommand {
     public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException {
+                        FtpReplyOutput out) throws IOException {
         
         // argument check
         String argument = request.getArgument();

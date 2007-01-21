@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -53,7 +53,7 @@ class OPTS_MLST extends AbstractCommand {
     public void execute(Connection connection,
                         FtpRequest request, 
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException, FtpException {
+                        FtpReplyOutput out) throws IOException, FtpException {
         
         // reset state
         session.resetState();

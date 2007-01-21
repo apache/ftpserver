@@ -26,8 +26,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -51,7 +51,7 @@ class MD5 extends AbstractCommand {
     public void execute(Connection connection,
                         FtpRequest request, 
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException {
+                        FtpReplyOutput out) throws IOException {
         
         // reset state variables
         session.resetState();

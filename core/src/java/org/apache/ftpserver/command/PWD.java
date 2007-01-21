@@ -22,9 +22,9 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -47,7 +47,7 @@ class PWD extends AbstractCommand {
     public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException, FtpException {
+                        FtpReplyOutput out) throws IOException, FtpException {
         session.resetState();
         FileSystemView fsview = session.getFileSystemView();
         String currDir = fsview.getCurrentDirectory().getFullName();

@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
@@ -61,7 +61,7 @@ class PORT extends AbstractCommand {
     public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException {
+                        FtpReplyOutput out) throws IOException {
         
         // reset state variables
         session.resetState();

@@ -23,12 +23,12 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -62,7 +62,7 @@ class PASS extends AbstractCommand {
     public void execute(Connection connection, 
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException, FtpException {
+                        FtpReplyOutput out) throws IOException, FtpException {
     
         boolean success = false;
         FtpServerContext serverContext = connection.getServerContext();

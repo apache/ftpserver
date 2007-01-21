@@ -22,9 +22,9 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
@@ -46,7 +46,7 @@ class SIZE extends AbstractCommand {
     public void execute(Connection connection,
                         FtpRequest request,
                         FtpSessionImpl session, 
-                        FtpWriter out) throws IOException, FtpException {
+                        FtpReplyOutput out) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
