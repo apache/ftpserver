@@ -30,7 +30,7 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
@@ -106,31 +106,31 @@ class STOU extends AbstractCommand {
                 log.debug("Exception getting file object", ex);
             }
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
                 return;
             }
             String fileName = file.getFullName();
             
             // check permission
             if(!file.hasWritePermission()) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU.permission", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU.permission", fileName));
                 return;
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_150_FILE_STATUS_OKAY, "STOU", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "STOU", null));
             
             // get data from client
             boolean failure = false;
             OutputStream os = null;
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "STOU", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "STOU", fileName));
             
             FtpDataConnection dataConnection;
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
                 log.debug("Exception getting the input data stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName));
                 return;
             }
             
@@ -155,12 +155,12 @@ class STOU extends AbstractCommand {
             catch(SocketException ex) {
                 log.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName));
             }
             catch(IOException ex) {
                 log.debug("IOException during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName));
             }
             finally {
                 IoUtils.close(os);
@@ -168,7 +168,7 @@ class STOU extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName));
                 
                 // call Ftplet.onUploadUniqueEnd() method
                 try {

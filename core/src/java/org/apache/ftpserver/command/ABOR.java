@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -58,6 +58,6 @@ class ABOR extends AbstractCommand {
         
         // and abort any data connection
         session.getFtpDataConnection().closeDataSocket();
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "ABOR", null));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "ABOR", null));
     }   
 }

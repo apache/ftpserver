@@ -22,7 +22,7 @@ package org.apache.ftpserver.listener.mina;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
@@ -30,7 +30,7 @@ import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
 
 /**
- * A {@link MessageEncoder} that encodes {@link FtpResponse}.
+ * A {@link MessageEncoder} that encodes {@link FtpReply}.
  */
 public class FtpResponseEncoder extends ProtocolEncoderAdapter
 {
@@ -39,7 +39,7 @@ public class FtpResponseEncoder extends ProtocolEncoderAdapter
     public void encode( IoSession session, Object message,
             ProtocolEncoderOutput out ) throws Exception
     {
-        FtpResponse ftpResponse = (FtpResponse) message;
+        FtpReply ftpResponse = (FtpReply) message;
         
         ByteBuffer buf = ByteBuffer.allocate( 256 );
 

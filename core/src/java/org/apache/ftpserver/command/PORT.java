@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -68,7 +68,7 @@ class PORT extends AbstractCommand {
         
         // argument check
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
             return;  
         }
         
@@ -94,7 +94,7 @@ class PORT extends AbstractCommand {
         }
         catch(UnknownHostException ex) {
             log.debug("Unknown host: " + dataSrvName, ex);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
             return;
         }
         
@@ -116,12 +116,12 @@ class PORT extends AbstractCommand {
         }
         catch(NumberFormatException ex) {
             log.debug("Invalid data port: " + request.getArgument(), ex);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
             return; 
         }
         
         session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "PORT", null));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
     
 }

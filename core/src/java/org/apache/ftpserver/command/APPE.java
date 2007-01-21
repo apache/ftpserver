@@ -30,7 +30,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -71,7 +71,7 @@ class APPE extends AbstractCommand {
             // argument check
             String fileName = request.getArgument();
             if(fileName == null) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "APPE", null));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "APPE", null));
                 return;  
             }
             
@@ -101,32 +101,32 @@ class APPE extends AbstractCommand {
                 log.debug("File system threw exception", e);
             }
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
                 return;
             }
             fileName = file.getFullName();
             
             // check file existance
             if(file.doesExist() && !file.isFile()) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
                 return;
             }
             
             // check permission
             if( !file.hasWritePermission()) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.permission", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.permission", fileName));
                 return;
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_150_FILE_STATUS_OKAY, "APPE", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "APPE", fileName));
             
             FtpDataConnection dataConnection;
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
                 log.debug("Exception when getting data input stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE", fileName));
                 return;
             }
              
@@ -159,12 +159,12 @@ class APPE extends AbstractCommand {
             catch(SocketException e) {
                 log.debug("SocketException during file upload", e);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "APPE", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "APPE", fileName));
             }
             catch(IOException e) {
                 log.debug("IOException during file upload", e);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "APPE", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "APPE", fileName));
             }
             finally {
                 IoUtils.close(os);
@@ -172,7 +172,7 @@ class APPE extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));
                 
                 // call Ftplet.onAppendEnd() method
                 try {

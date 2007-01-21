@@ -20,7 +20,7 @@
 package org.apache.ftpserver;
 
 import org.apache.commons.logging.Log;
-import org.apache.ftpserver.ftplet.FtpResponseOutput;
+import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.listener.ConnectionObserver;
 
 /**
@@ -28,7 +28,7 @@ import org.apache.ftpserver.listener.ConnectionObserver;
  *
  * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
-public abstract class FtpWriter implements FtpResponseOutput {
+public abstract class FtpWriter implements FtpReplyOutput {
 
     protected Log log;
     private ConnectionObserver observer;

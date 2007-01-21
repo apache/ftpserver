@@ -25,7 +25,7 @@ import java.io.Writer;
 import java.net.Socket;
 
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.util.IoUtils;
 
 public class IOFtpResponseOutput extends FtpWriter {
@@ -38,7 +38,7 @@ public class IOFtpResponseOutput extends FtpWriter {
         }
     }
 
-    public void write(FtpResponse response) throws IOException {
+    public void write(FtpReply response) throws IOException {
 
         String out = response.toString();
 

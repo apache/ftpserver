@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.ftplet;
 
-public interface FtpResponse {
+public interface FtpReply {
 
     /**
      * 110 Restart marker reply. In this case, the text is exact and not left to

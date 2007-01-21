@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -58,7 +58,7 @@ class EPRT extends AbstractCommand {
         // argument check
         String arg = request.getArgument();
         if(arg == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT", null));
             return;  
         }
         
@@ -91,7 +91,7 @@ class EPRT extends AbstractCommand {
         }
         catch(UnknownHostException ex) {
             log.debug("Unknown host: " + host, ex);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "EPRT.host", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "EPRT.host", null));
             return;
         }
         
@@ -111,11 +111,11 @@ class EPRT extends AbstractCommand {
         }
         catch(NumberFormatException ex) {
             log.debug("Invalid port: " + port, ex);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "EPRT.invalid", null)); 
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "EPRT.invalid", null)); 
             return; 
         }
         
         session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "EPRT", null));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "EPRT", null));
     }
 }

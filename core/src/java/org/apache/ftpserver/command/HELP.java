@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -56,16 +56,16 @@ class HELP extends AbstractCommand {
         
         // print global help
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_214_HELP_MESSAGE, null, null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_214_HELP_MESSAGE, null, null));
             return;
         }
         
         // print command specific help if available
         String ftpCmd = request.getArgument().toUpperCase();
         MessageResource resource = connection.getServerContext().getMessageResource();
-        if(resource.getMessage(FtpResponse.REPLY_214_HELP_MESSAGE, ftpCmd, session.getLanguage()) == null) {
+        if(resource.getMessage(FtpReply.REPLY_214_HELP_MESSAGE, ftpCmd, session.getLanguage()) == null) {
             ftpCmd = null;
         }
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_214_HELP_MESSAGE, ftpCmd, null));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_214_HELP_MESSAGE, ftpCmd, null));
     }
 }

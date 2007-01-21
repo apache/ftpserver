@@ -27,7 +27,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -64,7 +64,7 @@ class RMD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RMD", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RMD", null));
             return;  
         }
         
@@ -94,26 +94,26 @@ class RMD extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName));
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasDeletePermission() ) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.permission", fileName));
             return;
         }
         
         // check file
         if(!file.isDirectory()) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.invalid", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RMD.invalid", fileName));
             return;
         }
         
         // now delete directory
         if(file.delete()) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RMD", fileName)); 
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RMD", fileName)); 
             
             // write log message
             String userName = session.getUser().getName();
@@ -138,7 +138,7 @@ class RMD extends AbstractCommand {
 
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD", fileName));
         }
     }
 }

@@ -24,7 +24,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.FtpWriter;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.mina.common.IoSession;
 
 public class MinaFtpResponseOutput extends FtpWriter {
@@ -35,7 +35,7 @@ public class MinaFtpResponseOutput extends FtpWriter {
         this.session = session;
     }
 
-    public void write(FtpResponse response) throws IOException {
+    public void write(FtpReply response) throws IOException {
         session.write(response).join();
     }
 

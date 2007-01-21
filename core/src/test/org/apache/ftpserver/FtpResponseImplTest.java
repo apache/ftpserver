@@ -25,25 +25,25 @@ import junit.framework.TestCase;
 public class FtpResponseImplTest extends TestCase {
 
     public void testSingleLineToString() {
-        FtpResponseImpl response = new FtpResponseImpl(123, "foo bar");
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo bar");
         
         assertEquals("123 foo bar\r\n", response.toString());
     }
 
     public void testNullToString() {
-        FtpResponseImpl response = new FtpResponseImpl(123, null);
+        DefaultFtpReply response = new DefaultFtpReply(123, null);
         
         assertEquals("123 \r\n", response.toString());
     }
 
     public void testMultipleLinesToString() {
-        FtpResponseImpl response = new FtpResponseImpl(123, "foo\nbar\nbaz");
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\nbaz");
         
         assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
     }
 
     public void testMultipleLinesToString1() {
-        FtpResponseImpl response = new FtpResponseImpl(123, "\nfoo\nbar\nbaz");
+        DefaultFtpReply response = new DefaultFtpReply(123, "\nfoo\nbar\nbaz");
         
         assertEquals("123-\r\nfoo\r\nbar\r\n123 baz\r\n", response.toString());
     }

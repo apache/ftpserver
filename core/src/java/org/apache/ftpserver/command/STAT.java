@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -51,7 +51,7 @@ class STAT extends AbstractCommand {
         session.resetState();
         
         // write the status info
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null)); 
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null)); 
     }
     
 }

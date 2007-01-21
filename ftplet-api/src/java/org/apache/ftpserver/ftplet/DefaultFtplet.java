@@ -34,33 +34,33 @@ class DefaultFtplet implements Ftplet {
     public void init(FtpletContext ftpletContext, Configuration config) throws FtpException {}
     public void destroy() {}
     
-    public FtpletEnum onConnect(FtpSession session, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onDisconnect(FtpSession session, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onConnect(FtpSession session, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onDisconnect(FtpSession session, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onLogin(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
         
-    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
-    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
     
-    public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpResponseOutput response) throws FtpException, IOException {return null;}
+    public FtpletEnum onSite(FtpSession session, FtpRequest request, FtpReplyOutput response) throws FtpException, IOException {return null;}
 }

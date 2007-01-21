@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -61,7 +61,7 @@ class SYST extends AbstractCommand {
             systemName = systemName.replace(' ', '-');
         }
         // print server system info
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_215_NAME_SYSTEM_TYPE, "SYST", systemName));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_215_NAME_SYSTEM_TYPE, "SYST", systemName));
     }
 
 }

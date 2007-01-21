@@ -26,7 +26,7 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -55,7 +55,7 @@ class MDTM extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null));
             return;  
         }
         
@@ -68,7 +68,7 @@ class MDTM extends AbstractCommand {
             log.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
             return;
         }
         
@@ -76,10 +76,10 @@ class MDTM extends AbstractCommand {
         fileName = file.getFullName();
         if(file.doesExist()) {
             String dateStr = DateUtils.getFtpDate( file.getLastModified() );
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_213_FILE_STATUS, "MDTM", dateStr));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
         }
     } 
 }

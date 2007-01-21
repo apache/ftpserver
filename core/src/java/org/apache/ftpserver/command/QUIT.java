@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -47,7 +47,7 @@ class QUIT extends AbstractCommand {
                         FtpSessionImpl session, 
                         FtpWriter out) throws IOException {
         session.resetState();
-        out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
+        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
         connection.getServerContext().getConnectionManager().closeConnection(connection);
     }
 

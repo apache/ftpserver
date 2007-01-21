@@ -26,7 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -62,7 +62,7 @@ class OPTS_MLST extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if(spIndex == -1) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "OPTS.MLST", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "OPTS.MLST", null));
             return;
         }
         String listTypes = argument.substring(spIndex + 1);
@@ -78,10 +78,10 @@ class OPTS_MLST extends AbstractCommand {
         String[] validatedTypes = validateSelectedTypes(types);
         if(validatedTypes != null) {
             session.setAttribute("MLST.types", validatedTypes);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "OPTS.MLST", listTypes));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "OPTS.MLST", listTypes));
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS.MLST", listTypes));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS.MLST", listTypes));
         }
     }
     

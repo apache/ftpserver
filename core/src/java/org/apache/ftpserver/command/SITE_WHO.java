@@ -23,12 +23,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ftpserver.FtpResponseImpl;
+import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
@@ -61,7 +61,7 @@ class SITE_WHO extends AbstractCommand {
         UserManager userManager = connection.getServerContext().getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         
@@ -85,7 +85,7 @@ class SITE_WHO extends AbstractCommand {
             sb.append('\n');
         }
         sb.append('\n');
-        out.write(new FtpResponseImpl(FtpResponse.REPLY_200_COMMAND_OKAY, sb.toString()));
+        out.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
 
 }

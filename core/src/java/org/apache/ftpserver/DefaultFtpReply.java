@@ -19,12 +19,12 @@
 
 package org.apache.ftpserver;
 
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 
 /**
  * FTP request object.
  */
-public class FtpResponseImpl implements FtpResponse {
+public class DefaultFtpReply implements FtpReply {
     
     private int code;
     private String message;
@@ -33,7 +33,7 @@ public class FtpResponseImpl implements FtpResponse {
      * @param code
      * @param message
      */
-    public FtpResponseImpl(int code, String message) {
+    public DefaultFtpReply(int code, String message) {
         this.code = code;
         this.message = message;
     }

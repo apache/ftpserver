@@ -26,7 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpResponse;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -53,7 +53,7 @@ class PROT extends AbstractCommand {
         // check argument
         String arg = request.getArgument();
         if(arg == null) {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PROT", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PROT", null));
             return;
         }
         
@@ -62,7 +62,7 @@ class PROT extends AbstractCommand {
         FtpDataConnectionFactory dcon = session.getFtpDataConnection();
         if(arg.equals("C")) {
             dcon.setSecure(false);
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "PROT", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         }
         else if(arg.equals("P")) {
             FtpServerContext serverContext = connection.getServerContext();
@@ -71,11 +71,11 @@ class PROT extends AbstractCommand {
             }
             else {
                 dcon.setSecure(true);
-                out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_200_COMMAND_OKAY, "PROT", null));
+                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
             }
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpResponse.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "PROT", null));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "PROT", null));
         }
     }
     
