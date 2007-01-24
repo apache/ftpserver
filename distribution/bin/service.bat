@@ -91,7 +91,24 @@ if exist "%PR_JVM%" goto foundJvm
 set PR_JVM=auto
 :foundJvm
 echo Using JVM:              %PR_JVM%
-"%EXECUTABLE%" //IS//%SERVICE_NAME% --StartClass org.apache.ftpserver.commandline.Daemon --StartParams start --StartPath "%FTPD_HOME%" --StopClass org.apache.ftpserver.commandline.Daemon --StopParams stop 
+
+rem Supply additional command line params as start params
+
+set CMD_LINE_ARGS=start
+echo %CMD_LINE_ARGS%
+shift
+shift
+:buildArgs
+if %1a==a goto endInit
+set CMD_LINE_ARGS=%CMD_LINE_ARGS%;%1
+echo %CMD_LINE_ARGS%
+shift
+goto buildArgs
+
+:endInit
+echo %CMD_LINE_ARGS%
+
+"%EXECUTABLE%" //IS//%SERVICE_NAME% --StartClass org.apache.ftpserver.commandline.Daemon --StartParams %CMD_LINE_ARGS% --StartPath "%FTPD_HOME%" --StopClass org.apache.ftpserver.commandline.Daemon --StopParams stop 
 if not errorlevel 1 goto installed
 echo Failed installing '%SERVICE_NAME%' service
 goto end
