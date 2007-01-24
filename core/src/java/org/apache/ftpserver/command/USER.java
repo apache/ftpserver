@@ -43,8 +43,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * server for access to its file system.  This command will
  * normally be the first command transmitted by the user after
  * the control connections are made.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class USER extends AbstractCommand {

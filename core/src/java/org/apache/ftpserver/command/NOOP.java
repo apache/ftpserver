@@ -35,8 +35,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * This command does not affect any parameters or previously
  * entered commands. It specifies no action other than that the
  * server send an OK reply.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class NOOP extends AbstractCommand {

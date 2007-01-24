@@ -32,8 +32,6 @@ import org.apache.ftpserver.interfaces.Ssl;
 
 /**
  * It creates standard FTP server socket.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class FtpSocketFactory implements SocketFactory {

@@ -47,8 +47,6 @@ import org.apache.ftpserver.util.IoUtils;
  * file is to be created in the current directory under a name
  * unique to that directory.  The 250 Transfer Started response
  * must include the name generated.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class STOU extends AbstractCommand {

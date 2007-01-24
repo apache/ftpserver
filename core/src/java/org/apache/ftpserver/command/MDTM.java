@@ -35,8 +35,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * <code>MDTM &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
  * 
  * Returns the date and time of when a file was modified.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class MDTM extends AbstractCommand {

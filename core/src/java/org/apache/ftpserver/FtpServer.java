@@ -33,8 +33,6 @@ import org.apache.ftpserver.listener.io.IOListener;
  * This is the starting point of all the servers. It invokes a new listener
  * thread. <code>Server</code> implementation is used to create the server
  * socket and handle client connection.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class FtpServer {
 

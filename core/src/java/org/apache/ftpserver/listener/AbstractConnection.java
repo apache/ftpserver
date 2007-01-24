@@ -30,8 +30,6 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 /**
  * This is a generic request handler. It delegates 
  * the request to appropriate method in subclass.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public abstract class AbstractConnection implements Connection {
     

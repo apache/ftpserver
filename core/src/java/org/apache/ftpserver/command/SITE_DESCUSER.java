@@ -37,8 +37,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * This SITE command returns the specified user information.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE_DESCUSER extends AbstractCommand {

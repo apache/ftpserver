@@ -22,7 +22,7 @@ package org.apache.ftpserver;
 import org.apache.ftpserver.ftplet.FtpReply;
 
 /**
- * FTP request object.
+ * FTP reply object.
  */
 public class DefaultFtpReply implements FtpReply {
     

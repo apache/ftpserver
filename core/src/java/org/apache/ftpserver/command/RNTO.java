@@ -41,8 +41,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * specified in the immediately preceding "rename from"
  * command.  Together the two commands cause a file to be
  * renamed.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class RNTO extends AbstractCommand {

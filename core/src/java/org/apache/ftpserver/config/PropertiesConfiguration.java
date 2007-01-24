@@ -31,8 +31,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * Properties based configuration.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PropertiesConfiguration implements Configuration {

@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * additional features to advertise these to a client by responding to
  * the FEAT command.  If a server supports the FEAT command then it MUST
  * advertise supported AUTH, PBSZ and PROT commands in the reply.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class FEAT extends AbstractCommand {

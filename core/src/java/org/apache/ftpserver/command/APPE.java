@@ -48,8 +48,6 @@ import org.apache.ftpserver.util.IoUtils;
  * pathname exists at the server site, then the data shall be
  * appended to that file; otherwise the file specified in the
  * pathname shall be created at the server site.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class APPE extends AbstractCommand {

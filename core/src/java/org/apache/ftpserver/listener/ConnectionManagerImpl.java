@@ -36,8 +36,6 @@ import org.apache.ftpserver.ftplet.FtpSession;
 
 /**
  * Connection service to manage all the connections (request handlers).
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class ConnectionManagerImpl implements ConnectionManager {

@@ -35,6 +35,9 @@ import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.SSLFilter;
 
+/**
+ * Handles MINA type connections.
+ */
 public class MinaConnection extends AbstractConnection {
 
     private IoSession session;

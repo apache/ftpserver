@@ -34,8 +34,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * A SAXHandler helps to build XmlConfiguration out of sax events.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class XmlConfigurationHandler extends DefaultHandler {

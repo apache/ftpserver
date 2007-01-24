@@ -26,8 +26,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This is message resource interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface MessageResource extends Component {

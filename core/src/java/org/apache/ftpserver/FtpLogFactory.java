@@ -29,8 +29,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Custom log factory to add other log implementations.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class FtpLogFactory extends LogFactory {

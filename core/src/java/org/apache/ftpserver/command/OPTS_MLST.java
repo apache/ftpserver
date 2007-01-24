@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * Client-Server listing negotation.
  * Instruct the server what listing types to include in
  * machine directory/file listings.
- * 
- * @author Birkir A. Barkarson
  */
 public 
 class OPTS_MLST extends AbstractCommand {

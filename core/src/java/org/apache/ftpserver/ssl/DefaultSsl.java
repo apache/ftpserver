@@ -46,8 +46,6 @@ import org.apache.ftpserver.util.IoUtils;
 /**
  * Ssl implementation. This class encapsulates all 
  * the SSL functionalities.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class DefaultSsl implements Ssl {
     

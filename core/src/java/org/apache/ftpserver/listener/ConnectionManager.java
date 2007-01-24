@@ -25,8 +25,6 @@ import org.apache.ftpserver.ftplet.Component;
 
 /**
  * It manages all the ftp connections.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 interface ConnectionManager extends Component {

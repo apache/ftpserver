@@ -30,7 +30,7 @@ import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.MessageResource;
 
 /**
- * FTP reply object.
+ * FTP reply translator.
  */
 public class FtpReplyUtil  {
     

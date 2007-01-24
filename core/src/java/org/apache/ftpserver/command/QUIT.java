@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command terminates a USER and if file transfer is not
  * in progress, the server closes the control connection.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class QUIT extends AbstractCommand {

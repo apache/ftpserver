@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * <code>SIZE &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
  *
  * Returns the size of the file in bytes.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SIZE extends AbstractCommand {

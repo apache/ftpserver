@@ -46,8 +46,6 @@ import org.apache.ftpserver.util.StringUtils;
  * All the user attributes are replaced during run-time. So we can use
  * your database schema. Then you need to modify the SQLs in the configuration
  * file.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class DbUserManager extends AbstractUserManager {

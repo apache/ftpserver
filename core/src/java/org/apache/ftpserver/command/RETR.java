@@ -47,8 +47,6 @@ import org.apache.ftpserver.util.IoUtils;
  * file, specified in the pathname, to the server- or user-DTP
  * at the other end of the data connection.  The status and
  * contents of the file at the server site shall be unaffected.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class RETR extends AbstractCommand {

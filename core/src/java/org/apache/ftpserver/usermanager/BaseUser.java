@@ -40,8 +40,6 @@ import org.apache.ftpserver.ftplet.User;
  *   <li>uploadrate</li>
  *   <li>downloadrate</li>
  * </ul>
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 
 public

@@ -35,8 +35,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * Force server from default encoding to UTF-8 and back.
  * Note that the servers default encoding is UTF-8.
  * So this command has no effect.
- *
- * @author Birkir A. Barkarson
  */
 public 
 class OPTS_UTF8 extends AbstractCommand {

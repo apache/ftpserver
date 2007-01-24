@@ -32,8 +32,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Show SITE help message.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE_HELP extends AbstractCommand {

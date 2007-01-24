@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command is used to find out the type of operating
  * system at the server.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SYST extends AbstractCommand {

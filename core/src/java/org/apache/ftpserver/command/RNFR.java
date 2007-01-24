@@ -36,8 +36,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * This command specifies the old pathname of the file which is
  * to be renamed.  This command must be immediately followed by
  * a "rename to" command specifying the new file pathname.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class RNFR extends AbstractCommand {

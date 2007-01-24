@@ -23,6 +23,9 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 
+/**
+ * Factory for creating decoders and encoders
+ */
 public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory
 {
     private FtpRequestDecoder decoder = new FtpRequestDecoder();

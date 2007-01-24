@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * The argument is a single Telnet character code specifying
  * file structure.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class STRU extends AbstractCommand {

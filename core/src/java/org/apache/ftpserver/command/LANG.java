@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * A new command "LANG" is added to the FTP command set to allow
  * server-FTP process to determine in which language to present server
  * greetings and the textual part of command responses.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class LANG extends AbstractCommand {

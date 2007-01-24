@@ -29,8 +29,6 @@ import org.apache.ftpserver.ftplet.User;
 /**
  * File system view based on native file system. Here the root directory
  * will be user virtual root (/).
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class NativeFileSystemView implements FileSystemView {

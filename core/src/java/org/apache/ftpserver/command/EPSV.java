@@ -40,8 +40,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * address, which may be needed in the EPSV response in the future.  The
  * response code for entering passive mode using an extended address
  * MUST be 229.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class EPSV extends AbstractCommand {

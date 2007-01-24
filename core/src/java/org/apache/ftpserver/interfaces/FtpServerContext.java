@@ -26,8 +26,6 @@ import org.apache.ftpserver.listener.ConnectionManager;
 /**
  * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with added
  * connection manager, message resource functionalities.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FtpServerContext extends FtpletContext {

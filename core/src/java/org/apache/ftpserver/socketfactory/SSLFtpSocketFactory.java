@@ -28,8 +28,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * It is used in case of implicit SSL connection.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SSLFtpSocketFactory extends FtpSocketFactory {        

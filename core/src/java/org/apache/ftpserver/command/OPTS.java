@@ -37,8 +37,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command shall cause the server use optional features for the 
  * command specified.
- *
- * @author Birkir A. Barkarson
  */
 public 
 class OPTS extends AbstractCommand {

@@ -38,8 +38,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Handle SITE command.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE extends AbstractCommand {

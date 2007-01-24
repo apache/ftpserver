@@ -37,8 +37,6 @@ import org.apache.ftpserver.util.RegularExpr;
 
 /**
  * File based IP restrictor.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class FileIpRestrictor implements IpRestrictor {

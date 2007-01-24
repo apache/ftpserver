@@ -21,8 +21,6 @@ package org.apache.ftpserver;
 
 /**
  * Startup test case
- * 
- * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
 public class FtpServerStartupTest extends AbstractFtpServerTestTemplate {
 

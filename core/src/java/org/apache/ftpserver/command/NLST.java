@@ -46,8 +46,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * null argument implies the current directory.  The server
  * will return a stream of names of files and no other
  * information.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class NLST extends AbstractCommand {

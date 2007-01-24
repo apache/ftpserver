@@ -39,8 +39,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * connection must be closed.  
  * Current implementation does not do anything. As here data 
  * transfers are not multi-threaded. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class ABOR extends AbstractCommand {

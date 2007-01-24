@@ -31,8 +31,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Protection buffer size.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PBSZ extends AbstractCommand {

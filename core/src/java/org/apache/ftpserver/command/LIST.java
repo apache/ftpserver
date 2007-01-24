@@ -46,8 +46,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * file.  A null argument implies the user's current working or
  * default directory.  The data transfer is over the data
  * connection.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class LIST extends AbstractCommand {

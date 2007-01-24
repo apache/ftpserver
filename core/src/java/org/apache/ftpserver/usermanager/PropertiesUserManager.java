@@ -44,8 +44,6 @@ import org.apache.ftpserver.util.IoUtils;
 /**
  * Properties file based <code>UserManager</code> implementation. 
  * We use <code>user.properties</code> file to store user data.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class PropertiesUserManager extends AbstractUserManager {

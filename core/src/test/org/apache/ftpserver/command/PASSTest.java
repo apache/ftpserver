@@ -23,8 +23,6 @@ import java.io.IOException;
 
 /**
  * {@link PASS} test case
- * 
- * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
 public class PASSTest extends AbstractCommandTestTemplate {
 

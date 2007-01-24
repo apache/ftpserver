@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
   *
   * This command flushes a USER, without affecting transfers in progress.
   * The server state should otherwise be as when the user first connects.
-  *
-  * @author Birkir A. Barkarson
   */
 public 
 class REIN extends AbstractCommand {

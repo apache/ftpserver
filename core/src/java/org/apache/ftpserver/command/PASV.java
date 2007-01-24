@@ -39,8 +39,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * connection rather than initiate one upon receipt of a
  * transfer command.  The response to this command includes the
  * host and port address this server is listening on.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PASV extends AbstractCommand {

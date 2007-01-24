@@ -28,8 +28,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class DefaultFtpletContainer implements Component, FtpletContainer {
     

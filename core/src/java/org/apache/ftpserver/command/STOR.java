@@ -48,8 +48,6 @@ import org.apache.ftpserver.util.IoUtils;
  * be replaced by the data being transferred.  A new file is
  * created at the server site if the file specified in the
  * pathname does not already exist.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class STOR extends AbstractCommand {

@@ -24,8 +24,6 @@ import java.util.Map;
 
 /**
  * String utility methods.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 
 public

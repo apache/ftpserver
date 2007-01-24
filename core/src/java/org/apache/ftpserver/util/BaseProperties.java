@@ -37,8 +37,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 /**
  * This class encapsulates <code>java.util.Properties</code> to
  * add java primitives and some other java classes.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class BaseProperties extends Properties {

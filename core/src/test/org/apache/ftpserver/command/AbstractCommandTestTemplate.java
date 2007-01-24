@@ -32,8 +32,6 @@ import org.apache.ftpserver.interfaces.Command;
 
 /**
  * Abstract {@link Command} test case
- * 
- * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
 public abstract class AbstractCommandTestTemplate extends AbstractFtpServerTestTemplate {
 

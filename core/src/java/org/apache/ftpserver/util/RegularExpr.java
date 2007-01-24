@@ -23,8 +23,6 @@ package org.apache.ftpserver.util;
 /**
  * This is a simplified regular character mattching class. 
  * Supports *?^[]- pattern characters.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class RegularExpr {

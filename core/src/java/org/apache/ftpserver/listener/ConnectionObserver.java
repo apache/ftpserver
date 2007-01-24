@@ -22,8 +22,6 @@ package org.apache.ftpserver.listener;
 
 /**
  * This interface is used to monitor connection request & replies.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface ConnectionObserver {

@@ -25,8 +25,6 @@ import java.io.FilenameFilter;
 
 /**
  * This is regular expression filename filter. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class FileRegularFilter implements FilenameFilter {

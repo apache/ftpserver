@@ -38,8 +38,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * format of EPRT is:
  *
  * EPRT<space><d><net-prt><d><net-addr><d><tcp-port><d>
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class EPRT extends AbstractCommand {

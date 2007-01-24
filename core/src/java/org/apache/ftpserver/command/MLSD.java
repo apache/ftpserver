@@ -44,8 +44,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * server should transfer a list of files in the specified directory.
  * A null argument implies the user's current working or  default directory.
  * The data transfer is over the data connection
- * 
- * @author Birkir A. Barkarson
  */
 public 
 class MLSD extends AbstractCommand {

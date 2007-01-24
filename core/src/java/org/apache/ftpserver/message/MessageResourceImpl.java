@@ -44,8 +44,6 @@ import org.apache.ftpserver.util.IoUtils;
  * 
  * Custom Language Specific Messages -> Default Language Specific Messages ->
  * Custom Common Messages -> Default Common Messages -> null (not found)
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class MessageResourceImpl implements MessageResource {

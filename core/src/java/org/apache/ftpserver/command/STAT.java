@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command shall cause a status response to be sent over
  * the control connection in the form of a reply.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class STAT extends AbstractCommand {

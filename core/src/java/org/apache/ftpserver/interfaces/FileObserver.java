@@ -24,8 +24,6 @@ import org.apache.ftpserver.listener.Connection;
 
 /**
  * This is the file related activity observer.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FileObserver {

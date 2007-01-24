@@ -38,8 +38,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * altering his login or accounting information.  Transfer
  * parameters are similarly unchanged.  The argument is a
  * pathname specifying a directory.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class CWD extends AbstractCommand {

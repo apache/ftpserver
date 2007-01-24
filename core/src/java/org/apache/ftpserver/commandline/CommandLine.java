@@ -44,8 +44,6 @@ import org.apache.ftpserver.util.IoUtils;
  *   <li>-prop :: properties configuration will be used. User has to specify the file.</li>
  * </ul>
  * If you do not specify any parameter, default configuration will be used. 
- * 
- * @author Luis Sanabria
  */
 public 
 class CommandLine {

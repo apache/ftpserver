@@ -29,8 +29,6 @@ import org.apache.ftpserver.listener.Connection;
 
 /**
  * This interface encapsulates all the FTP commands. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface Command {

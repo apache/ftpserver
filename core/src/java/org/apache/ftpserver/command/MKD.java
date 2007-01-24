@@ -42,8 +42,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * to be created as a directory (if the pathname is absolute)
  * or as a subdirectory of the current working directory (if
  * the pathname is relative).
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class MKD extends AbstractCommand {

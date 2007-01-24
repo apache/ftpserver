@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Data channel protection level.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PROT extends AbstractCommand {

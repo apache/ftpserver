@@ -38,8 +38,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * directory trees between operating systems having different
  * syntaxes for naming the parent directory.  The reply codes
  * shall be identical to the reply codes of CWD.    
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class CDUP extends AbstractCommand {

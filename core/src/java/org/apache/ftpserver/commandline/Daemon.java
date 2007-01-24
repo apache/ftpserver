@@ -14,6 +14,10 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+ * Invokes FtpServer as a daemon, running in the background. 
+ * Used for example for the Windows service.
+ */
 public class Daemon {
 
     private static Log log = LogFactory.getLog(Daemon.class);

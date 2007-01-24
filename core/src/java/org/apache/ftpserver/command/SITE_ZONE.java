@@ -33,8 +33,6 @@ import org.apache.ftpserver.listener.Connection;
 
 /**
  * Displays the FTP server timezone in RFC 822 format.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE_ZONE extends AbstractCommand {

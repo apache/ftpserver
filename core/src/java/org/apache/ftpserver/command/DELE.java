@@ -40,8 +40,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command causes the file specified in the pathname to be
  * deleted at the server site.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class DELE extends AbstractCommand {

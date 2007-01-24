@@ -23,11 +23,15 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
 import org.apache.ftpserver.FtpRequestImpl;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderAdapter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
+/**
+ * Converts incoming bytes into {@link FtpRequest}
+ */
 public class FtpRequestDecoder extends ProtocolDecoderAdapter
 {
     private CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();

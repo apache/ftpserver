@@ -38,8 +38,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * <code>MLST &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
  *
  * Returns info on the file over the control connection.
- * 
- * @author Birkir A. Barkarson
  */
 public 
 class MLST extends AbstractCommand {

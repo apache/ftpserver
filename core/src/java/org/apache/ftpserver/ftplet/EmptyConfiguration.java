@@ -25,8 +25,6 @@ import java.util.Iterator;
 
 /**
  * Empty configuration - always returns the default values.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class EmptyConfiguration implements Configuration {

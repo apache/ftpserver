@@ -24,8 +24,6 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * String encryption utility methods.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 
 public

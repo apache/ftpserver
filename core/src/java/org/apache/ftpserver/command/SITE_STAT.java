@@ -35,8 +35,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Show all statistics information.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE_STAT extends AbstractCommand {

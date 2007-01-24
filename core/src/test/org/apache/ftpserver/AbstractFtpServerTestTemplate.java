@@ -31,8 +31,6 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
  * Abstract test case class, which starts and shutdown FtpServer.
- * 
- * @author <a href="mailto:vlsergey@gmail.com">Sergey Vladimirov</a>
  */
 public abstract class AbstractFtpServerTestTemplate extends TestCase {
 

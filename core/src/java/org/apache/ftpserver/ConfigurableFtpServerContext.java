@@ -56,8 +56,6 @@ import org.apache.ftpserver.usermanager.WritePermission;
 /**
  * FTP server configuration implementation. It holds all 
  * the components used.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class ConfigurableFtpServerContext implements FtpServerContext {

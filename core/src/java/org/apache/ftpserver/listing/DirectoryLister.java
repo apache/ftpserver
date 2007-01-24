@@ -27,9 +27,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This class prints file listing.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
- * @author Birkir A. Barkarson
  */
 public 
 class DirectoryLister {

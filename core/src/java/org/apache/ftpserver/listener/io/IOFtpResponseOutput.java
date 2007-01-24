@@ -28,6 +28,9 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+ * Output for IOConnections, writes to the blocking socket.
+ */
 public class IOFtpResponseOutput extends FtpWriter {
 
     private Writer writer;

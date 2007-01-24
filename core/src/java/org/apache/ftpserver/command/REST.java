@@ -37,8 +37,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * data checkpoint.  This command shall be immediately followed
  * by the appropriate FTP service command which shall cause
  * file transfer to resume.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class REST extends AbstractCommand {

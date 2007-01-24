@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * Acknowledges the ACCT (account) command with a 202 reply.
  * The command however is irrelevant to any workings.
- * 
- * @author Birkir A. Barkarson
  */
 public 
 class ACCT extends AbstractCommand {

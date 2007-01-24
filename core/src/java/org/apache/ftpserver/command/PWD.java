@@ -35,8 +35,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *
  * This command causes the name of the current working
  * directory to be returned in the reply.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PWD extends AbstractCommand {

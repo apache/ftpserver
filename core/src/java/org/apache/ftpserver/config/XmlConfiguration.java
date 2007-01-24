@@ -28,8 +28,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * XML based configuration element.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class XmlConfiguration implements Configuration {

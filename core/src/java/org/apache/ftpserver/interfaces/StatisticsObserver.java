@@ -23,8 +23,6 @@ import java.net.InetAddress;
 
 /**
  * Ftp statistics observer interface.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface StatisticsObserver {

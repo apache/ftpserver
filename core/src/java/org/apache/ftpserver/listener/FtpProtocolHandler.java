@@ -40,6 +40,9 @@ import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
+/**
+ * Callback class for events during an FTP session. 
+ */
 public class FtpProtocolHandler {
     
     protected Log log;

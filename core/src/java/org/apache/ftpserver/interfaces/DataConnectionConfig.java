@@ -25,8 +25,6 @@ import org.apache.ftpserver.ftplet.Component;
 
 /**
  * Data connection configuration interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface DataConnectionConfig extends Component {

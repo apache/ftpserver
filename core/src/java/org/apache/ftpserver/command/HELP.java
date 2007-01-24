@@ -37,8 +37,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * control connection to the user.  The command may take an
  * argument (e.g., any command name) and return more specific
  * information as a response.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class HELP extends AbstractCommand {

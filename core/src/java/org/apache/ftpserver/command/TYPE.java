@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * <code>TYPE &lt;SP&gt; &lt;type-code&gt; &lt;CRLF&gt;</code><br>
  *
  * The argument specifies the representation type.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class TYPE extends AbstractCommand {

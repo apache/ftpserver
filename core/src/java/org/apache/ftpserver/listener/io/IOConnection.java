@@ -45,8 +45,6 @@ import org.apache.ftpserver.util.IoUtils;
 /**
  * This is a generic request handler. It delegates 
  * the request to appropriate method in subclass.
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class IOConnection extends AbstractConnection implements Runnable {
     

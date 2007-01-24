@@ -24,8 +24,6 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * This is the connection request handler interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 interface Connection {

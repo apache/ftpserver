@@ -35,8 +35,6 @@ import org.apache.ftpserver.listener.Connection;
 
 /**
  * This is ftp statistice implementation.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public class FtpStatisticsImpl implements ServerFtpStatistics {
 

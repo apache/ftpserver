@@ -40,8 +40,6 @@ import org.apache.ftpserver.util.StringUtils;
 
 /**
  * Sends the list of all the connected users.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class SITE_WHO extends AbstractCommand {

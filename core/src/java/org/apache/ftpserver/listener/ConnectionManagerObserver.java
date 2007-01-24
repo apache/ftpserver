@@ -22,8 +22,6 @@ package org.apache.ftpserver.listener;
 
 /**
  * This observer interface monitors all the ftp connections.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface ConnectionManagerObserver {

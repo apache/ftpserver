@@ -33,8 +33,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * This server supports explicit SSL support.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class AUTH extends AbstractCommand {

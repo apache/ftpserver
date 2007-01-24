@@ -30,8 +30,6 @@ import org.apache.ftpserver.ftplet.Component;
 
 /**
  * SSL interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface Ssl extends Component {

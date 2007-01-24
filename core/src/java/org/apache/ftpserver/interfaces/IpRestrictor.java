@@ -27,8 +27,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * Ip restrictor interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 interface IpRestrictor extends Component {

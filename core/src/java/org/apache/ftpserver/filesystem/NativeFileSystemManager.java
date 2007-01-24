@@ -31,8 +31,6 @@ import org.apache.ftpserver.ftplet.User;
 
 /**
  * Native file system manager. It uses the OS file system.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class NativeFileSystemManager implements FileSystemManager {

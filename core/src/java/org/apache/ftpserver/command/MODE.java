@@ -34,8 +34,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  * The argument is a single Telnet character code specifying
  * the data transfer modes described in the Section on
  * Transmission Modes.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class MODE extends AbstractCommand {

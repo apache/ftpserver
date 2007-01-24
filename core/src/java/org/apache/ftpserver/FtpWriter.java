@@ -25,8 +25,6 @@ import org.apache.ftpserver.listener.ConnectionObserver;
 
 /**
  * FTP response object. The server uses this to send server messages
- *
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public abstract class FtpWriter implements FtpReplyOutput {
 

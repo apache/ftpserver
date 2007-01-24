@@ -36,8 +36,6 @@ import java.util.Random;
 
 /**
  * IO utility methods.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class IoUtils {

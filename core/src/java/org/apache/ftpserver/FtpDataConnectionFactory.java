@@ -35,8 +35,6 @@ import org.apache.ftpserver.interfaces.Ssl;
 /**
  * We can get the ftp data connection using this class.
  * It uses either PORT or PASV command.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class FtpDataConnectionFactory {

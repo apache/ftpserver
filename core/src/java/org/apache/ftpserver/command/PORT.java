@@ -49,8 +49,6 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  *   PORT h1,h2,h3,h4,p1,p2
  * 
  * where h1 is the high order 8 bits of the internet host address.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class PORT extends AbstractCommand {

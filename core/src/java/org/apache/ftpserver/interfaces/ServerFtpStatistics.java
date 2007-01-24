@@ -27,8 +27,6 @@ import org.apache.ftpserver.listener.Connection;
 /**
  * This is same as <code>org.apache.ftpserver.ftplet.FtpStatistics</code>
  * with added observer and setting values functionalities.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface ServerFtpStatistics extends FtpStatistics, Component {

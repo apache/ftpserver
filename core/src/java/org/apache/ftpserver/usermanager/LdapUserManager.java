@@ -46,8 +46,6 @@ import org.apache.ftpserver.ftplet.User;
  * Ldap based user manager class where the object class is ftpusers. This has
  * been tested with OpenLDAP. The BaseUser object will be serialized in LDAP.
  * Here the assumption is that the java object schema is available (RFC 2713).
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 class LdapUserManager extends AbstractUserManager {

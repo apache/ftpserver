@@ -35,8 +35,6 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 /**
  * Command factory to return appropriate command implementation
  * depending on the FTP request command string.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class DefaultCommandFactory implements CommandFactory {

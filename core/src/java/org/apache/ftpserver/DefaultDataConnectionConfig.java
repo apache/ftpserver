@@ -30,8 +30,6 @@ import org.apache.ftpserver.interfaces.Ssl;
 
 /**
  * Data connection configuration.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class DefaultDataConnectionConfig implements DataConnectionConfig {

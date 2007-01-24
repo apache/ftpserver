@@ -27,6 +27,10 @@ import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.mina.common.IoSession;
 
+/**
+ * Output for MINA, sends replies to the {@link FtpResponseEncoder} 
+ * and then to the non-blocking socket
+ */
 public class MinaFtpResponseOutput extends FtpWriter {
 
     private IoSession session;

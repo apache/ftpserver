@@ -34,8 +34,6 @@ import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
  * This class wraps native file object. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class NativeFileObject implements FileObject {
