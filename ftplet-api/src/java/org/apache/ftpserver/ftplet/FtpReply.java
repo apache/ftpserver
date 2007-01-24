@@ -19,6 +19,9 @@
 
 package org.apache.ftpserver.ftplet;
 
+/**
+ * Interface for a reply to an FTP request.
+ */
 public interface FtpReply {
 
     /**
@@ -226,7 +229,22 @@ public interface FtpReply {
      */
     public static final int REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED = 553;
 
+    /**
+     * The reply code
+     * @return The reply code
+     */
     int getCode();
 
+    /**
+     * The reply message, might be multiple lines
+     * @return The reply message
+     */
     String getMessage();
+
+    /** 
+     * Must implement toString to format the reply as described in the RFC. 
+     * Most important is the handling of multi-line replies.
+     * @return The formated reply
+     */
+    String toString();
 }

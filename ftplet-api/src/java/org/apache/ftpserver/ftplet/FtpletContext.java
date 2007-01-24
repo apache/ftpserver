@@ -27,8 +27,6 @@ import org.apache.commons.logging.LogFactory;
  * A ftplet configuration object used by a ftplet container used to pass 
  * information to a ftplet during initialization. The configuration information 
  * contains initialization parameters.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FtpletContext {

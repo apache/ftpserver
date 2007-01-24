@@ -22,9 +22,7 @@ package org.apache.ftpserver.ftplet;
 import java.io.IOException;
 
 /**
- * Ftp response interface. Ftplets can use this to send custom messges to client. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
+ * Ftp reply output. Ftplets can use this to send custom messages to client. 
  */
 public 
 interface FtpReplyOutput {

@@ -24,8 +24,6 @@ package org.apache.ftpserver.ftplet;
  * This class encapsulates the return values of the ftplet methods. 
  * 
  * RET_DEFAULT < RET_NO_FTPLET < RET_SKIP < RET_DISCONNECT
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 final class FtpletEnum {

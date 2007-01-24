@@ -42,8 +42,6 @@ import java.io.IOException;
  * All the callback methods return FtpletEnum. If it returns null FtpletEnum.RET_DEFAULT
  * will be assumed. If any ftplet callback method throws exception, that particular connection 
  * will be disconnected. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface Ftplet {

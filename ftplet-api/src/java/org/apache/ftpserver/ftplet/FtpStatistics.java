@@ -24,8 +24,6 @@ import java.util.Date;
 
 /**
  * This interface holds all the ftp server statistical information. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FtpStatistics {

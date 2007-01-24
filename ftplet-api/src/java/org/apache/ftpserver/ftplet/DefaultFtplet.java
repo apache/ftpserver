@@ -25,8 +25,6 @@ import java.io.IOException;
  * Default ftplet implementation. All the callback method returns null. 
  * It is just an empty implementation. You can derive your ftplet implementation
  * from this class.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class DefaultFtplet implements Ftplet {

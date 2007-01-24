@@ -22,8 +22,6 @@ package org.apache.ftpserver.ftplet;
 /**
  * This is the file system manager - it returns the file system 
  * view for user.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FileSystemManager extends Component {

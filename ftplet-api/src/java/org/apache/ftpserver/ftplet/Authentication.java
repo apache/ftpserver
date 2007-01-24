@@ -19,6 +19,10 @@
 
 package org.apache.ftpserver.ftplet;
 
+/**
+ * Represents a type of authentication request, typically
+ * anonymous or a username and password combination
+ */
 public interface Authentication {
 
 }

@@ -24,8 +24,6 @@ import java.util.Iterator;
 
 /**
  * Configuration interface. 
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface Configuration {

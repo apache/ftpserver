@@ -21,8 +21,6 @@ package org.apache.ftpserver.ftplet;
 
 /**
  * Basic user interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface User {

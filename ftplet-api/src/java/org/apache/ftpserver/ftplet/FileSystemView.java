@@ -22,8 +22,6 @@ package org.apache.ftpserver.ftplet;
 
 /**
  * This is an abstraction over the user file system view.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public
 interface FileSystemView {

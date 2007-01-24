@@ -24,8 +24,6 @@ import java.io.PrintWriter;
 
 /**
  * Ftplet exception class.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 class FtpException extends Exception {

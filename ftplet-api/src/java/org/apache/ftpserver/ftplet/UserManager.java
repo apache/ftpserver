@@ -22,8 +22,6 @@ package org.apache.ftpserver.ftplet;
 
 /**
  * User manager interface.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface UserManager extends Component {

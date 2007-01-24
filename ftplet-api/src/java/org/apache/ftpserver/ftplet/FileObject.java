@@ -25,8 +25,6 @@ import java.io.OutputStream;
 
 /**
  * This is the file abstraction used by the server.
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface FileObject {

@@ -21,8 +21,6 @@ package org.apache.ftpserver.ftplet;
 
 /**
  * Type safe enum for describing the structure
- *
- * @author <a href="mailto:niklas@protocol7.com">Niklas Gustavsson</a>
  */
 public class Structure {
 

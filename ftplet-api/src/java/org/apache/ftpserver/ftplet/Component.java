@@ -30,8 +30,6 @@ import org.apache.commons.logging.LogFactory;
  *     <li>Other component specific methods will be called.</li>
  *     <li>Finnaly Component.dispose() method will be called.</li>
  * </ol>
- * 
- * @author <a href="mailto:rana_b@yahoo.com">Rana Bhattacharyya</a>
  */
 public 
 interface Component {

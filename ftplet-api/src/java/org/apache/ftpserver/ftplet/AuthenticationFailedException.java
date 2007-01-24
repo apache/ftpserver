@@ -19,7 +19,9 @@
 
 package org.apache.ftpserver.ftplet;
 
-
+/**
+ * Thrown is an authentication request fails
+ */
 public class AuthenticationFailedException extends FtpException {
     private static final long serialVersionUID = -1328383839915898987L;
 
@@ -31,7 +33,7 @@ public class AuthenticationFailedException extends FtpException {
     }
 
     /**
-     * Constructs a <code>FtpException</code> object with a message.
+     * Constructs a <code>AuthenticationFailedException</code> object with a message.
      * 
      * @param msg a description of the exception 
      */
@@ -40,7 +42,7 @@ public class AuthenticationFailedException extends FtpException {
     }
 
     /**
-     * Constructs a <code>FtpException</code> object with a 
+     * Constructs a <code>AuthenticationFailedException</code> object with a 
      * <code>Throwable</code> cause.
      * 
      * @param th the original cause
@@ -50,7 +52,7 @@ public class AuthenticationFailedException extends FtpException {
     }
 
     /**
-     * Constructs a <code>BaseException</code> object with a 
+     * Constructs a <code>AuthenticationFailedException</code> object with a 
      * <code>Throwable</code> cause.
      * 
      * @param th the original cause
