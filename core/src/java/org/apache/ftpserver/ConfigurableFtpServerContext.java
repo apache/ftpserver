@@ -26,7 +26,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
 import org.apache.ftpserver.ftplet.FileSystemManager;
@@ -40,7 +39,6 @@ import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.listener.ConnectionManager;
@@ -61,16 +59,16 @@ public
 class ConfigurableFtpServerContext implements FtpServerContext {
 
     private LogFactory logFactory;
-    private SocketFactory socketFactory;
-    private DataConnectionConfig dataConConfig;
-    private MessageResource messageResource;
-    private ConnectionManager connectionManager;
-    private IpRestrictor ipRestrictor;
-    private UserManager userManager;
-    private FileSystemManager fileSystemManager;
-    private FtpletContainer ftpletContainer;
-    private ServerFtpStatistics statistics;
-    private CommandFactory commandFactory;
+    private Bean socketFactoryBean;
+    private Bean dataConConfigBean;
+    private Bean messageResourceBean;
+    private Bean connectionManagerBean;
+    private Bean ipRestrictorBean;
+    private Bean userManagerBean;
+    private Bean fileSystemManagerBean;
+    private Bean ftpletContainerBean;
+    private Bean statisticsBean;
+    private Bean commandFactoryBean;
     
     private Log log;
     
@@ -96,15 +94,15 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             log        = logFactory.getInstance(ConfigurableFtpServerContext.class);
             
             // create all the components
-            socketFactory     = (SocketFactory)        createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());
-            dataConConfig     = (DataConnectionConfig) createComponent(conf, "data-connection",     DefaultDataConnectionConfig.class.getName()); 
-            messageResource   = (MessageResource)      createComponent(conf, "message",             MessageResourceImpl.class.getName());
-            connectionManager = (ConnectionManager)    createComponent(conf, "connection-manager",  ConnectionManagerImpl.class.getName());
-            ipRestrictor      = (IpRestrictor)         createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
-            userManager       = (UserManager)           createComponent(conf, "user-manager",        PropertiesUserManager.class.getName());
-            fileSystemManager = (FileSystemManager)     createComponent(conf, "file-system-manager", NativeFileSystemManager.class.getName());
-            statistics        = (ServerFtpStatistics)        createComponent(conf, "statistics",          FtpStatisticsImpl.class.getName());
-            commandFactory    = (CommandFactory)       createComponent(conf, "command-factory",     DefaultCommandFactory.class.getName());
+            socketFactoryBean     = createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());
+            dataConConfigBean     = createComponent(conf, "data-connection",     DefaultDataConnectionConfig.class.getName()); 
+            messageResourceBean   = createComponent(conf, "message",             MessageResourceImpl.class.getName());
+            connectionManagerBean = createComponent(conf, "connection-manager",  ConnectionManagerImpl.class.getName());
+            ipRestrictorBean      = createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
+            userManagerBean       = createComponent(conf, "user-manager",        PropertiesUserManager.class.getName());
+            fileSystemManagerBean = createComponent(conf, "file-system-manager", NativeFileSystemManager.class.getName());
+            statisticsBean        = createComponent(conf, "statistics",          FtpStatisticsImpl.class.getName());
+            commandFactoryBean    = createComponent(conf, "command-factory",     DefaultCommandFactory.class.getName());
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);
@@ -112,9 +110,9 @@ class ConfigurableFtpServerContext implements FtpServerContext {
                 createDefaultUsers();
             }
             
-            ftpletContainer    = (FtpletContainer) createComponent(conf, "ftplet-container",     DefaultFtpletContainer.class.getName());
+            ftpletContainerBean    = createComponent(conf, "ftplet-container",     DefaultFtpletContainer.class.getName());
        
-            initFtplets(ftpletContainer, conf);
+            initFtplets((FtpletContainer) ftpletContainerBean.getBean(), conf);
         }
         catch(Exception ex) {
             dispose();
@@ -168,17 +166,14 @@ class ConfigurableFtpServerContext implements FtpServerContext {
     /**
      * Create component. 
      */
-    private Component createComponent(Configuration parentConfig, String configName, String defaultClass) throws Exception {
+    private Bean createComponent(Configuration parentConfig, String configName, String defaultClass) throws Exception {
         
         // get configuration subset
         Configuration conf = parentConfig.subset(configName);
         
-        // create and configure component
-        String className = conf.getString("class", defaultClass);
-        Component comp = (Component)Class.forName(className).newInstance();
-        comp.setLogFactory(logFactory);
-        comp.configure(conf);
-        return comp; 
+        Bean bean = Bean.createBean(conf, defaultClass, logFactory);
+        bean.initBean();
+        return bean;
     }
     
     /**
@@ -231,91 +226,91 @@ class ConfigurableFtpServerContext implements FtpServerContext {
      * Get socket factory.
      */
     public SocketFactory getSocketFactory() {
-        return socketFactory;
+        return (SocketFactory) socketFactoryBean.getBean();
     }
     
     /**
      * Get user manager.
      */
     public UserManager getUserManager() {
-        return userManager;
+        return (UserManager) userManagerBean.getBean();
     }
     
     /**
      * Get IP restrictor.
      */
     public IpRestrictor getIpRestrictor() {
-        return ipRestrictor;
+        return (IpRestrictor) ipRestrictorBean.getBean();
     }
      
     /**
      * Get connection manager.
      */
     public ConnectionManager getConnectionManager() {
-        return connectionManager;
+        return (ConnectionManager) connectionManagerBean.getBean();
     } 
     
     /**
      * Get file system manager.
      */
     public FileSystemManager getFileSystemManager() {
-        return fileSystemManager;
+        return (FileSystemManager) fileSystemManagerBean.getBean();
     }
      
     /**
      * Get message resource.
      */
     public MessageResource getMessageResource() {
-        return messageResource;
+        return (MessageResource) messageResourceBean.getBean();
     }
     
     /**
      * Get ftp statistics.
      */
     public FtpStatistics getFtpStatistics() {
-        return statistics;
+        return (FtpStatistics) statisticsBean.getBean();
     }
     
     /**
      * Get ftplet handler.
      */
     public Ftplet getFtpletContainer() {
-        return ftpletContainer;
+        return (Ftplet) ftpletContainerBean.getBean();
     }
 
     /**
      * Get data connection config.
      */
     public DataConnectionConfig getDataConnectionConfig() {
-        return dataConConfig;
+        return (DataConnectionConfig) dataConConfigBean.getBean();
     }
     
     /**
      * Get the command factory.
      */
     public CommandFactory getCommandFactory() {
-        return commandFactory;
+        return (CommandFactory) commandFactoryBean.getBean();
     }
     
     /**
      * Get server address.
      */
     public InetAddress getServerAddress() {
-        return socketFactory.getServerAddress();
+        return ((SocketFactory) socketFactoryBean.getBean()).getServerAddress();
     } 
         
     /**
      * Get server port.
      */
     public int getServerPort() {
-        return socketFactory.getPort();
+        return ((SocketFactory) socketFactoryBean.getBean()).getPort();
     } 
     
     /**
      * Get Ftplet.
      */
     public Ftplet getFtplet(String name) {
-        return ftpletContainer.getFtplet(name);
+        return ((FtpletContainer) ftpletContainerBean.getBean()).getFtplet(name);
     }
     
     /**
@@ -323,46 +318,36 @@ class ConfigurableFtpServerContext implements FtpServerContext {
      */
     public void dispose() {
         
-        if(connectionManager != null) {
-            connectionManager.dispose();
-            connectionManager = null;
+        if(connectionManagerBean.getBean() != null) {
+            connectionManagerBean.destroyBean();
         }
         
-        if(dataConConfig != null) {
-            dataConConfig.dispose();
-            dataConConfig = null;
+        if(dataConConfigBean.getBean() != null) {
+            dataConConfigBean.destroyBean();
         }
         
-        if(ftpletContainer != null) {
-            if(ftpletContainer instanceof Component) {
-                ((Component)ftpletContainer).dispose();
-            }
-            ftpletContainer = null;
+        if(ftpletContainerBean.getBean() != null) {
+            ftpletContainerBean.destroyBean();
         }
         
-        if(userManager != null) {
-            userManager.dispose();
-            userManager = null;
+        if(userManagerBean.getBean() != null) {
+            userManagerBean.destroyBean();
         }
         
-        if(ipRestrictor != null) {
-            ipRestrictor.dispose();
-            ipRestrictor = null;
+        if(ipRestrictorBean.getBean() != null) {
+            ipRestrictorBean.destroyBean();
         }
         
-        if(fileSystemManager != null) {
-            fileSystemManager.dispose();
-            fileSystemManager = null;
+        if(fileSystemManagerBean.getBean() != null) {
+            fileSystemManagerBean.destroyBean();
         }
         
-        if(statistics != null) {
-            statistics.dispose();
-            statistics = null;
+        if(statisticsBean.getBean() != null) {
+            statisticsBean.destroyBean();
         }
         
-        if(messageResource != null) {
-            messageResource.dispose();
-            messageResource = null;
+        if(messageResourceBean.getBean() != null) {
+            messageResourceBean.destroyBean();
         }
         
         if(logFactory != null) {
