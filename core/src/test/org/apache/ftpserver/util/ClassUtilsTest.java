@@ -19,10 +19,7 @@
 
 package org.apache.ftpserver.util;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +31,12 @@ import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
 
 public class ClassUtilsTest extends TestCase {
+
+    public void testNormalizePropertyName() {
+        assertEquals("foo", ClassUtils.normalizePropertyName("foo"));
+        assertEquals("fooBar", ClassUtils.normalizePropertyName("fooBar"));
+        assertEquals("fooBar", ClassUtils.normalizePropertyName("foo-bar"));
+    }
 
     public void testSetProperty() {
         MyBean bean = new MyBean();
@@ -47,6 +50,20 @@ public class ClassUtilsTest extends TestCase {
         ClassUtils.setProperty(bean, "bar", "123");
 
         assertEquals(123, bean.getBar());
+    }
+    
+    public void testSetCamelCasesProperty() {
+        MyBean bean = new MyBean();
+        
+        ClassUtils.setProperty(bean, "camelCasedProp", "flopp");
+        assertEquals("flopp", bean.getCamelCasedProp());
+    }
+
+    public void testSetDashedProperty() {
+        MyBean bean = new MyBean();
+        
+        ClassUtils.setProperty(bean, "camel-cased-prop", "flopp");
+        assertEquals("flopp", bean.getCamelCasedProp());
     }
 
     public void testSetPropertyWrongCast() {
@@ -138,6 +155,34 @@ public class ClassUtilsTest extends TestCase {
         assertEquals("flopp", iter.next());
         assertFalse(iter.hasNext());
     }
+    
+    public void testCreateAdvancedListBean() {
+        Properties props = new Properties();
+        props.setProperty("config.class", MyCollectionBean.class.getName());
+        props.setProperty("config.list.1.class", MyBean.class.getName());
+        props.setProperty("config.list.1.foo", "foo1");
+        props.setProperty("config.list.2.class", MyBean.class.getName());
+        props.setProperty("config.list.2.foo", "foo2");
+        props.setProperty("config.list.3.class", MyBean.class.getName());
+        props.setProperty("config.list.3.foo", "foo3");
+        
+        Configuration config = new PropertiesConfiguration(props);
+        
+        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        
+        Iterator iter = bean.getList().iterator();
+        
+        MyBean myBean1 = (MyBean) iter.next();
+        assertEquals("foo1", myBean1.getFoo());
+
+        MyBean myBean2 = (MyBean) iter.next();
+        assertEquals("foo2", myBean2.getFoo());
+        
+        MyBean myBean3 = (MyBean) iter.next();
+        assertEquals("foo3", myBean3.getFoo());
+        
+        assertFalse(iter.hasNext());
+    }
 
     public void testCreateArrayBean() {
         Properties props = new Properties();
@@ -155,6 +200,62 @@ public class ClassUtilsTest extends TestCase {
         assertEquals(12, array[1]);
         assertEquals(123, array[2]);
         assertEquals(1234, array[3]);
+    }
+    
+    public void testCreateAdvancedArrayBean() {
+        Properties props = new Properties();
+        props.setProperty("config.class", MyCollectionBean.class.getName());
+        props.setProperty("config.myBeans.1.foo", "foo1");
+        props.setProperty("config.myBeans.2.foo", "foo2");
+        props.setProperty("config.myBeans.3.foo", "foo3");
+        
+        Configuration config = new PropertiesConfiguration(props);
+        
+        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        
+        MyBean[] array = bean.getMyBeans();
+        
+        assertEquals(3, array.length);
+        assertEquals("foo1", array[0].getFoo());
+        assertEquals("foo2", array[1].getFoo());
+        assertEquals("foo3", array[2].getFoo());
+    }
+
+    public void testCreateSubClassArrayBean() {
+        Properties props = new Properties();
+        props.setProperty("config.class", MyCollectionBean.class.getName());
+        props.setProperty("config.myBeans.1.class", MySubBean.class.getName());
+        props.setProperty("config.myBeans.1.foo", "foo1");
+        
+        Configuration config = new PropertiesConfiguration(props);
+        
+        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        
+        MyBean[] array = bean.getMyBeans();
+        
+        assertEquals(1, array.length);
+        assertTrue(array[0] instanceof MySubBean);
+        assertEquals("foo1", array[0].getFoo());
+    }
+
+    public void testCreateLongArrayBean() {
+        Properties props = new Properties();
+        props.setProperty("config.class", MyCollectionBean.class.getName());
+        
+        for(int i = 1; i<13; i++) {
+            props.setProperty("config.array." + i, Integer.toString(i));
+        }
+        
+        Configuration config = new PropertiesConfiguration(props);
+        
+        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        
+        int[] array = bean.getArray();
+        
+        assertEquals(12, array.length);
+        for(int i = 0; i<12; i++) {
+            assertEquals(i+1, array[i]);
+        }
     }
     
     public void testCreateMapBean() {
@@ -177,143 +278,18 @@ public class ClassUtilsTest extends TestCase {
         assertEquals("bar3", map.get("foo3"));
         assertEquals("bar4", map.get("foo4"));
     }
-    
-    
-    /////////////////////////////////
-    // Test cast method
-    public void testCastToInt() {
-        assertEquals(new Integer(123), ClassUtils.cast(Integer.TYPE, "123"));
-        assertEquals(new Integer(123), ClassUtils.cast(Integer.class, "123"));
-        
-        try {
-            ClassUtils.cast(Integer.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToLong() {
-        assertEquals(new Long(123), ClassUtils.cast(Long.TYPE, "123"));
-        assertEquals(new Long(123), ClassUtils.cast(Long.class, "123"));
-        
-        try {
-            ClassUtils.cast(Long.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToFloat() {
-        assertEquals(new Float(123), ClassUtils.cast(Float.TYPE, "123"));
-        assertEquals(new Float(123), ClassUtils.cast(Float.class, "123"));
-        assertEquals(new Float(1.23), ClassUtils.cast(Float.TYPE, "1.23"));
-        assertEquals(new Float(1.23), ClassUtils.cast(Float.class, "1.23"));
-        
-        try {
-            ClassUtils.cast(Float.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-
-    public void testCastToDouble() {
-        assertEquals(new Double(123), ClassUtils.cast(Double.TYPE, "123"));
-        assertEquals(new Double(123), ClassUtils.cast(Double.class, "123"));
-        assertEquals(new Double(1.23), ClassUtils.cast(Double.TYPE, "1.23"));
-        assertEquals(new Double(1.23), ClassUtils.cast(Double.class, "1.23"));
-        
-        try {
-            ClassUtils.cast(Double.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToByte() {
-        assertEquals(new Byte("3"), ClassUtils.cast(Byte.TYPE, "3"));
-        assertEquals(new Byte("3"), ClassUtils.cast(Byte.class, "3"));
-
-        try {
-            ClassUtils.cast(Byte.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToBigDecimal() {
-        assertEquals(new BigDecimal("1.23"), ClassUtils.cast(BigDecimal.class, "1.23"));
-        
-        try {
-            ClassUtils.cast(BigDecimal.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToBigInteger() {
-        assertEquals(new BigInteger("123"), ClassUtils.cast(BigInteger.class, "123"));
-        
-        try {
-            ClassUtils.cast(BigInteger.class, "foo");
-            fail("Must throw exception");
-        } catch(NumberFormatException e) {
-            // ok
-        }
-    }
-
-    public void testCastToChar() {
-        assertEquals(new Character('a'), ClassUtils.cast(Character.TYPE, "a"));
-        assertEquals(new Character('a'), ClassUtils.cast(Character.class, "a"));
-        
-        try {
-            ClassUtils.cast(Character.class, "foo");
-            fail("Must throw exception");
-        } catch(RuntimeException e) {
-            // ok
-        }
-    }
-
-    public void testCastToBoolean() {
-        assertEquals(Boolean.TRUE, ClassUtils.cast(Boolean.TYPE, "true"));
-        assertEquals(Boolean.TRUE, ClassUtils.cast(Boolean.class, "true"));
-        assertEquals(Boolean.FALSE, ClassUtils.cast(Boolean.TYPE, "false"));
-        assertEquals(Boolean.FALSE, ClassUtils.cast(Boolean.class, "false"));
-        assertEquals(Boolean.FALSE, ClassUtils.cast(Boolean.class, "foo"));
-    }
-    
-    public void testCastToURL() throws Exception {
-        assertEquals(new URL("http://localhost"), ClassUtils.cast(URL.class, "http://localhost"));
-        
-        try {
-            ClassUtils.cast(URL.class, "foo://foo://foo");
-            fail("Must throw exception");
-        } catch(RuntimeException e) {
-            // ok
-        }
-    }
-    
-    public void testCastToInetAddress() throws Exception {
-        assertEquals(InetAddress.getByName("localhost"), ClassUtils.cast(InetAddress.class, "localhost"));
-        assertEquals(InetAddress.getByName("1.2.3.4"), ClassUtils.cast(InetAddress.class, "1.2.3.4"));
-        
-        try {
-            ClassUtils.cast(InetAddress.class, "1.2.3.4.5");
-            fail("Must throw exception");
-        } catch(RuntimeException e) {
-            // ok
-        }
-    }
-
+ 
     public static class MyCollectionBean {
         private List list;
         private int[] array;
+        private MyBean[] myBeans;
 
+        public MyBean[] getMyBeans() {
+            return myBeans;
+        }
+        public void setMyBeans(MyBean[] myBeans) {
+            this.myBeans = myBeans;
+        }
         public int[] getArray() {
             return array;
         }
@@ -344,6 +320,7 @@ public class ClassUtilsTest extends TestCase {
     public static class MyBean {
         private String foo;
         private int bar;
+        private String camelCasedProp;
         
         public int getBar() {
             return bar;
@@ -357,7 +334,15 @@ public class ClassUtilsTest extends TestCase {
         public void setFoo(String foo) {
             this.foo = foo;
         }
+        public String getCamelCasedProp() {
+            return camelCasedProp;
+        }
+        public void setCamelCasedProp(String camelCasedProp) {
+            this.camelCasedProp = camelCasedProp;
+        }
     }
+    
+    public static class MySubBean extends MyBean {}
     
     public static class MyOtherBean {
         private MyBean myBean;

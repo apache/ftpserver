@@ -33,10 +33,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.Configuration;
 
@@ -77,7 +81,34 @@ public class ClassUtils {
         setProperty(target, setter, castValue);
     }
     
+    public static String normalizePropertyName(String propertyName){
+        StringTokenizer st = new StringTokenizer(propertyName, "-");
+        
+        if(st.countTokens() > 1) {
+            StringBuffer sb = new StringBuffer();
+            
+            // add first unchanged
+            sb.append(st.nextToken());
+            
+            while(st.hasMoreTokens()) {
+                String token = st.nextToken().trim();
+                
+                if(token.length() > 0) {
+                    sb.append(Character.toUpperCase(token.charAt(0)));
+                    sb.append(token.substring(1));
+                }
+            }
+            
+            return sb.toString();
+        } else {
+            return propertyName;
+        }
+        
+    }
+    
     private static PropertyDescriptor getDescriptor(Class clazz, String propertyName) {
+        propertyName = normalizePropertyName(propertyName);
+        
         BeanInfo beanInfo;
         try {
             beanInfo = Introspector.getBeanInfo(clazz);
@@ -96,6 +127,115 @@ public class ClassUtils {
         return null;
     }
         
+    private static Object createObject(Class clazz, Configuration config, String propValue) {
+        Object value;
+        
+        if(config.isEmpty()) {
+            // regular property
+            value = cast(clazz, propValue);
+        } else {
+            if(clazz == null) {
+                String className = config.getString("class", null);
+                if(className != null) {
+                    try {
+                        clazz = Class.forName(className);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("Class not found: " + className, e);
+                    }
+                } else {
+                    // TODO improve error message
+                    throw new RuntimeException("Can not resolve class");
+                }
+            }
+            
+            if(Map.class.isAssignableFrom(clazz)) {
+                Map map = new HashMap();
+                
+                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                
+                while (mapKeys.hasNext()) {
+                    String mapKey = (String) mapKeys.next();
+                    
+                    map.put(mapKey, config.getString(mapKey, null));
+                }
+                
+                value = map;
+            } else if(Collection.class.isAssignableFrom(clazz)) {
+                List list = new ArrayList();
+                
+                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                
+                while (mapKeys.hasNext()) {
+                    String mapKey = (String) mapKeys.next();
+                    
+                    String listValue = config.getString(mapKey, null);
+
+                    list.add(createObject(null, config.subset(mapKey), listValue));
+                }
+                
+                value = list;
+            } else if(clazz.isArray()) {
+                List list = new ArrayList();
+                
+                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                
+                while (mapKeys.hasNext()) {
+                    String mapKey = (String) mapKeys.next();
+                    
+                    String listValue = config.getString(mapKey, null);
+
+                    list.add(createObject(clazz.getComponentType(), config.subset(mapKey), listValue));
+                }
+                
+                Object castArray = Array.newInstance(clazz.getComponentType(), list.size());
+                
+                for (int i = 0; i < list.size(); i++) {
+                    Array.set(castArray, i, list.get(i));
+                } 
+                
+                
+                value = castArray;
+            } else {
+                // create new bean
+                
+                value = createBean(config, clazz.getName());
+            }
+            
+        }
+
+        return value;
+    }
+    
+    public static class KeyComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            String key1 = (String) o1;
+            String key2 = (String) o2;
+
+            // assume they are integers
+            try {
+                int intKey1 = Integer.parseInt(key1);
+                int intKey2 = Integer.parseInt(key2);
+            
+                return intKey1 - intKey2;
+            } catch(NumberFormatException e) {
+                return key1.compareToIgnoreCase(key2);
+            }
+        }
+    }
+    
+    private static Iterator getKeysInOrder(Iterator keys) {
+        List keyList = new ArrayList();
+        
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            keyList.add(key);
+        }
+        
+        Collections.sort(keyList, new KeyComparator());
+
+        return keyList.iterator();
+    }
+    
     public static Object createBean(Configuration config, String defaultClass) {
         String className = config.getString("class", defaultClass);
         
@@ -120,32 +260,11 @@ public class ClassUtils {
             
             Configuration subConfig = config.subset(key);
             
-            Object value;
+            String propValue = config.getString(key, null);
+            
             PropertyDescriptor descriptor = getDescriptor(clazz, key);
-            if(subConfig.isEmpty()) {
-                // regular property
-                value = cast(descriptor.getPropertyType(), config.getString(key, null));
-            } else {
-                if(Map.class.isAssignableFrom(descriptor.getPropertyType())) {
-                    Map map = new HashMap();
-                    
-                    Iterator mapKeys = subConfig.getKeys();
-                    
-                    while (mapKeys.hasNext()) {
-                        String mapKey = (String) mapKeys.next();
-                        
-                        map.put(mapKey, subConfig.getString(mapKey, null));
-                    }
-                    
-                    value = map;
-                    
-                } else {
-                    // create new bean
-                    
-                    value = createBean(subConfig, descriptor.getPropertyType().getName());
-                }
-                
-            }
+
+            Object value = createObject(descriptor.getPropertyType(), subConfig, propValue);
 
             setProperty(bean, descriptor, value);
         }
