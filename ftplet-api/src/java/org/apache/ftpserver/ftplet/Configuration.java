@@ -89,7 +89,8 @@ interface Configuration {
     Configuration subset(String param);
     
     /**
-     * Get the configuration keys.
+     * Get the configuration keys. The order of the keys is not guaranteed
+     * to be the same as that of the input.
      */
     Iterator getKeys();
 }
