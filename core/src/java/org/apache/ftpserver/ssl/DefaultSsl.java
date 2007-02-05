@@ -37,6 +37,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -47,7 +48,7 @@ import org.apache.ftpserver.util.IoUtils;
  * Ssl implementation. This class encapsulates all 
  * the SSL functionalities.
  */
-public class DefaultSsl implements Ssl {
+public class DefaultSsl implements Ssl, Component {
     
     private Log log;
     

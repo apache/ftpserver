@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
@@ -33,7 +34,7 @@ import org.apache.ftpserver.ftplet.User;
  * Native file system manager. It uses the OS file system.
  */
 public 
-class NativeFileSystemManager implements FileSystemManager {
+class NativeFileSystemManager implements FileSystemManager, Component {
 
     private Log log;
     private boolean createHome;

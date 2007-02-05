@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.usermanager;
 
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.UserManager;
 
 
@@ -26,7 +27,7 @@ import org.apache.ftpserver.ftplet.UserManager;
  * Abstract common base type for {@link UserManager} implementations
  */
 public abstract 
-class AbstractUserManager implements UserManager {
+class AbstractUserManager implements UserManager, Component {
 
     public static final String ATTR_LOGIN             = "uid";
     public static final String ATTR_PASSWORD          = "userpassword";

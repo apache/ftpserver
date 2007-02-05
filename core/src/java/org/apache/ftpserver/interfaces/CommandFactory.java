@@ -25,7 +25,7 @@ import org.apache.ftpserver.ftplet.Component;
  * Command factory interface.
  */
 public 
-interface CommandFactory extends Component {
+interface CommandFactory {
 
     /**
      * Get the command instance.

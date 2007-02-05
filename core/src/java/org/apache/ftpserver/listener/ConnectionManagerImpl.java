@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpSession;
@@ -38,7 +39,7 @@ import org.apache.ftpserver.ftplet.FtpSession;
  * Connection service to manage all the connections (request handlers).
  */
 public 
-class ConnectionManagerImpl implements ConnectionManager {
+class ConnectionManagerImpl implements ConnectionManager, Component {
 
     private Log log;
     

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IpRestrictor;
@@ -39,7 +40,7 @@ import org.apache.ftpserver.util.RegularExpr;
  * File based IP restrictor.
  */
 public 
-class FileIpRestrictor implements IpRestrictor {
+class FileIpRestrictor implements IpRestrictor, Component {
 
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     

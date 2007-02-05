@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * This is message resource interface.
  */
 public 
-interface MessageResource extends Component {
+interface MessageResource {
 
     /**
      * Get all the available languages.

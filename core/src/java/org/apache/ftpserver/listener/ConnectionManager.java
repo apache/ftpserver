@@ -27,7 +27,7 @@ import org.apache.ftpserver.ftplet.Component;
  * It manages all the ftp connections.
  */
 public
-interface ConnectionManager extends Component {
+interface ConnectionManager {
 
     /**
      * Get maximum number of connections.

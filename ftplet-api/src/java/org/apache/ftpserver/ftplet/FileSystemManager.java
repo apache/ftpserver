@@ -24,7 +24,7 @@ package org.apache.ftpserver.ftplet;
  * view for user.
  */
 public 
-interface FileSystemManager extends Component {
+interface FileSystemManager {
     
     /**
      * Create user specific file system view.

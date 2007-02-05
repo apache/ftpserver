@@ -26,6 +26,7 @@ import java.util.Iterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.command.AbstractCommand;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
@@ -37,7 +38,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
  * depending on the FTP request command string.
  */
 public 
-class DefaultCommandFactory implements CommandFactory {
+class DefaultCommandFactory implements CommandFactory, Component {
 
     private LogFactory logFactory;
     private Log log;

@@ -23,6 +23,7 @@ import java.net.InetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
@@ -32,7 +33,7 @@ import org.apache.ftpserver.interfaces.Ssl;
  * Data connection configuration.
  */
 public 
-class DefaultDataConnectionConfig implements DataConnectionConfig {
+class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
 
     private Log log;
     private LogFactory logFactory;

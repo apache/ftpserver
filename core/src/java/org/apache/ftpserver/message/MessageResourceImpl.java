@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.MessageResource;
@@ -46,7 +47,7 @@ import org.apache.ftpserver.util.IoUtils;
  * Custom Common Messages -> Default Common Messages -> null (not found)
  */
 public 
-class MessageResourceImpl implements MessageResource {
+class MessageResourceImpl implements MessageResource, Component {
 
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     

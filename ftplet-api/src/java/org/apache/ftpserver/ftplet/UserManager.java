@@ -24,7 +24,7 @@ package org.apache.ftpserver.ftplet;
  * User manager interface.
  */
 public 
-interface UserManager extends Component {
+interface UserManager {
 
     /**
      * Get user by name.

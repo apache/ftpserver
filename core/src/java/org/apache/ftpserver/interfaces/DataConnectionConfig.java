@@ -27,7 +27,7 @@ import org.apache.ftpserver.ftplet.Component;
  * Data connection configuration interface.
  */
 public 
-interface DataConnectionConfig extends Component {
+interface DataConnectionConfig {
 
     /**
      * Get the maximum idle time in millis.

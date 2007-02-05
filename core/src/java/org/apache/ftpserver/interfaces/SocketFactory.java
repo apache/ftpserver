@@ -29,7 +29,7 @@ import org.apache.ftpserver.ftplet.Component;
  * This interface is responsible to create appropriate server socket.
  */
 public
-interface SocketFactory extends Component {
+interface SocketFactory {
     
     /**
      * Create the server socket. 

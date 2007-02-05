@@ -29,7 +29,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * Ip restrictor interface.
  */
 public
-interface IpRestrictor extends Component {
+interface IpRestrictor {
     
     /**
      * Check IP permission.

@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Hashtable;
 
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -36,7 +37,7 @@ import org.apache.ftpserver.listener.Connection;
 /**
  * This is ftp statistice implementation.
  */
-public class FtpStatisticsImpl implements ServerFtpStatistics {
+public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
     private StatisticsObserver observer = null;
     private FileObserver fileObserver   = null;

@@ -67,7 +67,7 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
 
     
     protected UserManager createUserManager() throws FtpException {
-        UserManager um = new PropertiesUserManager();
+        PropertiesUserManager um = new PropertiesUserManager();
         um.configure(new PropertiesConfiguration(createConfig()));
         
         return um;

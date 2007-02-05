@@ -24,6 +24,7 @@ import java.net.ServerSocket;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.SocketFactory;
@@ -34,7 +35,7 @@ import org.apache.ftpserver.interfaces.Ssl;
  * It creates standard FTP server socket.
  */
 public 
-class FtpSocketFactory implements SocketFactory {
+class FtpSocketFactory implements SocketFactory, Component {
     
     private Log log;
     private LogFactory logFactory;

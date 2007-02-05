@@ -223,7 +223,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
         userManager.save(user);
         
-        UserManager newUserManager = new PropertiesUserManager();
+        PropertiesUserManager newUserManager = new PropertiesUserManager();
         newUserManager.configure(new PropertiesConfiguration(createConfig()));
 
         
@@ -267,7 +267,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setPassword("newpw");
         userManager.save(user);
         
-        UserManager newUserManager = new PropertiesUserManager();
+        PropertiesUserManager newUserManager = new PropertiesUserManager();
         newUserManager.configure(new PropertiesConfiguration(createConfig()));
         
         User actualUser = newUserManager.getUserByName("newuser");

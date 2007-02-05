@@ -29,7 +29,7 @@ import org.apache.ftpserver.listener.Connection;
  * with added observer and setting values functionalities.
  */
 public 
-interface ServerFtpStatistics extends FtpStatistics, Component {
+interface ServerFtpStatistics extends FtpStatistics {
 
     /**
      * Set statistics observer.
