@@ -36,6 +36,7 @@ import org.apache.mina.filter.SSLFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
+import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 
 /**
  * The default {@link Listener} implementation.
@@ -80,12 +81,16 @@ public class MinaListener implements Listener {
         }
         
         cfg = new SocketAcceptorConfig();
+        
         cfg.setReuseAddress( true );
         cfg.getFilterChain().addLast(
                 "protocolFilter",
                 new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
         cfg.getFilterChain().addLast( "logger", new LoggingFilter() );
 
+        // Decrease the default receiver buffer size
+        ((SocketSessionConfig) acceptor.getDefaultConfig().getSessionConfig()).setReceiveBufferSize(512); 
+        
         if(serverContext.getSocketFactory() instanceof SSLFtpSocketFactory) {
             Ssl ssl = serverContext.getSocketFactory().getSSL();
             try {
