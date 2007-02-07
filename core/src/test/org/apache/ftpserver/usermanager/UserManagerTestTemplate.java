@@ -21,11 +21,9 @@ package org.apache.ftpserver.usermanager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
@@ -44,8 +42,6 @@ public abstract class UserManagerTestTemplate extends TestCase {
     protected void setUp() throws Exception {
         userManager = createUserManager();
     }
-
-    protected abstract Properties createConfig();
 
     public void testAuthenticate() throws Exception {
         assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user1", "pw1")));
@@ -223,8 +219,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
         userManager.save(user);
         
-        PropertiesUserManager newUserManager = new PropertiesUserManager();
-        newUserManager.configure(new PropertiesConfiguration(createConfig()));
+        UserManager newUserManager = createUserManager();
 
         
         User actualUser = newUserManager.getUserByName("newuser");
@@ -267,8 +262,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setPassword("newpw");
         userManager.save(user);
         
-        PropertiesUserManager newUserManager = new PropertiesUserManager();
-        newUserManager.configure(new PropertiesConfiguration(createConfig()));
+        UserManager newUserManager = createUserManager();
         
         User actualUser = newUserManager.getUserByName("newuser");
         

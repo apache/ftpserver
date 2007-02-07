@@ -33,7 +33,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.BaseProperties;
@@ -53,9 +52,9 @@ class PropertiesUserManager extends AbstractUserManager {
     private Log log;
     
     private BaseProperties userDataProp;
-    private File           userDataFile;
-    private boolean        isPasswordEncrypt;
-    private String         adminName;
+    private File           userDataFile = new File("./res/user.gen");
+    private boolean        isPasswordEncrypt = true;
+    private String         adminName = "admin";
     
     
     /**
@@ -65,12 +64,23 @@ class PropertiesUserManager extends AbstractUserManager {
         log = factory.getInstance(getClass());
     } 
     
+    public void setPropFile(File propFile) {
+        this.userDataFile = propFile; 
+    }
+    
+    public void setPropPasswordEncrypt(boolean encryptPassword) {
+        this.isPasswordEncrypt = encryptPassword;
+    }
+
+    public void setAdmin(String adminName) {
+        this.adminName = adminName;
+    }
+    
     /**
      * Configure user manager.
      */
-    public void configure(Configuration config) throws FtpException {
+    public void configure() throws FtpException {
         try {
-            userDataFile = new File(config.getString("prop-file", "./res/user.gen"));
             File dir = userDataFile.getParentFile();
             if( (!dir.exists()) && (!dir.mkdirs()) ) {
                 String dirName = dir.getAbsolutePath();
@@ -78,9 +88,6 @@ class PropertiesUserManager extends AbstractUserManager {
             }
             userDataFile.createNewFile();
             userDataProp = new BaseProperties(userDataFile);
-            
-            isPasswordEncrypt = config.getBoolean("prop-password-encrypt", true);
-            adminName = config.getString("admin", "admin");
         }
         catch(IOException ex) {
             log.fatal("PropertiesUserManager.configure()", ex);

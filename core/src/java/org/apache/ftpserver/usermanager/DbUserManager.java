@@ -33,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -48,7 +49,7 @@ import org.apache.ftpserver.util.StringUtils;
  * file.
  */
 public
-class DbUserManager extends AbstractUserManager {
+class DbUserManager extends AbstractUserManager implements Component {
     
     private Log log;
     

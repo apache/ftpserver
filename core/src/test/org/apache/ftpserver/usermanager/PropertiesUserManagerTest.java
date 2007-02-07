@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.IoUtils;
@@ -57,18 +56,14 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         
         fos.close();
     }
-    
-    protected Properties createConfig() {
-        Properties config = new Properties();
-        config.setProperty("config.prop-file", USERS_FILE.getAbsolutePath());
-        config.setProperty("config.prop-password-encrypt", "false");
-        return config;
-    }
+
 
     
     protected UserManager createUserManager() throws FtpException {
         PropertiesUserManager um = new PropertiesUserManager();
-        um.configure(new PropertiesConfiguration(createConfig()));
+        um.setPropFile(USERS_FILE);
+        um.setPropPasswordEncrypt(false);
+        um.configure();
         
         return um;
         

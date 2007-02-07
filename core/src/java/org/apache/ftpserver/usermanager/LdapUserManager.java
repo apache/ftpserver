@@ -38,6 +38,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -48,7 +49,7 @@ import org.apache.ftpserver.ftplet.User;
  * Here the assumption is that the java object schema is available (RFC 2713).
  */
 public
-class LdapUserManager extends AbstractUserManager {
+class LdapUserManager extends AbstractUserManager implements Component {
     
     // LDAP attributes
     private final static String CN         = "cn";
