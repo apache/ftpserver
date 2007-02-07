@@ -47,7 +47,8 @@ import org.apache.ftpserver.util.IoUtils;
 public
 class PropertiesUserManager extends AbstractUserManager {
 
-    private final static String PREFIX    = "FtpServer.user.";
+    private final static String DEPRECATED_PREFIX    = "FtpServer.user.";
+    private final static String PREFIX    = "ftpserver.user.";
 
     private Log log;
     
@@ -55,6 +56,8 @@ class PropertiesUserManager extends AbstractUserManager {
     private File           userDataFile = new File("./res/user.gen");
     private boolean        isPasswordEncrypt = true;
     private String         adminName = "admin";
+
+    private boolean isConfigured = false;
     
     
     /**
@@ -64,16 +67,49 @@ class PropertiesUserManager extends AbstractUserManager {
         log = factory.getInstance(getClass());
     } 
     
+    /**
+     * Set the file used to store and read users. Must be set before 
+     * {@link #configure()} is called.
+     * @param propFile A file containing users
+     */
     public void setPropFile(File propFile) {
+        if(isConfigured) {
+            throw new IllegalStateException("Must be called before configure()");
+        }
+        
         this.userDataFile = propFile; 
     }
+  
+    /**
+     * If true is returned, passwords will be stored as hashes rather 
+     * than in clear text. Default is true.
+     * @return True if passwords are stored as hashes.
+     */
+    public boolean isEncryptPassword() {
+        return isPasswordEncrypt;
+    }
     
-    public void setPropPasswordEncrypt(boolean encryptPassword) {
+    /**
+     * If set to true, passwords will be stored as a 
+     * hash to ensure that it can not be retrived from the
+     * user file.
+     * Must be set before {@link #configure()} is called.
+     * @param encryptPassword True to store a hash of the passwords,
+     *      false to store the passwords in clear text.
+     */
+    public void setEncryptPasswords(boolean encryptPassword) {
+        if(isConfigured) {
+            throw new IllegalStateException("Must be called before configure()");
+        }
+        
         this.isPasswordEncrypt = encryptPassword;
     }
 
-    public void setAdmin(String adminName) {
-        this.adminName = adminName;
+    /**
+     * @deprecated Use {@link #setEncryptPasswords(boolean)}
+     */
+    public void setPropPasswordEncrypt(boolean encryptPassword) {
+        setEncryptPasswords(encryptPassword);
     }
     
     /**
@@ -81,6 +117,7 @@ class PropertiesUserManager extends AbstractUserManager {
      */
     public void configure() throws FtpException {
         try {
+            isConfigured  = true;
             File dir = userDataFile.getParentFile();
             if( (!dir.exists()) && (!dir.mkdirs()) ) {
                 String dirName = dir.getAbsolutePath();
@@ -88,10 +125,34 @@ class PropertiesUserManager extends AbstractUserManager {
             }
             userDataFile.createNewFile();
             userDataProp = new BaseProperties(userDataFile);
+            
+            convertDeprecatedPropertyNames();
         }
         catch(IOException ex) {
             log.fatal("PropertiesUserManager.configure()", ex);
             throw new FtpException("PropertiesUserManager.configure()", ex);
+        }
+    }
+    
+    private void convertDeprecatedPropertyNames() throws FtpException {
+        Enumeration keys = userDataProp.propertyNames();
+        
+        boolean doSave = false;
+        
+        while (keys.hasMoreElements()) {
+            String key = (String) keys.nextElement();
+            
+            if(key.startsWith(DEPRECATED_PREFIX)) {
+                String newKey = PREFIX + key.substring(DEPRECATED_PREFIX.length());
+                userDataProp.setProperty(newKey, userDataProp.getProperty(key));
+                userDataProp.remove(key);
+                
+                doSave = true;
+            }
+        }
+        
+        if(doSave) {
+            saveUserData();
         }
     }
 
@@ -100,6 +161,24 @@ class PropertiesUserManager extends AbstractUserManager {
      */
     public String getAdminName() {
         return adminName;
+    }
+    
+    /**
+     * Set the name to use as the administrator of the server.
+     * The default value is "admin".
+     * @param adminName The administrator user name
+     */
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    /**
+     * Set the name to use as the administrator of the server
+     * @param adminName The administrator user name
+     * @deprecated Use {@link #setAdminName(String)} instead
+     */
+    public void setAdmin(String adminName) {
+        this.adminName = adminName;
     }
     
     /**
