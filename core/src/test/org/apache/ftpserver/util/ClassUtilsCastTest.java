@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.util;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -142,6 +143,10 @@ public class ClassUtilsCastTest extends TestCase {
         } catch(RuntimeException e) {
             // ok
         }
+    }
+    
+    public void testCastToFile() throws Exception {
+        assertEquals(new File("foo"), ClassUtils.cast(File.class, "foo"));
     }
     
     public void testCastToInetAddress() throws Exception {

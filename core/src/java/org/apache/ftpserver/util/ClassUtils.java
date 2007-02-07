@@ -23,6 +23,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.File;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -329,6 +330,8 @@ public class ClassUtils {
             }
             
             castValue = list;
+        } else if (clazz == File.class) {
+            castValue = new File(value);
         } else if (clazz == URL.class) {
             try {
                 castValue = new URL(value);
