@@ -1,4 +1,4 @@
--- Licensed to the Apache Software Foundation (ASF) under one
+managermanager-- Licensed to the Apache Software Foundation (ASF) under one
 -- or more contributor license agreements.  See the NOTICE file
 -- distributed with this work for additional information
 -- regarding copyright ownership.  The ASF licenses this file
@@ -19,9 +19,11 @@ CREATE TABLE FTP_USER (
    uid VARCHAR(64) NOT NULL PRIMARY KEY,       
    userpassword VARCHAR(64),      
    homedirectory VARCHAR(128) NOT NULL,             
-   enableflag VARCHAR(8) NOT NULL,    
-   writepermission VARCHAR(8) NOT NULL,       
-   idletime INT NOT NULL,             
-   uploadrate INT NOT NULL,             
-   downloadrate INT NOT NULL
-)
+   enableflag BOOLEAN DEFAULT TRUE,    
+   writepermission BOOLEAN DEFAULT FALSE,       
+   idletime INT DEFAULT 0,             
+   uploadrate INT DEFAULT 0,             
+   downloadrate INT DEFAULT 0,
+   maxloginnumber INT DEFAULT 0,
+   maxloginperip INT DEFAULT 0
+);

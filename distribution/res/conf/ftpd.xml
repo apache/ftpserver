@@ -132,9 +132,9 @@ under the License.
     <!-- Default properties file based user manager configuration block
     <user-manager>
         <class>org.apache.ftpserver.usermanager.PropertiesUserManager</class>
-        <admin>admin</admin>
+        <admin-name>admin</admin-name>
         <prop-file>./res/user.gen</prop-file>
-        <prop-password-encrypt>true</prop-password-encrypt>
+        <encrypt-passwords>true</encrypt-passwords>
     </user-manager>
     -->
 
@@ -142,11 +142,14 @@ under the License.
     <!-- Database based user manager configuration
     <user-manager>
         <class>org.apache.ftpserver.usermanager.DbUserManager</class>
-        <admin>admin</admin>
-        <jdbc-driver>org.gjt.mm.mysql.Driver</jdbc-driver>
-        <jdbc-url>jdbc:mysql://localhost:3306/data</jdbc-url>
-        <jdbc-user>user</jdbc-user>
-        <jdbc-password>password</jdbc-password>
+        <admin-name>admin</admin-name>
+        <data-source>
+        	<class>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</class>
+			<server-name>localhost</server-name>
+			<database-name>ftpdb</database-name>
+			<user>user</user>
+			<password>password</password>
+        </data-source>
         <sql-user-insert>INSERT INTO FTP_USER (uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate) VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate})</sql-user-insert>
         <sql-user-update>UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate} WHERE uid='{uid}'</sql-user-update>
         <sql-user-delete>DELETE FROM FTP_USER WHERE uid = '{uid}'</sql-user-delete>
@@ -161,7 +164,7 @@ under the License.
     <!-- LDAP based user manager
     <user-manager>
         <class>org.apache.ftpserver.usermanager.LdapUserManager</class>
-        <admin>admin</admin>
+        <admin-name>admin</admin-name>
         <ldap-url>ldap://localhost:389</ldap-url>
         <ldap-admin-dn>cn=Manager,dc=apache,dc=org</ldap-admin-dn>
         <ldap-admin-password>secret</ldap-admin-password>
