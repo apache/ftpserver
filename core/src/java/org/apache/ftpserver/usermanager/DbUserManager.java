@@ -20,7 +20,6 @@
 package org.apache.ftpserver.usermanager;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,13 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.StringUtils;
@@ -48,12 +48,9 @@ import org.apache.ftpserver.util.StringUtils;
  * your database schema. Then you need to modify the SQLs in the configuration
  * file.
  */
-public
-class DbUserManager extends AbstractUserManager implements Component {
+public class DbUserManager extends AbstractUserManager {
     
     private Log log;
-    
-    private Connection connection;
     
     private String insertUserStmt;
     private String updateUserStmt;
@@ -62,12 +59,9 @@ class DbUserManager extends AbstractUserManager implements Component {
     private String selectAllStmt;
     private String isAdminStmt;
     private String authenticateStmt;
-    
-    private String jdbcUrl;
-    private String dbUser;
-    private String dbPassword;
-    
-    private String adminName;
+
+    private DataSource dataSource;
+    private Connection cachedConnection;
     
     
     /**
@@ -78,42 +72,173 @@ class DbUserManager extends AbstractUserManager implements Component {
     }
     
     /**
-     * Configure user manager.
+     * Retrive the data source used by the user manager
+     * @return The current data source
      */
-    public void configure(Configuration config) throws FtpException {
-        
-        try {
-            String className = config.getString("jdbc-driver");
-            Class.forName(className);
-            
-            jdbcUrl          = config.getString("jdbc-url");
-            dbUser           = config.getString("jdbc-user", null);
-            dbPassword       = config.getString("jdbc-password", null);
-            
-            insertUserStmt   = config.getString("sql-user-insert");
-            deleteUserStmt   = config.getString("sql-user-delete");
-            updateUserStmt   = config.getString("sql-user-update");
-            selectUserStmt   = config.getString("sql-user-select");
-            selectAllStmt    = config.getString("sql-user-select-all");
-            authenticateStmt = config.getString("sql-user-authenticate");
-            isAdminStmt      = config.getString("sql-user-admin");
-            
-            openConnection();
-            
-            adminName = config.getString("admin", "admin");
-            log.info("Database connection opened.");
-        }
-        catch(Exception ex) {
-            log.fatal("DbUserManager.configure()", ex);
-            throw new FtpException("DbUserManager.configure()", ex);
-        }
+    public DataSource getDataSource() {
+        return dataSource;
     }
     
     /**
-     * Get the admin name.
+     * Set the data source to be used by the user manager
+     * @param dataSource The data source to use
      */
-    public String getAdminName() {
-        return adminName;
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    /**
+     * Get the SQL INSERT statement used to add a new user.
+     * @return The SQL statement
+     */
+    public String getSqlUserInsert() {
+        return insertUserStmt;
+    }
+    
+    /**
+     * Set the SQL INSERT statement used to add a new user. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserInsert(String sql) {
+        insertUserStmt = sql;
+    }
+    
+    /**
+     * Get the SQL DELETE statement used to delete an existing user.
+     * @return The SQL statement
+     */
+    public String getSqlUserDelete() {
+        return insertUserStmt;
+    }
+    
+    /**
+     * Set the SQL DELETE statement used to delete an existing user. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserDelete(String sql) {
+        deleteUserStmt = sql;
+    }
+    
+    /**
+     * Get the SQL UPDATE statement used to update an existing user.
+     * @return The SQL statement
+     */
+    public String getSqlUserUpdate() {
+        return updateUserStmt;
+    }
+    
+    /**
+     * Set the SQL UPDATE statement used to update an existing user. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserUpdate(String sql) {
+        updateUserStmt = sql;
+    }
+    
+    /**
+     * Get the SQL SELECT statement used to select an existing user.
+     * @return The SQL statement
+     */
+    public String getSqlUserSelect() {
+        return selectUserStmt;
+    }
+    
+    /**
+     * Set the SQL SELECT statement used to select an existing user. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserSelect(String sql) {
+        selectUserStmt = sql;
+    }
+    
+    /**
+     * Get the SQL SELECT statement used to select all user ids.
+     * @return The SQL statement
+     */
+    public String getSqlUserSelectAll() {
+        return selectAllStmt;
+    }
+    
+    /**
+     * Set the SQL SELECT statement used to select all user ids. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserSelectAll(String sql) {
+        selectAllStmt = sql;
+    }
+    
+    /**
+     * Get the SQL SELECT statement used to authenticate user.
+     * @return The SQL statement
+     */
+    public String getSqlUserAuthenticate() {
+        return selectAllStmt;
+    }
+    
+    /**
+     * Set the SQL SELECT statement used to authenticate user. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserAuthenticate(String sql) {
+        authenticateStmt = sql;
+    }
+    
+    /**
+     * Get the SQL SELECT statement used to find whether an user is admin or not.
+     * @return The SQL statement
+     */
+    public String getSqlUserAdmin() {
+        return selectAllStmt;
+    }
+    
+    /**
+     * Set the SQL SELECT statement used to find whether an user is admin or not. All the dynamic values will be replaced during runtime.
+     * @param sql The SQL statement
+     */
+    public void setSqlUserAdmin(String sql) {
+        isAdminStmt = sql;
+    }
+    
+    /**
+     * Configure user manager.
+     */
+    public void configure() {
+        
+        if(dataSource == null) {
+            throw new FtpServerConfigurationException("Required data source not provided");
+        }
+        if(insertUserStmt == null) {
+            throw new FtpServerConfigurationException("Required insert user SQL statement not provided");
+        }
+        if(updateUserStmt == null) {
+            throw new FtpServerConfigurationException("Required update user SQL statement not provided");
+        }
+        if(deleteUserStmt == null) {
+            throw new FtpServerConfigurationException("Required delete user SQL statement not provided");
+        }
+        if(selectUserStmt == null) {
+            throw new FtpServerConfigurationException("Required select user SQL statement not provided");
+        }
+        if(selectAllStmt == null) {
+            throw new FtpServerConfigurationException("Required select all users SQL statement not provided");
+        }
+        if(isAdminStmt == null) {
+            throw new FtpServerConfigurationException("Required is admin user SQL statement not provided");
+        }
+        if(authenticateStmt == null) {
+            throw new FtpServerConfigurationException("Required authenticate user SQL statement not provided");
+        }        
+        
+        try {
+            // test the connection
+            createConnection();
+            
+            log.info("Database connection opened.");
+        }
+        catch(SQLException ex) {
+            log.fatal("DbUserManager.configure()", ex);
+            throw new FtpServerConfigurationException("DbUserManager.configure()", ex);
+        }
     }
     
     /**
@@ -137,8 +262,7 @@ class DbUserManager extends AbstractUserManager implements Component {
             log.info(sql);
             
             // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             rs = stmt.executeQuery(sql);
             return rs.next();
         }
@@ -169,35 +293,10 @@ class DbUserManager extends AbstractUserManager implements Component {
     /**
      * Open connection to database.
      */
-    private void openConnection() throws SQLException {
-        connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
-        connection.setAutoCommit(true);
-    }
-    
-    /**
-     * Close connection to database.
-     */
-    private void closeConnection() {
-        if (connection != null) {        
-            try {
-                connection.close(); 
-            } 
-            catch(SQLException ex) {
-                log.error("DbUserManager.closeConnection()", ex);
-            }
-            connection = null;
-        }
-        
-        log.info("Database connection closed.");
-    }
-    
-    /**
-     * Prepare connection to database.
-     */
-    private void prepareConnection() throws SQLException {
+    private synchronized Connection createConnection() throws SQLException {
         boolean isClosed = false;    
         try {
-            if( (connection == null) || connection.isClosed() ) {
+            if( (cachedConnection == null) || cachedConnection.isClosed() ) {
                 isClosed = true;
             }
         }
@@ -208,8 +307,29 @@ class DbUserManager extends AbstractUserManager implements Component {
         
         if (isClosed) {
             closeConnection();
-            openConnection();
+
+            cachedConnection = dataSource.getConnection();
+            cachedConnection.setAutoCommit(true);
         }
+        
+        return cachedConnection;
+    }
+    
+    /**
+     * Close connection to database.
+     */
+    private void closeConnection() {
+        if (cachedConnection != null) {        
+            try {
+                cachedConnection.close(); 
+            } 
+            catch(SQLException ex) {
+                log.error("DbUserManager.closeConnection()", ex);
+            }
+            cachedConnection = null;
+        }
+        
+        log.info("Database connection closed.");
     }
     
     /**
@@ -226,8 +346,7 @@ class DbUserManager extends AbstractUserManager implements Component {
         // execute query
         Statement stmt = null;
         try {
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
@@ -263,9 +382,15 @@ class DbUserManager extends AbstractUserManager implements Component {
             HashMap map = new HashMap();
             map.put( ATTR_LOGIN, escapeString(user.getName()) );
             map.put( ATTR_PASSWORD, escapeString(getPassword(user)) );
-            map.put( ATTR_HOME, escapeString(user.getHomeDirectory()) );
+            
+            String home = user.getHomeDirectory();
+            if(home == null) {
+                home = "/";
+            }
+            map.put( ATTR_HOME, escapeString(home) );
             map.put( ATTR_ENABLE, String.valueOf(user.getEnabled()) );
-            map.put( ATTR_WRITE_PERM, String.valueOf(user.authorize(new WriteRequest())) );
+            
+            map.put( ATTR_WRITE_PERM, String.valueOf(user.authorize(new WriteRequest()) != null) );
             map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
             
             
@@ -306,8 +431,7 @@ class DbUserManager extends AbstractUserManager implements Component {
             log.info(sql);
             
             // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
@@ -342,8 +466,7 @@ class DbUserManager extends AbstractUserManager implements Component {
             log.info(sql);
             
             // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             rs = stmt.executeQuery(sql);
             
             // populate user object
@@ -357,13 +480,12 @@ class DbUserManager extends AbstractUserManager implements Component {
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
                 
                 List authorities = new ArrayList();
-                
                 if(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM))) {
                     authorities.add(new WritePermission());
                 }
                 
                 authorities.add(new ConcurrentLoginPermission(rs.getInt(ATTR_MAX_LOGIN_NUMBER), rs.getInt(ATTR_MAX_LOGIN_PER_IP)));
-                authorities.add(new TransferRatePermission(rs.getInt(ATTR_MAX_UPLOAD_RATE), rs.getInt(ATTR_MAX_DOWNLOAD_RATE)));
+                authorities.add(new TransferRatePermission(rs.getInt(ATTR_MAX_DOWNLOAD_RATE), rs.getInt(ATTR_MAX_UPLOAD_RATE)));
                 
                 thisUser.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
             }
@@ -408,8 +530,7 @@ class DbUserManager extends AbstractUserManager implements Component {
             log.info(sql);
             
             // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             rs = stmt.executeQuery(sql);
             return rs.next();
         }
@@ -451,8 +572,7 @@ class DbUserManager extends AbstractUserManager implements Component {
             log.info(sql);
             
             // execute query
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             rs = stmt.executeQuery(sql);
             
             // populate list
@@ -515,8 +635,7 @@ class DbUserManager extends AbstractUserManager implements Component {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            prepareConnection();
-            stmt = connection.createStatement();
+            stmt = createConnection().createStatement();
             rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 password = rs.getString(ATTR_PASSWORD);
@@ -577,8 +696,7 @@ class DbUserManager extends AbstractUserManager implements Component {
                 log.info(sql);
                 
                 // execute query
-                prepareConnection();
-                stmt = connection.createStatement();
+                stmt = createConnection().createStatement();
                 rs = stmt.executeQuery(sql);
                 if(rs.next()) {
                     try {
@@ -639,6 +757,10 @@ class DbUserManager extends AbstractUserManager implements Component {
      * Escape string to be embedded in SQL statement.
      */
     private String escapeString(String input) {
+        if(input == null) {
+            return input;
+        }
+        
         StringBuffer valBuf = new StringBuffer(input);
         for (int i=0; i<valBuf.length(); i++) {
             char ch = valBuf.charAt(i);

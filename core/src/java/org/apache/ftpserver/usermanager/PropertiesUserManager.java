@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
@@ -55,7 +56,7 @@ class PropertiesUserManager extends AbstractUserManager {
     private BaseProperties userDataProp;
     private File           userDataFile = new File("./res/user.gen");
     private boolean        isPasswordEncrypt = true;
-    private String         adminName = "admin";
+
 
     private boolean isConfigured = false;
     
@@ -115,26 +116,31 @@ class PropertiesUserManager extends AbstractUserManager {
     /**
      * Configure user manager.
      */
-    public void configure() throws FtpException {
-        try {
-            isConfigured  = true;
-            File dir = userDataFile.getParentFile();
-            if( (!dir.exists()) && (!dir.mkdirs()) ) {
-                String dirName = dir.getAbsolutePath();
-                throw new IOException("Cannot create directory : " + dirName);
+public void configure() {
+        isConfigured  = true;
+        File dir = userDataFile.getParentFile();
+        if( (!dir.exists()) && (!dir.mkdirs()) ) {
+            String dirName = dir.getAbsolutePath();
+            throw new FtpServerConfigurationException("Cannot create directory for user data file : " + dirName);
+        }
+        
+        if(!userDataFile.exists()) {
+            try {
+                userDataFile.createNewFile();
+            } catch (IOException e) {
+                throw new FtpServerConfigurationException("Cannot user data file : " + userDataFile.getAbsolutePath(), e);
             }
-            userDataFile.createNewFile();
+        }
+        try {
             userDataProp = new BaseProperties(userDataFile);
-            
-            convertDeprecatedPropertyNames();
+        } catch (IOException e) {
+            throw new FtpServerConfigurationException("Error loading user data file : " + userDataFile.getAbsolutePath(), e);
         }
-        catch(IOException ex) {
-            log.fatal("PropertiesUserManager.configure()", ex);
-            throw new FtpException("PropertiesUserManager.configure()", ex);
-        }
+        
+        convertDeprecatedPropertyNames();
     }
     
-    private void convertDeprecatedPropertyNames() throws FtpException {
+    private void convertDeprecatedPropertyNames() {
         Enumeration keys = userDataProp.propertyNames();
         
         boolean doSave = false;
@@ -152,41 +158,14 @@ class PropertiesUserManager extends AbstractUserManager {
         }
         
         if(doSave) {
-            saveUserData();
+            try {
+                saveUserData();
+            } catch (FtpException e) {
+                throw new FtpServerConfigurationException("Failed to save updated user data", e);
+            }
         }
     }
 
-    /**
-     * Get the admin name.
-     */
-    public String getAdminName() {
-        return adminName;
-    }
-    
-    /**
-     * Set the name to use as the administrator of the server.
-     * The default value is "admin".
-     * @param adminName The administrator user name
-     */
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
-
-    /**
-     * Set the name to use as the administrator of the server
-     * @param adminName The administrator user name
-     * @deprecated Use {@link #setAdminName(String)} instead
-     */
-    public void setAdmin(String adminName) {
-        this.adminName = adminName;
-    }
-    
-    /**
-     * @return true if user with this login is administrator
-     */
-    public boolean isAdmin(String login) throws FtpException {
-        return adminName.equals(login);
-    }
     
     /**
      * Save user data. Store the properties.
