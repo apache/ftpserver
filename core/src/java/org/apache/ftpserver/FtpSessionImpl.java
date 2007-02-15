@@ -32,6 +32,7 @@ import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.FtpServerSession;
+import org.apache.ftpserver.listener.Listener;
 
 /**
  * FTP session
@@ -47,6 +48,7 @@ public class FtpSessionImpl implements FtpServerSession {
     private HashMap attributeMap;
     private InetAddress remoteAddr;
     private InetAddress serverAddr;
+    private int serverPort;
     private String language;
     private Certificate[] clientCertificates;
     
@@ -65,7 +67,16 @@ public class FtpSessionImpl implements FtpServerSession {
     private DataType dataType    = DataType.ASCII;
     private Structure structure  = Structure.FILE;
     private FtpServerContext serverContext;
+    private Listener listener;
     
+    public Listener getListener() {
+        return listener;
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     /**
      * Default constructor.
      */
@@ -368,5 +379,13 @@ public class FtpSessionImpl implements FtpServerSession {
 
     public FtpServerContext getServerContext() {
         return serverContext;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 }

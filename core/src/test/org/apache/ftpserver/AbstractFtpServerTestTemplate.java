@@ -54,7 +54,7 @@ public abstract class AbstractFtpServerTestTemplate extends TestCase {
 
     protected Properties createConfig() {
         Properties configProps = new Properties();
-        configProps.setProperty("config.socket-factory.port", Integer
+        configProps.setProperty("config.listeners.default.port", Integer
                 .toString(serverPort));
 
         return configProps;

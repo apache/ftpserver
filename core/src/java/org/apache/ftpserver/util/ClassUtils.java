@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Configuration;
 
 
@@ -57,6 +58,10 @@ public class ClassUtils {
 
     public static void setProperty(Object target, String propertyName, Object propertyValue) {
         PropertyDescriptor setter = getDescriptor(target.getClass(), propertyName);
+        
+        if(setter == null) {
+            return;
+        }
         
         setProperty(target, setter, propertyValue);
     }
@@ -156,8 +161,10 @@ public class ClassUtils {
                 
                 while (mapKeys.hasNext()) {
                     String mapKey = (String) mapKeys.next();
+                    String mapValue = config.getString(mapKey, null);
+                    Configuration mapConfig = config.subset(mapKey);
                     
-                    map.put(mapKey, config.getString(mapKey, null));
+                    map.put(mapKey, createObject(String.class, mapConfig, mapValue));
                 }
                 
                 value = map;
@@ -237,6 +244,11 @@ public class ClassUtils {
         return keyList.iterator();
     }
     
+    public static Map createMap(Configuration config) {
+        return (Map) createObject(Map.class, config, null);
+        
+    }
+    
     public static Object createBean(Configuration config, String defaultClass) {
         String className = config.getString("class", defaultClass);
         
@@ -264,6 +276,10 @@ public class ClassUtils {
             String propValue = config.getString(key, null);
             
             PropertyDescriptor descriptor = getDescriptor(clazz, key);
+            
+            if(descriptor == null) {
+                throw new FtpServerConfigurationException("Unknown property \"" + key + "\" on class " + className);
+            }
 
             Object value = createObject(descriptor.getPropertyType(), subConfig, propValue);
 

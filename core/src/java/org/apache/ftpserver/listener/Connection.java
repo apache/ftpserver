@@ -21,6 +21,7 @@ package org.apache.ftpserver.listener;
 
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.FtpServerSession;
 
 /**
  * This is the connection request handler interface.
@@ -54,8 +55,8 @@ interface Connection {
      * @param type The type of security to use, i.e. SSL or TLS
      * @throws Exception
      */
-    void beforeSecureControlChannel(String type) throws Exception;
+    void beforeSecureControlChannel(FtpServerSession session, String type) throws Exception;
 
-    void afterSecureControlChannel(String type) throws Exception;
+    void afterSecureControlChannel(FtpServerSession session, String type) throws Exception;
 }
  

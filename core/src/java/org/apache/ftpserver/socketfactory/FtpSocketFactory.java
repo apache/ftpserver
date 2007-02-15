@@ -77,13 +77,13 @@ class FtpSocketFactory implements SocketFactory, Component {
             Configuration sslConf = conf.subset("ssl");
             if(!sslConf.isEmpty()) {
                 ssl = (Ssl)Class.forName("org.apache.ftpserver.ssl.DefaultSsl").newInstance();
-                ssl.setLogFactory(logFactory);
-                ssl.configure(sslConf);
+                //ssl.setLogFactory(logFactory);
+                //ssl.configure(sslConf);
             }
         }
-        catch(FtpException ex) {
+        /*catch(FtpException ex) {
             throw ex;
-        }
+        }*/
         catch(Exception ex) {
             log.fatal("FtpSocketFactory.configure()", ex);
             throw new FtpException("FtpSocketFactory.configure()", ex);

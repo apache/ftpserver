@@ -21,7 +21,6 @@ package org.apache.ftpserver.interfaces;
 
 import java.util.Properties;
 
-import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.FtpException;
 
 /**

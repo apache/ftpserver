@@ -43,17 +43,20 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
     
     private FtpServerContext serverContext;
     private FtpProtocolHandler protocolHandler;
+    private MinaListener listener;
     
-    public MinaFtpProtocolHandler(FtpServerContext serverContext, FtpProtocolHandler protocolHandler) throws IOException {
+    public MinaFtpProtocolHandler(FtpServerContext serverContext, FtpProtocolHandler protocolHandler, MinaListener listener) throws IOException {
         this.serverContext = serverContext;
         this.protocolHandler = protocolHandler;
+        this.listener = listener;
+         
     }
 
     /* (non-Javadoc)
      * @see org.apache.mina.common.IoHandlerAdapter#sessionCreated(org.apache.mina.common.IoSession)
      */
     public void sessionCreated(IoSession session) throws Exception {
-        MinaConnection connection = new MinaConnection(serverContext, session);
+        MinaConnection connection = new MinaConnection(serverContext, session, listener);
         session.setAttribute(CONNECTION_KEY, connection);
         
         MinaFtpResponseOutput output = new MinaFtpResponseOutput(session);

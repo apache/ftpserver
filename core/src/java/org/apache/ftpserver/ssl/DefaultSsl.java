@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.ssl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -37,9 +38,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -48,18 +47,18 @@ import org.apache.ftpserver.util.IoUtils;
  * Ssl implementation. This class encapsulates all 
  * the SSL functionalities.
  */
-public class DefaultSsl implements Ssl, Component {
+public class DefaultSsl implements Ssl {
     
-    private Log log;
+    private Log log = LogFactory.getLog(DefaultSsl.class);
     
-    private String keystoreFile;
-    private String keystorePass;
-    private String keystoreType;
-    private String keystoreAlgorithm;
+    private File keystoreFile = new File("./res/.keystore");
+    private String keystorePass = "password";   // TODO should we really default this value?
+    private String keystoreType = "JKS";
+    private String keystoreAlgorithm = "SunX509";
     
-    private String sslProtocol;
-    private boolean clientAuthReqd;
-    private String keyPass;
+    private String sslProtocol = "TLS";
+    private boolean clientAuthReqd = false;
+    private String keyPass = "password";   // TODO should we really default this value?
 
     private KeyStore keyStore;
     private KeyManagerFactory keyManagerFactory;
@@ -67,30 +66,41 @@ public class DefaultSsl implements Ssl, Component {
     
     private HashMap sslContextMap;
     
-    
-    /**
-     * Set the log actory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
+    public void setKeystoreFile(File keyStoreFile) {
+        this.keystoreFile = keyStoreFile;
     }
+    
+    public void setKeystorePassword(String keystorePass) {
+        this.keystorePass = keystorePass;
+    }
+    
+    public void setKeystoreType(String keystoreType) {
+        this.keystoreType = keystoreType;
+    }
+    
+    public void setKeystoreAlgorithm(String keystoreAlgorithm) {
+        this.keystoreAlgorithm = keystoreAlgorithm;
+    }
+    
+    public void setSslProtocol(String sslProtocol) {
+        this.sslProtocol = sslProtocol;
+    }
+    
+    public void setClientAuthentication(boolean clientAuthReqd) {
+        this.clientAuthReqd = clientAuthReqd;
+    }
+    
+    public void setKeyPassword(String keyPass) {
+        this.keyPass = keyPass;
+    }
+    
     
     /**
      * Configure secure server related properties. 
      */
-    public void configure(Configuration conf) throws FtpException {
+    public synchronized void init() {
         
         try {
-            
-            // get configuration parameters
-            keystoreFile      = conf.getString("keystore-file", "./res/.keystore");
-            keystorePass      = conf.getString("keystore-password", "password");
-            keystoreType      = conf.getString("keystore-type", "JKS");
-            keystoreAlgorithm = conf.getString("keystore-algorithm", "SunX509");
-            sslProtocol       = conf.getString("ssl-protocol", "TLS");
-            clientAuthReqd    = conf.getBoolean("client-authentication", false);
-            keyPass           = conf.getString("key-password", "password");
-            
             // initialize keystore
             FileInputStream fin = null;
             try {
@@ -116,7 +126,13 @@ public class DefaultSsl implements Ssl, Component {
         }
         catch(Exception ex) {
             log.fatal("DefaultSsl.configure()", ex);
-            throw new FtpException("DefaultSsl.configure()", ex);
+            throw new FtpServerConfigurationException("DefaultSsl.configure()", ex);
+        }
+    }
+    
+    private void lazyInit() {
+        if(keyManagerFactory == null) {
+            init();
         }
     }
     
@@ -124,6 +140,7 @@ public class DefaultSsl implements Ssl, Component {
      * Get SSL Context.
      */
     public synchronized SSLContext getSSLContext(String protocol) throws GeneralSecurityException {
+        lazyInit();
         
         // null value check
         if(protocol == null) {
@@ -153,7 +170,8 @@ public class DefaultSsl implements Ssl, Component {
     public ServerSocket createServerSocket(String protocol,
                                            InetAddress addr, 
                                            int port) throws Exception {
-
+        lazyInit();
+        
         // get server socket factory
         SSLContext ctx = getSSLContext(protocol);
         SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
@@ -180,6 +198,7 @@ public class DefaultSsl implements Ssl, Component {
     public Socket createSocket(String protocol,
                                Socket soc, 
                                boolean clientMode) throws Exception {
+        lazyInit();
         
         // already wrapped - no need to do anything
         if(soc instanceof SSLSocket) {
@@ -211,7 +230,8 @@ public class DefaultSsl implements Ssl, Component {
                                InetAddress addr, 
                                int port,
                                boolean clientMode) throws Exception {
-
+        lazyInit();
+        
         // get socket factory
         SSLContext ctx = getSSLContext(protocol);
         SSLSocketFactory socFactory = ctx.getSocketFactory();
@@ -235,6 +255,7 @@ public class DefaultSsl implements Ssl, Component {
                                InetAddress localhost,
                                int localport,
                                boolean clientMode) throws Exception {
+        lazyInit();
         
         // get socket factory
         SSLContext ctx = getSSLContext(protocol);

@@ -20,16 +20,14 @@
 package org.apache.ftpserver.listener.mina;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.socketfactory.SSLFtpSocketFactory;
 import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.filter.LoggingFilter;
 import org.apache.mina.filter.SSLFilter;
@@ -42,11 +40,9 @@ import org.apache.mina.transport.socket.nio.SocketSessionConfig;
  * The default {@link Listener} implementation.
  *
  */
-public class MinaListener implements Listener {
+public class MinaListener extends AbstractListener {
 
     private Log log;
-    
-    private FtpServerContext serverContext;
 
     private IoAcceptor acceptor = new SocketAcceptor();
     
@@ -57,27 +53,18 @@ public class MinaListener implements Listener {
     private SocketAcceptorConfig cfg;
     
     boolean suspended = false;
- 
 
     /**
-     * Constructs a listener based on the configuration object
-     * 
-     * @param serverContext Configuration for the listener
-     * @throws Exception 
+     * @see Listener#start(FtpServerContext)
      */
-    public MinaListener(FtpServerContext serverContext) throws Exception {
-        this.serverContext = serverContext;
+    public void start(FtpServerContext serverContext) throws Exception {
         
         log = serverContext.getLogFactory().getInstance(getClass());
         
-        
-        int port = serverContext.getSocketFactory().getPort();
-        InetAddress serverAddress = serverContext.getSocketFactory().getServerAddress();
-        
-        if(serverAddress != null) {
-            address = new InetSocketAddress(serverAddress, port );
+        if(getServerAddress() != null) {
+            address = new InetSocketAddress(getServerAddress(), getPort() );
         } else {
-            address = new InetSocketAddress( port );
+            address = new InetSocketAddress( getPort() );
         }
         
         cfg = new SocketAcceptorConfig();
@@ -91,10 +78,9 @@ public class MinaListener implements Listener {
         // Decrease the default receiver buffer size
         ((SocketSessionConfig) acceptor.getDefaultConfig().getSessionConfig()).setReceiveBufferSize(512); 
         
-        if(serverContext.getSocketFactory() instanceof SSLFtpSocketFactory) {
-            Ssl ssl = serverContext.getSocketFactory().getSSL();
+        if(isImplicitSsl()) {
             try {
-                SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
+                SSLFilter sslFilter = new SSLFilter( getSsl().getSSLContext() );
                 cfg.getFilterChain().addFirst("sslFilter", sslFilter);
 
             } catch (GeneralSecurityException e) {
@@ -102,14 +88,9 @@ public class MinaListener implements Listener {
             }
             
         }
-    }
-
-    /**
-     * @see Listener#start()
-     */
-    public void start() throws Exception {
         
-        protocolHandler = new MinaFtpProtocolHandler(serverContext, new FtpProtocolHandler(serverContext));
+        
+        protocolHandler = new MinaFtpProtocolHandler(serverContext, new FtpProtocolHandler(serverContext), this);
 
         acceptor.bind(address, protocolHandler, cfg );
     }

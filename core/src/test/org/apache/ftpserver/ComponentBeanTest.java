@@ -21,13 +21,13 @@ package org.apache.ftpserver;
 
 import java.util.Properties;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
-
-import junit.framework.TestCase;
 
 
 public class ComponentBeanTest extends TestCase {

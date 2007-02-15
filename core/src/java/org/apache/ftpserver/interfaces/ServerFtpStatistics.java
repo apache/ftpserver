@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.listener.Connection;

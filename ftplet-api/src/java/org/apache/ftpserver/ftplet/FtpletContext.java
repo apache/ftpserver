@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.net.InetAddress;
-
 import org.apache.commons.logging.LogFactory;
 
 /**
@@ -55,14 +53,4 @@ interface FtpletContext {
      * Get Ftplet.
      */
     Ftplet getFtplet(String name);
-    
-    /**
-     * Get server address.
-     */
-    InetAddress getServerAddress();
-        
-    /**
-     * Get server port.
-     */ 
-    int getServerPort();
 }

@@ -19,7 +19,10 @@
 
 package org.apache.ftpserver;
 
-import java.net.InetAddress;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
@@ -43,6 +46,8 @@ import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.ConnectionManagerImpl;
+import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
@@ -55,8 +60,7 @@ import org.apache.ftpserver.usermanager.WritePermission;
  * FTP server configuration implementation. It holds all 
  * the components used.
  */
-public
-class ConfigurableFtpServerContext implements FtpServerContext {
+public class ConfigurableFtpServerContext implements FtpServerContext {
 
     private LogFactory logFactory;
     private Bean socketFactoryBean;
@@ -71,6 +75,7 @@ class ConfigurableFtpServerContext implements FtpServerContext {
     private Bean commandFactoryBean;
     
     private Log log;
+    private Map listeners = new HashMap();
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
         new WritePermission()
@@ -92,6 +97,8 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             logFactory = LogFactory.getFactory();
             logFactory = new FtpLogFactory(logFactory);
             log        = logFactory.getInstance(ConfigurableFtpServerContext.class);
+            
+            listeners = createListeners(conf, "listeners");
             
             // create all the components
             socketFactoryBean     = createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());
@@ -118,6 +125,32 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             dispose();
             throw ex;
         }
+    }
+    
+    private Map createListeners(Configuration conf, String prefix) throws Exception {
+        Map map = new HashMap();
+
+        Configuration listenersConfig = conf.subset(prefix);
+        if(listenersConfig.isEmpty()) {
+            // create default listener
+            Bean listenerBean = createComponent(listenersConfig, "default", MinaListener.class.getName());
+            
+            map.put("default", listenerBean);
+        } else {
+        
+            Iterator keys = listenersConfig.getKeys();
+            
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                
+                Bean listenerBean = createComponent(listenersConfig, key, MinaListener.class.getName());
+                
+                map.put(key, listenerBean);
+            }
+        }
+        
+       
+        return map;
     }
 
     /**
@@ -293,20 +326,6 @@ class ConfigurableFtpServerContext implements FtpServerContext {
     }
     
     /**
-     * Get server address.
-     */
-    public InetAddress getServerAddress() {
-        return ((SocketFactory) socketFactoryBean.getBean()).getServerAddress();
-    } 
-        
-    /**
-     * Get server port.
-     */
-    public int getServerPort() {
-        return ((SocketFactory) socketFactoryBean.getBean()).getPort();
-    } 
-    
-    /**
      * Get Ftplet.
      */
     public Ftplet getFtplet(String name) {
@@ -318,35 +337,41 @@ class ConfigurableFtpServerContext implements FtpServerContext {
      */
     public void dispose() {
         
-        if(connectionManagerBean.getBean() != null) {
+        Iterator listenerIter = listeners.values().iterator();
+        while (listenerIter.hasNext()) {
+            Bean listenerBean = (Bean) listenerIter.next();
+            listenerBean.destroyBean();
+        }
+        
+        if(connectionManagerBean != null && connectionManagerBean.getBean() != null) {
             connectionManagerBean.destroyBean();
         }
         
-        if(dataConConfigBean.getBean() != null) {
+        if(dataConConfigBean != null && dataConConfigBean.getBean() != null) {
             dataConConfigBean.destroyBean();
         }
         
-        if(ftpletContainerBean.getBean() != null) {
+        if(ftpletContainerBean != null && ftpletContainerBean.getBean() != null) {
             ftpletContainerBean.destroyBean();
         }
         
-        if(userManagerBean.getBean() != null) {
+        if(userManagerBean != null && userManagerBean.getBean() != null) {
             userManagerBean.destroyBean();
         }
         
-        if(ipRestrictorBean.getBean() != null) {
+        if(ipRestrictorBean != null && ipRestrictorBean.getBean() != null) {
             ipRestrictorBean.destroyBean();
         }
         
-        if(fileSystemManagerBean.getBean() != null) {
+        if(fileSystemManagerBean != null && fileSystemManagerBean.getBean() != null) {
             fileSystemManagerBean.destroyBean();
         }
         
-        if(statisticsBean.getBean() != null) {
+        if(statisticsBean != null && statisticsBean.getBean() != null) {
             statisticsBean.destroyBean();
         }
         
-        if(messageResourceBean.getBean() != null) {
+        if(messageResourceBean != null && messageResourceBean.getBean() != null) {
             messageResourceBean.destroyBean();
         }
         
@@ -354,5 +379,34 @@ class ConfigurableFtpServerContext implements FtpServerContext {
             logFactory.release();
             logFactory = null;
         }
+    }
+
+    public Listener getListener(String name) {
+        Bean listenerBean = (Bean) listeners.get(name);
+        
+        if(listenerBean != null) {
+            return (Listener) listenerBean.getBean();
+        } else {
+            return null;
+        }
+    }
+
+    public Listener[] getListeners() {
+        Collection listenerBeans = listeners.values();
+        Iterator listenerIter = listenerBeans.iterator();
+        
+        
+        Listener[] listenerArray = new Listener[listenerBeans.size()];
+        
+        int counter = 0;
+        while (listenerIter.hasNext()) {
+            Bean bean = (Bean) listenerIter.next();
+            
+            listenerArray[counter] = (Listener) bean.getBean();
+            
+            counter++;
+        }
+        
+        return listenerArray;
     }
 } 

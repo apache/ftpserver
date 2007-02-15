@@ -20,6 +20,7 @@
 package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.listener.Listener;
 
 /**
  * The user session as seen by server components, adds additional
@@ -32,5 +33,7 @@ public interface FtpServerSession extends FtpSession {
      * @return The server context
      */
     FtpServerContext getServerContext();
+    
+    Listener getListener();
     
 }

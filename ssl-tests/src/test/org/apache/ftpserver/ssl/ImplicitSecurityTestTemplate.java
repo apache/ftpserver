@@ -32,8 +32,8 @@ public abstract class ImplicitSecurityTestTemplate extends ExplicitSecurityTestT
      */
     protected Properties createConfig() {
         Properties config = super.createConfig();
-        config.setProperty("config.socket-factory.class",
-                "org.apache.ftpserver.socketfactory.SSLFtpSocketFactory");
+        config.setProperty("config.listeners.default.implicitSsl",
+                "true");
 
         return config;
     }

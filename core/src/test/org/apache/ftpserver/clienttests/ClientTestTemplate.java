@@ -33,6 +33,7 @@ import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.log4j.Logger;
@@ -70,7 +71,8 @@ public abstract class ClientTestTemplate extends TestCase {
         assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE.exists());
 
         Properties configProps = new Properties();
-        configProps.setProperty("config.socket-factory.port", Integer
+        configProps.setProperty("config.listeners.default.class", MinaListener.class.getName());
+        configProps.setProperty("config.listeners.default.port", Integer
                 .toString(port));
         configProps.setProperty("config.user-manager.class",
                 "org.apache.ftpserver.usermanager.PropertiesUserManager");

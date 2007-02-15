@@ -19,6 +19,9 @@
 
 package org.apache.ftpserver.listener;
 
+import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.Ssl;
+
 
 /**
  * Interface for the component responsible for waiting for incoming
@@ -26,6 +29,8 @@ package org.apache.ftpserver.listener;
  *
  */
 public interface Listener {
+    
+    Ssl getSsl();
     
     /**
      * Start the listener, will initiate the listener waiting
@@ -35,7 +40,7 @@ public interface Listener {
      * 
      * @throws Exception On error during start up
      */
-    void start() throws Exception;
+    void start(FtpServerContext serverContext) throws Exception;
 
     /**
      * Stop the listener, it should no longer except socket requests.

@@ -26,6 +26,7 @@ import java.net.SocketException;
 
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.Listener;
@@ -34,10 +35,10 @@ import org.apache.ftpserver.listener.Listener;
  * The default {@link Listener} implementation.
  *
  */
-public class IOListener implements Listener, Runnable {
+public class IOListener extends AbstractListener implements Runnable {
 
     private Log log;
-    
+
     private FtpServerContext serverContext;
 
     private ServerSocket serverSocket;
@@ -47,25 +48,37 @@ public class IOListener implements Listener, Runnable {
     private boolean suspended = false;
 
     /**
-     * Constructs a listener based on the configuration object
-     * 
-     * @param serverContext Configuration for the listener
+     * @see Listener#start(FtpServerContext)
      */
-    public IOListener(FtpServerContext serverContext) {
+    public void start(FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
         
         log = serverContext.getLogFactory().getInstance(getClass());
-    }
 
-    /**
-     * @see Listener#start()
-     */
-    public void start() throws Exception {
-        serverSocket = serverContext.getSocketFactory().createServerSocket();
+        serverSocket = createServerSocket();
 
         listenerThread = new Thread(this);
         listenerThread.start();
 
+    }
+    
+    /**
+     * Create server socket.
+     */
+    private ServerSocket createServerSocket() throws Exception { 
+        ServerSocket ssocket = null;
+        
+        if(isImplicitSsl()) {
+            ssocket = getSsl().createServerSocket(null, getServerAddress(), getPort());
+        } else  {
+            if(getServerAddress() == null) {
+                ssocket = new ServerSocket(getPort(), 100);
+            } else {
+                ssocket = new ServerSocket(getPort(), 100, getServerAddress());
+            }
+        }
+        
+        return ssocket;
     }
 
     /**
@@ -106,7 +119,7 @@ public class IOListener implements Listener, Runnable {
                     continue;
                 }
 
-                Connection connection = new IOConnection(serverContext, soc);
+                Connection connection = new IOConnection(serverContext, soc, this);
                 conManager.newConnection(connection);
             } catch (SocketException ex) {
                 return;

@@ -20,12 +20,10 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.Ssl;
 
@@ -33,23 +31,72 @@ import org.apache.ftpserver.interfaces.Ssl;
  * Data connection configuration.
  */
 public 
-class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
+class DefaultDataConnectionConfig implements DataConnectionConfig {
 
+    public static class Active {
+        private boolean enable = true;
+        private InetAddress localAddress;
+        private int localPort = 0;
+        private boolean ipCheck = false;
+        
+        public Active() {
+            try {
+                localAddress = InetAddress.getLocalHost();
+            } catch (UnknownHostException e) {
+                throw new FtpServerConfigurationException("Failed to resolve localhost", e);
+            }
+        }
+        
+        public boolean isEnable() {
+            return enable;
+        }
+        public void setEnable(boolean enable) {
+            this.enable = enable;
+        }
+        public boolean isIpCheck() {
+            return ipCheck;
+        }
+        public void setIpCheck(boolean ipCheck) {
+            this.ipCheck = ipCheck;
+        }
+        public InetAddress getLocalAddress() {
+            return localAddress;
+        }
+        public void setLocalAddress(InetAddress localAddress) {
+            this.localAddress = localAddress;
+        }
+        public int getLocalPort() {
+            return localPort;
+        }
+        public void setLocalPort(int localPort) {
+            this.localPort = localPort;
+        }
+    }
+    
+    public static class Passive  {
+        private InetAddress address;
+        private PassivePorts passivePorts =PassivePorts.parse("0");
+        
+        public InetAddress getAddress() {
+            return address;
+        }
+        public void setAddress(InetAddress address) {
+            this.address = address;
+        }
+        public PassivePorts getPassivePorts() {
+            return passivePorts;
+        }
+        public void setPorts(String ports) {
+            this.passivePorts = PassivePorts.parse(ports);
+        }
+    }
+    
     private Log log;
     private LogFactory logFactory;
     
-    private int maxIdleTimeMillis;
-    
-    private boolean activeEnable;
-    private boolean activeIpCheck;
-    private InetAddress activeLocalAddress;
-    private int activeLocalPort;
-    
-    private InetAddress passiveAddress;
+    private int maxIdleTimeMillis = 10000;
     
     private Ssl ssl;
-    
-    private PassivePorts passivePorts;
 
     
     /**
@@ -60,62 +107,24 @@ class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
         log = logFactory.getInstance(getClass());
     }
     
-    /**
-     * Configure the data connection config object.
-     */
-    public void configure(Configuration conf) throws FtpException {
-        
-        try {
-            
-            // get the maximum idle time in millis
-            maxIdleTimeMillis = conf.getInt("idle-time", 10) * 1000;
-            
-            // get the active data connection parameters
-            Configuration activeConf = conf.subset("active");
-            activeEnable = activeConf.getBoolean("enable", true);
-            if(activeEnable) {
-                String portAddress = activeConf.getString("local-address", null);
-                if(portAddress == null) {
-                    activeLocalAddress = InetAddress.getLocalHost();
-                }
-                else {
-                    activeLocalAddress = InetAddress.getByName(portAddress);
-                }
-                
-                activeLocalPort = activeConf.getInt("local-port", 0);
-                activeIpCheck = activeConf.getBoolean("ip-check", false);
-            }
-            
-            // get the passive data connection parameters
-            Configuration passiveConf = conf.subset("passive");
-            
-            String pasvAddress = passiveConf.getString("address", null);
-            if(pasvAddress == null) {
-                passiveAddress = null;
-            }
-            else {
-                passiveAddress = InetAddress.getByName(pasvAddress);
-            }
-            
-            String pasvPorts = passiveConf.getString("ports", "0");
-            
-            passivePorts = PassivePorts.parse(pasvPorts);
-            
-            // get SSL parameters if available 
-            Configuration sslConf = conf.subset("ssl");
-            if(!sslConf.isEmpty()) {
-                ssl = (Ssl)Class.forName("org.apache.ftpserver.ssl.DefaultSsl").newInstance();
-                ssl.setLogFactory(logFactory);
-                ssl.configure(sslConf);
-            }
-        }
-        catch(FtpException ex) {
-            throw ex;
-        }
-        catch(Exception ex) {
-            log.error("DefaultDataConnectionConfig.configure()", ex);
-            throw new FtpException("DefaultDataConnectionConfig.configure()", ex);
-        }
+    public void setIdleTime(int idleTime) {
+        // get the maximum idle time in millis
+        maxIdleTimeMillis = idleTime * 1000;
+    }
+    
+    private Active active = new Active();
+    private Passive passive = new Passive();
+    
+    public void setActive(Active active) {
+        this.active = active;
+    }
+    
+    public void setPassive(Passive passive) {
+        this.passive = passive;
+    }
+    
+    public void setSsl(Ssl ssl) {
+        this.ssl = ssl;
     }
 
     /**
@@ -129,35 +138,35 @@ class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
      * Is PORT enabled?
      */
     public boolean isActiveEnabled() {
-        return activeEnable;
+        return active.isEnable();
     }
     
     /**
      * Check the PORT IP?
      */
     public boolean isActiveIpCheck() {
-        return activeIpCheck;
+        return active.isIpCheck();
     }
     
     /**
      * Get the local address for active mode data transfer.
      */
     public InetAddress getActiveLocalAddress() {
-        return activeLocalAddress;
+        return active.getLocalAddress();
     }
     
     /**
      * Get the active local port number.
      */
     public int getActiveLocalPort() {
-        return activeLocalPort;
+        return active.getLocalPort();
     }
     
     /**
      * Get passive host.
      */
     public InetAddress getPassiveAddress() {
-        return passiveAddress;
+        return passive.getAddress();
     }
     
     /**
@@ -172,7 +181,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
         while( (dataPort==-1) && (--loopTimes >= 0)  && (!currThread.isInterrupted()) ) {
 
             // search for a free port            
-            dataPort = passivePorts.reserveNextPort();
+            dataPort = passive.getPassivePorts().reserveNextPort();
 
             // no available free port - wait for the release notification
             if(dataPort == -1) {
@@ -190,7 +199,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig, Component {
      * Release data port
      */
     public synchronized void releasePassivePort(int port) {
-        passivePorts.releasePort(port);
+        passive.getPassivePorts().releasePort(port);
 
         notify();
     }

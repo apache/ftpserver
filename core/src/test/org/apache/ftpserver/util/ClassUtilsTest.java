@@ -278,6 +278,28 @@ public class ClassUtilsTest extends TestCase {
         assertEquals("bar3", map.get("foo3"));
         assertEquals("bar4", map.get("foo4"));
     }
+    
+    public void testCreateMap() {
+        Properties props = new Properties();
+        props.setProperty("config.foo1.class", MyBean.class.getName());
+        props.setProperty("config.foo1.foo", "bar1");
+        props.setProperty("config.foo2.class", MyBean.class.getName());
+        props.setProperty("config.foo2.foo", "bar2");
+        props.setProperty("config.foo3.class", MyBean.class.getName());
+        props.setProperty("config.foo3.foo", "bar3");
+        props.setProperty("config.foo4.class", MyBean.class.getName());
+        props.setProperty("config.foo4.foo", "bar4");
+        
+        Configuration config = new PropertiesConfiguration(props);
+        
+        Map map = ClassUtils.createMap(config);
+        
+        for(int i = 1; i<5; i++) {
+            MyBean bean = (MyBean) map.get("foo" + i);
+            assertEquals("bar" + i, bean.getFoo());
+            
+        }
+    }
  
     public static class MyCollectionBean {
         private List list;

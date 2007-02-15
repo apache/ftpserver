@@ -24,9 +24,9 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -58,7 +58,7 @@ class AUTH extends AbstractCommand {
         // check SSL configuration
         FtpServerContext serverContext = connection.getServerContext();
         Log log = serverContext.getLogFactory().getInstance(getClass());
-        if(serverContext.getSocketFactory().getSSL() == null) {
+        if(session.getListener().getSsl() == null) {
             out.write(FtpReplyUtil.translate(session, 431, "AUTH", null));
             return;
         }
@@ -67,9 +67,9 @@ class AUTH extends AbstractCommand {
         String authType = request.getArgument().toUpperCase();
         if(authType.equals("SSL")) {
             try {
-                connection.beforeSecureControlChannel("SSL");
+                connection.beforeSecureControlChannel(session, "SSL");
                 out.write(FtpReplyUtil.translate(session, 234, "AUTH.SSL", null));
-                connection.afterSecureControlChannel("SSL");
+                connection.afterSecureControlChannel(session, "SSL");
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {
@@ -79,9 +79,9 @@ class AUTH extends AbstractCommand {
         }
         else if(authType.equals("TLS")) {
             try {
-                connection.beforeSecureControlChannel("TLS");
+                connection.beforeSecureControlChannel(session, "TLS");
                 out.write(FtpReplyUtil.translate(session, 234, "AUTH.TLS", null));
-                connection.afterSecureControlChannel("TLS");
+                connection.afterSecureControlChannel(session, "TLS");
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {

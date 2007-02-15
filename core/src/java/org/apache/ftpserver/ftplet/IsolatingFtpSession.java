@@ -95,6 +95,10 @@ public class IsolatingFtpSession implements FtpSession {
         return session.getServerAddress();
     }
 
+    public int getServerPort() {
+        return session.getServerPort();
+    }
+
     public Structure getStructure() {
         return session.getStructure();
     }

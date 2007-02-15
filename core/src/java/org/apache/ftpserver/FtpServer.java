@@ -20,14 +20,9 @@
 package org.apache.ftpserver;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.io.IOListener;
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
@@ -44,8 +39,6 @@ public class FtpServer {
 
     private boolean suspended;
 
-    private List listeners = new ArrayList();
-
     /**
      * Constructor. Set the server object.
      * @throws Exception 
@@ -53,19 +46,15 @@ public class FtpServer {
     public FtpServer(FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
         log = this.serverContext.getLogFactory().getInstance(getClass());
-
-        // for now just create one 
-        listeners.add(new IOListener(serverContext));
     }
 
     /**
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            Listener listener = (Listener) iter.next();
-            
-            listener.start();
+        Listener[] listeners = serverContext.getListeners(); 
+        for (int i = 0; i<listeners.length; i++) {
+            listeners[i].start(serverContext);
         }
         
         System.out.println("Server ready :: Apache FTP Server");
@@ -79,11 +68,11 @@ public class FtpServer {
     public void stop() {
 
         // stop all listeners
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            Listener listener = (Listener) iter.next();
-            
-            listener.stop();
+        Listener[] listeners = serverContext.getListeners(); 
+        for (int i = 0; i<listeners.length; i++) {
+            listeners[i].stop();
         }
+
 
         // release server resources
         if (serverContext != null) {

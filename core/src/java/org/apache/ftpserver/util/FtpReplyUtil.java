@@ -23,8 +23,8 @@ import java.net.InetAddress;
 
 import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpReply;
+import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.MessageResource;
@@ -283,7 +283,7 @@ public class FtpReplyUtil  {
         
         // server port
         else if(varName.equals(SERVER_PORT)) {
-            varVal = String.valueOf(session.getServerContext().getServerPort());
+            varVal = String.valueOf(session.getServerPort());
         }
         
         return varVal;

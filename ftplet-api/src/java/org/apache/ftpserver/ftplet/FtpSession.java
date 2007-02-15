@@ -48,6 +48,8 @@ interface FtpSession {
     
     InetAddress getServerAddress();
     
+    int getServerPort();
+    
     Certificate[] getClientCertificates();
     
     /**

@@ -29,6 +29,7 @@ import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractConnection;
 import org.apache.ftpserver.listener.ConnectionObserver;
@@ -42,7 +43,7 @@ public class MinaConnection extends AbstractConnection {
 
     private IoSession session;
     
-    public MinaConnection(FtpServerContext serverContext, IoSession session) throws IOException {
+    public MinaConnection(FtpServerContext serverContext, IoSession session, MinaListener listener) throws IOException {
         super(serverContext);
         
         this.session = session;
@@ -53,6 +54,8 @@ public class MinaConnection extends AbstractConnection {
         ftpSession = new FtpSessionImpl(serverContext);
         ftpSession.setClientAddress(((InetSocketAddress)session.getRemoteAddress()).getAddress());
         ftpSession.setServerAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());
+        ftpSession.setServerPort(((InetSocketAddress)session.getLocalAddress()).getPort());
+        ftpSession.setListener(listener);
 
         FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
         dataCon.setServerControlAddress(((InetSocketAddress)session.getLocalAddress()).getAddress());
@@ -86,8 +89,8 @@ public class MinaConnection extends AbstractConnection {
         
     }
 
-    public void beforeSecureControlChannel(String type) throws Exception {
-        Ssl ssl = serverContext.getSocketFactory().getSSL();
+    public void beforeSecureControlChannel(FtpServerSession ftpSession, String type) throws Exception {
+        Ssl ssl = ftpSession.getListener().getSsl();
         
         if(ssl != null) {
             session.setAttribute(SSLFilter.DISABLE_ENCRYPTION_ONCE);
@@ -102,7 +105,7 @@ public class MinaConnection extends AbstractConnection {
         
     }
 
-    public void afterSecureControlChannel(String type) throws Exception {
+    public void afterSecureControlChannel(FtpServerSession ftpSession, String type) throws Exception {
         // do nothing
     }
 }

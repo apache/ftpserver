@@ -21,8 +21,6 @@ package org.apache.ftpserver.listener;
 
 import java.util.List;
 
-import org.apache.ftpserver.ftplet.Component;
-
 /**
  * It manages all the ftp connections.
  */

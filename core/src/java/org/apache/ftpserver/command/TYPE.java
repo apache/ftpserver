@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 

@@ -35,6 +35,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractConnection;
 import org.apache.ftpserver.listener.ConnectionObserver;
@@ -59,7 +60,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
     /**
      * Constructor - set the control socket.
      */
-    public IOConnection(FtpServerContext serverContext, Socket controlSocket) throws IOException {
+    public IOConnection(FtpServerContext serverContext, Socket controlSocket, IOListener listener) throws IOException {
         super(serverContext);
         
         this.controlSocket = controlSocket;
@@ -73,6 +74,8 @@ public class IOConnection extends AbstractConnection implements Runnable {
         ftpSession = new FtpSessionImpl(serverContext);
         ftpSession.setClientAddress(this.controlSocket.getInetAddress());
         ftpSession.setServerAddress(this.controlSocket.getLocalAddress());
+        ftpSession.setServerPort(this.controlSocket.getLocalPort());
+        ftpSession.setListener(listener);
 
         FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
@@ -148,7 +151,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
         } catch(SSLException ex) {
             log.warn("The client did not initiate the SSL connection correctly", ex);
         } catch(Exception ex) {
-            log.warn("RequestHandler.run()", ex);
+            log.warn("Client error, closing session", ex);
         }
         finally {
             // close all resources if not done already
@@ -196,10 +199,10 @@ public class IOConnection extends AbstractConnection implements Runnable {
     /**
      * Create secure socket.
      */
-    public void afterSecureControlChannel(String protocol) throws Exception {
+    public void afterSecureControlChannel(FtpServerSession ftpSession, String protocol) throws Exception {
 
         // change socket to SSL socket
-        Ssl ssl = serverContext.getSocketFactory().getSSL();
+        Ssl ssl = ftpSession.getListener().getSsl();
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }
@@ -213,7 +216,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
         controlSocket = ssoc;
     }
 
-    public void beforeSecureControlChannel(String type) throws Exception {
+    public void beforeSecureControlChannel(FtpServerSession ftpSession, String type) throws Exception {
         // do nothing
         
     }

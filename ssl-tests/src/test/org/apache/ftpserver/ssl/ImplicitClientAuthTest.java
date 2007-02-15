@@ -26,8 +26,8 @@ public class ImplicitClientAuthTest extends ClientAuthTest {
 
     protected Properties createConfig() {
         Properties config = super.createConfig();
-        config.setProperty("config.socket-factory.class",
-                "org.apache.ftpserver.socketfactory.SSLFtpSocketFactory");
+        config.setProperty("config.listeners.default.implicitSsl",
+                "true");
 
         return config;
     }

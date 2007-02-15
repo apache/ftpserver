@@ -26,13 +26,11 @@ import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.ftpserver.ftplet.Component;
-
 /**
  * SSL interface.
  */
 public 
-interface Ssl extends Component {
+interface Ssl {
     
     SSLContext getSSLContext() throws GeneralSecurityException;
     SSLContext getSSLContext(String protocol) throws GeneralSecurityException;
