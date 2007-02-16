@@ -210,10 +210,4 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     public Ssl getSSL() {
         return ssl;
     }
-    
-    /**
-     * Dispose it.
-     */
-    public void dispose() {
-    }
 }

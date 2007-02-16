@@ -38,18 +38,15 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.CommandFactory;
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.ConnectionManagerImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
-import org.apache.ftpserver.socketfactory.FtpSocketFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
@@ -63,8 +60,6 @@ import org.apache.ftpserver.usermanager.WritePermission;
 public class ConfigurableFtpServerContext implements FtpServerContext {
 
     private LogFactory logFactory;
-    private Bean socketFactoryBean;
-    private Bean dataConConfigBean;
     private Bean messageResourceBean;
     private Bean connectionManagerBean;
     private Bean ipRestrictorBean;
@@ -101,8 +96,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             listeners = createListeners(conf, "listeners");
             
             // create all the components
-            socketFactoryBean     = createComponent(conf, "socket-factory",      FtpSocketFactory.class.getName());
-            dataConConfigBean     = createComponent(conf, "data-connection",     DefaultDataConnectionConfig.class.getName()); 
             messageResourceBean   = createComponent(conf, "message",             MessageResourceImpl.class.getName());
             connectionManagerBean = createComponent(conf, "connection-manager",  ConnectionManagerImpl.class.getName());
             ipRestrictorBean      = createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
@@ -256,13 +249,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     }
     
     /**
-     * Get socket factory.
-     */
-    public SocketFactory getSocketFactory() {
-        return (SocketFactory) socketFactoryBean.getBean();
-    }
-    
-    /**
      * Get user manager.
      */
     public UserManager getUserManager() {
@@ -310,13 +296,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     public Ftplet getFtpletContainer() {
         return (Ftplet) ftpletContainerBean.getBean();
     }
-
-    /**
-     * Get data connection config.
-     */
-    public DataConnectionConfig getDataConnectionConfig() {
-        return (DataConnectionConfig) dataConConfigBean.getBean();
-    }
     
     /**
      * Get the command factory.
@@ -345,10 +324,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         
         if(connectionManagerBean != null && connectionManagerBean.getBean() != null) {
             connectionManagerBean.destroyBean();
-        }
-        
-        if(dataConConfigBean != null && dataConConfigBean.getBean() != null) {
-            dataConConfigBean.destroyBean();
         }
         
         if(ftpletContainerBean != null && ftpletContainerBean.getBean() != null) {

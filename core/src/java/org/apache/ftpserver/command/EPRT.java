@@ -61,7 +61,7 @@ class EPRT extends AbstractCommand {
         }
         
         // is port enabled
-        DataConnectionConfig dataCfg = connection.getServerContext().getDataConnectionConfig();
+        DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
             out.write(FtpReplyUtil.translate(session, 510, "EPRT.disabled", null));
             return;

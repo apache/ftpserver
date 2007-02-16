@@ -21,6 +21,8 @@ package org.apache.ftpserver.listener;
 
 import java.net.InetAddress;
 
+import org.apache.ftpserver.DefaultDataConnectionConfig;
+import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.Ssl;
 
 
@@ -33,6 +35,7 @@ public abstract class AbstractListener implements Listener {
     private int port = 21;
     private Ssl ssl;
     private boolean implicitSsl = false;
+    private DataConnectionConfig dataConnectionConfig = new DefaultDataConnectionConfig();
     
     public boolean isImplicitSsl() {
         return implicitSsl;
@@ -57,5 +60,14 @@ public abstract class AbstractListener implements Listener {
     }
     public void setSsl(Ssl ssl) {
         this.ssl = ssl;
+    }
+    public DataConnectionConfig getDataConnectionConfig() {
+        return dataConnectionConfig;
+    }
+    public void setDataConnectionConfig(DataConnectionConfig dataConnectionConfig) {
+        this.dataConnectionConfig = dataConnectionConfig;
+    }
+    public void setDataConnection(DataConnectionConfig dataConnectionConfig) {
+        setDataConnectionConfig(dataConnectionConfig);
     }
 }

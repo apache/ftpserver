@@ -56,16 +56,6 @@ interface FtpServerContext extends FtpletContext {
     Listener[] getListeners();
     
     /**
-     * Get server socket factory.
-     */
-    SocketFactory getSocketFactory();
-        
-    /**
-     * Get data connection config.
-     */
-    DataConnectionConfig getDataConnectionConfig();
-    
-    /**
      * Get the command factory.
      */
     CommandFactory getCommandFactory();

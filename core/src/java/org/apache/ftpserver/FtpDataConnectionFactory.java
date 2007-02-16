@@ -96,7 +96,7 @@ class FtpDataConnectionFactory {
             FtpServerContext ctx = serverContext;
             
             if(ctx != null) {
-                DataConnectionConfig dcc = ctx.getDataConnectionConfig();
+                DataConnectionConfig dcc = session.getListener().getDataConnectionConfig();
                 if(dcc != null) {
                     dcc.releasePassivePort(port);
                 }
@@ -134,7 +134,7 @@ class FtpDataConnectionFactory {
         closeDataSocket(); 
         
         // get the passive port
-        int passivePort = serverContext.getDataConnectionConfig().getPassivePort();
+        int passivePort = session.getListener().getDataConnectionConfig().getPassivePort();
         if(passivePort == -1) {
             log.warn("Cannot find an available passive port.");
             servSoc = null;
@@ -144,7 +144,7 @@ class FtpDataConnectionFactory {
         // open passive server socket and get parameters
         boolean bRet = false;
         try {
-            DataConnectionConfig dataCfg = serverContext.getDataConnectionConfig();
+            DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
             if(address == null) {
                 address = serverControlAddress;
@@ -206,7 +206,7 @@ class FtpDataConnectionFactory {
 
         // get socket depending on the selection
         dataSoc = null;
-        DataConnectionConfig dataConfig = serverContext.getDataConnectionConfig();
+        DataConnectionConfig dataConfig = session.getListener().getDataConnectionConfig();
         try {
             if(isPort) {
                 int localPort = dataConfig.getActiveLocalPort();
@@ -297,7 +297,7 @@ class FtpDataConnectionFactory {
         }
         
         // no idle time limit - not a timeout
-        int maxIdleTime = serverContext.getDataConnectionConfig().getMaxIdleTimeMillis();
+        int maxIdleTime = session.getListener().getDataConnectionConfig().getMaxIdleTimeMillis();
         if(maxIdleTime == 0) {
             return false;
         }

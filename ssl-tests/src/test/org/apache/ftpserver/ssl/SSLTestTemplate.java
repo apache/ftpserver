@@ -35,6 +35,7 @@ import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.ConfigurableFtpServerContext;
+import org.apache.ftpserver.DefaultDataConnectionConfig;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -99,8 +100,22 @@ public abstract class SSLTestTemplate extends TestCase {
         configProps.setProperty("config.listeners.default.ssl.key-password",
                 "password");
 
-        //configProps.setProperty("config.socket-factory.port", Integer
-        //        .toString(port));
+        configProps.setProperty("config.listeners.default.data-connection.class",
+                DefaultDataConnectionConfig.class.getName());
+        configProps.setProperty("config.listeners.default.data-connection.ssl.class",
+                DefaultSsl.class.getName());
+        configProps.setProperty("config.listeners.default.data-connection.ssl.keystore-file",
+                FTPSERVER_KEYSTORE.getAbsolutePath());
+        configProps.setProperty("config.listeners.default.data-connection.ssl.keystore-password",
+        "password");
+        configProps.setProperty("config.listeners.default.data-connection.ssl.ssl-protocol",
+                getAuthValue());
+        configProps.setProperty(
+                "config.listeners.default.data-connection.ssl.client-authentication", getClientAuth());
+        configProps.setProperty("config.listeners.default.data-connection.ssl.key-password",
+        "password");
+        
+        
         configProps.setProperty("config.user-manager.class",
                 "org.apache.ftpserver.usermanager.PropertiesUserManager");
         configProps.setProperty("config.user-manager.admin", "admin");
@@ -110,31 +125,6 @@ public abstract class SSLTestTemplate extends TestCase {
                 USERS_FILE.getAbsolutePath());
         configProps.setProperty("config.create-default-user", "false");
 
-        //configProps.setProperty("config.socket-factory.class",
-        //        "org.apache.ftpserver.socketfactory.FtpSocketFactory");
-//        configProps.setProperty("config.socket-factory.ssl.keystore-file",
-//                FTPSERVER_KEYSTORE.getAbsolutePath());
-//        configProps.setProperty("config.socket-factory.ssl.keystore-password",
-//                "password");
-//        configProps
-//                .setProperty("config.socket-factory.ssl.ssl-protocol", getAuthValue());
-//        configProps.setProperty(
-//                "config.socket-factory.ssl.client-authentication", getClientAuth());
-//        configProps.setProperty("config.socket-factory.ssl.key-password",
-//                "password");
-//
-        configProps.setProperty("config.data-connection.ssl.class",
-                DefaultSsl.class.getName());
-        configProps.setProperty("config.data-connection.ssl.keystore-file",
-                FTPSERVER_KEYSTORE.getAbsolutePath());
-        configProps.setProperty("config.data-connection.ssl.keystore-password",
-                "password");
-        configProps.setProperty("config.data-connection.ssl.ssl-protocol",
-                getAuthValue());
-        configProps.setProperty(
-                "config.data-connection.ssl.client-authentication", getClientAuth());
-        configProps.setProperty("config.data-connection.ssl.key-password",
-                "password");
 
         return configProps;
     }

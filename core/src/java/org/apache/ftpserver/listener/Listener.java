@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.listener;
 
+import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
 
@@ -31,6 +32,8 @@ import org.apache.ftpserver.interfaces.Ssl;
 public interface Listener {
     
     Ssl getSsl();
+    
+    DataConnectionConfig getDataConnectionConfig();
     
     /**
      * Start the listener, will initiate the listener waiting

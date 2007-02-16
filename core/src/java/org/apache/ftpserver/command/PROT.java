@@ -27,7 +27,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -63,8 +62,7 @@ class PROT extends AbstractCommand {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         }
         else if(arg.equals("P")) {
-            FtpServerContext serverContext = connection.getServerContext();
-            if(serverContext.getDataConnectionConfig().getSSL() == null) {
+            if(session.getListener().getDataConnectionConfig().getSSL() == null) {
                 out.write(FtpReplyUtil.translate(session, 431, "PROT", null));
             }
             else {
