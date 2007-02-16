@@ -33,14 +33,22 @@ public class FtpServer {
 
     private Thread runner;
 
-    private FtpServerContext serverContext;
+    private FtpServerContext serverContext = new DefaultFtpServerContext();
 
     private Log log;
 
     private boolean suspended;
 
     /**
-     * Constructor. Set the server object.
+     * Default constructor.
+     * @throws Exception 
+     */
+    public FtpServer() throws Exception {
+        log = this.serverContext.getLogFactory().getInstance(getClass());
+    }
+
+    /**
+     * Constructor. Set the server context.
      * @throws Exception 
      */
     public FtpServer(FtpServerContext serverContext) throws Exception {
