@@ -44,20 +44,22 @@ public class PasvTest extends ClientTestTemplate {
             String ip = ips[i];
             String ftpIp = ip.replace('.', ',');
             
-            try{
-                client.connect(ip, port);
-            } catch(FTPConnectionClosedException e) {
-                // try again
-                Thread.sleep(200);
-                client.connect(ip, port);
+            if(!ip.startsWith("0.")) {
+                try{
+                    client.connect(ip, port);
+                } catch(FTPConnectionClosedException e) {
+                    // try again
+                    Thread.sleep(200);
+                    client.connect(ip, port);
+                }
+                client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+                client.pasv();
+                
+                assertTrue(client.getReplyString().indexOf(ftpIp) > -1 );
+                
+                client.quit();
+                client.disconnect();
             }
-            client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-            client.pasv();
-            
-            assertTrue(client.getReplyString().indexOf(ftpIp) > -1 );
-            
-            client.quit();
-            client.disconnect();
         }
     }
 }
