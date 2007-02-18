@@ -36,7 +36,6 @@
         <system>Jira</system>
         <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
     </issueManagement>
-    <!--
     <developers>
         <developer>
             <name>Rana Battacharyya</name>
@@ -60,10 +59,8 @@
             <organization>Netcracker corp.</organization>
         </developer>
     </developers>
-    -->
 
     <!-- Contributor list -->
-    <!--
     <contributors>
         <contributor>
             <name>Birkir A. Barkarson</name>
@@ -90,15 +87,17 @@
             <name>Nick Vincent</name>
         </contributor>
     </contributors>
-    -->
+  
+
+    
     <distributionManagement>
 
-        <!--
-     This POM's parent POM (the Apache root POM) provides repositories. Unfortunately,
-     this allows for accidental deployments. So we disable them here by providing
-     a dummy repository. Use "mvn -Prc deploy" (Apache snapshot repository) or
-     "mvn -Prelease deploy" (Apache release repository), if you really want to deploy.
-   -->
+      <!--
+       This POM's parent POM (the Apache root POM) provides repositories. Unfortunately,
+       this allows for accidental deployments. So we disable them here by providing
+       a dummy repository. Use "mvn -Prc deploy" (Apache snapshot repository) or
+       "mvn -Prelease deploy" (Apache release repository), if you really want to deploy.
+      -->
         <repository>
             <id>dummy</id>
             <name>Dummy to avoid accidental deploys</name>
@@ -210,6 +209,7 @@
                     </archive>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -232,6 +232,19 @@
             </distributionManagement>
             <build>
                 <plugins>
+                    <plugin>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-gpg-plugin</artifactId>
+                      <executions>
+                        <execution>
+                          <id>sign-artifacts</id>
+                          <phase>verify</phase>
+                          <goals>
+                            <goal>sign</goal>
+                          </goals>
+                        </execution>
+                      </executions>
+                    </plugin>
                     <plugin>
                         <artifactId>maven-source-plugin</artifactId>
                         <executions>
@@ -270,8 +283,63 @@
                     <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/</url>
                 </repository>
             </distributionManagement>
+            
+            <!-- Used for snapshot RAT Maven plugin -->
+            <repositories>
+              <repository>
+                <id>Codehaus Snapshots</id>
+                <url>http://snapshots.repository.codehaus.org/</url>
+                <snapshots>
+                  <enabled>true</enabled>
+                </snapshots>
+                <releases>
+                  <enabled>false</enabled>
+                </releases>
+              </repository>
+            </repositories>
+            <pluginRepositories>
+              <pluginRepository>
+                <id>Codehaus Snapshots</id>
+                <url>http://snapshots.repository.codehaus.org/</url>
+                <snapshots>
+                  <enabled>true</enabled>
+                </snapshots>
+                <releases>
+                  <enabled>false</enabled>
+                </releases>
+              </pluginRepository>
+            </pluginRepositories>
             <build>
                 <plugins>
+                    <plugin>
+                      <groupId>org.codehaus.mojo</groupId>
+                      <artifactId>rat-maven-plugin</artifactId>
+                      <version>1.0-alpha-1-SNAPSHOT</version>
+                      <configuration>
+                        <reportFile>${project.build.directory}/${project.build.finalName}.rat</reportFile>
+                      </configuration>
+                          <executions>
+                            <execution>
+                              <phase>verify</phase>
+                              <goals>
+                                <goal>check</goal>
+                              </goals>
+                            </execution>
+                          </executions>
+                    </plugin>
+                    <plugin>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-gpg-plugin</artifactId>
+                      <executions>
+                        <execution>
+                          <id>sign-artifacts</id>
+                          <phase>verify</phase>
+                          <goals>
+                            <goal>sign</goal>
+                          </goals>
+                        </execution>
+                      </executions>
+                    </plugin>
                     <plugin>
                         <artifactId>maven-source-plugin</artifactId>
                         <executions>
