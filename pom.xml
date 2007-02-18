@@ -1,389 +1,267 @@
-<!-- 
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-    
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.apache</groupId>
-        <artifactId>apache</artifactId>
-        <version>3</version>
-    </parent>
-    <groupId>org.apache.ftpserver</groupId>
-    <artifactId>ftpserver-parent</artifactId>
-    <packaging>pom</packaging>
-    <!-- TODO: dummy version. In Maven 2.1, this will be auto-versioned being a generic parent -->
-    <version>1.0-incubator-SNAPSHOT</version>
-    <name>Apache Incubator FtpServer</name>
-    <url>http://incubator.apache.org/ftpserver/</url>
-    <inceptionYear>2003</inceptionYear>
-    
-    <issueManagement>
-        <system>Jira</system>
-        <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
-    </issueManagement>
-    <developers>
-        <developer>
-            <name>Rana Battacharyya</name>
-            <id>rana_b</id>
-            <email>rana_b.{aT}.yahoo.{d0T}.com</email>
-        </developer>
-        <developer>
-            <name>Paul Hammant</name>
-            <id>hammant</id>
-            <email>paul.{aT}.hammant.{d0T}.org</email>
-        </developer>
-        <developer>
-            <name>Niklas Gustavsson</name>
-            <id>ngn</id>
-            <email>niklas.{aT}.protocol7.{d0T}.com</email>
-        </developer>
-        <developer>
-            <name>Sergey M Vladimirov</name>
-            <id>sergey</id>
-            <email>vlsergey.{aT}.gmail.{d0T}.com</email>
-            <organization>Netcracker corp.</organization>
-        </developer>
-    </developers>
-
-    <!-- Contributor list -->
-    <contributors>
-        <contributor>
-            <name>Birkir A. Barkarson</name>
-        </contributor>
-        <contributor>
-            <name>David H. DeWolf</name>
-            <organization>Vivare, INC</organization>
-            <email>ddewolf.{aT}.apache.{d0T}.org</email>
-        </contributor>
-        <contributor>
-            <name>Luis Sanabria</name>
-        </contributor>
-        <contributor>
-            <name>Daniel Hagen</name>
-        </contributor>
-        <contributor>
-            <name>KwangYul Seo</name>
-        </contributor>
-        <contributor>
-            <name>Dave Roberts</name>
-            <organization>SAA Consultants Ltd</organization>
-        </contributor>
-        <contributor>
-            <name>Nick Vincent</name>
-        </contributor>
-    </contributors>
-  
-
-    
-    <distributionManagement>
-
-      <!--
-       This POM's parent POM (the Apache root POM) provides repositories. Unfortunately,
-       this allows for accidental deployments. So we disable them here by providing
-       a dummy repository. Use "mvn -Prc deploy" (Apache snapshot repository) or
-       "mvn -Prelease deploy" (Apache release repository), if you really want to deploy.
-      -->
-        <repository>
-            <id>dummy</id>
-            <name>Dummy to avoid accidental deploys</name>
-            <url/>
-        </repository>
-    </distributionManagement>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk/</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk/</url>
-    </scm>
-
-    <mailingLists>
-        <mailingList>
-            <name>FTP Server Development mailing list</name>
-            <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
-            <post>ftpserver-dev@incubator.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-dev/</archive>
-            <otherArchives>
-                <otherArchive>http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/</otherArchive>
-            </otherArchives>
-        </mailingList>
-        <mailingList>
-            <name>FTP Server Commit mailing list</name>
-            <subscribe>ftpserver-commits-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>ftpserver-commits-unsubscribe@incubator.apache.org</unsubscribe>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-commits/</archive>
-        </mailingList>
-        <mailingList>
-            <name>Incubator General mailing list</name>
-            <subscribe>general-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>general-unsubscribe@incubator.apache.org</unsubscribe>
-            <post>general@incubator.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-general/</archive>
-            <otherArchives>
-                <otherArchive>http://www.mail-archive.com/general%40incubator.apache.org/</otherArchive>
-            </otherArchives>
-        </mailingList>
-    </mailingLists>
-    
-    <build>
-        <sourceDirectory>src/java</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
-
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>apache</artifactId>
+    <groupId>org.apache</groupId>
+    <version>3</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.ftpserver</groupId>
+  <artifactId>ftpserver-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>Apache Incubator FtpServer</name>
+  <version>1.0-M1-incubator</version>
+  <url>http://incubator.apache.org/ftpserver</url>
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
+  </issueManagement>
+  <inceptionYear>2003</inceptionYear>
+  <mailingLists>
+    <mailingList>
+      <name>FTP Server Development mailing list</name>
+      <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
+      <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
+      <post>ftpserver-dev@incubator.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-dev/</archive>
+      <otherArchives>
+        <otherArchive>http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>FTP Server Commit mailing list</name>
+      <subscribe>ftpserver-commits-subscribe@incubator.apache.org</subscribe>
+      <unsubscribe>ftpserver-commits-unsubscribe@incubator.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-commits/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Incubator General mailing list</name>
+      <subscribe>general-subscribe@incubator.apache.org</subscribe>
+      <unsubscribe>general-unsubscribe@incubator.apache.org</unsubscribe>
+      <post>general@incubator.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/incubator-general/</archive>
+      <otherArchives>
+        <otherArchive>http://www.mail-archive.com/general%40incubator.apache.org/</otherArchive>
+      </otherArchives>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <id>rana_b</id>
+      <name>Rana Battacharyya</name>
+      <email>rana_b.{aT}.yahoo.{d0T}.com</email>
+    </developer>
+    <developer>
+      <id>hammant</id>
+      <name>Paul Hammant</name>
+      <email>paul.{aT}.hammant.{d0T}.org</email>
+    </developer>
+    <developer>
+      <id>ngn</id>
+      <name>Niklas Gustavsson</name>
+      <email>niklas.{aT}.protocol7.{d0T}.com</email>
+    </developer>
+    <developer>
+      <id>sergey</id>
+      <name>Sergey M Vladimirov</name>
+      <email>vlsergey.{aT}.gmail.{d0T}.com</email>
+      <organization>Netcracker corp.</organization>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Birkir A. Barkarson</name>
+    </contributor>
+    <contributor>
+      <name>David H. DeWolf</name>
+      <email>ddewolf.{aT}.apache.{d0T}.org</email>
+      <organization>Vivare, INC</organization>
+    </contributor>
+    <contributor>
+      <name>Luis Sanabria</name>
+    </contributor>
+    <contributor>
+      <name>Daniel Hagen</name>
+    </contributor>
+    <contributor>
+      <name>KwangYul Seo</name>
+    </contributor>
+    <contributor>
+      <name>Dave Roberts</name>
+      <organization>SAA Consultants Ltd</organization>
+    </contributor>
+    <contributor>
+      <name>Nick Vincent</name>
+    </contributor>
+  </contributors>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/ftpserver/tags/1.0-M1-incubator</url>
+  </scm>
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${maven.compile.source}</source>
+          <target>${maven.compile.target}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-idea-plugin</artifactId>
+        <configuration>
+          <jdkLevel>${maven.compile.source}</jdkLevel>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.outputDirectory}/META-INF">
+                  <fileset dir="${basedir}">
+                    <include name="LICENSE.txt"></include>
+                    <include name="NOTICE.txt"></include>
+                    <include name="DISCLAIMER.txt"></include>
+                  </fileset>
+                </copy>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <archive>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>rc</id>
+      <build>
         <plugins>
-            <!-- TODO: later use toolchain support to do compilation on an external JDK 1.3+ compiler -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>rat-maven-plugin</artifactId>
+            <version>1.0-alpha-1-SNAPSHOT</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <reportFile>${project.build.directory}/${project.build.finalName}.rat</reportFile>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-source-jar</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-javadoc-jar</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
                 <configuration>
-                    <source>${maven.compile.source}</source>
-                    <target>${maven.compile.target}</target>
+                  <source>${maven.compile.source}</source>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-idea-plugin</artifactId>
-                <configuration>
-                    <jdkLevel>${maven.compile.source}</jdkLevel>
-                </configuration>
-            </plugin>
-<!--            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
-            <plugin>
-                <!-- This should possibly better be done by using a resource
-		     definition. However, if we declare a resource with
-		     ${basedir} as the base directory, then the
-		     maven-source-plugin will add the whole directory to
-		     its contents.
-		-->
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <tasks>
-                                <copy todir="${project.build.outputDirectory}/META-INF">
-                                    <fileset dir="${basedir}">
-                                        <include name="LICENSE.txt"/>
-                                        <include name="NOTICE.txt"/>
-                                        <include name="DISCLAIMER.txt"/>
-                                    </fileset>
-                                </copy>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <archive>
-                        <addMavenDescriptor>false</addMavenDescriptor>
-                    </archive>
-                </configuration>
-            </plugin>
-
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
-    </build>
-
-    <modules>
-        <module>ftplet-api</module>
-        <module>core</module>
-        <module>admin-gui</module>
-    </modules>
-    
-    <profiles>
-<!-- As long as we are in the Incubator we shouldn't relase anything 
-        <profile>
-            <id>release</id>
-            <distributionManagement>
-                <repository>
-                    <id>apache.releases</id>
-                    <name>Apache Release Distribution Repository</name>
-                    <url>scp://people.apache.org/www/people.apache.org/repo/m2-ibiblio-rsync-repository</url>
-                </repository>
-            </distributionManagement>
-            <build>
-                <plugins>
-                    <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-gpg-plugin</artifactId>
-                      <executions>
-                        <execution>
-                          <id>sign-artifacts</id>
-                          <phase>verify</phase>
-                          <goals>
-                            <goal>sign</goal>
-                          </goals>
-                        </execution>
-                      </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>create-source-jar</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>create-javadoc-jar</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                                <configuration>
-                                    <source>${maven.compile.source}</source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    -->
-        <profile>
-            <id>rc</id>
-            <distributionManagement>
-                <repository>
-                    <id>apache.snapshots</id>
-                    <name>Apache Development Snapshot Repository</name>
-                    <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/</url>
-                </repository>
-            </distributionManagement>
-            
-            <!-- Used for snapshot RAT Maven plugin -->
-            <repositories>
-              <repository>
-                <id>Codehaus Snapshots</id>
-                <url>http://snapshots.repository.codehaus.org/</url>
-                <snapshots>
-                  <enabled>true</enabled>
-                </snapshots>
-                <releases>
-                  <enabled>false</enabled>
-                </releases>
-              </repository>
-            </repositories>
-            <pluginRepositories>
-              <pluginRepository>
-                <id>Codehaus Snapshots</id>
-                <url>http://snapshots.repository.codehaus.org/</url>
-                <snapshots>
-                  <enabled>true</enabled>
-                </snapshots>
-                <releases>
-                  <enabled>false</enabled>
-                </releases>
-              </pluginRepository>
-            </pluginRepositories>
-            <build>
-                <plugins>
-                    <plugin>
-                      <groupId>org.codehaus.mojo</groupId>
-                      <artifactId>rat-maven-plugin</artifactId>
-                      <version>1.0-alpha-1-SNAPSHOT</version>
-                      <configuration>
-                        <reportFile>${project.build.directory}/${project.build.finalName}.rat</reportFile>
-                      </configuration>
-                          <executions>
-                            <execution>
-                              <phase>verify</phase>
-                              <goals>
-                                <goal>check</goal>
-                              </goals>
-                            </execution>
-                          </executions>
-                    </plugin>
-                    <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-gpg-plugin</artifactId>
-                      <executions>
-                        <execution>
-                          <id>sign-artifacts</id>
-                          <phase>verify</phase>
-                          <goals>
-                            <goal>sign</goal>
-                          </goals>
-                        </execution>
-                      </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>create-source-jar</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>create-javadoc-jar</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                                <configuration>
-                                    <source>${maven.compile.source}</source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-                <activation>
-                    <jdk>1.5</jdk>
-                </activation>
-                <modules>
-                    <module>ssl-tests</module>
-                </modules>
-        </profile>
-    </profiles>
-
-    <properties>
-        <maven.compile.source>1.4</maven.compile.source>
-        <maven.compile.target>1.4</maven.compile.target>
-        
-        <commons-logging-version>1.1</commons-logging-version>
-        <junit-version>3.8.1</junit-version>
-        <log4j-version>1.2.13</log4j-version>
-    </properties>
+      </build>
+      <repositories>
+        <repository>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots />
+          <id>Codehaus Snapshots</id>
+          <url>http://snapshots.repository.codehaus.org/</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots />
+          <id>Codehaus Snapshots</id>
+          <url>http://snapshots.repository.codehaus.org/</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <distributionManagement>
+        <repository>
+          <id>apache.snapshots</id>
+          <name>Apache Development Snapshot Repository</name>
+          <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+    <profile>
+      <activation>
+        <jdk>1.5</jdk>
+      </activation>
+      <modules>
+        <module>ssl-tests</module>
+      </modules>
+    </profile>
+  </profiles>
+  <modules>
+    <module>ftplet-api</module>
+    <module>core</module>
+    <module>admin-gui</module>
+  </modules>
+  <distributionManagement>
+    <repository>
+      <id>dummy</id>
+      <name>Dummy to avoid accidental deploys</name>
+      <url></url>
+    </repository>
+  </distributionManagement>
+  <properties>
+    <log4j-version>1.2.13</log4j-version>
+    <maven.compile.source>1.4</maven.compile.source>
+    <commons-logging-version>1.1</commons-logging-version>
+    <maven.compile.target>1.4</maven.compile.target>
+    <junit-version>3.8.1</junit-version>
+  </properties>
 </project>
