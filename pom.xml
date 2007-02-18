@@ -9,7 +9,7 @@
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache Incubator FtpServer</name>
-  <version>1.0-M1-incubator</version>
+  <version>1.0-M2-incubator-SNAPSHOT</version>
   <url>http://incubator.apache.org/ftpserver</url>
   <issueManagement>
     <system>Jira</system>
@@ -94,9 +94,9 @@
     </contributor>
   </contributors>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator</developerConnection>
-    <url>http://svn.apache.org/viewvc/incubator/ftpserver/tags/1.0-M1-incubator</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk</url>
   </scm>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
