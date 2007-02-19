@@ -83,6 +83,19 @@
                 </executions>
                 </plugin>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>sign-artifacts</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.1</version>
                 <executions>
@@ -117,7 +130,6 @@
                     <reportSet>
                         <reports>
                             <report>dependencies</report>
-                            <report>project-team</report>
                             <report>mailing-list</report>
                             <report>issue-tracking</report>
                             <report>license</report>
