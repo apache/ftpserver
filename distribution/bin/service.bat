@@ -23,7 +23,7 @@ rem ---------------------------------------------------------------------------
 rem NT Service Install/Uninstall script
 rem
 rem Options
-rem install                Install the service using Tomcat5 as service name.
+rem install                Install the service using ftpd as service name.
 rem                        Service is installed using default settings.
 rem remove                 Remove the service from the System.
 rem
@@ -63,7 +63,7 @@ set PR_DISPLAYNAME=Apache FtpServer
 if "%1" == "" goto displayUsage
 if "%2" == "" goto setServiceName
 set SERVICE_NAME=%2
-set PR_DISPLAYNAME=Apache Tomcat %2
+set PR_DISPLAYNAME=Apache FtpServer %2
 :setServiceName
 if %1 == install goto doInstall
 if %1 == remove goto doRemove
