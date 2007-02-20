@@ -166,18 +166,6 @@
                     <jdkLevel>${maven.compile.source}</jdkLevel>
                 </configuration>
             </plugin>
-<!--            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
             <plugin>
                 <!-- This should possibly better be done by using a resource
 		     definition. However, if we declare a resource with
@@ -341,9 +329,9 @@
               <module>ftplet-api</module>
               <module>core</module>
               <module>admin-gui</module>
+              <module>ssl-tests</module>
               <module>distribution</module>
             </modules>
-            
 
             <build>
                 <plugins>
