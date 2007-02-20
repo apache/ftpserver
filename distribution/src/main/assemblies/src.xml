@@ -31,6 +31,9 @@
         <include>**/*</include>
       </includes>
       <excludes>
+        <exclude>KEYS</exclude>
+        <exclude>res</exclude>
+        <exclude>res/**/*</exclude>
         <exclude>**/target</exclude>
         <exclude>**/target/**/*</exclude>
         <exclude>**/.settings</exclude>

@@ -24,7 +24,7 @@
         <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
-    <includeSiteDirectory>false</includeSiteDirectory>
+    <includeSiteDirectory>true</includeSiteDirectory>
     <fileSets>
         <fileSet>
             <includes>

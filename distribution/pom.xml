@@ -37,7 +37,88 @@
 
     <build>
         <plugins>
-            <plugin>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          
+          	<executions>
+              <execution>
+                <phase>process-resources</phase>
+              	<goals>
+                 <goal>run</goal>
+                </goals>
+              	<configuration>
+                	<tasks>
+                    <echo>Downloading Manual</echo>
+                    <mkdir dir="${project.build.directory}/site"/>
+                    <get src="http://incubator.apache.org/ftpserver/ftpserver.zip" dest="${project.build.directory}/${pom.artifactId}-manual.zip"/>
+                    <unzip src="${project.build.directory}/${pom.artifactId}-manual.zip" dest="${project.build.directory}/site"/>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-ftplet-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/ftplet-api</outputDirectory>
+                	<artifactItems>
+                  	<artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftplet-api</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-core-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/core</outputDirectory>
+                	<artifactItems>
+                  	<artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftpserver-core</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-admingui-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/ftpserver-admin-gui</outputDirectory>
+                	<artifactItems>
+                  	<artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftpserver-admin-gui</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        
+            <!--<plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
@@ -62,26 +143,12 @@
                                     </fileset>
                                     <classpath refid="maven.compile.classpath"/>
                                     <doctitle>&lt;h1>Apache FTP Server&lt;/h1></doctitle>
-                                    <!--<link offline="true" href="http://java.sun.com/j2se/1.4.2/docs/api/"></link>-->
                                 </javadoc>
                             </tasks>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>site</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                </plugin>
+            </plugin>-->
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-gpg-plugin</artifactId>
@@ -95,28 +162,41 @@
                 </execution>
               </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <id>bin</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assemblies/bin-with-dependencies.xml</descriptor>
-                                <descriptor>src/main/assemblies/source-jar.xml</descriptor>
-                            </descriptors>
-                            <finalName>ftpserver-${version}</finalName>
-                            <outputDirectory>target/distro</outputDirectory>
-                            <workDirectory>target/work</workDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>bin</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assemblies/bin.xml</descriptor>
+              </descriptors>
+              <appendAssemblyId>false</appendAssemblyId>
+              <tarLongFileMode>gnu</tarLongFileMode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>src</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assemblies/src.xml</descriptor>
+              </descriptors>
+              <tarLongFileMode>gnu</tarLongFileMode>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
             
         </plugins>
     </build>
