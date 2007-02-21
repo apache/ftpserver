@@ -1,106 +1,82 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0">
-<!-- 
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-    
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.apache.ftpserver</groupId>
-        <artifactId>ftpserver-parent</artifactId>
-        <version>1.0-incubator-SNAPSHOT</version>
-    </parent>
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>ftpserver-parent</artifactId>
     <groupId>org.apache.ftpserver</groupId>
-    <artifactId>ftpserver-admin-gui</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0-incubator-SNAPSHOT</version>
-    <name>Apache Incubator FtpServer Admin GUI</name>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/admin-gui</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk/admin-gui</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk/admin-gui</url>
-    </scm>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jxr-maven-plugin</artifactId>
-            </plugin>      
-        </plugins>
-    </reporting>
-    
-    <build>
-         <resources>
-             <resource>
-                 <directory>src/java</directory>
-                 <includes>
-                     <include>**/*.txt</include>
-                     <include>**/*.gif</include>
-                 </includes>
-             </resource>
-             
-         </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test</directory>
-                <includes>
-                    <include>*.properties</include>
-                </includes>
-            </testResource>
-        </testResources>
-       </build>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.ftpserver</groupId>
-            <artifactId>ftplet-api</artifactId>
-            <version>1.0-incubator-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ftpserver</groupId>
-            <artifactId>ftpserver-core</artifactId>
-            <version>1.0-incubator-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>${commons-logging-version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>avalon-framework</groupId>
-                    <artifactId>avalon-framework</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>logkit</groupId>
-                    <artifactId>logkit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+    <version>1.0-M1-incubator</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.ftpserver</groupId>
+  <artifactId>ftpserver-admin-gui</artifactId>
+  <name>Apache Incubator FtpServer Admin GUI</name>
+  <version>1.0-M1-incubator</version>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</url>
+  </scm>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/java</directory>
+        <includes>
+          <include>**/*.txt</include>
+          <include>**/*.gif</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test</directory>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+      </testResource>
+    </testResources>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.ftpserver</groupId>
+      <artifactId>ftplet-api</artifactId>
+      <version>1.0-M1-incubator</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ftpserver</groupId>
+      <artifactId>ftpserver-core</artifactId>
+      <version>1.0-M1-incubator</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>${commons-logging-version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>avalon-framework</artifactId>
+          <groupId>avalon-framework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>servlet-api</artifactId>
+          <groupId>javax.servlet</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>logkit</artifactId>
+          <groupId>logkit</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
