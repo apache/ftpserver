@@ -329,7 +329,6 @@
               <module>ftplet-api</module>
               <module>core</module>
               <module>admin-gui</module>
-              <module>ssl-tests</module>
               <module>distribution</module>
             </modules>
 
