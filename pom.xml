@@ -375,14 +375,12 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-                <activation>
-                    <jdk>1.5</jdk>
-                </activation>
-                <modules>
-                    <module>ssl-tests</module>
-                </modules>
-        </profile>
+    <profile>
+      <id>ssl-tests</id>
+      <modules>
+        <module>ssl-tests</module>
+      </modules>
+    </profile>
     </profiles>
 
     <properties>
