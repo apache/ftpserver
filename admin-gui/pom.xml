@@ -2,17 +2,17 @@
   <parent>
     <artifactId>ftpserver-parent</artifactId>
     <groupId>org.apache.ftpserver</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-M1-incubator</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
   <artifactId>ftpserver-admin-gui</artifactId>
   <name>Apache Incubator FtpServer Admin GUI</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0-M1-incubator</version>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/admin-gui</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk/admin-gui</developerConnection>
-    <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk/admin-gui</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/ftpserver/tags/1.0-M1-incubator/admin-gui</url>
   </scm>
   <build>
     <resources>
@@ -37,12 +37,12 @@
     <dependency>
       <groupId>org.apache.ftpserver</groupId>
       <artifactId>ftplet-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-M1-incubator</version>
     </dependency>
     <dependency>
       <groupId>org.apache.ftpserver</groupId>
       <artifactId>ftpserver-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-M1-incubator</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>

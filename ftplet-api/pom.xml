@@ -2,17 +2,17 @@
   <parent>
     <artifactId>ftpserver-parent</artifactId>
     <groupId>org.apache.ftpserver</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-M1-incubator</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
   <artifactId>ftplet-api</artifactId>
   <name>Apache Incubator FTPLet API</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0-M1-incubator</version>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk/ftplet-api</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk/ftplet-api</developerConnection>
-    <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk/ftplet-api</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/ftplet-api</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/tags/1.0-M1-incubator/ftplet-api</developerConnection>
+    <url>http://svn.apache.org/viewvc/incubator/ftpserver/tags/1.0-M1-incubator/ftplet-api</url>
   </scm>
   <dependencies>
     <dependency>
