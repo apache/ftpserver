@@ -108,6 +108,26 @@
           <tagBase>https://svn.apache.org/repos/asf/incubator/ftpserver/tags/</tagBase>
         </configuration>
       </plugin>
+        <plugin>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.0-alpha-2</version>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>process</goal>
+                  </goals>
+                  <configuration>
+                      <resourceBundles>
+                        <resourceBundle>org.apache:apache-jar-resource-bundle:1.1</resourceBundle>                    
+                        <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.0</resourceBundle>
+                      </resourceBundles>
+                      <properties>
+                          <addLicense>true</addLicense>
+                      </properties>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -122,28 +142,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <copy todir="${project.build.outputDirectory}/META-INF">
-                  <fileset dir="${basedir}">
-                    <include name="LICENSE.txt"></include>
-                    <include name="NOTICE.txt"></include>
-                    <include name="DISCLAIMER.txt"></include>
-                  </fileset>
-                </copy>
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.1</version>
         <configuration>
@@ -155,7 +153,7 @@
     </plugins>
   </build>
   <profiles>
-    <profile>
+    <!--<profile>
       <id>release</id>
       <build>
         <plugins>
@@ -171,6 +169,7 @@
               </execution>
             </executions>
           </plugin>
+
           <plugin>
             <artifactId>maven-source-plugin</artifactId>
             <executions>
@@ -205,7 +204,7 @@
           <url>scp://people.apache.org/www/people.apache.org/repo/m2-ibiblio-rsync-repository</url>
         </repository>
       </distributionManagement>
-    </profile>
+    </profile>-->
     <profile>
       <id>rat</id>
       <build>
@@ -267,6 +266,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-source-plugin</artifactId>
+            <version>2.0.2</version>
             <executions>
               <execution>
                 <id>create-source-jar</id>
@@ -278,6 +278,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.2</version>
             <executions>
               <execution>
                 <id>create-javadoc-jar</id>
