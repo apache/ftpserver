@@ -28,6 +28,7 @@
     <fileSets>
         <fileSet>
             <includes>
+                <include>release*</include>
                 <include>README*</include>
                 <include>LICENSE.txt</include>
                 <include>NOTICE.txt</include>
