@@ -55,77 +55,6 @@
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-ftplet-javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/api/ftplet-api</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${pom.groupId}</groupId>
-                  <artifactId>ftplet-api</artifactId>
-                  <classifier>javadoc</classifier>
-                  <version>${pom.version}</version>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-core-javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/api/core</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${pom.groupId}</groupId>
-                  <artifactId>ftpserver-core</artifactId>
-                  <classifier>javadoc</classifier>
-                  <version>${pom.version}</version>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-admingui-javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/api/ftpserver-admin-gui</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${pom.groupId}</groupId>
-                  <artifactId>ftpserver-admin-gui</artifactId>
-                  <classifier>javadoc</classifier>
-                  <version>${pom.version}</version>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.1</version>
         <executions>
@@ -205,6 +134,77 @@
       <version>${log4j-version}</version>
     </dependency>
   </dependencies>
+  
+  <profiles>
+    <profile>
+      <id>rc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.0-alpha-1</version>
+            <executions>
+              <execution>
+                <id>unpack-ftplet-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/ftplet-api</outputDirectory>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftplet-api</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-core-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/core</outputDirectory>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftpserver-core</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-admingui-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/api/ftpserver-admin-gui</outputDirectory>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${pom.groupId}</groupId>
+                      <artifactId>ftpserver-admin-gui</artifactId>
+                      <classifier>javadoc</classifier>
+                      <version>${pom.version}</version>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
   <reporting>
     <plugins>
       <plugin>
