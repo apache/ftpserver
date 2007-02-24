@@ -29,6 +29,8 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>SIZE &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -37,6 +39,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  */
 public 
 class SIZE extends AbstractCommand {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(SIZE.class);
     
     /**
      * Execute command.
@@ -62,7 +66,7 @@ class SIZE extends AbstractCommand {
             file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
-            log.debug("Exception getting file object", ex);
+            LOG.debug("Exception getting file object", ex);
         }
         if(file == null) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));

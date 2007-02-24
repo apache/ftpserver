@@ -24,7 +24,6 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.Statement;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.test.TestUtil;
@@ -50,8 +49,6 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
     
     protected UserManager createUserManager() throws FtpException {
         DbUserManager manager = new DbUserManager();
-        
-        manager.setLogFactory(LogFactory.getFactory());
         
         manager.setDataSource(ds);
         manager.setSqlUserInsert("INSERT INTO FTP_USER (uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate, maxloginnumber, maxloginperip) VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");

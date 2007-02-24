@@ -27,6 +27,8 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>REST &lt;SP&gt; <marker> &lt;CRLF&gt;</code><br>
@@ -41,6 +43,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class REST extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(REST.class);
+    
     /**
      * Execute command
      */
@@ -72,7 +76,7 @@ class REST extends AbstractCommand {
             }
         }
         catch(NumberFormatException ex) {
-            log.debug("Invalid restart position: " + argument, ex);
+            LOG.debug("Invalid restart position: " + argument, ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "REST.invalid", null)); 
         }
         

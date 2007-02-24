@@ -28,6 +28,8 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>TYPE &lt;SP&gt; &lt;type-code&gt; &lt;CRLF&gt;</code><br>
@@ -36,6 +38,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  */
 public 
 class TYPE extends AbstractCommand {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(TYPE.class);
     
     /**
      * Execute command
@@ -60,7 +64,7 @@ class TYPE extends AbstractCommand {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
         } 
         catch(IllegalArgumentException e) {
-            log.debug("Illegal type argument: " + request.getArgument(), e);
+            LOG.debug("Illegal type argument: " + request.getArgument(), e);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "TYPE", null));
         }
     }

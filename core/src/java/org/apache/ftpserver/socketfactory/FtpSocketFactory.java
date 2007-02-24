@@ -22,13 +22,13 @@ package org.apache.ftpserver.socketfactory;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.SocketFactory;
 import org.apache.ftpserver.interfaces.Ssl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -37,21 +37,11 @@ import org.apache.ftpserver.interfaces.Ssl;
 public 
 class FtpSocketFactory implements SocketFactory, Component {
     
-    private Log log;
-    private LogFactory logFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(FtpSocketFactory.class);
     
     private InetAddress serverAddress;
     private int port;
     private Ssl ssl;
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        logFactory = factory;
-        log = logFactory.getInstance(getClass());
-    }
     
     /**
      * Configure the server
@@ -85,7 +75,7 @@ class FtpSocketFactory implements SocketFactory, Component {
             throw ex;
         }*/
         catch(Exception ex) {
-            log.fatal("FtpSocketFactory.configure()", ex);
+            LOG.error("FtpSocketFactory.configure()", ex);
             throw new FtpException("FtpSocketFactory.configure()", ex);
         }
     }

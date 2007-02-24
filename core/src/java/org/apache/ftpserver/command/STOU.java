@@ -39,6 +39,8 @@ import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>STOU &lt;CRLF&gt;</code><br>
@@ -51,6 +53,7 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class STOU extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(STOU.class);
 
     /**
      * Execute command.
@@ -72,7 +75,7 @@ class STOU extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onUploadUniqueStart(session, request, out);
             } catch(Exception e) {
-                log.debug("Ftplet container threw exception", e);
+                LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -101,7 +104,7 @@ class STOU extends AbstractCommand {
                 }
             }
             catch(Exception ex) {
-                log.debug("Exception getting file object", ex);
+                LOG.debug("Exception getting file object", ex);
             }
             if(file == null) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
@@ -127,7 +130,7 @@ class STOU extends AbstractCommand {
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
-                log.debug("Exception getting the input data stream", e);
+                LOG.debug("Exception getting the input data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName));
                 return;
             }
@@ -142,7 +145,7 @@ class STOU extends AbstractCommand {
                 
                 // log message
                 String userName = session.getUser().getName();
-                log.info("File upload : " + userName + " - " + fileName);
+                LOG.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
@@ -151,12 +154,12 @@ class STOU extends AbstractCommand {
                 }
             }
             catch(SocketException ex) {
-                log.debug("Socket exception during data transfer", ex);
+                LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName));
             }
             catch(IOException ex) {
-                log.debug("IOException during data transfer", ex);
+                LOG.debug("IOException during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName));
             }
@@ -172,7 +175,7 @@ class STOU extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onUploadUniqueEnd(session, request, out);
                 } catch(Exception e) {
-                    log.debug("Ftplet container threw exception", e);
+                    LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

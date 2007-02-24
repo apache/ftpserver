@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -36,7 +35,6 @@ public class ComponentBeanTest extends TestCase {
 
         public Configuration config;
         public boolean disposed = false;
-        public LogFactory logFactory;
         
         public void configure(Configuration config) throws FtpException {
             this.config = config;
@@ -44,10 +42,6 @@ public class ComponentBeanTest extends TestCase {
 
         public void dispose() {
             disposed = true;
-        }
-
-        public void setLogFactory(LogFactory logFactory) {
-            this.logFactory = logFactory;
         }
         
     }
@@ -58,7 +52,7 @@ public class ComponentBeanTest extends TestCase {
         props.setProperty("config.foo", "bar");
         PropertiesConfiguration config = new PropertiesConfiguration(props);
         
-        ComponentBean bean = (ComponentBean) Bean.createBean(config, null, null);
+        ComponentBean bean = (ComponentBean) Bean.createBean(config, null);
         
         MockComponent component = (MockComponent) bean.initBean();
         assertEquals("bar", component.config.getString("foo"));
@@ -76,7 +70,7 @@ public class ComponentBeanTest extends TestCase {
         PropertiesConfiguration config = new PropertiesConfiguration(props);
         
         
-        ComponentBean bean = (ComponentBean) Bean.createBean(config, MockComponent.class.getName(), null);
+        ComponentBean bean = (ComponentBean) Bean.createBean(config, MockComponent.class.getName());
         
         MockComponent component = (MockComponent) bean.initBean();
         assertEquals("bar", component.config.getString("foo"));

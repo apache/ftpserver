@@ -30,6 +30,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The EPRT command allows for the specification of an extended address
@@ -42,6 +44,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class EPRT extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EPRT.class);
+    
     /**
      * Execute command.
      */
@@ -77,7 +81,7 @@ class EPRT extends AbstractCommand {
             port = arg.substring(lastDelimIdx+1, arg.length() - 1);
         }
         catch(Exception ex) {
-            log.debug("Exception parsing host and port: " + arg, ex);
+            LOG.debug("Exception parsing host and port: " + arg, ex);
             out.write(FtpReplyUtil.translate(session, 510, "EPRT", null));
             return;
         }
@@ -88,7 +92,7 @@ class EPRT extends AbstractCommand {
             dataAddr = InetAddress.getByName(host);
         }
         catch(UnknownHostException ex) {
-            log.debug("Unknown host: " + host, ex);
+            LOG.debug("Unknown host: " + host, ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "EPRT.host", null));
             return;
         }
@@ -108,7 +112,7 @@ class EPRT extends AbstractCommand {
             dataPort = Integer.parseInt(port);     
         }
         catch(NumberFormatException ex) {
-            log.debug("Invalid port: " + port, ex);
+            LOG.debug("Invalid port: " + port, ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "EPRT.invalid", null)); 
             return; 
         }

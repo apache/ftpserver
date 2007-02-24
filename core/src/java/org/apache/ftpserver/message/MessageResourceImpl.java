@@ -30,13 +30,13 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -49,9 +49,9 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class MessageResourceImpl implements MessageResource, Component {
 
-    private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
+    private static final Logger LOG = LoggerFactory.getLogger(MessageResourceImpl.class);
     
-    private Log log;
+    private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     
     private String[] languages;
     private HashMap messages;
@@ -61,14 +61,6 @@ class MessageResourceImpl implements MessageResource, Component {
         public Properties defaultProperties = new Properties();
         public Properties customProperties = new Properties();
     } 
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    }
     
     /**
      * Configure - load properties file.
@@ -125,7 +117,7 @@ class MessageResourceImpl implements MessageResource, Component {
             }
         }
         catch(Exception ex) {
-            log.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            LOG.warn("MessageResourceImpl.createPropertiesPair()", ex);
             throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
@@ -148,7 +140,7 @@ class MessageResourceImpl implements MessageResource, Component {
             }
         }
         catch(Exception ex) {
-            log.warn("MessageResourceImpl.createPropertiesPair()", ex);
+            LOG.warn("MessageResourceImpl.createPropertiesPair()", ex);
             throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
@@ -264,7 +256,7 @@ class MessageResourceImpl implements MessageResource, Component {
             prop.store(out, "Custom Messages");
         }
         catch(IOException ex) {
-            log.error("MessageResourceImpl.save()", ex);
+            LOG.error("MessageResourceImpl.save()", ex);
             throw new FtpException("MessageResourceImpl.save()", ex);
         }
         finally {

@@ -23,7 +23,6 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileObject;
@@ -71,13 +70,6 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     Hashtable userLoginTable = new Hashtable();
     
     public static final String LOGIN_NUMBER = "login_number";
-    
-    
-    /**
-     * Set the log factory - does nothing.
-     */
-    public void setLogFactory(LogFactory factory) {
-    }
     
     /**
      * Configure component - does nothing.

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.SocketException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
@@ -38,6 +37,8 @@ import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>APPE &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -51,6 +52,8 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public 
 class APPE extends AbstractCommand {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(APPE.class);
     
     /**
      * Execute command.
@@ -79,7 +82,7 @@ class APPE extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onAppendStart(session, request, out);
             } catch(Exception e) {
-                log.debug("Ftplet container threw exception", e);
+                LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -96,7 +99,7 @@ class APPE extends AbstractCommand {
                 file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception e) {
-                log.debug("File system threw exception", e);
+                LOG.debug("File system threw exception", e);
             }
             if(file == null) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
@@ -123,7 +126,7 @@ class APPE extends AbstractCommand {
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
-                log.debug("Exception when getting data input stream", e);
+                LOG.debug("Exception when getting data input stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE", fileName));
                 return;
             }
@@ -147,20 +150,20 @@ class APPE extends AbstractCommand {
                 
                 // log message
                 String userName = session.getUser().getName();
-                Log log = serverContext.getLogFactory().getInstance(getClass());
-                log.info("File upload : " + userName + " - " + fileName);
+
+                LOG.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
                 ftpStat.setUpload(connection, file, transSz);
             }
             catch(SocketException e) {
-                log.debug("SocketException during file upload", e);
+                LOG.debug("SocketException during file upload", e);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "APPE", fileName));
             }
             catch(IOException e) {
-                log.debug("IOException during file upload", e);
+                LOG.debug("IOException during file upload", e);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "APPE", fileName));
             }
@@ -176,7 +179,7 @@ class APPE extends AbstractCommand {
                 try {
                     ftpletRet = ftpletContainer.onAppendEnd(session, request, out);
                 } catch(Exception e) {
-                    log.debug("Ftplet container threw exception", e);
+                    LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

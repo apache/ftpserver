@@ -29,6 +29,8 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>CDUP &lt;CRLF&gt;</code><br>
@@ -42,6 +44,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class CDUP extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CDUP.class);
+    
     /**
      * Execute command.
      */
@@ -60,7 +64,7 @@ class CDUP extends AbstractCommand {
             success = fsview.changeDirectory("..");
         }
         catch(Exception ex) {
-            log.debug("Failed to change directory in file system", ex);
+            LOG.debug("Failed to change directory in file system", ex);
         }
         if(success) {
             String dirName = fsview.getCurrentDirectory().getFullName();

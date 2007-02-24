@@ -34,6 +34,8 @@ import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WriteRequest;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This SITE command returns the specified user information.
@@ -41,6 +43,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class SITE_DESCUSER extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SITE_DESCUSER.class);
+    
     /**
      * Execute command.
      */
@@ -79,7 +83,7 @@ class SITE_DESCUSER extends AbstractCommand {
             }
         }
         catch(FtpException ex) {
-            log.debug("Exception trying to get user from user manager", ex);
+            LOG.debug("Exception trying to get user from user manager", ex);
             user = null;
         }
         if(user == null) {

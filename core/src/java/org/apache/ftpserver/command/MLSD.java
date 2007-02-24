@@ -35,6 +35,8 @@ import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.MLSTFileFormater;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>MLSD [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
@@ -47,7 +49,9 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  */
 public 
 class MLSD extends AbstractCommand {
-
+    
+    private static final Logger LOG = LoggerFactory.getLogger(MLSD.class);
+    
     private DirectoryLister directoryLister = new DirectoryLister();
     
     /**
@@ -72,7 +76,7 @@ class MLSD extends AbstractCommand {
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
-                log.debug("Exception getting the output data stream", e);
+                LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD", null));
                 return;
             }
@@ -87,16 +91,16 @@ class MLSD extends AbstractCommand {
                 dataConnection.transferToClient(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
-                log.debug("Socket exception during data transfer", ex);
+                LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "MLSD", null));
             }
             catch(IOException ex) {
-                log.debug("IOException during data transfer", ex);
+                LOG.debug("IOException during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "MLSD", null));
             } catch(IllegalArgumentException e) {
-                log.debug("Illegal listing syntax: " + request.getArgument(), e);
+                LOG.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLSD", null));
             }

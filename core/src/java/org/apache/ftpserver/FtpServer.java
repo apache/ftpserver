@@ -20,9 +20,10 @@
 package org.apache.ftpserver;
 
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
@@ -31,11 +32,11 @@ import org.apache.ftpserver.listener.Listener;
  */
 public class FtpServer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
+    
     private Thread runner;
 
     private FtpServerContext serverContext = new DefaultFtpServerContext();
-
-    private Log log;
 
     private boolean suspended;
 
@@ -44,7 +45,6 @@ public class FtpServer {
      * @throws Exception 
      */
     public FtpServer() throws Exception {
-        log = this.serverContext.getLogFactory().getInstance(getClass());
     }
 
     /**
@@ -53,7 +53,6 @@ public class FtpServer {
      */
     public FtpServer(FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
-        log = this.serverContext.getLogFactory().getInstance(getClass());
     }
 
     /**
@@ -66,7 +65,7 @@ public class FtpServer {
         }
         
         System.out.println("Server ready :: Apache FTP Server");
-        log.info("------- Apache FTP Server started ------");
+        LOG.info("------- Apache FTP Server started ------");
 
     }
     

@@ -22,7 +22,6 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -34,6 +33,8 @@ import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -42,6 +43,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class SITE extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SITE.class);
+    
     private static final HashMap COMMAND_MAP = new HashMap(16);
     
     
@@ -60,7 +63,7 @@ class SITE extends AbstractCommand {
         try {
             ftpletRet = ftpletContainer.onSite(session, request, out);
         } catch(Exception e) {
-            log.debug("Ftplet container threw exception", e);
+            LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -101,8 +104,7 @@ class SITE extends AbstractCommand {
             }
         }
         catch(Exception ex) {
-            Log log = serverContext.getLogFactory().getInstance(getClass());
-            log.warn("SITE.execute()", ex);
+            LOG.warn("SITE.execute()", ex);
             session.resetState();
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "SITE", null));
         }

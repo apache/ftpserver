@@ -19,13 +19,11 @@
 
 package org.apache.ftpserver.ftplet;
 
-import org.apache.commons.logging.LogFactory;
 
 /**
  * This interface abstracts the basic lifecycle method. 
  * <ol>
  *     <li>Default constructor will be called.</li>
- *     <li>Set the LogFactory.</li>
  *     <li>The component will be configured using Component.configure(Configuration)</li>
  *     <li>Other component specific methods will be called.</li>
  *     <li>Finnaly Component.dispose() method will be called.</li>
@@ -33,11 +31,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public 
 interface Component {
-
-    /**
-     * Set the LogFactory.
-     */
-    void setLogFactory(LogFactory logFact);
     
     /**
      * Configure the component.

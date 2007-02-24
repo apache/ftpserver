@@ -27,14 +27,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.ftpserver.util.RegularExpr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * File based IP restrictor.
@@ -42,19 +42,12 @@ import org.apache.ftpserver.util.RegularExpr;
 public 
 class FileIpRestrictor implements IpRestrictor, Component {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FileIpRestrictor.class);
+    
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     
-    private Log log;
     private String file;
     private Object[][] permissions;
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    }
     
     /**
      * Configure the IP restrictor.
@@ -64,7 +57,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
         File dir = new File(file).getParentFile();
         if( (!dir.exists()) && (!dir.mkdirs()) ) {
             String dirName = dir.getAbsolutePath();
-            log.fatal("Cannot create directory - " + dirName);
+            LOG.error("Cannot create directory - " + dirName);
             throw new FtpException("Cannot create directory : " + dirName);
         }
         
@@ -117,7 +110,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
                 }
             }
             catch(IOException ex) {
-                log.error("FileIpRestrictor.getPermissions()", ex);
+                LOG.error("FileIpRestrictor.getPermissions()", ex);
                 throw new FtpException("FileIpRestrictor.getPermissions()", ex);
             }
             finally {
@@ -149,7 +142,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
             this.permissions = permissions;
         }
         catch(IOException ex) {
-            log.error("FileIpRestrictor.setPermissions()", ex);
+            LOG.error("FileIpRestrictor.setPermissions()", ex);
             throw new FtpException("FileIpRestrictor.setPermissions()", ex);
         }
         finally {

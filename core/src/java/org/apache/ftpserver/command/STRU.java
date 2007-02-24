@@ -28,6 +28,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>STRU &lt;SP&gt; &lt;structure-code&gt; &lt;CRLF&gt;</code><br>
@@ -37,6 +39,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  */
 public 
 class STRU extends AbstractCommand {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(STRU.class);
     
     /**
      * Execute command
@@ -62,7 +66,7 @@ class STRU extends AbstractCommand {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "STRU", null));
         } 
         catch(IllegalArgumentException e) {
-            log.debug("Illegal structure argument: " + request.getArgument(), e);
+            LOG.debug("Illegal structure argument: " + request.getArgument(), e);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "STRU", null));
         }
     }

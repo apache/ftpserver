@@ -33,6 +33,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>MD5 &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -45,6 +47,8 @@ import org.apache.ftpserver.util.IoUtils;
 public 
 class MD5 extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MD5.class);
+    
     /**
      * Execute command.
      */
@@ -88,7 +92,7 @@ class MD5 extends AbstractCommand {
                 file = session.getFileSystemView().getFileObject(fileName);
             }
             catch(Exception ex) {
-                log.debug("Exception getting the file object: " + fileName, ex);
+                LOG.debug("Exception getting the file object: " + fileName, ex);
             }
             
             if(file == null) {
@@ -116,7 +120,7 @@ class MD5 extends AbstractCommand {
                 sb.append(md5Hash);
                 
             } catch(NoSuchAlgorithmException e) {
-                log.debug("MD5 algorithm not available", e);
+                LOG.debug("MD5 algorithm not available", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "MD5.notimplemened", null));
             } finally {
                 IoUtils.close(is);

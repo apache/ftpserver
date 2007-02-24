@@ -21,7 +21,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -33,6 +32,8 @@ import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>RNTO &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -45,6 +46,7 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class RNTO extends AbstractCommand {
     
+    private static final Logger LOG = LoggerFactory.getLogger(RNTO.class);
 
     /**
      * Execute command.
@@ -69,7 +71,7 @@ class RNTO extends AbstractCommand {
             try {
                 ftpletRet = ftpletContainer.onRenameStart(session, request, out);
             } catch(Exception e) {
-                log.debug("Ftplet container threw exception", e);
+                LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -93,7 +95,7 @@ class RNTO extends AbstractCommand {
                 toFile = session.getFileSystemView().getFileObject(toFileStr);
             }
             catch(Exception ex) {
-                log.debug("Exception getting file object", ex);
+                LOG.debug("Exception getting file object", ex);
             }
             if(toFile == null) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO.invalid", null));
@@ -117,15 +119,14 @@ class RNTO extends AbstractCommand {
             if( frFile.move(toFile) ) { 
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO", toFileStr));
 
-                Log log = serverContext.getLogFactory().getInstance(getClass());
-                log.info("File rename (" + session.getUser().getName() + ") " 
+                LOG.info("File rename (" + session.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
                 
                 // call Ftplet.onRenameEnd() method
                 try {
                     ftpletRet = ftpletContainer.onRenameEnd(session, request, out);
                 } catch(Exception e) {
-                    log.debug("Ftplet container threw exception", e);
+                    LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

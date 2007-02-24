@@ -21,7 +21,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -43,6 +42,8 @@ import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>PASS &lt;SP&gt; <password> &lt;CRLF&gt;</code><br>
@@ -54,6 +55,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class PASS extends AbstractCommand {
     
+    private static final Logger LOG = LoggerFactory.getLogger(PASS.class);
+    
     /**
      * Execute command.
      */
@@ -64,7 +67,7 @@ class PASS extends AbstractCommand {
     
         boolean success = false;
         FtpServerContext serverContext = connection.getServerContext();
-        Log log = serverContext.getLogFactory().getInstance(getClass());
+        
         ConnectionManager conManager = serverContext.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
         try {
@@ -131,12 +134,12 @@ class PASS extends AbstractCommand {
             } catch(AuthenticationFailedException e) { 
                 success = false;
                 authenticatedUser = null;
-                log.warn("User failed to log in", e);                
+                LOG.warn("User failed to log in", e);                
             }
             catch(Exception e) {
                 success = false;
                 authenticatedUser = null;
-                log.warn("PASS.execute()", e);
+                LOG.warn("PASS.execute()", e);
             }
 
             // set the user so that the Ftplets will be able to verify it
@@ -162,7 +165,7 @@ class PASS extends AbstractCommand {
                 try{
                     ftpletRet = ftpletContainer.onLogin(session, request, out);
                 } catch(Exception e) {
-                    log.debug("Ftplet container threw exception", e);
+                    LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
@@ -179,7 +182,7 @@ class PASS extends AbstractCommand {
                 session.setUserArgument(oldUserArgument);
                 session.setMaxIdleTime(oldMaxIdleTime);
                 
-                log.warn("Login failure - " + userName);
+                LOG.warn("Login failure - " + userName);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
                 stat.setLoginFail(connection);
                 return;
@@ -194,10 +197,10 @@ class PASS extends AbstractCommand {
             // everything is fine - send login ok message
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_230_USER_LOGGED_IN, "PASS", userName));
             if(anonymous) {
-                log.info("Anonymous login success - " + password);
+                LOG.info("Anonymous login success - " + password);
             }
             else {
-                log.info("Login success - " + userName);
+                LOG.info("Login success - " + userName);
             }
             
         }

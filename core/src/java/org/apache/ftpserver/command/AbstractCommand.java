@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.command;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.interfaces.Command;
 
 /**
@@ -28,13 +26,5 @@ import org.apache.ftpserver.interfaces.Command;
  */
 public abstract class AbstractCommand implements Command {
 
-    protected Log log;
     
-    public AbstractCommand() {
-        log = LogFactory.getLog(getClass());
-    }
-
-    public void setLogFactory(LogFactory logFactory) {
-        log = logFactory.getInstance(getClass());
-    }  
 }

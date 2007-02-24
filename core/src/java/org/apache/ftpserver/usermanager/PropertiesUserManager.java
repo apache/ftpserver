@@ -28,8 +28,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -39,6 +37,8 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.EncryptUtils;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -48,25 +48,17 @@ import org.apache.ftpserver.util.IoUtils;
 public
 class PropertiesUserManager extends AbstractUserManager {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PropertiesUserManager.class);
+    
     private final static String DEPRECATED_PREFIX    = "FtpServer.user.";
     private final static String PREFIX    = "ftpserver.user.";
 
-    private Log log;
-    
     private BaseProperties userDataProp;
     private File           userDataFile = new File("./res/user.gen");
     private boolean        isPasswordEncrypt = true;
 
 
-    private boolean isConfigured = false;
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    } 
+    private boolean isConfigured = false; 
     
     /**
      * Set the file used to store and read users. Must be set before 
@@ -231,7 +223,7 @@ public void configure() {
                userDataProp.store(fos, "Generated file - don't edit (please)");
            }
            catch(IOException ex) {
-               log.error("Failed saving user data", ex);
+               LOG.error("Failed saving user data", ex);
                throw new FtpException("Failed saving user data", ex);
            }
            finally {

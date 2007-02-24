@@ -22,8 +22,6 @@ package org.apache.ftpserver;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.Ssl;
 
@@ -91,21 +89,9 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
         }
     }
     
-    private Log log;
-    private LogFactory logFactory;
-    
     private int maxIdleTimeMillis = 10000;
     
     private Ssl ssl;
-
-    
-    /**
-     * Set the log factory. 
-     */
-    public void setLogFactory(LogFactory factory) {
-        logFactory = factory;
-        log = logFactory.getInstance(getClass());
-    }
     
     public void setIdleTime(int idleTime) {
         // get the maximum idle time in millis

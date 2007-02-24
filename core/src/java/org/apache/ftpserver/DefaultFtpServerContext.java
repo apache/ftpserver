@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Component;
@@ -51,6 +49,8 @@ import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WritePermission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FTP server configuration implementation. It holds all 
@@ -58,7 +58,8 @@ import org.apache.ftpserver.usermanager.WritePermission;
  */
 public class DefaultFtpServerContext implements FtpServerContext {
 
-    private LogFactory logFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultFtpServerContext.class);
+    
     private MessageResource messageResource;
     private ConnectionManager connectionManager;
     private IpRestrictor ipRestrictor;
@@ -68,7 +69,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
     private FtpStatistics statistics;
     private CommandFactory commandFactory;
     
-    private Log log;
     private Map listeners = new HashMap();
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
@@ -90,12 +90,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
     public DefaultFtpServerContext(boolean createDefaultUsers) throws Exception {
         
         try {
-            
-            // get the log classes
-            logFactory = LogFactory.getFactory();
-            logFactory = new FtpLogFactory(logFactory);
-            log        = logFactory.getInstance(DefaultFtpServerContext.class);
-            
             createListeners();
             
             // create all the components
@@ -148,7 +142,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
         // create admin user
         String adminName = userManager.getAdminName();
         if(!userManager.doesExist(adminName)) {
-            log.info("Creating user : " + adminName);
+            LOG.info("Creating user : " + adminName);
             BaseUser adminUser = new BaseUser();
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
@@ -163,7 +157,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
         
         // create anonymous user
         if(!userManager.doesExist("anonymous")) {
-            log.info("Creating user : anonymous");
+            LOG.info("Creating user : anonymous");
             BaseUser anonUser = new BaseUser();
             anonUser.setName("anonymous");
             anonUser.setPassword("");
@@ -176,13 +170,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
             anonUser.setMaxIdleTime(300);
             userManager.save(anonUser);
         }
-    }
-    
-    /**
-     * Get the log factory.
-     */
-    public LogFactory getLogFactory() {
-        return logFactory;
     }
     
     /**
@@ -289,11 +276,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
         
         if(messageResource != null && messageResource instanceof Component) {
             ((Component)messageResource).dispose();
-        }
-        
-        if(logFactory != null) {
-            logFactory.release();
-            logFactory = null;
         }
     }
 

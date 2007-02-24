@@ -28,8 +28,6 @@ import javax.net.ssl.SSLException;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -41,16 +39,18 @@ import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.io.IOListener;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class SSLTestTemplate extends TestCase {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
+    
     private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
     protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
     protected static final char[] KEYSTORE_PASSWORD = "password".toCharArray();
 
     private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/ftpserver.jks");
-
-    private static final Log log = LogFactory.getLog(SSLTestTemplate.class);
 
     private static final int DEFAULT_PORT = 12322;
 
@@ -205,12 +205,12 @@ public abstract class SSLTestTemplate extends TestCase {
         client.addProtocolCommandListener(new ProtocolCommandListener() {
 
             public void protocolCommandSent(ProtocolCommandEvent event) {
-                log.debug("> " + event.getMessage().trim());
+                LOG.debug("> " + event.getMessage().trim());
 
             }
 
             public void protocolReplyReceived(ProtocolCommandEvent event) {
-                log.debug("< " + event.getMessage().trim());
+                LOG.debug("< " + event.getMessage().trim());
             }
         });
 

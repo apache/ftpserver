@@ -19,18 +19,16 @@
 
 package org.apache.ftpserver;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -40,18 +38,9 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 public 
 class DefaultCommandFactory implements CommandFactory, Component {
 
-    private LogFactory logFactory;
-    private Log log;
+    private static final  Logger LOG = LoggerFactory.getLogger(DefaultCommandFactory.class);
+
     private HashMap commandMap = new HashMap();  
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        this.logFactory = factory;
-        log = factory.getInstance(getClass());
-    }
     
     /**
      * Configure the command factory - populate the command map.
@@ -128,19 +117,8 @@ class DefaultCommandFactory implements CommandFactory, Component {
                 commandMap.put(cmdName, cmd);
             }
             catch(Exception ex) {
-                log.error("DefaultCommandFactory.configure()", ex);
+                LOG.error("DefaultCommandFactory.configure()", ex);
                 throw new FtpException("DefaultCommandFactory.configure()", ex);
-            }
-        }
-        
-        Collection commandEntries = commandMap.values();
-        
-        for (Iterator iter = commandEntries.iterator(); iter.hasNext();) {
-            Command command = (Command) iter.next();
-            
-            if(command instanceof AbstractCommand) {
-                AbstractCommand abstractCommand = (AbstractCommand) command;
-                abstractCommand.setLogFactory(logFactory);
             }
         }
     }

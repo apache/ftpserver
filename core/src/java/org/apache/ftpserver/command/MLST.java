@@ -33,6 +33,8 @@ import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.MLSTFileFormater;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>MLST &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -42,6 +44,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class MLST extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MLST.class);
+    
     /**
      * Execute command.
      */
@@ -67,7 +71,7 @@ class MLST extends AbstractCommand {
             }
         }
         catch(FtpException ex) {
-            log.debug("Exception sending the file listing", ex);
+            LOG.debug("Exception sending the file listing", ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLST", null));
         }     
     }   

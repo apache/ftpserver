@@ -29,6 +29,8 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>RNFR &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -40,6 +42,9 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class RNFR extends AbstractCommand {
 
+    
+    private static final Logger LOG = LoggerFactory.getLogger(RNFR.class);
+    
     /**
      * Execute command
      */
@@ -64,7 +69,7 @@ class RNFR extends AbstractCommand {
             renFr = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
-            log.debug("Exception getting file object", ex);
+            LOG.debug("Exception getting file object", ex);
         }
             
         // check file

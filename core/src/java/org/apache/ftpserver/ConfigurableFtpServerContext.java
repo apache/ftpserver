@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -52,6 +50,8 @@ import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WritePermission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FTP server configuration implementation. It holds all 
@@ -59,7 +59,8 @@ import org.apache.ftpserver.usermanager.WritePermission;
  */
 public class ConfigurableFtpServerContext implements FtpServerContext {
 
-    private LogFactory logFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
+    
     private Bean messageResourceBean;
     private Bean connectionManagerBean;
     private Bean ipRestrictorBean;
@@ -69,7 +70,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     private Bean statisticsBean;
     private Bean commandFactoryBean;
     
-    private Log log;
     private Map listeners = new HashMap();
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
@@ -87,11 +87,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     public ConfigurableFtpServerContext(Configuration conf) throws Exception {
         
         try {
-            
-            // get the log classes
-            logFactory = LogFactory.getFactory();
-            logFactory = new FtpLogFactory(logFactory);
-            log        = logFactory.getInstance(ConfigurableFtpServerContext.class);
             
             listeners = createListeners(conf, "listeners");
             
@@ -165,7 +160,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         try {
             while(st.hasMoreTokens()) {
                 String ftpletName = st.nextToken();
-                log.info("Configuring ftplet : " + ftpletName);
+                LOG.info("Configuring ftplet : " + ftpletName);
                 
                 // get ftplet specific configuration
                 Configuration subConfig = ftpletConf.subset(ftpletName);
@@ -184,7 +179,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         }
         catch(Exception ex) {
             container.destroy();
-            log.fatal("FtpletContainer.init()", ex);
+            LOG.error("FtpletContainer.init()", ex);
             throw new FtpException("FtpletContainer.init()", ex);
         }
     }
@@ -197,7 +192,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         // get configuration subset
         Configuration conf = parentConfig.subset(configName);
         
-        Bean bean = Bean.createBean(conf, defaultClass, logFactory);
+        Bean bean = Bean.createBean(conf, defaultClass);
         bean.initBean();
         return bean;
     }
@@ -211,7 +206,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         // create admin user
         String adminName = userManager.getAdminName();
         if(!userManager.doesExist(adminName)) {
-            log.info("Creating user : " + adminName);
+            LOG.info("Creating user : " + adminName);
             BaseUser adminUser = new BaseUser();
             adminUser.setName(adminName);
             adminUser.setPassword(adminName);
@@ -226,7 +221,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         
         // create anonymous user
         if(!userManager.doesExist("anonymous")) {
-            log.info("Creating user : anonymous");
+            LOG.info("Creating user : anonymous");
             BaseUser anonUser = new BaseUser();
             anonUser.setName("anonymous");
             anonUser.setPassword("");
@@ -239,13 +234,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             anonUser.setMaxIdleTime(300);
             userManager.save(anonUser);
         }
-    }
-    
-    /**
-     * Get the log factory.
-     */
-    public LogFactory getLogFactory() {
-        return logFactory;
     }
     
     /**
@@ -348,11 +336,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         
         if(messageResourceBean != null && messageResourceBean.getBean() != null) {
             messageResourceBean.destroyBean();
-        }
-        
-        if(logFactory != null) {
-            logFactory.release();
-            logFactory = null;
         }
     }
 

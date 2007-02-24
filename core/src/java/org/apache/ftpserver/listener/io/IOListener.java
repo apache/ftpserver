@@ -24,12 +24,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The default {@link Listener} implementation.
@@ -37,7 +38,7 @@ import org.apache.ftpserver.listener.Listener;
  */
 public class IOListener extends AbstractListener implements Runnable {
 
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(IOListener.class);
 
     private FtpServerContext serverContext;
 
@@ -53,8 +54,6 @@ public class IOListener extends AbstractListener implements Runnable {
     public void start(FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
         
-        log = serverContext.getLogFactory().getInstance(getClass());
-
         serverSocket = createServerSocket();
 
         listenerThread = new Thread(this);
@@ -89,7 +88,7 @@ public class IOListener extends AbstractListener implements Runnable {
             throw new IllegalStateException("start() must be called before run()");
         }
         
-        log.info("Listener started on port " + serverSocket.getLocalPort());
+        LOG.info("Listener started on port " + serverSocket.getLocalPort());
 
         // serverContext might be null if stop has been called
         if (serverContext == null) {
@@ -124,7 +123,7 @@ public class IOListener extends AbstractListener implements Runnable {
             } catch (SocketException ex) {
                 return;
             } catch (Exception ex) {
-                log.debug("Listener ending", ex);
+                LOG.debug("Listener ending", ex);
                 return;
             }
         }

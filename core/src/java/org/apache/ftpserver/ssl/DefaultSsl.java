@@ -36,11 +36,11 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -49,7 +49,7 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public class DefaultSsl implements Ssl {
     
-    private Log log = LogFactory.getLog(DefaultSsl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSsl.class);
     
     private File keystoreFile = new File("./res/.keystore");
     private String keystorePass = "password";   // TODO should we really default this value?
@@ -125,7 +125,7 @@ public class DefaultSsl implements Ssl {
             sslContextMap = new HashMap();
         }
         catch(Exception ex) {
-            log.fatal("DefaultSsl.configure()", ex);
+            LOG.error("DefaultSsl.configure()", ex);
             throw new FtpServerConfigurationException("DefaultSsl.configure()", ex);
         }
     }

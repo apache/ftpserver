@@ -21,8 +21,6 @@ package org.apache.ftpserver.commandline;
 
 import java.io.FileInputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ConfigurableFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
@@ -32,6 +30,8 @@ import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Invokes FtpServer as a daemon, running in the background. 
@@ -39,7 +39,7 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public class Daemon {
 
-    private static Log log = LogFactory.getLog(Daemon.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Daemon.class);
     
     private static FtpServer server;
     private static Object lock = new Object();
@@ -50,7 +50,7 @@ public class Daemon {
                 // get configuration
                 Configuration config = getConfiguration(args);
                 if(config == null) {
-                    log.error("No configuration provided");
+                    LOG.error("No configuration provided");
                     throw new FtpException("No configuration provided");
                 }
     
@@ -69,7 +69,7 @@ public class Daemon {
             
             
             if(command.equals("start")) {
-                log.info("Starting FTP server daemon");
+                LOG.info("Starting FTP server daemon");
                 server.start();
                 
                 synchronized (lock) {
@@ -79,11 +79,11 @@ public class Daemon {
                 synchronized (lock) {
                     lock.notify();
                 }
-                log.info("Stopping FTP server daemon");
+                LOG.info("Stopping FTP server daemon");
                 server.stop();
             }
         } catch(Throwable t) {
-            log.error("Daemon error", t);
+            LOG.error("Daemon error", t);
         }
     }
 
@@ -96,21 +96,21 @@ public class Daemon {
         FileInputStream in = null;
         try {
             if(args == null || args.length < 2) {
-                log.info("Using default configuration....");
+                LOG.info("Using default configuration....");
                 config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 2) && args[1].equals("-default") ) {
-                log.info("Using default configuration....");
+                LOG.info("Using default configuration....");
                 config = EmptyConfiguration.INSTANCE;
             }
             else if( (args.length == 3) && args[1].equals("-xml") ) {
-                log.info("Using xml configuration file " + args[2] + "...");
+                LOG.info("Using xml configuration file " + args[2] + "...");
                 in = new FileInputStream(args[2]);
                 XmlConfigurationHandler xmlHandler = new XmlConfigurationHandler(in);
                 config = xmlHandler.parse();
             }
             else if( (args.length == 3) && args[1].equals("-prop") ) {
-                log.info("Using properties configuration file " + args[2] + "...");
+                LOG.info("Using properties configuration file " + args[2] + "...");
                 in = new FileInputStream(args[2]);
                 config = new PropertiesConfiguration(in);
             } else {

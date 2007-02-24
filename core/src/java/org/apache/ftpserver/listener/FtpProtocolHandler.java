@@ -22,7 +22,6 @@ package org.apache.ftpserver.listener;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FileSystemView;
@@ -39,19 +38,20 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Callback class for events during an FTP session. 
  */
 public class FtpProtocolHandler {
     
-    protected Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(FtpProtocolHandler.class);
+    
     protected FtpServerContext serverContext;
     
     public FtpProtocolHandler(FtpServerContext serverContext) throws IOException {
         this.serverContext = serverContext;
-        
-        log = serverContext.getLogFactory().getInstance(FtpProtocolHandler.class);
     }
 
     public void onConnectionOpened(Connection connection, FtpSessionImpl session, FtpWriter writer) throws Exception {
@@ -68,7 +68,7 @@ public class FtpProtocolHandler {
         
         // write log message
         String hostAddress = clientAddr.getHostAddress();
-        log.info("Open connection - " + hostAddress);
+        LOG.info("Open connection - " + hostAddress);
         
         // notify ftp statistics
         ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
@@ -91,7 +91,7 @@ public class FtpProtocolHandler {
             // IP permission check
             IpRestrictor ipRestrictor = serverContext.getIpRestrictor();
             if( !ipRestrictor.hasPermission(clientAddr) ) {
-                log.warn("No permission to access from " + hostAddress);
+                LOG.warn("No permission to access from " + hostAddress);
                 writer.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "ip.restricted", null));
                 return;
             }
@@ -100,7 +100,7 @@ public class FtpProtocolHandler {
             int maxConnections = conManager.getMaxConnections();
             
             if(maxConnections != 0 && ftpStat.getCurrentConnectionNumber() > maxConnections) {
-                log.warn("Maximum connection limit reached.");
+                LOG.warn("Maximum connection limit reached.");
                 writer.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "connection.limit", null));
                 return;
             }
@@ -134,7 +134,7 @@ public class FtpProtocolHandler {
             ftpletContainer.onDisconnect(session, writer);
         }
         catch(Exception ex) {
-            log.warn("RequestHandler.close()", ex);
+            LOG.warn("RequestHandler.close()", ex);
         }
 
         // notify statistics object and close request
@@ -146,7 +146,7 @@ public class FtpProtocolHandler {
             User user = session.getUser();
             String userName = user != null ? user.getName() : "<Not logged in>";
             InetAddress clientAddr = session.getClientAddress(); 
-            log.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
+            LOG.info("Close connection : " + clientAddr.getHostAddress() + " - " + userName);
             
             // logout if necessary and notify statistics
             if(session.isLoggedIn()) {
@@ -202,7 +202,7 @@ public class FtpProtocolHandler {
                throw (IOException)ex;
             }
             else {
-                log.warn("RequestHandler.service()", ex);
+                LOG.warn("RequestHandler.service()", ex);
             }
         }
     }

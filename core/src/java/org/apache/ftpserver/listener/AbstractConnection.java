@@ -21,7 +21,6 @@ package org.apache.ftpserver.listener;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -34,7 +33,6 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 public abstract class AbstractConnection implements Connection {
     
     protected FtpServerContext serverContext;
-    protected Log log;
     
     protected FtpSessionImpl ftpSession;
     private ConnectionObserver observer;
@@ -55,7 +53,6 @@ public abstract class AbstractConnection implements Connection {
      */
     public AbstractConnection(FtpServerContext serverContext) throws IOException {
         this.serverContext = serverContext;
-        log = this.serverContext.getLogFactory().getInstance(getClass());
     }
     
     /**

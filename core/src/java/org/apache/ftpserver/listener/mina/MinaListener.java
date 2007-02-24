@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
@@ -35,6 +34,8 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 import org.apache.mina.transport.socket.nio.SocketSessionConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The default {@link Listener} implementation.
@@ -42,7 +43,7 @@ import org.apache.mina.transport.socket.nio.SocketSessionConfig;
  */
 public class MinaListener extends AbstractListener {
 
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(MinaListener.class);
 
     private IoAcceptor acceptor = new SocketAcceptor();
     
@@ -58,8 +59,6 @@ public class MinaListener extends AbstractListener {
      * @see Listener#start(FtpServerContext)
      */
     public void start(FtpServerContext serverContext) throws Exception {
-        
-        log = serverContext.getLogFactory().getInstance(getClass());
         
         if(getServerAddress() != null) {
             address = new InetSocketAddress(getServerAddress(), getPort() );
@@ -129,7 +128,7 @@ public class MinaListener extends AbstractListener {
             try {
                 acceptor.bind(address, protocolHandler, cfg);
             } catch (IOException e) {
-                log.error("Failed to resume listener", e);
+                LOG.error("Failed to resume listener", e);
             }
         }
     }

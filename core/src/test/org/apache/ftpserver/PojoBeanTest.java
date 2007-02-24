@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -36,7 +35,6 @@ public class PojoBeanTest extends TestCase {
         public Configuration config;
         public boolean configured = false;
         public boolean disposed = false;
-        public LogFactory logFactory;
         
         public String foo;
         public int bar;
@@ -50,17 +48,12 @@ public class PojoBeanTest extends TestCase {
         }
 
         public void configure() throws FtpException {
-            logFactory.getInstance(MockPojo.class).debug("test");
             
             configured = true;
         }
 
         public void dispose() {
             disposed = true;
-        }
-
-        public void setLogFactory(LogFactory logFactory) {
-            this.logFactory = logFactory;
         }
     }
     
@@ -71,17 +64,14 @@ public class PojoBeanTest extends TestCase {
         props.setProperty("config.bar", "123");
 
         PropertiesConfiguration config = new PropertiesConfiguration(props);
-        
-        LogFactory logFactory = LogFactory.getFactory();
-        
-        PojoBean bean = (PojoBean) Bean.createBean(config, null, logFactory);
+
+        PojoBean bean = (PojoBean) Bean.createBean(config, null);
         
         MockPojo pojo = (MockPojo) bean.initBean();
         assertEquals("hello", pojo.foo);
         assertEquals(123, pojo.bar);
         assertFalse(pojo.disposed);
         assertTrue(pojo.configured);
-        assertSame(logFactory, pojo.logFactory);
 
         bean.destroyBean();
         assertTrue(pojo.disposed);

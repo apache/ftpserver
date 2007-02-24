@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.ftplet;
 
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A ftplet configuration object used by a ftplet container used to pass 
@@ -28,11 +27,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public 
 interface FtpletContext {
-
-    /**
-     * Get the log factory.
-     */
-    public LogFactory getLogFactory();
     
     /**
      * Get the user manager.

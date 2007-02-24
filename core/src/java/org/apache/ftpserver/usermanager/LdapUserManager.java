@@ -34,14 +34,14 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Ldap based user manager class where the object class is ftpusers. This has
@@ -50,6 +50,8 @@ import org.apache.ftpserver.ftplet.User;
  */
 public
 class LdapUserManager extends AbstractUserManager implements Component {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(LdapUserManager.class);
     
     // LDAP attributes
     private final static String CN         = "cn";
@@ -60,20 +62,11 @@ class LdapUserManager extends AbstractUserManager implements Component {
         CN
     };
     
-    private Log log;
-    
     private String adminName;
     private DirContext adminContext;
     private String userBaseDn;
     private Attribute objClassAttr;
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    }
+
     
     /**
      * Instantiate LDAP based <code>UserManager</code> implementation.
@@ -107,13 +100,13 @@ class LdapUserManager extends AbstractUserManager implements Component {
             objClassAttr.add("javaObject");
             objClassAttr.add("top");
             
-            log.info("LDAP user manager opened.");
+            LOG.info("LDAP user manager opened.");
         }
         catch(FtpException ex) {
             throw ex;
         }
         catch(Exception ex) {
-            log.fatal("LdapUserManager.configure()", ex);
+            LOG.error("LdapUserManager.configure()", ex);
             throw new FtpException("LdapUserManager.configure()", ex);
         }
     }
@@ -143,7 +136,7 @@ class LdapUserManager extends AbstractUserManager implements Component {
             matchAttrs.put(objClassAttr);
             matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
             NamingEnumeration answers = adminContext.search(userBaseDn, matchAttrs, CN_ATTRS);
-            log.info("Getting all users under " + userBaseDn);
+            LOG.info("Getting all users under " + userBaseDn);
             
             // populate list
             ArrayList allUsers = new ArrayList();
@@ -156,7 +149,7 @@ class LdapUserManager extends AbstractUserManager implements Component {
             return (String[]) allUsers.toArray(new String[0]);
         }
         catch(NamingException ex) {
-            log.error("LdapUserManager.getAllUserNames()", ex);
+            LOG.error("LdapUserManager.getAllUserNames()", ex);
             throw new FtpException("LdapUserManager.getAllUserNames()", ex);
         }
     } 
@@ -169,11 +162,11 @@ class LdapUserManager extends AbstractUserManager implements Component {
         User user = null;
         try {
             String dn = getDN(name);
-            log.info("Getting user object for " + dn);
+            LOG.info("Getting user object for " + dn);
             user = (User)adminContext.lookup(dn);
         }
         catch(NamingException ex) {
-            log.debug("Failed to retrive user: " + name, ex);
+            LOG.debug("Failed to retrive user: " + name, ex);
             user = null;
         }
         return user;
@@ -247,11 +240,11 @@ class LdapUserManager extends AbstractUserManager implements Component {
             attrs.put(new BasicAttribute(CLASS_NAME, BaseUser.class.getName()));
             
             // bind object
-            log.info("Rebinding user " + dn);
+            LOG.info("Rebinding user " + dn);
             adminContext.rebind(dn, newUser, attrs);
         }
         catch(NamingException ex) {
-            log.error("LdapUserManager.save()", ex);
+            LOG.error("LdapUserManager.save()", ex);
             throw new FtpException("LdapUserManager.save()", ex);
         }
     }
@@ -269,11 +262,11 @@ class LdapUserManager extends AbstractUserManager implements Component {
     public synchronized void delete(String userName) throws FtpException {
         try {
             String dn = getDN(userName);
-            log.info("Unbinding " + dn);
+            LOG.info("Unbinding " + dn);
             adminContext.unbind(dn);
         }
         catch(NamingException ex) {
-            log.error("LdapUserManager.delete()", ex);
+            LOG.error("LdapUserManager.delete()", ex);
             throw new FtpException("LdapUserManager.delete()", ex);
         }
     }

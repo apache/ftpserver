@@ -23,15 +23,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
  */
 public class DefaultFtpletContainer implements Component, FtpletContainer {
     
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultFtpletContainer.class);
+    
     private List ftplets = new ArrayList();
     
     private static class FtpletEntry {
@@ -55,15 +56,10 @@ public class DefaultFtpletContainer implements Component, FtpletContainer {
                 ftpletEnt.ftplet.destroy();
             }
             catch(Exception ex) {
-                log.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
+                LOG.error(ftpletEnt.name + " :: FtpletHandler.destroy()", ex);
             }
         }
         ftplets.clear();
-        
-    }
-
-    public void setLogFactory(LogFactory logFact) {
-        log = logFact.getInstance(DefaultFtpletContainer.class);
         
     }
     

@@ -21,22 +21,23 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This server supports explicit SSL support.
  */
 public 
 class AUTH extends AbstractCommand {
-    
+
+    private static final Logger LOG = LoggerFactory.getLogger(AUTH.class);
 
     /**
      * Execute command
@@ -56,8 +57,6 @@ class AUTH extends AbstractCommand {
         }
         
         // check SSL configuration
-        FtpServerContext serverContext = connection.getServerContext();
-        Log log = serverContext.getLogFactory().getInstance(getClass());
         if(session.getListener().getSsl() == null) {
             out.write(FtpReplyUtil.translate(session, 431, "AUTH", null));
             return;
@@ -73,7 +72,7 @@ class AUTH extends AbstractCommand {
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {
-                log.warn("AUTH.execute()", ex);
+                LOG.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
         }
@@ -85,7 +84,7 @@ class AUTH extends AbstractCommand {
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {
-                log.warn("AUTH.execute()", ex);
+                LOG.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
         }

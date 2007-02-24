@@ -26,14 +26,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Connection service to manage all the connections (request handlers).
@@ -41,7 +41,7 @@ import org.apache.ftpserver.ftplet.FtpSession;
 public 
 class ConnectionManagerImpl implements ConnectionManager, Component {
 
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectionManagerImpl.class);
     
     private ConnectionManagerObserver observer;              
     private Timer timer;
@@ -55,13 +55,6 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     private int defaultIdleSec;
     private int pollIntervalSec;
     
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    }
     
     /**
      * Configure connection service
@@ -267,7 +260,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
 
                     // if the data connection is not active - close it
                     if(dataCon.isTimeout(currTime)) {
-                        log.info("Removing idle data connection for " + session.getUser());
+                        LOG.info("Removing idle data connection for " + session.getUser());
                         dataCon.closeDataSocket();
                     }
                 }
@@ -286,7 +279,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
                 continue;
             }
             
-            log.info("Removing idle user " + session.getUser());
+            LOG.info("Removing idle user " + session.getUser());
             closeConnection(connection);
         }
     }

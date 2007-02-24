@@ -25,11 +25,12 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLSocket;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -39,7 +40,7 @@ import org.apache.ftpserver.interfaces.Ssl;
 public
 class FtpDataConnectionFactory {
     
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(FtpDataConnectionFactory.class);
     
     private FtpServerContext    serverContext;
     private Socket        dataSoc;
@@ -63,7 +64,6 @@ class FtpDataConnectionFactory {
     public FtpDataConnectionFactory(FtpServerContext serverContext, FtpSessionImpl session) {
         this.session = session;
         this.serverContext = serverContext;
-        log = serverContext.getLogFactory().getInstance(getClass());
         
     }
 
@@ -79,7 +79,7 @@ class FtpDataConnectionFactory {
                 dataSoc.close(); 
             } 
             catch(Exception ex) {
-                log.warn("FtpDataConnection.closeDataSocket()", ex);
+                LOG.warn("FtpDataConnection.closeDataSocket()", ex);
             }
             dataSoc = null;
         }
@@ -90,7 +90,7 @@ class FtpDataConnectionFactory {
                servSoc.close();
             }
             catch(Exception ex) {
-                log.warn("FtpDataConnection.closeDataSocket()", ex);
+                LOG.warn("FtpDataConnection.closeDataSocket()", ex);
             }
             
             FtpServerContext ctx = serverContext;
@@ -136,7 +136,7 @@ class FtpDataConnectionFactory {
         // get the passive port
         int passivePort = session.getListener().getDataConnectionConfig().getPassivePort();
         if(passivePort == -1) {
-            log.warn("Cannot find an available passive port.");
+            LOG.warn("Cannot find an available passive port.");
             servSoc = null;
             return false;
         }
@@ -171,7 +171,7 @@ class FtpDataConnectionFactory {
         catch(Exception ex) {
             servSoc = null;
             closeDataSocket();
-            log.warn("FtpDataConnection.setPasvCommand()", ex);
+            LOG.warn("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
@@ -239,7 +239,7 @@ class FtpDataConnectionFactory {
         }
         catch(Exception ex) {
             closeDataSocket();
-            log.warn("FtpDataConnection.getDataSocket()", ex);
+            LOG.warn("FtpDataConnection.getDataSocket()", ex);
             throw ex;
         }
         

@@ -21,7 +21,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -34,6 +33,8 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>DELE &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -44,7 +45,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class DELE extends AbstractCommand {
     
-
+    private static final Logger LOG = LoggerFactory.getLogger(DELE.class);
+    
     /**
      * Execute command.
      */
@@ -70,7 +72,7 @@ class DELE extends AbstractCommand {
         try {
             ftpletRet = ftpletContainer.onDeleteStart(session, request, out);
         } catch(Exception e) {
-            log.debug("Ftplet container threw exception", e);
+            LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -89,7 +91,7 @@ class DELE extends AbstractCommand {
             file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
-            log.debug("Could not get file " + fileName, ex);
+            LOG.debug("Could not get file " + fileName, ex);
         }
         if(file == null) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "DELE.invalid", fileName));
@@ -110,8 +112,8 @@ class DELE extends AbstractCommand {
             
             // log message
             String userName = session.getUser().getName();
-            Log log = serverContext.getLogFactory().getInstance(getClass());
-            log.info("File delete : " + userName + " - " + fileName);
+            
+            LOG.info("File delete : " + userName + " - " + fileName);
             
             // notify statistics object
             ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
@@ -121,7 +123,7 @@ class DELE extends AbstractCommand {
             try{
                 ftpletRet = ftpletContainer.onDeleteEnd(session, request, out);
             } catch(Exception e) {
-                log.debug("Ftplet container threw exception", e);
+                LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {

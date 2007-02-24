@@ -31,6 +31,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>
@@ -53,6 +55,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class PORT extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PORT.class);
+    
     /**
      * Execute command.
      */
@@ -91,7 +95,7 @@ class PORT extends AbstractCommand {
             dataAddr = InetAddress.getByName(dataSrvName);
         }
         catch(UnknownHostException ex) {
-            log.debug("Unknown host: " + dataSrvName, ex);
+            LOG.debug("Unknown host: " + dataSrvName, ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
             return;
         }
@@ -113,7 +117,7 @@ class PORT extends AbstractCommand {
             dataPort = (hi << 8) | lo;     
         }
         catch(NumberFormatException ex) {
-            log.debug("Invalid data port: " + request.getArgument(), ex);
+            LOG.debug("Invalid data port: " + request.getArgument(), ex);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
             return; 
         }

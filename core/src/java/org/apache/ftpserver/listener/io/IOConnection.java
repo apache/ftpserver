@@ -41,6 +41,8 @@ import org.apache.ftpserver.listener.AbstractConnection;
 import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -48,6 +50,8 @@ import org.apache.ftpserver.util.IoUtils;
  * the request to appropriate method in subclass.
  */
 public class IOConnection extends AbstractConnection implements Runnable {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(IOConnection.class);
     
     private Socket controlSocket;
     private IOFtpResponseOutput writer;
@@ -149,9 +153,9 @@ public class IOConnection extends AbstractConnection implements Runnable {
         } catch(SocketException ex) {
             // socket closed - no need to do anything
         } catch(SSLException ex) {
-            log.warn("The client did not initiate the SSL connection correctly", ex);
+            LOG.warn("The client did not initiate the SSL connection correctly", ex);
         } catch(Exception ex) {
-            log.warn("Client error, closing session", ex);
+            LOG.warn("Client error, closing session", ex);
         }
         finally {
             // close all resources if not done already
@@ -190,7 +194,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
                 controlSocket.close();
             }
             catch(Exception ex) {
-                log.warn("RequestHandler.close()", ex);
+                LOG.warn("RequestHandler.close()", ex);
             }
             controlSocket = null;
         }

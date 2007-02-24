@@ -36,6 +36,8 @@ import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.NLSTFileFormater;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>NLST [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
@@ -50,6 +52,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class NLST extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(NLST.class);
+    
     private static final NLSTFileFormater NLST_FILE_FORMATER = new NLSTFileFormater();
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
     private DirectoryLister directoryLister = new DirectoryLister();
@@ -76,7 +80,7 @@ class NLST extends AbstractCommand {
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
-                log.debug("Exception getting the output data stream", e);
+                LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "NLST", null));
                 return;
             }
@@ -96,16 +100,16 @@ class NLST extends AbstractCommand {
                 dataConnection.transferToClient(directoryLister.listFiles(parsedArg, session.getFileSystemView(), formater));
             }
             catch(SocketException ex) {
-                log.debug("Socket exception during data transfer", ex);
+                LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "NLST", null));
             }
             catch(IOException ex) {
-                log.debug("IOException during data transfer", ex);
+                LOG.debug("IOException during data transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "NLST", null));
             } catch(IllegalArgumentException e) {
-                log.debug("Illegal listing syntax: " + request.getArgument(), e);
+                LOG.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "LIST", null));
             }

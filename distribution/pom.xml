@@ -105,34 +105,6 @@
       <artifactId>ftpserver-admin-gui</artifactId>
       <version>1.0-incubator-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>${commons-logging-version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>avalon-framework</artifactId>
-          <groupId>avalon-framework</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>servlet-api</artifactId>
-          <groupId>javax.servlet</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>log4j</artifactId>
-          <groupId>log4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>logkit</artifactId>
-          <groupId>logkit</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>${log4j-version}</version>
-    </dependency>
   </dependencies>
   
   <profiles>

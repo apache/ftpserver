@@ -30,6 +30,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -41,6 +43,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class OPTS extends AbstractCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OPTS.class);
+    
     private static final HashMap COMMAND_MAP = new HashMap(16);
     
     
@@ -82,7 +86,7 @@ class OPTS extends AbstractCommand {
             }
         }
         catch(Exception ex) {
-            log.warn("OPTS.execute()", ex);
+            LOG.warn("OPTS.execute()", ex);
             session.resetState();
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null));
         }

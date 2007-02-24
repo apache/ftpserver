@@ -29,8 +29,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -38,6 +36,8 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is another database based user manager class. It has been
@@ -50,7 +50,7 @@ import org.apache.ftpserver.util.StringUtils;
  */
 public class DbUserManager extends AbstractUserManager {
     
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(DbUserManager.class);
     
     private String insertUserStmt;
     private String updateUserStmt;
@@ -62,14 +62,6 @@ public class DbUserManager extends AbstractUserManager {
 
     private DataSource dataSource;
     private Connection cachedConnection;
-    
-    
-    /**
-     * Set the log factory.
-     */
-    public void setLogFactory(LogFactory factory) {
-        log = factory.getInstance(getClass());
-    }
     
     /**
      * Retrive the data source used by the user manager
@@ -233,10 +225,10 @@ public class DbUserManager extends AbstractUserManager {
             // test the connection
             createConnection();
             
-            log.info("Database connection opened.");
+            LOG.info("Database connection opened.");
         }
         catch(SQLException ex) {
-            log.fatal("DbUserManager.configure()", ex);
+            LOG.error("DbUserManager.configure()", ex);
             throw new FtpServerConfigurationException("DbUserManager.configure()", ex);
         }
     }
@@ -259,7 +251,7 @@ public class DbUserManager extends AbstractUserManager {
             HashMap map = new HashMap();
             map.put( ATTR_LOGIN, escapeString(login) );
             String sql = StringUtils.replaceString(isAdminStmt, map);
-            log.info(sql);
+            LOG.info(sql);
             
             // execute query
             stmt = createConnection().createStatement();
@@ -267,7 +259,7 @@ public class DbUserManager extends AbstractUserManager {
             return rs.next();
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.isAdmin()", ex);
+            LOG.error("DbUserManager.isAdmin()", ex);
             throw new FtpException("DbUserManager.isAdmin()", ex);
         }
         finally {
@@ -276,7 +268,7 @@ public class DbUserManager extends AbstractUserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.isAdmin()", ex);
+                    LOG.error("DbUserManager.isAdmin()", ex);
                 }
             }
             if(stmt != null) {
@@ -284,7 +276,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.isAdmin()", ex);
+                    LOG.error("DbUserManager.isAdmin()", ex);
                 }
             }
         }
@@ -301,7 +293,7 @@ public class DbUserManager extends AbstractUserManager {
             }
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.prepareConnection()", ex);
+            LOG.error("DbUserManager.prepareConnection()", ex);
             isClosed = true;
         }
         
@@ -324,12 +316,12 @@ public class DbUserManager extends AbstractUserManager {
                 cachedConnection.close(); 
             } 
             catch(SQLException ex) {
-                log.error("DbUserManager.closeConnection()", ex);
+                LOG.error("DbUserManager.closeConnection()", ex);
             }
             cachedConnection = null;
         }
         
-        log.info("Database connection closed.");
+        LOG.info("Database connection closed.");
     }
     
     /**
@@ -341,7 +333,7 @@ public class DbUserManager extends AbstractUserManager {
         HashMap map = new HashMap();
         map.put( ATTR_LOGIN, escapeString(name) );
         String sql = StringUtils.replaceString(deleteUserStmt, map);
-        log.info(sql);
+        LOG.info(sql);
         
         // execute query
         Statement stmt = null;
@@ -350,7 +342,7 @@ public class DbUserManager extends AbstractUserManager {
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.delete()", ex);
+            LOG.error("DbUserManager.delete()", ex);
             throw new FtpException("DbUserManager.delete()", ex);
         }
         finally {
@@ -359,7 +351,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.delete()", ex);
+                    LOG.error("DbUserManager.delete()", ex);
                 }
             }
         }
@@ -428,14 +420,14 @@ public class DbUserManager extends AbstractUserManager {
             else {
                 sql = StringUtils.replaceString(updateUserStmt, map);
             }
-            log.info(sql);
+            LOG.info(sql);
             
             // execute query
             stmt = createConnection().createStatement();
             stmt.executeUpdate(sql);
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.save()", ex);
+            LOG.error("DbUserManager.save()", ex);
             throw new FtpException("DbUserManager.save()", ex);
         }
         finally {
@@ -444,7 +436,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUsermanager.error()", ex);
+                    LOG.error("DbUsermanager.error()", ex);
                 }
             }
         }
@@ -463,7 +455,7 @@ public class DbUserManager extends AbstractUserManager {
             HashMap map = new HashMap();
             map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
-            log.info(sql);
+            LOG.info(sql);
             
             // execute query
             stmt = createConnection().createStatement();
@@ -492,7 +484,7 @@ public class DbUserManager extends AbstractUserManager {
             return thisUser;
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.getUserByName()", ex);
+            LOG.error("DbUserManager.getUserByName()", ex);
             throw new FtpException("DbUserManager.getUserByName()", ex);
         }
         finally {
@@ -501,7 +493,7 @@ public class DbUserManager extends AbstractUserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getUserByName()", ex);
+                    LOG.error("DbUserManager.getUserByName()", ex);
                 }
             }
             if(stmt != null) {
@@ -509,7 +501,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getUserByName()", ex);
+                    LOG.error("DbUserManager.getUserByName()", ex);
                 }
             }
         }
@@ -527,7 +519,7 @@ public class DbUserManager extends AbstractUserManager {
             HashMap map = new HashMap();
             map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
-            log.info(sql);
+            LOG.info(sql);
             
             // execute query
             stmt = createConnection().createStatement();
@@ -535,7 +527,7 @@ public class DbUserManager extends AbstractUserManager {
             return rs.next();
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.doesExist()", ex);
+            LOG.error("DbUserManager.doesExist()", ex);
             throw new FtpException("DbUserManager.doesExist()", ex);
         }
         finally {
@@ -544,7 +536,7 @@ public class DbUserManager extends AbstractUserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.doesExist()", ex);
+                    LOG.error("DbUserManager.doesExist()", ex);
                 }
             }
             if(stmt != null) {
@@ -552,7 +544,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.doesExist()", ex);
+                    LOG.error("DbUserManager.doesExist()", ex);
                 }
             }
         }
@@ -569,7 +561,7 @@ public class DbUserManager extends AbstractUserManager {
             
             // create sql query
             String sql = selectAllStmt;
-            log.info(sql);
+            LOG.info(sql);
             
             // execute query
             stmt = createConnection().createStatement();
@@ -583,7 +575,7 @@ public class DbUserManager extends AbstractUserManager {
             return (String[]) names.toArray(new String[0]);
         }
         catch(SQLException ex) {
-            log.error("DbUserManager.getAllUserNames()", ex);
+            LOG.error("DbUserManager.getAllUserNames()", ex);
             throw new FtpException("DbUserManager.getAllUserNames()", ex);
         }
         finally {
@@ -592,7 +584,7 @@ public class DbUserManager extends AbstractUserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getAllUserNames()", ex);
+                    LOG.error("DbUserManager.getAllUserNames()", ex);
                 }
             }
             if(stmt != null) {
@@ -600,7 +592,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getAllUserNames()", ex);
+                    LOG.error("DbUserManager.getAllUserNames()", ex);
                 }
             }
         }
@@ -629,7 +621,7 @@ public class DbUserManager extends AbstractUserManager {
         HashMap map = new HashMap();
         map.put( ATTR_LOGIN, escapeString(user.getName()) );
         String sql = StringUtils.replaceString(selectUserStmt, map);
-        log.info(sql);
+        LOG.info(sql);
         
         // execute query
         Statement stmt = null;
@@ -647,7 +639,7 @@ public class DbUserManager extends AbstractUserManager {
                     rs.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getPassword()", ex);
+                    LOG.error("DbUserManager.getPassword()", ex);
                 }
             }
             if(stmt != null) {
@@ -655,7 +647,7 @@ public class DbUserManager extends AbstractUserManager {
                     stmt.close(); 
                 } 
                 catch(Exception ex) {
-                    log.error("DbUserManager.getPassword()", ex);
+                    LOG.error("DbUserManager.getPassword()", ex);
                 }
             }
         }
@@ -693,7 +685,7 @@ public class DbUserManager extends AbstractUserManager {
                 map.put( ATTR_LOGIN, escapeString(user) );
                 map.put( ATTR_PASSWORD, escapeString(password) );
                 String sql = StringUtils.replaceString(authenticateStmt, map);
-                log.info(sql);
+                LOG.info(sql);
                 
                 // execute query
                 stmt = createConnection().createStatement();
@@ -708,7 +700,7 @@ public class DbUserManager extends AbstractUserManager {
                     throw new AuthenticationFailedException("Authentication failed");
                 }
             } catch(SQLException ex) {
-                log.error("DbUserManager.authenticate()", ex);
+                LOG.error("DbUserManager.authenticate()", ex);
                 throw new AuthenticationFailedException("Authentication failed", ex);
             }
             finally {
@@ -717,7 +709,7 @@ public class DbUserManager extends AbstractUserManager {
                         rs.close(); 
                     } 
                     catch(Exception ex) {
-                        log.error("DbUserManager.authenticate()", ex);
+                        LOG.error("DbUserManager.authenticate()", ex);
                     }
                 }
                 if(stmt != null) {
@@ -725,7 +717,7 @@ public class DbUserManager extends AbstractUserManager {
                         stmt.close(); 
                     } 
                     catch(Exception ex) {
-                        log.error("DbUserManager.authenticate()", ex);
+                        LOG.error("DbUserManager.authenticate()", ex);
                     }
                 }
             }

@@ -34,6 +34,8 @@ import org.apache.ftpserver.listing.LISTFileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>LIST [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
@@ -49,6 +51,8 @@ import org.apache.ftpserver.util.FtpReplyUtil;
  */
 public 
 class LIST extends AbstractCommand {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(LIST.class);
     
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
     private DirectoryLister directoryLister = new DirectoryLister();
@@ -73,7 +77,7 @@ class LIST extends AbstractCommand {
             try {
                 dataConnection = session.getFtpDataConnection().openConnection();
             } catch (Exception e) {
-                log.debug("Exception getting the output data stream", e);
+                LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "LIST", null));
                 return;
             }
@@ -89,16 +93,16 @@ class LIST extends AbstractCommand {
                 dataConnection.transferToClient(directoryLister.listFiles(parsedArg, session.getFileSystemView(), LIST_FILE_FORMATER));
             }
             catch(SocketException ex) {
-                log.debug("Socket exception during list transfer", ex);
+                LOG.debug("Socket exception during list transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "LIST", null));
             }
             catch(IOException ex) {
-                log.debug("IOException during list transfer", ex);
+                LOG.debug("IOException during list transfer", ex);
                 failure = true;
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "LIST", null));
             } catch(IllegalArgumentException e) {
-                log.debug("Illegal list syntax: " + request.getArgument(), e);
+                LOG.debug("Illegal list syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "LIST", null));
             }

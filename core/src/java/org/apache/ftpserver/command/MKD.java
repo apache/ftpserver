@@ -21,7 +21,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -34,6 +33,8 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>MKD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
@@ -46,6 +47,7 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 public 
 class MKD extends AbstractCommand {
     
+    private static final Logger LOG = LoggerFactory.getLogger(MKD.class);
 
     /**
      * Execute command.
@@ -72,7 +74,7 @@ class MKD extends AbstractCommand {
         try{
             ftpletRet = ftpletContainer.onMkdirStart(session, request, out);
         } catch(Exception e) {
-            log.debug("Ftplet container threw exception", e);
+            LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
@@ -89,7 +91,7 @@ class MKD extends AbstractCommand {
             file = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {
-            log.debug("Exception getting file object", ex);
+            LOG.debug("Exception getting file object", ex);
         }
         if(file == null) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName));
@@ -115,8 +117,7 @@ class MKD extends AbstractCommand {
             
             // write log message
             String userName = session.getUser().getName();
-            Log log = serverContext.getLogFactory().getInstance(getClass());
-            log.info("Directory create : " + userName + " - " + fileName);
+            LOG.info("Directory create : " + userName + " - " + fileName);
             
             // notify statistics object
             ServerFtpStatistics ftpStat = (ServerFtpStatistics)connection.getServerContext().getFtpStatistics();
@@ -126,7 +127,7 @@ class MKD extends AbstractCommand {
             try{
                 ftpletRet = ftpletContainer.onMkdirEnd(session, request, out);
             } catch(Exception e) {
-                log.debug("Ftplet container threw exception", e);
+                LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
