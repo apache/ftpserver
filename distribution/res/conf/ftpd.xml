@@ -21,71 +21,57 @@ under the License.
 <!-- XML file based configuration -->
 <config>
 
-    <!-- Standard socket factory. If you want to support explicit
-         secure connection, please specify the ssl block
-    <socket-factory>
-        <class>org.apache.ftpserver.socketfactory.FtpSocketFactory</class>
-        <address>localhost</address>
-        <port>21</port>
-        <ssl>
-            <keystore-file>./res/.keystore</keystore-file>
-            <keystore-password>password</keystore-password>
-            <keystore-type>JKS</keystore-type>
-            <keystore-algorithm>SunX509</keystore-algorithm>
-            <ssl-protocol>TLS</ssl-protocol>
-            <client-authentication>false</client-authentication>
-            <key-password>password</key-password>
-        </ssl>
-    </socket-factory>
-    -->
-
-
-    <!-- Secure server socket factory. In this case you have to
-         specify the ssl block
-    <socket-factory>
-        <class>org.apache.ftpserver.socketfactory.SSLFtpSocketFactory</class>
-        <address>localhost</address>
-        <port>21</port>
-        <ssl>
-            <keystore-file>./res/.keystore</keystore-file>
-            <keystore-password>password</keystore-password>
-            <keystore-type>JKS</keystore-type>
-            <keystore-algorithm>SunX509</keystore-algorithm>
-            <ssl-protocol>TLS</ssl-protocol>
-            <client-authentication>false</client-authentication>
-            <key-password>password</key-password>
-        </ssl>
-    </socket-factory>
-    -->
-
-
-    <!-- Data connection configuration. If you want to support secure
-         data connection, please specify the ssl block.
-    <data-connection>
-        <idle-time>10</idle-time>
-        <active>
-            <enable>true</enable>
-            <local-address>localhost</local-address>
-            <local-port>20</local-port>
-            <ip-check>false</ip-check>
-        </active>
-        <passive>
+    <!-- This is the listener configuration. Additional listeners can be added if required. 
+        If you want to support SSL connections, please specify ssl block -->
+    <!--
+    <listeners>
+        <default>
+            <class>org.apache.ftpserver.listener.mina.MinaListener</class>
             <address>localhost</address>
-            <ports>0</ports>
-        </passive>
-        <ssl>
-            <keystore-file>./res/.keystore</keystore-file>
-            <keystore-password>password</keystore-password>
-            <keystore-type>JKS</keystore-type>
-            <keystore-algorithm>SunX509</keystore-algorithm>
-            <ssl-protocol>TLS</ssl-protocol>
-            <client-authentication>false</client-authentication>
-            <key-password>password</key-password>
-        </ssl>
-    </data-connection>
+            <port>21</port>
+            <implicit-ssl>false</implicit-ssl>
+            <ssl>
+                <class>org.apache.ftpserver.ssl.DefaultSsl</class>
+                <keystore-file>./res/.keystore</keystore-file>
+                <keystore-password>password</keystore-password>
+                <keystore-type>JKS</keystore-type>
+                <keystore-algorithm>SunX509</keystore-algorithm>
+                <ssl-protocol>TLS</ssl-protocol>
+                <client-authentication>false</client-authentication>
+                <key-password>password</key-password>
+            </ssl> -->
+            <!-- Data connection configuration. If you want to support secure
+        data connection, please specify the ssl block.-->
+    <!--
+            <data-connection>
+                <class>org.apache.ftpserver.DefaultDataConnectionConfig</class>
+                <idle-time>10</idle-time>
+                <active>
+                    <enable>true</enable>
+                    <local-address>localhost</local-address>
+                    <local-port>20</local-port>
+                    <ip-check>false</ip-check>
+                </active>
+                <passive>
+                    <address>localhost</address>
+                    <ports>0</ports>
+                </passive>
+                <ssl>
+                    <class>org.apache.ftpserver.ssl.DefaultSsl</class>
+                    <keystore-file>./res/.keystore</keystore-file>
+                    <keystore-password>password</keystore-password>
+                    <keystore-type>JKS</keystore-type>
+                    <keystore-algorithm>SunX509</keystore-algorithm>
+                    <ssl-protocol>TLS</ssl-protocol>
+                    <client-authentication>false</client-authentication>
+                    <key-password>password</key-password>
+                </ssl>
+            </data-connection>
+        </default>
+
+    </listeners>
     -->
-
-
+    
     <!-- Standard users admin and anonymous will be created by default.
     <create-default-user>true</create-default-user>
     -->
