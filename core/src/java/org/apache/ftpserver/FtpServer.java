@@ -34,14 +34,15 @@ public class FtpServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
     
-    private Thread runner;
-
+    
     private FtpServerContext serverContext = new DefaultFtpServerContext();
 
     private boolean suspended;
 
+    private boolean started = false;
+
     /**
-     * Default constructor.
+     * Creates a server with the default configuration
      * @throws Exception 
      */
     public FtpServer() throws Exception {
@@ -63,6 +64,8 @@ public class FtpServer {
         for (int i = 0; i<listeners.length; i++) {
             listeners[i].start(serverContext);
         }
+
+        started = true;
         
         System.out.println("Server ready :: Apache FTP Server");
         LOG.info("------- Apache FTP Server started ------");
@@ -87,19 +90,26 @@ public class FtpServer {
             serverContext = null;
         }
 
+        started = false;
     }
 
     /**
      * Get the server status.
      */
     public boolean isStopped() {
-        return runner == null;
+        return !started;
     }
 
     /**
      * Suspend further requests
      */
     public void suspend() {
+        // stop all listeners
+        Listener[] listeners = serverContext.getListeners(); 
+        for (int i = 0; i<listeners.length; i++) {
+            listeners[i].suspend();
+        }
+        
         suspended = true;
     }
 
@@ -107,6 +117,11 @@ public class FtpServer {
      * Resume the server handler
      */
     public void resume() {
+        Listener[] listeners = serverContext.getListeners(); 
+        for (int i = 0; i<listeners.length; i++) {
+            listeners[i].resume();
+        }
+        
         suspended = false;
     }
 
