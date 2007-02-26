@@ -35,7 +35,7 @@ public class FtpServer {
     private static final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
     
     
-    private FtpServerContext serverContext = new DefaultFtpServerContext();
+    private FtpServerContext serverContext;
 
     private boolean suspended;
 
@@ -46,6 +46,7 @@ public class FtpServer {
      * @throws Exception 
      */
     public FtpServer() throws Exception {
+        serverContext = new DefaultFtpServerContext();
     }
 
     /**

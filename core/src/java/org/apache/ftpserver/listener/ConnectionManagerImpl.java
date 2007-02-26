@@ -70,7 +70,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         pollIntervalSec = config.getInt     ("timeout-poll-interval",   60);
         
         // set timer to remove inactive users and load data
-        timer = new Timer();
+        timer = new Timer(true);
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 timerTask();
