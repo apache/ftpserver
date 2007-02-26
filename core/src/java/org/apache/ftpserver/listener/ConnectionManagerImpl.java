@@ -67,7 +67,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         anonEnabled     = config.getBoolean ("anonymous-login-enabled", true);
         maxAnonLogins   = config.getInt     ("max-anonymous-login",     10);
         defaultIdleSec  = config.getInt     ("default-idle-time",       60);
-        pollIntervalSec = config.getInt     ("timeout-poll-inverval",   60);
+        pollIntervalSec = config.getInt     ("timeout-poll-interval",   60);
         
         // set timer to remove inactive users and load data
         timer = new Timer();
