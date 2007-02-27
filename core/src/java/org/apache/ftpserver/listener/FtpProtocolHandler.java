@@ -131,7 +131,10 @@ public class FtpProtocolHandler {
         // call Ftplet.onDisconnect() method.
         try {
             Ftplet ftpletContainer = serverContext.getFtpletContainer();
-            ftpletContainer.onDisconnect(session, writer);
+            
+            if(ftpletContainer != null) {
+                ftpletContainer.onDisconnect(session, writer);
+            }
         }
         catch(Exception ex) {
             LOG.warn("RequestHandler.close()", ex);
@@ -151,9 +154,15 @@ public class FtpProtocolHandler {
             // logout if necessary and notify statistics
             if(session.isLoggedIn()) {
                 session.setLogout();
-                ftpStat.setLogout(connection);
+                
+                if(ftpStat != null) {
+                    ftpStat.setLogout(connection);
+                }
             }
-            ftpStat.setCloseConnection(connection);
+            
+            if(ftpStat != null) {
+                ftpStat.setCloseConnection(connection);
+            }
             
             // clear request
             session.clear();

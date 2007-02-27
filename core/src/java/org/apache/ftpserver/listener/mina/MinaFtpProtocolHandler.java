@@ -37,7 +37,8 @@ import org.apache.mina.util.SessionLog;
  */
 public class MinaFtpProtocolHandler extends IoHandlerAdapter
 {
-    
+
+
     private static final String OUTPUT_KEY = "output";
     private static final String CONNECTION_KEY = "connection";
     
@@ -73,6 +74,14 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
         MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
         
         protocolHandler.onConnectionOpened(connection, (FtpSessionImpl)connection.getSession(), output);
+    }
+    
+    
+    public void sessionClosed(IoSession session) throws Exception {
+        MinaConnection connection = (MinaConnection) session.getAttribute(CONNECTION_KEY);
+        MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
+        
+        protocolHandler.onConnectionClosed(connection, (FtpSessionImpl)connection.getSession(), output);
     }
     
     public void messageReceived( IoSession session, Object message ) throws IOException, FtpException
