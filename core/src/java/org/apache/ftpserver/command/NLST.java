@@ -22,8 +22,8 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.net.SocketException;
 
-import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
@@ -76,9 +76,9 @@ class NLST extends AbstractCommand {
 
             
             // print listing data
-            FtpDataConnection dataConnection;
+            DataConnection dataConnection;
             try {
-                dataConnection = session.getFtpDataConnection().openConnection();
+                dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "NLST", null));
@@ -120,7 +120,7 @@ class NLST extends AbstractCommand {
             }
         }
         finally {
-            session.getFtpDataConnection().closeDataSocket();
+            session.getDataConnection().closeDataConnection();
         }
     }
 }

@@ -31,6 +31,7 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -40,13 +41,13 @@ import org.apache.ftpserver.util.IoUtils;
  * data connection.
  */
 public
-class FtpDataConnection {
+class IODataConnection implements DataConnection {
     
     private FtpSessionImpl session;
     private Socket socket;
-    private FtpDataConnectionFactory factory;
+    private ServerDataConnectionFactory factory;
     
-    public FtpDataConnection(Socket socket, FtpSessionImpl session, FtpDataConnectionFactory factory) {
+    public IODataConnection(Socket socket, FtpSessionImpl session, ServerDataConnectionFactory factory) {
         this.session = session;
         this.socket = socket;
         this.factory = factory;
@@ -73,7 +74,7 @@ class FtpDataConnection {
             return is;
         }
         catch(IOException ex) {
-            factory.closeDataSocket();
+            factory.closeDataConnection();
             throw ex;
         }
     }
@@ -98,17 +99,13 @@ class FtpDataConnection {
             return os;
         }
         catch(IOException ex) {
-            factory.closeDataSocket();
+            factory.closeDataConnection();
             throw ex;
         }
     }
     
-    /**
-     * Transfer data from the client (e.g. STOR).
-     * @param out The {@link OutputStream} containing the destination
-     * of the data from the client.
-     * @return The length of the transefered data
-     * @throws IOException
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.OutputStream)
      */
     public final long transferFromClient(OutputStream out) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
@@ -126,11 +123,8 @@ class FtpDataConnection {
         }
     }
 
-    /**
-     * Transfer data to the client (e.g. RETR).
-     * @param in Data to be transfered to the client
-     * @return The length of the transefered data
-     * @throws IOException
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream)
      */
     public final long transferToClient(InputStream in) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
@@ -148,10 +142,8 @@ class FtpDataConnection {
         }
     }
     
-    /**
-     * Transfer a string to the client, e.g. during LIST
-     * @param str The string to transfer
-     * @throws IOException
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String)
      */
     public final void transferToClient(String str) throws IOException {
         OutputStream out = getDataOutputStream();

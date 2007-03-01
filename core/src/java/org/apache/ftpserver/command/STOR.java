@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.SocketException;
 
-import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
@@ -117,9 +117,9 @@ class STOR extends AbstractCommand {
             // get data connection
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "STOR", fileName));
             
-            FtpDataConnection dataConnection;
+            DataConnection dataConnection;
             try {
-                dataConnection = session.getFtpDataConnection().openConnection();
+                dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the input data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOR", fileName));
@@ -175,7 +175,7 @@ class STOR extends AbstractCommand {
         }
         finally {
             session.resetState();
-            session.getFtpDataConnection().closeDataSocket();
+            session.getDataConnection().closeDataConnection();
         }
     }
 }

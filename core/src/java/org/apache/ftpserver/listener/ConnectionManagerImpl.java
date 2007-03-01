@@ -26,7 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.apache.ftpserver.FtpDataConnectionFactory;
+import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -252,7 +252,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
                 }
                 
                 // idle data connection
-                FtpDataConnectionFactory dataCon = session.getFtpDataConnection();
+                ServerDataConnectionFactory dataCon = session.getServerDataConnection();
                 if(dataCon == null) {
                     continue;
                 }
@@ -261,7 +261,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
                     // if the data connection is not active - close it
                     if(dataCon.isTimeout(currTime)) {
                         LOG.info("Removing idle data connection for " + session.getUser());
-                        dataCon.closeDataSocket();
+                        dataCon.closeDataConnection();
                     }
                 }
             }

@@ -50,6 +50,11 @@ interface FtpSession {
     
     int getServerPort();
     
+    /**
+     * Get FTP data connection.
+     */
+    DataConnectionFactory getDataConnection();
+    
     Certificate[] getClientCertificates();
     
     /**

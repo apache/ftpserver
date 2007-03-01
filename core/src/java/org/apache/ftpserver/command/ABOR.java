@@ -55,7 +55,7 @@ class ABOR extends AbstractCommand {
         session.resetState();
         
         // and abort any data connection
-        session.getFtpDataConnection().closeDataSocket();
+        session.getDataConnection().closeDataConnection();
         out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "ABOR", null));
     }   
 }

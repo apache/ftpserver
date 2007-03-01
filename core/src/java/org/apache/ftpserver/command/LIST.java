@@ -22,8 +22,8 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.net.SocketException;
 
-import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
@@ -73,9 +73,9 @@ class LIST extends AbstractCommand {
             // get data connection
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "LIST", null));
 
-            FtpDataConnection dataConnection;
+            DataConnection dataConnection;
             try {
-                dataConnection = session.getFtpDataConnection().openConnection();
+                dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "LIST", null));
@@ -113,7 +113,7 @@ class LIST extends AbstractCommand {
             }
         }
         finally {
-            session.getFtpDataConnection().closeDataSocket();
+            session.getDataConnection().closeDataConnection();
         }
     }
 

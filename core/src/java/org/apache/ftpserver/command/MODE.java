@@ -59,11 +59,11 @@ class MODE extends AbstractCommand {
         char md = request.getArgument().charAt(0);
         md = Character.toUpperCase(md);
         if(md == 'S') {
-            session.getFtpDataConnection().setZipMode(false);
+            session.getServerDataConnection().setZipMode(false);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "S"));
         }
         else if(md == 'Z') {
-            session.getFtpDataConnection().setZipMode(true);
+            session.getServerDataConnection().setZipMode(true);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "Z"));
         }
         else {

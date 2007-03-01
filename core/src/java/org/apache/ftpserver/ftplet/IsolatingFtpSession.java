@@ -126,5 +126,9 @@ public class IsolatingFtpSession implements FtpSession {
     public void setMaxIdleTime(int maxIdleTimeSec) {
         session.setMaxIdleTime(maxIdleTimeSec);
     }
+
+    public DataConnectionFactory getDataConnection() {
+        return session.getDataConnection();
+    }
     
 }

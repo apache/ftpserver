@@ -27,6 +27,7 @@ import java.util.HashMap;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
@@ -57,7 +58,7 @@ public class FtpSessionImpl implements FtpServerSession {
     private long loginTime = 0L;
     private long lastAccessTime = 0L;
     
-    private FtpDataConnectionFactory dataConnection;
+    private IODataConnectionFactory dataConnection;
     private FileSystemView fileSystemView;
     
     private FileObject renameFrom;
@@ -98,7 +99,7 @@ public class FtpSessionImpl implements FtpServerSession {
     /**
      * Set FTP data connection.
      */
-    public void setFtpDataConnection(FtpDataConnectionFactory dataCon) {
+    public void setFtpDataConnection(IODataConnectionFactory dataCon) {
         dataConnection = dataCon;
     }
     
@@ -155,7 +156,14 @@ public class FtpSessionImpl implements FtpServerSession {
     /**
      * Get FTP data connection.
      */
-    public FtpDataConnectionFactory getFtpDataConnection() {
+    public DataConnectionFactory getDataConnection() {
+        return dataConnection;
+    }
+
+    /**
+     * Get FTP data connection.
+     */
+    public ServerDataConnectionFactory getServerDataConnection() {
         return dataConnection;
     }
     

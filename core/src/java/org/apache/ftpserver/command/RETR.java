@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
 
-import org.apache.ftpserver.FtpDataConnection;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
@@ -133,9 +133,9 @@ class RETR extends AbstractCommand {
             boolean failure = false;
             InputStream is = null;
 
-            FtpDataConnection dataConnection;
+            DataConnection dataConnection;
             try {
-                dataConnection = session.getFtpDataConnection().openConnection();
+                dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "RETR", null));
@@ -194,7 +194,7 @@ class RETR extends AbstractCommand {
         }
         finally {
             session.resetState();
-            session.getFtpDataConnection().closeDataSocket();
+            session.getDataConnection().closeDataConnection();
         }
     }
     

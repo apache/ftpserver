@@ -15,31 +15,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
-
-package org.apache.ftpserver.interfaces;
-
-import org.apache.ftpserver.ServerDataConnectionFactory;
-import org.apache.ftpserver.ftplet.FtpSession;
-import org.apache.ftpserver.listener.Listener;
-
-/**
- * The user session as seen by server components, adds additional
- * methods compared to the more limited FtpLet session
  */
-public interface FtpServerSession extends FtpSession {
+
+package org.apache.ftpserver.ftplet;
+
+
+public interface DataConnectionFactory {
+
 
     /**
-     * Retrive the server context
-     * @return The server context
+     * Open an active data connection
+     * @return The open data connection
+     * @throws Exception
      */
-    FtpServerContext getServerContext();
-    
-    Listener getListener();
+    DataConnection openConnection() throws Exception;
+
     
     /**
-     * Get FTP data connection.
+     * Close data socket.
      */
-    ServerDataConnectionFactory getServerDataConnection();
-    
+    void closeDataConnection();
+
 }

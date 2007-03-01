@@ -117,7 +117,7 @@ class EPRT extends AbstractCommand {
             return; 
         }
         
-        session.getFtpDataConnection().setPortCommand(dataAddr, dataPort);
+        session.getServerDataConnection().setPortCommand(dataAddr, dataPort);
         out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "EPRT", null));
     }
 }

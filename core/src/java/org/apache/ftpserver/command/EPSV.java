@@ -21,7 +21,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpDataConnectionFactory;
+import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
@@ -56,7 +56,7 @@ class EPSV extends AbstractCommand {
         session.resetState();
         
         // set data connection
-        FtpDataConnectionFactory dataCon = session.getFtpDataConnection();
+        ServerDataConnectionFactory dataCon = session.getServerDataConnection();
         if (!dataCon.setPasvCommand()) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null));
             return;   

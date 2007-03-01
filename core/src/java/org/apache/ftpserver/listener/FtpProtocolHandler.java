@@ -166,7 +166,7 @@ public class FtpProtocolHandler {
             
             // clear request
             session.clear();
-            session.getFtpDataConnection().dispose();
+            session.getServerDataConnection().dispose();
             FileSystemView fview = session.getFileSystemView();
             if(fview != null) {
                 fview.dispose();

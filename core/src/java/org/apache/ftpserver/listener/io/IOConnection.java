@@ -29,7 +29,7 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocket;
 
-import org.apache.ftpserver.FtpDataConnectionFactory;
+import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
@@ -81,7 +81,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
         ftpSession.setServerPort(this.controlSocket.getLocalPort());
         ftpSession.setListener(listener);
 
-        FtpDataConnectionFactory dataCon = new FtpDataConnectionFactory(this.serverContext, ftpSession);
+        IODataConnectionFactory dataCon = new IODataConnectionFactory(this.serverContext, ftpSession);
         dataCon.setServerControlAddress(controlSocket.getLocalAddress());
         
         ftpSession.setFtpDataConnection(dataCon);

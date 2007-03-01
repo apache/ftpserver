@@ -25,6 +25,7 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLSocket;
 
+import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -37,31 +38,30 @@ import org.slf4j.LoggerFactory;
  * We can get the ftp data connection using this class.
  * It uses either PORT or PASV command.
  */
-public
-class FtpDataConnectionFactory {
+public class IODataConnectionFactory implements ServerDataConnectionFactory {
     
-    private static final Logger LOG = LoggerFactory.getLogger(FtpDataConnectionFactory.class);
+    static final Logger LOG = LoggerFactory.getLogger(IODataConnectionFactory.class);
     
     private FtpServerContext    serverContext;
     private Socket        dataSoc;
-    private ServerSocket  servSoc;
+    ServerSocket  servSoc;
     
-    private InetAddress  address;
-    private int          port    = 0;
+    InetAddress  address;
+    int          port    = 0;
     
-    private long requestTime = 0L;
+    long requestTime = 0L;
     
-    private boolean isPort   = false;
-    private boolean isPasv   = false;
+    boolean isPort   = false;
+    boolean isPasv   = false;
     
-    private boolean secure   = false;
+    boolean secure   = false;
     private boolean isZip    = false;
 
-    private InetAddress serverControlAddress;
+    InetAddress serverControlAddress;
 
-    private FtpSessionImpl session;
+    FtpSessionImpl session;
     
-    public FtpDataConnectionFactory(FtpServerContext serverContext, FtpSessionImpl session) {
+    public IODataConnectionFactory(FtpServerContext serverContext, FtpSessionImpl session) {
         this.session = session;
         this.serverContext = serverContext;
         
@@ -71,7 +71,7 @@ class FtpDataConnectionFactory {
     /**
      * Close data socket.
      */
-    public synchronized void closeDataSocket() {
+    public synchronized void closeDataConnection() {
         
         // close client socket if any
         if(dataSoc != null) {
@@ -115,7 +115,7 @@ class FtpDataConnectionFactory {
     public synchronized void setPortCommand(InetAddress addr, int activePort) {
         
         // close old sockets if any
-        closeDataSocket();
+        closeDataConnection();
         
         // set variables
         isPort = true;
@@ -131,7 +131,7 @@ class FtpDataConnectionFactory {
     public synchronized boolean setPasvCommand() {
         
         // close old sockets if any
-        closeDataSocket(); 
+        closeDataConnection(); 
         
         // get the passive port
         int passivePort = session.getListener().getDataConnectionConfig().getPassivePort();
@@ -170,33 +170,31 @@ class FtpDataConnectionFactory {
         }
         catch(Exception ex) {
             servSoc = null;
-            closeDataSocket();
+            closeDataConnection();
             LOG.warn("FtpDataConnection.setPasvCommand()", ex);
         }
         return bRet;
     }
      
-    /**
-     * Get client address.
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnectionFactory2#getInetAddress()
      */
     public InetAddress getInetAddress() {
         return address;
     }
      
-    /**
-     * Get port number.
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnectionFactory2#getPort()
      */
     public int getPort() {
         return port;
     }
 
-    /**
-     * Open an active data connection
-     * @return The open data connection
-     * @throws Exception
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnectionFactory2#openConnection()
      */
-    public FtpDataConnection openConnection() throws Exception {
-        return new FtpDataConnection(getDataSocket(), session, this);
+    public DataConnection openConnection() throws Exception {
+        return new IODataConnection(getDataSocket(), session, this);
     }
     
     /**
@@ -238,7 +236,7 @@ class FtpDataConnectionFactory {
             }
         }
         catch(Exception ex) {
-            closeDataSocket();
+            closeDataConnection();
             LOG.warn("FtpDataConnection.getDataSocket()", ex);
             throw ex;
         }
@@ -253,8 +251,8 @@ class FtpDataConnectionFactory {
         return dataSoc;
     }
     
-    /**
-     * Is secure?
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnectionFactory2#isSecure()
      */
     public boolean isSecure() {
         return secure;
@@ -267,8 +265,8 @@ class FtpDataConnectionFactory {
         this.secure = secure;
     }
     
-    /**
-     * Is zip mode?
+    /* (non-Javadoc)
+     * @see org.apache.ftpserver.FtpDataConnectionFactory2#isZipMode()
      */
     public boolean isZipMode() {
         return isZip;
@@ -314,7 +312,7 @@ class FtpDataConnectionFactory {
      * Dispose data connection - close all the sockets.
      */ 
     public void dispose() {
-        closeDataSocket();
+        closeDataConnection();
     }
 
     /**
