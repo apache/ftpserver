@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class FtpClientLogger implements ProtocolCommandListener {
 
-    private static final Logger log = Logger.getLogger(FtpClientLogger.class);
+    private final Logger log = Logger.getLogger(FtpClientLogger.class);
     
     private String clientId;
     
