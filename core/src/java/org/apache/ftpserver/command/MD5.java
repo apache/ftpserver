@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MD5 extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MD5.class);
+    private final Logger LOG = LoggerFactory.getLogger(MD5.class);
     
     /**
      * Execute command.

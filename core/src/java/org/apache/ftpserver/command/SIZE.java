@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public 
 class SIZE extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(SIZE.class);
+    private final Logger LOG = LoggerFactory.getLogger(SIZE.class);
     
     /**
      * Execute command.

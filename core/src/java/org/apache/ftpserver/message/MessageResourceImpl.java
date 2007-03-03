@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MessageResourceImpl implements MessageResource, Component {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MessageResourceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(MessageResourceImpl.class);
     
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     

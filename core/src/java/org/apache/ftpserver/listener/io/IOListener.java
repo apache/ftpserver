@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IOListener extends AbstractListener implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IOListener.class);
+    private final Logger LOG = LoggerFactory.getLogger(IOListener.class);
 
     private FtpServerContext serverContext;
 

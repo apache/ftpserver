@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public
 class PropertiesUserManager extends AbstractUserManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PropertiesUserManager.class);
+    private final Logger LOG = LoggerFactory.getLogger(PropertiesUserManager.class);
     
     private final static String DEPRECATED_PREFIX    = "FtpServer.user.";
     private final static String PREFIX    = "ftpserver.user.";

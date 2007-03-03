@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class SSLTestTemplate extends TestCase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
+    private final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
     
     private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
     protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");

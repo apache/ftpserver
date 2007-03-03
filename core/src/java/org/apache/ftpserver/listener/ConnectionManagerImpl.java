@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public 
 class ConnectionManagerImpl implements ConnectionManager, Component {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConnectionManagerImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ConnectionManagerImpl.class);
     
     private ConnectionManagerObserver observer;              
     private Timer timer;

@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public 
 class CWD extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CWD.class);
+    private final Logger LOG = LoggerFactory.getLogger(CWD.class);
     
     /**
      * Execute command

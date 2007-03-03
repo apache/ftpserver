@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public 
 class DELE extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(DELE.class);
+    private final Logger LOG = LoggerFactory.getLogger(DELE.class);
     
     /**
      * Execute command.

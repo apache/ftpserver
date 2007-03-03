@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public 
 class RMD extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(RMD.class);
+    private final Logger LOG = LoggerFactory.getLogger(RMD.class);
 
     /**
      * Execute command.

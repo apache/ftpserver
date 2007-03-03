@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 public 
 class STOR extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(STOR.class);
+    private final Logger LOG = LoggerFactory.getLogger(STOR.class);
 
     /**
      * Execute command.

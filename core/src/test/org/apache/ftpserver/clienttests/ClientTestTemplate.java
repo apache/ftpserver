@@ -36,11 +36,12 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class ClientTestTemplate extends TestCase {
 
-    private static final Logger log = Logger.getLogger(ClientTestTemplate.class);
+    private final Logger LOG = LoggerFactory.getLogger(ClientTestTemplate.class);
     
     protected static final String ADMIN_PASSWORD = "admin";
     protected static final String ADMIN_USERNAME = "admin";
@@ -133,12 +134,12 @@ public abstract class ClientTestTemplate extends TestCase {
         client.addProtocolCommandListener(new ProtocolCommandListener(){
 
             public void protocolCommandSent(ProtocolCommandEvent event) {
-                log.debug("> " + event.getMessage().trim());
+                LOG.debug("> " + event.getMessage().trim());
                 
             }
 
             public void protocolReplyReceived(ProtocolCommandEvent event) {
-                log.debug("< " + event.getMessage().trim());
+                LOG.debug("< " + event.getMessage().trim());
             }});
         
         if(isConnectClient()) {

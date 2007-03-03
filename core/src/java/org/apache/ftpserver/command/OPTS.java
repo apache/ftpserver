@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public 
 class OPTS extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OPTS.class);
+    private final Logger LOG = LoggerFactory.getLogger(OPTS.class);
     
     private static final HashMap COMMAND_MAP = new HashMap(16);
     

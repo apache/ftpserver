@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public 
 class APPE extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(APPE.class);
+    private final Logger LOG = LoggerFactory.getLogger(APPE.class);
     
     /**
      * Execute command.

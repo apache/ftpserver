@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConfigurableFtpServerContext implements FtpServerContext {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
+    private final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
     
     private Bean messageResourceBean;
     private Bean connectionManagerBean;

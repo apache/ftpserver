@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MDTM extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MDTM.class);
+    private final Logger LOG = LoggerFactory.getLogger(MDTM.class);
     
     /**
      * Execute command

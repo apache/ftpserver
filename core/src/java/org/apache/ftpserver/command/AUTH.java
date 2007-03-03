@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public 
 class AUTH extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AUTH.class);
+    private final Logger LOG = LoggerFactory.getLogger(AUTH.class);
 
     /**
      * Execute command

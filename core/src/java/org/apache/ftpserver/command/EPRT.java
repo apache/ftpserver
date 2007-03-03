@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public 
 class EPRT extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EPRT.class);
+    private final Logger LOG = LoggerFactory.getLogger(EPRT.class);
     
     /**
      * Execute command.

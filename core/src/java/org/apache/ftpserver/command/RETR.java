@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public 
 class RETR extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(RETR.class);
+    private final Logger LOG = LoggerFactory.getLogger(RETR.class);
 
     /**
      * Execute command.

@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public 
 class LIST extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(LIST.class);
+    private final Logger LOG = LoggerFactory.getLogger(LIST.class);
     
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
     private DirectoryLister directoryLister = new DirectoryLister();

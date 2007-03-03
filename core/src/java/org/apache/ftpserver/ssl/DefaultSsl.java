@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultSsl implements Ssl {
     
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSsl.class);
+    private final Logger LOG = LoggerFactory.getLogger(DefaultSsl.class);
     
     private File keystoreFile = new File("./res/.keystore");
     private String keystorePass = "password";   // TODO should we really default this value?

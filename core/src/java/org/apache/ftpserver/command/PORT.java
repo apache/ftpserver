@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 public 
 class PORT extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PORT.class);
+    private final Logger LOG = LoggerFactory.getLogger(PORT.class);
     
     /**
      * Execute command.

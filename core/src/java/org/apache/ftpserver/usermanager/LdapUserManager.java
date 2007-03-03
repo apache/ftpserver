@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 public
 class LdapUserManager extends AbstractUserManager implements Component {
     
-    private static final Logger LOG = LoggerFactory.getLogger(LdapUserManager.class);
+    private final Logger LOG = LoggerFactory.getLogger(LdapUserManager.class);
     
     // LDAP attributes
     private final static String CN         = "cn";

@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public 
 class NLST extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NLST.class);
+    private final Logger LOG = LoggerFactory.getLogger(NLST.class);
     
     private static final NLSTFileFormater NLST_FILE_FORMATER = new NLSTFileFormater();
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();

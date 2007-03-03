@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public 
 class FtpSocketFactory implements SocketFactory, Component {
     
-    private static final Logger LOG = LoggerFactory.getLogger(FtpSocketFactory.class);
+    private final Logger LOG = LoggerFactory.getLogger(FtpSocketFactory.class);
     
     private InetAddress serverAddress;
     private int port;

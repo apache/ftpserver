@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IOConnection extends AbstractConnection implements Runnable {
     
-    private static final Logger LOG = LoggerFactory.getLogger(IOConnection.class);
+    private final Logger LOG = LoggerFactory.getLogger(IOConnection.class);
     
     private Socket controlSocket;
     private IOFtpResponseOutput writer;

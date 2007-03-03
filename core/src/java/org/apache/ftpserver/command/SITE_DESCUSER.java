@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public 
 class SITE_DESCUSER extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SITE_DESCUSER.class);
+    private final Logger LOG = LoggerFactory.getLogger(SITE_DESCUSER.class);
     
     /**
      * Execute command.

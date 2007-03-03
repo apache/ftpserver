@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public 
 class TYPE extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(TYPE.class);
+    private final Logger LOG = LoggerFactory.getLogger(TYPE.class);
     
     /**
      * Execute command

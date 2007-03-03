@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public 
 class REST extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(REST.class);
+    private final Logger LOG = LoggerFactory.getLogger(REST.class);
     
     /**
      * Execute command

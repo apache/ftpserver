@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MLST extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MLST.class);
+    private final Logger LOG = LoggerFactory.getLogger(MLST.class);
     
     /**
      * Execute command.

@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MinaListener extends AbstractListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MinaListener.class);
+    private final Logger LOG = LoggerFactory.getLogger(MinaListener.class);
 
     private IoAcceptor acceptor = new SocketAcceptor();
     

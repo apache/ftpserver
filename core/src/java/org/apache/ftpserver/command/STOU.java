@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public 
 class STOU extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(STOU.class);
+    private final Logger LOG = LoggerFactory.getLogger(STOU.class);
 
     /**
      * Execute command.

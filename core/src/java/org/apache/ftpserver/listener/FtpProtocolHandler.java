@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FtpProtocolHandler {
     
-    private static final Logger LOG = LoggerFactory.getLogger(FtpProtocolHandler.class);
+    private final Logger LOG = LoggerFactory.getLogger(FtpProtocolHandler.class);
     
     protected FtpServerContext serverContext;
     

@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DbUserManager extends AbstractUserManager {
     
-    private static final Logger LOG = LoggerFactory.getLogger(DbUserManager.class);
+    private final Logger LOG = LoggerFactory.getLogger(DbUserManager.class);
     
     private String insertUserStmt;
     private String updateUserStmt;

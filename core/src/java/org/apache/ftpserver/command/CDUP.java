@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public 
 class CDUP extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CDUP.class);
+    private final Logger LOG = LoggerFactory.getLogger(CDUP.class);
     
     /**
      * Execute command.

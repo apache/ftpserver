@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MKD extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(MKD.class);
+    private final Logger LOG = LoggerFactory.getLogger(MKD.class);
 
     /**
      * Execute command.

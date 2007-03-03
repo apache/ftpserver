@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public 
 class NativeFileSystemManager implements FileSystemManager, Component {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NativeFileSystemManager.class);
+    private final Logger LOG = LoggerFactory.getLogger(NativeFileSystemManager.class);
     
     private boolean createHome;
     private boolean caseInsensitive;

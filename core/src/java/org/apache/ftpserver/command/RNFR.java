@@ -43,7 +43,7 @@ public
 class RNFR extends AbstractCommand {
 
     
-    private static final Logger LOG = LoggerFactory.getLogger(RNFR.class);
+    private final Logger LOG = LoggerFactory.getLogger(RNFR.class);
     
     /**
      * Execute command

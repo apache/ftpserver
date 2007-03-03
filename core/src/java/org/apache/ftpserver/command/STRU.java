@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public 
 class STRU extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(STRU.class);
+    private final Logger LOG = LoggerFactory.getLogger(STRU.class);
     
     /**
      * Execute command

@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public 
 class SITE extends AbstractCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SITE.class);
+    private final Logger LOG = LoggerFactory.getLogger(SITE.class);
     
     private static final HashMap COMMAND_MAP = new HashMap(16);
     

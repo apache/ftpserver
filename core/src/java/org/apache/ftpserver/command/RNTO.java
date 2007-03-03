@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public 
 class RNTO extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(RNTO.class);
+    private final Logger LOG = LoggerFactory.getLogger(RNTO.class);
 
     /**
      * Execute command.

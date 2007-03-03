@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 public 
 class MLSD extends AbstractCommand {
     
-    private static final Logger LOG = LoggerFactory.getLogger(MLSD.class);
+    private final Logger LOG = LoggerFactory.getLogger(MLSD.class);
     
     private DirectoryLister directoryLister = new DirectoryLister();
     

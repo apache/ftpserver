@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultFtpServerContext implements FtpServerContext {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultFtpServerContext.class);
+    private final Logger LOG = LoggerFactory.getLogger(DefaultFtpServerContext.class);
     
     private MessageResource messageResource;
     private ConnectionManager connectionManager;

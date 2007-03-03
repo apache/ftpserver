@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultFtpletContainer implements Component, FtpletContainer {
     
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultFtpletContainer.class);
+    private final Logger LOG = LoggerFactory.getLogger(DefaultFtpletContainer.class);
     
     private List ftplets = new ArrayList();
     

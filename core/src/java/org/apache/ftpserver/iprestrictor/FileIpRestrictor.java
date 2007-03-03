@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 public 
 class FileIpRestrictor implements IpRestrictor, Component {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FileIpRestrictor.class);
+    private final Logger LOG = LoggerFactory.getLogger(FileIpRestrictor.class);
     
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     

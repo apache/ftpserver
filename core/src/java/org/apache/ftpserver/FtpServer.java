@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FtpServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
+    private final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
     
     
     private FtpServerContext serverContext;
