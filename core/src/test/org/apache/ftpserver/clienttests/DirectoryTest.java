@@ -50,7 +50,7 @@ public class DirectoryTest extends ClientTestTemplate {
     }
 
     public void testMkdirInValidDirectoryName() throws Exception {
-        assertEquals(550 ,client.sendCommand("MKD foo:bar;foo"));
+        assertEquals(501 ,client.sendCommand("MKD foo:bar;foo"));
     }
 
     public void testMkdirDouble() throws Exception {

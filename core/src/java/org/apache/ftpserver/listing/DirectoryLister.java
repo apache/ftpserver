@@ -32,7 +32,15 @@ public
 class DirectoryLister {
 
     
-    private String traverseFiles(final FileObject[] files, final FileFilter filter, final FileFormater formater) {
+	private String traverseFiles(final FileObject[] files, final FileFilter filter, final FileFormater formater) {
+		StringBuffer sb = new StringBuffer();
+
+		sb.append(traverseFiles(files, filter, formater, true));
+		sb.append(traverseFiles(files, filter, formater, false));
+		
+		return sb.toString();
+	}
+    private String traverseFiles(final FileObject[] files, final FileFilter filter, final FileFormater formater, boolean matchDirs) {
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<files.length; i++) {
             if(files[i] == null) {
@@ -40,7 +48,9 @@ class DirectoryLister {
             }
             
             if(filter == null || filter.accept(files[i])) {
-                sb.append(formater.format(files[i]));
+            	if(files[i].isDirectory() == matchDirs) {
+            		sb.append(formater.format(files[i]));
+            	}
             }
          }
         
