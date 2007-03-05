@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.command;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpSessionImpl;
@@ -63,9 +64,9 @@ class MKD extends AbstractCommand {
         
         // argument check
         String fileName = request.getArgument();
-        if(fileName == null) {
+        if(fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null));
-            return;  
+            return;  	
         }
         
         // call Ftplet.onMkdirStart() method
