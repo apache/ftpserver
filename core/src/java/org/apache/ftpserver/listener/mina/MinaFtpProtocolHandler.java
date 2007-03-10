@@ -67,9 +67,6 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
 
     public void sessionOpened( IoSession session ) throws Exception
     {
-        // set idle time to 60 seconds
-        session.setIdleTime( IdleStatus.BOTH_IDLE, 60 );
-
         MinaConnection connection = (MinaConnection) session.getAttribute(CONNECTION_KEY);
         MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
         
