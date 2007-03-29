@@ -21,6 +21,7 @@ package org.apache.ftpserver.listener.mina;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -83,7 +84,8 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
     
     public void messageReceived( IoSession session, Object message ) throws IOException, FtpException
     {
-        FtpRequest request = (FtpRequest) message;
+        // Incoming messages are decoded into strings
+        FtpRequest request = new FtpRequestImpl(message.toString());
 
 
         ConnectionObserver observer = (ConnectionObserver) session.getAttribute("observer");

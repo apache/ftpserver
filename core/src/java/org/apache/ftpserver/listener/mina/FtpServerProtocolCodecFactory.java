@@ -19,17 +19,20 @@
  */
 package org.apache.ftpserver.listener.mina;
 
+import java.nio.charset.Charset;
+
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
+import org.apache.mina.filter.codec.textline.TextLineDecoder;
 
 /**
  * Factory for creating decoders and encoders
  */
 public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory
 {
-    private FtpRequestDecoder decoder = new FtpRequestDecoder();
-    private FtpResponseEncoder encoder = new FtpResponseEncoder();
+    private ProtocolDecoder decoder = new TextLineDecoder(Charset.forName("UTF-8"));
+    private ProtocolEncoder encoder = new FtpResponseEncoder();
 
     public ProtocolDecoder getDecoder() throws Exception {
         return decoder;

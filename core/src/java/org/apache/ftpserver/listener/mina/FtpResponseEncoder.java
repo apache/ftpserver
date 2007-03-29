@@ -39,11 +39,11 @@ public class FtpResponseEncoder extends ProtocolEncoderAdapter
     public void encode( IoSession session, Object message,
             ProtocolEncoderOutput out ) throws Exception
     {
-        FtpReply ftpResponse = (FtpReply) message;
+        String value = message.toString();
         
-        ByteBuffer buf = ByteBuffer.allocate( 256 );
+        ByteBuffer buf = ByteBuffer.allocate( value.length() ).setAutoExpand( true );
 
-        buf.putString( ftpResponse.toString(), ENCODER );
+        buf.putString( value, ENCODER );
         
         buf.flip();
         out.write(buf);
