@@ -58,6 +58,14 @@ interface DataConnectionConfig {
     InetAddress getPassiveAddress();
     
     /**
+     * Get the passive address that will be returned to clients on the
+     * PASV command.
+     * @return The passive address to be returned to clients, null if not
+     *      configured.
+     */
+    InetAddress getPassiveExernalAddress();
+    
+    /**
      * Get passive port.
      */
     int getPassivePort();

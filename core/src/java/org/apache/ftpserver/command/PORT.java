@@ -21,6 +21,7 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
@@ -122,7 +123,7 @@ class PORT extends AbstractCommand {
             return; 
         }
         
-        session.getServerDataConnection().setPortCommand(dataAddr, dataPort);
+        session.getServerDataConnection().initActiveDataConnection(new InetSocketAddress(dataAddr, dataPort));
         out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
     

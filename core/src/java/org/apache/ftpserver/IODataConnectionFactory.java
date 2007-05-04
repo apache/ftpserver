@@ -20,6 +20,7 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IODataConnectionFactory implements ServerDataConnectionFactory {
     
-    static final Logger LOG = LoggerFactory.getLogger(IODataConnectionFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IODataConnectionFactory.class);
     
     private FtpServerContext    serverContext;
     private Socket        dataSoc;
@@ -51,8 +52,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     
     long requestTime = 0L;
     
-    boolean isPort   = false;
-    boolean isPasv   = false;
+    boolean passive   = false;
     
     boolean secure   = false;
     private boolean isZip    = false;
@@ -112,23 +112,23 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     /**
      * Port command.
      */
-    public synchronized void setPortCommand(InetAddress addr, int activePort) {
+    public synchronized void initActiveDataConnection(InetSocketAddress address) {
         
         // close old sockets if any
         closeDataConnection();
         
         // set variables
-        isPort = true;
-        isPasv = false;
-        address = addr;
-        port = activePort;
+        passive = false;
+        this.address = address.getAddress();
+        port = address.getPort();
         requestTime = System.currentTimeMillis();
     } 
     
     /**
-     * Passive command. It returns the success flag.
+     * Initiate a data connection in passive mode (server listening). 
+     * It returns the success flag.
      */
-    public synchronized boolean setPasvCommand() {
+    public synchronized InetSocketAddress initPassiveDataConnection() throws DataConnectionException {
         
         // close old sockets if any
         closeDataConnection(); 
@@ -136,13 +136,11 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         // get the passive port
         int passivePort = session.getListener().getDataConnectionConfig().getPassivePort();
         if(passivePort == -1) {
-            LOG.warn("Cannot find an available passive port.");
             servSoc = null;
-            return false;
+            throw new DataConnectionException("Cannot find an available passive port.");
         }
         
         // open passive server socket and get parameters
-        boolean bRet = false;
         try {
             DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
@@ -152,28 +150,30 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             if(secure) {
                 Ssl ssl = dataCfg.getSSL();
                 if(ssl == null) {
-                    throw new FtpException("Data connection SSL not configured.");
+                    throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
                 servSoc = ssl.createServerSocket(null, address, passivePort);
+                port = servSoc.getLocalPort();
+                LOG.debug("SSL data connection created on " + address + ":" + port);
             }
             else {
                 servSoc = new ServerSocket(passivePort, 1, address);
+                port = servSoc.getLocalPort();
+                LOG.debug("Data connection created on " + address + ":" + port);
             }
             servSoc.setSoTimeout(dataCfg.getMaxIdleTimeMillis());
-            port = servSoc.getLocalPort();
 
             // set different state variables
-            isPort = false;
-            isPasv = true;
-            bRet = true;
+            passive = true;
             requestTime = System.currentTimeMillis();
+            
+            return new InetSocketAddress(address, port);
         }
         catch(Exception ex) {
             servSoc = null;
             closeDataConnection();
-            LOG.warn("FtpDataConnection.setPasvCommand()", ex);
+            throw new DataConnectionException("FtpDataConnection.setPasvCommand()", ex);
         }
-        return bRet;
     }
      
     /* (non-Javadoc)
@@ -194,19 +194,19 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#openConnection()
      */
     public DataConnection openConnection() throws Exception {
-        return new IODataConnection(getDataSocket(), session, this);
+        return new IODataConnection(createDataSocket(), session, this);
     }
     
     /**
      * Get the data socket. In case of error returns null.
      */
-    private synchronized Socket getDataSocket() throws Exception {
+    private synchronized Socket createDataSocket() throws Exception {
 
         // get socket depending on the selection
         dataSoc = null;
         DataConnectionConfig dataConfig = session.getListener().getDataConnectionConfig();
         try {
-            if(isPort) {
+            if(!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if(secure) {
                     Ssl ssl = dataConfig.getSSL();
@@ -230,9 +230,10 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                         dataSoc = new Socket(address, port, localAddr, localPort);
                     }
                 }
-            }
-            else if(isPasv) {
+            } else {
+                LOG.debug("Opening passive data connection");
                 dataSoc = servSoc.accept();
+                LOG.debug("Passive data connection opened");
             }
         }
         catch(Exception ex) {

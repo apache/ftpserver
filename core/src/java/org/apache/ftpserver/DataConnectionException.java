@@ -17,47 +17,49 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver;
+
+import org.apache.ftpserver.ftplet.FtpException;
 
 /**
- * Thrown if an authentication request fails
+ * Thrown if a data connection can not be established
  */
-public class AuthenticationFailedException extends FtpException {
-    private static final long serialVersionUID = -1328383839915898987L;
+public class DataConnectionException extends FtpException {
+    private static final long serialVersionUID = -1328383839917648987L;
 
     /**
      * Default constructor.
      */
-    public AuthenticationFailedException() {
+    public DataConnectionException() {
         super();
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a message.
+     * Constructs a <code>DataConnectionException</code> object with a message.
      * 
      * @param msg a description of the exception 
      */
-    public AuthenticationFailedException(String msg) {
+    public DataConnectionException(String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a 
+     * Constructs a <code>DataConnectionException</code> object with a 
      * <code>Throwable</code> cause.
      * 
      * @param th the original cause
      */
-    public AuthenticationFailedException(Throwable th) {
+    public DataConnectionException(Throwable th) {
         super(th);
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a 
+     * Constructs a <code>DataConnectionException</code> object with a 
      * <code>Throwable</code> cause.
      * 
      * @param th the original cause
      */
-    public AuthenticationFailedException(String msg, Throwable th) {
+    public DataConnectionException(String msg, Throwable th) {
         super(msg);
     }
 }

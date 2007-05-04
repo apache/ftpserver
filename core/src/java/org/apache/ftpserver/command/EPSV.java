@@ -20,9 +20,11 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
-import org.apache.ftpserver.ServerDataConnectionFactory;
+import org.apache.ftpserver.DataConnectionException;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -57,16 +59,19 @@ class EPSV extends AbstractCommand {
         
         // set data connection
         ServerDataConnectionFactory dataCon = session.getServerDataConnection();
-        if (!dataCon.setPasvCommand()) {
+        
+        try {
+            InetSocketAddress dataConAddress = dataCon.initPassiveDataConnection();
+            // get connection info
+            int servPort = dataConAddress.getPort();
+            
+            // send connection info to client
+            String portStr = "|||" + servPort + '|';
+            out.write(FtpReplyUtil.translate(session, 229, "EPSV", portStr));
+        
+        } catch(DataConnectionException e) {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null));
             return;   
         }
-        
-        // get connection info
-        int servPort = dataCon.getPort();
-        
-        // send connection info to client
-        String portStr = "|||" + servPort + '|';
-        out.write(FtpReplyUtil.translate(session, 229, "EPSV", portStr));
     }
 }

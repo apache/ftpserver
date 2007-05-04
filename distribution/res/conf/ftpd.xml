@@ -55,6 +55,7 @@ under the License.
                 <passive>
                     <address>localhost</address>
                     <ports>0</ports>
+                    <external-address>192.1.2.3</external-address>
                 </passive>
                 <ssl>
                     <class>org.apache.ftpserver.ssl.DefaultSsl</class>

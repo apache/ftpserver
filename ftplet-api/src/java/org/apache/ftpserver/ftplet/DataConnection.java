@@ -29,7 +29,7 @@ public interface DataConnection {
      * Transfer data from the client (e.g. STOR).
      * @param out The {@link OutputStream} containing the destination
      * of the data from the client.
-     * @return The length of the transefered data
+     * @return The length of the transferred data
      * @throws IOException
      */
     long transferFromClient(OutputStream out) throws IOException;
@@ -37,7 +37,7 @@ public interface DataConnection {
     /**
      * Transfer data to the client (e.g. RETR).
      * @param in Data to be transfered to the client
-     * @return The length of the transefered data
+     * @return The length of the transferred data
      * @throws IOException
      */
     long transferToClient(InputStream in) throws IOException;

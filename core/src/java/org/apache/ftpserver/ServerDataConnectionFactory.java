@@ -20,6 +20,7 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 
@@ -28,12 +29,14 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
     /**
      * Port command.
      */
-    void setPortCommand(InetAddress addr, int activePort);
+    void initActiveDataConnection(InetSocketAddress address);
 
     /**
-     * Passive command. It returns the success flag.
+     * Initate the passive data connection. 
+     * @return The {@link InetSocketAddress} on which the data connection 
+     *  if bound.
      */
-    boolean setPasvCommand();
+    InetSocketAddress initPassiveDataConnection() throws DataConnectionException;
 
     /**
      * Set the security protocol.

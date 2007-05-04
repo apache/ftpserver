@@ -73,6 +73,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     
     public static class Passive  {
         private InetAddress address;
+        private InetAddress externalAddress;
         private PassivePorts passivePorts =PassivePorts.parse("0");
         
         public InetAddress getAddress() {
@@ -86,6 +87,12 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
         }
         public void setPorts(String ports) {
             this.passivePorts = PassivePorts.parse(ports);
+        }
+        public InetAddress getExternalAddress() {
+            return externalAddress;
+        }
+        public void setExternalAddress(InetAddress externalAddress) {
+            this.externalAddress = externalAddress;
         }
     }
     
@@ -153,6 +160,13 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
      */
     public InetAddress getPassiveAddress() {
         return passive.getAddress();
+    }
+
+    /**
+     * Get external passive host.
+     */
+    public InetAddress getPassiveExernalAddress() {
+        return passive.getExternalAddress();
     }
     
     /**
