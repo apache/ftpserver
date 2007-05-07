@@ -21,13 +21,15 @@ package org.apache.ftpserver.clienttests;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.util.IoUtils;
 
 
 public class StoreTest extends ClientTestTemplate {
-    private static final String TESTDATA = "TESTDATA";
+    private static final String TESTDATA = "TESTDATA\r\nline2\r\n";
 
     private static final String ENCODING = "UTF-8";
 

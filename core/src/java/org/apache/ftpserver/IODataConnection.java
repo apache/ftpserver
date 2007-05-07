@@ -174,7 +174,7 @@ class IODataConnection implements DataConnection {
     
             bos = IoUtils.getBufferedOutputStream( out );
             
-            
+            boolean lastWasCR = false;
             while(true) {
                 
                 // if current rate exceeds the max rate, sleep for 50ms 
@@ -207,8 +207,14 @@ class IODataConnection implements DataConnection {
                 if(isAscii) {
                     for(int i=0; i<count; ++i) {
                         byte b = buff[i];
-                        if(b == '\n') {
+                        if(b == '\n' && !lastWasCR) {
                             bos.write('\r');
+                        } 
+                        
+                        if(b == '\r') {
+                            lastWasCR = true;
+                        } else {
+                            lastWasCR = false;
                         }
                         bos.write(b);
                     }

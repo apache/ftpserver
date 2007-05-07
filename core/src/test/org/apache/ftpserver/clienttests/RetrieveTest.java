@@ -37,7 +37,7 @@ public class RetrieveTest extends ClientTestTemplate {
     protected void setUp() throws Exception {
         super.setUp();
 
-        testData = "TESTDATA".getBytes("UTF-8");
+        testData = "TESTDATA\r\n".getBytes("UTF-8");
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
