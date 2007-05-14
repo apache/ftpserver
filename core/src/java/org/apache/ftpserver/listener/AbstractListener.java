@@ -55,6 +55,9 @@ public abstract class AbstractListener implements Listener {
     public void setServerAddress(InetAddress serverAddress) {
         this.serverAddress = serverAddress;
     }
+    public void setAddress(InetAddress serverAddress) {
+        this.serverAddress = serverAddress;
+    }
     public Ssl getSsl() {
         return ssl;
     }
