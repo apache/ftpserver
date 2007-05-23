@@ -331,7 +331,9 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
             Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
             statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() + 1));
             Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getSession().getClientAddress().getHostAddress());
-            if(loginNumberPerIP == null){//new connection from this ip
+            
+            if(loginNumberPerIP == null) {
+                //new connection from this ip
               statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(1));
             } else{//this ip has connections already
               statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() + 1));
@@ -365,13 +367,17 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
           Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
           statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() - 1));
           Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getSession().getClientAddress().getHostAddress());
-          if(loginNumberPerIP != null){//this should always be true
-            if(loginNumberPerIP.intValue() <= 1){//the last login from this ip, remove this ip address
-              statisticsTable.remove(connection.getSession().getClientAddress().getHostAddress());
+          
+          if(loginNumberPerIP != null){
+            //this should always be true
+            if(loginNumberPerIP.intValue() <= 1){
+                //the last login from this ip, remove this ip address
+                statisticsTable.remove(connection.getSession().getClientAddress().getHostAddress());
+            } else{
+                //this ip has other logins, reduce the number
+                statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() - 1));
             }
-          } else{//this ip has other logins, reduce the number
-            statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() - 1));
-          }
+          } 
         }
         
         notifyLogout(connection);
