@@ -26,6 +26,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.ConnectionObserver;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.mina.common.IdleStatus;
@@ -59,6 +60,9 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
      */
     public void sessionCreated(IoSession session) throws Exception {
         MinaConnection connection = new MinaConnection(serverContext, session, listener);
+        ConnectionManager conManager = serverContext.getConnectionManager();
+        conManager.newConnection(connection);
+        
         session.setAttribute(CONNECTION_KEY, connection);
         
         MinaFtpResponseOutput output = new MinaFtpResponseOutput(session);
