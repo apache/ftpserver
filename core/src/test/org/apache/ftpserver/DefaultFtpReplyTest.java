@@ -22,7 +22,7 @@ package org.apache.ftpserver;
 import junit.framework.TestCase;
 
 
-public class FtpResponseImplTest extends TestCase {
+public class DefaultFtpReplyTest extends TestCase {
 
     public void testSingleLineToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo bar");
@@ -46,5 +46,11 @@ public class FtpResponseImplTest extends TestCase {
         DefaultFtpReply response = new DefaultFtpReply(123, "\nfoo\nbar\nbaz");
         
         assertEquals("123-\r\nfoo\r\nbar\r\n123 baz\r\n", response.toString());
+    }
+    
+    public void testMultipleLinesToStringSpaceFirst() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\n bar\nbaz");
+        
+        assertEquals("123-foo\r\n bar\r\n123 baz\r\n", response.toString());
     }
 }

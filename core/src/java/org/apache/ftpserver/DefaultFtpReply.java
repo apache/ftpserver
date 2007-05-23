@@ -75,7 +75,7 @@ public class DefaultFtpReply implements FtpReply {
             sb.append("-");
 
             for (int i = 0; i < lines.length; i++) {
-                String line = lines[i].trim();
+                String line = lines[i];
                 
                 if(i + 1 == lines.length) {
                     sb.append(code);
