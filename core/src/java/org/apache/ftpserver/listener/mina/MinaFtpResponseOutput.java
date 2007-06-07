@@ -40,7 +40,7 @@ public class MinaFtpResponseOutput extends FtpWriter {
     }
 
     public void write(FtpReply response) throws IOException {
-        session.write(response).join();
+        session.write(response);
     }
 
     protected InetAddress getFallbackServerAddress() {
