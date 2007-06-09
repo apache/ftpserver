@@ -100,8 +100,10 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
         MinaConnection connection = (MinaConnection) session.getAttribute(CONNECTION_KEY);
         MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
 
-        
-        protocolHandler.onRequestReceived(connection, (FtpSessionImpl)connection.getSession(), output, request);
+        FtpSessionImpl ftpSession = (FtpSessionImpl) connection.getSession();
+        ftpSession.updateLastAccessTime();
+                 
+        protocolHandler.onRequestReceived(connection, ftpSession, output, request);
     }
 
     public void sessionIdle( IoSession session, IdleStatus status )
