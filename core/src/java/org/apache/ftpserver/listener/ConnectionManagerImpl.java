@@ -54,6 +54,10 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     
     private int defaultIdleSec;
     private int pollIntervalSec;
+
+    private int maxLoginFailures;
+
+    private int loginFailureDelay;
     
     
     /**
@@ -62,12 +66,14 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     public void configure(Configuration config) throws FtpException {
         
         // get configuration parameters
-        maxConnections  = config.getInt     ("max-connection",          20);
-        maxLogins       = config.getInt     ("max-login",               10);
-        anonEnabled     = config.getBoolean ("anonymous-login-enabled", true);
-        maxAnonLogins   = config.getInt     ("max-anonymous-login",     10);
-        defaultIdleSec  = config.getInt     ("default-idle-time",       60);
-        pollIntervalSec = config.getInt     ("timeout-poll-interval",   60);
+        maxConnections    = config.getInt     ("max-connection",          20);
+        maxLogins         = config.getInt     ("max-login",               10);
+        anonEnabled       = config.getBoolean ("anonymous-login-enabled", true);
+        maxAnonLogins     = config.getInt     ("max-anonymous-login",     10);
+        defaultIdleSec    = config.getInt     ("default-idle-time",       60);
+        pollIntervalSec   = config.getInt     ("timeout-poll-interval",   60);
+        maxLoginFailures  = config.getInt     ("max-login-failures",   3);
+        loginFailureDelay = config.getInt     ("login-failure-delay",   500);
         
         // set timer to remove inactive users and load data
         timer = new Timer(true);
@@ -302,5 +308,13 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
             closeAllConnections();
             conList = null;
         }
+    }
+
+    public int getMaxLoginFailures() {
+        return maxLoginFailures;
+    }
+
+    public int getLoginFailureDelay() {
+        return loginFailureDelay;
     } 
 }

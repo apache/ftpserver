@@ -95,6 +95,8 @@ under the License.
         <max-anonymous-login>10</max-anonymous-login>
         <default-idle-time>60</default-idle-time>
         <timeout-poll-inverval>60</timeout-poll-inverval>
+        <max-login-failures>3</max-login-failures>
+        <login-failure-delay>500</login-failure-delay>
     </connection-manager>
     -->
 

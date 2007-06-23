@@ -36,6 +36,16 @@ interface ConnectionManager {
      * Get maximum number of logins.
      */
     int getMaxLogins();
+
+    /**
+     * Get login failure before getting disconnected
+     */
+    int getMaxLoginFailures();
+
+    /**
+     * The number of milliseconds the server will delay after a failed login.
+     */
+    int getLoginFailureDelay();
      
     
     /**

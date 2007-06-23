@@ -69,6 +69,7 @@ public class FtpSessionImpl implements FtpServerSession {
     private Structure structure  = Structure.FILE;
     private FtpServerContext serverContext;
     private Listener listener;
+    private int failedLogins;
     
     public Listener getListener() {
         return listener;
@@ -395,5 +396,13 @@ public class FtpSessionImpl implements FtpServerSession {
 
     public void setServerPort(int serverPort) {
         this.serverPort = serverPort;
+    }
+
+    public int getFailedLogins() {
+        return failedLogins;
+    }
+
+    public void increaseFailedLogins() {
+        this.failedLogins++;
     }
 }

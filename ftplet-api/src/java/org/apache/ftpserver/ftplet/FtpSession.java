@@ -66,6 +66,11 @@ interface FtpSession {
      * Get the login time.
      */
     Date getLoginTime();
+
+    /**
+     * Get the number of failed logins. When login succeeds, this will return 0.
+     */
+    int getFailedLogins();
     
     /**
      * Get last access time.

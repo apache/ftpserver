@@ -130,5 +130,9 @@ public class IsolatingFtpSession implements FtpSession {
     public DataConnectionFactory getDataConnection() {
         return session.getDataConnection();
     }
+
+    public int getFailedLogins() {
+        return session.getFailedLogins();
+    }
     
 }

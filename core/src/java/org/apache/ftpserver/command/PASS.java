@@ -181,10 +181,22 @@ class PASS extends AbstractCommand {
                 session.setUser(oldUser);
                 session.setUserArgument(oldUserArgument);
                 session.setMaxIdleTime(oldMaxIdleTime);
+
+                delayAfterLoginFailure(conManager);
                 
                 LOG.warn("Login failure - " + userName);
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
                 stat.setLoginFail(connection);
+
+                session.increaseFailedLogins();
+
+                // kick the user if the max number of failed logins is reached
+                int maxAllowedLoginFailues = conManager.getMaxLoginFailures(); 
+                if(maxAllowedLoginFailues != 0 && 
+                        session.getFailedLogins() >= maxAllowedLoginFailues) {
+                    connection.close();
+                }
+                
                 return;
             }
             
@@ -209,6 +221,20 @@ class PASS extends AbstractCommand {
             // if login failed - reset user
             if(!success) {
                 session.reinitialize();
+            }
+        }
+    }
+
+    private void delayAfterLoginFailure(ConnectionManager conManager) {
+        int loginFailureDelay = conManager.getLoginFailureDelay();
+        
+        if(loginFailureDelay > 0) {
+            LOG.debug("Waiting for " + loginFailureDelay + " milliseconds due to login failure");
+            
+            try {
+                Thread.sleep(loginFailureDelay);
+            } catch (InterruptedException e) {
+                // ignore and go on
             }
         }
     }
