@@ -32,6 +32,7 @@ import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.apache.ftpserver.util.SocketAddressEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +68,7 @@ class PASV extends AbstractCommand {
         try {
             InetSocketAddress dataConAddress = dataCon.initPassiveDataConnection();
 
+            
             // get connection info
             InetAddress servAddr;
             if(externalPassiveAddress != null) {
@@ -74,10 +76,11 @@ class PASV extends AbstractCommand {
             } else {
                 servAddr = dataConAddress.getAddress();
             }
-            int servPort = dataConAddress.getPort();
             
             // send connection info to client
-            String addrStr = servAddr.getHostAddress().replace( '.', ',' ) + ',' + (servPort>>8) + ',' + (servPort&0xFF);
+            InetSocketAddress externalDataConAddress = new InetSocketAddress(servAddr, dataConAddress.getPort());
+            
+            String addrStr = SocketAddressEncoder.encode(externalDataConAddress);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
         } catch(DataConnectionException e) {
             LOG.warn("Failed to open passive data connection", e);

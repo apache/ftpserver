@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.StringTokenizer;
 
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -32,6 +31,9 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.apache.ftpserver.util.IllegalInetAddressException;
+import org.apache.ftpserver.util.IllegalPortException;
+import org.apache.ftpserver.util.SocketAddressEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,13 +76,7 @@ class PORT extends AbstractCommand {
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
             return;  
         }
-        
-        StringTokenizer st = new StringTokenizer(request.getArgument(), ",");
-        if(st.countTokens() != 6) {
-            out.write(FtpReplyUtil.translate(session, 510, "PORT", null));
-            return;
-        }
-        
+
         // is port enabled
         DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
@@ -88,15 +84,18 @@ class PORT extends AbstractCommand {
             return;
         } 
         
-        // get data server
-        String dataSrvName = st.nextToken() + '.' + st.nextToken() + '.' +
-        st.nextToken() + '.' + st.nextToken();
-        InetAddress dataAddr = null;
+        InetSocketAddress address;
         try {
-            dataAddr = InetAddress.getByName(dataSrvName);
-        }
-        catch(UnknownHostException ex) {
-            LOG.debug("Unknown host: " + dataSrvName, ex);
+            address = SocketAddressEncoder.decode(request.getArgument());
+        } catch(IllegalInetAddressException e) {
+            out.write(FtpReplyUtil.translate(session, 510, "PORT", null));
+            return;
+        } catch(IllegalPortException e) {
+            LOG.debug("Invalid data port: " + request.getArgument(), e);
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
+            return; 
+        } catch(UnknownHostException e) {
+            LOG.debug("Unknown host", e);
             out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
             return;
         }
@@ -104,26 +103,13 @@ class PORT extends AbstractCommand {
         // check IP
         if(dataCfg.isActiveIpCheck()) {
             InetAddress clientAddr = session.getClientAddress();
-            if(!dataAddr.equals(clientAddr)) {
+            if(!address.getAddress().equals(clientAddr)) {
                 out.write(FtpReplyUtil.translate(session, 510, "PORT.mismatch", null));
                 return;
             }
         }
         
-        // get data server port
-        int dataPort = 0;
-        try {
-            int hi = Integer.parseInt(st.nextToken());
-            int lo = Integer.parseInt(st.nextToken());
-            dataPort = (hi << 8) | lo;     
-        }
-        catch(NumberFormatException ex) {
-            LOG.debug("Invalid data port: " + request.getArgument(), ex);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
-            return; 
-        }
-        
-        session.getServerDataConnection().initActiveDataConnection(new InetSocketAddress(dataAddr, dataPort));
+        session.getServerDataConnection().initActiveDataConnection(address);
         out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
     
