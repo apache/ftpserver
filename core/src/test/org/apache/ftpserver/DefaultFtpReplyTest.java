@@ -31,13 +31,25 @@ public class DefaultFtpReplyTest extends TestCase {
     }
 
     public void testNullToString() {
-        DefaultFtpReply response = new DefaultFtpReply(123, null);
+        DefaultFtpReply response = new DefaultFtpReply(123, (String)null);
         
         assertEquals("123 \r\n", response.toString());
     }
 
     public void testMultipleLinesToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\nbaz");
+        
+        assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
+    }
+
+    public void testMultipleLinesEndWithNewlineToString() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\nbaz\n");
+        
+        assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
+    }
+    
+    public void testArrayLinesToString() {
+        DefaultFtpReply response = new DefaultFtpReply(123, new String[]{"foo", "bar", "baz"});
         
         assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
     }

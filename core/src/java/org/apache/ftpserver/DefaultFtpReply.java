@@ -37,6 +37,17 @@ public class DefaultFtpReply implements FtpReply {
         this.code = code;
         this.message = message;
     }
+
+    public DefaultFtpReply(int code, String[] message) {
+        this.code = code;
+        
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i<message.length; i++) {
+            sb.append(message[i]);
+            sb.append('\n');
+        }
+        this.message = sb.toString();
+    }
     /**
      * @return the code
      */
