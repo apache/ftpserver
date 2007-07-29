@@ -21,8 +21,6 @@ package org.apache.ftpserver.clienttests;
 
 import java.util.Properties;
 
-import org.apache.commons.net.ftp.FTPConnectionClosedException;
-
 
 public class UnlimitedMaxLoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";
