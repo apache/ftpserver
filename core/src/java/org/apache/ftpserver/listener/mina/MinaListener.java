@@ -24,6 +24,7 @@ import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.ftpserver.listener.Listener;
@@ -96,14 +97,15 @@ public class MinaListener extends AbstractListener {
         ((SocketSessionConfig) cfg.getSessionConfig()).setReceiveBufferSize(512); 
         
         if(isImplicitSsl()) {
-            try {
-                SSLFilter sslFilter = new SSLFilter( getSsl().getSSLContext() );
-                cfg.getFilterChain().addFirst("sslFilter", sslFilter);
-
-            } catch (GeneralSecurityException e) {
-                throw e;
+            Ssl ssl = getSsl();
+            SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
+            
+            sslFilter.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            if(ssl.getEnabledCipherSuites() != null) {
+                sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
             }
             
+            cfg.getFilterChain().addFirst("sslFilter", sslFilter);
         }
         
         protocolHandler = new MinaFtpProtocolHandler(serverContext, new FtpProtocolHandler(serverContext), this);

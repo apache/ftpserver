@@ -22,6 +22,7 @@ package org.apache.ftpserver.ssl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Properties;
 
 import javax.net.ssl.SSLException;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class SSLTestTemplate extends TestCase {
 
-    private final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
+    private final Logger LOG = LoggerFactory.getLogger(SSLTestTemplate.class);
     
     private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
     protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
@@ -85,7 +86,7 @@ public abstract class SSLTestTemplate extends TestCase {
         assertTrue(FTPSERVER_KEYSTORE.exists());
         
         Properties configProps = new Properties();
-        configProps.setProperty("config.listeners.default.class", MinaListener.class.getName());
+        configProps.setProperty("config.listeners.default.class", IOListener.class.getName());
         configProps.setProperty("config.listeners.default.port", Integer
                 .toString(port));
         configProps.setProperty("config.listeners.default.ssl.class",
@@ -215,16 +216,24 @@ public abstract class SSLTestTemplate extends TestCase {
             }
         });
 
+        doConnect();
+    }
+
+    protected void doConnect() throws Exception {
         int attempts = 0;
         
+        Exception lastException = null;
         while(attempts < 5) {
             try {
                 client.connect("localhost", port);
+                lastException = null;
                 break;
             } catch (SSLException e) {
                 // try again
+                lastException = e;
             } catch (FTPConnectionClosedException e) {
                 // try again
+                lastException = e;
             }
             
             System.out.println("Retrying!");
@@ -232,6 +241,9 @@ public abstract class SSLTestTemplate extends TestCase {
             attempts++;
         }
         
+        if(lastException != null) {
+            throw lastException;
+        }
     }
 
     protected void cleanTmpDirs() throws IOException {

@@ -15,29 +15,20 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
-
-package org.apache.ftpserver.interfaces;
-
-import java.security.GeneralSecurityException;
-
-import javax.net.ssl.SSLContext;
-
-/**
- * SSL interface.
  */
-public 
-interface Ssl {
-    
-    SSLContext getSSLContext() throws GeneralSecurityException;
-    SSLContext getSSLContext(String protocol) throws GeneralSecurityException;
-    
-    /**
-     * Returns the cipher suites that should be enabled for this connection.
-     * Must return null if the default (as decided by the JVM) cipher suites
-     * should be used.
-     * @return An array of cipher suites, or null.
-     */
-    String[] getEnabledCipherSuites();
-    boolean getClientAuthenticationRequired();
+
+package org.apache.ftpserver.ssl;
+
+import java.util.Properties;
+
+import org.apache.ftpserver.listener.mina.MinaListener;
+
+public class MinaCipherSuitesTest extends IOCipherSuitesTest {
+
+    protected Properties createConfig() {
+        Properties config = super.createConfig();
+        config.setProperty("config.listeners.default.class", MinaListener.class.getName());
+
+        return config;
+    }
 }

@@ -97,6 +97,10 @@ public class MinaConnection extends AbstractConnection {
             
             SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
             sslFilter.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            
+            if(ssl.getEnabledCipherSuites() != null) {
+                sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+            }
             session.getFilterChain().addFirst("sslSessionFilter", sslFilter);
 
         } else {

@@ -24,7 +24,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
@@ -65,19 +70,39 @@ public class IOListener extends AbstractListener implements Runnable {
      * Create server socket.
      */
     private ServerSocket createServerSocket() throws Exception { 
-        ServerSocket ssocket = null;
+        ServerSocket serverSocket = null;
         
         if(isImplicitSsl()) {
-            ssocket = getSsl().createServerSocket(null, getServerAddress(), getPort());
+            Ssl ssl = getSsl();
+            
+            // get server socket factory
+            SSLContext ctx = ssl.getSSLContext();
+            SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
+            
+            // create server socket
+            SSLServerSocket sslServerSocket = null;
+            if(getServerAddress() == null) {
+                sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(getPort(), 100);
+            } else {
+                sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(getPort(), 100, getServerAddress());
+            }
+            
+            // initialize server socket
+            sslServerSocket.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            
+            if(ssl.getEnabledCipherSuites() != null) {
+                sslServerSocket.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+            }
+            serverSocket = sslServerSocket;
         } else  {
             if(getServerAddress() == null) {
-                ssocket = new ServerSocket(getPort(), 100);
+                serverSocket = new ServerSocket(getPort(), 100);
             } else {
-                ssocket = new ServerSocket(getPort(), 100, getServerAddress());
+                serverSocket = new ServerSocket(getPort(), 100, getServerAddress());
             }
         }
         
-        return ssocket;
+        return serverSocket;
     }
 
     /**

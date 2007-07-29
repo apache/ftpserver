@@ -25,9 +25,11 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.FtpRequestImpl;
@@ -201,6 +203,39 @@ public class IOConnection extends AbstractConnection implements Runnable {
     }   
     
     /**
+     * Returns a socket layered over an existing socket.
+     */
+    private Socket createSocket(Ssl ssl, String protocol,
+                               Socket soc, 
+                               boolean clientMode) throws Exception {
+        // already wrapped - no need to do anything
+        if(soc instanceof SSLSocket) {
+            return soc;
+        }
+        
+        // get socket factory
+        SSLContext ctx = ssl.getSSLContext(protocol);
+        SSLSocketFactory socFactory = ctx.getSocketFactory();
+        
+        // create socket
+        String host = soc.getInetAddress().getHostAddress();
+        int port = soc.getLocalPort();
+        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(soc, host, port, true);
+        ssoc.setUseClientMode(clientMode);
+        
+        // initialize socket
+        ssoc.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+
+        if(ssl.getEnabledCipherSuites() != null) {
+            ssoc.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+        }
+
+        
+        return ssoc;
+    }
+
+    
+    /**
      * Create secure socket.
      */
     public void afterSecureControlChannel(FtpServerSession ftpSession, String protocol) throws Exception {
@@ -210,7 +245,7 @@ public class IOConnection extends AbstractConnection implements Runnable {
         if(ssl == null) {
             throw new FtpException("Socket factory SSL not configured");
         }
-        Socket ssoc = ssl.createSocket(protocol, controlSocket, false);
+        Socket ssoc = createSocket(ssl, protocol, controlSocket, false);
         
         // change streams
         reader = new BufferedReader(new InputStreamReader(ssoc.getInputStream(), "UTF-8"));

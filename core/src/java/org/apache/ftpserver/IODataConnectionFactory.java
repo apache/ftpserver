@@ -19,12 +19,18 @@
 
 package org.apache.ftpserver;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -152,7 +158,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 if(ssl == null) {
                     throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
-                servSoc = ssl.createServerSocket(null, address, passivePort);
+                servSoc = createServerSocket(ssl, address, passivePort);
                 port = servSoc.getLocalPort();
                 LOG.debug("SSL data connection created on " + address + ":" + port);
             }
@@ -176,6 +182,29 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
     }
      
+    private ServerSocket createServerSocket(Ssl ssl, InetAddress address2, int passivePort) throws IOException, GeneralSecurityException {
+        // get server socket factory
+        SSLContext ctx = ssl.getSSLContext();
+        SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
+        
+        // create server socket
+        SSLServerSocket sslServerSocket = null;
+        if(address2 == null) {
+            sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(passivePort, 100);
+        } else {
+            sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(passivePort, 100, address2);
+        }
+        
+        // initialize server socket
+        sslServerSocket.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+        
+        if(ssl.getEnabledCipherSuites() != null) {
+            sslServerSocket.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+        }
+        return sslServerSocket;
+    }
+
+
     /* (non-Javadoc)
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#getInetAddress()
      */
@@ -214,11 +243,11 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                         throw new FtpException("Data connection SSL not configured");
                     }
                     if(localPort == 0) {
-                        dataSoc = ssl.createSocket(null, address, port, false);
+                        dataSoc = createSocket(ssl, address, port, null, localPort, false);
                     }
                     else {
                         InetAddress localAddr = dataConfig.getActiveLocalAddress();
-                        dataSoc = ssl.createSocket(null, address, port, localAddr, localPort, false);
+                        dataSoc = createSocket(ssl, address, port, localAddr, localPort, false);
                     }
                 }
                 else {
@@ -252,6 +281,31 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         return dataSoc;
     }
     
+    private Socket createSocket(Ssl ssl, InetAddress address2,
+            int port2, InetAddress localAddress, int localPort, boolean clientMode) throws IOException, GeneralSecurityException {
+        
+        // get socket factory
+        SSLContext ctx = ssl.getSSLContext();
+        SSLSocketFactory socFactory = ctx.getSocketFactory();
+        
+        // create socket
+        SSLSocket ssoc;
+        if(localPort != 0) {
+            ssoc = (SSLSocket)socFactory.createSocket(address2, port2);
+        } else {
+            ssoc = (SSLSocket)socFactory.createSocket(address2, port2, localAddress, localPort);
+        }
+        ssoc.setUseClientMode(clientMode);
+        
+        
+        // initialize socket
+        if(ssl.getEnabledCipherSuites() != null) {
+            ssoc.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+        }
+        return ssoc;
+    }
+
+
     /* (non-Javadoc)
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#isSecure()
      */

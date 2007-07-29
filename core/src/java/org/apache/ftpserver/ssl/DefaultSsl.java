@@ -21,19 +21,12 @@ package org.apache.ftpserver.ssl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.util.HashMap;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
@@ -65,6 +58,8 @@ public class DefaultSsl implements Ssl {
     private TrustManagerFactory trustManagerFactory;
     
     private HashMap sslContextMap;
+
+    private String[] enabledCipherSuites;
     
     public void setKeystoreFile(File keyStoreFile) {
         this.keystoreFile = keyStoreFile;
@@ -161,114 +156,8 @@ public class DefaultSsl implements Ssl {
 
         // store it in map
         sslContextMap.put(protocol, ctx);
+        
         return ctx;
-    }
-
-    /**
-     * Create secure server socket.
-     */
-    public ServerSocket createServerSocket(String protocol,
-                                           InetAddress addr, 
-                                           int port) throws Exception {
-        lazyInit();
-        
-        // get server socket factory
-        SSLContext ctx = getSSLContext(protocol);
-        SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
-        
-        // create server socket
-        SSLServerSocket serverSocket = null;
-        if(addr == null) {
-            serverSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port, 100);
-        }
-        else {
-            serverSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port, 100, addr);
-        }
-        
-        // initialize server socket
-        String cipherSuites[] = serverSocket.getSupportedCipherSuites();
-        serverSocket.setEnabledCipherSuites(cipherSuites);
-        serverSocket.setNeedClientAuth(clientAuthReqd);
-        return serverSocket;
-    }
- 
-    /**
-     * Returns a socket layered over an existing socket.
-     */
-    public Socket createSocket(String protocol,
-                               Socket soc, 
-                               boolean clientMode) throws Exception {
-        lazyInit();
-        
-        // already wrapped - no need to do anything
-        if(soc instanceof SSLSocket) {
-            return soc;
-        }
-        
-        // get socket factory
-        SSLContext ctx = getSSLContext(protocol);
-        SSLSocketFactory socFactory = ctx.getSocketFactory();
-        
-        // create socket
-        String host = soc.getInetAddress().getHostAddress();
-        int port = soc.getLocalPort();
-        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(soc, host, port, true);
-        ssoc.setUseClientMode(clientMode);
-        
-        // initialize socket
-        String cipherSuites[] = ssoc.getSupportedCipherSuites();
-        ssoc.setEnabledCipherSuites(cipherSuites);
-        ssoc.setNeedClientAuth(clientAuthReqd);
-        
-        return ssoc;
-    }
-
-    /**
-     * Create a secure socket.
-     */
-    public Socket createSocket(String protocol,
-                               InetAddress addr, 
-                               int port,
-                               boolean clientMode) throws Exception {
-        lazyInit();
-        
-        // get socket factory
-        SSLContext ctx = getSSLContext(protocol);
-        SSLSocketFactory socFactory = ctx.getSocketFactory();
-        
-        // create socket
-        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(addr, port);
-        ssoc.setUseClientMode(clientMode);
-        
-        // initialize socket
-        String cipherSuites[] = ssoc.getSupportedCipherSuites();
-        ssoc.setEnabledCipherSuites(cipherSuites);
-        return ssoc;
-    } 
-    
-    /**
-     * Create a secure socket.
-     */
-    public Socket createSocket(String protocol,
-                               InetAddress host,
-                               int port,
-                               InetAddress localhost,
-                               int localport,
-                               boolean clientMode) throws Exception {
-        lazyInit();
-        
-        // get socket factory
-        SSLContext ctx = getSSLContext(protocol);
-        SSLSocketFactory socFactory = ctx.getSocketFactory();
-        
-        // create socket
-        SSLSocket ssoc = (SSLSocket)socFactory.createSocket(host, port, localhost, localport);
-        ssoc.setUseClientMode(clientMode);
-        
-        // initialize socket
-        String cipherSuites[] = ssoc.getSupportedCipherSuites();
-        ssoc.setEnabledCipherSuites(cipherSuites);
-        return ssoc;
     }
     
     /**
@@ -283,5 +172,13 @@ public class DefaultSsl implements Ssl {
 
     public SSLContext getSSLContext() throws GeneralSecurityException {
         return getSSLContext(sslProtocol);
+    }
+
+    public String[] getEnabledCipherSuites() {
+        return enabledCipherSuites;
+    }
+    
+    public void setEnabledCipherSuites(String[] enabledCipherSuites) {
+        this.enabledCipherSuites = enabledCipherSuites;
     }
 }
