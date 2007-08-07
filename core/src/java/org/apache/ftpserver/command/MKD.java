@@ -114,7 +114,7 @@ class MKD extends AbstractCommand {
         
         // now create directory
         if(file.mkdir()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "MKD", fileName));
+            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
             
             // write log message
             String userName = session.getUser().getName();
