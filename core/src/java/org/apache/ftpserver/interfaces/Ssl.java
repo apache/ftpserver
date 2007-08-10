@@ -39,5 +39,5 @@ interface Ssl {
      * @return An array of cipher suites, or null.
      */
     String[] getEnabledCipherSuites();
-    boolean getClientAuthenticationRequired();
+    ClientAuth getClientAuth();
 }

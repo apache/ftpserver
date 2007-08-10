@@ -34,6 +34,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -196,7 +197,12 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
         
         // initialize server socket
-        sslServerSocket.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+        if(ssl.getClientAuth() == ClientAuth.NEED) {
+            sslServerSocket.setNeedClientAuth(true);
+        } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+            sslServerSocket.setWantClientAuth(true);
+        }
+
         
         if(ssl.getEnabledCipherSuites() != null) {
             sslServerSocket.setEnabledCipherSuites(ssl.getEnabledCipherSuites());

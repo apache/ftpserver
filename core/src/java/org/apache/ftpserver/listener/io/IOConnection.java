@@ -36,6 +36,7 @@ import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.FtpWriter;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -224,7 +225,11 @@ public class IOConnection extends AbstractConnection implements Runnable {
         ssoc.setUseClientMode(clientMode);
         
         // initialize socket
-        ssoc.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+        if(ssl.getClientAuth() == ClientAuth.NEED) {
+            ssoc.setNeedClientAuth(true);
+        } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+            ssoc.setWantClientAuth(true);
+        }
 
         if(ssl.getEnabledCipherSuites() != null) {
             ssoc.setEnabledCipherSuites(ssl.getEnabledCipherSuites());

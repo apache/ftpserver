@@ -28,6 +28,7 @@ import javax.net.ssl.SSLSession;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.Ssl;
@@ -96,7 +97,11 @@ public class MinaConnection extends AbstractConnection {
             session.setAttribute(SSLFilter.DISABLE_ENCRYPTION_ONCE);
             
             SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
-            sslFilter.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            if(ssl.getClientAuth() == ClientAuth.NEED) {
+                sslFilter.setNeedClientAuth(true);
+            } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+                sslFilter.setWantClientAuth(true);
+            }
             
             if(ssl.getEnabledCipherSuites() != null) {
                 sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());

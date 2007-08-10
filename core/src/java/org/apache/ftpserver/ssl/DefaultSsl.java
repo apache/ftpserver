@@ -30,6 +30,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class DefaultSsl implements Ssl {
     private String keystoreAlgorithm = "SunX509";
     
     private String sslProtocol = "TLS";
-    private boolean clientAuthReqd = false;
+    private ClientAuth clientAuthReqd = ClientAuth.NONE;
     private String keyPass = "password";   // TODO should we really default this value?
 
     private KeyStore keyStore;
@@ -81,8 +82,15 @@ public class DefaultSsl implements Ssl {
         this.sslProtocol = sslProtocol;
     }
     
-    public void setClientAuthentication(boolean clientAuthReqd) {
-        this.clientAuthReqd = clientAuthReqd;
+    public void setClientAuthentication(String clientAuthReqd) {
+        if("true".equalsIgnoreCase(clientAuthReqd) 
+                || "yes".equalsIgnoreCase(clientAuthReqd)) {
+            this.clientAuthReqd = ClientAuth.NEED;
+        } else if("want".equalsIgnoreCase(clientAuthReqd)) {
+            this.clientAuthReqd = ClientAuth.WANT;
+        } else {
+            this.clientAuthReqd = ClientAuth.NONE;
+        }
     }
     
     public void setKeyPassword(String keyPass) {
@@ -166,7 +174,7 @@ public class DefaultSsl implements Ssl {
     public void dispose() {
     }
 
-    public boolean getClientAuthenticationRequired() {
+    public ClientAuth getClientAuth() {
         return clientAuthReqd;
     }
 

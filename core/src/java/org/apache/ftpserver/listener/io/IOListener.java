@@ -28,6 +28,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
@@ -88,7 +89,11 @@ public class IOListener extends AbstractListener implements Runnable {
             }
             
             // initialize server socket
-            sslServerSocket.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            if(ssl.getClientAuth() == ClientAuth.NEED) {
+                sslServerSocket.setNeedClientAuth(true);
+            } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+                sslServerSocket.setWantClientAuth(true);
+            }
             
             if(ssl.getEnabledCipherSuites() != null) {
                 sslServerSocket.setEnabledCipherSuites(ssl.getEnabledCipherSuites());

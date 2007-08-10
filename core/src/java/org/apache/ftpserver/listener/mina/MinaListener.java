@@ -22,6 +22,7 @@ package org.apache.ftpserver.listener.mina;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
@@ -99,7 +100,12 @@ public class MinaListener extends AbstractListener {
             Ssl ssl = getSsl();
             SSLFilter sslFilter = new SSLFilter( ssl.getSSLContext() );
             
-            sslFilter.setNeedClientAuth(ssl.getClientAuthenticationRequired());
+            if(ssl.getClientAuth() == ClientAuth.NEED) {
+                sslFilter.setNeedClientAuth(true);
+            } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+                sslFilter.setWantClientAuth(true);
+            }
+
             if(ssl.getEnabledCipherSuites() != null) {
                 sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
             }
