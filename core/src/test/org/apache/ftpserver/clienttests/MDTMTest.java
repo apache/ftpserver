@@ -26,7 +26,7 @@ import java.util.Date;
 
 
 public class MDTMTest extends ClientTestTemplate {
-    private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat("yyyyMMddhhmmss.SSS");
+    private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
     
@@ -40,7 +40,9 @@ public class MDTMTest extends ClientTestTemplate {
     }
 
     public void testMDTMForFile() throws Exception {
-        TEST_FILE1.createNewFile();
+        assertFalse(TEST_FILE1.exists());
+        assertTrue(TEST_FILE1.createNewFile());
+        
         Date expected = new Date(TEST_FILE1.lastModified());
         assertEquals(213, client.sendCommand("MDTM " + TEST_FILE1.getName()));
 
@@ -49,7 +51,9 @@ public class MDTMTest extends ClientTestTemplate {
     }
 
     public void testMDTMForDir() throws Exception {
-        TEST_DIR1.mkdirs();
+        assertFalse(TEST_DIR1.exists());
+        assertTrue(TEST_DIR1.mkdirs());
+
         Date expected = new Date(TEST_DIR1.lastModified());
         assertEquals(213, client.sendCommand("MDTM " + TEST_DIR1.getName()));
         
