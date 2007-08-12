@@ -79,7 +79,7 @@ class DirectoryLister {
     }
     
     /**
-     * Get the file list.
+     * Get the file list. Files will be listed in alphabetlical order.
      */
     private FileObject[] listFiles(FileSystemView fileSystemView, String file) {
     	FileObject[] files = null;

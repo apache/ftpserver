@@ -14,6 +14,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
     protected static final String DIR1_PATH = "/dir1";
     protected static final String DIR1_WITH_SLASH_PATH = "/dir1/";
     protected static final String FILE1_PATH = "/file1";
+    protected static final String FILE3_PATH = "/file3";
     
     protected static final User USER = new BaseUser() {
         public AuthorizationRequest authorize(AuthorizationRequest request) {
@@ -21,20 +22,12 @@ public abstract class FileObjectTestTemplate extends TestCase {
         }
     };
 
-    public FileObjectTestTemplate() {
-        super();
-    }
-
-    public FileObjectTestTemplate(String name) {
-        super(name);
-    }
-
-    protected abstract FileObject createFile(String fileName, User user);
+    protected abstract FileObject createFileObject(String fileName, User user);
     
     
     public void testNullFileName() {
         try{
-            createFile(null, USER);
+            createFileObject(null, USER);
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -43,7 +36,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
 
     public void testWhiteSpaceFileName() {
         try{
-            createFile(" \t", USER);
+            createFileObject(" \t", USER);
            fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -52,7 +45,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
     
     public void testEmptyFileName() {
         try{
-            createFile("", USER);
+            createFileObject("", USER);
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -61,7 +54,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
 
     public void testNonLeadingSlash() {
         try{
-            createFile("foo", USER);
+            createFileObject("foo", USER);
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
@@ -69,25 +62,35 @@ public abstract class FileObjectTestTemplate extends TestCase {
     }
 
     public void testFullName() {
-        FileObject fileObject = createFile(FILE2_PATH, USER);
+        FileObject fileObject = createFileObject(FILE2_PATH, USER);
         assertEquals("/dir1/file2", fileObject.getFullName());
     
-        fileObject = createFile("/dir1/", USER);
+        fileObject = createFileObject("/dir1/", USER);
         assertEquals("/dir1", fileObject.getFullName());
     
-        fileObject = createFile("/dir1", USER);
+        fileObject = createFileObject("/dir1", USER);
         assertEquals("/dir1", fileObject.getFullName());
     }
 
     public void testShortName() {
-        FileObject fileObject = createFile("/dir1/file2", USER);
+        FileObject fileObject = createFileObject("/dir1/file2", USER);
         assertEquals("file2", fileObject.getShortName());
     
-        fileObject = createFile("/dir1/", USER);
+        fileObject = createFileObject("/dir1/", USER);
         assertEquals("dir1", fileObject.getShortName());
     
-        fileObject = createFile("/dir1", USER);
+        fileObject = createFileObject("/dir1", USER);
         assertEquals("dir1", fileObject.getShortName());
+    }
+    
+    public void testListFilesInOrder() {
+        FileObject root = createFileObject("/", USER);
+        
+        FileObject[] files = root.listFiles();
+        assertEquals(3, files.length);
+        assertEquals("dir1", files[0].getShortName());
+        assertEquals("file1", files[1].getShortName());
+        assertEquals("file3", files[2].getShortName());
     }
 
 }

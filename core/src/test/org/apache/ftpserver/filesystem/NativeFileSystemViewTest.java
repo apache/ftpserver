@@ -22,48 +22,22 @@ package org.apache.ftpserver.filesystem;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.util.IoUtils;
 
-public class NativeFileSystemViewTest extends TestCase {
+public class NativeFileSystemViewTest extends FileSystemViewTemplate {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
 
-    protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
+    private static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
 
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+    private static final File TEST_DIR1 = new File(ROOT_DIR, DIR1_NAME);
 
-    private static final File TEST_FILE1 = new File(ROOT_DIR, "file1");
-
-    private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
-
-    private static final String ROOT_DIR_PATH = ROOT_DIR.getAbsolutePath()
-            .replace('\\', '/');
-
-    private static final String FULL_PATH = ROOT_DIR_PATH + "/"
-            + TEST_DIR1.getName() + "/" + TEST_FILE2_IN_DIR1.getName();
-
-    private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
-            + TEST_FILE2_IN_DIR1.getName();
-
-    private BaseUser user;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
     protected void setUp() throws Exception {
         initDirs();
 
         TEST_DIR1.mkdirs();
-        TEST_FILE1.createNewFile();
-        TEST_FILE2_IN_DIR1.createNewFile();
 
-        user = new BaseUser();
         user.setHomeDirectory(ROOT_DIR.getAbsolutePath());
     }
 
@@ -72,42 +46,7 @@ public class NativeFileSystemViewTest extends TestCase {
         assertEquals("/", view.getCurrentDirectory().getFullName());
     }
     
-    public void testChangeDirectory() throws Exception {
-        NativeFileSystemView view = new NativeFileSystemView(user);
-        assertEquals("/", view.getCurrentDirectory().getFullName());
 
-        assertTrue(view.changeDirectory(TEST_DIR1.getName()));
-        assertEquals("/" + TEST_DIR1.getName(), view.getCurrentDirectory().getFullName());
-        
-        assertTrue(view.changeDirectory("."));
-        assertEquals("/" + TEST_DIR1.getName(), view.getCurrentDirectory().getFullName());
-
-        assertTrue(view.changeDirectory(".."));
-        assertEquals("/", view.getCurrentDirectory().getFullName());
-
-        assertTrue(view.changeDirectory("./" + TEST_DIR1.getName()));
-        assertEquals("/" + TEST_DIR1.getName(), view.getCurrentDirectory().getFullName());
-
-        assertTrue(view.changeDirectory("~"));
-        assertEquals("/", view.getCurrentDirectory().getFullName());
-    }
-
-    public void testChangeDirectoryCaseInsensitive() throws Exception {
-        NativeFileSystemView view = new NativeFileSystemView(user, true);
-        assertEquals("/", view.getCurrentDirectory().getFullName());
-        
-        assertTrue(view.changeDirectory("/DIR1"));
-        assertEquals("/dir1", view.getCurrentDirectory().getFullName());
-        assertTrue(view.getCurrentDirectory().doesExist());
-        
-        assertTrue(view.changeDirectory("/dir1"));
-        assertEquals("/dir1", view.getCurrentDirectory().getFullName());
-        assertTrue(view.getCurrentDirectory().doesExist());
-
-        assertTrue(view.changeDirectory("/DiR1"));
-        assertEquals("/dir1", view.getCurrentDirectory().getFullName());
-        assertTrue(view.getCurrentDirectory().doesExist());
-    }
 
     public void testConstructorWithNullUser() throws FtpException {
         try{

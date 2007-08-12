@@ -117,6 +117,7 @@ interface FileObject {
     /**
      * List file objects. If not a directory or does not exist,
      * null will be returned.
+     * Files must be returned in alphabetical order.
      */
     FileObject[] listFiles();
     

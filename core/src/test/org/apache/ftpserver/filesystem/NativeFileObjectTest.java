@@ -35,13 +35,16 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
     private static final File TEST_FILE1 = new File(ROOT_DIR, "file1");
     private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
+    private static final File TEST_FILE3 = new File(ROOT_DIR, "file3");
 
     private static final Map FILE_MAPPINGS = new HashMap();
     
     static {
+        FILE_MAPPINGS.put("/", ROOT_DIR);
         FILE_MAPPINGS.put(FILE2_PATH, TEST_FILE2_IN_DIR1);
         FILE_MAPPINGS.put(DIR1_PATH, TEST_DIR1);
         FILE_MAPPINGS.put(FILE1_PATH, TEST_FILE1);
+        FILE_MAPPINGS.put(FILE2_PATH, TEST_FILE3);
         FILE_MAPPINGS.put(DIR1_WITH_SLASH_PATH, TEST_DIR1);
         FILE_MAPPINGS.put(" \t", TEST_FILE2_IN_DIR1);
     }
@@ -61,10 +64,11 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
         TEST_DIR1.mkdirs();
         TEST_FILE1.createNewFile();
         TEST_FILE2_IN_DIR1.createNewFile();
+        TEST_FILE3.createNewFile();
     }
     
 
-    protected FileObject createFile(String fileName, User user) {
+    protected FileObject createFileObject(String fileName, User user) {
         return new NativeFileObject(fileName, (File)FILE_MAPPINGS.get(fileName), user);
     }
 
