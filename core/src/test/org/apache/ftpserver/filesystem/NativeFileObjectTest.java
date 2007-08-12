@@ -21,14 +21,14 @@ package org.apache.ftpserver.filesystem;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import junit.framework.TestCase;
-
-import org.apache.ftpserver.ftplet.AuthorizationRequest;
-import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.IoUtils;
 
-public class NativeFileObjectTest extends TestCase {
+public class NativeFileObjectTest extends FileObjectTestTemplate {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
     private static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
@@ -36,6 +36,16 @@ public class NativeFileObjectTest extends TestCase {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "file1");
     private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
 
+    private static final Map FILE_MAPPINGS = new HashMap();
+    
+    static {
+        FILE_MAPPINGS.put(FILE2_PATH, TEST_FILE2_IN_DIR1);
+        FILE_MAPPINGS.put(DIR1_PATH, TEST_DIR1);
+        FILE_MAPPINGS.put(FILE1_PATH, TEST_FILE1);
+        FILE_MAPPINGS.put(DIR1_WITH_SLASH_PATH, TEST_DIR1);
+        FILE_MAPPINGS.put(" \t", TEST_FILE2_IN_DIR1);
+    }
+    
     private static final String ROOT_DIR_PATH = ROOT_DIR.getAbsolutePath()
             .replace(File.separatorChar, '/');
 
@@ -45,25 +55,17 @@ public class NativeFileObjectTest extends TestCase {
     private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
             + TEST_FILE2_IN_DIR1.getName();
 
-    public static class AlwaysAuthorizedUser extends BaseUser {
-
-        public AuthorizationRequest authorize(AuthorizationRequest request) {
-            return request;
-        }
-        
-    }
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
     protected void setUp() throws Exception {
         initDirs();
 
         TEST_DIR1.mkdirs();
         TEST_FILE1.createNewFile();
         TEST_FILE2_IN_DIR1.createNewFile();
+    }
+    
+
+    protected FileObject createFile(String fileName, User user) {
+        return new NativeFileObject(fileName, (File)FILE_MAPPINGS.get(fileName), user);
     }
 
     public void testGetPhysicalName() {
@@ -135,82 +137,15 @@ public class NativeFileObjectTest extends TestCase {
         
     }
 
-    
-    public void testConstructorWithNullFileName() {
-        try{
-            new NativeFileObject(null, TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-            fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
-            // OK
-        }
-    }
-
-    public void testEmptyFileName() {
-        try{
-            new NativeFileObject("", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-            fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
-            // OK
-        }
-    }
-
-    public void testNonLeadingSlash() {
-        try{
-            new NativeFileObject("foo", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-            fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
-            // OK
-        }
-    }
-
-    public void testWhiteSpaceFileName() {
-        try{
-            new NativeFileObject(" \t", TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-            fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
-            // OK
-        } 
-    }
-
     public void testConstructorWithNullFile() {
         try{
-            new NativeFileObject("foo", null, new AlwaysAuthorizedUser());
+            new NativeFileObject("foo", null, USER);
             fail("Must throw IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             // OK
         }
     }
 
-    
-    public void testFullName() {
-        NativeFileObject fileObject = new NativeFileObject("/dir1/file2",
-                TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("/dir1/file2", fileObject.getFullName());
-
-        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("/dir1", fileObject.getFullName());
-
-        fileObject = new NativeFileObject("/dir1", TEST_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("/dir1", fileObject.getFullName());
-    }
-
-    public void testShortName() {
-        NativeFileObject fileObject = new NativeFileObject("/dir1/file2",
-                TEST_FILE2_IN_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("file2", fileObject.getShortName());
-
-        fileObject = new NativeFileObject("/dir1/", TEST_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("dir1", fileObject.getShortName());
-
-        fileObject = new NativeFileObject("/dir1", TEST_DIR1, new AlwaysAuthorizedUser());
-        assertEquals("dir1", fileObject.getShortName());
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#tearDown()
-     */
     protected void tearDown() throws Exception {
         cleanTmpDirs();
     }
@@ -230,5 +165,6 @@ public class NativeFileObjectTest extends TestCase {
             IoUtils.delete(TEST_TMP_DIR);
         }
     }
+
 
 }
