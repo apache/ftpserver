@@ -23,7 +23,7 @@ import java.net.InetAddress;
 
 import org.apache.ftpserver.DefaultDataConnectionConfig;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.ssl.Ssl;
 
 
 /**

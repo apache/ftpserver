@@ -22,6 +22,8 @@ package org.apache.ftpserver.interfaces;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
+import org.apache.ftpserver.ssl.Ssl;
+
 
 /**
  * This interface is responsible to create appropriate server socket.

@@ -28,12 +28,12 @@ import javax.net.ssl.SSLSession;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.FtpServerSession;
-import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractConnection;
 import org.apache.ftpserver.listener.ConnectionObserver;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.Ssl;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.SSLFilter;
 

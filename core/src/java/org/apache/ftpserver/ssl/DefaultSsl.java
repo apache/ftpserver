@@ -30,8 +30,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.interfaces.ClientAuth;
-import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

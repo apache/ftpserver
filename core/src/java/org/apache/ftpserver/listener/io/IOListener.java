@@ -28,13 +28,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 
-import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.Ssl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

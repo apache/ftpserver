@@ -17,11 +17,12 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.ssl;
 
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
+
 
 /**
  * SSL interface.

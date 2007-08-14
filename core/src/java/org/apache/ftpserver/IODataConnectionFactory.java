@@ -34,10 +34,10 @@ import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.Ssl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

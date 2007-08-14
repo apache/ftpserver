@@ -1,4 +1,4 @@
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.ssl;
 
 public class ClientAuth {
     public static final ClientAuth NEED = new ClientAuth("Need");

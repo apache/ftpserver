@@ -22,12 +22,12 @@ package org.apache.ftpserver.listener.mina;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import org.apache.ftpserver.interfaces.ClientAuth;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.Ssl;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.FtpProtocolHandler;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.Ssl;
 import org.apache.mina.common.DefaultIoFilterChainBuilder;
 import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.common.ThreadModel;

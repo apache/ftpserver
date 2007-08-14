@@ -21,7 +21,7 @@ package org.apache.ftpserver.listener;
 
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.Ssl;
+import org.apache.ftpserver.ssl.Ssl;
 
 
 /**
