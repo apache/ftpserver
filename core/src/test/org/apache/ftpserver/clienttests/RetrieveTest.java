@@ -29,6 +29,8 @@ public class RetrieveTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
     private static final File TEST_FILE = new File(ROOT_DIR, TEST_FILENAME);
 
+    private static final String EOL = System.getProperty("line.separator"); 
+    
     private static byte[] testData = null;
     
     /* (non-Javadoc)
@@ -37,7 +39,7 @@ public class RetrieveTest extends ClientTestTemplate {
     protected void setUp() throws Exception {
         super.setUp();
 
-        testData = "TESTDATA\r\n".getBytes("UTF-8");
+        testData = ("TESTDATA" +EOL).getBytes("UTF-8");
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
