@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
+import java.net.SocketException;
+
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 
 
@@ -37,6 +39,8 @@ public class DefaultMaxLoginTest extends ClientTestTemplate {
             fail("Must be disconnected");
         } catch(FTPConnectionClosedException e) {
             // OK
+        } catch(SocketException e) {
+        	// OK
         }
     }
 }
