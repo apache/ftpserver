@@ -105,7 +105,11 @@ public class TestUtil {
             
             while (ips.hasMoreElements()) {
                 InetAddress ip = (InetAddress) ips.nextElement();
-                hostIps.add(ip.getHostAddress());
+                if(ip instanceof java.net.Inet4Address) {
+            		hostIps.add(ip.getHostAddress());
+                } else {
+                	// IPv6 not tested
+                }
             }
         }
         
