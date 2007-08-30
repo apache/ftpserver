@@ -20,10 +20,10 @@
 package org.apache.ftpserver.ssl;
 
 
-public class ImplicitSSLTest extends ImplicitSecurityTestTemplate {
+public class MinaExplicitTLSTest extends ExplicitSecurityTestTemplate {
 
     protected String getAuthValue() {
-        return "SSL";
+        return "TLS";
     }
 
 }

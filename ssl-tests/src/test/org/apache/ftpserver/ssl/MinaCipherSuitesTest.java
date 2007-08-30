@@ -21,14 +21,60 @@ package org.apache.ftpserver.ssl;
 
 import java.util.Properties;
 
-import org.apache.ftpserver.listener.mina.MinaListener;
+import javax.net.ssl.SSLHandshakeException;
 
-public class MinaCipherSuitesTest extends IOCipherSuitesTest {
+import org.apache.commons.net.ftp.FTPSClient;
 
+public class MinaCipherSuitesTest extends SSLTestTemplate {
+
+    protected String getAuthValue() {
+        return "TLS";
+    }
+    
     protected Properties createConfig() {
         Properties config = super.createConfig();
-        config.setProperty("config.listeners.default.class", MinaListener.class.getName());
+        config.setProperty("config.listeners.default.implicitSsl",
+        "true");
+
+        config.setProperty("config.listeners.default.ssl.enabledCipherSuites", "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA");
 
         return config;
     }
+
+    protected FTPSClient createFTPClient() throws Exception {
+        return new FTPSClient(true);
+    }
+
+    protected void doConnect() throws Exception {
+    }
+
+    
+    /*
+     * Only certain cipher suites will work with the keys and protocol 
+     * we're using for this test. 
+     * Two suites known to work is:
+     *  * SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA
+     *  * SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
+     */
+    public void testEnabled() throws Exception {
+        
+        client.setEnabledCipherSuites(new String[]{ 
+                "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA"});
+        
+        super.doConnect();
+    }
+    
+    public void testDisabled() throws Exception {
+        
+        client.setEnabledCipherSuites(new String[]{ 
+                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"});
+        
+        try {
+            super.doConnect();
+            fail("Must throw SSLHandshakeException"); 
+        } catch(SSLHandshakeException e) {
+            // OK
+        }
+    }
+
 }

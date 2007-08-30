@@ -28,7 +28,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 
 
-public class ClientAuthTest extends SSLTestTemplate {
+public class MinaClientAuthTest extends SSLTestTemplate {
 
     protected boolean useImplicit() {
         return false;

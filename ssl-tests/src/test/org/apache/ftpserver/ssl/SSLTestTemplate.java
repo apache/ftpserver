@@ -22,7 +22,6 @@ package org.apache.ftpserver.ssl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.Properties;
 
 import javax.net.ssl.SSLException;
@@ -38,7 +37,6 @@ import org.apache.ftpserver.DefaultDataConnectionConfig;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.io.IOListener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -86,7 +84,7 @@ public abstract class SSLTestTemplate extends TestCase {
         assertTrue(FTPSERVER_KEYSTORE.exists());
         
         Properties configProps = new Properties();
-        configProps.setProperty("config.listeners.default.class", IOListener.class.getName());
+        configProps.setProperty("config.listeners.default.class", MinaListener.class.getName());
         configProps.setProperty("config.listeners.default.port", Integer
                 .toString(port));
         configProps.setProperty("config.listeners.default.ssl.class",
@@ -242,6 +240,7 @@ public abstract class SSLTestTemplate extends TestCase {
         }
         
         if(lastException != null) {
+        	lastException.printStackTrace();
             throw lastException;
         }
     }
