@@ -30,6 +30,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509KeyManager;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.util.IoUtils;
@@ -58,7 +59,7 @@ public class DefaultSsl implements Ssl {
     private String sslProtocol = "TLS";
     private ClientAuth clientAuthReqd = ClientAuth.NONE;
     private String keyPass;
-
+    private String keyAlias;
 
     private KeyManagerFactory keyManagerFactory;
     private TrustManagerFactory trustManagerFactory;
@@ -236,14 +237,17 @@ public class DefaultSsl implements Ssl {
         
         KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
         
-        // wrap key managers to allow us to control their behavior
-        // FTPSERVER-93, currently not working as described in the issue
-        //for (int i = 0; i < keyManagers.length; i++) {
-        //  if(keyManagers[i] instanceof X509KeyManager) {
-        //      X509KeyManager keyManager = (X509KeyManager) keyManagers[i];
-        //      keyManagers[i] = new JSSEKeyManager(keyManager, keyAlias);
-        //  }
-        //} 
+        // wrap key managers to allow us to control their behavior (FTPSERVER-93)
+        for (int i = 0; i < keyManagers.length; i++) {
+          if(implementsInterface(keyManagers[i].getClass(), "javax.net.ssl.X509ExtendedKeyManager")) {
+        	  keyManagers[i] = new ExtendedAliasKeyManager(keyManagers[i], keyAlias);
+          } else if(keyManagers[i] instanceof X509KeyManager) {
+        	  keyManagers[i] = new AliasKeyManager(keyManagers[i], keyAlias);
+          }
+        } 
+        
+        // create SSLContext
+        ctx = SSLContext.getInstance(protocol);
         
         ctx.init(keyManagers, 
                  trustManagerFactory.getTrustManagers(), 
@@ -253,6 +257,18 @@ public class DefaultSsl implements Ssl {
         sslContextMap.put(protocol, ctx);
         
         return ctx;
+    }
+    
+    private boolean implementsInterface(Class clazz, String interfaceName) {
+    	Class[] interfaces = clazz.getInterfaces();
+    	
+    	for (int i = 0; i < interfaces.length; i++) {
+			if(interfaces[i].getName().equals(interfaceName)) {
+				return true;
+			}
+		}
+    	
+    	return false;
     }
 
     public ClientAuth getClientAuth() {
@@ -275,9 +291,9 @@ public class DefaultSsl implements Ssl {
      * Get the server key alias to be used for SSL communication
      * @return The alias, or null if none is set
      */
-//    public String getKeyAlias() {
-//        return keyAlias;
-//    }
+    public String getKeyAlias() {
+        return keyAlias;
+    }
 
     /**
      * Set the alias for the key to be used for SSL communication.
@@ -286,7 +302,7 @@ public class DefaultSsl implements Ssl {
      * @param keyAlias The alias to use, or null if JSSE should
      *          be allowed to choose the key.
      */
-//    public void setKeyAlias(String keyAlias) {
-//        this.keyAlias = keyAlias;
-//    }
+    public void setKeyAlias(String keyAlias) {
+        this.keyAlias = keyAlias;
+    }
 }
