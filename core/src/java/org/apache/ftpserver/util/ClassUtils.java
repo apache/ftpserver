@@ -376,16 +376,25 @@ public class ClassUtils {
         return castValue;
     }
     
-    
-    public static boolean implementsInterface(Class clazz, String interfaceName) {
-    	Class[] interfaces = clazz.getInterfaces();
+    /**
+     * Checks if a class is a subclass of a class with the specified name.
+     * Used as an instanceOf without having to load the class, useful when
+     * trying to check for classes that might not be available in the runtime
+     * JRE.
+     * @param clazz The class to check
+     * @param className The class name to look for in the super classes
+     * @return true if the class extends a class by the specified name.
+     */
+    public static boolean extendsClass(final Class clazz, String className) {
+    	Class superClass = clazz.getSuperclass();
     	
-    	for (int i = 0; i < interfaces.length; i++) {
-			if(interfaces[i].getName().equals(interfaceName)) {
-				return true;
-			}
-		}
-    	
+    	while(superClass != null) {
+    		if(superClass.getName().equals(className)) {
+    			return true;
+    		}
+    		superClass = superClass.getSuperclass();
+    		
+    	}
     	return false;
     }
 }

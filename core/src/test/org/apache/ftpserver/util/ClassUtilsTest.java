@@ -25,21 +25,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.net.ssl.X509KeyManager;
-
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ssl.AliasKeyManager;
 
 public class ClassUtilsTest extends TestCase {
 
 	public void testImplementsInterface() {
-		X509KeyManager km = new AliasKeyManager(null, null);
-		
-		assertTrue(ClassUtils.implementsInterface(km.getClass(), "javax.net.ssl.X509KeyManager"));
-		assertFalse(ClassUtils.implementsInterface(km.getClass(), "foo"));
+		assertTrue(ClassUtils.extendsClass(MySubBean.class, MyBean.class.getName()));
+		assertFalse(ClassUtils.extendsClass(MySubBean.class, "foo"));
 	}
 	
     public void testNormalizePropertyName() {

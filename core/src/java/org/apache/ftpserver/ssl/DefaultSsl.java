@@ -33,6 +33,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.util.ClassUtils;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -236,10 +237,10 @@ public class DefaultSsl implements Ssl {
         ctx = SSLContext.getInstance(protocol);
         
         KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
-        
+
         // wrap key managers to allow us to control their behavior (FTPSERVER-93)
         for (int i = 0; i < keyManagers.length; i++) {
-          if(implementsInterface(keyManagers[i].getClass(), "javax.net.ssl.X509ExtendedKeyManager")) {
+          if(ClassUtils.extendsClass(keyManagers[i].getClass(), "javax.net.ssl.X509ExtendedKeyManager")) {
         	  keyManagers[i] = new ExtendedAliasKeyManager(keyManagers[i], keyAlias);
           } else if(keyManagers[i] instanceof X509KeyManager) {
         	  keyManagers[i] = new AliasKeyManager(keyManagers[i], keyAlias);
@@ -259,18 +260,6 @@ public class DefaultSsl implements Ssl {
         return ctx;
     }
     
-    private boolean implementsInterface(Class clazz, String interfaceName) {
-    	Class[] interfaces = clazz.getInterfaces();
-    	
-    	for (int i = 0; i < interfaces.length; i++) {
-			if(interfaces[i].getName().equals(interfaceName)) {
-				return true;
-			}
-		}
-    	
-    	return false;
-    }
-
     public ClientAuth getClientAuth() {
         return clientAuthReqd;
     }
