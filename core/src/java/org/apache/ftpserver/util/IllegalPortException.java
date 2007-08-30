@@ -30,17 +30,7 @@ public class IllegalPortException extends IllegalArgumentException {
         super();
     }
 
-    public IllegalPortException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public IllegalPortException(String s) {
         super(s);
     }
-
-    public IllegalPortException(Throwable cause) {
-        super(cause);
-    }
-
-
 }

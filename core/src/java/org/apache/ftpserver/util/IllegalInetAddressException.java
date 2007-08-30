@@ -30,17 +30,7 @@ public class IllegalInetAddressException extends IllegalArgumentException {
         super();
     }
 
-    public IllegalInetAddressException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public IllegalInetAddressException(String s) {
         super(s);
     }
-
-    public IllegalInetAddressException(Throwable cause) {
-        super(cause);
-    }
-
-
 }

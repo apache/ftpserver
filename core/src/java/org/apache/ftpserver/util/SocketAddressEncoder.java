@@ -57,7 +57,7 @@ public class SocketAddressEncoder {
         sb.append('.');
         sb.append(convertAndValidateNumber(st.nextToken()));
         } catch(IllegalArgumentException e) {
-            throw new IllegalInetAddressException(e);
+            throw new IllegalInetAddressException(e.getMessage());
         }
         
         InetAddress dataAddr = InetAddress.getByName(sb.toString());
@@ -71,7 +71,7 @@ public class SocketAddressEncoder {
             dataPort = (hi << 8) | lo;     
         }
         catch(IllegalArgumentException ex) {
-            throw new IllegalPortException("Invalid data port: " + str, ex);
+            throw new IllegalPortException("Invalid data port: " + str);
         }
 
         return new InetSocketAddress(dataAddr, dataPort);
