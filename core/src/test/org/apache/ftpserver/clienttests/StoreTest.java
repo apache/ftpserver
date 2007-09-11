@@ -155,6 +155,16 @@ public class StoreTest extends ClientTestTemplate {
         doAssertOfUniqueFile(client, ROOT_DIR);
     }
 
+    public void testStoreUniqueWithCompletePath() throws Exception {
+    	TEST_DIR.mkdirs();
+    	File existingFile = new File(TEST_DIR, "existingFile.txt");
+    	existingFile.createNewFile();
+    	
+    	assertTrue(client.storeUniqueFile("foo/bar/existingFile.txt", new ByteArrayInputStream(testData)));
+    	
+    	doAssertOfUniqueFile(client, ROOT_DIR);
+    }
+    
     public void testStoreUniqueWithDirectory() throws Exception {
         TEST_DIR.mkdirs();
 

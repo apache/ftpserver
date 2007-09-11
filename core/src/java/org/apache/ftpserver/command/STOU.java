@@ -86,18 +86,23 @@ class STOU extends AbstractCommand {
                 return;
             }
             
-            String dirName = request.getArgument();
-            
-            String filePrefix;
-            if(dirName == null) {
-                filePrefix = "ftp.dat";
-            } else {
-                filePrefix = dirName + "/ftp.dat";
-            }
+            String pathName = request.getArgument();
             
             // get filenames
             FileObject file = null;
             try {
+            	String filePrefix;
+                if(pathName == null) {
+                	filePrefix = "ftp.dat";
+            	} else {
+            		FileObject dir = session.getFileSystemView().getFileObject(pathName);
+            		if(dir.isDirectory()) {
+            			filePrefix = pathName + "/ftp.dat";
+            		} else {
+            			filePrefix = pathName;
+            		}
+            	}
+            
                 file = session.getFileSystemView().getFileObject(filePrefix);
                 if(file != null) {
                     file = getUniqueFile(connection, session, file);
@@ -106,6 +111,7 @@ class STOU extends AbstractCommand {
             catch(Exception ex) {
                 LOG.debug("Exception getting file object", ex);
             }
+            
             if(file == null) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
                 return;
