@@ -452,7 +452,6 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.storeUniqueFile(new ByteArrayInputStream(TESTDATA)));
-        assertTrue(client.completePendingCommand());
         try {
             client.noop();
             fail("Must throw FTPConnectionClosedException");

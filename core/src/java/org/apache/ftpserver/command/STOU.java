@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.SocketException;
 
+import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
@@ -47,8 +48,8 @@ import org.slf4j.LoggerFactory;
  *
  * This command behaves like STOR except that the resultant
  * file is to be created in the current directory under a name
- * unique to that directory.  The 250 Transfer Started response
- * must include the name generated.
+ * unique to that directory.  The 150 Transfer Started response
+ * must include the name generated, See RFC1123 section 4.1.2.9
  */
 public 
 class STOU extends AbstractCommand {
@@ -125,12 +126,11 @@ class STOU extends AbstractCommand {
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "STOU", null));
-            
+            out.write(new DefaultFtpReply(FtpReply.REPLY_150_FILE_STATUS_OKAY, "FILE: " + fileName));
+
             // get data from client
             boolean failure = false;
             OutputStream os = null;
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "STOU", fileName));
             
             DataConnection dataConnection;
             try {

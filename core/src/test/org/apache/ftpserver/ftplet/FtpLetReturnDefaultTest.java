@@ -149,7 +149,6 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     public void testUploadUnique() throws Exception {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         client.storeUniqueFile(new ByteArrayInputStream(TESTDATA));
-        client.completePendingCommand();
         
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }

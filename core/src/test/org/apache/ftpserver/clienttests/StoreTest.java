@@ -187,8 +187,6 @@ public class StoreTest extends ClientTestTemplate {
      * @throws Exception
      */
     private void doAssertOfUniqueFile(FTPClient client, File dir) throws Exception {
-        assertTrue(client.completePendingCommand());
-        
         String reply = client.getReplyString();
         String generatedFileName = reply.substring(5, reply.indexOf(':'));
         File testFile = new File(dir, generatedFileName);
