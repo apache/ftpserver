@@ -98,14 +98,17 @@ class PASS extends AbstractCommand {
             }
             
             // anonymous login limit check
-            boolean anonymous = userName.equals("anonymous");
-            int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
-            int maxAnonLogin = conManager.getMaxAnonymousLogins();
-            if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
-                return;
-            }
             
+            boolean anonymous = userName != null && userName.equals("anonymous");
+            if(anonymous) {
+	            int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
+	            int maxAnonLogin = conManager.getMaxAnonymousLogins();
+	            if( currAnonLogin >= maxAnonLogin ) {
+	                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
+	                return;
+	            }
+            }
+	            
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();

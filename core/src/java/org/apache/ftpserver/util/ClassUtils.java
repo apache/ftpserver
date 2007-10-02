@@ -76,9 +76,12 @@ public class ClassUtils {
                 throw new RuntimeException("Failed invoking setter " + setter.getDisplayName() + " on " + target, e);
             }
         } else {
-            throw new RuntimeException("Property \"" + setter.getDisplayName() + "\" is not settable on class "+ target.getClass());
+        	if(setter != null) {
+        		throw new RuntimeException("Property \"" + setter.getDisplayName() + "\" is not settable on class "+ target.getClass());
+        	} else {
+        		throw new RuntimeException("Property is not settable on class "+ target.getClass());
+        	}
         }
-        
     }
     
     private static void setProperty(Object target, PropertyDescriptor setter, String propertyValue) {
