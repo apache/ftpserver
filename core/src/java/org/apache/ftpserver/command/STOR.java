@@ -21,9 +21,13 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.SocketException;
 
+import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.IODataConnectionFactory;
+import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -75,6 +79,16 @@ class STOR extends AbstractCommand {
             if(fileName == null) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STOR", null));
                 return;  
+            }
+
+            // 24-10-2007 - added check if PORT or PASV is issued, see https://issues.apache.org/jira/browse/FTPSERVER-110
+            DataConnectionFactory connFactory = session.getDataConnection();
+            if (connFactory instanceof IODataConnectionFactory) {
+                InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
+                if (address == null) {
+                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                    return;
+                }
             }
             
             // call Ftplet.onUploadStart() method
