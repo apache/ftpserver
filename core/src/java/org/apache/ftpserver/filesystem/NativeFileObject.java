@@ -311,10 +311,20 @@ public class NativeFileObject implements FileObject {
         }
 
         // create output stream
-        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        final RandomAccessFile raf = new RandomAccessFile(file, "rw");
         raf.setLength(offset);
         raf.seek(offset);
-        return new FileOutputStream(raf.getFD());
+
+        // The IBM jre needs to have both the stream and the random access file
+        // objects closed to actually close the file
+        return new FileOutputStream(raf.getFD())
+        {
+            public void close() throws IOException
+            {
+                super.close();
+                raf.close();
+            }
+        };
     }
 
     /**
@@ -328,9 +338,19 @@ public class NativeFileObject implements FileObject {
         }
 
         // move to the appropriate offset and create input stream
-        RandomAccessFile raf = new RandomAccessFile(file, "r");
+        final RandomAccessFile raf = new RandomAccessFile(file, "r");
         raf.seek(offset);
-        return new FileInputStream(raf.getFD());
+
+        // The IBM jre needs to have both the stream and the random access file
+        // objects closed to actually close the file
+        return new FileInputStream(raf.getFD())
+        {
+            public void close() throws IOException
+            {
+                super.close();
+                raf.close();
+            }
+        };
     }
 
     /**
