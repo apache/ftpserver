@@ -93,7 +93,6 @@ class PASS extends AbstractCommand {
             // already logged-in
             if(session.isLoggedIn()) {
                 out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS", null));
-                success = true;
                 return;
             }
             
@@ -133,14 +132,11 @@ class PASS extends AbstractCommand {
                     auth = new UsernamePasswordAuthentication(userName, password, userMetadata);
                 }
                 authenticatedUser = userManager.authenticate(auth);
-                success = true;
             } catch(AuthenticationFailedException e) { 
-                success = false;
                 authenticatedUser = null;
                 LOG.warn("User failed to log in", e);                
             }
             catch(Exception e) {
-                success = false;
                 authenticatedUser = null;
                 LOG.warn("PASS.execute()", e);
             }
@@ -153,10 +149,11 @@ class PASS extends AbstractCommand {
             String oldUserArgument = session.getUserArgument();
             int oldMaxIdleTime = session.getMaxIdleTime();
 
-            if(success) {
+            if(authenticatedUser != null) {
                 session.setUser(authenticatedUser);
                 session.setUserArgument(null);
                 session.setMaxIdleTime(authenticatedUser.getMaxIdleTime());
+                success = true;
             } else {
                 session.setUser(null);
             }

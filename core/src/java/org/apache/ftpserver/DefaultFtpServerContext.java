@@ -250,6 +250,13 @@ public class DefaultFtpServerContext implements FtpServerContext {
             listenerBean.destroyBean();
         }
         
+//        Iterator listenerIter = listeners.values().iterator();
+//        while (listenerIter.hasNext()) {
+//            Listener listenerBean = (Listener) listenerIter.next();
+//            listenerBean.stop();
+//        }
+
+        
         if(connectionManager != null && connectionManager instanceof Component) {
             ((Component)connectionManager).dispose();
         }
