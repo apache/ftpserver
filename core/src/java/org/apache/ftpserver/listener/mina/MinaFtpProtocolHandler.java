@@ -84,6 +84,9 @@ public class MinaFtpProtocolHandler extends IoHandlerAdapter
         MinaFtpResponseOutput output = (MinaFtpResponseOutput) session.getAttribute(OUTPUT_KEY);
         
         protocolHandler.onConnectionClosed(connection, (FtpSessionImpl)connection.getSession(), output);
+        
+        ConnectionManager conManager = serverContext.getConnectionManager();
+        conManager.closeConnection(connection);
     }
     
     public void messageReceived( IoSession session, Object message ) throws IOException, FtpException
