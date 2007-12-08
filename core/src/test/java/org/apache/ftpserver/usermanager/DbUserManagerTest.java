@@ -32,7 +32,7 @@ import org.hsqldb.jdbc.jdbcDataSource;
 
 public class DbUserManagerTest extends UserManagerTestTemplate {
 
-    private static final File INIT_SQL_SCRIPT = new File(TestUtil.getBaseDir(), "src/test/dbusermanagertest-hsql.sql");
+    private static final File INIT_SQL_SCRIPT = new File(TestUtil.getBaseDir(), "src/test/resources/dbusermanagertest-hsql.sql");
     
     private jdbcDataSource ds;
     private Connection conn;

@@ -36,7 +36,7 @@ public class AliasKeymanagerTest extends TestCase {
 	protected void setUp() throws Exception {
 		KeyStore ks = KeyStore.getInstance("JKS");
 		
-		FileInputStream fis = new FileInputStream("src/test/keymanager-test.jks");
+		FileInputStream fis = new FileInputStream("src/test/resources/keymanager-test.jks");
 		ks.load(fis, "".toCharArray());
 		
 		KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");

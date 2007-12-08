@@ -28,7 +28,7 @@ import org.apache.ftpserver.test.TestUtil;
 public class XmlConfigurationTest extends ConfigurationTestTemplate {
 
     protected Configuration createConfiguration() throws Exception {
-        File xmlFile = new File(TestUtil.getBaseDir(), "src/test/XmlConfigurationHandler-test.xml");
+        File xmlFile = new File(TestUtil.getBaseDir(), "src/test/resources/XmlConfigurationHandler-test.xml");
         FileInputStream fis = new FileInputStream(xmlFile);
         XmlConfigurationHandler handler = new XmlConfigurationHandler(fis);
         
