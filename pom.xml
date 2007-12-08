@@ -100,8 +100,6 @@
         <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk</url>
     </scm>
     <build>
-        <sourceDirectory>src/java</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

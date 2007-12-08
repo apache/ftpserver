@@ -17,7 +17,6 @@
   <build>
     <resources>
       <resource>
-        <directory>src/java</directory>
         <includes>
           <include>**/*.properties</include>
         </includes>
@@ -25,7 +24,6 @@
     </resources>
     <testResources>
       <testResource>
-        <directory>src/test</directory>
         <includes>
           <include>*.properties</include>
         </includes>
