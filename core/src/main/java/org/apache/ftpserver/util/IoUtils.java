@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
@@ -37,224 +37,241 @@ import java.util.Random;
 /**
  * IO utility methods.
  */
-public
-class IoUtils {
-    
-    /**
-     * Random number generator to make unique file name
-     */
-    private final static Random RANDOM_GEN = new Random(System.currentTimeMillis());
-     
-    
-    /**
-     * Get a <code>BufferedInputStream</code>. 
-     */
-    public final static BufferedInputStream getBufferedInputStream(InputStream in) {
-        BufferedInputStream bin = null;
-        if(in instanceof java.io.BufferedInputStream) {
-            bin = (BufferedInputStream)in;
-        }
-        else {
-            bin = new BufferedInputStream(in);
-        }
-        return bin;
-    }
-    
-    /**
-     * Get a <code>BufferedOutputStream</code>. 
-     */
-    public final static BufferedOutputStream getBufferedOutputStream(OutputStream out) {
-        BufferedOutputStream bout = null;
-        if(out instanceof java.io.BufferedOutputStream) {
-            bout = (BufferedOutputStream)out;
-        }
-        else {
-            bout = new BufferedOutputStream(out);
-        }
-        return bout;
-    }
-    
-    /**
-     * Get <code>BufferedReader</code>.
-     */
-    public final static BufferedReader getBufferedReader(Reader reader) {
-        BufferedReader buffered = null;
-        if (reader instanceof java.io.BufferedReader) {
-            buffered = (BufferedReader) reader;
-        } 
-        else {
-            buffered = new BufferedReader(reader);
-        }
-        return buffered;
-    }
-    
-    
-    /**
-     * Get <code>BufferedWriter</code>.
-     */
-    public final static BufferedWriter getBufferedWriter(Writer wr) {
-        BufferedWriter bw = null;
-        if(wr instanceof java.io.BufferedWriter) {
-            bw = (BufferedWriter)wr;
-        }
-        else {
-            bw = new BufferedWriter(wr);
-        }
-        return bw;
-    }
+public class IoUtils {
 
-    /**
-     * Get unique file object.
-     */
-    public final static File getUniqueFile(File oldFile) {
-        File newFile = oldFile;
-        while (true) {
-            if (!newFile.exists()) {
-                break;
-            }
-            newFile = new File(oldFile.getAbsolutePath() + '.' + Math.abs(RANDOM_GEN.nextLong()));
-        }
-        return newFile;
-    }
-   
-    /**
-     * No exception <code>InputStream</code> close method.
-     */
-    public final static void close(InputStream is) {
-        if(is != null) {
-            try { is.close(); } catch(Exception ex) {}
-        }
-    } 
-   
-    /**
-     * No exception <code>OutputStream</code> close method.
-     */
-    public final static void close(OutputStream os) {
-        if(os != null) {
-            try { os.close(); } catch(Exception ex) {}
-        }
-    }
-   
-    /**
-     * No exception <code>java.io.Reader</code> close method.
-     */
-    public final static void close(Reader rd) {
-        if(rd != null) {
-            try { rd.close(); } catch(Exception ex) {}
-        }
-    }
-   
-   
-    /**
-     * No exception <code>java.io.Writer</code> close method.
-     */
-    public final static void close(Writer wr) {
-        if(wr != null) {
-            try { wr.close(); } catch(Exception ex) {}
-        }
-    }
-   
-   
-    /**
-     * Get exception stack trace.
-     */
-    public final static String getStackTrace(Throwable ex) {
-        String result = "";
-        if(ex != null) {
-            try  {
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                ex.printStackTrace(pw);
-                pw.close();
-                sw.close();
-                result = sw.toString();
-            }
-            catch(Exception e)  {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
-     * @param bufferSize Size of internal buffer to use.
-     */
-    public final static void copy(Reader input, Writer output, int bufferSize ) throws IOException {
-        char buffer[] = new char[bufferSize];
-        int n = 0;
-        while( (n=input.read(buffer)) != -1) {
-            output.write(buffer, 0, n);
-        }
-    } 
-    
-    /**
-     * Copy chars from a <code>InputStream</code> to a <code>OutputStream</code>.
-     * @param bufferSize Size of internal buffer to use.
-     */
-    public final static void copy(InputStream input, OutputStream output, int bufferSize ) throws IOException {
-        byte buffer[] = new byte[bufferSize];
-        int n = 0;
-        while( (n=input.read(buffer)) != -1) {
-            output.write(buffer, 0, n);
-        }
-    }
-    
-    /**
-     * Read fully from reader
-     */
-    public final static String readFully(Reader reader) throws IOException {
-        StringWriter writer = new StringWriter();
-        copy(reader, writer, 1024);
-        return writer.toString();
-    }
-    
-    /**
-     * Read fully from stream
-     */ 
-    public final static String readFully(InputStream input) throws IOException {
-        StringWriter writer = new StringWriter();
-        InputStreamReader reader = new InputStreamReader(input);
-        copy(reader, writer, 1024);
-        return writer.toString();
-    } 
-    
-    public final static void delete(File file) throws IOException {
-        if(!file.exists()) {
-            return;
-        } else if(file.isDirectory()) {
-            deleteDir(file);
-        } else {
-            deleteFile(file);
-        }
-    }
-    
-    private final static void deleteDir(File dir) throws IOException {
-        File[] children = dir.listFiles();
-        
-        for (int i = 0; i < children.length; i++) {
-            File file = children[i];
-            delete(file);
-        }
-        
-        if(!dir.delete()) {
-            throw new IOException("Failed to delete directory: " + dir);
-        }
+	/**
+	 * Random number generator to make unique file name
+	 */
+	private final static Random RANDOM_GEN = new Random(System
+			.currentTimeMillis());
 
-    }
+	/**
+	 * Get a <code>BufferedInputStream</code>.
+	 */
+	public final static BufferedInputStream getBufferedInputStream(
+			InputStream in) {
+		BufferedInputStream bin = null;
+		if (in instanceof java.io.BufferedInputStream) {
+			bin = (BufferedInputStream) in;
+		} else {
+			bin = new BufferedInputStream(in);
+		}
+		return bin;
+	}
 
-    private final static void deleteFile(File file) throws IOException {
-        if(!file.delete()) {
-            if(OS.isFamilyWindows()) {
-                System.gc();
-            }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-            }
-            if(!file.delete()) {
-                throw new IOException("Failed to delete file: " + file);
-            }
-        }
-    }
-}    
+	/**
+	 * Get a <code>BufferedOutputStream</code>.
+	 */
+	public final static BufferedOutputStream getBufferedOutputStream(
+			OutputStream out) {
+		BufferedOutputStream bout = null;
+		if (out instanceof java.io.BufferedOutputStream) {
+			bout = (BufferedOutputStream) out;
+		} else {
+			bout = new BufferedOutputStream(out);
+		}
+		return bout;
+	}
+
+	/**
+	 * Get <code>BufferedReader</code>.
+	 */
+	public final static BufferedReader getBufferedReader(Reader reader) {
+		BufferedReader buffered = null;
+		if (reader instanceof java.io.BufferedReader) {
+			buffered = (BufferedReader) reader;
+		} else {
+			buffered = new BufferedReader(reader);
+		}
+		return buffered;
+	}
+
+	/**
+	 * Get <code>BufferedWriter</code>.
+	 */
+	public final static BufferedWriter getBufferedWriter(Writer wr) {
+		BufferedWriter bw = null;
+		if (wr instanceof java.io.BufferedWriter) {
+			bw = (BufferedWriter) wr;
+		} else {
+			bw = new BufferedWriter(wr);
+		}
+		return bw;
+	}
+
+	/**
+	 * Get unique file object.
+	 */
+	public final static File getUniqueFile(File oldFile) {
+		File newFile = oldFile;
+		while (true) {
+			if (!newFile.exists()) {
+				break;
+			}
+			newFile = new File(oldFile.getAbsolutePath() + '.'
+					+ Math.abs(RANDOM_GEN.nextLong()));
+		}
+		return newFile;
+	}
+
+	/**
+	 * No exception <code>InputStream</code> close method.
+	 */
+	public final static void close(InputStream is) {
+		if (is != null) {
+			try {
+				is.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	/**
+	 * No exception <code>OutputStream</code> close method.
+	 */
+	public final static void close(OutputStream os) {
+		if (os != null) {
+			try {
+				os.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	/**
+	 * No exception <code>java.io.Reader</code> close method.
+	 */
+	public final static void close(Reader rd) {
+		if (rd != null) {
+			try {
+				rd.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	/**
+	 * No exception <code>java.io.Writer</code> close method.
+	 */
+	public final static void close(Writer wr) {
+		if (wr != null) {
+			try {
+				wr.close();
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	/**
+	 * Get exception stack trace.
+	 */
+	public final static String getStackTrace(Throwable ex) {
+		String result = "";
+		if (ex != null) {
+			try {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				ex.printStackTrace(pw);
+				pw.close();
+				sw.close();
+				result = sw.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+	 * 
+	 * @param bufferSize
+	 *            Size of internal buffer to use.
+	 */
+	public final static void copy(Reader input, Writer output, int bufferSize)
+			throws IOException {
+		char buffer[] = new char[bufferSize];
+		int n = 0;
+		while ((n = input.read(buffer)) != -1) {
+			output.write(buffer, 0, n);
+		}
+	}
+
+	/**
+	 * Copy chars from a <code>InputStream</code> to a
+	 * <code>OutputStream</code>.
+	 * 
+	 * @param bufferSize
+	 *            Size of internal buffer to use.
+	 */
+	public final static void copy(InputStream input, OutputStream output,
+			int bufferSize) throws IOException {
+		byte buffer[] = new byte[bufferSize];
+		int n = 0;
+		while ((n = input.read(buffer)) != -1) {
+			output.write(buffer, 0, n);
+		}
+	}
+
+	/**
+	 * Read fully from reader
+	 */
+	public final static String readFully(Reader reader) throws IOException {
+		StringWriter writer = new StringWriter();
+		copy(reader, writer, 1024);
+		return writer.toString();
+	}
+
+	/**
+	 * Read fully from stream
+	 */
+	public final static String readFully(InputStream input) throws IOException {
+		StringWriter writer = new StringWriter();
+		InputStreamReader reader = new InputStreamReader(input);
+		copy(reader, writer, 1024);
+		return writer.toString();
+	}
+
+	public final static void delete(File file) throws IOException {
+		if (!file.exists()) {
+			return;
+		} else if (file.isDirectory()) {
+			deleteDir(file);
+		} else {
+			deleteFile(file);
+		}
+	}
+
+	private final static void deleteDir(File dir) throws IOException {
+		File[] children = dir.listFiles();
+
+		if(children == null)  {
+			return;
+		}
+		
+		for (int i = 0; i < children.length; i++) {
+			File file = children[i];
+			delete(file);
+		}
+
+		if (!dir.delete()) {
+			throw new IOException("Failed to delete directory: " + dir);
+		}
+
+	}
+
+	private final static void deleteFile(File file) throws IOException {
+		if (!file.delete()) {
+			if (OS.isFamilyWindows()) {
+				System.gc();
+			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+			if (!file.delete()) {
+				throw new IOException("Failed to delete file: " + file);
+			}
+		}
+	}
+}

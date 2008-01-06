@@ -21,13 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
@@ -46,10 +45,9 @@ class MDTM extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state
         session.resetState();
@@ -57,7 +55,7 @@ class MDTM extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null));
             return;  
         }
         
@@ -70,7 +68,7 @@ class MDTM extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
             return;
         }
         
@@ -78,10 +76,10 @@ class MDTM extends AbstractCommand {
         fileName = file.getFullName();
         if(file.doesExist()) {
             String dateStr = DateUtils.getFtpDate( file.getLastModified() );
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
         }
     } 
 }

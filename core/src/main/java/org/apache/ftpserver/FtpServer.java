@@ -68,8 +68,7 @@ public class FtpServer {
 
         started = true;
         
-        System.out.println("Server ready :: Apache FTP Server");
-        LOG.info("------- Apache FTP Server started ------");
+        LOG.info("FTP server started");
 
     }
     

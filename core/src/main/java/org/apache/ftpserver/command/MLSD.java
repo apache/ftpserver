@@ -24,15 +24,14 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listing.DirectoryLister;
 import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
@@ -61,10 +60,9 @@ class MLSD extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         try {
             
@@ -76,13 +74,13 @@ class MLSD extends AbstractCommand {
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
                 if (address == null) {
-                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                    session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "MLSD", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_150_FILE_STATUS_OKAY, "MLSD", null));
 
             
             // print listing data
@@ -91,7 +89,7 @@ class MLSD extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD", null));
                 return;
             }
             
@@ -107,21 +105,21 @@ class MLSD extends AbstractCommand {
             catch(SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "MLSD", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "MLSD", null));
             }
             catch(IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "MLSD", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "MLSD", null));
             } catch(IllegalArgumentException e) {
                 LOG.debug("Illegal listing syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLSD", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MLSD", null));
             }
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "MLSD", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "MLSD", null));
             }
         }
         finally {

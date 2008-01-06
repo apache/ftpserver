@@ -17,14 +17,9 @@
 
 #Generated file - don't edit (please)
 #Wed Feb 07 20:58:22 CET 2007
-ftpserver.user.anonymous.writepermission=false
-ftpserver.user.anonymous.maxloginnumber=20
-ftpserver.user.anonymous.enableflag=true
-ftpserver.user.anonymous.userpassword=
 ftpserver.user.admin.homedirectory=./test-tmp/ftproot
 ftpserver.user.admin.maxloginperip=0
-ftpserver.user.anonymous.homedirectory=./test-tmp/ftproot
-ftpserver.user.anonymous.idletime=300
+
 ftpserver.user.admin.idletime=0
 ftpserver.user.admin.enableflag=true
 ftpserver.user.testuser2.userpassword=password
@@ -43,3 +38,10 @@ ftpserver.user.admin.downloadrate=0
 ftpserver.user.anonymous.downloadrate=4800
 ftpserver.user.testuser1.userpassword=password
 ftpserver.user.admin.writepermission=true
+
+ftpserver.user.anonymous.writepermission=false
+ftpserver.user.anonymous.maxloginnumber=20
+ftpserver.user.anonymous.enableflag=true
+ftpserver.user.anonymous.userpassword=
+ftpserver.user.anonymous.homedirectory=./test-tmp/ftproot
+ftpserver.user.anonymous.idletime=300

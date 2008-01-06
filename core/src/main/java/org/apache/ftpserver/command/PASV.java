@@ -24,13 +24,12 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.DataConnectionException;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
 import org.slf4j.Logger;
@@ -53,16 +52,15 @@ class PASV extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
         
         // set data connection
-        ServerDataConnectionFactory dataCon = session.getServerDataConnection();
+        ServerDataConnectionFactory dataCon = session.getDataConnection();
         InetAddress externalPassiveAddress = session.getListener().getDataConnectionConfig().getPassiveExernalAddress();
         
         try {
@@ -77,14 +75,18 @@ class PASV extends AbstractCommand {
                 servAddr = dataConAddress.getAddress();
             }
             
+            System.out.println("############" + dataConAddress);
+            System.out.println("############" + dataConAddress.getAddress());
+            System.out.println("############" + servAddr);
+            
             // send connection info to client
             InetSocketAddress externalDataConAddress = new InetSocketAddress(servAddr, dataConAddress.getPort());
             
             String addrStr = SocketAddressEncoder.encode(externalDataConAddress);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
         } catch(DataConnectionException e) {
             LOG.warn("Failed to open passive data connection", e);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "PASV", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "PASV", null));
             return;   
         }
         

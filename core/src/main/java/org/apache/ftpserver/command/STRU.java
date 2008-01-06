@@ -21,12 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Structure;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,17 +44,16 @@ class STRU extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STRU", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STRU", null));
             return;  
         }
         
@@ -63,11 +61,11 @@ class STRU extends AbstractCommand {
         char stru = request.getArgument().charAt(0);
         try  {
             session.setStructure(Structure.parseArgument(stru));
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "STRU", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "STRU", null));
         } 
         catch(IllegalArgumentException e) {
             LOG.debug("Illegal structure argument: " + request.getArgument(), e);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "STRU", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "STRU", null));
         }
     }
 

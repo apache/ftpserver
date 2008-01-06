@@ -81,7 +81,8 @@ public abstract class AbstractConnection implements Connection {
      * Notify connection manager observer.
      */
     protected void notifyObserver() {
-        ftpSession.updateLastAccessTime();
+        // replace with MINA idle handling
+    	//ftpSession.updateLastAccessTime();
         serverContext.getConnectionManager().updateConnection(this);
     }
 }

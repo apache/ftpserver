@@ -24,7 +24,7 @@ import java.nio.charset.CharsetEncoder;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.WriteFuture;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
@@ -43,7 +43,7 @@ public class FtpResponseEncoder extends ProtocolEncoderAdapter
     {
         String value = message.toString();
         
-        ByteBuffer buf = ByteBuffer.allocate( value.length() ).setAutoExpand( true );
+        IoBuffer buf = IoBuffer.allocate( value.length() ).setAutoExpand( true );
 
         buf.putString( value, ENCODER );
         
@@ -51,10 +51,12 @@ public class FtpResponseEncoder extends ProtocolEncoderAdapter
         out.write(buf);
         
         // 2007-10-26 - flushing the response, it is important to receive replies like 421 - service unavailable, see https://issues.apache.org/jira/browse/FTPSERVER-112
-        WriteFuture future = out.flush();
-        future.join(5000);
-        if (!future.isWritten()) {
-        	throw new FtpException("The response could not be sent for 5 seconds");
-        }
+        //WriteFuture future = out.flush();
+        
+        // TODO implement using listener?
+        //future.await(5000);
+        //if (!future.isWritten()) {
+        //	throw new FtpException("The response could not be sent for 5 seconds");
+        //}
     }
 }

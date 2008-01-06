@@ -25,12 +25,11 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -52,10 +51,9 @@ class MD5 extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
@@ -70,7 +68,7 @@ class MD5 extends AbstractCommand {
         String argument = request.getArgument();
         
         if(argument == null || argument.trim().length() == 0) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", null));
             return;
         }
 
@@ -96,13 +94,13 @@ class MD5 extends AbstractCommand {
             }
             
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
+            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
                 return;
             }
     
             // check file
             if(!file.isFile()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
+            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
                 return;
             }
             
@@ -121,15 +119,15 @@ class MD5 extends AbstractCommand {
                 
             } catch(NoSuchAlgorithmException e) {
                 LOG.debug("MD5 algorithm not available", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "MD5.notimplemened", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "MD5.notimplemened", null));
             } finally {
                 IoUtils.close(is);
             }
         }
         if(isMMD5) {
-            out.write(FtpReplyUtil.translate(session, 252, "MMD5", sb.toString()));
+        	session.write(FtpReplyUtil.translate(session, request, context, 252, "MMD5", sb.toString()));
         } else {
-            out.write(FtpReplyUtil.translate(session, 251, "MD5", sb.toString()));
+        	session.write(FtpReplyUtil.translate(session, request,  context, 251, "MD5", sb.toString()));
         }
     }
 

@@ -21,13 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
@@ -41,10 +40,9 @@ class LANG extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state
         session.resetState();
@@ -53,25 +51,25 @@ class LANG extends AbstractCommand {
         String language = request.getArgument();
         if(language == null) {
             session.setLanguage(null);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "LANG", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "LANG", null));
             return;
         }
         
         // check and set language
         language = language.toLowerCase();
-        MessageResource msgResource = connection.getServerContext().getMessageResource();
+        MessageResource msgResource = context.getMessageResource();
         String[] availableLanguages = msgResource.getAvailableLanguages();
         if(availableLanguages != null) {
             for(int i=0; i<availableLanguages.length; ++i) {
                 if(availableLanguages[i].equals(language)) {
                     session.setLanguage(language);
-                    out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "LANG", null));
+                    session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "LANG", null));
                     return;
                 }
             }
         }
         
         // not found - send error message
-        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "LANG", null));
+        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "LANG", null));
     }
 }

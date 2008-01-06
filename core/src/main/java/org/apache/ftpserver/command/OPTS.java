@@ -22,13 +22,12 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,16 +44,15 @@ class OPTS extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(OPTS.class);
     
-    private static final HashMap COMMAND_MAP = new HashMap(16);
+    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(16);
     
     
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state
         session.resetState();
@@ -62,7 +60,7 @@ class OPTS extends AbstractCommand {
         // no params
         String argument = request.getArgument();
         if(argument == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null));
             return;
         }
         
@@ -78,17 +76,17 @@ class OPTS extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( optsRequest );
         try {
             if(command != null) {
-                command.execute(connection, request, session, out);
+                command.execute(null, null, request);
             }
             else {
                 session.resetState();
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument));
             }
         }
         catch(Exception ex) {
             LOG.warn("OPTS.execute()", ex);
             session.resetState();
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null));
         }
     }
     

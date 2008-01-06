@@ -43,52 +43,52 @@ interface ServerFtpStatistics extends FtpStatistics {
     /**
      * Increment upload count.
      */
-    void setUpload(Connection connection, FileObject file, long size);
+    void setUpload(FtpIoSession session, FileObject file, long size);
     
     /**
      * Increment download count.
      */
-    void setDownload(Connection connection, FileObject file, long size);
+    void setDownload(FtpIoSession session, FileObject file, long size);
     
     /**
      * Increment make directory count.
      */
-    void setMkdir(Connection connection, FileObject dir);
+    void setMkdir(FtpIoSession session, FileObject dir);
     
     /**
      * Decrement remove directory count.
      */
-    void setRmdir(Connection connection, FileObject dir) ;
+    void setRmdir(FtpIoSession session, FileObject dir) ;
     
     /**
      * Increment delete count.
      */
-    void setDelete(Connection connection, FileObject file);
+    void setDelete(FtpIoSession session, FileObject file);
     
     /**
      * Increment current connection count.
      */
-    void setOpenConnection(Connection connection);
+    void setOpenConnection(FtpIoSession session);
     
     /**
      * Decrement close connection count.
      */
-    void setCloseConnection(Connection connection);
+    void setCloseConnection(FtpIoSession session);
     
     /**
      * Increment current login count.
      */
-    void setLogin(Connection connection);
+    void setLogin(FtpIoSession session);
     
     /**
      * Increment failed login count.
      */
-    void setLoginFail(Connection connection);
+    void setLoginFail(FtpIoSession session);
     
     /**
      * Decrement current login count.
      */
-    void setLogout(Connection connection);
+    void setLogout(FtpIoSession session);
     
     /**
      * Reset all cumulative total counters. Do not reset current counters, like 

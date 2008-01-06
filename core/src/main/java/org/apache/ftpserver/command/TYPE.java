@@ -21,12 +21,11 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +43,9 @@ class TYPE extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
@@ -61,11 +59,11 @@ class TYPE extends AbstractCommand {
         // set type
         try {
             session.setDataType(DataType.parseArgument(type));
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
         } 
         catch(IllegalArgumentException e) {
             LOG.debug("Illegal type argument: " + request.getArgument(), e);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "TYPE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "TYPE", null));
         }
     }
     

@@ -22,12 +22,11 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.ServerDataConnectionFactory;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
@@ -39,10 +38,9 @@ class PROT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
     
         // reset state variables
         session.resetState();
@@ -50,28 +48,28 @@ class PROT extends AbstractCommand {
         // check argument
         String arg = request.getArgument();
         if(arg == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PROT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PROT", null));
             return;
         }
         
         // check argument
         arg = arg.toUpperCase();
-        ServerDataConnectionFactory dcon = session.getServerDataConnection();
+        ServerDataConnectionFactory dcon = session.getDataConnection();
         if(arg.equals("C")) {
             dcon.setSecure(false);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         }
         else if(arg.equals("P")) {
             if(session.getListener().getDataConnectionConfig().getSSL() == null) {
-                out.write(FtpReplyUtil.translate(session, 431, "PROT", null));
+                session.write(FtpReplyUtil.translate(session, request, context, 431, "PROT", null));
             }
             else {
                 dcon.setSecure(true);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
             }
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "PROT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "PROT", null));
         }
     }
     

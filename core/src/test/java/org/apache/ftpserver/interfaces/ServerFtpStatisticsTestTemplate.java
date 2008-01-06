@@ -77,24 +77,24 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         assertEquals(0, stats.getTotalConnectionNumber());
         assertEquals(0, stats.getCurrentConnectionNumber());
 
-        stats.setOpenConnection(new MockConnection());
+        stats.setOpenConnection(new FtpIoSession(null, null));
         assertEquals(1, stats.getTotalConnectionNumber());
         assertEquals(1, stats.getCurrentConnectionNumber());
 
-        stats.setOpenConnection(new MockConnection());
+        stats.setOpenConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(2, stats.getCurrentConnectionNumber());
         
-        stats.setCloseConnection(new MockConnection());
+        stats.setCloseConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(1, stats.getCurrentConnectionNumber());
 
-        stats.setCloseConnection(new MockConnection());
+        stats.setCloseConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(0, stats.getCurrentConnectionNumber());
 
         // This should never occure
-        stats.setCloseConnection(new MockConnection());
+        stats.setCloseConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(0, stats.getCurrentConnectionNumber());
     }

@@ -25,7 +25,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FileObject;
@@ -33,11 +32,11 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
@@ -62,10 +61,9 @@ class STOU extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         try {
         	// 24-10-2007 - added check if PORT or PASV is issued, see https://issues.apache.org/jira/browse/FTPSERVER-110
@@ -73,20 +71,19 @@ class STOU extends AbstractCommand {
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
                 if (address == null) {
-                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                    session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
             }
         
             // reset state variables
             session.resetState();
-            FtpServerContext serverContext = connection.getServerContext();
             
             // call Ftplet.onUploadUniqueStart() method
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
+            Ftplet ftpletContainer = context.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onUploadUniqueStart(session, request, out);
+                ftpletRet = ftpletContainer.onUploadUniqueStart(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -95,7 +92,7 @@ class STOU extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
             
@@ -118,7 +115,7 @@ class STOU extends AbstractCommand {
             
                 file = session.getFileSystemView().getFileObject(filePrefix);
                 if(file != null) {
-                    file = getUniqueFile(connection, session, file);
+                    file = getUniqueFile(session, file);
                 }
             }
             catch(Exception ex) {
@@ -126,19 +123,19 @@ class STOU extends AbstractCommand {
             }
             
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU", null));
                 return;
             }
             String fileName = file.getFullName();
             
             // check permission
             if(!file.hasWritePermission()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU.permission", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOU.permission", fileName));
                 return;
             }
             
             // get data connection
-            out.write(new DefaultFtpReply(FtpReply.REPLY_150_FILE_STATUS_OKAY, "FILE: " + fileName));
+            session.write(new DefaultFtpReply(FtpReply.REPLY_150_FILE_STATUS_OKAY, "FILE: " + fileName));
 
             // get data from client
             boolean failure = false;
@@ -149,7 +146,7 @@ class STOU extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the input data stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOU", fileName));
                 return;
             }
             
@@ -166,20 +163,20 @@ class STOU extends AbstractCommand {
                 LOG.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
-                ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
+                ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
                 if(ftpStat != null) {
-                    ftpStat.setUpload(connection, file, transSz);
+                    ftpStat.setUpload(session, file, transSz);
                 }
             }
             catch(SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOU", fileName));
             }
             catch(IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOU", fileName));
             }
             finally {
                 IoUtils.close(os);
@@ -187,17 +184,17 @@ class STOU extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName));
                 
                 // call Ftplet.onUploadUniqueEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onUploadUniqueEnd(session, request, out);
+                    ftpletRet = ftpletContainer.onUploadUniqueEnd(session.getFtpletSession(), request);
                 } catch(Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(connection);
+                    session.closeOnFlush();
                     return;
                 }
 
@@ -212,7 +209,7 @@ class STOU extends AbstractCommand {
     /**
      * Get unique file object.
      */
-    protected FileObject getUniqueFile(Connection connection, FtpSession session, FileObject oldFile) throws FtpException {
+    protected FileObject getUniqueFile(FtpIoSession session, FileObject oldFile) throws FtpException {
         FileObject newFile = oldFile;
         FileSystemView fsView = session.getFileSystemView();
         String fileName = newFile.getFullName();

@@ -24,12 +24,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IllegalInetAddressException;
 import org.apache.ftpserver.util.IllegalPortException;
@@ -63,24 +62,23 @@ class PORT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PORT", null));
             return;  
         }
 
         // is port enabled
         DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
-            out.write(FtpReplyUtil.translate(session, 510, "PORT.disabled", null));
+            session.write(FtpReplyUtil.translate(session, request, context, 510, "PORT.disabled", null));
             return;
         } 
         
@@ -88,29 +86,31 @@ class PORT extends AbstractCommand {
         try {
             address = SocketAddressEncoder.decode(request.getArgument());
         } catch(IllegalInetAddressException e) {
-            out.write(FtpReplyUtil.translate(session, 510, "PORT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, 510, "PORT", null));
             return;
         } catch(IllegalPortException e) {
             LOG.debug("Invalid data port: " + request.getArgument(), e);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "PORT.invalid", null)); 
             return; 
         } catch(UnknownHostException e) {
             LOG.debug("Unknown host", e);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "PORT.host", null));
             return;
         }
         
         // check IP
         if(dataCfg.isActiveIpCheck()) {
-            InetAddress clientAddr = session.getClientAddress();
-            if(!address.getAddress().equals(clientAddr)) {
-                out.write(FtpReplyUtil.translate(session, 510, "PORT.mismatch", null));
-                return;
-            }
+        	if(session.getRemoteAddress() instanceof InetSocketAddress) {
+        		InetAddress clientAddr = ((InetSocketAddress)session.getRemoteAddress()).getAddress();
+        		if(!address.getAddress().equals(clientAddr)) {
+        			session.write(FtpReplyUtil.translate(session, request, context, 510, "PORT.mismatch", null));
+        			return;
+        		}
+        	}
         }
         
-        session.getServerDataConnection().initActiveDataConnection(address);
-        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
+        session.getDataConnection().initActiveDataConnection(address);
+        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
     
 }

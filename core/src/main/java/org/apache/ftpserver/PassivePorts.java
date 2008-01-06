@@ -46,7 +46,7 @@ public class PassivePorts {
      *   invalid (e.g. not an integer or too large for a port number) 
      */
     public static PassivePorts parse(String portsString) {
-        List passivePortsList = new ArrayList();
+        List<Integer> passivePortsList = new ArrayList<Integer>();
         
         boolean inRange = false;
         Integer lastPort = new Integer(1);

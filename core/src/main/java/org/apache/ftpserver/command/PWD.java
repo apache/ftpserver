@@ -21,13 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
@@ -42,14 +41,13 @@ class PWD extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         session.resetState();
         FileSystemView fsview = session.getFileSystemView();
         String currDir = fsview.getCurrentDirectory().getFullName();
-        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_257_PATHNAME_CREATED, "PWD", currDir));
+        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_257_PATHNAME_CREATED, "PWD", currDir));
     }
     
 }

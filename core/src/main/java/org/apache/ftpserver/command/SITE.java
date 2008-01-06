@@ -22,16 +22,14 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,23 +43,21 @@ class SITE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE.class);
     
-    private static final HashMap COMMAND_MAP = new HashMap(16);
+    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(16);
     
     
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         // call Ftplet.onSite method
-        FtpServerContext serverContext = connection.getServerContext();
-        Ftplet ftpletContainer = serverContext.getFtpletContainer();
+        Ftplet ftpletContainer = context.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
-            ftpletRet = ftpletContainer.onSite(session, request, out);
+            ftpletRet = ftpletContainer.onSite(session.getFtpletSession(), request);
         } catch(Exception e) {
             LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -70,7 +66,7 @@ class SITE extends AbstractCommand {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            serverContext.getConnectionManager().closeConnection(connection);
+            session.closeOnFlush();
             return;
         }
         
@@ -87,7 +83,7 @@ class SITE extends AbstractCommand {
         // no params
         if(argument == null) {
             session.resetState();
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "SITE", null));
             return;
         }
         
@@ -96,17 +92,17 @@ class SITE extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( siteRequest );
         try {
             if(command != null) {
-                command.execute(connection, request, session, out);
+                command.execute(null, null, request);
             }
             else {
                 session.resetState();
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE", argument));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE", argument));
             }
         }
         catch(Exception ex) {
             LOG.warn("SITE.execute()", ex);
             session.resetState();
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "SITE", null));
         }
     
     }

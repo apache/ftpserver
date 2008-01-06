@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.io.IOListener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 
 
@@ -34,7 +33,7 @@ public class ConfigurableFtpServerContextTest extends TestCase {
 
     public void testConfigListeners() throws Exception {
         Properties props = new Properties();
-        props.setProperty("config.listeners.foo1.class", IOListener.class.getName());
+        props.setProperty("config.listeners.foo1.class", MinaListener.class.getName());
         props.setProperty("config.listeners.foo2.class", MinaListener.class.getName());
         
         Configuration config = new PropertiesConfiguration(props);
@@ -42,8 +41,8 @@ public class ConfigurableFtpServerContextTest extends TestCase {
         ConfigurableFtpServerContext ctx = new ConfigurableFtpServerContext(config);
         
         assertNotNull(ctx.getListener("foo1"));
-        assertTrue(ctx.getListener("foo1") instanceof IOListener);
-        
+        assertTrue(ctx.getListener("foo1") instanceof MinaListener);
+
         assertNotNull(ctx.getListener("foo2"));
         assertTrue(ctx.getListener("foo2") instanceof MinaListener);
         

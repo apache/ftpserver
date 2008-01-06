@@ -32,13 +32,12 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -62,21 +61,19 @@ class APPE extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         try {
         
             // reset state variables
             session.resetState();
-            FtpServerContext serverContext = connection.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
             if(fileName == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "APPE", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "APPE", null));
                 return;  
             }
             
@@ -85,16 +82,16 @@ class APPE extends AbstractCommand {
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
                 if (address == null) {
-                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                	session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
             }
             
             // call Ftplet.onAppendStart() method
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
+            Ftplet ftpletContainer = context.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onAppendStart(session, request, out);
+                ftpletRet = ftpletContainer.onAppendStart(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -103,7 +100,7 @@ class APPE extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
             
@@ -116,32 +113,32 @@ class APPE extends AbstractCommand {
                 LOG.debug("File system threw exception", e);
             }
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
                 return;
             }
             fileName = file.getFullName();
             
             // check file existance
             if(file.doesExist() && !file.isFile()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.invalid", fileName));
                 return;
             }
             
             // check permission
             if( !file.hasWritePermission()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.permission", fileName));
+            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "APPE.permission", fileName));
                 return;
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "APPE", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_150_FILE_STATUS_OKAY, "APPE", fileName));
             
             DataConnection dataConnection;
             try {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception when getting data input stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE", fileName));
+                session.write(FtpReplyUtil.translate(session,request,  context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE", fileName));
                 return;
             }
              
@@ -168,18 +165,18 @@ class APPE extends AbstractCommand {
                 LOG.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
-                ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-                ftpStat.setUpload(connection, file, transSz);
+                ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
+                ftpStat.setUpload(session, file, transSz);
             }
             catch(SocketException e) {
                 LOG.debug("SocketException during file upload", e);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "APPE", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "APPE", fileName));
             }
             catch(IOException e) {
                 LOG.debug("IOException during file upload", e);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "APPE", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "APPE", fileName));
             }
             finally {
                 IoUtils.close(os);
@@ -187,17 +184,17 @@ class APPE extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));
                 
                 // call Ftplet.onAppendEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onAppendEnd(session, request, out);
+                    ftpletRet = ftpletContainer.onAppendEnd(session.getFtpletSession(), request);
                 } catch(Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(connection);
+                    session.closeOnFlush();
                     return;
                 }
 

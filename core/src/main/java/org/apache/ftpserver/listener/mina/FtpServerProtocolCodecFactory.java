@@ -21,6 +21,7 @@ package org.apache.ftpserver.listener.mina;
 
 import java.nio.charset.Charset;
 
+import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
@@ -34,11 +35,11 @@ public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory
     private ProtocolDecoder decoder = new TextLineDecoder(Charset.forName("UTF-8"));
     private ProtocolEncoder encoder = new FtpResponseEncoder();
 
-    public ProtocolDecoder getDecoder() throws Exception {
-        return decoder;
-    }
+	public ProtocolDecoder getDecoder(IoSession session) throws Exception {
+		return decoder;
+	}
 
-    public ProtocolEncoder getEncoder() throws Exception {
+	public ProtocolEncoder getEncoder(IoSession session) throws Exception {
         return encoder;
     }
 }

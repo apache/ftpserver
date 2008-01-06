@@ -25,13 +25,12 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,37 +49,35 @@ class DELE extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state variables
         session.resetState(); 
-        FtpServerContext serverContext = connection.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "DELE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "DELE", null));
             return;  
         }
         
         // call Ftplet.onDeleteStart() method
-        Ftplet ftpletContainer = serverContext.getFtpletContainer();
+        Ftplet ftpletContainer = context.getFtpletContainer();
         FtpletEnum ftpletRet;
         try {
-            ftpletRet = ftpletContainer.onDeleteStart(session, request, out);
+            ftpletRet = ftpletContainer.onDeleteStart(session.getFtpletSession(), request);
         } catch(Exception e) {
             LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
         }
         if(ftpletRet == FtpletEnum.RET_SKIP) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName));
+        	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName));
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            serverContext.getConnectionManager().closeConnection(connection);
+            session.closeOnFlush();
             return;
         }
 
@@ -94,7 +91,7 @@ class DELE extends AbstractCommand {
             LOG.debug("Could not get file " + fileName, ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "DELE.invalid", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "DELE.invalid", fileName));
             return;
         }
 
@@ -102,13 +99,13 @@ class DELE extends AbstractCommand {
         fileName = file.getFullName();
 
         if( !file.hasDeletePermission() ) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE.permission", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE.permission", fileName));
             return;
         }
         
         // now delete
         if(file.delete()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "DELE", fileName)); 
+        	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "DELE", fileName)); 
             
             // log message
             String userName = session.getUser().getName();
@@ -116,24 +113,24 @@ class DELE extends AbstractCommand {
             LOG.info("File delete : " + userName + " - " + fileName);
             
             // notify statistics object
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-            ftpStat.setDelete(connection, file);
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
+            ftpStat.setDelete(session, file);
             
             // call Ftplet.onDeleteEnd() method
             try{
-                ftpletRet = ftpletContainer.onDeleteEnd(session, request, out);
+                ftpletRet = ftpletContainer.onDeleteEnd(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
 
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE", fileName));
         }
     }
 

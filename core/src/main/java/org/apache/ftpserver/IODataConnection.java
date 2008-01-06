@@ -30,8 +30,9 @@ import java.net.Socket;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.DataConnection;
+import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -43,11 +44,11 @@ import org.apache.ftpserver.util.IoUtils;
 public
 class IODataConnection implements DataConnection {
     
-    private FtpSessionImpl session;
+    private FtpIoSession session;
     private Socket socket;
     private ServerDataConnectionFactory factory;
     
-    public IODataConnection(Socket socket, FtpSessionImpl session, ServerDataConnectionFactory factory) {
+    public IODataConnection(Socket socket, FtpIoSession session, ServerDataConnectionFactory factory) {
         this.session = session;
         this.socket = socket;
         this.factory = factory;

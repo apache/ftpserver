@@ -24,14 +24,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -47,25 +47,24 @@ class SITE_WHO extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
         
         // only administrator can execute this
-        UserManager userManager = connection.getServerContext().getUserManager(); 
+        UserManager userManager = context.getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
-        List allCons = connection.getServerContext().getConnectionManager().getAllConnections();
+        List allCons = context.getConnectionManager().getAllConnections();
         
         sb.append('\n');
         for(Iterator conIt = allCons.iterator(); conIt.hasNext(); ) {
@@ -83,7 +82,7 @@ class SITE_WHO extends AbstractCommand {
             sb.append('\n');
         }
         sb.append('\n');
-        out.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
 
 }

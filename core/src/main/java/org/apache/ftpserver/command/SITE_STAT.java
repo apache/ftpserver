@@ -22,14 +22,13 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
@@ -42,24 +41,23 @@ class SITE_STAT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-            FtpRequest request,
-            FtpSessionImpl session, 
-            FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+            FtpServerContext context,
+            FtpRequest request) throws IOException, FtpException {
     
         // reset state variables
         session.resetState();
         
         // only administrator can execute this
-        UserManager userManager = connection.getServerContext().getUserManager(); 
+        UserManager userManager = context.getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         
         // get statistics information
-        FtpStatistics stat = connection.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         StringBuffer sb = new StringBuffer(256);
         sb.append('\n');
         sb.append("Start Time               : ").append( DateUtils.getISO8601Date(stat.getStartTime().getTime()) ).append('\n');
@@ -77,7 +75,7 @@ class SITE_STAT extends AbstractCommand {
         sb.append("Current Connections      : ").append( stat.getCurrentConnectionNumber() ).append('\n');
         sb.append("Total Connections        : ").append( stat.getTotalConnectionNumber() ).append('\n');
         sb.append('\n');
-        out.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
     
 }

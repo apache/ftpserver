@@ -21,13 +21,12 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +44,9 @@ class SIZE extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
@@ -56,7 +54,7 @@ class SIZE extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if(fileName == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SIZE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SIZE", null));
             return;  
         }
         
@@ -69,21 +67,21 @@ class SIZE extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
             return;
         }
         
         // print file size
         fileName = file.getFullName();
         if(!file.doesExist()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
         }
         else if(!file.isFile()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.invalid", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.invalid", fileName));
         }
         else {
             String fileLen = String.valueOf(file.getSize());             
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_213_FILE_STATUS, "SIZE", fileLen));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_213_FILE_STATUS, "SIZE", fileLen));
         }
     } 
 

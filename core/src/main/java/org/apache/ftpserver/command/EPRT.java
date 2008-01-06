@@ -24,12 +24,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +49,9 @@ class EPRT extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
@@ -61,14 +59,14 @@ class EPRT extends AbstractCommand {
         // argument check
         String arg = request.getArgument();
         if(arg == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT", null));
             return;  
         }
         
         // is port enabled
         DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
         if(!dataCfg.isActiveEnabled()) {
-            out.write(FtpReplyUtil.translate(session, 510, "EPRT.disabled", null));
+            session.write(FtpReplyUtil.translate(session, request, context, 510, "EPRT.disabled", null));
             return;
         }
         
@@ -83,7 +81,7 @@ class EPRT extends AbstractCommand {
         }
         catch(Exception ex) {
             LOG.debug("Exception parsing host and port: " + arg, ex);
-            out.write(FtpReplyUtil.translate(session, 510, "EPRT", null));
+            session.write(FtpReplyUtil.translate(session, request, context, 510, "EPRT", null));
             return;
         }
         
@@ -94,17 +92,19 @@ class EPRT extends AbstractCommand {
         }
         catch(UnknownHostException ex) {
             LOG.debug("Unknown host: " + host, ex);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "EPRT.host", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "EPRT.host", null));
             return;
         }
         
         // check IP
         if(dataCfg.isActiveIpCheck()) {
-            InetAddress clientAddr = session.getClientAddress();
-            if(!dataAddr.equals(clientAddr)) {
-                out.write(FtpReplyUtil.translate(session, 510, "EPRT.mismatch", null));
-                return;
-            }
+        	if(session.getRemoteAddress() instanceof InetSocketAddress) {
+	            InetAddress clientAddr = ((InetSocketAddress)session.getRemoteAddress()).getAddress();
+	            if(!dataAddr.equals(clientAddr)) {
+	                session.write(FtpReplyUtil.translate(session, request, context, 510, "EPRT.mismatch", null));
+	                return;
+	            }
+        	}
         }
         
         // get data server port
@@ -114,11 +114,11 @@ class EPRT extends AbstractCommand {
         }
         catch(NumberFormatException ex) {
             LOG.debug("Invalid port: " + port, ex);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "EPRT.invalid", null)); 
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE, "EPRT.invalid", null)); 
             return; 
         }
         
-        session.getServerDataConnection().initActiveDataConnection(new InetSocketAddress(dataAddr, dataPort));
-        out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "EPRT", null));
+        session.getDataConnection().initActiveDataConnection(new InetSocketAddress(dataAddr, dataPort));
+        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "EPRT", null));
     }
 }

@@ -21,11 +21,8 @@ package org.apache.ftpserver.interfaces;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
 
 /**
  * This interface encapsulates all the FTP commands. 
@@ -35,10 +32,11 @@ interface Command {
 
     /**
      * Execute command.
+     * @param session TODO
+     * @param context TODO
      */
-    void execute(Connection connection, 
-                 FtpRequest request,
-                 FtpSessionImpl session, 
-                 FtpReplyOutput out) throws IOException, FtpException;
+    void execute(FtpIoSession session, 
+                 FtpServerContext context,
+                 FtpRequest request) throws IOException, FtpException;
     
 }

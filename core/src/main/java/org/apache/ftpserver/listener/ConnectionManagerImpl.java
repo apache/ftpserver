@@ -252,13 +252,15 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
                 if(session == null) {
                     continue;
                 }
-                if(session.isTimeout(currTime)) {
+                /*
+                 * TODO replace with MINA idle handling
+                 * if(session.isTimeout(currTime)) {
                     inactiveCons.add(con);
                     continue;
                 }
                 
                 // idle data connection
-                ServerDataConnectionFactory dataCon = session.getServerDataConnection();
+                ServerDataConnectionFactory dataCon = session.getDataConnection();
                 if(dataCon == null) {
                     continue;
                 }
@@ -269,7 +271,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
                         LOG.info("Removing idle data connection for " + session.getUser());
                         dataCon.closeDataConnection();
                     }
-                }
+                }*/
             }
         }
 

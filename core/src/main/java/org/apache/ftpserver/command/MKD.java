@@ -22,17 +22,15 @@ package org.apache.ftpserver.command;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,27 +51,25 @@ class MKD extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state
         session.resetState(); 
-        FtpServerContext serverContext = connection.getServerContext();
         
         // argument check
         String fileName = request.getArgument();
         if(fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null));
             return;  	
         }
         
         // call Ftplet.onMkdirStart() method
-        Ftplet ftpletContainer = serverContext.getFtpletContainer();
+        Ftplet ftpletContainer = context.getFtpletContainer();
         FtpletEnum ftpletRet;
         try{
-            ftpletRet = ftpletContainer.onMkdirStart(session, request, out);
+            ftpletRet = ftpletContainer.onMkdirStart(session.getFtpletSession(), request);
         } catch(Exception e) {
             LOG.debug("Ftplet container threw exception", e);
             ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -82,7 +78,7 @@ class MKD extends AbstractCommand {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            serverContext.getConnectionManager().closeConnection(connection);
+            session.closeOnFlush();
             return;
         }
         
@@ -95,50 +91,50 @@ class MKD extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if(file == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.invalid", fileName));
             return;
         }
         
         // check permission
         fileName = file.getFullName();
         if( !file.hasWritePermission() ) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.permission", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.permission", fileName));
             return;
         }
         
         // check file existance
         if(file.doesExist()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.exists", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD.exists", fileName));
             return;
         }
         
         // now create directory
         if(file.mkdir()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
             
             // write log message
             String userName = session.getUser().getName();
             LOG.info("Directory create : " + userName + " - " + fileName);
             
             // notify statistics object
-            ServerFtpStatistics ftpStat = (ServerFtpStatistics)connection.getServerContext().getFtpStatistics();
-            ftpStat.setMkdir(connection, file);
+            ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
+            ftpStat.setMkdir(session, file);
             
             // call Ftplet.onMkdirEnd() method
             try{
-                ftpletRet = ftpletContainer.onMkdirEnd(session, request, out);
+                ftpletRet = ftpletContainer.onMkdirEnd(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
 
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName));
         }
     }
 }

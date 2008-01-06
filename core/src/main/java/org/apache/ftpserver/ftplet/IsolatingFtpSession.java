@@ -35,10 +35,6 @@ public class IsolatingFtpSession implements FtpSession {
         this.session = session;
     }
     
-    public void clear() {
-        session.clear();
-    }
-
     public Object getAttribute(String name) {
         return session.getAttribute(name);
     }
@@ -53,10 +49,6 @@ public class IsolatingFtpSession implements FtpSession {
 
     public Date getConnectionTime() {
         return session.getConnectionTime();
-    }
-
-    public FtpRequest getCurrentRequest() {
-        return session.getCurrentRequest();
     }
 
     public DataType getDataType() {

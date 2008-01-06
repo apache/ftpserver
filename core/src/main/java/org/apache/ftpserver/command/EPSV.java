@@ -23,12 +23,11 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.DataConnectionException;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
@@ -49,16 +48,15 @@ class EPSV extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException {
         
         // reset state variables
         session.resetState();
         
         // set data connection
-        ServerDataConnectionFactory dataCon = session.getServerDataConnection();
+        ServerDataConnectionFactory dataCon = session.getDataConnection();
         
         try {
             InetSocketAddress dataConAddress = dataCon.initPassiveDataConnection();
@@ -67,10 +65,10 @@ class EPSV extends AbstractCommand {
             
             // send connection info to client
             String portStr = "|||" + servPort + '|';
-            out.write(FtpReplyUtil.translate(session, 229, "EPSV", portStr));
+            session.write(FtpReplyUtil.translate(session, request, context, 229, "EPSV", portStr));
         
         } catch(DataConnectionException e) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "EPSV", null));
             return;   
         }
     }

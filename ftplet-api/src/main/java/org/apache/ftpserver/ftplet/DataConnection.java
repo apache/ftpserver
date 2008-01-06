@@ -48,5 +48,5 @@ public interface DataConnection {
      * @throws IOException
      */
     void transferToClient(String str) throws IOException;
-
+    
 }

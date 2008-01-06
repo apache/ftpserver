@@ -20,257 +20,121 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
-import java.util.HashMap;
 
+import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.DataConnectionFactory;
-import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.FtpServerSession;
-import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 
 /**
  * FTP session
  */
-public class FtpSessionImpl implements FtpServerSession {
+public class FtpSessionImpl implements FtpSession {
 
-    
-    /**
-     * Contains user name between USER and PASS commands
-     */
-    private String userArgument;
-    private User user;
-    private HashMap attributeMap;
-    private InetAddress remoteAddr;
-    private InetAddress serverAddr;
-    private int serverPort;
-    private String language;
-    private Certificate[] clientCertificates;
-    
-    private int maxIdleTime = 0;
-    private long connectionTime = 0L;
-    private long loginTime = 0L;
-    private long lastAccessTime = 0L;
-    
-    private IODataConnectionFactory dataConnection;
-    private FileSystemView fileSystemView;
-    
-    private FileObject renameFrom;
-    private long fileOffset;
-    private FtpRequest request;
-    
-    private DataType dataType    = DataType.ASCII;
-    private Structure structure  = Structure.FILE;
-    private FtpServerContext serverContext;
-    private Listener listener;
-    private int failedLogins;
-    
-    public Listener getListener() {
-        return listener;
-    }
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
+	private FtpIoSession ioSession;
+	
     /**
      * Default constructor.
      */
-    public FtpSessionImpl(FtpServerContext serverContext) {
-        this.serverContext = serverContext;
-        attributeMap = new HashMap();
-        userArgument = null;
-        user = null;
-        connectionTime = System.currentTimeMillis();
+    public FtpSessionImpl(FtpIoSession ioSession) {
+        this.ioSession = ioSession;
     } 
-    
-    /**
-     * Set client address.
-     */
-    public void setClientAddress(InetAddress addr) {
-        remoteAddr = addr;
-    }
-
-    /**
-     * Set FTP data connection.
-     */
-    public void setFtpDataConnection(IODataConnectionFactory dataCon) {
-        dataConnection = dataCon;
-    }
-    
-    /**
-     * Reset temporary state variables.
-     */
-    public void resetState() {
-        renameFrom = null;
-        fileOffset = 0L;
-    }
-    
-    /**
-     * Reinitialize request.
-     */
-    public void reinitialize() {
-        userArgument = null;
-        user = null;
-        loginTime = 0L;
-        fileSystemView = null;
-        renameFrom = null;
-        fileOffset = 0L;
-    }
-
-    
-    /**
-     * Set login attribute & user file system view.
-     */
-    public void setLogin(FileSystemView userFsView) {
-        loginTime = System.currentTimeMillis();
-        fileSystemView = userFsView;
-    }
-    
-    /**
-     * Set logout.
-     */
-    public void setLogout() {
-        loginTime = 0L;
-    }
-    
-    /**
-     * Update last access time.
-     */
-    public void updateLastAccessTime() {
-        lastAccessTime = System.currentTimeMillis();
-    }
     
     /**
      * Is logged-in
      */
     public boolean isLoggedIn() {
-        return (loginTime != 0L);
+        return ioSession.isLoggedIn();
     }
     
     /**
      * Get FTP data connection.
      */
     public DataConnectionFactory getDataConnection() {
-        return dataConnection;
+        return ioSession.getDataConnection();
     }
 
-    /**
-     * Get FTP data connection.
-     */
-    public ServerDataConnectionFactory getServerDataConnection() {
-        return dataConnection;
-    }
-    
     /**
      * Get file system view.
      */
     public FileSystemView getFileSystemView() {
-        return fileSystemView;
+        return ioSession.getFileSystemView();
     }
     
     /**
      * Get connection time.
      */
     public Date getConnectionTime() {
-        return new Date(connectionTime);
+        return new Date(ioSession.getCreationTime());
     }
     
     /**
      * Get the login time.
      */
     public Date getLoginTime() {
-        return new Date(loginTime);
+        return ioSession.getLoginTime();
     }
     
     /**
      * Get last access time.
      */
     public Date getLastAccessTime() {
-        return new Date(lastAccessTime);
+        return ioSession.getLastAccessTime();
     }
     
     /**
      * Get file offset.
      */
     public long getFileOffset() {
-        return fileOffset;
-    }
-    
-    /**
-     * Set the file offset.
-     */
-    public void setFileOffset(long offset) {
-        fileOffset = offset;
+        return ioSession.getFileOffset();
     }
     
     /**
      * Get rename from file object.
      */
     public FileObject getRenameFrom() {
-        return renameFrom;
+        return ioSession.getRenameFrom();
     }
     
-    /**
-     * Set rename from.
-     */
-    public void setRenameFrom(FileObject file) {
-        renameFrom = file;
-    }
-
     /**
      * Returns user name entered in USER command
      * 
      * @return user name entered in USER command
      */
     public String getUserArgument() {
-        return userArgument;
+        return ioSession.getUserArgument();
     }
 
-    /**
-     * Set user name entered from USER command
-     */
-    public void setUserArgument(String tmpUserName) {
-        this.userArgument = tmpUserName;
-    }
-
-    
     /**
      * Get language.
      */
     public String getLanguage() {
-        return language;
-    }
-    
-    /**
-     * Set language.
-     */
-    public void setLanguage(String language) {
-        this.language = language;
+        return ioSession.getLanguage();
     }
     
     /**
      * Get user.
      */
     public User getUser() {
-        return user;
-    }
-    
-    public void setUser(User user) {
-	this.user = user;
+        return ioSession.getUser();
     }
     
     /**
      * Get remote address
      */
     public InetAddress getClientAddress() {
-        return remoteAddr;
+        if(ioSession.getRemoteAddress() instanceof InetSocketAddress) {
+        	return ((InetSocketAddress)ioSession.getRemoteAddress()).getAddress();
+        } else {
+        	return null;
+        }
     }
     
 
@@ -279,130 +143,75 @@ public class FtpSessionImpl implements FtpServerSession {
      * Get attribute
      */
     public Object getAttribute(String name) {
-        return attributeMap.get(name);
+    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+    		throw new IllegalArgumentException("Illegal lookup of internal attribute");
+    	}
+    	
+        return ioSession.getAttribute(name);
     }
     
     /**
      * Set attribute.
      */
     public void setAttribute(String name, Object value) {
-        attributeMap.put(name, value);
-    }
-    
-    /**
-     * Remove attribute.
-     */
-    public void removeAttribute(String name) {
-        attributeMap.remove(name);
-    }
-    
-    /**
-     * Remove all attributes.
-     */
-    public void clear() {
-        attributeMap.clear();
-    }
-    
-    /**
-     * It checks the request timeout.
-     * Compares the last access time with the specified time.
-     */
-    public boolean isTimeout(long currTime) {
-         boolean bActive = true;
-         int maxIdleTime = getMaxIdleTime();
-         if(maxIdleTime > 0) {
-             long currIdleTimeMillis = currTime - lastAccessTime;
-             long maxIdleTimeMillis = maxIdleTime * 1000L;
-             bActive = currIdleTimeMillis <= maxIdleTimeMillis;
-         }
-         return !bActive;
-    }
+    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+    		throw new IllegalArgumentException("Illegal setting of internal attribute");
+    	}
 
-    /**
-     * Check request timeout.
-     */
-    public boolean isTimeout() {
-        return isTimeout(System.currentTimeMillis());
+    	setAttribute(name, value);
     }
-
+    
     public int getMaxIdleTime() {
-        return this.maxIdleTime;
+        return ioSession.getMaxIdleTime();
     }
 
-    public void setMaxIdleTime(int maxIdleTimeSec) {
-        this.maxIdleTime = maxIdleTimeSec;
+    public void setMaxIdleTime(int maxIdleTime) {
+        ioSession.setMaxIdleTime(maxIdleTime);
     }
 
-    public FtpRequest getCurrentRequest() {
-        return request;
-    }
-    
-    public void setCurrentRequest(FtpRequest request) {
-        this.request = request;
-    }
-    
-    
     /**
      * Get the data type.
      */
     public DataType getDataType() {
-        return dataType;
+        return ioSession.getDataType();
     }
     
-    /**
-     * Set the data type.
-     */
-    public void setDataType(DataType type) {
-        dataType = type;
-    }
-
     /**
      * Get structure.
      */
     public Structure getStructure() {
-        return structure;
-    }
-    
-    /**
-     * Set structure
-     */
-    public void setStructure(Structure stru) {
-        structure = stru;
+        return ioSession.getStructure();
     }
     
     public Certificate[] getClientCertificates() {
-        return clientCertificates;
+        return ioSession.getClientCertificates();
     }
     
-    public void setClientCertificates(Certificate[] certificates) {
-        this.clientCertificates = certificates;
-    }
-
     public InetAddress getServerAddress() {
-        return serverAddr;
-    }
-
-    public void setServerAddress(InetAddress adress) {
-        this.serverAddr = adress;
-    }
-
-    public FtpServerContext getServerContext() {
-        return serverContext;
+        if(ioSession.getLocalAddress() instanceof InetSocketAddress) {
+        	return ((InetSocketAddress)ioSession.getLocalAddress()).getAddress();
+        } else {
+        	return null;
+        }
     }
 
     public int getServerPort() {
-        return serverPort;
-    }
-
-    public void setServerPort(int serverPort) {
-        this.serverPort = serverPort;
+        if(ioSession.getLocalAddress() instanceof InetSocketAddress) {
+        	return ((InetSocketAddress)ioSession.getLocalAddress()).getPort();
+        } else {
+        	return 0;
+        }
     }
 
     public int getFailedLogins() {
-        return failedLogins;
+        return ioSession.getFailedLogins();
     }
 
-    public void increaseFailedLogins() {
-        this.failedLogins++;
-    }
+	public void removeAttribute(String name) {
+    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+    		throw new IllegalArgumentException("Illegal removal of internal attribute");
+    	}
+		
+		removeAttribute(name);
+	}
 }

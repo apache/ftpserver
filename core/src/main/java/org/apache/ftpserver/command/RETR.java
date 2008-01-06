@@ -34,10 +34,10 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Connection;
@@ -62,29 +62,27 @@ class RETR extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection,
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         try {
         
             // get state variable
             long skipLen = session.getFileOffset();
-            FtpServerContext serverContext = connection.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
             if(fileName == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RETR", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RETR", null));
                 return;  
             }
     
             // call Ftplet.onDownloadStart() method
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
+            Ftplet ftpletContainer = context.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onDownloadStart(session, request, out);
+                ftpletRet = ftpletContainer.onDownloadStart(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -93,7 +91,7 @@ class RETR extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
             
@@ -106,26 +104,26 @@ class RETR extends AbstractCommand {
                 LOG.debug("Exception getting file object", ex);
             }
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.missing", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.missing", fileName));
                 return;
             }
             fileName = file.getFullName();
             
             // check file existance
             if(!file.doesExist()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.missing", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.missing", fileName));
                 return;
             }
             
             // check valid file
             if(!file.isFile()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.invalid", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.invalid", fileName));
                 return;
             }
             
             // check permission
             if(!file.hasReadPermission()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.permission", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "RETR.permission", fileName));
                 return;
             }
 
@@ -134,13 +132,13 @@ class RETR extends AbstractCommand {
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
                 if (address == null) {
-                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                    session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "RETR", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_150_FILE_STATUS_OKAY, "RETR", null));
 
             
             // send file data to client
@@ -152,14 +150,14 @@ class RETR extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "RETR", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "RETR", null));
                 return;
             }
             
             try {
                 
                 // open streams
-                is = openInputStream(connection, session, file, skipLen);
+                is = openInputStream(session, file, skipLen);
                 
                 // transfer data
                 long transSz = dataConnection.transferToClient(is);
@@ -169,20 +167,20 @@ class RETR extends AbstractCommand {
                 LOG.info("File download : " + userName + " - " + fileName);
                 
                 // notify the statistics component
-                ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
+                ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
                 if(ftpStat != null)  {
-                    ftpStat.setDownload(connection, file, transSz);
+                    ftpStat.setDownload(session, file, transSz);
                 }
             }
             catch(SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "RETR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "RETR", fileName));
             }
             catch(IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "RETR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "RETR", fileName));
             }
             finally {
                 IoUtils.close(is);
@@ -190,17 +188,17 @@ class RETR extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "RETR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "RETR", fileName));
                 
                 // call Ftplet.onDownloadEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onDownloadEnd(session, request, out);
+                    ftpletRet = ftpletContainer.onDownloadEnd(session.getFtpletSession(), request);
                 } catch(Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(connection);
+                    session.closeOnFlush();
                     return;
                 }
 
@@ -215,8 +213,7 @@ class RETR extends AbstractCommand {
     /**
      * Skip length and open input stream.
      */
-    public InputStream openInputStream(Connection connection,
-                                       FtpSessionImpl session, 
+    public InputStream openInputStream(FtpIoSession session, 
                                        FileObject file, 
                                        long skipLen) throws IOException {
         InputStream in;

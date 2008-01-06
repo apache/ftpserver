@@ -20,12 +20,16 @@
 package org.apache.ftpserver.util;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.FtpServerSession;
 import org.apache.ftpserver.interfaces.MessageResource;
 
@@ -64,14 +68,14 @@ public class FtpReplyUtil  {
     public static final String STAT_LOGIN_TOTAL = "stat.login.total";
     public static final String STAT_START_TIME = "stat.start.time";
     
-    public static FtpReply translate(FtpServerSession session, int code, String subId, String basicMsg) {
-        String msg = translateMessage(session, code, subId, basicMsg);
+    public static FtpReply translate(FtpIoSession session, FtpRequest request, FtpServerContext context, int code, String subId, String basicMsg) {
+        String msg = translateMessage(session, request, context, code, subId, basicMsg);
         
         return new DefaultFtpReply(code, msg);
     }
     
-    private static String translateMessage(FtpServerSession session, int code, String subId, String basicMsg) {
-        MessageResource resource = session.getServerContext().getMessageResource();
+    private static String translateMessage(FtpIoSession session, FtpRequest request, FtpServerContext context, int code, String subId, String basicMsg) {
+        MessageResource resource = context.getMessageResource();
         String lang = session.getLanguage();
         
         String msg = null;
@@ -81,7 +85,7 @@ public class FtpReplyUtil  {
         if(msg == null) {
             msg = "";
         }
-        msg = replaceVariables(session, code, basicMsg, msg);
+        msg = replaceVariables(session, request, context, code, basicMsg, msg);
         
         return msg;
     }
@@ -89,7 +93,7 @@ public class FtpReplyUtil  {
     /**
      * Replace server variables.
      */
-    private static String replaceVariables(FtpServerSession session, int code, String basicMsg, String str) {
+    private static String replaceVariables(FtpIoSession session, FtpRequest request, FtpServerContext context, int code, String basicMsg, String str) {
         
         int startIndex = 0;
         int openIndex = str.indexOf('{', startIndex);
@@ -106,7 +110,7 @@ public class FtpReplyUtil  {
         sb.append(str.substring(startIndex, openIndex));
         while(true) {
             String varName = str.substring(openIndex+1, closeIndex);
-            sb.append( getVariableValue(session, code, basicMsg, varName) );
+            sb.append( getVariableValue(session, request, context, code, basicMsg, varName) );
             
             startIndex = closeIndex + 1;
             openIndex = str.indexOf('{', startIndex);
@@ -128,7 +132,7 @@ public class FtpReplyUtil  {
     /**
      * Get the variable value.
      */
-    private static String getVariableValue(FtpServerSession session, int code, String basicMsg, String varName) {
+    private static String getVariableValue(FtpIoSession session, FtpRequest request, FtpServerContext context, int code, String basicMsg, String varName) {
         
         String varVal = null;
         
@@ -144,12 +148,12 @@ public class FtpReplyUtil  {
         
         // all request variables
         else if(varName.startsWith("request.")) {
-            varVal = getRequestVariableValue(session, varName);
+            varVal = getRequestVariableValue(session, request, varName);
         }
         
         // all statistical variables
         else if(varName.startsWith("stat.")) {
-            varVal = getStatisticalVariableValue(session, varName);
+            varVal = getStatisticalVariableValue(session, context, varName);
         }
                 
         // all client variables
@@ -166,23 +170,29 @@ public class FtpReplyUtil  {
     /**
      * Get client variable value.
      */
-    private static String getClientVariableValue(FtpServerSession session, String varName) {
+    private static String getClientVariableValue(FtpIoSession session, String varName) {
         
         String varVal = null;
         
         // client ip
         if(varName.equals(CLIENT_IP)) {
-            varVal = session.getClientAddress().getHostAddress();
+        	if(session.getRemoteAddress() instanceof InetSocketAddress) {
+        		InetSocketAddress remoteSocketAddress = (InetSocketAddress) session.getRemoteAddress();
+        		varVal = remoteSocketAddress.getAddress().getHostAddress();
+        	}
+        	
         }
         
         // client connection time
         else if(varName.equals(CLIENT_CON_TIME)) {
-            varVal = DateUtils.getISO8601Date(session.getConnectionTime().getTime());
+            varVal = DateUtils.getISO8601Date(session.getCreationTime());
         }
         
         // client login name
         else if(varName.equals(CLIENT_LOGIN_NAME)) {
-            varVal = session.getUserArgument();
+            if(session.getUser() != null) {
+            	varVal = session.getUser().getName();
+            }
         }
         
         // client login time
@@ -218,7 +228,7 @@ public class FtpReplyUtil  {
     /**
      * Get output variable value.
      */
-    private static String getOutputVariableValue(FtpServerSession session, int code, String basicMsg, String varName) {
+    private static String getOutputVariableValue(FtpIoSession session, int code, String basicMsg, String varName) {
         String varVal = null;
         
         // output code
@@ -237,11 +247,9 @@ public class FtpReplyUtil  {
     /**
      * Get request variable value.
      */
-    private static String getRequestVariableValue(FtpServerSession session, String varName) {
+    private static String getRequestVariableValue(FtpIoSession session, FtpRequest request, String varName) {
         
         String varVal = null;
-        
-        FtpRequest request = session.getCurrentRequest();
         
         if(request == null) {
             return "";
@@ -268,22 +276,28 @@ public class FtpReplyUtil  {
     /**
      * Get server variable value.
      */
-    private static String getServerVariableValue(FtpServerSession session, String varName) {
+    private static String getServerVariableValue(FtpIoSession session, String varName) {
         
         String varVal = null;
-        
-        // server address
-        if(varName.equals(SERVER_IP)) {
-            InetAddress addr = session.getServerAddress();;
 
-            if(addr != null) {
-                varVal = addr.getHostAddress();
-            }
-        }
+        SocketAddress localSocketAddress = session.getLocalAddress();
         
-        // server port
-        else if(varName.equals(SERVER_PORT)) {
-            varVal = String.valueOf(session.getServerPort());
+        if(localSocketAddress instanceof InetSocketAddress) {
+        	InetSocketAddress localInetSocketAddress = (InetSocketAddress) localSocketAddress;
+        	// server address
+        	if(varName.equals(SERVER_IP)) {
+        		
+        		InetAddress addr = localInetSocketAddress.getAddress();
+        			
+        			if(addr != null) {
+        				varVal = addr.getHostAddress();
+        			}
+        	}
+        	
+        	// server port
+        	else if(varName.equals(SERVER_PORT)) {
+        		varVal = String.valueOf(localInetSocketAddress.getPort());
+        	}
         }
         
         return varVal;
@@ -292,9 +306,9 @@ public class FtpReplyUtil  {
     /**
      * Get statistical connection variable value.
      */
-    private static String getStatisticalConnectionVariableValue(FtpServerSession session, String varName) {
+    private static String getStatisticalConnectionVariableValue(FtpIoSession session, FtpServerContext context, String varName) {
         String varVal = null;
-        FtpStatistics stat = session.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         
         // total connection number
         if(varName.equals(STAT_CON_TOTAL)) {
@@ -312,9 +326,9 @@ public class FtpReplyUtil  {
     /**
      * Get statistical directory variable value.
      */
-    private static String getStatisticalDirectoryVariableValue(FtpServerSession session, String varName) {
+    private static String getStatisticalDirectoryVariableValue(FtpIoSession session, FtpServerContext context, String varName) {
         String varVal = null;
-        FtpStatistics stat = session.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         
         // total directory created
         if(varName.equals(STAT_DIR_CREATE_COUNT)) {
@@ -332,9 +346,9 @@ public class FtpReplyUtil  {
     /**
      * Get statistical file variable value.
      */
-    private static String getStatisticalFileVariableValue(FtpServerSession session, String varName) {
+    private static String getStatisticalFileVariableValue(FtpIoSession session, FtpServerContext context, String varName) {
         String varVal = null;
-        FtpStatistics stat = session.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         
         // total number of file upload
         if(varName.equals(STAT_FILE_UPLOAD_COUNT)) {
@@ -367,9 +381,9 @@ public class FtpReplyUtil  {
     /**
      * Get statistical login variable value.
      */
-    private static String getStatisticalLoginVariableValue(FtpServerSession session, String varName) {
+    private static String getStatisticalLoginVariableValue(FtpIoSession session, FtpServerContext context, String varName) {
         String varVal = null;
-        FtpStatistics stat = session.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         
         // total login number
         if(varName.equals(STAT_LOGIN_TOTAL)) {
@@ -397,10 +411,10 @@ public class FtpReplyUtil  {
     /**
      * Get statistical variable value. 
      */
-    private static String getStatisticalVariableValue(FtpServerSession session, String varName) {
+    private static String getStatisticalVariableValue(FtpIoSession session, FtpServerContext context, String varName) {
     
         String varVal = null;
-        FtpStatistics stat = session.getServerContext().getFtpStatistics();
+        FtpStatistics stat = context.getFtpStatistics();
         
         // server start time
         if(varName.equals(STAT_START_TIME)) {
@@ -409,22 +423,22 @@ public class FtpReplyUtil  {
         
         // connection statistical variables
         else if(varName.startsWith("stat.con")) {
-            varVal = getStatisticalConnectionVariableValue(session, varName);
+            varVal = getStatisticalConnectionVariableValue(session, context, varName);
         }
         
         // login statistical variables
         else if(varName.startsWith("stat.login.")) {
-            varVal = getStatisticalLoginVariableValue(session, varName);
+            varVal = getStatisticalLoginVariableValue(session, context, varName);
         }
         
         // file statistical variable
         else if(varName.startsWith("stat.file")) {
-            varVal = getStatisticalFileVariableValue(session, varName);
+            varVal = getStatisticalFileVariableValue(session, context, varName);
         }
         
         // directory statistical variable
         else if(varName.startsWith("stat.dir.")) {
-            varVal = getStatisticalDirectoryVariableValue(session, varName);
+            varVal = getStatisticalDirectoryVariableValue(session, context, varName);
         }
         
         return varVal;

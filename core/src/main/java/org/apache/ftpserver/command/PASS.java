@@ -20,23 +20,22 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UserMetadata;
@@ -60,16 +59,14 @@ class PASS extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
     
         boolean success = false;
-        FtpServerContext serverContext = connection.getServerContext();
         
-        ConnectionManager conManager = serverContext.getConnectionManager();
-        ServerFtpStatistics stat = (ServerFtpStatistics)serverContext.getFtpStatistics();
+        ConnectionManager conManager = context.getConnectionManager();
+        ServerFtpStatistics stat = (ServerFtpStatistics)context.getFtpStatistics();
         try {
             
             // reset state variables
@@ -78,7 +75,7 @@ class PASS extends AbstractCommand {
             // argument check
             String password = request.getArgument();
             if(password == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PASS", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PASS", null));
                 return; 
             }
             
@@ -86,13 +83,13 @@ class PASS extends AbstractCommand {
             String userName = session.getUserArgument();
 
             if(userName == null && session.getUser() == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PASS", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PASS", null));
                 return;
             }
             
             // already logged-in
             if(session.isLoggedIn()) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS", null));
                 return;
             }
             
@@ -103,7 +100,7 @@ class PASS extends AbstractCommand {
 	            int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
 	            int maxAnonLogin = conManager.getMaxAnonymousLogins();
 	            if( currAnonLogin >= maxAnonLogin ) {
-	                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
+	                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
 	                return;
 	            }
             }
@@ -112,16 +109,19 @@ class PASS extends AbstractCommand {
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = conManager.getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.login", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.login", null));
                 return;
             }
             
             // authenticate user
-            UserManager userManager = serverContext.getUserManager();
+            UserManager userManager = context.getUserManager();
             User authenticatedUser = null;
             try {
                 UserMetadata userMetadata = new UserMetadata();
-                userMetadata.setInetAddress(session.getClientAddress());
+                
+                if(session.getRemoteAddress() instanceof InetSocketAddress) {
+                	userMetadata.setInetAddress(((InetSocketAddress)session.getRemoteAddress()).getAddress());
+                }
                 userMetadata.setCertificateChain(session.getClientCertificates());
                 
                 Authentication auth;
@@ -159,17 +159,17 @@ class PASS extends AbstractCommand {
             }
             
             // call Ftplet.onLogin() method
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
+            Ftplet ftpletContainer = context.getFtpletContainer();
             if(ftpletContainer != null) {
                 FtpletEnum ftpletRet;
                 try{
-                    ftpletRet = ftpletContainer.onLogin(session, request, out);
+                    ftpletRet = ftpletContainer.onLogin(session.getFtpletSession(), request);
                 } catch(Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(connection);
+                    session.closeOnFlush();
                     return;
                 } else if(ftpletRet == FtpletEnum.RET_SKIP) {
                     success = false;
@@ -185,8 +185,8 @@ class PASS extends AbstractCommand {
                 delayAfterLoginFailure(conManager);
                 
                 LOG.warn("Login failure - " + userName);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
-                stat.setLoginFail(connection);
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
+                stat.setLoginFail(session);
 
                 session.increaseFailedLogins();
 
@@ -194,20 +194,20 @@ class PASS extends AbstractCommand {
                 int maxAllowedLoginFailues = conManager.getMaxLoginFailures(); 
                 if(maxAllowedLoginFailues != 0 && 
                         session.getFailedLogins() >= maxAllowedLoginFailues) {
-                    connection.close();
+                    session.closeOnFlush();
                 }
                 
                 return;
             }
             
             // update different objects
-            FileSystemManager fmanager = serverContext.getFileSystemManager(); 
+            FileSystemManager fmanager = context.getFileSystemManager(); 
             FileSystemView fsview = fmanager.createFileSystemView(authenticatedUser);
             session.setLogin(fsview);
-            stat.setLogin(connection);
+            stat.setLogin(session);
 
             // everything is fine - send login ok message
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_230_USER_LOGGED_IN, "PASS", userName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_230_USER_LOGGED_IN, "PASS", userName));
             if(anonymous) {
                 LOG.info("Anonymous login success - " + password);
             }

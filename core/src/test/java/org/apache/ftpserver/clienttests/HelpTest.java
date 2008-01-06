@@ -33,6 +33,17 @@ public class HelpTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
+    /*public void testHelpMulti() throws Exception {
+    	client.quit();
+    	
+    	for(int i = 0; i<1000000; i++) {
+    		client.connect("localhost", port);
+	    	client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+	    	client.help();
+	    	client.quit();
+    	}
+    }*/
+    
     public void testHelp() throws Exception {
         assertEquals(214, client.help());
         assertTrue(client.getReplyString().indexOf("The following commands are implemented") > -1);

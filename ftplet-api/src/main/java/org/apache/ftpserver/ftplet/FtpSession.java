@@ -35,13 +35,6 @@ public
 interface FtpSession {
 
     /**
-     * Receive the current ongoing {@link FtpRequest}. If no request
-     * is currently active, this method will return null.
-     * @return The active {@link FtpRequest} or null.
-     */
-    FtpRequest getCurrentRequest();
-    
-    /**
      * Returns the IP address of the client that sent the request.
      */
     InetAddress getClientAddress();
@@ -154,9 +147,4 @@ interface FtpSession {
      * Removes an attribute from this request.
      */
     void removeAttribute(String name);
-    
-    /**
-     * Clear all attributes
-     */
-    void clear();
 }

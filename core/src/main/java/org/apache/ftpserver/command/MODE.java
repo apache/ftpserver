@@ -21,11 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
@@ -41,17 +40,16 @@ class MODE extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection,
-                       FtpRequest request,
-                       FtpSessionImpl session, 
-                       FtpReplyOutput out) throws IOException {
+    public void execute(FtpIoSession session,
+                       FtpServerContext context,
+                       FtpRequest request) throws IOException {
         
         // reset state
         session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MODE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MODE", null));
             return;  
         }
         
@@ -59,15 +57,15 @@ class MODE extends AbstractCommand {
         char md = request.getArgument().charAt(0);
         md = Character.toUpperCase(md);
         if(md == 'S') {
-            session.getServerDataConnection().setZipMode(false);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "S"));
+            session.getDataConnection().setZipMode(false);
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "S"));
         }
         else if(md == 'Z') {
-            session.getServerDataConnection().setZipMode(true);
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "Z"));
+            session.getDataConnection().setZipMode(true);
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "Z"));
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MODE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MODE", null));
         }
     }
 }

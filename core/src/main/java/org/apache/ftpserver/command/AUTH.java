@@ -20,14 +20,17 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.Connection;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.Ssl;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.apache.mina.filter.ssl.SslFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,23 +45,22 @@ class AUTH extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(Connection connection,
-                        FtpRequest request, 
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session,
+                        FtpServerContext context, 
+                        FtpRequest request) throws IOException, FtpException {
         
         // reset state variables
         session.resetState();
         
         // argument check
         if(!request.hasArgument()) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
             return;  
         }
         
         // check SSL configuration
         if(session.getListener().getSsl() == null) {
-            out.write(FtpReplyUtil.translate(session, 431, "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context, 431, "AUTH", null));
             return;
         }
         
@@ -66,9 +68,8 @@ class AUTH extends AbstractCommand {
         String authType = request.getArgument().toUpperCase();
         if(authType.equals("SSL")) {
             try {
-                connection.beforeSecureControlChannel(session, "SSL");
-                out.write(FtpReplyUtil.translate(session, 234, "AUTH.SSL", null));
-                connection.afterSecureControlChannel(session, "SSL");
+                secureSession(session, "SSL");
+                session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.SSL", null));
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {
@@ -78,9 +79,8 @@ class AUTH extends AbstractCommand {
         }
         else if(authType.equals("TLS")) {
             try {
-                connection.beforeSecureControlChannel(session, "TLS");
-                out.write(FtpReplyUtil.translate(session, 234, "AUTH.TLS", null));
-                connection.afterSecureControlChannel(session, "TLS");
+                secureSession(session, "TLS");
+                session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.TLS", null));
             } catch(FtpException ex) {
                 throw ex;
             } catch(Exception ex) {
@@ -89,7 +89,30 @@ class AUTH extends AbstractCommand {
             }
         }
         else {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null));
+        }
+    }
+    
+    private void secureSession(FtpIoSession session, String type) throws GeneralSecurityException, FtpException {
+        Ssl ssl = session.getListener().getSsl();
+        
+        if(ssl != null) {
+            session.setAttribute(SslFilter.DISABLE_ENCRYPTION_ONCE);
+            
+            SslFilter sslFilter = new SslFilter( ssl.getSSLContext() );
+            if(ssl.getClientAuth() == ClientAuth.NEED) {
+                sslFilter.setNeedClientAuth(true);
+            } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+                sslFilter.setWantClientAuth(true);
+            }
+            
+            if(ssl.getEnabledCipherSuites() != null) {
+                sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+            }
+            session.getFilterChain().addFirst("sslSessionFilter", sslFilter);
+
+        } else {
+            throw new FtpException("Socket factory SSL not configured");
         }
     }
 }

@@ -20,6 +20,7 @@
 package org.apache.ftpserver;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -29,9 +30,9 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FileObserver;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.StatisticsObserver;
-import org.apache.ftpserver.listener.Connection;
 
 /**
  * This is ftp statistice implementation.
@@ -67,7 +68,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
      *The user login information. The structure of the hashtable: 
      * userLoginTable {user.getName ==> Hashtable {IP_address String ==> Login_Number}}
      */
-    Hashtable userLoginTable = new Hashtable();
+    Hashtable<String, Hashtable<String, Integer>> userLoginTable = new Hashtable<String, Hashtable<String, Integer>>();
     
     public static final String LOGIN_NUMBER = "login_number";
     
@@ -209,7 +210,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
      * Get the login number for the specific user
      */
     public int getCurrentUserLoginNumber(User user) {
-      Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+      Hashtable<String, Integer> statisticsTable = userLoginTable.get(user.getName());
       if(statisticsTable == null){//not found the login user's statistics info
         return 0;
       } else{
@@ -228,7 +229,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
      * @param ipAddress the ip address of the remote user
      */
     public int getCurrentUserLoginNumber(User user, InetAddress ipAddress) {
-      Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+      Hashtable<String, Integer> statisticsTable = userLoginTable.get(user.getName());
       if(statisticsTable == null){//not found the login user's statistics info
         return 0;
       } else{
@@ -247,140 +248,155 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     /**
      * Increment upload count.
      */
-    public void setUpload(Connection connection, FileObject file, long size) {
+    public void setUpload(FtpIoSession session, FileObject file, long size) {
         ++uploadCount;
         bytesUpload += size;
-        notifyUpload(connection, file, size);
+        notifyUpload(session, file, size);
     }
      
     /**
      * Increment download count.
      */
-    public void setDownload(Connection connection, FileObject file, long size) {
+    public void setDownload(FtpIoSession session, FileObject file, long size) {
         ++downloadCount;
         bytesDownload += size;
-        notifyDownload(connection, file, size);
+        notifyDownload(session, file, size);
     }
      
     /**
      * Increment delete count.
      */
-    public void setDelete(Connection connection, FileObject file) {
+    public void setDelete(FtpIoSession session, FileObject file) {
         ++deleteCount;
-        notifyDelete(connection, file);
+        notifyDelete(session, file);
     }
      
     /**
      * Increment make directory count.
      */
-    public void setMkdir(Connection connection, FileObject file) {
+    public void setMkdir(FtpIoSession session, FileObject file) {
         ++mkdirCount;
-        notifyMkdir(connection, file);
+        notifyMkdir(session, file);
     }
     
     /**
      * Increment remove directory count.
      */
-    public void setRmdir(Connection connection, FileObject file) {
+    public void setRmdir(FtpIoSession session, FileObject file) {
         ++rmdirCount;
-        notifyRmdir(connection, file);
+        notifyRmdir(session, file);
     }
     
     /**
      * Increment open connection count.
      */
-    public void setOpenConnection(Connection connection) {
+    public void setOpenConnection(FtpIoSession session) {
         ++currConnections;
         ++totalConnections;
-        notifyOpenConnection(connection);
+        notifyOpenConnection(session);
     }
     
     /**
      * Decrement open connection count.
      */
-    public void setCloseConnection(Connection connection) {
+    public void setCloseConnection(FtpIoSession session) {
         if(currConnections > 0) {
             --currConnections;
         }
-        notifyCloseConnection(connection);
+        notifyCloseConnection(session);
     }
     
     /**
      * New login.
      */
-    public void setLogin(Connection connection) {
+    public void setLogin(FtpIoSession session) {
         ++currLogins;
         ++totalLogins;
-        User user = connection.getSession().getUser();
+        User user = session.getUser();
         if( "anonymous".equals(user.getName()) ) {
             ++currAnonLogins;
             ++totalAnonLogins;
         }
         
         synchronized(user){//thread safety is needed. Since the login occurrs at low frequency, this overhead is endurable
-          Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
+          Hashtable<String, Integer> statisticsTable = userLoginTable.get(user.getName());
           if(statisticsTable == null){
             //the hash table that records the login information of the user and its ip address.
             //structure: IP_Address String ==> login_number
-            statisticsTable = new Hashtable();
+            statisticsTable = new Hashtable<String, Integer>();
             userLoginTable.put(user.getName(), statisticsTable);
             //new login, put 1 in the login number
             statisticsTable.put(LOGIN_NUMBER, new Integer(1));
-            statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(1));
-          } else{
-            Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
-            statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() + 1));
-            Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getSession().getClientAddress().getHostAddress());
-            
-            if(loginNumberPerIP == null) {
-                //new connection from this ip
-              statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(1));
-            } else{//this ip has connections already
-              statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() + 1));
+            if(session.getRemoteAddress() instanceof InetSocketAddress) {
+            	String address = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
+            	statisticsTable.put(address, new Integer(1));
             }
+        } else{
+            Integer loginNumber = statisticsTable.get(LOGIN_NUMBER);
+            statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() + 1));
+            
+            if(session.getRemoteAddress() instanceof InetSocketAddress) {
+            	String address = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
+            	Integer loginNumberPerIP = statisticsTable.get(address);
+
+            	if(loginNumberPerIP == null) {
+            		//new connection from this ip
+            		statisticsTable.put(address, new Integer(1));
+            	} else{//this ip has connections already
+            		statisticsTable.put(address, new Integer(loginNumberPerIP.intValue() + 1));
+            	}
+            }
+            
           }
         }
         
-        notifyLogin(connection);
+        notifyLogin(session);
     }
     
     /**
      * Increment failed login count.
      */
-    public void setLoginFail(Connection connection) {
+    public void setLoginFail(FtpIoSession session) {
         ++totalFailedLogins;
-        notifyLoginFail(connection);
+        notifyLoginFail(session);
     }
     
     /**
      * User logout
      */
-    public void setLogout(Connection connection) {
+    public void setLogout(FtpIoSession session) {
         --currLogins;
-        User user = connection.getSession().getUser();
+        User user = session.getUser();
         if( "anonymous".equals(user.getName()) ) {
             --currAnonLogins;
         }
         
         synchronized(user){
-          Hashtable statisticsTable = (Hashtable) userLoginTable.get(user.getName());
-          Integer loginNumber = (Integer) statisticsTable.get(LOGIN_NUMBER);
+          Hashtable<String, Integer> statisticsTable = userLoginTable.get(user.getName());
+          Integer loginNumber = statisticsTable.get(LOGIN_NUMBER);
           statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() - 1));
-          Integer loginNumberPerIP = (Integer) statisticsTable.get(connection.getSession().getClientAddress().getHostAddress());
           
-          if(loginNumberPerIP != null){
-            //this should always be true
-            if(loginNumberPerIP.intValue() <= 1){
-                //the last login from this ip, remove this ip address
-                statisticsTable.remove(connection.getSession().getClientAddress().getHostAddress());
-            } else{
-                //this ip has other logins, reduce the number
-                statisticsTable.put(connection.getSession().getClientAddress().getHostAddress(), new Integer(loginNumberPerIP.intValue() - 1));
-            }
-          } 
+          
+          if(session.getRemoteAddress() instanceof InetSocketAddress) {
+        	  String address = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
+
+        	  Integer loginNumberPerIP = statisticsTable.get(address);
+        	  
+        	  if(loginNumberPerIP != null){
+        		  //this should always be true
+        		  if(loginNumberPerIP.intValue() <= 1){
+        			  //the last login from this ip, remove this ip address
+        			  statisticsTable.remove(address);
+        		  } else{
+        			  //this ip has other logins, reduce the number
+        			  statisticsTable.put(address, new Integer(loginNumberPerIP.intValue() - 1));
+        		  }
+        	  } 
+          }
+          
         }
         
-        notifyLogout(connection);
+        notifyLogout(session);
     }
     
     
@@ -389,7 +405,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     /**               
      * Observer upload notification.
      */
-    private void notifyUpload(Connection connection, FileObject file, long size) {
+    private void notifyUpload(FtpIoSession session, FileObject file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyUpload();
@@ -397,14 +413,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyUpload(connection, file, size);
+            fileObserver.notifyUpload(session, file, size);
         }
     }
     
     /**               
      * Observer download notification.
      */
-    private void notifyDownload(Connection connection, FileObject file, long size) {
+    private void notifyDownload(FtpIoSession session, FileObject file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDownload();
@@ -412,14 +428,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyDownload(connection, file, size);
+            fileObserver.notifyDownload(session, file, size);
         }
     }
     
     /**               
      * Observer delete notification.
      */
-    private void notifyDelete(Connection connection, FileObject file) {
+    private void notifyDelete(FtpIoSession session, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDelete();
@@ -427,14 +443,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyDelete(connection, file);
+            fileObserver.notifyDelete(session, file);
         }
     }
     
     /**               
      * Observer make directory notification.
      */
-    private void notifyMkdir(Connection connection, FileObject file) {
+    private void notifyMkdir(FtpIoSession session, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyMkdir();
@@ -442,14 +458,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyMkdir(connection, file);
+            fileObserver.notifyMkdir(session, file);
         }
     }
     
     /**               
      * Observer remove directory notification.
      */
-    private void notifyRmdir(Connection connection, FileObject file) {
+    private void notifyRmdir(FtpIoSession session, FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyRmdir();
@@ -457,14 +473,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
 
         FileObserver fileObserver = this.fileObserver;
         if (fileObserver != null) {
-            fileObserver.notifyRmdir(connection, file);
+            fileObserver.notifyRmdir(session, file);
         }
     }
     
     /**
      * Observer open connection notification.
      */
-    private void notifyOpenConnection(Connection connection) {
+    private void notifyOpenConnection(FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyOpenConnection();
@@ -474,7 +490,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     /**
      * Observer close connection notification.
      */
-    private void notifyCloseConnection(Connection connection) {
+    private void notifyCloseConnection(FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyCloseConnection();
@@ -484,12 +500,12 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     /**
      * Observer login notification.
      */
-    private void notifyLogin(Connection connection) {
+    private void notifyLogin(FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             
             // is anonymous login
-            User user = connection.getSession().getUser();
+            User user = session.getUser();
             boolean anonymous = false;
             if(user != null) {
                 String login = user.getName();
@@ -502,21 +518,24 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     /**
      * Observer failed login notification.
      */
-    private void notifyLoginFail(Connection connection) {
+    private void notifyLoginFail(FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
-            observer.notifyLoginFail(connection.getSession().getClientAddress());
+        	if(session.getRemoteAddress() instanceof InetSocketAddress) {
+        		observer.notifyLoginFail(((InetSocketAddress)session.getRemoteAddress()).getAddress());
+        		
+        	}
         }
     }
     
     /**
      * Observer logout notification.
      */
-    private void notifyLogout(Connection connection) {
+    private void notifyLogout(FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             // is anonymous login
-            User user = connection.getSession().getUser();
+            User user = session.getUser();
             boolean anonymous = false;
             if(user != null) {
                 String login = user.getName();

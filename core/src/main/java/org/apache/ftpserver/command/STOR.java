@@ -25,20 +25,18 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -63,21 +61,19 @@ class STOR extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
         
         try {
         
             // get state variable
             long skipLen = session.getFileOffset();
-            FtpServerContext serverContext = connection.getServerContext();
             
             // argument check
             String fileName = request.getArgument();
             if(fileName == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STOR", null));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STOR", null));
                 return;  
             }
 
@@ -86,16 +82,16 @@ class STOR extends AbstractCommand {
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory)connFactory).getInetAddress();
                 if (address == null) {
-                    out.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
+                    session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
             }
             
             // call Ftplet.onUploadStart() method
-            Ftplet ftpletContainer = serverContext.getFtpletContainer();
+            Ftplet ftpletContainer = context.getFtpletContainer();
             FtpletEnum ftpletRet;
             try {
-                ftpletRet = ftpletContainer.onUploadStart(session, request, out);
+                ftpletRet = ftpletContainer.onUploadStart(session.getFtpletSession(), request);
             } catch(Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
@@ -104,7 +100,7 @@ class STOR extends AbstractCommand {
                 return;
             }
             else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                serverContext.getConnectionManager().closeConnection(connection);
+                session.closeOnFlush();
                 return;
             }
             
@@ -117,26 +113,26 @@ class STOR extends AbstractCommand {
                 LOG.debug("Exception getting file object", ex);
             }
             if(file == null) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOR.invalid", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOR.invalid", fileName));
                 return;
             }
             fileName = file.getFullName();
             
             // get permission
             if( !file.hasWritePermission() ) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOR.permission", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "STOR.permission", fileName));
                 return;
             }
             
             // get data connection
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_150_FILE_STATUS_OKAY, "STOR", fileName));
+			session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_150_FILE_STATUS_OKAY, "STOR", fileName)).awaitUninterruptibly(10000);
             
             DataConnection dataConnection;
             try {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the input data stream", e);
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "STOR", fileName));
                 return;
             }
             
@@ -152,18 +148,18 @@ class STOR extends AbstractCommand {
                 LOG.info("File upload : " + userName + " - " + fileName);
                 
                 // notify the statistics component
-                ServerFtpStatistics ftpStat = (ServerFtpStatistics)serverContext.getFtpStatistics();
-                ftpStat.setUpload(connection, file, transSz);
+                ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
+                ftpStat.setUpload(session, file, transSz);
             }
             catch(SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED, "STOR", fileName));
             }
             catch(IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN, "STOR", fileName));
             }
             finally {
                 IoUtils.close(outStream);
@@ -171,17 +167,17 @@ class STOR extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOR", fileName));
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOR", fileName));
                 
                 // call Ftplet.onUploadEnd() method
                 try {
-                    ftpletRet = ftpletContainer.onUploadEnd(session, request, out);
+                    ftpletRet = ftpletContainer.onUploadEnd(session.getFtpletSession(), request);
                 } catch(Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    serverContext.getConnectionManager().closeConnection(connection);
+                    session.closeOnFlush();
                     return;
                 }
 

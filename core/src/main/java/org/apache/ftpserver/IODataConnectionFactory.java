@@ -35,6 +35,7 @@ import javax.net.ssl.SSLSocketFactory;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.Ssl;
@@ -66,9 +67,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     InetAddress serverControlAddress;
 
-    FtpSessionImpl session;
+    FtpIoSession session;
     
-    public IODataConnectionFactory(FtpServerContext serverContext, FtpSessionImpl session) {
+    public IODataConnectionFactory(FtpServerContext serverContext, FtpIoSession session) {
         this.session = session;
         this.serverContext = serverContext;
         
@@ -151,9 +152,11 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         try {
             DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
+            System.out.println("!!!!!!!!!!!!!" + address);
             if(address == null) {
                 address = serverControlAddress;
             }
+            System.out.println("!!!!!!!!!!!!!" + address);
             if(secure) {
                 Ssl ssl = dataCfg.getSSL();
                 if(ssl == null) {

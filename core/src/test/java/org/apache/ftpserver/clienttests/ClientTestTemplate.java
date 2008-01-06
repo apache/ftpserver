@@ -181,6 +181,14 @@ public abstract class ClientTestTemplate extends TestCase {
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception {
+    	if(isConnectClient() ) {
+    		try {
+    			client.quit();
+    		} catch(Exception e) {
+    			// ignore
+    		}
+    	}
+    	
         if(server != null) {
             server.stop();
         }

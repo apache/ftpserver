@@ -22,15 +22,13 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 
 import org.apache.ftpserver.DefaultFtpReply;
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
-import org.apache.ftpserver.ftplet.FtpReplyOutput;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WriteRequest;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -48,19 +46,18 @@ class SITE_DESCUSER extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(Connection connection, 
-                        FtpRequest request,
-                        FtpSessionImpl session, 
-                        FtpReplyOutput out) throws IOException, FtpException {
+    public void execute(FtpIoSession session, 
+                        FtpServerContext context,
+                        FtpRequest request) throws IOException, FtpException {
     
         // reset state variables
         session.resetState();
         
         // only administrator can execute this
-        UserManager userManager = connection.getServerContext().getUserManager(); 
+        UserManager userManager = context.getUserManager(); 
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if(!isAdmin) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
         
@@ -68,14 +65,13 @@ class SITE_DESCUSER extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if(spIndex == -1) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null));
             return;
         }
         String userName = argument.substring(spIndex + 1);
         
         // check the user existance
-        FtpServerContext serverContext = connection.getServerContext();
-        UserManager usrManager = serverContext.getUserManager();
+        UserManager usrManager = context.getUserManager();
         User user = null;
         try {
             if(usrManager.doesExist(userName)) {
@@ -87,7 +83,7 @@ class SITE_DESCUSER extends AbstractCommand {
             user = null;
         }
         if(user == null) {
-            out.write(FtpReplyUtil.translate(session, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName));
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName));
             return;
         }
         
@@ -112,7 +108,7 @@ class SITE_DESCUSER extends AbstractCommand {
             sb.append("downloadrate    : 0\n");
         }
         sb.append('\n');
-        out.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
     }
 
 }

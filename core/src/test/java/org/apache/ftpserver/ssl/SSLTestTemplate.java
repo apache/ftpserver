@@ -46,11 +46,11 @@ public abstract class SSLTestTemplate extends TestCase {
 
     private final Logger LOG = LoggerFactory.getLogger(SSLTestTemplate.class);
     
-    private static final File USERS_FILE = new File(getBaseDir(), "src/test/users.gen");
-    protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/client.jks");
+    private static final File USERS_FILE = new File(getBaseDir(), "src/test/resources/users.gen");
+    protected static final File FTPCLIENT_KEYSTORE = new File(getBaseDir(), "src/test/resources/client.jks");
     protected static final char[] KEYSTORE_PASSWORD = "password".toCharArray();
 
-    private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/ftpserver.jks");
+    private static final File FTPSERVER_KEYSTORE = new File(getBaseDir(), "src/test/resources/ftpserver.jks");
 
     private static final int DEFAULT_PORT = 12322;
 
