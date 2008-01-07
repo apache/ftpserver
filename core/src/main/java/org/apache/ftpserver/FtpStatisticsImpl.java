@@ -365,34 +365,42 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
      * User logout
      */
     public void setLogout(FtpIoSession session) {
-        --currLogins;
         User user = session.getUser();
+        
+        if(user == null) {
+        	return;
+        }
+
+        --currLogins;
+        
         if( "anonymous".equals(user.getName()) ) {
             --currAnonLogins;
         }
         
         synchronized(user){
           Hashtable<String, Integer> statisticsTable = userLoginTable.get(user.getName());
-          Integer loginNumber = statisticsTable.get(LOGIN_NUMBER);
-          statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() - 1));
           
+          if(statisticsTable != null) {
+	          Integer loginNumber = statisticsTable.get(LOGIN_NUMBER);
+	          statisticsTable.put(LOGIN_NUMBER, new Integer(loginNumber.intValue() - 1));
           
-          if(session.getRemoteAddress() instanceof InetSocketAddress) {
-        	  String address = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
-
-        	  Integer loginNumberPerIP = statisticsTable.get(address);
-        	  
-        	  if(loginNumberPerIP != null){
-        		  //this should always be true
-        		  if(loginNumberPerIP.intValue() <= 1){
-        			  //the last login from this ip, remove this ip address
-        			  statisticsTable.remove(address);
-        		  } else{
-        			  //this ip has other logins, reduce the number
-        			  statisticsTable.put(address, new Integer(loginNumberPerIP.intValue() - 1));
-        		  }
-        	  } 
-          }
+	          if(session.getRemoteAddress() instanceof InetSocketAddress) {
+	        	  String address = ((InetSocketAddress)session.getRemoteAddress()).getAddress().getHostAddress();
+	
+	        	  Integer loginNumberPerIP = statisticsTable.get(address);
+	        	  
+	        	  if(loginNumberPerIP != null){
+	        		  //this should always be true
+	        		  if(loginNumberPerIP.intValue() <= 1){
+	        			  //the last login from this ip, remove this ip address
+	        			  statisticsTable.remove(address);
+	        		  } else{
+	        			  //this ip has other logins, reduce the number
+	        			  statisticsTable.put(address, new Integer(loginNumberPerIP.intValue() - 1));
+	        		  }
+	        	  } 
+	          }
+          }          
           
         }
         

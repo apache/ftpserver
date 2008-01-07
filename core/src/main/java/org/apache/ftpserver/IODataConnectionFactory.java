@@ -152,11 +152,11 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         try {
             DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
             address = dataCfg.getPassiveAddress();
-            System.out.println("!!!!!!!!!!!!!" + address);
+
             if(address == null) {
                 address = serverControlAddress;
             }
-            System.out.println("!!!!!!!!!!!!!" + address);
+
             if(secure) {
                 Ssl ssl = dataCfg.getSSL();
                 if(ssl == null) {

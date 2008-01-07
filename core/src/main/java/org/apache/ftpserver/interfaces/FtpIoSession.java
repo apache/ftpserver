@@ -331,7 +331,7 @@ public class FtpIoSession implements IoSession {
      * Is logged-in
      */
     public boolean isLoggedIn() {
-        return containsAttribute(ATTRIBUTE_LOGIN_TIME);
+        return containsAttribute(ATTRIBUTE_USER);
     }
 
 	public Listener getListener() {
@@ -390,6 +390,7 @@ public class FtpIoSession implements IoSession {
 	}
 
 	public void setLogin(FileSystemView fsview) {
+		setAttribute(ATTRIBUTE_LOGIN_TIME, new Date());
 		setAttribute(ATTRIBUTE_FILE_SYSTEM, fsview);
 	}
 

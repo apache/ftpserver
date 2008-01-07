@@ -27,7 +27,7 @@ public class FeatTest extends ClientTestTemplate {
 
     public void test() throws Exception {
         client.sendCommand("FEAT");
-        String[] featReplies = client.getReplyStrings();
+        String[] featReplies = client.getReplyString().split("\r\n");
         
         for(int i = 0; i<featReplies.length; i++) {
             if(i == 0) {

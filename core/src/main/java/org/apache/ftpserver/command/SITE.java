@@ -92,7 +92,7 @@ class SITE extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( siteRequest );
         try {
             if(command != null) {
-                command.execute(null, null, request);
+                command.execute(session, context, request);
             }
             else {
                 session.resetState();

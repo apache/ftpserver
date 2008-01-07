@@ -234,7 +234,6 @@ public abstract class SSLTestTemplate extends TestCase {
                 lastException = e;
             }
             
-            System.out.println("Retrying!");
             Thread.sleep(500);
             attempts++;
         }

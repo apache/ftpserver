@@ -76,7 +76,7 @@ class OPTS extends AbstractCommand {
         Command command = (Command)COMMAND_MAP.get( optsRequest );
         try {
             if(command != null) {
-                command.execute(null, null, request);
+                command.execute(session, context, request);
             }
             else {
                 session.resetState();

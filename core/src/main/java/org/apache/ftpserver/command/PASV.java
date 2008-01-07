@@ -75,10 +75,6 @@ class PASV extends AbstractCommand {
                 servAddr = dataConAddress.getAddress();
             }
             
-            System.out.println("############" + dataConAddress);
-            System.out.println("############" + dataConAddress.getAddress());
-            System.out.println("############" + servAddr);
-            
             // send connection info to client
             InetSocketAddress externalDataConAddress = new InetSocketAddress(servAddr, dataConAddress.getPort());
             
