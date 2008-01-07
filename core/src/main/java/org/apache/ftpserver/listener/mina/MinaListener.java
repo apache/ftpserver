@@ -116,6 +116,7 @@ public class MinaListener extends AbstractListener {
         // close server socket
         if (acceptor != null) {
             acceptor.unbind();
+            acceptor.dispose();
             acceptor = null;
         }
         
