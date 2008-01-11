@@ -92,5 +92,5 @@ interface Configuration {
      * Get the configuration keys. The order of the keys is not guaranteed
      * to be the same as that of the input.
      */
-    Iterator getKeys();
+    Iterator<String> getKeys();
 }
