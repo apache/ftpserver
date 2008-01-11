@@ -40,7 +40,7 @@ public abstract class ConfigurationTestTemplate extends TestCase {
     }
 
     public void testBaseConfigKeys() throws Exception {
-        Iterator keys = config.getKeys();
+        Iterator<String> keys = config.getKeys();
         
         assertEquals("socket-factory", keys.next());
         assertEquals("empty", keys.next());

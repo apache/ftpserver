@@ -135,18 +135,18 @@ class LdapUserManager extends AbstractUserManager implements Component {
             Attributes matchAttrs = new BasicAttributes(true);
             matchAttrs.put(objClassAttr);
             matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
-            NamingEnumeration answers = adminContext.search(userBaseDn, matchAttrs, CN_ATTRS);
+            NamingEnumeration<SearchResult> answers = adminContext.search(userBaseDn, matchAttrs, CN_ATTRS);
             LOG.info("Getting all users under " + userBaseDn);
             
             // populate list
-            ArrayList allUsers = new ArrayList();
+            ArrayList<String> allUsers = new ArrayList<String>();
             while (answers.hasMore()) {
                 SearchResult sr = (SearchResult)answers.next();
                 String cn = sr.getAttributes().get(CN).get().toString();
                 allUsers.add(cn);
             }
             Collections.sort(allUsers);
-            return (String[]) allUsers.toArray(new String[0]);
+            return allUsers.toArray(new String[0]);
         }
         catch(NamingException ex) {
             LOG.error("LdapUserManager.getAllUserNames()", ex);

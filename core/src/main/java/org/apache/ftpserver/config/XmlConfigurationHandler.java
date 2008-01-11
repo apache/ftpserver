@@ -38,7 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public 
 class XmlConfigurationHandler extends DefaultHandler {
 
-    private ArrayList elements = new ArrayList();
+    private ArrayList<XmlConfiguration> elements = new ArrayList<XmlConfiguration>();
     private XmlConfiguration root = null;
     private InputSource source = null;
     private StringBuffer elemVal = new StringBuffer(128);
@@ -92,7 +92,7 @@ class XmlConfigurationHandler extends DefaultHandler {
                            String qname) throws SAXException {
         
         int location = elements.size() - 1;
-        XmlConfiguration lastElem = (XmlConfiguration)elements.remove(location);
+        XmlConfiguration lastElem = elements.remove(location);
 
         if(lastElem.getChildCount() == 0) {
             String trimmedElemVal = elemVal.toString().trim();
@@ -126,7 +126,7 @@ class XmlConfigurationHandler extends DefaultHandler {
         elemVal.setLength(0);
 
         if(lastIdx > -1) {
-            XmlConfiguration parent = (XmlConfiguration)elements.get(lastIdx);
+            XmlConfiguration parent = elements.get(lastIdx);
             parent.setValue(null);
             parent.addChild(element);
         }

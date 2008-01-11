@@ -26,15 +26,15 @@ public class ComponentBean extends Bean {
 
     private Configuration config;
     private Component component;
-    private Class clazz;
+    private Class<Component> clazz;
     
-    public ComponentBean(Configuration config, Class clazz) {
+    public ComponentBean(Configuration config, Class<Component> clazz) {
         this.clazz = clazz;
         this.config = config;
     }
     
     public Object initBean() throws Exception {
-        component = (Component) clazz.newInstance();
+        component = clazz.newInstance();
         
         component.configure(config);
         return component;

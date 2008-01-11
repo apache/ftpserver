@@ -37,7 +37,7 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
     private static final File TEST_FILE3 = new File(ROOT_DIR, "file3");
 
-    private static final Map FILE_MAPPINGS = new HashMap();
+    private static final Map<String, File> FILE_MAPPINGS = new HashMap<String, File>();
     
     static {
         FILE_MAPPINGS.put("/", ROOT_DIR);
@@ -69,7 +69,7 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     
 
     protected FileObject createFileObject(String fileName, User user) {
-        return new NativeFileObject(fileName, (File)FILE_MAPPINGS.get(fileName), user);
+        return new NativeFileObject(fileName, FILE_MAPPINGS.get(fileName), user);
     }
 
     public void testGetPhysicalName() {

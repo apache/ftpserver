@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
+@SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {
 
     private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);

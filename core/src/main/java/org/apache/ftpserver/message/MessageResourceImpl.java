@@ -54,7 +54,7 @@ class MessageResourceImpl implements MessageResource, Component {
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     
     private String[] languages;
-    private HashMap messages;
+    private HashMap<String, PropertiesPair> messages;
     private String customMessageDir;
     
     private static class PropertiesPair {
@@ -82,7 +82,7 @@ class MessageResourceImpl implements MessageResource, Component {
         }
         
         // populate different properties
-        messages = new HashMap();
+        messages = new HashMap<String, PropertiesPair>();
         if(this.languages != null) {
             for(int i=0; i<this.languages.length; ++i) {
                 String lang = this.languages[i];
@@ -177,7 +177,7 @@ class MessageResourceImpl implements MessageResource, Component {
         PropertiesPair pair = null;
         if(language != null) {
             language = language.toLowerCase();
-            pair = (PropertiesPair)messages.get(language);
+            pair = messages.get(language);
             if(pair != null) {
                 value = pair.customProperties.getProperty(key);
                 if(value == null) {
@@ -188,7 +188,7 @@ class MessageResourceImpl implements MessageResource, Component {
         
         // if not available get the default value
         if(value == null) {
-            pair = (PropertiesPair)messages.get(null);
+            pair = messages.get(null);
             if(pair != null) {
                 value = pair.customProperties.getProperty(key);
                 if(value == null) {
@@ -208,14 +208,14 @@ class MessageResourceImpl implements MessageResource, Component {
         
         // load properties sequentially 
         // (default,custom,default language,custom language)
-        PropertiesPair pair = (PropertiesPair)this.messages.get(null);
+        PropertiesPair pair = this.messages.get(null);
         if(pair != null) {
             messages.putAll(pair.defaultProperties);
             messages.putAll(pair.customProperties);
         }
         if(language != null) {
             language = language.toLowerCase();
-            pair = (PropertiesPair)this.messages.get(language);
+            pair = this.messages.get(language);
             if(pair != null) {
                 messages.putAll(pair.defaultProperties);
                 messages.putAll(pair.customProperties);
@@ -264,7 +264,7 @@ class MessageResourceImpl implements MessageResource, Component {
         }
         
         // assign new messages
-        PropertiesPair pair = (PropertiesPair)messages.get(language);
+        PropertiesPair pair = messages.get(language);
         if(pair == null) {
             pair = new PropertiesPair();
             messages.put(language, pair);
@@ -276,10 +276,10 @@ class MessageResourceImpl implements MessageResource, Component {
      * Dispose component - clear all maps.
      */
     public void dispose() {
-        Iterator it = messages.keySet().iterator();
+        Iterator<String> it = messages.keySet().iterator();
         while(it.hasNext()) {
-            String language = (String)it.next();
-            PropertiesPair pair = (PropertiesPair)messages.get(language);
+            String language = it.next();
+            PropertiesPair pair = messages.get(language);
             pair.customProperties.clear();
             pair.defaultProperties.clear();
         }

@@ -17,7 +17,9 @@ public abstract class FileObjectTestTemplate extends TestCase {
     protected static final String FILE3_PATH = "/file3";
     
     protected static final User USER = new BaseUser() {
-        public AuthorizationRequest authorize(AuthorizationRequest request) {
+		private static final long serialVersionUID = 4906315989316879758L;
+
+		public AuthorizationRequest authorize(AuthorizationRequest request) {
             return request;
         }
     };

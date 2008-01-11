@@ -34,7 +34,7 @@ class XmlConfiguration implements Configuration {
     
     private String name;
     private String value;
-    private ArrayList children;
+    private ArrayList<XmlConfiguration> children;
     
     /**
      * Create a new <code>XmlConfiguration</code> instance.
@@ -72,7 +72,7 @@ class XmlConfiguration implements Configuration {
      */
     void addChild(XmlConfiguration elem) {
         if(children == null) {
-            children = new ArrayList();
+            children = new ArrayList<XmlConfiguration>();
         }
 
         children.add( elem );
@@ -84,8 +84,8 @@ class XmlConfiguration implements Configuration {
     XmlConfiguration getChild(String param) {
         XmlConfiguration child = null;
         if(children != null) {
-            for(Iterator it=children.iterator(); it.hasNext(); ) {
-                XmlConfiguration thisChild = (XmlConfiguration)it.next();
+            for(Iterator<XmlConfiguration> it=children.iterator(); it.hasNext(); ) {
+                XmlConfiguration thisChild = it.next();
                 if( thisChild.name.equals(param) ) {
                     child = thisChild;
                     break;
@@ -248,11 +248,11 @@ class XmlConfiguration implements Configuration {
     /**
      * Get the configuration keys.
      */
-    public Iterator getKeys() {
-        ArrayList arr = new ArrayList( children == null? 1 : children.size() );
+    public Iterator<String> getKeys() {
+        ArrayList<String> arr = new ArrayList<String>( children == null? 1 : children.size() );
         if(children != null) {
             for(int i=0; i<children.size(); ++i) {
-                XmlConfiguration conf = (XmlConfiguration)children.get(i); 
+                XmlConfiguration conf = children.get(i); 
                 arr.add(conf.name);
             }
         }

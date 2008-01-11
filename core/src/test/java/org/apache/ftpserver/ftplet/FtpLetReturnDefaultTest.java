@@ -43,7 +43,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
      */
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
-        MockFtplet.callback.returnValue = FtpletEnum.RET_DEFAULT;
+        MockFtpletCallback.returnValue = FtpletEnum.RET_DEFAULT;
 
         initDirs();
 
@@ -76,7 +76,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
             }
             
         };
-        MockFtplet.callback.returnValue = FtpletEnum.RET_DEFAULT;
+        MockFtpletCallback.returnValue = FtpletEnum.RET_DEFAULT;
         
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }

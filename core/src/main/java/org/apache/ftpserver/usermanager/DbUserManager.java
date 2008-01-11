@@ -248,7 +248,7 @@ public class DbUserManager extends AbstractUserManager {
         try {
             
             // create the sql query
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<String, Object>();
             map.put( ATTR_LOGIN, escapeString(login) );
             String sql = StringUtils.replaceString(isAdminStmt, map);
             LOG.info(sql);
@@ -330,7 +330,7 @@ public class DbUserManager extends AbstractUserManager {
     public synchronized void delete(String name) throws FtpException {
         
         // create sql query
-        HashMap map = new HashMap();
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put( ATTR_LOGIN, escapeString(name) );
         String sql = StringUtils.replaceString(deleteUserStmt, map);
         LOG.info(sql);
@@ -371,7 +371,7 @@ public class DbUserManager extends AbstractUserManager {
         try {
             
             // create sql query
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<String, Object>();
             map.put( ATTR_LOGIN, escapeString(user.getName()) );
             map.put( ATTR_PASSWORD, escapeString(getPassword(user)) );
             
@@ -452,7 +452,7 @@ public class DbUserManager extends AbstractUserManager {
         try {
             
             // create sql query
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<String, Object>();
             map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
             LOG.info(sql);
@@ -471,7 +471,7 @@ public class DbUserManager extends AbstractUserManager {
                 thisUser.setEnabled(trueStr.equalsIgnoreCase(rs.getString(ATTR_ENABLE)));
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
                 
-                List authorities = new ArrayList();
+                List<Authority> authorities = new ArrayList<Authority>();
                 if(trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM))) {
                     authorities.add(new WritePermission());
                 }
@@ -479,7 +479,7 @@ public class DbUserManager extends AbstractUserManager {
                 authorities.add(new ConcurrentLoginPermission(rs.getInt(ATTR_MAX_LOGIN_NUMBER), rs.getInt(ATTR_MAX_LOGIN_PER_IP)));
                 authorities.add(new TransferRatePermission(rs.getInt(ATTR_MAX_DOWNLOAD_RATE), rs.getInt(ATTR_MAX_UPLOAD_RATE)));
                 
-                thisUser.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+                thisUser.setAuthorities(authorities.toArray(new Authority[0]));
             }
             return thisUser;
         }
@@ -516,7 +516,7 @@ public class DbUserManager extends AbstractUserManager {
         try {
             
             // create the sql
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<String, Object>();
             map.put( ATTR_LOGIN, escapeString(name) );
             String sql = StringUtils.replaceString(selectUserStmt, map);
             LOG.info(sql);
@@ -568,11 +568,11 @@ public class DbUserManager extends AbstractUserManager {
             rs = stmt.executeQuery(sql);
             
             // populate list
-            ArrayList names = new ArrayList();
+            ArrayList<String> names = new ArrayList<String>();
             while(rs.next()) {
                 names.add(rs.getString(ATTR_LOGIN));
             }
-            return (String[]) names.toArray(new String[0]);
+            return names.toArray(new String[0]);
         }
         catch(SQLException ex) {
             LOG.error("DbUserManager.getAllUserNames()", ex);
@@ -618,7 +618,7 @@ public class DbUserManager extends AbstractUserManager {
         }
 
         // create sql query
-        HashMap map = new HashMap();
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put( ATTR_LOGIN, escapeString(user.getName()) );
         String sql = StringUtils.replaceString(selectUserStmt, map);
         LOG.info(sql);
@@ -681,7 +681,7 @@ public class DbUserManager extends AbstractUserManager {
             try {
                 
                 // create the sql query
-                HashMap map = new HashMap();
+                HashMap<String, Object> map = new HashMap<String, Object>();
                 map.put( ATTR_LOGIN, escapeString(user) );
                 map.put( ATTR_PASSWORD, escapeString(password) );
                 String sql = StringUtils.replaceString(authenticateStmt, map);

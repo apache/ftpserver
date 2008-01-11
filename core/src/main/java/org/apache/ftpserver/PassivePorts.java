@@ -90,11 +90,11 @@ public class PassivePorts {
         
         int[] passivePorts = new int[passivePortsList.size()];
         
-        Iterator iter = passivePortsList.iterator();
+        Iterator<Integer> iter = passivePortsList.iterator();
         
         int counter = 0;
         while (iter.hasNext()) {
-            Integer port = (Integer) iter.next();
+            Integer port = iter.next();
             passivePorts[counter] = port.intValue();
             counter++;
         }
@@ -105,7 +105,7 @@ public class PassivePorts {
     /**
      * Fill a range of ports
      */
-    private static void fillRange(List passivePortsList, Integer beginPort, Integer endPort) {
+    private static void fillRange(List<Integer> passivePortsList, Integer beginPort, Integer endPort) {
         for(int i = beginPort.intValue(); i<=endPort.intValue(); i++ ) {
             Integer rangePort = new Integer(i);
             addPort(passivePortsList, rangePort);
@@ -115,7 +115,7 @@ public class PassivePorts {
     /**
      * Add a single port if not already in list
      */
-    private static void addPort(List passivePortsList, Integer rangePort) {
+    private static void addPort(List<Integer> passivePortsList, Integer rangePort) {
         if(!passivePortsList.contains(rangePort)) {
             passivePortsList.add(rangePort);
         }

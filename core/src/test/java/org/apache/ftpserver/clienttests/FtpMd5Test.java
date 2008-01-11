@@ -122,7 +122,7 @@ public class FtpMd5Test extends ClientTestTemplate {
     }
 
     private void assertHash(String expected, String reply, String fileName) {
-        Map hashes = parseReplyHash(reply);
+        Map<String, String> hashes = parseReplyHash(reply);
         assertEquals(expected, hashes.get(fileName));
     }
     
@@ -165,13 +165,13 @@ public class FtpMd5Test extends ClientTestTemplate {
         assertEquals(504, client.sendCommand("MMD5 " + fileNames));
     }
     
-    private Map parseReplyHash(String reply) {
+    private Map<String, String> parseReplyHash(String reply) {
         String s = reply.substring(4);
         s = s.trim();
         
         String[] tokens = s.split(",");
         
-        Map result = new HashMap();
+        Map<String, String> result = new HashMap<String, String>();
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i].trim();
             int hashStart = token.lastIndexOf(' ');

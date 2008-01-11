@@ -194,8 +194,8 @@ class BaseUser implements User, Serializable {
         }
     }
 
-    public Authority[] getAuthorities(Class clazz) {
-        List selected = new ArrayList();
+    public Authority[] getAuthorities(Class<Authority> clazz) {
+        List<Authority> selected = new ArrayList<Authority>();
         
         for (int i = 0; i < authorities.length; i++) {
             if(authorities[i].getClass().equals(clazz)) {
@@ -203,6 +203,6 @@ class BaseUser implements User, Serializable {
             }
         }
         
-        return (Authority[]) selected.toArray(new Authority[0]);
+        return selected.toArray(new Authority[0]);
     }
 }

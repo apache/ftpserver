@@ -124,8 +124,8 @@ class EmptyConfiguration implements Configuration {
     /**
      * Get the keys.
      */
-    public Iterator getKeys() {
-        return new ArrayList(1).iterator();
+    public Iterator<String> getKeys() {
+        return new ArrayList<String>(1).iterator();
     }
 
 }

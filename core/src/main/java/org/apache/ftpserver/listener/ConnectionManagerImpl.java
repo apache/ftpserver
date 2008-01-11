@@ -26,7 +26,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -45,7 +44,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     
     private ConnectionManagerObserver observer;              
     private Timer timer;
-    private Vector conList = new Vector();  
+    private Vector<Connection> conList = new Vector<Connection>();  
     
     private int maxConnections;
     private int maxLogins;
@@ -127,12 +126,12 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     /**
      * Get all request handlers
      */
-    public List getAllConnections() {
-        List cons = conList;
+    public List<Connection> getAllConnections() {
+        List<Connection> cons = conList;
         if(cons == null) {
-            return new Vector();
+            return new Vector<Connection>();
         }
-        return new Vector(cons);
+        return new Vector<Connection>(cons);
     }
     
     /**
@@ -146,7 +145,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         }
         
         // disposed - ignore
-        List cons = conList;
+        List<Connection> cons = conList;
         if(cons == null) {
             return;
         }
@@ -200,7 +199,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         }
         
         // close socket
-        List cons = conList;
+        List<Connection> cons = conList;
         if(cons != null) {
             cons.remove(connection);
         }
@@ -217,9 +216,9 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
      * Close all connections.
      */
     public void closeAllConnections() {
-        List allCons = getAllConnections();
-        for( Iterator it = allCons.iterator(); it.hasNext(); ) {
-            Connection connection = (Connection)it.next();
+        List<Connection> allCons = getAllConnections();
+        for( Iterator<Connection> it = allCons.iterator(); it.hasNext(); ) {
+            Connection connection = it.next();
             closeConnection(connection);
         }
         allCons.clear();
@@ -232,9 +231,9 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
     public void timerTask() {
     
         // get all connections
-        ArrayList inactiveCons = new ArrayList();
-        long currTime = System.currentTimeMillis();
-        Vector conList = this.conList;
+        ArrayList<Connection> inactiveCons = new ArrayList<Connection>();
+
+        Vector<Connection> conList = this.conList;
         if(conList == null) {
             return;
         }
@@ -242,7 +241,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         // get inactive client connection list 
         synchronized(conList) {
             for( int i = conList.size(); --i>=0; ) {
-                Connection con = (Connection)conList.get(i);
+                Connection con = conList.get(i);
                 if(con == null) {
                     continue;
                 }
@@ -276,8 +275,8 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         }
 
         // close idle client connections
-        for( Iterator conIt=inactiveCons.iterator(); conIt.hasNext(); ) {
-            Connection connection = (Connection)conIt.next();
+        for( Iterator<Connection> conIt=inactiveCons.iterator(); conIt.hasNext(); ) {
+            Connection connection = conIt.next();
             if(connection == null) {
                 continue;
             }
@@ -305,7 +304,7 @@ class ConnectionManagerImpl implements ConnectionManager, Component {
         }
         
         // close all connections
-        List cons = conList;
+        List<Connection> cons = conList;
         if (cons != null) {
             closeAllConnections();
             conList = null;

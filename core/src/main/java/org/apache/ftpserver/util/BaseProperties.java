@@ -251,7 +251,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>Class</code> object
      */
-    public Class getClass(final String str) throws FtpException  {
+    public Class<?> getClass(final String str) throws FtpException  {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -265,7 +265,7 @@ class BaseProperties extends Properties {
         }
     }
 
-    public Class getClass(final String str, final Class cls)  {
+    public Class<?> getClass(final String str, final Class<?> cls)  {
         try {
             return getClass(str);
         } 
@@ -423,7 +423,7 @@ class BaseProperties extends Properties {
     /**
      * Set <code>Class</code> object.
      */
-    public void setProperty(final String key, final Class val)  {
+    public void setProperty(final String key, final Class<?> val)  {
         setProperty(key, val.getName());
     }
 

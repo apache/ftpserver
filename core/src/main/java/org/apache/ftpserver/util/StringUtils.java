@@ -89,7 +89,7 @@ class StringUtils {
     /**
      * Replace string.
      */ 
-    public final static String replaceString(String source, Map args) {
+    public final static String replaceString(String source, Map<String, Object> args) {
         int startIndex = 0;
         int openIndex = source.indexOf('{', startIndex);
         if (openIndex == -1) {

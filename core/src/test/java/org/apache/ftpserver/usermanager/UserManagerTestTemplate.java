@@ -211,11 +211,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setEnabled(false);
         user.setMaxIdleTime(2);
 
-        List authorities = new ArrayList();
+        List<Authority> authorities = new ArrayList<Authority>();
         authorities.add(new WritePermission());
         authorities.add(new ConcurrentLoginPermission(3, 4));
         authorities.add(new TransferRatePermission(1, 5));
-        user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+        user.setAuthorities(authorities.toArray(new Authority[0]));
 
         userManager.save(user);
         

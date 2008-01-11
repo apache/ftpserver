@@ -86,7 +86,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
      */
     public Object[][] getPermissions() throws FtpException {
         
-        ArrayList permList = new ArrayList();
+        ArrayList<Object[]> permList = new ArrayList<Object[]>();
         if(new File(file).exists()) {
             BufferedReader br = null;
             try {
@@ -121,7 +121,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
         // return array
         Object[][] permissions = new Object[permList.size()][2];
         for(int i=0; i<permissions.length; ++i) {
-            permissions[i] = (Object[])permList.get(i);
+            permissions[i] = permList.get(i);
         }
         return permissions;
     }   

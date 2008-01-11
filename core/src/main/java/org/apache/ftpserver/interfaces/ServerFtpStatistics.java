@@ -21,7 +21,6 @@ package org.apache.ftpserver.interfaces;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpStatistics;
-import org.apache.ftpserver.listener.Connection;
 
 /**
  * This is same as <code>org.apache.ftpserver.ftplet.FtpStatistics</code>

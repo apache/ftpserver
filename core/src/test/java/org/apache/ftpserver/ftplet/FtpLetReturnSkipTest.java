@@ -19,18 +19,12 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 
 public class FtpLetReturnSkipTest extends ClientTestTemplate {
-    private static final byte[] TESTDATA = "TESTDATA".getBytes();
-    private static final byte[] DOUBLE_TESTDATA = "TESTDATATESTDATA".getBytes();
-    private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
-    private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
     
     protected FtpletEnum mockReturnValue = FtpletEnum.RET_DISCONNECT;
     

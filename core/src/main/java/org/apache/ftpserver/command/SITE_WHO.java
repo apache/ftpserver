@@ -20,22 +20,22 @@
 package org.apache.ftpserver.command;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.StringUtils;
+import org.apache.mina.common.IoSession;
 
 
 /**
@@ -64,21 +64,27 @@ class SITE_WHO extends AbstractCommand {
         
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
-        List allCons = context.getConnectionManager().getAllConnections();
+
+        Set<IoSession> sessions = session.getService().getManagedSessions();
         
         sb.append('\n');
-        for(Iterator conIt = allCons.iterator(); conIt.hasNext(); ) {
-            Connection tmpCon = (Connection)conIt.next();
-            FtpSession tmpReq = tmpCon.getSession();
-            if(!tmpReq.isLoggedIn()) {
+        Iterator<IoSession> sessionIterator = sessions.iterator();
+        
+        while(sessionIterator.hasNext()) {
+            FtpIoSession managedSession = new FtpIoSession(sessionIterator.next(), context);
+
+            if(!managedSession.isLoggedIn()) {
                 continue;
             }
             
-            User tmpUsr = tmpReq.getUser();
+            User tmpUsr = managedSession.getUser();
             sb.append( StringUtils.pad(tmpUsr.getName(), ' ', true, 16) );
-            sb.append( StringUtils.pad(tmpReq.getClientAddress().getHostAddress(), ' ', true, 16) );
-            sb.append( StringUtils.pad(DateUtils.getISO8601Date(tmpReq.getLoginTime().getTime()), ' ', true, 20) );
-            sb.append( StringUtils.pad(DateUtils.getISO8601Date(tmpReq.getLastAccessTime().getTime()), ' ', true, 20) );
+            
+            if(managedSession.getRemoteAddress() instanceof InetSocketAddress) {
+            	sb.append( StringUtils.pad(((InetSocketAddress)managedSession.getRemoteAddress()).getAddress().getHostAddress(), ' ', true, 16) );
+            }
+            sb.append( StringUtils.pad(DateUtils.getISO8601Date(managedSession.getLoginTime().getTime()), ' ', true, 20) );
+            sb.append( StringUtils.pad(DateUtils.getISO8601Date(managedSession.getLastAccessTime().getTime()), ' ', true, 20) );
             sb.append('\n');
         }
         sb.append('\n');

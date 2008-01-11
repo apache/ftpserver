@@ -274,11 +274,8 @@ public class NativeFileObject implements FileObject {
         }
 
         // make sure the files are returned in order
-        Arrays.sort(files, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                File f1 = (File) o1;
-                File f2 = (File) o2;
-
+        Arrays.sort(files, new Comparator<File>() {
+            public int compare(File f1, File f2) {
                 return f1.getName().compareTo(f2.getName());
             }
         });

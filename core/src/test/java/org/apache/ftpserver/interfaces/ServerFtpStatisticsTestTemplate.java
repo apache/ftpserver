@@ -99,7 +99,8 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         assertEquals(0, stats.getCurrentConnectionNumber());
     }
     
-    public void testStartDateImmutable() {
+    @SuppressWarnings("deprecation")
+	public void testStartDateImmutable() {
         ServerFtpStatistics stats = createStatistics();
         Date date = stats.getStartTime();
         date.setYear(1);

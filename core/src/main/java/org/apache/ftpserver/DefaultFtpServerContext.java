@@ -69,7 +69,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
     private FtpStatistics statistics;
     private CommandFactory commandFactory;
     
-    private Map listeners = new HashMap();
+    private Map<String, Listener> listeners = new HashMap<String, Listener>();
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
         new WritePermission()
@@ -244,7 +244,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
      */
     public void dispose() {
         
-        Iterator listenerIter = listeners.values().iterator();
+        Iterator<Listener> listenerIter = listeners.values().iterator();
         while (listenerIter.hasNext()) {
             Bean listenerBean = (Bean) listenerIter.next();
             listenerBean.destroyBean();
@@ -287,15 +287,15 @@ public class DefaultFtpServerContext implements FtpServerContext {
     }
 
     public Listener getListener(String name) {
-        return (Listener) listeners.get(name);
+        return listeners.get(name);
     }
 
     public Listener[] getListeners() {
-        Collection listenerList = listeners.values();
+        Collection<Listener> listenerList = listeners.values();
         
         Listener[] listenerArray = new Listener[0];
         
-        return (Listener[]) listenerList.toArray(listenerArray);
+        return listenerList.toArray(listenerArray);
     }
     
     public void addListener(String name, Listener listener) {
@@ -303,7 +303,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
     }
 
     public Listener removeListener(String name) {
-        return (Listener) listeners.remove(name);
+        return listeners.remove(name);
     }
     
     public void setCommandFactory(CommandFactory commandFactory) {

@@ -133,7 +133,7 @@ public void configure() {
     }
     
     private void convertDeprecatedPropertyNames() {
-        Enumeration keys = userDataProp.propertyNames();
+        Enumeration<?> keys = userDataProp.propertyNames();
         
         boolean doSave = false;
         
@@ -239,15 +239,15 @@ public void configure() {
         
         // remove entries from properties
         String thisPrefix = PREFIX + usrName + '.';
-        Enumeration propNames = userDataProp.propertyNames();
-        ArrayList remKeys = new ArrayList();
+        Enumeration<?> propNames = userDataProp.propertyNames();
+        ArrayList<String> remKeys = new ArrayList<String>();
         while(propNames.hasMoreElements()) {
             String thisKey = propNames.nextElement().toString();
             if(thisKey.startsWith(thisPrefix)) {
                 remKeys.add(thisKey);
             }
         }
-        Iterator remKeysIt = remKeys.iterator();
+        Iterator<String> remKeysIt = remKeys.iterator();
         while (remKeysIt.hasNext()) {
             userDataProp.remove(remKeysIt.next().toString());
         }
@@ -300,8 +300,8 @@ public void configure() {
 
         // get all user names
         String suffix = '.' + ATTR_HOME;
-        ArrayList ulst = new ArrayList();
-        Enumeration allKeys = userDataProp.propertyNames();
+        ArrayList<String> ulst = new ArrayList<String>();
+        Enumeration<?> allKeys = userDataProp.propertyNames();
         int prefixlen = PREFIX.length();
         int suffixlen = suffix.length();
         while(allKeys.hasMoreElements()) {
@@ -315,7 +315,7 @@ public void configure() {
         }
         
         Collections.sort(ulst);
-        return (String[]) ulst.toArray(new String[0]);
+        return ulst.toArray(new String[0]);
     }
 
     /**
@@ -333,7 +333,7 @@ public void configure() {
         user.setEnabled(userDataProp.getBoolean(baseKey + ATTR_ENABLE, true));
         user.setHomeDirectory( userDataProp.getProperty(baseKey + ATTR_HOME, "/") );
         
-        List authorities = new ArrayList();
+        List<Authority> authorities = new ArrayList<Authority>();
         
         if(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false)) {
             authorities.add(new WritePermission());
@@ -349,7 +349,7 @@ public void configure() {
         
         authorities.add(new TransferRatePermission(downloadRate, uploadRate));
         
-        user.setAuthorities((Authority[]) authorities.toArray(new Authority[0]));
+        user.setAuthorities(authorities.toArray(new Authority[0]));
         
         user.setMaxIdleTime(userDataProp.getInteger(baseKey + ATTR_MAX_IDLE_TIME, 0));
 

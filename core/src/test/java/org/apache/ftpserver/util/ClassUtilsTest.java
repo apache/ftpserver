@@ -152,7 +152,7 @@ public class ClassUtilsTest extends TestCase {
         
         MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
         
-        Iterator iter = bean.getList().iterator();
+        Iterator<?> iter = bean.getList().iterator();
         
         assertEquals("foo", iter.next());
         assertEquals("bar", iter.next());
@@ -175,7 +175,7 @@ public class ClassUtilsTest extends TestCase {
         
         MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
         
-        Iterator iter = bean.getList().iterator();
+        Iterator<?> iter = bean.getList().iterator();
         
         MyBean myBean1 = (MyBean) iter.next();
         assertEquals("foo1", myBean1.getFoo());
@@ -275,7 +275,7 @@ public class ClassUtilsTest extends TestCase {
         
         MyMapBean bean = (MyMapBean) ClassUtils.createBean(config, null);
         
-        Map map = bean.getMap();
+        Map<?, ?> map = bean.getMap();
         
         assertEquals(4, map.size());
         assertEquals("bar1", map.get("foo1"));
@@ -297,7 +297,7 @@ public class ClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        Map map = ClassUtils.createMap(config);
+        Map<?, ?> map = ClassUtils.createMap(config);
         
         for(int i = 1; i<5; i++) {
             MyBean bean = (MyBean) map.get("foo" + i);
@@ -307,7 +307,7 @@ public class ClassUtilsTest extends TestCase {
     }
  
     public static class MyCollectionBean {
-        private List list;
+        private List<?> list;
         private int[] array;
         private MyBean[] myBeans;
 
@@ -323,22 +323,22 @@ public class ClassUtilsTest extends TestCase {
         public void setArray(int[] array) {
             this.array = array;
         }
-        public List getList() {
+        public List<?> getList() {
             return list;
         }
-        public void setList(List list) {
+        public void setList(List<?> list) {
             this.list = list;
         }
     }
     
     public static class MyMapBean {
-        private Map map;
+        private Map<?, ?> map;
 
-        public Map getMap() {
+        public Map<?, ?> getMap() {
             return map;
         }
 
-        public void setMap(Map map) {
+        public void setMap(Map<?, ?> map) {
             this.map = map;
         }
 

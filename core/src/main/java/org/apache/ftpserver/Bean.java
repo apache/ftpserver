@@ -24,17 +24,18 @@ import org.apache.ftpserver.ftplet.Configuration;
 
 public abstract class Bean {
 
-    public static Bean createBean(Configuration config, String defaultClass) throws Exception {
+    @SuppressWarnings("unchecked")
+	public static Bean createBean(Configuration config, String defaultClass) throws Exception {
         String className = config.getString("class", defaultClass);
         
-        Class clazz = Class.forName(className);
+        Class<?> clazz = Class.forName(className);
         
         boolean isComponent = Component.class.isAssignableFrom(clazz);
         
         if(isComponent) {
-            return new ComponentBean(config, clazz);
+            return new ComponentBean(config, (Class<Component>) clazz);
         } else {
-            return new PojoBean(config, clazz);
+            return new PojoBean(config, (Class<Object>) clazz);
         }
     }
     

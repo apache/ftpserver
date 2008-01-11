@@ -70,7 +70,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     private Bean statisticsBean;
     private Bean commandFactoryBean;
     
-    private Map listeners = new HashMap();
+    private Map<String, Bean> listeners = new HashMap<String, Bean>();
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
         new WritePermission()
@@ -115,8 +115,8 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         }
     }
     
-    private Map createListeners(Configuration conf, String prefix) throws Exception {
-        Map map = new HashMap();
+    private Map<String, Bean> createListeners(Configuration conf, String prefix) throws Exception {
+        Map<String, Bean> map = new HashMap<String, Bean>();
 
         Configuration listenersConfig = conf.subset(prefix);
         if(listenersConfig.isEmpty()) {
@@ -126,7 +126,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             map.put("default", listenerBean);
         } else {
         
-            Iterator keys = listenersConfig.getKeys();
+            Iterator<String> keys = listenersConfig.getKeys();
             
             while (keys.hasNext()) {
                 String key = (String) keys.next();
@@ -304,9 +304,9 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
      */
     public void dispose() {
         
-        Iterator listenerIter = listeners.values().iterator();
+        Iterator<Bean> listenerIter = listeners.values().iterator();
         while (listenerIter.hasNext()) {
-            Bean listenerBean = (Bean) listenerIter.next();
+            Bean listenerBean = listenerIter.next();
             listenerBean.destroyBean();
         }
         
@@ -340,7 +340,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     }
 
     public Listener getListener(String name) {
-        Bean listenerBean = (Bean) listeners.get(name);
+        Bean listenerBean = listeners.get(name);
         
         if(listenerBean != null) {
             return (Listener) listenerBean.getBean();
@@ -350,15 +350,15 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     }
 
     public Listener[] getListeners() {
-        Collection listenerBeans = listeners.values();
-        Iterator listenerIter = listenerBeans.iterator();
+        Collection<Bean> listenerBeans = listeners.values();
+        Iterator<Bean> listenerIter = listenerBeans.iterator();
         
         
         Listener[] listenerArray = new Listener[listenerBeans.size()];
         
         int counter = 0;
         while (listenerIter.hasNext()) {
-            Bean bean = (Bean) listenerIter.next();
+            Bean bean = listenerIter.next();
             
             listenerArray[counter] = (Listener) bean.getBean();
             

@@ -40,12 +40,13 @@ class DefaultCommandFactory implements CommandFactory, Component {
 
     private static final  Logger LOG = LoggerFactory.getLogger(DefaultCommandFactory.class);
 
-    private HashMap commandMap = new HashMap();  
+    private HashMap<String, Command> commandMap = new HashMap<String, Command>();  
     
     /**
      * Configure the command factory - populate the command map.
      */
-    public void configure(Configuration conf) throws FtpException {
+    @SuppressWarnings("unchecked")
+	public void configure(Configuration conf) throws FtpException {
         
         // first populate the default command list
         commandMap.put("ABOR", new org.apache.ftpserver.command.ABOR());
@@ -112,8 +113,8 @@ class DefaultCommandFactory implements CommandFactory, Component {
                 throw new FtpException("Command not found :: " + cmdName);
             }
             try {
-                Class clazz = Class.forName(cmdClass);
-                Command cmd = (Command)clazz.newInstance();
+                Class<Command> clazz = (Class<Command>) Class.forName(cmdClass);
+                Command cmd = clazz.newInstance();
                 commandMap.put(cmdName, cmd);
             }
             catch(Exception ex) {
@@ -130,7 +131,7 @@ class DefaultCommandFactory implements CommandFactory, Component {
         if(cmdName == null || cmdName.equals("")) {
             return null;
         }
-        return (Command)commandMap.get(cmdName);
+        return commandMap.get(cmdName);
     }
     
     /**

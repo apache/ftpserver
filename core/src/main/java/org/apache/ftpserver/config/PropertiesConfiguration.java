@@ -67,7 +67,7 @@ class PropertiesConfiguration implements Configuration {
      */
     public boolean isEmpty() {
         boolean empty = true;
-        Enumeration keys = prop.propertyNames();
+        Enumeration<?> keys = prop.propertyNames();
         while(keys.hasMoreElements()) {
             String key = (String)keys.nextElement();
             if(key.startsWith(prefix)) {
@@ -223,9 +223,9 @@ class PropertiesConfiguration implements Configuration {
     /**
      * Get configuration keys.
      */
-    public Iterator getKeys() {
-        ArrayList arr = new ArrayList();
-        for(Enumeration en = prop.keys(); en.hasMoreElements(); ) {
+    public Iterator<String> getKeys() {
+        ArrayList<String> arr = new ArrayList<String>();
+        for(Enumeration<Object> en = prop.keys(); en.hasMoreElements(); ) {
             String key = (String)en.nextElement();
             if(!key.startsWith(prefix)) {
                 continue;

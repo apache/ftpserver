@@ -21,7 +21,6 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;

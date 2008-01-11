@@ -96,12 +96,12 @@ public class TestUtil {
     }
 
     public static String[] getHostAddresses() throws Exception {
-        Enumeration nifs = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
         
-        List hostIps = new ArrayList();
+        List<String> hostIps = new ArrayList<String>();
         while (nifs.hasMoreElements()) {
             NetworkInterface nif = (NetworkInterface) nifs.nextElement();
-            Enumeration ips = nif.getInetAddresses();
+            Enumeration<InetAddress> ips = nif.getInetAddresses();
             
             while (ips.hasMoreElements()) {
                 InetAddress ip = (InetAddress) ips.nextElement();
@@ -113,7 +113,7 @@ public class TestUtil {
             }
         }
         
-        return (String[]) hostIps.toArray(new String[0]);
+        return hostIps.toArray(new String[0]);
     }
     
     public static void writeDataToFile(File file, byte[] data) throws IOException {

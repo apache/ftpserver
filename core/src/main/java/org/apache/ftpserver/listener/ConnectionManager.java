@@ -63,7 +63,7 @@ interface ConnectionManager {
     /**
      * Get all request handlers.
      */
-    List getAllConnections();
+    List<Connection> getAllConnections();
     
     /**
      * Establish a new connection channel.

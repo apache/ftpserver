@@ -27,9 +27,9 @@ public class PojoBean extends Bean {
 
     private Configuration config;
     private Object pojo;
-    private Class clazz;
+    private Class<Object> clazz;
     
-    public PojoBean(Configuration config, Class clazz) {
+    public PojoBean(Configuration config, Class<Object> clazz) {
         this.clazz = clazz;
         this.config = config;
     }

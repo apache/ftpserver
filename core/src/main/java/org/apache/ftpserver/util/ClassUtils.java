@@ -115,7 +115,7 @@ public class ClassUtils {
         
     }
     
-    private static PropertyDescriptor getDescriptor(Class clazz, String propertyName) {
+    private static PropertyDescriptor getDescriptor(Class<?> clazz, String propertyName) {
         propertyName = normalizePropertyName(propertyName);
         
         BeanInfo beanInfo;
@@ -136,7 +136,7 @@ public class ClassUtils {
         return null;
     }
         
-    private static Object createObject(Class clazz, Configuration config, String propValue) {
+    private static Object createObject(Class<?> clazz, Configuration config, String propValue) {
         Object value;
         
         if(config.isEmpty()) {
@@ -158,12 +158,12 @@ public class ClassUtils {
             }
             
             if(Map.class.isAssignableFrom(clazz)) {
-                Map map = new HashMap();
+                Map<String, Object> map = new HashMap<String, Object>();
                 
-                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
-                    String mapKey = (String) mapKeys.next();
+                    String mapKey = mapKeys.next();
                     String mapValue = config.getString(mapKey, null);
                     Configuration mapConfig = config.subset(mapKey);
                     
@@ -172,12 +172,12 @@ public class ClassUtils {
                 
                 value = map;
             } else if(Collection.class.isAssignableFrom(clazz)) {
-                List list = new ArrayList();
+                List<Object> list = new ArrayList<Object>();
                 
-                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
-                    String mapKey = (String) mapKeys.next();
+                    String mapKey = mapKeys.next();
                     
                     String listValue = config.getString(mapKey, null);
 
@@ -186,12 +186,12 @@ public class ClassUtils {
                 
                 value = list;
             } else if(clazz.isArray()) {
-                List list = new ArrayList();
+                List<Object> list = new ArrayList<Object>();
                 
-                Iterator mapKeys = getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
-                    String mapKey = (String) mapKeys.next();
+                    String mapKey = mapKeys.next();
                     
                     String listValue = config.getString(mapKey, null);
 
@@ -217,10 +217,8 @@ public class ClassUtils {
         return value;
     }
     
-    public static class KeyComparator implements Comparator {
-        public int compare(Object o1, Object o2) {
-            String key1 = (String) o1;
-            String key2 = (String) o2;
+    public static class KeyComparator implements Comparator<String> {
+        public int compare(String key1, String key2) {
 
             // assume they are integers
             try {
@@ -234,11 +232,11 @@ public class ClassUtils {
         }
     }
     
-    private static Iterator getKeysInOrder(Iterator keys) {
-        List keyList = new ArrayList();
+    private static Iterator<String> getKeysInOrder(Iterator<String> keys) {
+        List<String> keyList = new ArrayList<String>();
         
         while (keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
             keyList.add(key);
         }
         
@@ -247,15 +245,15 @@ public class ClassUtils {
         return keyList.iterator();
     }
     
-    public static Map createMap(Configuration config) {
-        return (Map) createObject(Map.class, config, null);
+    public static Map<?, ?> createMap(Configuration config) {
+        return (Map<?, ?>) createObject(Map.class, config, null);
         
     }
     
     public static Object createBean(Configuration config, String defaultClass) {
         String className = config.getString("class", defaultClass);
         
-        Class clazz;
+        Class<?> clazz;
         Object bean;
         try {
             clazz = Class.forName(className);
@@ -265,10 +263,10 @@ public class ClassUtils {
         }
         
         
-        Iterator keys = config.getKeys();
+        Iterator<String> keys = config.getKeys();
         
         while (keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
 
             if(key.equals("class")) {
                 continue;
@@ -302,7 +300,7 @@ public class ClassUtils {
         }
     }
     
-    public static Object cast(Class clazz, String value) {
+    public static Object cast(Class<?> clazz, String value) {
         
         Object castValue = null;
         int pos;
@@ -341,7 +339,7 @@ public class ClassUtils {
             
             castValue = castArray;
         } else if(clazz == List.class) {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             String[] values = value.split(",");
             
             for (int i = 0; i < values.length; i++) {
@@ -365,7 +363,7 @@ public class ClassUtils {
             }
         } else if((pos = value.lastIndexOf('.')) != -1) {
             try {
-                Class c = Class.forName(value.substring(0, pos));
+                Class<?> c = Class.forName(value.substring(0, pos));
                 Field f = c.getDeclaredField(value.substring(pos+1));
 
                 castValue = f.get(null);
@@ -388,8 +386,8 @@ public class ClassUtils {
      * @param className The class name to look for in the super classes
      * @return true if the class extends a class by the specified name.
      */
-    public static boolean extendsClass(final Class clazz, String className) {
-    	Class superClass = clazz.getSuperclass();
+    public static boolean extendsClass(final Class<?> clazz, String className) {
+    	Class<?> superClass = clazz.getSuperclass();
     	
     	while(superClass != null) {
     		if(superClass.getName().equals(className)) {
