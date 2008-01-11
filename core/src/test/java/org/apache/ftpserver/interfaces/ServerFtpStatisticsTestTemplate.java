@@ -49,10 +49,6 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         public void run() {            
         }
 
-        public void beforeSecureControlChannel(FtpServerSession session, String type) throws Exception {
-            
-        }
-
         public Socket getControlSocket() {
             return null;
         }
@@ -64,11 +60,6 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         public long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException {
             return 0;
         }
-
-        public void afterSecureControlChannel(FtpServerSession session, String type) throws Exception {
-            
-        }
-        
     }
     
     public void testConnectionCount() {
