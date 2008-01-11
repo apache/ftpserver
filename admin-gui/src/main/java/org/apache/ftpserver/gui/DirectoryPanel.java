@@ -33,6 +33,7 @@ import javax.swing.JTable;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Connection;
 
@@ -114,8 +115,8 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Make directory notification.
      */
-    public void notifyMkdir(Connection con, FileObject file) {
-        User user = con.getSession().getUser();
+    public void notifyMkdir(FtpIoSession session, FileObject file) {
+        User user = session.getUser();
         models[0].newEntry(file.getFullName(), user);
     }
     
@@ -123,8 +124,8 @@ class DirectoryPanel extends PluginPanel {
     /**
      * Remove directory notification.
      */
-    public void notifyRmdir(Connection con, FileObject file) {
-        User user = con.getSession().getUser();
+    public void notifyRmdir(FtpIoSession session, FileObject file) {
+        User user = session.getUser();
         models[1].newEntry(file.getFullName(), user);
     }
     

@@ -33,8 +33,8 @@ import javax.swing.JTable;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.Connection;
 
 /**
  * This panel displays all user file upload, download and remove activities.
@@ -116,24 +116,24 @@ class FilePanel extends PluginPanel {
     /**
      * File upload notification.
      */
-    public void notifyUpload(Connection con, FileObject file, long sz) {
-        User user = con.getSession().getUser();
+    public void notifyUpload(FtpIoSession session, FileObject file, long sz) {
+        User user = session.getUser();
         models[0].newEntry(file.getFullName(), user);
     }
     
     /**
      * File download notification.
      */
-    public void notifyDownload(Connection con, FileObject file, long sz) {
-        User user = con.getSession().getUser();
+    public void notifyDownload(FtpIoSession session, FileObject file, long sz) {
+        User user = session.getUser();
         models[1].newEntry(file.getFullName(), user);
     }
     
     /**
      * File delete notification.
      */
-    public void notifyDelete(Connection con, FileObject file) {
-        User user = con.getSession().getUser();
+    public void notifyDelete(FtpIoSession session, FileObject file) {
+        User user = session.getUser();
         models[2].newEntry(file.getFullName(), user);
     }
     

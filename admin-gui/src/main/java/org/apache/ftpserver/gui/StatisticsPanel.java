@@ -37,10 +37,10 @@ import javax.swing.table.TableModel;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.interfaces.FileObserver;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.interfaces.StatisticsObserver;
-import org.apache.ftpserver.listener.Connection;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -299,11 +299,11 @@ class StatisticsPanel extends PluginPanel
     /**
      * File upload notification.
      */
-    public void notifyUpload(final Connection connection, final FileObject file, final long size) {
+    public void notifyUpload(final FtpIoSession session, final FileObject file, final long size) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
-                filePanel.notifyUpload(connection, file, size);        
+                filePanel.notifyUpload(session, file, size);        
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -331,11 +331,11 @@ class StatisticsPanel extends PluginPanel
     /**
      * File download notification.
      */
-    public void notifyDownload(final Connection connection, final FileObject file, final long size) {
+    public void notifyDownload(final FtpIoSession session, final FileObject file, final long size) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
-                filePanel.notifyDownload(connection, file, size);        
+                filePanel.notifyDownload(session, file, size);        
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -360,11 +360,11 @@ class StatisticsPanel extends PluginPanel
     /**
      * File delete notification.
      */
-    public void notifyDelete(final Connection connection, final FileObject file) {
+    public void notifyDelete(final FtpIoSession session, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 FilePanel filePanel = (FilePanel)getContainer().getPluginPanel(PluginPanelContainer.FILE_INDEX);
-                filePanel.notifyDelete(connection, file);        
+                filePanel.notifyDelete(session, file);        
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -465,11 +465,11 @@ class StatisticsPanel extends PluginPanel
     /**
      * Make directry notification.
      */
-    public void notifyMkdir(final Connection connection, final FileObject file) {
+    public void notifyMkdir(final FtpIoSession session, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 DirectoryPanel dirPanel = (DirectoryPanel)getContainer().getPluginPanel(PluginPanelContainer.DIR_INDEX);
-                dirPanel.notifyMkdir(connection, file);        
+                dirPanel.notifyMkdir(session, file);        
             }
         };
         SwingUtilities.invokeLater(runnable);
@@ -494,11 +494,11 @@ class StatisticsPanel extends PluginPanel
     /**
      * Remove directry notification.
      */
-    public void notifyRmdir(final Connection connection, final FileObject file) {
+    public void notifyRmdir(final FtpIoSession session, final FileObject file) {
         Runnable runnable = new Runnable() {
             public void run() { 
                 DirectoryPanel dirPanel = (DirectoryPanel)getContainer().getPluginPanel(PluginPanelContainer.DIR_INDEX);
-                dirPanel.notifyRmdir(connection, file);        
+                dirPanel.notifyRmdir(session, file);        
             }
         };
         SwingUtilities.invokeLater(runnable);
