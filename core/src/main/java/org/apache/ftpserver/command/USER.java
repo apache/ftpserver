@@ -34,6 +34,7 @@ import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
 import org.apache.ftpserver.util.FtpReplyUtil;
+import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
@@ -68,6 +69,9 @@ class USER extends AbstractCommand {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "USER", null));
                 return;  
             }
+            
+            // Add to the MDC logging
+            MdcInjectionFilter.setProperty(session, "userName", userName);
             
             // already logged-in
             BaseUser user = (BaseUser)session.getUser();

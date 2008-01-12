@@ -32,9 +32,11 @@ import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.Ssl;
 import org.apache.mina.common.IdleStatus;
+import org.apache.mina.common.IoSessionLogger;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
+import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.apache.mina.transport.socket.SocketAcceptor;
 import org.apache.mina.transport.socket.SocketSessionConfig;
@@ -72,22 +74,22 @@ public class MinaListener extends AbstractListener {
         }
         
         acceptor.setReuseAddress(true);
+        acceptor.getSessionConfig().setReadBufferSize( 2048 );
+        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
+        // Decrease the default receiver buffer size
+        ((SocketSessionConfig) acceptor.getSessionConfig()).setReceiveBufferSize(512); 
 
-        acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
+        acceptor.getFilterChain().addLast("mdcFilter", new MdcInjectionFilter());
         acceptor.getFilterChain().addLast(
                 "codec",
                 new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
+        
+        // dusable the session prefix as we now use MDC logging
+        IoSessionLogger.setUsePrefix(false);
         acceptor.getFilterChain().addLast( "logger", new LoggingFilter() );
+        acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
+        acceptor.getFilterChain().addLast("mdcFilter2", new MdcInjectionFilter());
 
-        acceptor.setHandler(  new FtpHandler(context, this) );
-
-        acceptor.getSessionConfig().setReadBufferSize( 2048 );
-        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
-
-        
-        
-        // Decrease the default receiver buffer size
-        ((SocketSessionConfig) acceptor.getSessionConfig()).setReceiveBufferSize(512); 
         
         if(isImplicitSsl()) {
             Ssl ssl = getSsl();
@@ -105,6 +107,8 @@ public class MinaListener extends AbstractListener {
             
             acceptor.getFilterChain().addFirst("sslFilter", sslFilter);
         }
+
+        acceptor.setHandler(  new FtpHandler(context, this) );
         
         acceptor.bind(address);
     }
