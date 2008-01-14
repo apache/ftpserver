@@ -17,6 +17,7 @@
   <build>
     <resources>
       <resource>
+        <directory>src/main/resources</directory>
         <includes>
           <include>**/*.txt</include>
           <include>**/*.gif</include>
@@ -25,6 +26,7 @@
     </resources>
     <testResources>
       <testResource>
+        <directory>src/test/resources</directory>
         <includes>
           <include>*.properties</include>
         </includes>
