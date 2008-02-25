@@ -88,7 +88,7 @@ public abstract class SSLTestTemplate extends TestCase {
         configProps.setProperty("config.listeners.default.port", Integer
                 .toString(port));
         configProps.setProperty("config.listeners.default.ssl.class",
-                DefaultSsl.class.getName());
+                DefaultSslConfiguration.class.getName());
         configProps.setProperty("config.listeners.default.ssl.keystore-file",
                 FTPSERVER_KEYSTORE.getAbsolutePath());
         configProps.setProperty("config.listeners.default.ssl.keystore-password",
@@ -103,7 +103,7 @@ public abstract class SSLTestTemplate extends TestCase {
         configProps.setProperty("config.listeners.default.data-connection.class",
                 DefaultDataConnectionConfig.class.getName());
         configProps.setProperty("config.listeners.default.data-connection.ssl.class",
-                DefaultSsl.class.getName());
+                DefaultSslConfiguration.class.getName());
         configProps.setProperty("config.listeners.default.data-connection.ssl.keystore-file",
                 FTPSERVER_KEYSTORE.getAbsolutePath());
         configProps.setProperty("config.listeners.default.data-connection.ssl.keystore-password",

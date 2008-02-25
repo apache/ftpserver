@@ -25,12 +25,23 @@ import javax.net.ssl.SSLContext;
 
 
 /**
- * SSL interface.
+ * SSL configuration
  */
-public 
-interface Ssl {
+public interface SslConfiguration {
     
+	/**
+	 * Return the SSL context for this configuration
+	 * @return The {@link SSLContext}
+	 * @throws GeneralSecurityException
+	 */
     SSLContext getSSLContext() throws GeneralSecurityException;
+    
+	/**
+	 * Return the SSL context for this configuration given the specified protocol
+     * @param protocol The protocol, SSL or TLS must be supported
+     * @return The {@link SSLContext}
+     * @throws GeneralSecurityException
+     */
     SSLContext getSSLContext(String protocol) throws GeneralSecurityException;
     
     /**
@@ -40,5 +51,12 @@ interface Ssl {
      * @return An array of cipher suites, or null.
      */
     String[] getEnabledCipherSuites();
+    
+    /**
+     * Return the required client authentication setting
+     * @return {@link ClientAuth#NEED} if client authentication is required, 
+     * 		{@link ClientAuth#WANT} is client authentication is wanted or
+     * 		{@link ClientAuth#NONE} if no client authentication is the be performed  
+     */
     ClientAuth getClientAuth();
 }

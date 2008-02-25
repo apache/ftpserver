@@ -22,7 +22,7 @@ package org.apache.ftpserver.interfaces;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 
 
 /**
@@ -53,5 +53,5 @@ interface SocketFactory {
     /**
      * Get SSL component.
      */
-    Ssl getSSL();
+    SslConfiguration getSSL();
 }

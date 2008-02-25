@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.ClientAuth;
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.slf4j.Logger;
@@ -94,7 +94,7 @@ class AUTH extends AbstractCommand {
     }
     
     private void secureSession(FtpIoSession session, String type) throws GeneralSecurityException, FtpException {
-        Ssl ssl = session.getListener().getSsl();
+        SslConfiguration ssl = session.getListener().getSsl();
         
         if(ssl != null) {
             session.setAttribute(SslFilter.DISABLE_ENCRYPTION_ONCE);

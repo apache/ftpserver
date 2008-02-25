@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
  * Ssl implementation. This class encapsulates all 
  * the SSL functionalities.
  */
-public class DefaultSsl implements Ssl {
+public class DefaultSslConfiguration implements SslConfiguration {
     
-    private final Logger LOG = LoggerFactory.getLogger(DefaultSsl.class);
+    private final Logger LOG = LoggerFactory.getLogger(DefaultSslConfiguration.class);
     
     private File keystoreFile = new File("./res/.keystore");
     private String keystorePass;

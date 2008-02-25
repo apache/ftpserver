@@ -21,7 +21,7 @@ package org.apache.ftpserver.interfaces;
 
 import java.net.InetAddress;
 
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
  * Data connection configuration interface.
@@ -80,5 +80,5 @@ interface DataConnectionConfig {
     /**
      * Get SSL component.
      */
-    Ssl getSSL();
+    SslConfiguration getSSL();
 }

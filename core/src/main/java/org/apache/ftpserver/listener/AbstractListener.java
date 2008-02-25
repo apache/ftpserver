@@ -23,7 +23,7 @@ import java.net.InetAddress;
 
 import org.apache.ftpserver.DefaultDataConnectionConfig;
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 
 
 /**
@@ -33,7 +33,7 @@ public abstract class AbstractListener implements Listener {
     
     private InetAddress serverAddress;
     private int port = 21;
-    private Ssl ssl;
+    private SslConfiguration ssl;
     private boolean implicitSsl = false;
     private DataConnectionConfig dataConnectionConfig = new DefaultDataConnectionConfig();
     
@@ -58,10 +58,10 @@ public abstract class AbstractListener implements Listener {
     public void setAddress(InetAddress serverAddress) {
         this.serverAddress = serverAddress;
     }
-    public Ssl getSsl() {
+    public SslConfiguration getSsl() {
         return ssl;
     }
-    public void setSsl(Ssl ssl) {
+    public void setSsl(SslConfiguration ssl) {
         this.ssl = ssl;
     }
     public DataConnectionConfig getDataConnectionConfig() {

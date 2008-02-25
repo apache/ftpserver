@@ -38,7 +38,7 @@ import org.apache.ftpserver.interfaces.DataConnectionConfig;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.ClientAuth;
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,7 +158,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             }
 
             if(secure) {
-                Ssl ssl = dataCfg.getSSL();
+                SslConfiguration ssl = dataCfg.getSSL();
                 if(ssl == null) {
                     throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
@@ -186,7 +186,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
     }
      
-    private ServerSocket createServerSocket(Ssl ssl, InetAddress address2, int passivePort) throws IOException, GeneralSecurityException {
+    private ServerSocket createServerSocket(SslConfiguration ssl, InetAddress address2, int passivePort) throws IOException, GeneralSecurityException {
         // get server socket factory
         SSLContext ctx = ssl.getSSLContext();
         SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
@@ -247,7 +247,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             if(!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if(secure) {
-                    Ssl ssl = dataConfig.getSSL();
+                    SslConfiguration ssl = dataConfig.getSSL();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
                     }
@@ -290,7 +290,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         return dataSoc;
     }
     
-    private Socket createSocket(Ssl ssl, InetAddress address2,
+    private Socket createSocket(SslConfiguration ssl, InetAddress address2,
             int port2, InetAddress localAddress, int localPort, boolean clientMode) throws IOException, GeneralSecurityException {
         
         // get socket factory

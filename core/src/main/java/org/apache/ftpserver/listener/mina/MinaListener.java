@@ -30,7 +30,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoSessionLogger;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -92,7 +92,7 @@ public class MinaListener extends AbstractListener {
 
         
         if(isImplicitSsl()) {
-            Ssl ssl = getSsl();
+            SslConfiguration ssl = getSsl();
             SslFilter sslFilter = new SslFilter( ssl.getSSLContext() );
             
             if(ssl.getClientAuth() == ClientAuth.NEED) {

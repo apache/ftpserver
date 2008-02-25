@@ -23,7 +23,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
-import org.apache.ftpserver.ssl.Ssl;
+import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
  * Data connection configuration.
@@ -98,7 +98,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     
     private int maxIdleTimeMillis = 10000;
     
-    private Ssl ssl;
+    private SslConfiguration ssl;
     
     public void setIdleTime(int idleTime) {
         // get the maximum idle time in millis
@@ -116,7 +116,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
         this.passive = passive;
     }
     
-    public void setSsl(Ssl ssl) {
+    public void setSsl(SslConfiguration ssl) {
         this.ssl = ssl;
     }
 
@@ -207,7 +207,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     /**
      * Get SSL component.
      */
-    public Ssl getSSL() {
+    public SslConfiguration getSSL() {
         return ssl;
     }
 }
