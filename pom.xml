@@ -9,9 +9,9 @@
     <groupId>org.apache.ftpserver</groupId>
     <artifactId>ftpserver-parent</artifactId>
     <packaging>pom</packaging>
-    <name>Apache Incubator FtpServer</name>
-    <version>1.0-incubator-SNAPSHOT</version>
-    <url>http://incubator.apache.org/ftpserver</url>
+    <name>Apache FtpServer</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <url>http://mina.apache.org/ftpserver</url>
     <issueManagement>
         <system>Jira</system>
         <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
@@ -19,33 +19,35 @@
     <inceptionYear>2003</inceptionYear>
     <mailingLists>
         <mailingList>
-            <name>FTP Server Development mailing list</name>
-            <subscribe>ftpserver-dev-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>ftpserver-dev-unsubscribe@incubator.apache.org</unsubscribe>
-            <post>ftpserver-dev@incubator.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-dev/</archive>
+            <name>FtpServer Users mailing list</name>
+            <subscribe>ftpserver-users-subscribe@mina.apache.org</subscribe>
+            <unsubscribe>ftpserver-users-unsubscribe@mina.apache.org</unsubscribe>
+            <post>ftpserver-users@mina.apache.org</post>
+            <archive>http://mail-archives.apache.org/mod_mbox/mina-ftpserver-users/</archive>
+        </mailingList>
+        <mailingList>
+            <name>MINA Development mailing list</name>
+            <subscribe>dev-subscribe@mina.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@mina.apache.org</unsubscribe>
+            <post>dev@mina.apache.org</post>
+            <archive>http://mail-archives.apache.org/mod_mbox/mina-dev/</archive>
             <otherArchives>
-                <otherArchive>http://www.mail-archive.com/ftpserver-dev%40incubator.apache.org/</otherArchive>
+                <otherArchive>http://www.nabble.com/Apache-MINA-f16868.html</otherArchive>
             </otherArchives>
         </mailingList>
         <mailingList>
-            <name>FTP Server Commit mailing list</name>
-            <subscribe>ftpserver-commits-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>ftpserver-commits-unsubscribe@incubator.apache.org</unsubscribe>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-ftpserver-commits/</archive>
-        </mailingList>
-        <mailingList>
-            <name>Incubator General mailing list</name>
-            <subscribe>general-subscribe@incubator.apache.org</subscribe>
-            <unsubscribe>general-unsubscribe@incubator.apache.org</unsubscribe>
-            <post>general@incubator.apache.org</post>
-            <archive>http://mail-archives.apache.org/mod_mbox/incubator-general/</archive>
-            <otherArchives>
-                <otherArchive>http://www.mail-archive.com/general%40incubator.apache.org/</otherArchive>
-            </otherArchives>
+            <name>MINA Commit mailing list</name>
+            <subscribe>commits-subscribe@mina.apache.org</subscribe>
+            <unsubscribe>commits-unsubscribe@mina.apache.org</unsubscribe>
+            <archive>http://mail-archives.apache.org/mod_mbox/mina-commits/</archive>
         </mailingList>
     </mailingLists>
     <developers>
+        <developer>
+            <id>ngn</id>
+            <name>Niklas Gustavsson</name>
+            <email>niklas@protocol7.com</email>
+        </developer>
         <developer>
             <id>rana_b</id>
             <name>Rana Battacharyya</name>
@@ -55,11 +57,6 @@
             <id>hammant</id>
             <name>Paul Hammant</name>
             <email>paul.{aT}.hammant.{d0T}.org</email>
-        </developer>
-        <developer>
-            <id>ngn</id>
-            <name>Niklas Gustavsson</name>
-            <email>niklas.{aT}.protocol7.{d0T}.com</email>
         </developer>
         <developer>
             <id>sergey</id>
@@ -95,9 +92,9 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/ftpserver/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/ftpserver/trunk</developerConnection>
-        <url>http://svn.apache.org/viewvc/incubator/ftpserver/trunk</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/mina/sandbox/ftpserver/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/mina/sandbox/ftpserver/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/mina/sandbox/ftpserver/trunk</url>
     </scm>
     <build>
         <plugins>
@@ -138,7 +135,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.0-beta-5</version>
                 <configuration>
-                    <tagBase>https://svn.apache.org/repos/asf/incubator/ftpserver/tags/</tagBase>
+                    <tagBase>https://svn.apache.org/repos/asf/mina/sandbox/ftpserver/tags/</tagBase>
                 </configuration>
             </plugin>
             <plugin>
