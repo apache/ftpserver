@@ -592,7 +592,7 @@ class UserManagerPanel extends PluginPanel implements ActionListener {
                 user.setHomeDirectory(directoryTxt.getText());
                 user.setEnabled(enabledChkBox.isSelected());
                 
-                List authorities = new ArrayList();
+                List<Authority> authorities = new ArrayList<Authority>();
                 
                 if(writeChkBox.isSelected()) {
                     authorities.add(new WritePermission());

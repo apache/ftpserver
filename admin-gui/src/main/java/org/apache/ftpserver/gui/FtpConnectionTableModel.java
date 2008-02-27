@@ -52,7 +52,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
                                                "Login Time", 
                                                "Last Access Time",    
                                                "IP"};
-    private List connections = new Vector();
+    private List<Connection> connections = new Vector<Connection>();
     private FtpServerContext serverContext;
     private EventListenerList listeners = new EventListenerList();
     
@@ -75,7 +75,7 @@ class FtpConnectionTableModel implements TableModel, ConnectionManagerObserver {
     /**
      * Get column class - always string
      */
-    public Class getColumnClass(int index) {
+    public Class<String> getColumnClass(int index) {
         return String.class;
     }
     

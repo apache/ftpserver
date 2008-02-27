@@ -21,6 +21,7 @@ package org.apache.ftpserver.gui;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -50,8 +51,8 @@ class TreePluginPanelContainer extends JSplitPane
     
     private static final long serialVersionUID = -6807863406907626635L;
     
-    private ArrayList pluginPanels = new ArrayList();
-    private Vector treeListeners = new Vector();
+    private List<PluginPanel> pluginPanels = new ArrayList<PluginPanel>();
+    private List<TreeModelListener> treeListeners = new Vector<TreeModelListener>();
     
     private FtpServerContext serverContext;
     

@@ -35,7 +35,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.Connection;
 
 /**
  * This panel monitor all user directory create and remove activities.

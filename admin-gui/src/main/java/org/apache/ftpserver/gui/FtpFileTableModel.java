@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.gui;
 
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
@@ -41,12 +42,12 @@ class FtpFileTableModel extends AbstractTableModel {
                                                "User", 
                                                "Time"};    
 
-    private Vector entries = new Vector();
+    private List<TableEntry> entries = new Vector<TableEntry>();
          
     /**
      * Get column class - always string
      */
-    public Class getColumnClass(int index) {
+    public Class<String> getColumnClass(int index) {
         return String.class;
     }
     

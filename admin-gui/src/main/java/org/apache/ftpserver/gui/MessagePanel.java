@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -42,8 +43,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.MessageResource;
 
 /**
  * This is FTP server response panel. User can customize server responses.
@@ -62,7 +63,7 @@ class MessagePanel extends PluginPanel {
     private JTextArea txtArea;
     
     private String[] languages;
-    private Vector messageKeys;
+    private List<String> messageKeys;
     private Properties messageProps;
     private int oldKeySelIndex = -1;
     
@@ -164,8 +165,8 @@ class MessagePanel extends PluginPanel {
         // get properties
         MessageResource msgRes = serverContext.getMessageResource();
         Properties prop = msgRes.getMessages(language);
-        Vector keyList = new Vector();
-        for(Enumeration keys = prop.propertyNames(); keys.hasMoreElements();) {
+        List<String> keyList = new Vector<String>();
+        for(Enumeration<?> keys = prop.propertyNames(); keys.hasMoreElements();) {
             String key = (String)keys.nextElement();
             keyList.add(key);
         }
@@ -175,7 +176,7 @@ class MessagePanel extends PluginPanel {
         
         // load list
         list.removeAll();
-        list.setListData(keyList);
+        list.setListData(keyList.toArray());
         list.setSelectedIndex(0);
     }
     

@@ -151,7 +151,7 @@ class StatisticsPanel extends PluginPanel
     /**
      * Get column class - always string
      */
-    public Class getColumnClass(int index) {
+    public Class<String> getColumnClass(int index) {
         return String.class;
     }
     

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -207,7 +208,7 @@ class DirChooser extends JDialog implements TreeSelectionListener,
             }
         }
         
-        ArrayList dirs = new ArrayList();
+        List<File> dirs = new ArrayList<File>();
         while(true) {
             dirs.add(dir);
             if(FILE_VIEW.isRoot(dir)) {

@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.gui;
 
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.event.EventListenerList;
@@ -44,13 +45,13 @@ class FtpDirectoryTableModel implements TableModel {
                                                "User", 
                                                "Time"};    
 
-    private Vector entries = new Vector();
+    private List<TableEntry> entries = new Vector<TableEntry>();
     private EventListenerList listeners = new EventListenerList();
          
     /**
      * Get column class - always string
      */
-    public Class getColumnClass(int index) {
+    public Class<String> getColumnClass(int index) {
         return String.class;
     }
     

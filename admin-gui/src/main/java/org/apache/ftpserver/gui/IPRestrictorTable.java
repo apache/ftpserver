@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -53,7 +54,7 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
             "Permission"
     };
     
-    private Vector entries = new Vector();
+    private List<Entry> entries = new Vector<Entry>();
     private EventListenerList modelListeners  = new EventListenerList();
     
     private JTable table;
@@ -439,8 +440,8 @@ class IPRestrictorTable extends JPanel implements TableModel, ListSelectionListe
     /**
      * Get column class.
      */
-    public Class getColumnClass(int colIdx) {
-        Class type = null;
+    public Class<?> getColumnClass(int colIdx) {
+        Class<?> type = null;
         if(colIdx == 0) {
             type = String.class;
         }
