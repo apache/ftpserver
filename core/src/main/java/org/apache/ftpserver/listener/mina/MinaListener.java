@@ -75,11 +75,13 @@ public class MinaListener extends AbstractListener {
         
         acceptor.setReuseAddress(true);
         acceptor.getSessionConfig().setReadBufferSize( 2048 );
-        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
+        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 120 );
         // Decrease the default receiver buffer size
         ((SocketSessionConfig) acceptor.getSessionConfig()).setReceiveBufferSize(512); 
 
-        acceptor.getFilterChain().addLast("mdcFilter", new MdcInjectionFilter());
+        MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
+        
+        acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
         acceptor.getFilterChain().addLast(
                 "codec",
                 new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
@@ -88,7 +90,7 @@ public class MinaListener extends AbstractListener {
         IoSessionLogger.setUsePrefix(false);
         acceptor.getFilterChain().addLast( "logger", new LoggingFilter() );
         acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
-        acceptor.getFilterChain().addLast("mdcFilter2", new MdcInjectionFilter());
+        acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
 
         
         if(isImplicitSsl()) {
