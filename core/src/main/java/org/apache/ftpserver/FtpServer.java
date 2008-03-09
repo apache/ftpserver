@@ -76,7 +76,11 @@ public class FtpServer {
      * Stop the server. Stop the listener thread.
      */
     public void stop() {
-
+    	if(!started || serverContext == null) {
+    		// we have already been stopped, ignore
+    		return;
+    	}
+    	
         // stop all listeners
         Listener[] listeners = serverContext.getListeners(); 
         for (int i = 0; i<listeners.length; i++) {
