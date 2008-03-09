@@ -32,7 +32,6 @@ import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoSessionLogger;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
@@ -87,7 +86,6 @@ public class MinaListener extends AbstractListener {
                 new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
         
         // dusable the session prefix as we now use MDC logging
-        IoSessionLogger.setUsePrefix(false);
         acceptor.getFilterChain().addLast( "logger", new LoggingFilter() );
         acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
         acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
