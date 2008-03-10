@@ -30,6 +30,8 @@ public class LoginTest extends ClientTestTemplate {
     public void testLogin() throws Exception {
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
+    
+
 
     public void testLoginNoUser() throws Exception {
         assertFalse(client.login(null, null));
@@ -156,6 +158,7 @@ public class LoginTest extends ClientTestTemplate {
             
             try{
                 assertTrue(client4.login(TESTUSER1_USERNAME, TESTUSER_PASSWORD));
+                assertEquals(421, client.getReplyCode());
                 fail("Must throw FTPConnectionClosedException");
             } catch(FTPConnectionClosedException e) {
                 // expected
