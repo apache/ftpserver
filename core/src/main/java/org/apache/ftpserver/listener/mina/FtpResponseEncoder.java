@@ -47,14 +47,5 @@ public class FtpResponseEncoder extends ProtocolEncoderAdapter
         
         buf.flip();
         out.write(buf);
-        
-        // 2007-10-26 - flushing the response, it is important to receive replies like 421 - service unavailable, see https://issues.apache.org/jira/browse/FTPSERVER-112
-        //WriteFuture future = out.flush();
-        
-        // TODO implement using listener?
-        //future.await(5000);
-        //if (!future.isWritten()) {
-        //	throw new FtpException("The response could not be sent for 5 seconds");
-        //}
     }
 }

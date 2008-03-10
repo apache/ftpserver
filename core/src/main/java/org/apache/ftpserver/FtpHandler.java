@@ -58,8 +58,8 @@ public class FtpHandler extends IoHandlerAdapter
     @Override
     public void exceptionCaught( IoSession session, Throwable cause ) throws Exception
     {
-        cause.printStackTrace();
-        session.closeOnFlush().awaitUninterruptibly(10000);
+    	LOG.error("Exception caught, closing session", cause);
+    	session.closeOnFlush();
     }
 
     @Override

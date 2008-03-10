@@ -45,8 +45,7 @@ class QUIT extends AbstractCommand {
         session.resetState();
         session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
 		
-        session.closeOnFlush().awaitUninterruptibly(10000);
-        
+        session.closeOnFlush();
     }
 
 }
