@@ -76,7 +76,9 @@ public class FtpHandler extends IoHandlerAdapter
             
             
             if(command != null) {
-                command.execute(ftpSession, context, request);
+            	synchronized (session) {
+            		command.execute(ftpSession, context, request);
+				}
             }
             else {
                 session.write(FtpReplyUtil.translate(ftpSession, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "not.implemented", null));

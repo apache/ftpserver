@@ -134,7 +134,7 @@ class PASS extends AbstractCommand {
                 authenticatedUser = userManager.authenticate(auth);
             } catch(AuthenticationFailedException e) { 
                 authenticatedUser = null;
-                LOG.warn("User failed to log in", e);                
+                LOG.warn("User failed to log in");                
             }
             catch(Exception e) {
                 authenticatedUser = null;

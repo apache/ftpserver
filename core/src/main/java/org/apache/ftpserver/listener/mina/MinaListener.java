@@ -21,6 +21,9 @@ package org.apache.ftpserver.listener.mina;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -30,6 +33,7 @@ import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
@@ -53,6 +57,8 @@ public class MinaListener extends AbstractListener {
     
     boolean suspended = false;
 
+    private ExecutorService filterExecutor = Executors.newCachedThreadPool();
+
     /**
      * @see Listener#start(FtpServerContext)
      */
@@ -75,11 +81,12 @@ public class MinaListener extends AbstractListener {
         MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
         
         acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
+        acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
         acceptor.getFilterChain().addLast(
-                "codec",
-                new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
-        
+        		"codec",
+        		new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
         acceptor.getFilterChain().addLast("logger", new LoggingFilter() );
+        
         acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
 
         
@@ -114,6 +121,16 @@ public class MinaListener extends AbstractListener {
             acceptor.unbind();
             acceptor.dispose();
             acceptor = null;
+        }
+        
+        if(filterExecutor != null) {
+            filterExecutor.shutdown();
+            try {
+                filterExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+            } finally {
+//              TODO: how to handle?
+            }
         }
     }
 
@@ -153,4 +170,22 @@ public class MinaListener extends AbstractListener {
             acceptor.unbind(address);
         }
     }
+
+    /**
+     * Get the {@link ExecutorService} used for processing requests. The default
+     * value is a cached thread pool.
+     * @return The {@link ExecutorService}
+     */
+    public ExecutorService getFilterExecutor() {
+        return filterExecutor;
+    }
+
+    /**
+     * Set the {@link ExecutorService} used for processing requests
+     * @param filterExecutor The {@link ExecutorService}
+     */
+    public void setFilterExecutor(ExecutorService filterExecutor) {
+        this.filterExecutor = filterExecutor;
+    }
+
 }
