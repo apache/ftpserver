@@ -19,9 +19,11 @@
 
 package org.apache.ftpserver.ftplet;
 
+import java.io.IOException;
+
 
 public class FtpLetThrowIOExceptionTest extends FtpLetThrowFtpExceptionTest {
-    protected void throwException() {
-        throw new RuntimeException();
+    protected void throwException() throws IOException {
+        throw new IOException();
     }
 }

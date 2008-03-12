@@ -78,7 +78,7 @@ class MKD extends AbstractCommand {
             return;
         }
         else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            session.closeOnFlush();
+            session.closeOnFlush().awaitUninterruptibly(10000);
             return;
         }
         
@@ -128,7 +128,7 @@ class MKD extends AbstractCommand {
                 ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
             if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush();
+                session.closeOnFlush().awaitUninterruptibly(10000);
                 return;
             }
 

@@ -169,7 +169,7 @@ class PASS extends AbstractCommand {
                     ftpletRet = FtpletEnum.RET_DISCONNECT;
                 }
                 if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush();
+                    session.closeOnFlush().awaitUninterruptibly(10000);
                     return;
                 } else if(ftpletRet == FtpletEnum.RET_SKIP) {
                     success = false;
@@ -194,7 +194,7 @@ class PASS extends AbstractCommand {
                 int maxAllowedLoginFailues = conManager.getMaxLoginFailures(); 
                 if(maxAllowedLoginFailues != 0 && 
                         session.getFailedLogins() >= maxAllowedLoginFailues) {
-                    session.closeOnFlush();
+                    session.closeOnFlush().awaitUninterruptibly(10000);
                 }
                 
                 return;

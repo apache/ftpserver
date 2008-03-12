@@ -59,7 +59,7 @@ public class FtpHandler extends IoHandlerAdapter
     public void exceptionCaught( IoSession session, Throwable cause ) throws Exception
     {
     	LOG.error("Exception caught, closing session", cause);
-    	session.closeOnFlush();
+    	session.closeOnFlush().awaitUninterruptibly(10000);
     }
 
     @Override
@@ -106,6 +106,7 @@ public class FtpHandler extends IoHandlerAdapter
     @Override
     public void sessionIdle( IoSession session, IdleStatus status ) throws Exception
     {
-        session.closeOnFlush();
+    	LOG.info("Session idle, closing");
+        session.closeOnFlush().awaitUninterruptibly(10000);
     }
 }

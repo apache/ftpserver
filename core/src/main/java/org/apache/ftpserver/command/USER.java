@@ -142,7 +142,7 @@ class USER extends AbstractCommand {
 
             // if not ok - close connection
             if(!success) {
-                session.closeOnFlush();
+                session.closeOnFlush().awaitUninterruptibly(10000);
             }
         }
     }
