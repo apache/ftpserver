@@ -349,7 +349,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         }
     }
 
-    public Listener[] getListeners() {
+    public Listener[] getAllListeners() {
         Collection<Bean> listenerBeans = listeners.values();
         Iterator<Bean> listenerIter = listenerBeans.iterator();
         

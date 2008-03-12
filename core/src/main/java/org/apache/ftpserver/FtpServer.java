@@ -61,7 +61,7 @@ public class FtpServer {
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-        Listener[] listeners = serverContext.getListeners(); 
+        Listener[] listeners = serverContext.getAllListeners(); 
         for (int i = 0; i<listeners.length; i++) {
             listeners[i].start(serverContext);
         }
@@ -82,7 +82,7 @@ public class FtpServer {
     	}
     	
         // stop all listeners
-        Listener[] listeners = serverContext.getListeners(); 
+        Listener[] listeners = serverContext.getAllListeners(); 
         for (int i = 0; i<listeners.length; i++) {
             listeners[i].stop();
         }
@@ -109,7 +109,7 @@ public class FtpServer {
      */
     public void suspend() {
         // stop all listeners
-        Listener[] listeners = serverContext.getListeners(); 
+        Listener[] listeners = serverContext.getAllListeners(); 
         for (int i = 0; i<listeners.length; i++) {
             listeners[i].suspend();
         }
@@ -121,7 +121,7 @@ public class FtpServer {
      * Resume the server handler
      */
     public void resume() {
-        Listener[] listeners = serverContext.getListeners(); 
+        Listener[] listeners = serverContext.getAllListeners(); 
         for (int i = 0; i<listeners.length; i++) {
             listeners[i].resume();
         }
@@ -142,4 +142,8 @@ public class FtpServer {
     public FtpServerContext getServerContext() {
         return serverContext;
     }
+
+	public void setServerContext(FtpServerContext serverContext) {
+		this.serverContext = serverContext;
+	}
 }

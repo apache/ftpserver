@@ -46,7 +46,7 @@ public class ConfigurableFtpServerContextTest extends TestCase {
         assertNotNull(ctx.getListener("foo2"));
         assertTrue(ctx.getListener("foo2") instanceof MinaListener);
         
-        Listener[] listeners = ctx.getListeners();
+        Listener[] listeners = ctx.getAllListeners();
         
         assertEquals(2, listeners.length);
         assertTrue(listeners[0] instanceof Listener);

@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.ftpserver.DefaultFtpHandler;
 import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
@@ -59,7 +60,10 @@ public class MinaListener extends AbstractListener {
 
     private ExecutorService filterExecutor = Executors.newCachedThreadPool();
 
-    /**
+	private FtpHandler handler = new DefaultFtpHandler();
+
+
+	/**
      * @see Listener#start(FtpServerContext)
      */
     public void start(FtpServerContext context) throws Exception {
@@ -107,7 +111,9 @@ public class MinaListener extends AbstractListener {
             acceptor.getFilterChain().addFirst("sslFilter", sslFilter);
         }
 
-        acceptor.setHandler(  new FtpHandler(context, this) );
+        
+		handler.init(context, this);
+        acceptor.setHandler(new FtpHandlerAdapter(context, handler));
         
         acceptor.bind(address);
     }
@@ -188,4 +194,12 @@ public class MinaListener extends AbstractListener {
         this.filterExecutor = filterExecutor;
     }
 
+
+    public FtpHandler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(FtpHandler handler) {
+		this.handler = handler;
+	}
 }

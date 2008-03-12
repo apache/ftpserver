@@ -53,7 +53,7 @@ interface FtpServerContext extends FtpletContext {
     
     Listener getListener(String name);
 
-    Listener[] getListeners();
+    Listener[] getAllListeners();
     
     /**
      * Get the command factory.

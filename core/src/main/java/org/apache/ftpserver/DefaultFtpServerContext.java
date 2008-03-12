@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -290,12 +291,20 @@ public class DefaultFtpServerContext implements FtpServerContext {
         return listeners.get(name);
     }
 
-    public Listener[] getListeners() {
+    public Listener[] getAllListeners() {
         Collection<Listener> listenerList = listeners.values();
         
         Listener[] listenerArray = new Listener[0];
         
         return listenerList.toArray(listenerArray);
+    }
+    
+    public Map<String, Listener> getListeners() {
+    	return listeners;
+    }
+    
+    public void setListeners(Map<String, Listener> listeners) {
+    	this.listeners = listeners;
     }
     
     public void addListener(String name, Listener listener) {
