@@ -25,12 +25,16 @@ import org.apache.commons.net.ftp.FTPReply;
  * Tests that commands sent simultaniously are handled correctly.
  */
 public class ConcatedCommandsTest extends ClientTestTemplate {
-
+	
     public void testLogin() throws Exception {
-        client.sendCommand("USER admin\r\nPASS admin");
+		// send both commands, expect a 331 response
+    	assertEquals(331, client.sendCommand("USER admin\r\nPASS admin"));
         
-        assertTrue(FTPReply.isPositiveCompletion(client.noop()));
+    	// make sure we wait for the 230 to come back
+    	client.completePendingCommand();
+    	assertEquals(230, client.getReplyCode());
 
+        assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
     
 }
