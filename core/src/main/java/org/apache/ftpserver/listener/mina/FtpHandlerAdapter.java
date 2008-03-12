@@ -79,6 +79,15 @@ public class FtpHandlerAdapter implements IoHandler
     	FtpIoSession ftpSession = new FtpIoSession(session, context);
     	ftpHandler.sessionOpened(ftpSession);
 	}
+
+	public FtpHandler getFtpHandler() {
+		return ftpHandler;
+	}
+
+	public void setFtpHandler(FtpHandler handler) {
+		this.ftpHandler = handler;
+		
+	}
 	
 
 }

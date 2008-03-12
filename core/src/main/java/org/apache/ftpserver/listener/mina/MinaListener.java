@@ -196,10 +196,14 @@ public class MinaListener extends AbstractListener {
 
 
     public FtpHandler getHandler() {
-		return handler;
+    	return handler;
 	}
 
 	public void setHandler(FtpHandler handler) {
 		this.handler = handler;
+		
+		if(acceptor != null) {
+			((FtpHandlerAdapter)acceptor.getHandler()).setFtpHandler(handler);
+		}
 	}
 }
