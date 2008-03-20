@@ -30,7 +30,6 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -56,7 +55,6 @@ class USER extends AbstractCommand {
                         FtpRequest request) throws IOException, FtpException {
     
         boolean success = false;
-        ConnectionManager conManager = context.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)context.getFtpStatistics();
         try {
             
@@ -88,14 +86,14 @@ class USER extends AbstractCommand {
             
             // anonymous login is not enabled
             boolean anonymous = userName.equals("anonymous");
-            if( anonymous && (!conManager.isAnonymousLoginEnabled()) ) {
+            if( anonymous && (!context.getConnectionConfig().isAnonymousLoginEnabled()) ) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "USER.anonymous", null));
                 return;
             }
             
             // anonymous login limit check
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
-            int maxAnonLogin = conManager.getMaxAnonymousLogins();
+            int maxAnonLogin = context.getConnectionConfig().getMaxAnonymousLogins();
             if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.anonymous", null));
                 return;
@@ -103,7 +101,7 @@ class USER extends AbstractCommand {
             
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
-            int maxLogin = conManager.getMaxLogins();
+            int maxLogin = context.getConnectionConfig().getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
             	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null));
                 return;

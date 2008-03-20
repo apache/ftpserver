@@ -40,8 +40,6 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
-import org.apache.ftpserver.listener.ConnectionManager;
-import org.apache.ftpserver.listener.ConnectionManagerImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
@@ -62,15 +60,16 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     private final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
     
     private Bean messageResourceBean;
-    private Bean connectionManagerBean;
     private Bean ipRestrictorBean;
     private Bean userManagerBean;
     private Bean fileSystemManagerBean;
     private Bean ftpletContainerBean;
     private Bean statisticsBean;
     private Bean commandFactoryBean;
+    private Bean connectionConfigBean;
     
     private Map<String, Bean> listeners = new HashMap<String, Bean>();
+
     
     private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
         new WritePermission()
@@ -92,12 +91,12 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             
             // create all the components
             messageResourceBean   = createComponent(conf, "message",             MessageResourceImpl.class.getName());
-            connectionManagerBean = createComponent(conf, "connection-manager",  ConnectionManagerImpl.class.getName());
             ipRestrictorBean      = createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
             userManagerBean       = createComponent(conf, "user-manager",        PropertiesUserManager.class.getName());
             fileSystemManagerBean = createComponent(conf, "file-system-manager", NativeFileSystemManager.class.getName());
             statisticsBean        = createComponent(conf, "statistics",          FtpStatisticsImpl.class.getName());
             commandFactoryBean    = createComponent(conf, "command-factory",     DefaultCommandFactory.class.getName());
+            connectionConfigBean    = createComponent(conf, "connection-config", DefaultConnectionConfig.class.getName());
             
             // create user if necessary
             boolean userCreate = conf.getBoolean("create-default-user", true);
@@ -249,13 +248,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     public IpRestrictor getIpRestrictor() {
         return (IpRestrictor) ipRestrictorBean.getBean();
     }
-     
-    /**
-     * Get connection manager.
-     */
-    public ConnectionManager getConnectionManager() {
-        return (ConnectionManager) connectionManagerBean.getBean();
-    } 
     
     /**
      * Get file system manager.
@@ -308,10 +300,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         while (listenerIter.hasNext()) {
             Bean listenerBean = listenerIter.next();
             listenerBean.destroyBean();
-        }
-        
-        if(connectionManagerBean != null && connectionManagerBean.getBean() != null) {
-            connectionManagerBean.destroyBean();
         }
         
         if(ftpletContainerBean != null && ftpletContainerBean.getBean() != null) {
@@ -367,4 +355,8 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         
         return listenerArray;
     }
+
+	public ConnectionConfig getConnectionConfig() {
+		return (ConnectionConfig) connectionConfigBean.getBean();
+	}
 } 

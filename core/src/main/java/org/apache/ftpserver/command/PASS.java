@@ -36,7 +36,6 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
@@ -65,7 +64,6 @@ class PASS extends AbstractCommand {
     
         boolean success = false;
         
-        ConnectionManager conManager = context.getConnectionManager();
         ServerFtpStatistics stat = (ServerFtpStatistics)context.getFtpStatistics();
         try {
             
@@ -98,7 +96,7 @@ class PASS extends AbstractCommand {
             boolean anonymous = userName != null && userName.equals("anonymous");
             if(anonymous) {
 	            int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
-	            int maxAnonLogin = conManager.getMaxAnonymousLogins();
+	            int maxAnonLogin = context.getConnectionConfig().getMaxAnonymousLogins();
 	            if( currAnonLogin >= maxAnonLogin ) {
 	                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.anonymous", null));
 	                return;
@@ -107,7 +105,7 @@ class PASS extends AbstractCommand {
 	            
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
-            int maxLogin = conManager.getMaxLogins();
+            int maxLogin = context.getConnectionConfig().getMaxLogins();
             if(maxLogin != 0 && currLogin >= maxLogin) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "PASS.login", null));
                 return;
@@ -182,7 +180,7 @@ class PASS extends AbstractCommand {
                 session.setUserArgument(oldUserArgument);
                 session.setMaxIdleTime(oldMaxIdleTime);
 
-                delayAfterLoginFailure(conManager);
+                delayAfterLoginFailure(context.getConnectionConfig().getLoginFailureDelay());
                 
                 LOG.warn("Login failure - " + userName);
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
@@ -191,7 +189,7 @@ class PASS extends AbstractCommand {
                 session.increaseFailedLogins();
 
                 // kick the user if the max number of failed logins is reached
-                int maxAllowedLoginFailues = conManager.getMaxLoginFailures(); 
+                int maxAllowedLoginFailues = context.getConnectionConfig().getMaxLoginFailures(); 
                 if(maxAllowedLoginFailues != 0 && 
                         session.getFailedLogins() >= maxAllowedLoginFailues) {
                     session.closeOnFlush().awaitUninterruptibly(10000);
@@ -225,8 +223,7 @@ class PASS extends AbstractCommand {
         }
     }
 
-    private void delayAfterLoginFailure(ConnectionManager conManager) {
-        int loginFailureDelay = conManager.getLoginFailureDelay();
+    private void delayAfterLoginFailure(int loginFailureDelay) {
         
         if(loginFailureDelay > 0) {
             LOG.debug("Waiting for " + loginFailureDelay + " milliseconds due to login failure");

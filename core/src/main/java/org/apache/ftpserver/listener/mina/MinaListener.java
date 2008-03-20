@@ -61,7 +61,17 @@ public class MinaListener extends AbstractListener {
     private ExecutorService filterExecutor = Executors.newCachedThreadPool();
 
 	private FtpHandler handler = new DefaultFtpHandler();
+	
+	private int idleTimeout = 60;
 
+
+	public int getIdleTimeout() {
+		return idleTimeout;
+	}
+
+	public void setIdleTimeout(int idleTimeout) {
+		this.idleTimeout = idleTimeout;
+	}
 
 	/**
      * @see Listener#start(FtpServerContext)
@@ -78,7 +88,7 @@ public class MinaListener extends AbstractListener {
         
         acceptor.setReuseAddress(true);
         acceptor.getSessionConfig().setReadBufferSize( 2048 );
-        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 120 );
+        acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, idleTimeout );
         // Decrease the default receiver buffer size
         ((SocketSessionConfig) acceptor.getSessionConfig()).setReceiveBufferSize(512); 
 

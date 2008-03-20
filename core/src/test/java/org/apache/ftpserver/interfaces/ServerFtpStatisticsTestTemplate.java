@@ -19,48 +19,14 @@
 
 package org.apache.ftpserver.interfaces;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Date;
 
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpStatisticsImpl;
-import org.apache.ftpserver.ftplet.FtpSession;
-import org.apache.ftpserver.listener.Connection;
-import org.apache.ftpserver.listener.ConnectionObserver;
 
 public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
-    public static class MockConnection implements Connection {
-
-        public void close() {
-        }
-
-        public FtpSession getSession() {
-            return null;
-        }
-
-        public void setObserver(ConnectionObserver observer) {            
-        }
-
-        public void run() {            
-        }
-
-        public Socket getControlSocket() {
-            return null;
-        }
-
-        public FtpServerContext getServerContext() {
-            return null;
-        }
-
-        public long transfer(InputStream bis, OutputStream bos, int maxRate) throws IOException {
-            return 0;
-        }
-    }
     
     public void testConnectionCount() {
         ServerFtpStatistics stats = createStatistics();

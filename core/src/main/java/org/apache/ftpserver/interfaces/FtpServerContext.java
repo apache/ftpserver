@@ -19,9 +19,9 @@
 
 package org.apache.ftpserver.interfaces;
 
+import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletContext;
-import org.apache.ftpserver.listener.ConnectionManager;
 import org.apache.ftpserver.listener.Listener;
 
 /**
@@ -31,11 +31,8 @@ import org.apache.ftpserver.listener.Listener;
 public 
 interface FtpServerContext extends FtpletContext {
 
-    /**
-     * Get connection manager.
-     */
-    ConnectionManager getConnectionManager();
-    
+	ConnectionConfig getConnectionConfig();
+	
     /**
      * Get message resource.
      */

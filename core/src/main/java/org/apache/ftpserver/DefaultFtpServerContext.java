@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,8 +39,6 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
-import org.apache.ftpserver.listener.ConnectionManager;
-import org.apache.ftpserver.listener.ConnectionManagerImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
@@ -62,13 +59,13 @@ public class DefaultFtpServerContext implements FtpServerContext {
     private final Logger LOG = LoggerFactory.getLogger(DefaultFtpServerContext.class);
     
     private MessageResource messageResource;
-    private ConnectionManager connectionManager;
     private IpRestrictor ipRestrictor;
     private UserManager userManager;
     private FileSystemManager fileSystemManager;
     private FtpletContainer ftpletContainer;
     private FtpStatistics statistics;
     private CommandFactory commandFactory;
+    private ConnectionConfig connectionConfig = new DefaultConnectionConfig();
     
     private Map<String, Listener> listeners = new HashMap<String, Listener>();
     
@@ -96,9 +93,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
             // create all the components
             messageResource = new MessageResourceImpl();
             ((MessageResourceImpl)messageResource).configure(EmptyConfiguration.INSTANCE);
-            
-            connectionManager = new ConnectionManagerImpl();
-            ((ConnectionManagerImpl)connectionManager).configure(EmptyConfiguration.INSTANCE);
             
             ipRestrictor = new FileIpRestrictor();
             ((FileIpRestrictor)ipRestrictor).configure(EmptyConfiguration.INSTANCE);
@@ -188,13 +182,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
     }
      
     /**
-     * Get connection manager.
-     */
-    public ConnectionManager getConnectionManager() {
-        return connectionManager;
-    } 
-    
-    /**
      * Get file system manager.
      */
     public FileSystemManager getFileSystemManager() {
@@ -258,10 +245,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 //        }
 
         
-        if(connectionManager != null && connectionManager instanceof Component) {
-            ((Component)connectionManager).dispose();
-        }
-        
         if(ftpletContainer != null && ftpletContainer instanceof Component) {
             ((Component)ftpletContainer).dispose();
         }
@@ -318,9 +301,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
     public void setCommandFactory(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
     }
-    public void setConnectionManager(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
-    }
     public void setFileSystemManager(FileSystemManager fileSystemManager) {
         this.fileSystemManager = fileSystemManager;
     }
@@ -336,4 +316,12 @@ public class DefaultFtpServerContext implements FtpServerContext {
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
+
+	public ConnectionConfig getConnectionConfig() {
+		return connectionConfig;
+	}
+	
+	public void setConnectionConfig(ConnectionConfig connectionConfig) {
+		this.connectionConfig = connectionConfig;
+	}
 } 

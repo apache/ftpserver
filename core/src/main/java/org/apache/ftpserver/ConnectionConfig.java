@@ -17,27 +17,17 @@
  * under the License.
  */  
 
-package org.apache.ftpserver.listener;
+package org.apache.ftpserver;
 
+public interface ConnectionConfig {
 
-/**
- * This observer interface monitors all the ftp connections.
- */
-public 
-interface ConnectionManagerObserver {
-    
-    /**
-     * New ftp connection.
-     */
-    void openedConnection(Connection connection);
-    
-    /**
-     * Closing ftp connection
-     */
-    void closedConnection(Connection connection);
-    
-    /**
-     * Connected user property change 
-     */
-    void updatedConnection(Connection connection);
-}    
+	int getMaxLoginFailures();
+	
+	int getLoginFailureDelay();
+	
+	int getMaxAnonymousLogins();
+	
+	int getMaxLogins();
+	
+	boolean isAnonymousLoginEnabled();
+}
