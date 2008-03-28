@@ -27,7 +27,10 @@ import org.apache.ftpserver.test.TestUtil;
 
 public class RetrieveTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
+    private static final String TEST_FILENAME_WITH_LEADING_SPACE = " leading.txt";
+    
     private static final File TEST_FILE = new File(ROOT_DIR, TEST_FILENAME);
+    private static final File TEST_FILE_WITH_LEADING_SPACE = new File(ROOT_DIR, TEST_FILENAME_WITH_LEADING_SPACE);
 
     private static final String EOL = System.getProperty("line.separator"); 
     
@@ -57,6 +60,19 @@ public class RetrieveTest extends ClientTestTemplate {
         TestUtil.assertArraysEqual(testData, baos.toByteArray());
     }
 
+    public void testRetrieveWithLeadingSpace() throws Exception {
+        
+        TestUtil.writeDataToFile(TEST_FILE_WITH_LEADING_SPACE, testData);
+
+        assertTrue(TEST_FILE_WITH_LEADING_SPACE.exists());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        assertTrue(client.retrieveFile(TEST_FILENAME_WITH_LEADING_SPACE, baos));
+        
+        assertTrue(TEST_FILE_WITH_LEADING_SPACE.exists());
+        TestUtil.assertArraysEqual(testData, baos.toByteArray());
+    }
+    
     public void testRetrieveNoFileName() throws Exception {
         assertEquals(501, client.sendCommand("RETR"));
     }

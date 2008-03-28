@@ -32,6 +32,7 @@ public class StoreTest extends ClientTestTemplate {
     private static final String ENCODING = "UTF-8";
 
     private static final String TEST_FILENAME = "test.txt";
+    private static final String TEST_FILENAME_WITH_LEADING_SPACE = " leading.txt";
 
     private static final int SKIP_LEN = 4;
     
@@ -64,6 +65,16 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(testData, testFile);
     }
 
+
+    public void testStoreWithLeadingSpace() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME_WITH_LEADING_SPACE);
+
+        assertTrue(client.storeFile(TEST_FILENAME_WITH_LEADING_SPACE, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(testData, testFile);
+    }
+    
     public void testStoreNoFileName() throws Exception {
         assertEquals(501, client.sendCommand("STOR"));
     }

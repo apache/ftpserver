@@ -58,7 +58,7 @@ public class NativeFileObject implements FileObject {
         if (file == null) {
             throw new IllegalArgumentException("file can not be null");
         }
-        fileName = fileName.trim();
+
         if (fileName.length() == 0) {
             throw new IllegalArgumentException("fileName can not be empty");
         } else if (fileName.charAt(0) != '/') {
@@ -382,9 +382,6 @@ public class NativeFileObject implements FileObject {
             String fileName, boolean caseInsensitive) {
 
         // get the starting directory
-        rootDir = rootDir.trim();
-        fileName = fileName.trim();
-
         rootDir = normalizeSeparateChar(rootDir);
         if (rootDir.charAt(rootDir.length() - 1) != '/') {
             rootDir += '/';
@@ -396,7 +393,6 @@ public class NativeFileObject implements FileObject {
             if (currDir == null) {
                 currDir = "/";
             }
-            currDir = currDir.trim();
             if (currDir.length() == 0) {
                 currDir = "/";
             }
@@ -424,7 +420,7 @@ public class NativeFileObject implements FileObject {
         // in this loop resArg will never end with '/'
         StringTokenizer st = new StringTokenizer(fileName, "/");
         while (st.hasMoreTokens()) {
-            String tok = st.nextToken().trim();
+            String tok = st.nextToken();
 
             // . => current directory
             if (tok.equals(".")) {
