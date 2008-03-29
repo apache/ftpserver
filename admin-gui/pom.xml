@@ -6,7 +6,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
-  <artifactId>ftpserver-admin-gui</artifactId>
+  <artifactId>admin-gui</artifactId>
   <name>Apache FtpServer Admin GUI</name>
   <version>1.0.0-SNAPSHOT</version>
   <scm>
@@ -35,29 +35,24 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.apache.ftpserver</groupId>
+      <groupId>${groupId}</groupId>
       <artifactId>ftplet-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.ftpserver</groupId>
-      <artifactId>ftpserver-core</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <groupId>${groupId}</groupId>
+      <artifactId>core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j-version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j-version}</version>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>${log4j-version}</version>
     </dependency>
   </dependencies>
   <reporting>
