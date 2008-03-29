@@ -23,6 +23,7 @@ import java.net.SocketException;
 import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.ftpserver.DefaultConnectionConfig;
 
 
 public class CustomMaxLoginTest extends ClientTestTemplate {
@@ -34,7 +35,9 @@ public class CustomMaxLoginTest extends ClientTestTemplate {
     protected Properties createConfig() {
         Properties config = super.createConfig();
         
-        config.setProperty("config.connection-manager.max-login-failures", "2");
+        config.setProperty("config.connection-config.class", DefaultConnectionConfig.class.getName());
+        config.setProperty("config.connection-config.max-login-failures", "2");
+
         return config;
     }
 

@@ -21,6 +21,8 @@ package org.apache.ftpserver.clienttests;
 
 import java.util.Properties;
 
+import org.apache.ftpserver.DefaultConnectionConfig;
+
 
 public class LoginNoAnonTest extends ClientTestTemplate {
 
@@ -29,7 +31,10 @@ public class LoginNoAnonTest extends ClientTestTemplate {
      */
     protected Properties createConfig() {
         Properties config = super.createDefaultConfig();
-        config.setProperty("config.connection-manager.anonymous-login-enabled", "false");
+
+        config.setProperty("config.connection-config.class", DefaultConnectionConfig.class.getName());
+        config.setProperty("config.connection-config.anonymous-login-enabled", "false");
+
         return config;
     }
 
