@@ -21,6 +21,8 @@ package org.apache.ftpserver.clienttests;
 
 import java.util.Properties;
 
+import org.apache.ftpserver.DefaultConnectionConfig;
+
 
 public class UnlimitedMaxLoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";
@@ -31,7 +33,8 @@ public class UnlimitedMaxLoginTest extends ClientTestTemplate {
     protected Properties createConfig() {
         Properties config = super.createConfig();
         
-        config.setProperty("config.connection-manager.max-login-failures", "0");
+        config.setProperty("config.connection-config.class", DefaultConnectionConfig.class.getName());
+        config.setProperty("config.connection-config.max-login-failures", "0");
         return config;
     }
 
