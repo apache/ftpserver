@@ -22,7 +22,6 @@ package org.apache.ftpserver.listener.mina;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.DefaultFtpHandler;
@@ -35,6 +34,7 @@ import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
+import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
@@ -57,8 +57,8 @@ public class MinaListener extends AbstractListener {
     private InetSocketAddress address;
     
     boolean suspended = false;
-
-    private ExecutorService filterExecutor = Executors.newCachedThreadPool();
+    
+    private ExecutorService filterExecutor = new OrderedThreadPoolExecutor();
 
 	private FtpHandler handler = new DefaultFtpHandler();
 	
