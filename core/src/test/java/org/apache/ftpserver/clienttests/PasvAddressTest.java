@@ -19,26 +19,27 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Properties;
+import java.net.InetAddress;
+
+import org.apache.ftpserver.DefaultDataConnectionConfig;
+import org.apache.ftpserver.FtpServer;
 
 public class PasvAddressTest extends ClientTestTemplate {
 
-    protected Properties createConfig() {
-        Properties config = createDefaultConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
 
-        config.setProperty("config.listeners.default.data-connection.class",
-                "org.apache.ftpserver.DefaultDataConnectionConfig");
-        config.setProperty(
-                "config.listeners.default.data-connection.passive.external-address",
-                "1.2.3.4");
-
-        return config;
+    	DefaultDataConnectionConfig ddcc = (DefaultDataConnectionConfig) server.getServerContext().getListener("default").getDataConnectionConfig();
+    	
+    	ddcc.setPassiveAddress(InetAddress.getByName("127.0.0.200"));
+    	
+        return server;
     }
 
     public void testPasvAddress() throws Exception {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         client.pasv();
 
-        assertTrue(client.getReplyString().indexOf("(1,2,3,4,") > -1);
+        assertTrue(client.getReplyString().indexOf("(127,0,0,200,") > -1);
     }
 }

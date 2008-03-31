@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -51,277 +51,279 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FTP server configuration implementation. It holds all 
- * the components used.
+ * FTP server configuration implementation. It holds all the components used.
  */
 public class DefaultFtpServerContext implements FtpServerContext {
 
-    private final Logger LOG = LoggerFactory.getLogger(DefaultFtpServerContext.class);
-    
-    private MessageResource messageResource;
-    private IpRestrictor ipRestrictor;
-    private UserManager userManager;
-    private FileSystemManager fileSystemManager;
-    private FtpletContainer ftpletContainer;
-    private FtpStatistics statistics;
-    private CommandFactory commandFactory;
-    private ConnectionConfig connectionConfig = new DefaultConnectionConfig();
-    
-    private Map<String, Listener> listeners = new HashMap<String, Listener>();
-    
-    private static final Authority[] ADMIN_AUTHORITIES = new Authority[]{
-        new WritePermission()
-    };
+	private final Logger LOG = LoggerFactory
+			.getLogger(DefaultFtpServerContext.class);
 
-    private static final Authority[] ANON_AUTHORITIES = new Authority[]{
-        new ConcurrentLoginPermission(20, 2),
-        new TransferRatePermission(4800, 4800)
-    };
-    
-    /**
-     * Constructor - set the root configuration.
-     */
-    public DefaultFtpServerContext() throws Exception {
-        this(true);
-    }
-    
-    public DefaultFtpServerContext(boolean createDefaultUsers) throws Exception {
-        
-        try {
-            createListeners();
-            
-            // create all the components
-            messageResource = new MessageResourceImpl();
-            ((MessageResourceImpl)messageResource).configure(EmptyConfiguration.INSTANCE);
-            
-            ipRestrictor = new FileIpRestrictor();
-            ((FileIpRestrictor)ipRestrictor).configure(EmptyConfiguration.INSTANCE);
-            
-            userManager = new PropertiesUserManager();
-            ((PropertiesUserManager)userManager).configure();
-            
-            fileSystemManager = new NativeFileSystemManager();
-            ((NativeFileSystemManager)fileSystemManager).configure(EmptyConfiguration.INSTANCE);
+	private MessageResource messageResource;
+	private IpRestrictor ipRestrictor;
+	private UserManager userManager;
+	private FileSystemManager fileSystemManager;
+	private FtpletContainer ftpletContainer;
+	private FtpStatistics statistics;
+	private CommandFactory commandFactory;
+	private ConnectionConfig connectionConfig = new DefaultConnectionConfig();
 
-            statistics = new FtpStatisticsImpl();
-            ((FtpStatisticsImpl)statistics).configure(EmptyConfiguration.INSTANCE);
-            
-            commandFactory = new DefaultCommandFactory();
-            ((DefaultCommandFactory)commandFactory).configure(EmptyConfiguration.INSTANCE);
-            
-            // create user if necessary
-            if(createDefaultUsers) {
-                createDefaultUsers();
-            }
-            
-            ftpletContainer = new DefaultFtpletContainer();
-            ((DefaultFtpletContainer)ftpletContainer).configure(EmptyConfiguration.INSTANCE);
-        }
-        catch(Exception ex) {
-            dispose();
-            throw ex;
-        }
-    }
-    
-    private void createListeners() throws Exception {
-        listeners.put("default", new MinaListener());
-    }
-    
-    
-    /**
-     * Create default users.
-     */
-    private void createDefaultUsers() throws Exception {
-        UserManager userManager = getUserManager();
-        
-        // create admin user
-        String adminName = userManager.getAdminName();
-        if(!userManager.doesExist(adminName)) {
-            LOG.info("Creating user : " + adminName);
-            BaseUser adminUser = new BaseUser();
-            adminUser.setName(adminName);
-            adminUser.setPassword(adminName);
-            adminUser.setEnabled(true);
-            
-            adminUser.setAuthorities(ADMIN_AUTHORITIES);
+	private Map<String, Listener> listeners = new HashMap<String, Listener>();
 
-            adminUser.setHomeDirectory("./res/home");
-            adminUser.setMaxIdleTime(0);
-            userManager.save(adminUser);
-        }
-        
-        // create anonymous user
-        if(!userManager.doesExist("anonymous")) {
-            LOG.info("Creating user : anonymous");
-            BaseUser anonUser = new BaseUser();
-            anonUser.setName("anonymous");
-            anonUser.setPassword("");
-            
-            anonUser.setAuthorities(ANON_AUTHORITIES);
-            
-            anonUser.setEnabled(true);
+	private static final Authority[] ADMIN_AUTHORITIES = new Authority[] { new WritePermission() };
 
-            anonUser.setHomeDirectory("./res/home");
-            anonUser.setMaxIdleTime(300);
-            userManager.save(anonUser);
-        }
-    }
-    
-    /**
-     * Get user manager.
-     */
-    public UserManager getUserManager() {
-        return userManager;
-    }
-    
-    /**
-     * Get IP restrictor.
-     */
-    public IpRestrictor getIpRestrictor() {
-        return ipRestrictor;
-    }
-     
-    /**
-     * Get file system manager.
-     */
-    public FileSystemManager getFileSystemManager() {
-        return fileSystemManager;
-    }
-     
-    /**
-     * Get message resource.
-     */
-    public MessageResource getMessageResource() {
-        return messageResource;
-    }
-    
-    /**
-     * Get ftp statistics.
-     */
-    public FtpStatistics getFtpStatistics() {
-        return statistics;
-    }
+	private static final Authority[] ANON_AUTHORITIES = new Authority[] {
+			new ConcurrentLoginPermission(20, 2),
+			new TransferRatePermission(4800, 4800) };
 
-    public void setFtpStatistics(FtpStatistics statistics) {
-        this.statistics = statistics;
-    }
-    
-    /**
-     * Get ftplet handler.
-     */
-    public Ftplet getFtpletContainer() {
-        return ftpletContainer;
-    }
-    
-    /**
-     * Get the command factory.
-     */
-    public CommandFactory getCommandFactory() {
-        return commandFactory;
-    }
-    
-    /**
-     * Get Ftplet.
-     */
-    public Ftplet getFtplet(String name) {
-        return ftpletContainer.getFtplet(name);
-    }
-    
-    /**
-     * Close all the components.
-     */
-    public void dispose() {
-        
-        Iterator<Listener> listenerIter = listeners.values().iterator();
-        while (listenerIter.hasNext()) {
-            Bean listenerBean = (Bean) listenerIter.next();
-            listenerBean.destroyBean();
-        }
-        
-//        Iterator listenerIter = listeners.values().iterator();
-//        while (listenerIter.hasNext()) {
-//            Listener listenerBean = (Listener) listenerIter.next();
-//            listenerBean.stop();
-//        }
+	/**
+	 * Constructor - set the root configuration.
+	 */
+	public DefaultFtpServerContext() throws Exception {
+		this(true);
+	}
 
-        
-        if(ftpletContainer != null && ftpletContainer instanceof Component) {
-            ((Component)ftpletContainer).dispose();
-        }
-        
-        if(userManager != null && userManager instanceof Component) {
-            ((Component)userManager).dispose();
-        }
-        
-        if(ipRestrictor != null && ipRestrictor instanceof Component) {
-            ((Component)ipRestrictor).dispose();
-        }
-        
-        if(fileSystemManager != null && fileSystemManager instanceof Component) {
-            ((Component)fileSystemManager).dispose();
-        }
-        
-        if(statistics != null && statistics instanceof Component) {
-            ((Component)statistics).dispose();
-        }
-        
-        if(messageResource != null && messageResource instanceof Component) {
-            ((Component)messageResource).dispose();
-        }
-    }
+	public DefaultFtpServerContext(boolean createDefaultUsers) throws Exception {
 
-    public Listener getListener(String name) {
-        return listeners.get(name);
-    }
+		try {
+			createListeners();
 
-    public Listener[] getAllListeners() {
-        Collection<Listener> listenerList = listeners.values();
-        
-        Listener[] listenerArray = new Listener[0];
-        
-        return listenerList.toArray(listenerArray);
-    }
-    
-    public Map<String, Listener> getListeners() {
-    	return listeners;
-    }
-    
-    public void setListeners(Map<String, Listener> listeners) {
-    	this.listeners = listeners;
-    }
-    
-    public void addListener(String name, Listener listener) {
-        listeners.put(name, listener);
-    }
+			// create all the components
+			messageResource = new MessageResourceImpl();
+			((MessageResourceImpl) messageResource)
+					.configure();
 
-    public Listener removeListener(String name) {
-        return listeners.remove(name);
-    }
-    
-    public void setCommandFactory(CommandFactory commandFactory) {
-        this.commandFactory = commandFactory;
-    }
-    public void setFileSystemManager(FileSystemManager fileSystemManager) {
-        this.fileSystemManager = fileSystemManager;
-    }
-    public void setFtpletContainer(FtpletContainer ftpletContainer) {
-        this.ftpletContainer = ftpletContainer;
-    }
-    public void setIpRestrictor(IpRestrictor ipRestrictor) {
-        this.ipRestrictor = ipRestrictor;
-    }
-    public void setMessageResource(MessageResource messageResource) {
-        this.messageResource = messageResource;
-    }
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
+			ipRestrictor = new FileIpRestrictor();
+			((FileIpRestrictor) ipRestrictor)
+					.configure(EmptyConfiguration.INSTANCE);
+
+			userManager = new PropertiesUserManager();
+			((PropertiesUserManager) userManager).configure();
+
+			fileSystemManager = new NativeFileSystemManager();
+
+			statistics = new FtpStatisticsImpl();
+			((FtpStatisticsImpl) statistics)
+					.configure(EmptyConfiguration.INSTANCE);
+
+			commandFactory = new DefaultCommandFactory();
+			((DefaultCommandFactory) commandFactory)
+					.configure(EmptyConfiguration.INSTANCE);
+
+			// create user if necessary
+			// TODO turn into a setter
+			if (createDefaultUsers) {
+				createDefaultUsers();
+			}
+
+			ftpletContainer = new DefaultFtpletContainer();
+			((DefaultFtpletContainer) ftpletContainer)
+					.configure(EmptyConfiguration.INSTANCE);
+		} catch (Exception ex) {
+			dispose();
+			throw ex;
+		}
+	}
+
+	private void createListeners() throws Exception {
+		listeners.put("default", new MinaListener());
+	}
+
+	/**
+	 * Create default users.
+	 */
+	private void createDefaultUsers() throws Exception {
+		UserManager userManager = getUserManager();
+
+		// create admin user
+		String adminName = userManager.getAdminName();
+		if (!userManager.doesExist(adminName)) {
+			LOG.info("Creating user : " + adminName);
+			BaseUser adminUser = new BaseUser();
+			adminUser.setName(adminName);
+			adminUser.setPassword(adminName);
+			adminUser.setEnabled(true);
+
+			adminUser.setAuthorities(ADMIN_AUTHORITIES);
+
+			adminUser.setHomeDirectory("./res/home");
+			adminUser.setMaxIdleTime(0);
+			userManager.save(adminUser);
+		}
+
+		// create anonymous user
+		if (!userManager.doesExist("anonymous")) {
+			LOG.info("Creating user : anonymous");
+			BaseUser anonUser = new BaseUser();
+			anonUser.setName("anonymous");
+			anonUser.setPassword("");
+
+			anonUser.setAuthorities(ANON_AUTHORITIES);
+
+			anonUser.setEnabled(true);
+
+			anonUser.setHomeDirectory("./res/home");
+			anonUser.setMaxIdleTime(300);
+			userManager.save(anonUser);
+		}
+	}
+
+	/**
+	 * Get user manager.
+	 */
+	public UserManager getUserManager() {
+		return userManager;
+	}
+
+	/**
+	 * Get IP restrictor.
+	 */
+	public IpRestrictor getIpRestrictor() {
+		return ipRestrictor;
+	}
+
+	/**
+	 * Get file system manager.
+	 */
+	public FileSystemManager getFileSystemManager() {
+		return fileSystemManager;
+	}
+
+	/**
+	 * Get message resource.
+	 */
+	public MessageResource getMessageResource() {
+		return messageResource;
+	}
+
+	/**
+	 * Get ftp statistics.
+	 */
+	public FtpStatistics getFtpStatistics() {
+		return statistics;
+	}
+
+	public void setFtpStatistics(FtpStatistics statistics) {
+		this.statistics = statistics;
+	}
+
+	/**
+	 * Get ftplet handler.
+	 */
+	public FtpletContainer getFtpletContainer() {
+		return ftpletContainer;
+	}
+
+	/**
+	 * Get the command factory.
+	 */
+	public CommandFactory getCommandFactory() {
+		return commandFactory;
+	}
+
+	/**
+	 * Get Ftplet.
+	 */
+	public Ftplet getFtplet(String name) {
+		return ftpletContainer.getFtplet(name);
+	}
+
+	/**
+	 * Close all the components.
+	 */
+	public void dispose() {
+
+		Iterator<Listener> listenerIter = listeners.values().iterator();
+		while (listenerIter.hasNext()) {
+			Listener listener = listenerIter.next();
+			listener.stop();
+		}
+
+		if (ftpletContainer != null && ftpletContainer instanceof Component) {
+			((Component) ftpletContainer).dispose();
+		}
+
+		if (userManager != null && userManager instanceof Component) {
+			((Component) userManager).dispose();
+		}
+
+		if (ipRestrictor != null && ipRestrictor instanceof Component) {
+			((Component) ipRestrictor).dispose();
+		}
+
+		if (fileSystemManager != null && fileSystemManager instanceof Component) {
+			((Component) fileSystemManager).dispose();
+		}
+
+		if (statistics != null && statistics instanceof Component) {
+			((Component) statistics).dispose();
+		}
+
+		if (messageResource != null && messageResource instanceof Component) {
+			((Component) messageResource).dispose();
+		}
+	}
+
+	public Listener getListener(String name) {
+		return listeners.get(name);
+	}
+
+	public void setListener(String name, Listener listener) {
+		listeners.put(name, listener);
+	}
+
+	public Listener[] getAllListeners() {
+		Collection<Listener> listenerList = listeners.values();
+
+		Listener[] listenerArray = new Listener[0];
+
+		return listenerList.toArray(listenerArray);
+	}
+
+	public Map<String, Listener> getListeners() {
+		return listeners;
+	}
+
+	public void setListeners(Map<String, Listener> listeners) {
+		this.listeners = listeners;
+	}
+
+	public void addListener(String name, Listener listener) {
+		listeners.put(name, listener);
+	}
+
+	public Listener removeListener(String name) {
+		return listeners.remove(name);
+	}
+
+	public void setCommandFactory(CommandFactory commandFactory) {
+		this.commandFactory = commandFactory;
+	}
+
+	public void setFileSystemManager(FileSystemManager fileSystemManager) {
+		this.fileSystemManager = fileSystemManager;
+	}
+
+	public void setFtpletContainer(FtpletContainer ftpletContainer) {
+		this.ftpletContainer = ftpletContainer;
+	}
+
+	public void setIpRestrictor(IpRestrictor ipRestrictor) {
+		this.ipRestrictor = ipRestrictor;
+	}
+
+	public void setMessageResource(MessageResource messageResource) {
+		this.messageResource = messageResource;
+	}
+
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
 
 	public ConnectionConfig getConnectionConfig() {
 		return connectionConfig;
 	}
-	
+
 	public void setConnectionConfig(ConnectionConfig connectionConfig) {
 		this.connectionConfig = connectionConfig;
 	}
-} 
+}

@@ -24,9 +24,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.test.TestUtil;
 
@@ -54,20 +54,13 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         connectClient();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
-     */
-    protected Properties createConfig() {
-        Properties config = createDefaultConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
 
-        config.setProperty("config.ftplets", "f1");
-        config.setProperty("config.ftplet.f1.class", 
-                MockFtplet.class.getName());
-        // #config.ftplet.f1.param=value1
-        return config;
+    	server.getServerContext().getFtpletContainer().addFtplet("f1", new MockFtplet());
+        return server;
     }
+
 
 /*    public void testExceptionDuringInit() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {

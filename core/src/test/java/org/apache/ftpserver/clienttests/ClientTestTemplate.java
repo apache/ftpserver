@@ -21,7 +21,6 @@ package org.apache.ftpserver.clienttests;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -29,12 +28,11 @@ import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
-import org.apache.ftpserver.ConfigurableFtpServerContext;
+import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.config.PropertiesConfiguration;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +53,6 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected int port = -1;
 
-    private FtpServerContext serverContext;
-
     protected FTPClient client;
 
    
@@ -64,26 +60,24 @@ public abstract class ClientTestTemplate extends TestCase {
     private static final File TEST_TMP_DIR = new File("test-tmp");
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
     
-    protected Properties createConfig() {
-        return createDefaultConfig();
-    }
-
-    protected Properties createDefaultConfig() {
+    protected FtpServer createServer() throws Exception {
         assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE.exists());
 
-        Properties configProps = new Properties();
-        configProps.setProperty("config.listeners.default.class", MinaListener.class.getName());
-        configProps.setProperty("config.listeners.default.port", Integer
-                .toString(port));
-        configProps.setProperty("config.user-manager.class",
-                "org.apache.ftpserver.usermanager.PropertiesUserManager");
-        configProps.setProperty("config.user-manager.admin", "admin");
-        configProps.setProperty("config.user-manager.prop-password-encrypt", "false");
-        configProps.setProperty("config.user-manager.prop-file",
-                USERS_FILE.getAbsolutePath());
-        configProps.setProperty("config.create-default-user", "false");
+        DefaultFtpServerContext context = new DefaultFtpServerContext(false);
 
-        return configProps;
+        MinaListener listener = new MinaListener();
+        listener.setPort(port);
+        context.setListener("default", listener);
+        
+        PropertiesUserManager userManager = new PropertiesUserManager();
+        userManager.setAdminName("admin");
+        userManager.setEncryptPasswords(false);
+        userManager.setPropFile(USERS_FILE);
+        userManager.configure();
+        
+        context.setUserManager(userManager);
+        
+        return new FtpServer(context);        
     }
     
     /*
@@ -116,8 +110,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected void initServer() throws IOException, Exception {
         initPort();
 
-        serverContext = new ConfigurableFtpServerContext(new PropertiesConfiguration(createConfig()));
-        server = new FtpServer(serverContext);
+        server = createServer();
         
         server.start();
     }

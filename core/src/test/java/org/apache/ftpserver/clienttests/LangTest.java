@@ -19,7 +19,9 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Properties;
+import org.apache.ftpserver.DefaultFtpServerContext;
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.message.MessageResourceImpl;
 
 
 
@@ -29,10 +31,14 @@ public class LangTest extends ClientTestTemplate {
     /* (non-Javadoc)
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
-    protected Properties createConfig() {
-        Properties config = super.createConfig();
-        config.setProperty("config.message.languages", "en,zh-tw");
-        return config;
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
+        
+    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+
+    	MessageResourceImpl resource = (MessageResourceImpl) context.getMessageResource();
+    	resource.setLanguages(new String[] {"en", "zh-tw"});
+        return server;
     }
 
     /* (non-Javadoc)

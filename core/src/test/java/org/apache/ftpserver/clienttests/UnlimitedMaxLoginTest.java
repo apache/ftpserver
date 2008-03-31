@@ -19,9 +19,9 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Properties;
-
 import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.DefaultFtpServerContext;
+import org.apache.ftpserver.FtpServer;
 
 
 public class UnlimitedMaxLoginTest extends ClientTestTemplate {
@@ -30,12 +30,14 @@ public class UnlimitedMaxLoginTest extends ClientTestTemplate {
 
     
     
-    protected Properties createConfig() {
-        Properties config = super.createConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
         
-        config.setProperty("config.connection-config.class", DefaultConnectionConfig.class.getName());
-        config.setProperty("config.connection-config.max-login-failures", "0");
-        return config;
+    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+    	
+    	DefaultConnectionConfig cc = (DefaultConnectionConfig) context.getConnectionConfig();
+    	cc.setMaxLoginFailures(0);
+        return server;
     }
 
 

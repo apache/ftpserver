@@ -273,8 +273,8 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     /**
      * Get ftplet handler.
      */
-    public Ftplet getFtpletContainer() {
-        return (Ftplet) ftpletContainerBean.getBean();
+    public FtpletContainer getFtpletContainer() {
+        return (FtpletContainer) ftpletContainerBean.getBean();
     }
     
     /**

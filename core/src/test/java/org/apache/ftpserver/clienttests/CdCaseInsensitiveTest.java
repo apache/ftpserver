@@ -19,19 +19,21 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Properties;
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 
 
 public class CdCaseInsensitiveTest extends CdTest {
-    protected Properties createConfig() {
-		Properties config = super.createConfig();
+    protected FtpServer createServer() throws Exception {
+		FtpServer server = super.createServer();
 		
-		config.setProperty("config.file-system-manager.case-insensitive", "true");
-		return config;
+		NativeFileSystemManager fs = (NativeFileSystemManager) server.getServerContext().getFileSystemManager();
+		fs.setCaseInsensitive(true);
+		
+		return server;
 	}
 
     public void testCWDCaseInsensitive() throws Exception {
-        
         assertTrue(client.changeWorkingDirectory(TEST_DIR1.getName().toUpperCase()));
         assertEquals("/dir1", client.printWorkingDirectory());
 

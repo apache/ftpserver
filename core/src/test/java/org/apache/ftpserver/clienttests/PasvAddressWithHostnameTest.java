@@ -19,7 +19,11 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Properties;
+import java.net.InetAddress;
+
+import org.apache.ftpserver.DefaultDataConnectionConfig;
+import org.apache.ftpserver.DefaultFtpServerContext;
+import org.apache.ftpserver.FtpServer;
 
 /**
  * Test for external passive address configured as hostname rather than
@@ -27,16 +31,15 @@ import java.util.Properties;
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {
 
-    protected Properties createConfig() {
-        Properties config = createDefaultConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
+        
+    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
 
-        config.setProperty("config.listeners.default.data-connection.class",
-                "org.apache.ftpserver.DefaultDataConnectionConfig");
-        config.setProperty(
-                "config.listeners.default.data-connection.passive.external-address",
-                "localhost");
-
-        return config;
+    	DefaultDataConnectionConfig ddcc = (DefaultDataConnectionConfig) context.getListener("default").getDataConnectionConfig();
+    	ddcc.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
+    	
+        return server;
     }
 
     public void testPasvAddress() throws Exception {

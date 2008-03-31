@@ -28,10 +28,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.util.IoUtils;
@@ -47,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * Custom Common Messages -> Default Common Messages -> null (not found)
  */
 public 
-class MessageResourceImpl implements MessageResource, Component {
+class MessageResourceImpl implements MessageResource {
 
     private final Logger LOG = LoggerFactory.getLogger(MessageResourceImpl.class);
     
@@ -55,39 +52,39 @@ class MessageResourceImpl implements MessageResource, Component {
     
     private String[] languages;
     private HashMap<String, PropertiesPair> messages;
-    private String customMessageDir;
-    
+    private File customMessageDirectory;
+
     private static class PropertiesPair {
         public Properties defaultProperties = new Properties();
         public Properties customProperties = new Properties();
     } 
     
-    /**
+    public String[] getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(String[] languages) {
+		this.languages = languages;
+	}
+
+	public File getCustomMessageDirectory() {
+		return customMessageDirectory;
+	}
+
+	public void setCustomMessageDirectory(File customMessageDirectory) {
+		this.customMessageDirectory = customMessageDirectory;
+	}
+
+	/**
      * Configure - load properties file.
      */
-    public void configure(Configuration config) throws FtpException {
-        
-        // get the custom message directory
-        customMessageDir = config.getString("custom-message-dir", "./res");
-        
-        // get all the languages
-        String languages = config.getString("languages", null);
-        if(languages != null) {
-            StringTokenizer st = new StringTokenizer(languages, ",; \t");
-            int tokenCount = st.countTokens();
-            this.languages = new String[tokenCount];
-            for(int i=0; i<tokenCount; ++i) {
-                this.languages[i] = st.nextToken().toLowerCase();
-            }
-        }
-        
+    public void configure() throws FtpException {
         // populate different properties
         messages = new HashMap<String, PropertiesPair>();
-        if(this.languages != null) {
-            for(int i=0; i<this.languages.length; ++i) {
-                String lang = this.languages[i];
-                PropertiesPair pair = createPropertiesPair(lang);
-                messages.put(lang, pair);
+        if(languages != null) {
+            for(String language : languages) {
+                PropertiesPair pair = createPropertiesPair(language);
+                messages.put(language, pair);
             }
         }
         PropertiesPair pair = createPropertiesPair(null);
@@ -127,10 +124,10 @@ class MessageResourceImpl implements MessageResource, Component {
         // load custom resource
         File resourceFile = null;
         if(lang == null) {
-            resourceFile = new File(customMessageDir, "FtpStatus.gen");
+            resourceFile = new File(customMessageDirectory, "FtpStatus.gen");
         }
         else {
-            resourceFile = new File(customMessageDir, "FtpStatus_" + lang + ".gen");
+            resourceFile = new File(customMessageDirectory, "FtpStatus_" + lang + ".gen");
         }
         in = null;
         try {
@@ -242,11 +239,11 @@ class MessageResourceImpl implements MessageResource, Component {
         // get custom resource file name
         File resourceFile = null;
         if(language == null) {
-            resourceFile = new File(customMessageDir, "FtpStatus.gen");
+            resourceFile = new File(customMessageDirectory, "FtpStatus.gen");
         }
         else {
             language = language.toLowerCase();
-            resourceFile = new File(customMessageDir, "FtpStatus_" + language + ".gen");
+            resourceFile = new File(customMessageDirectory, "FtpStatus_" + language + ".gen");
         }
         
         // save resource file

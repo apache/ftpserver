@@ -1,8 +1,8 @@
 package org.apache.ftpserver.filesystem;
 
-import org.apache.ftpserver.usermanager.BaseUser;
-
 import junit.framework.TestCase;
+
+import org.apache.ftpserver.usermanager.BaseUser;
 
 public abstract class FileSystemViewTemplate extends TestCase {
 

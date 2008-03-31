@@ -20,10 +20,11 @@
 package org.apache.ftpserver.clienttests;
 
 import java.net.SocketException;
-import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.DefaultFtpServerContext;
+import org.apache.ftpserver.FtpServer;
 
 
 public class CustomMaxLoginTest extends ClientTestTemplate {
@@ -32,13 +33,15 @@ public class CustomMaxLoginTest extends ClientTestTemplate {
 
     
     
-    protected Properties createConfig() {
-        Properties config = super.createConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
         
-        config.setProperty("config.connection-config.class", DefaultConnectionConfig.class.getName());
-        config.setProperty("config.connection-config.max-login-failures", "2");
+    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+    	DefaultConnectionConfig cc = (DefaultConnectionConfig) context.getConnectionConfig();
 
-        return config;
+        cc.setMaxLoginFailures(2);
+
+        return server;
     }
 
 

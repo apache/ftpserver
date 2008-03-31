@@ -163,10 +163,26 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     }
 
     /**
+     * Set the passive host
+     * @param address The passive host
+     */
+    public void setPassiveAddress(InetAddress address) {
+    	passive.setAddress(address);
+    }
+    
+    /**
      * Get external passive host.
      */
     public InetAddress getPassiveExernalAddress() {
         return passive.getExternalAddress();
+    }
+
+    /**
+     * Set the passive external host
+     * @param address The passive external  host
+     */
+    public void setPassiveExernalAddress(InetAddress address) {
+    	passive.setExternalAddress(address);
     }
     
     /**

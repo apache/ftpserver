@@ -20,8 +20,8 @@
 package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
-import java.util.Properties;
 
+import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 
 public class FtpLetReturnSkipTest extends ClientTestTemplate {
@@ -43,19 +43,11 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         connectClient();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
-     */
-    protected Properties createConfig() {
-        Properties config = createDefaultConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
 
-        config.setProperty("config.ftplets", "f1");
-        config.setProperty("config.ftplet.f1.class", 
-                MockFtplet.class.getName());
-        // #config.ftplet.f1.param=value1
-        return config;
+    	server.getServerContext().getFtpletContainer().addFtplet("f1", new MockFtplet());
+        return server;
     }
 
     public void testLogin() throws Exception {

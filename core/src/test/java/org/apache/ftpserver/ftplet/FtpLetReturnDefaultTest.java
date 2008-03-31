@@ -23,9 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.test.TestUtil;
 
@@ -53,18 +53,11 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
-     */
-    protected Properties createConfig() {
-        Properties config = createDefaultConfig();
+    protected FtpServer createServer() throws Exception {
+    	FtpServer server = super.createServer();
 
-        config.setProperty("config.ftplets", "f1");
-        config.setProperty("config.ftplet.f1.class", 
-                MockFtplet.class.getName());
-        return config;
+    	server.getServerContext().getFtpletContainer().addFtplet("f1", new MockFtplet());
+        return server;
     }
 
     public void testLogin() throws Exception {

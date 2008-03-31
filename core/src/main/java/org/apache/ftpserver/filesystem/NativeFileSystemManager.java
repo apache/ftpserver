@@ -21,8 +21,6 @@ package org.apache.ftpserver.filesystem;
 
 import java.io.File;
 
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -34,27 +32,30 @@ import org.slf4j.LoggerFactory;
  * Native file system manager. It uses the OS file system.
  */
 public 
-class NativeFileSystemManager implements FileSystemManager, Component {
+class NativeFileSystemManager implements FileSystemManager {
 
     private final Logger LOG = LoggerFactory.getLogger(NativeFileSystemManager.class);
     
     private boolean createHome;
     private boolean caseInsensitive;
     
-    /**
-     * Configure the file system manager - does nothing.
-     */
-    public void configure(Configuration conf) throws FtpException {
-        createHome  = conf.getBoolean("create-home", false); 
-        caseInsensitive  = conf.getBoolean("case-insensitive", false); 
-    }
-    
-    /**
-     * Dispose the file system manager.
-     */
-    public void dispose() {
-    }
-    
+    public boolean isCreateHome() {
+		return createHome;
+	}
+
+	public void setCreateHome(boolean createHome) {
+		this.createHome = createHome;
+	}
+
+	public boolean isCaseInsensitive() {
+		return caseInsensitive;
+	}
+
+	public void setCaseInsensitive(boolean caseInsensitive) {
+		this.caseInsensitive = caseInsensitive;
+	}
+
+   
     /**
      * Create the appropriate user file system view.
      */
@@ -74,6 +75,7 @@ class NativeFileSystemManager implements FileSystemManager, Component {
             }
         }
         
+        System.out.println("#########" + caseInsensitive);
         FileSystemView fsView = new NativeFileSystemView(user, caseInsensitive);
         return fsView;
     }
