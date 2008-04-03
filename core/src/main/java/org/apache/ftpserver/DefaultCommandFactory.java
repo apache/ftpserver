@@ -69,8 +69,6 @@ import org.apache.ftpserver.command.TYPE;
 import org.apache.ftpserver.command.USER;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -82,8 +80,6 @@ import org.slf4j.LoggerFactory;
  */
 public 
 class DefaultCommandFactory implements CommandFactory {
-
-    private static final  Logger LOG = LoggerFactory.getLogger(DefaultCommandFactory.class);
 
     private static final HashMap<String, Command> DEFAULT_COMMAND_MAP = new HashMap<String, Command>();  
     

@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
  */
-public class DefaultFtpletContainer implements Component, FtpletContainer {
+public class DefaultFtpletContainer implements FtpletContainer {
     
     private final Logger LOG = LoggerFactory.getLogger(DefaultFtpletContainer.class);
     
@@ -42,10 +42,6 @@ public class DefaultFtpletContainer implements Component, FtpletContainer {
         }
         final String name;
         final Ftplet ftplet;
-    }
-    
-    public void configure(Configuration config) throws FtpException {
-        // do nothing
     }
 
     public void dispose() {

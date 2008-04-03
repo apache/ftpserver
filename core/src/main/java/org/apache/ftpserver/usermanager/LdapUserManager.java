@@ -36,8 +36,6 @@ import javax.naming.directory.SearchResult;
 
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.slf4j.Logger;
@@ -48,8 +46,7 @@ import org.slf4j.LoggerFactory;
  * been tested with OpenLDAP. The BaseUser object will be serialized in LDAP.
  * Here the assumption is that the java object schema is available (RFC 2713).
  */
-public
-class LdapUserManager extends AbstractUserManager implements Component {
+public class LdapUserManager extends AbstractUserManager {
     
     private final Logger LOG = LoggerFactory.getLogger(LdapUserManager.class);
     
@@ -64,35 +61,32 @@ class LdapUserManager extends AbstractUserManager implements Component {
     
     private String adminName;
     private DirContext adminContext;
-    private String userBaseDn;
+    private String ldapUserBaseDn;
     private Attribute objClassAttr;
 
+    private String ldapUrl;
+    private String ldapAdminDn;
+    private String ldapAdminPassword;
+    private String ldapAuthentication = "simple";
+    
     
     /**
      * Instantiate LDAP based <code>UserManager</code> implementation.
      */
-    public void configure(Configuration config) throws FtpException { 
+    public void configure() throws FtpException { 
         
         try {
-            
-            // get admin name
-            adminName = config.getString("admin", "admin");
-            
-            // get ldap parameters
-            String url      = config.getString("ldap-url");
-            String admin    = config.getString("ldap-admin-dn");
-            String password = config.getString("ldap-admin-password");
-            String auth     = config.getString("ldap-authentication", "simple");
-
-            userBaseDn    = config.getString("ldap-user-base-dn");
-            
+        	if(ldapUrl == null) {
+        		throw new IllegalStateException("LDAP URL not set");
+        	}
+        	
             // create connection
             Properties adminEnv = new Properties();
             adminEnv.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-            adminEnv.setProperty(Context.PROVIDER_URL, url);
-            adminEnv.setProperty(Context.SECURITY_AUTHENTICATION, auth);             
-            adminEnv.setProperty(Context.SECURITY_PRINCIPAL, admin);             
-            adminEnv.setProperty(Context.SECURITY_CREDENTIALS, password);                     
+            adminEnv.setProperty(Context.PROVIDER_URL, ldapUrl);
+            adminEnv.setProperty(Context.SECURITY_AUTHENTICATION, ldapAuthentication);             
+            adminEnv.setProperty(Context.SECURITY_PRINCIPAL, ldapAdminDn);             
+            adminEnv.setProperty(Context.SECURITY_CREDENTIALS, ldapAdminPassword);                     
             adminContext = new InitialDirContext(adminEnv);
             
             // create objectClass attribute
@@ -101,11 +95,8 @@ class LdapUserManager extends AbstractUserManager implements Component {
             objClassAttr.add("top");
             
             LOG.info("LDAP user manager opened.");
-        }
-        catch(FtpException ex) {
-            throw ex;
-        }
-        catch(Exception ex) {
+    
+        } catch(Exception ex) {
             LOG.error("LdapUserManager.configure()", ex);
             throw new FtpException("LdapUserManager.configure()", ex);
         }
@@ -135,8 +126,8 @@ class LdapUserManager extends AbstractUserManager implements Component {
             Attributes matchAttrs = new BasicAttributes(true);
             matchAttrs.put(objClassAttr);
             matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
-            NamingEnumeration<SearchResult> answers = adminContext.search(userBaseDn, matchAttrs, CN_ATTRS);
-            LOG.info("Getting all users under " + userBaseDn);
+            NamingEnumeration<SearchResult> answers = adminContext.search(ldapUserBaseDn, matchAttrs, CN_ATTRS);
+            LOG.info("Getting all users under " + ldapUserBaseDn);
             
             // populate list
             ArrayList<String> allUsers = new ArrayList<String>();
@@ -304,6 +295,50 @@ class LdapUserManager extends AbstractUserManager implements Component {
                 i++;
             }
         }
-        return CN + '=' + valBuf.toString() + ',' + userBaseDn;
+        return CN + '=' + valBuf.toString() + ',' + ldapUserBaseDn;
     }
+
+	public String getLdapUrl() {
+		return ldapUrl;
+	}
+
+	public void setLdapUrl(String ldapUrl) {
+		this.ldapUrl = ldapUrl;
+	}
+
+	public String getLdapAdminDn() {
+		return ldapAdminDn;
+	}
+
+	public void setLdapAdminDn(String ldapAdminDn) {
+		this.ldapAdminDn = ldapAdminDn;
+	}
+
+	public String getLdapAdminPassword() {
+		return ldapAdminPassword;
+	}
+
+	public void setLdapAdminPassword(String ldapAdminPassword) {
+		this.ldapAdminPassword = ldapAdminPassword;
+	}
+
+	public String getLdapAuthentication() {
+		return ldapAuthentication;
+	}
+
+	public void setLdapAuthentication(String ldapAuthentication) {
+		this.ldapAuthentication = ldapAuthentication;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public String getLdapUserBaseDn() {
+		return ldapUserBaseDn;
+	}
+
+	public void setLdapUserBaseDn(String ldapUserBaseDn) {
+		this.ldapUserBaseDn = ldapUserBaseDn;
+	}
 }    

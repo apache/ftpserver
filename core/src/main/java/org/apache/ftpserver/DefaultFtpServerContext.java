@@ -114,8 +114,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			}
 
 			ftpletContainer = new DefaultFtpletContainer();
-			((DefaultFtpletContainer) ftpletContainer)
-					.configure(EmptyConfiguration.INSTANCE);
 		} catch (Exception ex) {
 			dispose();
 			throw ex;
