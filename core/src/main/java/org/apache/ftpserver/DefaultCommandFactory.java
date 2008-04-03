@@ -20,11 +20,53 @@
 package org.apache.ftpserver;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
-import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.command.ABOR;
+import org.apache.ftpserver.command.ACCT;
+import org.apache.ftpserver.command.APPE;
+import org.apache.ftpserver.command.AUTH;
+import org.apache.ftpserver.command.CDUP;
+import org.apache.ftpserver.command.CWD;
+import org.apache.ftpserver.command.DELE;
+import org.apache.ftpserver.command.EPRT;
+import org.apache.ftpserver.command.EPSV;
+import org.apache.ftpserver.command.FEAT;
+import org.apache.ftpserver.command.HELP;
+import org.apache.ftpserver.command.LANG;
+import org.apache.ftpserver.command.LIST;
+import org.apache.ftpserver.command.MD5;
+import org.apache.ftpserver.command.MDTM;
+import org.apache.ftpserver.command.MKD;
+import org.apache.ftpserver.command.MLSD;
+import org.apache.ftpserver.command.MLST;
+import org.apache.ftpserver.command.MODE;
+import org.apache.ftpserver.command.NLST;
+import org.apache.ftpserver.command.NOOP;
+import org.apache.ftpserver.command.OPTS;
+import org.apache.ftpserver.command.PASS;
+import org.apache.ftpserver.command.PASV;
+import org.apache.ftpserver.command.PBSZ;
+import org.apache.ftpserver.command.PORT;
+import org.apache.ftpserver.command.PROT;
+import org.apache.ftpserver.command.PWD;
+import org.apache.ftpserver.command.QUIT;
+import org.apache.ftpserver.command.REIN;
+import org.apache.ftpserver.command.REST;
+import org.apache.ftpserver.command.RETR;
+import org.apache.ftpserver.command.RMD;
+import org.apache.ftpserver.command.RNFR;
+import org.apache.ftpserver.command.RNTO;
+import org.apache.ftpserver.command.SITE;
+import org.apache.ftpserver.command.SIZE;
+import org.apache.ftpserver.command.STAT;
+import org.apache.ftpserver.command.STOR;
+import org.apache.ftpserver.command.STOU;
+import org.apache.ftpserver.command.STRU;
+import org.apache.ftpserver.command.SYST;
+import org.apache.ftpserver.command.TYPE;
+import org.apache.ftpserver.command.USER;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.slf4j.Logger;
@@ -34,110 +76,124 @@ import org.slf4j.LoggerFactory;
 /**
  * Command factory to return appropriate command implementation
  * depending on the FTP request command string.
+ * 
+ * Used a default setup of commands which can be appended or 
+ * overriden using {@link #setCommandMap(HashMap)}.
  */
 public 
-class DefaultCommandFactory implements CommandFactory, Component {
+class DefaultCommandFactory implements CommandFactory {
 
     private static final  Logger LOG = LoggerFactory.getLogger(DefaultCommandFactory.class);
 
-    private HashMap<String, Command> commandMap = new HashMap<String, Command>();  
+    private static final HashMap<String, Command> DEFAULT_COMMAND_MAP = new HashMap<String, Command>();  
+    
+    static {
+        // first populate the default command list
+        DEFAULT_COMMAND_MAP.put("ABOR", new ABOR());
+        DEFAULT_COMMAND_MAP.put("ACCT", new ACCT());
+        DEFAULT_COMMAND_MAP.put("APPE", new APPE());
+        DEFAULT_COMMAND_MAP.put("AUTH", new AUTH());
+        DEFAULT_COMMAND_MAP.put("CDUP", new CDUP());
+        DEFAULT_COMMAND_MAP.put("CWD",  new CWD());
+        DEFAULT_COMMAND_MAP.put("DELE", new DELE());
+        DEFAULT_COMMAND_MAP.put("EPRT", new EPRT());
+        DEFAULT_COMMAND_MAP.put("EPSV", new EPSV());
+        DEFAULT_COMMAND_MAP.put("FEAT", new FEAT());
+        DEFAULT_COMMAND_MAP.put("HELP", new HELP());
+        DEFAULT_COMMAND_MAP.put("LANG", new LANG());
+        DEFAULT_COMMAND_MAP.put("LIST", new LIST());
+        DEFAULT_COMMAND_MAP.put("MD5", new MD5());
+        DEFAULT_COMMAND_MAP.put("MMD5", new MD5());
+        DEFAULT_COMMAND_MAP.put("MDTM", new MDTM());
+        DEFAULT_COMMAND_MAP.put("MLST", new MLST());
+        DEFAULT_COMMAND_MAP.put("MKD",  new MKD());
+        DEFAULT_COMMAND_MAP.put("MLSD", new MLSD());
+        DEFAULT_COMMAND_MAP.put("MODE", new MODE());
+        DEFAULT_COMMAND_MAP.put("NLST", new NLST());
+        DEFAULT_COMMAND_MAP.put("NOOP", new NOOP());
+        DEFAULT_COMMAND_MAP.put("OPTS", new OPTS());
+        DEFAULT_COMMAND_MAP.put("PASS", new PASS());
+        DEFAULT_COMMAND_MAP.put("PASV", new PASV());
+        DEFAULT_COMMAND_MAP.put("PBSZ", new PBSZ());
+        DEFAULT_COMMAND_MAP.put("PORT", new PORT());
+        DEFAULT_COMMAND_MAP.put("PROT", new PROT());
+        DEFAULT_COMMAND_MAP.put("PWD",  new PWD());
+        DEFAULT_COMMAND_MAP.put("QUIT", new QUIT());
+        DEFAULT_COMMAND_MAP.put("REIN", new REIN());
+        DEFAULT_COMMAND_MAP.put("REST", new REST());
+        DEFAULT_COMMAND_MAP.put("RETR", new RETR());
+        DEFAULT_COMMAND_MAP.put("RMD",  new RMD());
+        DEFAULT_COMMAND_MAP.put("RNFR", new RNFR());
+        DEFAULT_COMMAND_MAP.put("RNTO", new RNTO());
+        DEFAULT_COMMAND_MAP.put("SITE", new SITE());
+        DEFAULT_COMMAND_MAP.put("SIZE", new SIZE());
+        DEFAULT_COMMAND_MAP.put("STAT", new STAT());
+        DEFAULT_COMMAND_MAP.put("STOR", new STOR());
+        DEFAULT_COMMAND_MAP.put("STOU", new STOU());
+        DEFAULT_COMMAND_MAP.put("STRU", new STRU());
+        DEFAULT_COMMAND_MAP.put("SYST", new SYST());
+        DEFAULT_COMMAND_MAP.put("TYPE", new TYPE());
+        DEFAULT_COMMAND_MAP.put("USER", new USER());
+    }
+
+    private Map<String, Command> commandMap = new HashMap<String, Command>();
+    private boolean useDefaultCommands = true;
     
     /**
-     * Configure the command factory - populate the command map.
+     * Are default commands used?
+     * @return true if default commands are used
      */
-    @SuppressWarnings("unchecked")
-	public void configure(Configuration conf) throws FtpException {
-        
-        // first populate the default command list
-        commandMap.put("ABOR", new org.apache.ftpserver.command.ABOR());
-        commandMap.put("ACCT", new org.apache.ftpserver.command.ACCT());
-        commandMap.put("APPE", new org.apache.ftpserver.command.APPE());
-        commandMap.put("AUTH", new org.apache.ftpserver.command.AUTH());
-        commandMap.put("CDUP", new org.apache.ftpserver.command.CDUP());
-        commandMap.put("CWD",  new org.apache.ftpserver.command.CWD());
-        commandMap.put("DELE", new org.apache.ftpserver.command.DELE());
-        commandMap.put("EPRT", new org.apache.ftpserver.command.EPRT());
-        commandMap.put("EPSV", new org.apache.ftpserver.command.EPSV());
-        commandMap.put("FEAT", new org.apache.ftpserver.command.FEAT());
-        commandMap.put("HELP", new org.apache.ftpserver.command.HELP());
-        commandMap.put("LANG", new org.apache.ftpserver.command.LANG());
-        commandMap.put("LIST", new org.apache.ftpserver.command.LIST());
-        commandMap.put("MD5", new org.apache.ftpserver.command.MD5());
-        commandMap.put("MMD5", new org.apache.ftpserver.command.MD5());
-        commandMap.put("MDTM", new org.apache.ftpserver.command.MDTM());
-        commandMap.put("MLST", new org.apache.ftpserver.command.MLST());
-        commandMap.put("MKD",  new org.apache.ftpserver.command.MKD());
-        commandMap.put("MLSD", new org.apache.ftpserver.command.MLSD());
-        commandMap.put("MODE", new org.apache.ftpserver.command.MODE());
-        commandMap.put("NLST", new org.apache.ftpserver.command.NLST());
-        commandMap.put("NOOP", new org.apache.ftpserver.command.NOOP());
-        commandMap.put("OPTS", new org.apache.ftpserver.command.OPTS());
-        commandMap.put("PASS", new org.apache.ftpserver.command.PASS());
-        commandMap.put("PASV", new org.apache.ftpserver.command.PASV());
-        commandMap.put("PBSZ", new org.apache.ftpserver.command.PBSZ());
-        commandMap.put("PORT", new org.apache.ftpserver.command.PORT());
-        commandMap.put("PROT", new org.apache.ftpserver.command.PROT());
-        commandMap.put("PWD",  new org.apache.ftpserver.command.PWD());
-        commandMap.put("QUIT", new org.apache.ftpserver.command.QUIT());
-        commandMap.put("REIN", new org.apache.ftpserver.command.REIN());
-        commandMap.put("REST", new org.apache.ftpserver.command.REST());
-        commandMap.put("RETR", new org.apache.ftpserver.command.RETR());
-        commandMap.put("RMD",  new org.apache.ftpserver.command.RMD());
-        commandMap.put("RNFR", new org.apache.ftpserver.command.RNFR());
-        commandMap.put("RNTO", new org.apache.ftpserver.command.RNTO());
-        commandMap.put("SITE", new org.apache.ftpserver.command.SITE());
-        commandMap.put("SIZE", new org.apache.ftpserver.command.SIZE());
-        commandMap.put("STAT", new org.apache.ftpserver.command.STAT());
-        commandMap.put("STOR", new org.apache.ftpserver.command.STOR());
-        commandMap.put("STOU", new org.apache.ftpserver.command.STOU());
-        commandMap.put("STRU", new org.apache.ftpserver.command.STRU());
-        commandMap.put("SYST", new org.apache.ftpserver.command.SYST());
-        commandMap.put("TYPE", new org.apache.ftpserver.command.TYPE());
-        commandMap.put("USER", new org.apache.ftpserver.command.USER());
-        
-        // now populate the configured commands
-        Configuration sconf = conf.subset("command");
-        if(sconf == null || sconf.isEmpty()) {
-            return;
-        }
-        
-        Iterator cmds = sconf.getKeys();
-        if(cmds == null) {
-            return;
-        }
-        
-        while(cmds.hasNext()) {
-            String cmdName = (String)cmds.next();
-            String cmdClass = sconf.getString(cmdName, null);
-            if(cmdClass == null || cmdClass.equals("")) {
-                throw new FtpException("Command not found :: " + cmdName);
-            }
-            try {
-                Class<Command> clazz = (Class<Command>) Class.forName(cmdClass);
-                Command cmd = clazz.newInstance();
-                commandMap.put(cmdName, cmd);
-            }
-            catch(Exception ex) {
-                LOG.error("DefaultCommandFactory.configure()", ex);
-                throw new FtpException("DefaultCommandFactory.configure()", ex);
-            }
-        }
-    }
+    public boolean isUseDefaultCommands() {
+		return useDefaultCommands;
+	}
+
+    /**
+     * Sets whether the default commands will be used.
+     * @param useDefaultCommands true if default commands should be used
+     */
+	public void setUseDefaultCommands(boolean useDefaultCommands) {
+		this.useDefaultCommands = useDefaultCommands;
+	}
+
+	/**
+	 * Get the installed commands
+	 * @return The installed commands
+	 */
+    public Map<String, Command> getCommandMap() {
+		return commandMap;
+	}
+
+	/**
+	 * Set commands to add or override to the default commands
+	 * @param commandMap The map of commands, the key will be used to map 
+	 * 	to requests. 
+	 */
+	public synchronized void setCommandMap(Map<String, Command> commandMap) {
+		if(commandMap == null) {
+			throw new NullPointerException("commandMap can not be null");
+		}
+
+		this.commandMap.clear();
+		
+		for(Entry<String, Command> entry : commandMap.entrySet()) {
+			this.commandMap.put(entry.getKey().toUpperCase(), entry.getValue());
+		}
+	}
     
     /**
      * Get command. Returns null if not found.
      */
     public Command getCommand(String cmdName) {
-        if(cmdName == null || cmdName.equals("")) {
+    	if(cmdName == null || cmdName.equals("")) {
             return null;
         }
-        return commandMap.get(cmdName);
-    }
-    
-    /**
-     * Cose the command factory - does nothing.
-     */
-    public void dispose() {
-        commandMap.clear();
+    	cmdName = cmdName.toUpperCase();
+    	Command command = commandMap.get(cmdName);
+    	
+    	if(command == null && useDefaultCommands) {
+    		command = DEFAULT_COMMAND_MAP.get(cmdName);
+    	}
+    	
+        return command;
     }
 }

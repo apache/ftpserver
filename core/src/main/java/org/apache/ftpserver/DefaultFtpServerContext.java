@@ -106,8 +106,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 					.configure(EmptyConfiguration.INSTANCE);
 
 			commandFactory = new DefaultCommandFactory();
-			((DefaultCommandFactory) commandFactory)
-					.configure(EmptyConfiguration.INSTANCE);
 
 			// create user if necessary
 			// TODO turn into a setter
