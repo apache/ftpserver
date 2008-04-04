@@ -28,7 +28,6 @@ import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
-import org.apache.ftpserver.ftplet.EmptyConfiguration;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -93,8 +92,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 					.configure();
 
 			ipRestrictor = new FileIpRestrictor();
-			((FileIpRestrictor) ipRestrictor)
-					.configure(EmptyConfiguration.INSTANCE);
 
 			userManager = new PropertiesUserManager();
 			((PropertiesUserManager) userManager).configure();
