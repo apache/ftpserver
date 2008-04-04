@@ -30,6 +30,7 @@ import org.apache.mina.common.ReadFuture;
 import org.apache.mina.common.TrafficMask;
 import org.apache.mina.common.TransportMetadata;
 import org.apache.mina.common.WriteFuture;
+import org.apache.mina.common.WriteRequest;
 import org.apache.mina.filter.ssl.SslFilter;
 
 public class FtpIoSession implements IoSession {
@@ -474,6 +475,14 @@ public class FtpIoSession implements IoSession {
 	public void updateLastAccessTime() {
 		setAttribute(ATTRIBUTE_LAST_ACCESS_TIME, new Date());
 		
+	}
+
+	public Object getCurrentWriteMessage() {
+		return wrappedSession.getCurrentWriteMessage();
+	}
+
+	public WriteRequest getCurrentWriteRequest() {
+		return wrappedSession.getCurrentWriteRequest();
 	}
 
 }
