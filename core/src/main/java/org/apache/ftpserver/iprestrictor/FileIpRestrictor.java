@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.util.IoUtils;
@@ -39,30 +37,14 @@ import org.slf4j.LoggerFactory;
 /**
  * File based IP restrictor.
  */
-public 
-class FileIpRestrictor implements IpRestrictor, Component {
+public class FileIpRestrictor implements IpRestrictor {
 
     private final Logger LOG = LoggerFactory.getLogger(FileIpRestrictor.class);
     
     private final static String LINE_SEP = System.getProperty("line.separator", "\n");
     
-    private String file;
+    private File file = new File("./res/ip.gen");
     private Object[][] permissions;
-    
-    /**
-     * Configure the IP restrictor.
-     */
-    public void configure(Configuration config) throws FtpException {
-        file = config.getString("file", "./res/ip.gen");
-        File dir = new File(file).getParentFile();
-        if( (!dir.exists()) && (!dir.mkdirs()) ) {
-            String dirName = dir.getAbsolutePath();
-            LOG.error("Cannot create directory - " + dirName);
-            throw new FtpException("Cannot create directory : " + dirName);
-        }
-        
-        permissions = getPermissions();
-    }
     
     /**
      * Has the permission?
@@ -87,7 +69,7 @@ class FileIpRestrictor implements IpRestrictor, Component {
     public Object[][] getPermissions() throws FtpException {
         
         ArrayList<Object[]> permList = new ArrayList<Object[]>();
-        if(new File(file).exists()) {
+        if(file.exists()) {
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new FileReader(file));
@@ -150,9 +132,20 @@ class FileIpRestrictor implements IpRestrictor, Component {
         }
     }
     
-    /**
-     * Release all the resources
-     */
-    public void dispose() {
-    }
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) throws FtpException {
+		this.file = file;
+
+		File dir = file.getParentFile();
+        if( (!dir.exists()) && (!dir.mkdirs()) ) {
+            String dirName = dir.getAbsolutePath();
+            LOG.error("Cannot create directory - " + dirName);
+            throw new FtpException("Cannot create directory : " + dirName);
+        }
+        
+        permissions = getPermissions();
+	}
 }

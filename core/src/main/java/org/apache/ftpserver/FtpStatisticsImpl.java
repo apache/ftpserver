@@ -24,10 +24,7 @@ import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.apache.ftpserver.ftplet.Component;
-import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.ftplet.FileObject;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FileObserver;
 import org.apache.ftpserver.interfaces.FtpIoSession;
@@ -37,7 +34,7 @@ import org.apache.ftpserver.interfaces.StatisticsObserver;
 /**
  * This is ftp statistice implementation.
  */
-public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
+public class FtpStatisticsImpl implements ServerFtpStatistics {
 
     private StatisticsObserver observer = null;
     private FileObserver fileObserver   = null;
@@ -71,18 +68,6 @@ public class FtpStatisticsImpl implements ServerFtpStatistics, Component {
     Hashtable<String, Hashtable<String, Integer>> userLoginTable = new Hashtable<String, Hashtable<String, Integer>>();
     
     public static final String LOGIN_NUMBER = "login_number";
-    
-    /**
-     * Configure component - does nothing.
-     */
-    public void configure(Configuration conf) throws FtpException {
-    }
-    
-    /**
-     * Dispose component - does nothing.
-     */
-    public void dispose() {
-    }
     
     /**
      * Set the observer.

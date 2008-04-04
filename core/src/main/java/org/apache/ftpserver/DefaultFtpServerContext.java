@@ -102,8 +102,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			fileSystemManager = new NativeFileSystemManager();
 
 			statistics = new FtpStatisticsImpl();
-			((FtpStatisticsImpl) statistics)
-					.configure(EmptyConfiguration.INSTANCE);
 
 			commandFactory = new DefaultCommandFactory();
 
