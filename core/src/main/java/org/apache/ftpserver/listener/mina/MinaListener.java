@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.DefaultFtpHandler;
 import org.apache.ftpserver.FtpHandler;
+import org.apache.ftpserver.filter.FtpLoggingFilter;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Listener;
@@ -35,7 +36,6 @@ import org.apache.mina.common.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
-import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.apache.mina.transport.socket.SocketAcceptor;
@@ -99,7 +99,7 @@ public class MinaListener extends AbstractListener {
         acceptor.getFilterChain().addLast(
         		"codec",
         		new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
-        acceptor.getFilterChain().addLast("logger", new LoggingFilter() );
+        acceptor.getFilterChain().addLast("logger", new FtpLoggingFilter() );
         
         acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
 

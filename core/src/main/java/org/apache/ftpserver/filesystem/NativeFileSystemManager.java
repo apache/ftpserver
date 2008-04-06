@@ -75,7 +75,6 @@ class NativeFileSystemManager implements FileSystemManager {
             }
         }
         
-        System.out.println("#########" + caseInsensitive);
         FileSystemView fsView = new NativeFileSystemView(user, caseInsensitive);
         return fsView;
     }
