@@ -30,22 +30,15 @@ import org.apache.commons.net.ftp.FTPSClient;
 
 public class MinaClientAuthTest extends SSLTestTemplate {
 
-    protected boolean useImplicit() {
-        return false;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.apache.ftpserver.ssl.SSLTestTemplate#createFTPClient()
-     */
     protected FTPSClient createFTPClient() throws Exception {
         FTPSClient client = new FTPSClient(useImplicit());
         client.setNeedClientAuth(true);
         
         KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(new FileInputStream(FTPCLIENT_KEYSTORE), KEYSTORE_PASSWORD);
+        ks.load(new FileInputStream(FTPCLIENT_KEYSTORE), KEYSTORE_PASSWORD.toCharArray());
         
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(ks, KEYSTORE_PASSWORD);
+        kmf.init(ks, KEYSTORE_PASSWORD.toCharArray());
 
         client.setKeyManager(kmf.getKeyManagers()[0]);
 

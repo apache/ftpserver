@@ -19,21 +19,11 @@
 
 package org.apache.ftpserver.ssl;
 
-import java.util.Properties;
 
 
 public class MinaImplicitClientAuthTest extends MinaClientAuthTest {
 
-    protected Properties createConfig() {
-        Properties config = super.createConfig();
-        config.setProperty("config.listeners.default.implicitSsl",
-                "true");
-
-        return config;
-    }
-
     protected boolean useImplicit() {
-        return true;
+    	return true;
     }
-
 }

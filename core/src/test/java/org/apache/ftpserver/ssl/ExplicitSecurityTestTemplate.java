@@ -26,6 +26,7 @@ import java.io.InputStream;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.util.IoUtils;
 
 
@@ -54,7 +55,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
         
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -66,14 +67,14 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
         
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
         assertTrue(TEST_FILE1.exists());
         assertEquals(TEST_DATA.length, TEST_FILE1.length());
 
-        client.execPROT("C");
+        ((FTPSClient)client).execPROT("C");
         
         client.storeFile(TEST_FILE2.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -85,7 +86,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         // needed due to bug in commons-net
         client.setServerSocketFactory(SSLServerSocketFactory.getDefault());
 
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -97,7 +98,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         // needed due to bug in commons-net
         client.setServerSocketFactory(SSLServerSocketFactory.getDefault());
         
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -107,7 +108,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         // needed due to bug in commons-net
         client.setServerSocketFactory(null);
         
-        client.execPROT("C");
+        ((FTPSClient)client).execPROT("C");
         
         client.storeFile(TEST_FILE2.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -119,7 +120,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
         
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         File dir = new File(ROOT_DIR, "dir");
         dir.mkdir();
@@ -131,7 +132,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
         
-        client.execPROT("P");
+        ((FTPSClient)client).execPROT("P");
         
         File file = new File(ROOT_DIR, "foo");
         file.createNewFile();

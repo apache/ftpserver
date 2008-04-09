@@ -19,30 +19,14 @@
 
 package org.apache.ftpserver.ssl;
 
-import java.util.Properties;
-
 import org.apache.commons.net.ftp.FTPSClient;
 
 public abstract class ImplicitSecurityTestTemplate extends ExplicitSecurityTestTemplate {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.ftpserver.ssl.SSLTestTemplate#createConfig()
-     */
-    protected Properties createConfig() {
-        Properties config = super.createConfig();
-        config.setProperty("config.listeners.default.implicitSsl",
-                "true");
-
-        return config;
+    protected boolean useImplicit() {
+    	return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.ftpserver.ssl.SSLTestTemplate#createFTPClient()
-     */
     protected FTPSClient createFTPClient() throws Exception {
         return new FTPSClient(true);
     }

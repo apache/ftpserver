@@ -136,16 +136,20 @@ public abstract class ClientTestTemplate extends TestCase {
             }});
         
         if(isConnectClient()) {
-            try{
-                client.connect("localhost", port);
-            } catch(FTPConnectionClosedException e) {
-                // try again
-                Thread.sleep(200);
-                client.connect("localhost", port);
-            }
+        	doConnect();
         }
     }
 
+    protected void doConnect() throws Exception {
+    	try{
+            client.connect("localhost", port);
+        } catch(FTPConnectionClosedException e) {
+            // try again
+            Thread.sleep(200);
+            client.connect("localhost", port);
+        }
+    }
+    
     protected boolean isConnectClient() {
         return true;
     }
