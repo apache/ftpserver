@@ -1,17 +1,39 @@
+/*
+ * Copyright 1999-2004 The Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.ftpserver.ssl;
 
-public class ClientAuth {
-    public static final ClientAuth NEED = new ClientAuth("Need");
-    public static final ClientAuth WANT = new ClientAuth("Want");
-    public static final ClientAuth NONE = new ClientAuth("None");
+/**
+ * Enumeration of possible levels of client
+ * authentication during an SSL session.
+ */
+public enum ClientAuth {
+	
+	/**
+	 * Client authentication is required
+	 */
+    NEED,
     
-    private String type;
+    /**
+     * Client authentication is requested but not required 
+     */
+    WANT,
     
-    private ClientAuth(String type) {
-        this.type = type;
-    }
-
-    public String toString() {
-        return type;
-    }
+    /**
+     * Client authentication is not performed
+     */
+    NONE
 }

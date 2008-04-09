@@ -40,8 +40,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Ssl implementation. This class encapsulates all 
- * the SSL functionalities.
+ * Used to configure the SSL settings for the control channel
+ * or the data channel.
  */
 public class DefaultSslConfiguration implements SslConfiguration {
     
@@ -49,12 +49,12 @@ public class DefaultSslConfiguration implements SslConfiguration {
     
     private File keystoreFile = new File("./res/.keystore");
     private String keystorePass;
-    private String keystoreType = "JKS";
+    private String keystoreType = KeyStore.getDefaultType();
     private String keystoreAlgorithm = "SunX509";
 
     private File trustStoreFile;
     private String trustStorePass;
-    private String trustStoreType = "JKS";
+    private String trustStoreType = KeyStore.getDefaultType();
     private String trustStoreAlgorithm = "SunX509";
     
     private String sslProtocol = "TLS";
@@ -69,47 +69,100 @@ public class DefaultSslConfiguration implements SslConfiguration {
 
     private String[] enabledCipherSuites;
     
+    /**
+     * The key store file used by this configuration
+     * @return The key store file
+     */
     public File getKeystoreFile() {
         return keystoreFile;
     }
     
+    /**
+     * Set the key store file to be used by this configuration
+     * @param keyStoreFile A path to an existing key store file
+     */
     public void setKeystoreFile(File keyStoreFile) {
         this.keystoreFile = keyStoreFile;
     }
     
+    /**
+     * The password used to load the key store
+     * @return The password
+     */
     public String getKeystorePassword() {
         return keystorePass;
     }
-    
+
+    /**
+     * Set the password used to load the key store 
+     * @param keystorePass The password
+     */
     public void setKeystorePassword(String keystorePass) {
         this.keystorePass = keystorePass;
     }
-    
+
+    /**
+     * The key store type, defaults to @see {@link KeyStore#getDefaultType()}
+     * @return The key store type
+     */
     public String getKeystoreType() {
         return keystoreType;
     }
     
+    /**
+     * Set the key store type
+     * @param keystoreType The key store type
+     */
     public void setKeystoreType(String keystoreType) {
         this.keystoreType = keystoreType;
     }
     
+    /**
+     * The algorithm used to open the key store. 
+     * 	 Defaults to "SunX509"
+     * @return The key store algorithm
+     */
     public String getKeystoreAlgorithm() {
         return keystoreAlgorithm;
     }
     
+    /**
+     * Override the key store algorithm used to
+     *   open the key store
+     * @param keystoreAlgorithm The key store algorithm
+     */
     public void setKeystoreAlgorithm(String keystoreAlgorithm) {
         this.keystoreAlgorithm = keystoreAlgorithm;
     
     }
     
+    /**
+     * The SSL protocol used for this channel. 
+     *   Supported values are "SSL" and "TLS". 
+     *   Defaults to "TLS".
+     * @return The SSL protocol
+     */
     public String getSslProtocol() {
         return sslProtocol;
     }
-    
+
+    /**
+     * Set the SSL protocol used for this channel. 
+     *   Supported values are "SSL" and "TLS".
+     *   Defaults to "TLS". 
+     * @param sslProtocol The SSL protocol
+     */
     public void setSslProtocol(String sslProtocol) {
         this.sslProtocol = sslProtocol;
     }
     
+    /**
+     * Set what client authentication level to use, supported
+     * values are "yes" or "true" for required authentication, 
+     * "want" for wanted authentication and "false" or "none" 
+     * for no authentication. Defaults to "none".
+     * @param clientAuthReqd The desired authentication level
+     */
     public void setClientAuthentication(String clientAuthReqd) {
         if("true".equalsIgnoreCase(clientAuthReqd) 
                 || "yes".equalsIgnoreCase(clientAuthReqd)) {
@@ -121,10 +174,18 @@ public class DefaultSslConfiguration implements SslConfiguration {
         }
     }
     
+    /**
+     * The password used to load the key
+     * @return The password
+     */
     public String getKeyPassword() {
         return keyPass;
     }
     
+    /**
+     * Set the password used to load the key 
+     * @param keyPass The password
+     */
     public void setKeyPassword(String keyPass) {
         this.keyPass = keyPass;
     }
@@ -133,30 +194,60 @@ public class DefaultSslConfiguration implements SslConfiguration {
         return trustStoreFile;
     }
     
+    /**
+     * Set the password used to load the trust store 
+     * @param trustStoreFile The password
+     */
     public void setTruststoreFile(File trustStoreFile) {
         this.trustStoreFile = trustStoreFile;
     }
-    
+
+    /**
+     * The password used to load the trust store
+     * @return The password
+     */
     public String getTruststorePassword() {
         return trustStorePass;
     }
-    
+
+    /**
+     * Set the password used to load the trust store 
+     * @param trustStorePass The password
+     */
     public void setTruststorePassword(String trustStorePass) {
         this.trustStorePass = trustStorePass;
     }
     
+    /**
+     * The trust store type, defaults to @see {@link KeyStore#getDefaultType()}
+     * @return The trust store type
+     */
     public String getTruststoreType() {
         return trustStoreType;
     }
-    
+
+    /**
+     * Set the trust store type
+     * @param keystoreType The trust store type
+     */    
     public void setTruststoreType(String trustStoreType) {
         this.trustStoreType = trustStoreType;
     }
     
+    /**
+     * The algorithm used to open the trust store. 
+     * 	 Defaults to "SunX509"
+     * @return The trust store algorithm
+     */
     public String getTruststoreAlgorithm() {
         return trustStoreAlgorithm;
     }
     
+    /**
+     * Override the trust store algorithm used to
+     *   open the trust store
+     * @param trustStoreAlgorithm The trust store algorithm
+     */
     public void setTruststoreAlgorithm(String trustStoreAlgorithm) {
         this.trustStoreAlgorithm = trustStoreAlgorithm;
     
@@ -217,7 +308,7 @@ public class DefaultSslConfiguration implements SslConfiguration {
     }
     
     /**
-     * Get SSL Context.
+     * @see SslConfiguration#getSSLContext(String)
      */
     public synchronized SSLContext getSSLContext(String protocol) throws GeneralSecurityException {
         lazyInit();
@@ -260,18 +351,33 @@ public class DefaultSslConfiguration implements SslConfiguration {
         return ctx;
     }
     
+    /**
+     * @see SslConfiguration#getClientAuth()
+     */
     public ClientAuth getClientAuth() {
         return clientAuthReqd;
     }
 
+    /**
+     * @see SslConfiguration#getSSLContext()
+     */
     public SSLContext getSSLContext() throws GeneralSecurityException {
         return getSSLContext(sslProtocol);
     }
 
+    /**
+     * @see SslConfiguration#getEnabledCipherSuites()
+     */
     public String[] getEnabledCipherSuites() {
         return enabledCipherSuites;
     }
     
+    /**
+     * Set the allowed cipher suites, note that
+     *   the exact list of supported cipher suites
+     *   differs between JRE implementations.
+     * @param enabledCipherSuites
+     */
     public void setEnabledCipherSuites(String[] enabledCipherSuites) {
         this.enabledCipherSuites = enabledCipherSuites;
     }
