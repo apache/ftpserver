@@ -37,9 +37,7 @@ import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
@@ -60,7 +58,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     private final Logger LOG = LoggerFactory.getLogger(ConfigurableFtpServerContext.class);
     
     private Bean messageResourceBean;
-    private Bean ipRestrictorBean;
     private Bean userManagerBean;
     private Bean fileSystemManagerBean;
     private Bean ftpletContainerBean;
@@ -91,7 +88,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             
             // create all the components
             messageResourceBean   = createComponent(conf, "message",             MessageResourceImpl.class.getName());
-            ipRestrictorBean      = createComponent(conf, "ip-restrictor",       FileIpRestrictor.class.getName());
             userManagerBean       = createComponent(conf, "user-manager",        PropertiesUserManager.class.getName());
             fileSystemManagerBean = createComponent(conf, "file-system-manager", NativeFileSystemManager.class.getName());
             statisticsBean        = createComponent(conf, "statistics",          FtpStatisticsImpl.class.getName());
@@ -243,13 +239,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
     }
     
     /**
-     * Get IP restrictor.
-     */
-    public IpRestrictor getIpRestrictor() {
-        return (IpRestrictor) ipRestrictorBean.getBean();
-    }
-    
-    /**
      * Get file system manager.
      */
     public FileSystemManager getFileSystemManager() {
@@ -308,10 +297,6 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         
         if(userManagerBean != null && userManagerBean.getBean() != null) {
             userManagerBean.destroyBean();
-        }
-        
-        if(ipRestrictorBean != null && ipRestrictorBean.getBean() != null) {
-            ipRestrictorBean.destroyBean();
         }
         
         if(fileSystemManagerBean != null && fileSystemManagerBean.getBean() != null) {

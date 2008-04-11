@@ -39,11 +39,6 @@ interface FtpServerContext extends FtpletContext {
     MessageResource getMessageResource();
     
     /**
-     * Get IP restrictor.
-     */
-    IpRestrictor getIpRestrictor();
-    
-    /**
      * Get ftplet container.
      */
     FtpletContainer getFtpletContainer();

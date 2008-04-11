@@ -35,9 +35,7 @@ import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.IpRestrictor;
 import org.apache.ftpserver.interfaces.MessageResource;
-import org.apache.ftpserver.iprestrictor.FileIpRestrictor;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
@@ -58,7 +56,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			.getLogger(DefaultFtpServerContext.class);
 
 	private MessageResource messageResource;
-	private IpRestrictor ipRestrictor;
 	private UserManager userManager;
 	private FileSystemManager fileSystemManager;
 	private FtpletContainer ftpletContainer;
@@ -90,8 +87,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			messageResource = new MessageResourceImpl();
 			((MessageResourceImpl) messageResource)
 					.configure();
-
-			ipRestrictor = new FileIpRestrictor();
 
 			userManager = new PropertiesUserManager();
 			((PropertiesUserManager) userManager).configure();
@@ -166,13 +161,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 	}
 
 	/**
-	 * Get IP restrictor.
-	 */
-	public IpRestrictor getIpRestrictor() {
-		return ipRestrictor;
-	}
-
-	/**
 	 * Get file system manager.
 	 */
 	public FileSystemManager getFileSystemManager() {
@@ -237,10 +225,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			((Component) userManager).dispose();
 		}
 
-		if (ipRestrictor != null && ipRestrictor instanceof Component) {
-			((Component) ipRestrictor).dispose();
-		}
-
 		if (fileSystemManager != null && fileSystemManager instanceof Component) {
 			((Component) fileSystemManager).dispose();
 		}
@@ -296,10 +280,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
 	public void setFtpletContainer(FtpletContainer ftpletContainer) {
 		this.ftpletContainer = ftpletContainer;
-	}
-
-	public void setIpRestrictor(IpRestrictor ipRestrictor) {
-		this.ipRestrictor = ipRestrictor;
 	}
 
 	public void setMessageResource(MessageResource messageResource) {
