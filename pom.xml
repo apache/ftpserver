@@ -118,16 +118,18 @@
         <version>${pom.version}</version>
       </dependency>
 
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>2.0.0-M2-20080407.124109-12</version>
+		</dependency>
+
+
       <!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.4.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-core</artifactId>
-			<version>2.0.0-M2-20080407.124109-12</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -315,7 +317,7 @@
             <modules>
                 <module>ftplet-api</module>
                 <module>core</module>
-                <module>admin-gui</module>
+                <module>server</module>
             </modules>
             <distributionManagement>
                 <repository>
@@ -363,7 +365,7 @@
             <modules>
                 <module>ftplet-api</module>
                 <module>core</module>
-                <module>admin-gui</module>
+                <module>server</module>
                 <module>distribution</module>
             </modules>
             <distributionManagement>
@@ -386,6 +388,7 @@
         <module>commons-net-2</module>
         <module>ftplet-api</module>
         <module>core</module>
+	<module>server</module>
     </modules>
 
     <distributionManagement>
