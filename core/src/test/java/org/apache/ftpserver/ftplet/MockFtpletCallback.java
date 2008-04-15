@@ -28,7 +28,7 @@ public class MockFtpletCallback implements Ftplet {
     public void destroy() {
     }
 
-    public void init(FtpletContext ftpletContext, Configuration config) throws FtpException {
+    public void init(FtpletContext ftpletContext) throws FtpException {
     }
 
     public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {

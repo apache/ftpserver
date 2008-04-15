@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Defines methods that all ftplets must implement. 
  *
- * A servlet is a small Java program that runs within a FTP server. 
+ * A ftplet is a small Java program that runs within a FTP server. 
  * Ftplets receive and respond to requests from FTP clients.
  *
  * This interface defines methods to initialize a ftplet, to service requests, 
@@ -53,7 +53,7 @@ interface Ftplet {
      * the ftplet. The init method must complete successfully before the ftplet can 
      * receive any requests.
      */
-    void init(FtpletContext ftpletContext, Configuration config) throws FtpException;
+    void init(FtpletContext ftpletContext) throws FtpException;
     
     /**
      * Called by the servlet container to indicate to a ftplet that the ftplet is 

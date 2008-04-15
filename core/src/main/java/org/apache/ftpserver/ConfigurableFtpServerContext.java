@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.DefaultFtplet;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -46,6 +47,7 @@ import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.usermanager.TransferRatePermission;
 import org.apache.ftpserver.usermanager.WritePermission;
+import org.apache.ftpserver.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,12 +161,9 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
                 
                 // get ftplet specific configuration
                 Configuration subConfig = ftpletConf.subset(ftpletName);
-                String className = subConfig.getString("class", null);
-                if(className == null) {
-                    continue;
-                }
-                Ftplet ftplet = (Ftplet)Class.forName(className).newInstance();
-                ftplet.init(this, subConfig);
+                
+                Ftplet ftplet = (Ftplet) ClassUtils.createBean(subConfig, DefaultFtplet.class.getName());
+                ftplet.init(this);
                 container.addFtplet(ftpletName, ftplet);
             }
         }

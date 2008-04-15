@@ -533,7 +533,7 @@ public class DefaultFtpletContainer implements FtpletContainer {
         return retVal;
     }
 
-    public void init(FtpletContext ftpletContext, Configuration config) throws FtpException {
+    public void init(FtpletContext ftpletContext) throws FtpException {
         // dummy, forced by Ftplet API       
     }
 

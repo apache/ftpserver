@@ -29,7 +29,7 @@ import java.io.IOException;
 public 
 class DefaultFtplet implements Ftplet {
 
-    public void init(FtpletContext ftpletContext, Configuration config) throws FtpException {}
+    public void init(FtpletContext ftpletContext) throws FtpException {}
     public void destroy() {}
     
     public FtpletEnum onConnect(FtpSession session) throws FtpException, IOException {return null;}
