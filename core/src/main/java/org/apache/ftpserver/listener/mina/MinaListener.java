@@ -20,7 +20,10 @@
 package org.apache.ftpserver.listener.mina;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +39,8 @@ import org.apache.mina.common.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
+import org.apache.mina.filter.firewall.BlacklistFilter;
+import org.apache.mina.filter.firewall.Subnet;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.apache.mina.transport.socket.SocketAcceptor;
@@ -63,6 +68,9 @@ public class MinaListener extends AbstractListener {
 	private FtpHandler handler = new DefaultFtpHandler();
 	
 	private int idleTimeout = 60;
+	
+	private List<InetAddress> blockedAddresses;
+	private List<Subnet> blockedSubnets;
 
 
 	public int getIdleTimeout() {
@@ -73,6 +81,24 @@ public class MinaListener extends AbstractListener {
 		this.idleTimeout = idleTimeout;
 	}
 
+	private void updateBlacklistFilter() {
+	    if(acceptor != null) {
+    	    BlacklistFilter filter = (BlacklistFilter) acceptor.getFilterChain().get("ipFilter");
+    	    
+    	    if(filter != null) {
+    	        if(blockedAddresses != null) {
+    	            filter.setBlacklist(blockedAddresses);
+    	        } else if(blockedSubnets != null) {
+    	            filter.setSubnetBlacklist(blockedSubnets);
+    	        } else {
+    	            // an empty list clears the blocked addresses
+                    filter.setSubnetBlacklist(new ArrayList<Subnet>());
+    	        }
+    	        
+    	    }
+	    }
+	}
+	
 	/**
      * @see Listener#start(FtpServerContext)
      */
@@ -93,8 +119,13 @@ public class MinaListener extends AbstractListener {
         ((SocketSessionConfig) acceptor.getSessionConfig()).setReceiveBufferSize(512); 
 
         MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
-        
+
         acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
+        
+        // add and update the blacklist filter
+        acceptor.getFilterChain().addLast("ipFilter", new BlacklistFilter());
+        updateBlacklistFilter();
+        
         acceptor.getFilterChain().addLast("threadPool", new ExecutorFilter(filterExecutor));
         acceptor.getFilterChain().addLast(
         		"codec",
@@ -216,4 +247,38 @@ public class MinaListener extends AbstractListener {
 			((FtpHandlerAdapter)acceptor.getHandler()).setFtpHandler(handler);
 		}
 	}
+
+	/**
+	 * Retrives the {@link InetAddress} for which this listener blocks connections
+	 * @return The list of {@link InetAddress}es
+	 */
+    public List<InetAddress> getBlockedAddresses() {
+        return blockedAddresses;
+    }
+
+    /**
+     * Sets the {@link InetAddress} that this listener will block from connecting
+     * @param blockedAddresses The list of {@link InetAddress}es
+     */
+    public synchronized void setBlockedAddresses(List<InetAddress> blockedAddresses) {
+        this.blockedAddresses = blockedAddresses;
+        updateBlacklistFilter();
+    }
+
+    /**
+     * Retrives the {@link Subnet}s for which this acceptor blocks connections
+     * @return The list of {@link Subnet}s
+     */
+    public List<Subnet> getBlockedSubnets() {
+        return blockedSubnets;
+    }
+
+    /**
+     * Sets the {@link Subnet}s that this listener will block from connecting
+     * @param blockedAddresses The list of {@link Subnet}s
+     */
+    public synchronized void setBlockedSubnets(List<Subnet> blockedSubnets) {
+        this.blockedSubnets = blockedSubnets;
+        updateBlacklistFilter();
+    }
 }
