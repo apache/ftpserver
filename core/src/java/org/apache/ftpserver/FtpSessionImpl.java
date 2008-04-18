@@ -56,7 +56,9 @@ public class FtpSessionImpl implements FtpServerSession {
     private int maxIdleTime = 0;
     private long connectionTime = 0L;
     private long loginTime = 0L;
-    private long lastAccessTime = 0L;
+    
+    // make sure init this as the session is created or the session might get collected for idle disconnect
+    private long lastAccessTime = System.currentTimeMillis(); 
     
     private IODataConnectionFactory dataConnection;
     private FileSystemView fileSystemView;
