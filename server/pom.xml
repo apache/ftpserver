@@ -48,7 +48,7 @@
 		</dependency>
 		<dependency>
 		      <groupId>${groupId}</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>ftpserver-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.mina</groupId>
