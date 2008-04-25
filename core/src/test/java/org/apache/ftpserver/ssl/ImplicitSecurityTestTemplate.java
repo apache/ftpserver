@@ -19,16 +19,10 @@
 
 package org.apache.ftpserver.ssl;
 
-import org.apache.commons.net.ftp.FTPSClient;
 
 public abstract class ImplicitSecurityTestTemplate extends ExplicitSecurityTestTemplate {
 
     protected boolean useImplicit() {
     	return true;
     }
-
-    protected FTPSClient createFTPClient() throws Exception {
-        return new FTPSClient(true);
-    }
-
 }

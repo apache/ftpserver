@@ -20,8 +20,13 @@
 package org.apache.ftpserver.ssl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.KeyStore;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.DefaultDataConnectionConfig;
@@ -59,10 +64,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         
         DefaultSslConfiguration dataSslConfig = new DefaultSslConfiguration();
         dataSslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
-        dataSslConfig.setKeystorePassword("password");
+        dataSslConfig.setKeystorePassword(KEYSTORE_PASSWORD);
         dataSslConfig.setSslProtocol(getAuthValue());
         dataSslConfig.setClientAuthentication(getClientAuth());
-        dataSslConfig.setKeyPassword("password");
+        dataSslConfig.setKeyPassword(KEYSTORE_PASSWORD);
         
         DefaultDataConnectionConfig dataConfig = new DefaultDataConnectionConfig();
         dataConfig.setSsl(dataSslConfig);
@@ -80,33 +85,26 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return "false";
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-    	initClientKeystores(); 
-
-    	super.setUp();
-    }
-
-    /**
-     * 
-     */
-    private void initClientKeystores() {
-        assertTrue(FTPCLIENT_KEYSTORE.exists());
-        
-        System.setProperty("javax.net.ssl.keyStore", FTPCLIENT_KEYSTORE.getAbsolutePath());
-        System.setProperty("javax.net.ssl.keyStorePassword", KEYSTORE_PASSWORD); 
-
-        
-        System.setProperty("javax.net.ssl.trustStore", FTPCLIENT_KEYSTORE.getAbsolutePath());
-        System.setProperty("javax.net.ssl.trustStorePassword", KEYSTORE_PASSWORD);
-    }
-
     protected FTPSClient createFTPClient() throws Exception {
-        FTPSClient ftpsClient = new FTPSClient();
+        FTPSClient ftpsClient = new FTPSClient(useImplicit());
+        
+        FileInputStream fin = new FileInputStream(FTPCLIENT_KEYSTORE);
+        KeyStore store = KeyStore.getInstance("jks");
+        store.load(fin, KEYSTORE_PASSWORD.toCharArray());
+        fin.close();
+        
+        
+        // initialize key manager factory
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+        keyManagerFactory.init(store, KEYSTORE_PASSWORD.toCharArray());
+        
+        // initialize trust manager factory
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+
+        trustManagerFactory.init(store);
+        ftpsClient.setKeyManager(keyManagerFactory.getKeyManagers()[0]);
+        ftpsClient.setTrustManager(trustManagerFactory.getTrustManagers()[0]);
+
         
         String auth = getAuthValue();
         if(auth != null) {

@@ -23,8 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 
-import javax.net.ssl.SSLServerSocketFactory;
-
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.util.IoUtils;
@@ -83,9 +81,6 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testStoreWithProtPInActiveMode() throws Exception {
-        // needed due to bug in commons-net
-        client.setServerSocketFactory(SSLServerSocketFactory.getDefault());
-
         ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
@@ -95,9 +90,6 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testStoreWithProtPAndReturnToProtCInActiveMode() throws Exception {
-        // needed due to bug in commons-net
-        client.setServerSocketFactory(SSLServerSocketFactory.getDefault());
-        
         ((FTPSClient)client).execPROT("P");
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));

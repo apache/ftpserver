@@ -65,7 +65,7 @@ public class DefaultSslConfiguration implements SslConfiguration {
     private KeyManagerFactory keyManagerFactory;
     private TrustManagerFactory trustManagerFactory;
     
-    private HashMap<String, SSLContext> sslContextMap;
+    private HashMap<String, SSLContext> sslContextMap = new HashMap<String, SSLContext>();
 
     private String[] enabledCipherSuites;
     
@@ -290,10 +290,6 @@ public class DefaultSslConfiguration implements SslConfiguration {
             // initialize trust manager factory
             trustManagerFactory = TrustManagerFactory.getInstance(trustStoreAlgorithm);
             trustManagerFactory.init(trustStore);
-            
-            // create ssl context map - the key is the 
-            // SSL protocol and the value is SSLContext.
-            sslContextMap = new HashMap<String, SSLContext>();
         }
         catch(Exception ex) {
             LOG.error("DefaultSsl.configure()", ex);
