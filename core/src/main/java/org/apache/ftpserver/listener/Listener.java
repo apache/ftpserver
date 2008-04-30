@@ -19,14 +19,17 @@
 
 package org.apache.ftpserver.listener;
 
+import java.util.Set;
+
 import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 
 /**
  * Interface for the component responsible for waiting for incoming
- * socket requests and kicking off {@link Connection}s 
+ * socket requests and kicking off {@link FtpIoSession}s 
  *
  */
 public interface Listener {
@@ -79,4 +82,11 @@ public interface Listener {
      * @return True if the listener is suspended
      */
     boolean isSuspended();
+    
+    /**
+     * Returns the currently active sessions for this listener.
+     * If no sessions are active, an empty {@link Set} would be returned.
+     * @return The currently active sessions
+     */
+    Set<FtpIoSession> getActiveSessions();
 }

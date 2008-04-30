@@ -23,19 +23,23 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.DefaultFtpHandler;
 import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.filter.FtpLoggingFilter;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.common.IdleStatus;
+import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
@@ -72,6 +76,8 @@ public class MinaListener extends AbstractListener {
 	private List<InetAddress> blockedAddresses;
 	private List<Subnet> blockedSubnets;
 
+    private FtpServerContext context;
+
 
 	public int getIdleTimeout() {
 		return idleTimeout;
@@ -103,6 +109,8 @@ public class MinaListener extends AbstractListener {
      * @see Listener#start(FtpServerContext)
      */
     public void start(FtpServerContext context) throws Exception {
+        this.context = context;
+        
         
         acceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors());
         
@@ -280,5 +288,18 @@ public class MinaListener extends AbstractListener {
     public synchronized void setBlockedSubnets(List<Subnet> blockedSubnets) {
         this.blockedSubnets = blockedSubnets;
         updateBlacklistFilter();
+    }
+
+    /**
+     * @see Listener#getActiveSessions()
+     */
+    public Set<FtpIoSession> getActiveSessions() {
+        Set<IoSession> sessions = acceptor.getManagedSessions();
+        
+        Set<FtpIoSession> ftpSessions = new HashSet<FtpIoSession>();
+        for(IoSession session : sessions) {
+            ftpSessions.add(new FtpIoSession(session, context));
+        }
+        return ftpSessions;
     }
 }
