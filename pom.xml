@@ -97,16 +97,9 @@
         <url>http://svn.apache.org/viewvc/mina/sandbox/ftpserver/trunk</url>
     </scm>
 
-
   <dependencyManagement>
     <dependencies>
       <!-- Submodules -->
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
-		</dependency>
-
       <dependency>
         <groupId>${groupId}</groupId>
         <artifactId>ftplet-api</artifactId>
@@ -142,7 +135,11 @@
 	      <artifactId>junit</artifactId>
 	      <version>3.8.2</version>
 	    </dependency>
-
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>2.0.0-ftpserver-20080501.114815-1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -388,8 +385,6 @@
         </profile>
     </profiles>
     <modules>
-        <!-- Commons Net is built since no snapshot is available in a Maven repos -->
-        <module>commons-net-2</module>
         <module>ftplet-api</module>
         <module>core</module>
 	<module>server</module>
@@ -417,7 +412,16 @@
             <enabled>false</enabled>
           </releases>
         </repository>
-      </repositories>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots/>
+            <id>commons-net Snapshots</id>
+            <url>http://people.apache.org/~ngn/ftpserver-repos</url>
+        </repository>
+    </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>apache Snapshots</id>
