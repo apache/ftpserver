@@ -92,6 +92,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+            // OK
         }
     }
 
@@ -112,7 +114,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         assertTrue(TEST_FILE1.exists());
     }
 
@@ -134,9 +139,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         } catch (SocketException e) {
-        	// OK
+            // OK
         }
-        
+
         assertFalse(TEST_FILE1.exists());
     }
 
@@ -147,7 +152,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.makeDirectory(TEST_DIR1.getName());
@@ -155,7 +160,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         assertFalse(TEST_DIR1.exists());
     }
 
@@ -166,7 +174,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.makeDirectory(TEST_DIR1.getName()));
         try {
@@ -175,9 +183,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         } catch (SocketException e) {
-        	// OK
+            // OK
         }
-        
+
         assertTrue(TEST_DIR1.exists());
     }
 
@@ -188,9 +196,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TEST_DIR1.mkdirs();
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.removeDirectory(TEST_DIR1.getName());
@@ -198,7 +206,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         assertTrue(TEST_DIR1.exists());
     }
 
@@ -209,9 +220,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TEST_DIR1.mkdirs();
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.removeDirectory(TEST_DIR1.getName()));
         try {
@@ -220,9 +231,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         } catch (SocketException e) {
-        	// OK
+            // OK
         }
-        
+
         assertFalse(TEST_DIR1.exists());
     }
 
@@ -233,12 +244,15 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.site("HELP");
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
+            // OK
+        }
+        catch (SocketException e) {
             // OK
         }
     }
@@ -250,9 +264,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.rename(TEST_FILE1.getName(), TEST_FILE2.getName());
@@ -260,11 +274,14 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         assertTrue(TEST_FILE1.exists());
         assertFalse(TEST_FILE2.exists());
     }
-    
+
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
@@ -272,9 +289,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
         try {
@@ -283,7 +300,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         } catch (SocketException e) {
-        	// OK
+            // OK
         }
 
         assertFalse(TEST_FILE1.exists());
@@ -298,14 +315,17 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.retrieveFileStream(TEST_FILE1.getName());
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
+            // OK
+        }
+        catch (SocketException e) {
             // OK
         }
     }
@@ -317,9 +337,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         assertTrue(client.retrieveFile(TEST_FILE1.getName(), baos));
@@ -329,7 +349,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-    
+        catch (SocketException e) {
+            // OK
+        }
+
         TestUtil.assertArraysEqual(TESTDATA, baos.toByteArray());
     }
 
@@ -340,9 +363,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
@@ -350,10 +373,13 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         TestUtil.assertFileEqual(TESTDATA, TEST_FILE1);
     }
-    
+
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
@@ -361,9 +387,9 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
         try {
@@ -372,7 +398,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         TestUtil.assertFileEqual(DOUBLE_TESTDATA, TEST_FILE1);
     }
 
@@ -383,7 +412,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
@@ -391,10 +420,13 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         } catch (FTPConnectionClosedException e) {
             // OK
         }
-        
+        catch (SocketException e) {
+            // OK
+        }
+
         assertFalse(TEST_FILE1.exists());
     }
-    
+
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
@@ -402,7 +434,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
         try {
@@ -410,11 +442,14 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+            // OK
         }
-        
+
+
         TestUtil.assertFileEqual(TESTDATA, TEST_FILE1);
     }
-    
+
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
@@ -422,27 +457,29 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.storeUniqueFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+            // OK
         }
-        
+
         assertEquals(ROOT_DIR.listFiles().length, 0);
     }
-    
+
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
-                
+
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.storeUniqueFile(new ByteArrayInputStream(TESTDATA)));
         try {
@@ -450,8 +487,10 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
+        } catch (SocketException e) {
+            // OK
         }
-        
+
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }
 
