@@ -158,7 +158,7 @@ public class FtpSessionImpl implements FtpSession {
     		throw new IllegalArgumentException("Illegal setting of internal attribute");
     	}
 
-    	setAttribute(name, value);
+    	ioSession.setAttribute(name, value);
     }
     
     public int getMaxIdleTime() {
@@ -212,6 +212,6 @@ public class FtpSessionImpl implements FtpSession {
     		throw new IllegalArgumentException("Illegal removal of internal attribute");
     	}
 		
-		removeAttribute(name);
+    	ioSession.removeAttribute(name);
 	}
 }
