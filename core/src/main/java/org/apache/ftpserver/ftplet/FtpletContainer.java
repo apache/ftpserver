@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.ftplet;
 
+import java.util.Map;
+
 /**
  * Interface describing an Ftplet container. 
  * Ftplet containers extend the {@link Ftplet} interface and 
@@ -54,4 +56,17 @@ public interface FtpletContainer extends Ftplet {
      *   unknown to the container.
      */
     Ftplet getFtplet(String name);
+
+    /**
+     * Retrive all Ftplets registered with this container
+     * @return A map of all Ftplets with their name as the key
+     */
+    Map<String, Ftplet> getFtplets();
+    
+    /**
+     * Set the Ftplets for this container. Will remove all
+     * previously registred Ftplets in this container
+     * @param ftplets A map of all Ftplets with their name as the key
+     */
+    void setFtplets(Map<String, Ftplet> ftplets);
 }
