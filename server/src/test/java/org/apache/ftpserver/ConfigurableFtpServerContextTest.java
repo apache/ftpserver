@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver;
 
+import java.util.Map;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -46,11 +47,11 @@ public class ConfigurableFtpServerContextTest extends TestCase {
         assertNotNull(ctx.getListener("foo2"));
         assertTrue(ctx.getListener("foo2") instanceof MinaListener);
         
-        Listener[] listeners = ctx.getAllListeners();
+        Map<String, Listener> listeners = ctx.getListeners();
         
-        assertEquals(2, listeners.length);
-        assertTrue(listeners[0] instanceof Listener);
-        assertTrue(listeners[1] instanceof Listener);
+        assertEquals(2, listeners.size());
+        assertTrue(listeners.get("foo1") instanceof Listener);
+        assertTrue(listeners.get("foo2") instanceof Listener);
         
     }
     
