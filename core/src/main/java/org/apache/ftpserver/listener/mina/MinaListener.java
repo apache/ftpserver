@@ -71,7 +71,7 @@ public class MinaListener extends AbstractListener {
 
 	private FtpHandler handler = new DefaultFtpHandler();
 	
-	private int idleTimeout = 60;
+	private int idleTimeout = 300;
 	
 	private List<InetAddress> blockedAddresses;
 	private List<Subnet> blockedSubnets;
@@ -165,6 +165,9 @@ public class MinaListener extends AbstractListener {
         acceptor.setHandler(new FtpHandlerAdapter(context, handler));
         
         acceptor.bind(address);
+        
+        // update the port to the real port bound by the listener
+        setPort(acceptor.getLocalAddress().getPort());
     }
 
     /**

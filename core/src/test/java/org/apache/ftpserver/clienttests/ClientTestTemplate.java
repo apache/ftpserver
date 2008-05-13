@@ -112,9 +112,15 @@ public abstract class ClientTestTemplate extends TestCase {
 
         server = createServer();
         
-        server.start();
+        if(isStartServer()) {
+            server.start();
+        }
     }
 
+    protected boolean isStartServer() {
+        return true;
+    }
+    
     protected FTPClient createFTPClient() throws Exception {
         return new FTPClient();
     }
