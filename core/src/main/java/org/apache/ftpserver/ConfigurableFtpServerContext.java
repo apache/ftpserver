@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
@@ -321,26 +322,16 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         }
     }
 
-    public Listener[] getAllListeners() {
-        Collection<Bean> listenerBeans = listeners.values();
-        Iterator<Bean> listenerIter = listenerBeans.iterator();
-        
-        
-        Listener[] listenerArray = new Listener[listenerBeans.size()];
-        
-        int counter = 0;
-        while (listenerIter.hasNext()) {
-            Bean bean = listenerIter.next();
-            
-            listenerArray[counter] = (Listener) bean.getBean();
-            
-            counter++;
-        }
-        
-        return listenerArray;
-    }
-
 	public ConnectionConfig getConnectionConfig() {
 		return (ConnectionConfig) connectionConfigBean.getBean();
 	}
+
+    public Map<String, Listener> getListeners() {
+        Map<String, Listener> result = new HashMap<String, Listener>();
+        
+        for(Entry<String, Bean> entry : listeners.entrySet()) {
+            result.put(entry.getKey(), (Listener) entry.getValue().getBean());
+        }
+        return result;
+    }
 } 

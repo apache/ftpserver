@@ -246,14 +246,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 		listeners.put(name, listener);
 	}
 
-	public Listener[] getAllListeners() {
-		Collection<Listener> listenerList = listeners.values();
-
-		Listener[] listenerArray = new Listener[0];
-
-		return listenerList.toArray(listenerArray);
-	}
-
 	public Map<String, Listener> getListeners() {
 		return listeners;
 	}

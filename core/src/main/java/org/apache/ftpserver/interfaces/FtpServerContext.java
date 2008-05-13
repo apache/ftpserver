@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.interfaces;
 
+import java.util.Map;
+
 import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.FtpletContext;
@@ -45,7 +47,7 @@ interface FtpServerContext extends FtpletContext {
     
     Listener getListener(String name);
 
-    Listener[] getAllListeners();
+    Map<String, Listener> getListeners();
     
     /**
      * Get the command factory.

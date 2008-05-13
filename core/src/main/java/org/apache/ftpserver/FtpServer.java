@@ -20,6 +20,8 @@
 package org.apache.ftpserver;
 
 
+import java.util.Map;
+
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Listener;
 import org.slf4j.Logger;
@@ -61,9 +63,9 @@ public class FtpServer {
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-        Listener[] listeners = serverContext.getAllListeners(); 
-        for (int i = 0; i<listeners.length; i++) {
-            listeners[i].start(serverContext);
+        Map<String, Listener> listeners = serverContext.getListeners(); 
+        for (Listener listener : listeners.values()) {
+            listener.start(serverContext);
         }
 
         started = true;
@@ -82,11 +84,10 @@ public class FtpServer {
     	}
     	
         // stop all listeners
-        Listener[] listeners = serverContext.getAllListeners(); 
-        for (int i = 0; i<listeners.length; i++) {
-            listeners[i].stop();
+    	Map<String, Listener> listeners = serverContext.getListeners();
+        for (Listener listener : listeners.values()) {
+            listener.stop();
         }
-
 
         // release server resources
         if (serverContext != null) {
@@ -109,9 +110,9 @@ public class FtpServer {
      */
     public void suspend() {
         // stop all listeners
-        Listener[] listeners = serverContext.getAllListeners(); 
-        for (int i = 0; i<listeners.length; i++) {
-            listeners[i].suspend();
+        Map<String, Listener> listeners = serverContext.getListeners();
+        for (Listener listener : listeners.values()) {
+            listener.suspend();
         }
         
         suspended = true;
@@ -121,10 +122,11 @@ public class FtpServer {
      * Resume the server handler
      */
     public void resume() {
-        Listener[] listeners = serverContext.getAllListeners(); 
-        for (int i = 0; i<listeners.length; i++) {
-            listeners[i].resume();
+        Map<String, Listener> listeners = serverContext.getListeners();
+        for (Listener listener : listeners.values()) {
+            listener.resume();
         }
+
         
         suspended = false;
     }
