@@ -74,7 +74,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     public static class Passive  {
         private InetAddress address;
         private InetAddress externalAddress;
-        private PassivePorts passivePorts =PassivePorts.parse("0");
+        private PassivePorts passivePorts = new PassivePorts(new int[]{0});
         
         public InetAddress getAddress() {
             return address;
@@ -86,7 +86,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
             return passivePorts;
         }
         public void setPorts(String ports) {
-            this.passivePorts = PassivePorts.parse(ports);
+            this.passivePorts = new PassivePorts(ports);
         }
         public InetAddress getExternalAddress() {
             return externalAddress;
@@ -209,6 +209,25 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
             }
         }
         return dataPort;
+    }
+
+    /**
+     * Retrive the passive ports configured for this data connection
+     * @return The String of passive ports
+     */
+    public String getPassivePorts() {
+        return passive.passivePorts.toString();
+    }
+
+    /**
+     * Set the passive ports allowed for this data connection. 
+     * @param passivePorts A string consisting of port numbers 
+     *  separated by commas. It can also include ranged. For example:
+     *  <p>22,23,24</p>
+     *  <p>22-24,28</p>
+     */
+    public void setPassivePorts(String passivePorts) {
+        passive.passivePorts = new PassivePorts(passivePorts);
     }
 
     /**

@@ -34,6 +34,7 @@ public class PassivePorts {
     private static final int MAX_PORT = 65535;
     private int[] passivePorts;
     private boolean[] reservedPorts;
+    private String passivePortsString;
     
     /**
      * Parse a string containing passive ports
@@ -45,7 +46,7 @@ public class PassivePorts {
      * @throws IllegalArgumentException If any of of the ports in the string is
      *   invalid (e.g. not an integer or too large for a port number) 
      */
-    public static PassivePorts parse(String portsString) {
+    private static int[] parse(String portsString) {
         List<Integer> passivePortsList = new ArrayList<Integer>();
         
         boolean inRange = false;
@@ -99,7 +100,7 @@ public class PassivePorts {
             counter++;
         }
         
-        return new PassivePorts(passivePorts);
+        return passivePorts;
     }
 
     /**
@@ -107,8 +108,7 @@ public class PassivePorts {
      */
     private static void fillRange(List<Integer> passivePortsList, Integer beginPort, Integer endPort) {
         for(int i = beginPort.intValue(); i<=endPort.intValue(); i++ ) {
-            Integer rangePort = new Integer(i);
-            addPort(passivePortsList, rangePort);
+            addPort(passivePortsList, i);
         }
     }
 
@@ -132,7 +132,11 @@ public class PassivePorts {
         }
     }
     
-    private PassivePorts(int[] passivePorts) {
+    public PassivePorts(String passivePorts) {
+        this(parse(passivePorts));
+    }
+
+    public PassivePorts(int[] passivePorts) {
         this.passivePorts = passivePorts;
         
         reservedPorts = new boolean[passivePorts.length];
@@ -161,4 +165,23 @@ public class PassivePorts {
         }
     }
 
+    @Override
+    public String toString() {
+        if(passivePortsString != null) {
+            return passivePortsString;
+        } else {
+            StringBuffer sb = new StringBuffer();
+            
+            for(int port : passivePorts) {
+                sb.append(port);
+                sb.append(",");
+            }
+            // remove the last ,
+            sb.deleteCharAt(sb.length() - 1);
+            return sb.toString();
+        }
+    }
+
+    
+    
 }
