@@ -57,7 +57,12 @@ public class DefaultFtpHandler implements FtpHandler {
     }
 
     public void sessionClosed(FtpIoSession session) throws Exception {
-    	context.getFtpletContainer().onDisconnect(session.getFtpletSession());
+        try {
+            context.getFtpletContainer().onDisconnect(session.getFtpletSession());
+        } catch(Exception e) {
+            // shallow the exception, we're closing down the session anyways
+            LOG.warn("Ftplet threw an exception on disconnect", e);
+        }
         
         ServerFtpStatistics stats = ((ServerFtpStatistics)context.getFtpStatistics());
     	
