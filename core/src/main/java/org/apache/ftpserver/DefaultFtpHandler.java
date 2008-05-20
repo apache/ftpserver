@@ -51,11 +51,15 @@ public class DefaultFtpHandler implements FtpHandler {
     }
 
     public void sessionOpened(FtpIoSession session) throws Exception {
+        context.getFtpletContainer().onConnect(session.getFtpletSession());
+        
     	session.write(FtpReplyUtil.translate(session,  null, context, FtpReply.REPLY_220_SERVICE_READY, null, null));
     }
 
     public void sessionClosed(FtpIoSession session) throws Exception {
-    	ServerFtpStatistics stats = ((ServerFtpStatistics)context.getFtpStatistics());
+    	context.getFtpletContainer().onDisconnect(session.getFtpletSession());
+        
+        ServerFtpStatistics stats = ((ServerFtpStatistics)context.getFtpStatistics());
     	
     	if(stats != null) {
     		stats.setLogout(session);
