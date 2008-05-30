@@ -41,7 +41,7 @@ interface User {
      */
     Authority[] getAuthorities();
 
-    Authority[] getAuthorities(Class<Authority> clazz);
+    Authority[] getAuthorities(Class<? extends Authority> clazz);
 
     /**
      * Authorize a {@link AuthorizationRequest} for this user
