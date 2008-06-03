@@ -165,7 +165,7 @@ class BaseUser implements User, Serializable {
     }  
     
     /**
-     * @see User#authorize(AuthorizationRequest)
+     * {@inheritDoc}
      */
     public AuthorizationRequest authorize(AuthorizationRequest request) {
         Authority[] authorities = getAuthorities();
@@ -194,7 +194,10 @@ class BaseUser implements User, Serializable {
         }
     }
 
-    public Authority[] getAuthorities(Class<Authority> clazz) {
+    /**
+     * {@inheritDoc}
+     */
+    public Authority[] getAuthorities(Class<? extends Authority> clazz) {
         List<Authority> selected = new ArrayList<Authority>();
         
         for (int i = 0; i < authorities.length; i++) {
