@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://mina.apache.org/ftpserver/spring/v1"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
+	   ">
+
+	<beans:bean id="listener1" class="org.apache.ftpserver.listener.mina.MinaListener">
+		<beans:property name="port" value="2223"/>
+	</beans:bean>
+
+	<server id="server">
+		<listeners>
+			<nio-listener name="listener0" port="2222">
+				<data-connection>
+					<ssl>
+						<keystore file="/tmp/tmp.jks" password="secret"/>
+					</ssl>
+					<active enabled="true" local-address="1.2.3.4"/>
+					<passive ports="123-125"/>
+				</data-connection>
+				<blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>				
+			</nio-listener>
+			<listener name="listener1">
+				<beans:ref bean="listener1"/>
+			</listener>
+			<listener name="listener2">
+				<beans:bean class="org.apache.ftpserver.listener.mina.MinaListener">
+					<beans:property name="port" value="2224"/>
+				</beans:bean>
+			</listener>
+		</listeners>
+		<ftplets>
+			<ftplet name="ftplet1">
+				<beans:bean class="org.apache.ftpserver.config.spring.TestFtplet">
+					<beans:property name="foo" value="123"/>
+				</beans:bean>
+				
+			</ftplet>
+		</ftplets>
+		<!--<file-user-manager file="/tmp/foo.users" encrypt-passwords="true" />-->
+		<user-manager>
+			<beans:bean class="org.apache.ftpserver.usermanager.PropertiesUserManager"/>
+		</user-manager>
+		<native-filesystem case-insensitive="false" />
+		<commands use-default="false">
+		  <command name="FOO">
+			  <beans:bean class="org.apache.ftpserver.command.HELP" />
+		  </command>
+		</commands>
+		<messages languages="se no ,da" />
+	</server>
+</beans:beans>

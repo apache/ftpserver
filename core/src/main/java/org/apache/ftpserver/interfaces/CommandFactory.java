@@ -19,6 +19,10 @@
 
 package org.apache.ftpserver.interfaces;
 
+import java.util.Map;
+
+import com.sun.org.apache.bcel.internal.generic.ISUB;
+
 
 /**
  * Command factory interface.
@@ -30,4 +34,41 @@ interface CommandFactory {
      * Get the command instance.
      */
     Command getCommand(String commandName);
+    
+    /**
+     * Get the registered SITE commands
+     * @return Active site commands, the key is 
+     *   the site command name, used in FTP 
+     *   sessions as SITE <command name>
+     */
+//    Map<String, Command> getSiteCommands();
+    
+    /**
+     * Register SITE commands. The map can replace or
+     * append to the default SITE commands provided
+     * by FtpServer depending on the value of
+     * {@see CommandFactory#isUseDefaultSiteCommands()}
+     * @param siteCommands Active site commands, the key is 
+     *   the site command name, used in FTP 
+     *   sessions as SITE <command name>. The value is the
+     *   command
+     */
+//    void setSiteCommands(Map<String, Command> siteCommands);
+
+    /**
+     * Should custom site commands append to or replace
+     * the default commands provided by FtpServer?. 
+     * The default is to append
+     * @return true if custom commands should append to the default,
+     *  false if they should replace
+     */
+//    boolean isUseDefaultSiteCommands();
+ 
+    /**
+     * Should custom site commands append to or replace
+     * the default commands provided by FtpServer?. 
+     * @param useDefaultSiteCommands true if custom commands should append to the default,
+     *  false if they should replace
+     */
+//    void setUseDefaultSiteCommands(boolean useDefaultSiteCommands);
 }

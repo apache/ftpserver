@@ -28,6 +28,9 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>**/*.properties</include>
+					<include>**/*.handlers</include>
+					<include>**/*.schemas</include>
+					<include>**/*.xsd</include>
 				</includes>
 			</resource>
 		</resources>
@@ -91,6 +94,12 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+	  <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>2.5.2</version>
+    </dependency>
+    
+  </dependencies>
 
 </project>

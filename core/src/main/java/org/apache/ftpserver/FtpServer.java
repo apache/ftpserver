@@ -22,7 +22,12 @@ package org.apache.ftpserver;
 
 import java.util.Map;
 
+import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +57,9 @@ public class FtpServer {
     }
 
     /**
-     * Constructor. Set the server context.
-     * @throws Exception 
+     * Constructor. Set a custom the server context.
+     * @throws Exception
+     * TODO consider removing 
      */
     public FtpServer(FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
@@ -145,7 +151,123 @@ public class FtpServer {
         return serverContext;
     }
 
+    /**
+     * Set a custom server context to be used for this server
+     * @param serverContext The custom server context
+     */
 	public void setServerContext(FtpServerContext serverContext) {
 		this.serverContext = serverContext;
 	}
+	
+    private DefaultFtpServerContext checkAndGetContext() {
+        if(getServerContext() instanceof DefaultFtpServerContext) {
+            return (DefaultFtpServerContext) getServerContext();
+        } else {
+            throw new IllegalStateException("Custom FtpServerContext provided, setters can not be used on FtpServer");
+        }
+    }
+    
+    /**
+     * Get all listeners available one this server
+     * @return The current listeners
+     */
+    public Map<String, Listener> getListeners() {
+        return getServerContext().getListeners();
+    }
+
+    /**
+     * Set the listeners for this server, replaces existing listeners
+     * @param listeners The listeners to use for this server with the name as the key
+     *   and the listener as the value
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setListeners(Map<String, Listener> listeners) {
+        checkAndGetContext().setListeners(listeners);
+    }
+    
+    /**
+     * Get all {@link Ftplet}s registered at this server
+     * @return All {@link Ftplet}s
+     */
+    public Map<String, Ftplet> getFtplets() {
+        return getServerContext().getFtpletContainer().getFtplets();
+    }
+
+    /**
+     * Set the {@link Ftplet}s to be active for this server. Replaces existing {@link Ftplet}s
+     * @param ftplets Ftplets as a map with the name as the key and the Ftplet as the value
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setFtplets(Map<String, Ftplet> ftplets) {
+        getServerContext().getFtpletContainer().setFtplets(ftplets);
+    }
+
+    /**
+     * Retrieve the user manager used with this server
+     * @return The user manager
+     */
+    public UserManager getUserManager() {
+        return getServerContext().getUserManager();
+    }
+
+    /**
+     * Set the user manager to be used for this server
+     * @param userManager The {@link UserManager}
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setUserManager(UserManager userManager) {
+        checkAndGetContext().setUserManager(userManager);
+    }
+    
+    /**
+     * Retrieve the file system used with this server
+     * @return The {@link FileSystemManager}
+     */
+    public FileSystemManager getFileSystem() {
+        return getServerContext().getFileSystemManager();
+    }
+
+    /**
+     * Set the file system to be used for this server
+     * @param fileSystem The {@link FileSystemManager}
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setFileSystem(FileSystemManager fileSystem) {
+        checkAndGetContext().setFileSystemManager(fileSystem);
+    }
+    
+    /**
+     * Retrieve the command factory used with this server
+     * @return The {@link CommandFactory}
+     */
+    public CommandFactory getCommandFactory() {
+        return getServerContext().getCommandFactory();
+    }
+
+    /**
+     * Set the command factory to be used for this server
+     * @param commandFactory The {@link CommandFactory}
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setCommandFactory(CommandFactory commandFactory) {
+        checkAndGetContext().setCommandFactory(commandFactory);
+    }
+    
+    /**
+     * Retrieve the message resource used with this server
+     * @return The {@link MessageResource}
+     */
+    public MessageResource getMessageResource() {
+        return getServerContext().getMessageResource();
+    }
+
+    /**
+     * Set the message resource to be used with this server
+     * @param messageResource The {@link MessageResource}
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setMessageResource(MessageResource messageResource) {
+        checkAndGetContext().setMessageResource(messageResource);
+    }
+
 }
