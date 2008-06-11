@@ -34,7 +34,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.ClientAuth;
@@ -104,7 +104,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             FtpServerContext ctx = serverContext;
             
             if(ctx != null) {
-                DataConnectionConfig dcc = session.getListener().getDataConnectionConfig();
+                DataConnectionConfiguration dcc = session.getListener().getDataConnectionConfiguration();
                 if(dcc != null) {
                     dcc.releasePassivePort(port);
                 }
@@ -142,7 +142,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         closeDataConnection(); 
         
         // get the passive port
-        int passivePort = session.getListener().getDataConnectionConfig().getPassivePort();
+        int passivePort = session.getListener().getDataConnectionConfiguration().requestPassivePort();
         if(passivePort == -1) {
             servSoc = null;
             throw new DataConnectionException("Cannot find an available passive port.");
@@ -150,7 +150,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         
         // open passive server socket and get parameters
         try {
-            DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
+            DataConnectionConfiguration dataCfg = session.getListener().getDataConnectionConfiguration();
             address = dataCfg.getPassiveAddress();
 
             if(address == null) {
@@ -158,7 +158,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             }
 
             if(secure) {
-                SslConfiguration ssl = dataCfg.getSSL();
+                SslConfiguration ssl = dataCfg.getSSLConfiguration();
                 if(ssl == null) {
                     throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
@@ -242,12 +242,12 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
         // get socket depending on the selection
         dataSoc = null;
-        DataConnectionConfig dataConfig = session.getListener().getDataConnectionConfig();
+        DataConnectionConfiguration dataConfig = session.getListener().getDataConnectionConfiguration();
         try {
             if(!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if(secure) {
-                    SslConfiguration ssl = dataConfig.getSSL();
+                    SslConfiguration ssl = dataConfig.getSSLConfiguration();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
                     }
@@ -359,7 +359,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
         
         // no idle time limit - not a timeout
-        int maxIdleTime = session.getListener().getDataConnectionConfig().getMaxIdleTimeMillis();
+        int maxIdleTime = session.getListener().getDataConnectionConfiguration().getMaxIdleTimeMillis();
         if(maxIdleTime == 0) {
             return false;
         }

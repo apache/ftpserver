@@ -5,10 +5,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ftpserver.DefaultDataConnectionConfig;
-import org.apache.ftpserver.DefaultDataConnectionConfig.Active;
-import org.apache.ftpserver.DefaultDataConnectionConfig.Passive;
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration.Active;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration.Passive;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.listener.mina.MinaListener;
 import org.apache.ftpserver.ssl.DefaultSslConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -87,8 +87,8 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         
         Element dataConElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "data-connection");
         if(dataConElm != null) {
-            DataConnectionConfig dc = parseDataConnection(dataConElm);
-            builder.addPropertyValue("dataConnection", dc);
+            DataConnectionConfiguration dc = parseDataConnection(dataConElm);
+            builder.addPropertyValue("dataConnectionConfiguration", dc);
         }
         
         Element blacklistElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "blacklist");
@@ -183,12 +183,12 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     
     }
     
-    private DataConnectionConfig parseDataConnection(Element element) {
-        DefaultDataConnectionConfig dc = new DefaultDataConnectionConfig();
+    private DataConnectionConfiguration parseDataConnection(Element element) {
+        DefaultDataConnectionConfiguration dc = new DefaultDataConnectionConfiguration();
         
         SslConfiguration ssl = parseSsl(element);
         if(ssl != null) {
-            dc.setSsl(ssl);
+            dc.setSslConfiguration(ssl);
         }
         
         Element activeElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "active");

@@ -21,8 +21,8 @@ package org.apache.ftpserver.listener;
 
 import java.net.InetAddress;
 
-import org.apache.ftpserver.DefaultDataConnectionConfig;
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 
@@ -35,42 +35,75 @@ public abstract class AbstractListener implements Listener {
     private int port = 21;
     private SslConfiguration ssl;
     private boolean implicitSsl = false;
-    private DataConnectionConfig dataConnectionConfig = new DefaultDataConnectionConfig();
+    private DataConnectionConfiguration dataConnectionConfig = new DefaultDataConnectionConfiguration();
     
+    /**
+     * {@inheritDoc}
+     */
     public boolean isImplicitSsl() {
         return implicitSsl;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setImplicitSsl(boolean implicitSsl) {
         this.implicitSsl = implicitSsl;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public int getPort() {
         return port;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setPort(int port) {
         this.port = port;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
     public InetAddress getServerAddress() {
         return serverAddress;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
     public void setServerAddress(InetAddress serverAddress) {
         this.serverAddress = serverAddress;
     }
-    public void setAddress(InetAddress serverAddress) {
-        this.serverAddress = serverAddress;
-    }
-    public SslConfiguration getSsl() {
+
+    /**
+     * {@inheritDoc}
+     */
+    public SslConfiguration getSslConfiguration() {
         return ssl;
     }
-    public void setSsl(SslConfiguration ssl) {
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setSslConfiguration(SslConfiguration ssl) {
         this.ssl = ssl;
     }
-    public DataConnectionConfig getDataConnectionConfig() {
+
+    /**
+     * {@inheritDoc}
+     */
+    public DataConnectionConfiguration getDataConnectionConfiguration() {
         return dataConnectionConfig;
     }
-    public void setDataConnectionConfig(DataConnectionConfig dataConnectionConfig) {
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setDataConnectionConfiguration(DataConnectionConfiguration dataConnectionConfig) {
         this.dataConnectionConfig = dataConnectionConfig;
-    }
-    public void setDataConnection(DataConnectionConfig dataConnectionConfig) {
-        setDataConnectionConfig(dataConnectionConfig);
     }
 }

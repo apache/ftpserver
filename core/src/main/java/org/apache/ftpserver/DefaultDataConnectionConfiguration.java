@@ -22,14 +22,14 @@ package org.apache.ftpserver;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
  * Data connection configuration.
  */
 public 
-class DefaultDataConnectionConfig implements DataConnectionConfig {
+class DefaultDataConnectionConfiguration implements DataConnectionConfiguration {
 
     public static class Active {
         private boolean enable = true;
@@ -116,7 +116,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
         this.passive = passive;
     }
     
-    public void setSsl(SslConfiguration ssl) {
+    public void setSslConfiguration(SslConfiguration ssl) {
         this.ssl = ssl;
     }
 
@@ -189,7 +189,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
      * Get passive data port. Data port number zero (0) means that 
      * any available port will be used.
      */
-    public synchronized int getPassivePort() {        
+    public synchronized int requestPassivePort() {        
         int dataPort = -1;
         int loopTimes = 2;
         Thread currThread = Thread.currentThread();
@@ -242,7 +242,7 @@ class DefaultDataConnectionConfig implements DataConnectionConfig {
     /**
      * Get SSL component.
      */
-    public SslConfiguration getSSL() {
+    public SslConfiguration getSSLConfiguration() {
         return ssl;
     }
 }

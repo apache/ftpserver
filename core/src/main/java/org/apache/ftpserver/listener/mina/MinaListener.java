@@ -144,7 +144,7 @@ public class MinaListener extends AbstractListener {
 
         
         if(isImplicitSsl()) {
-            SslConfiguration ssl = getSsl();
+            SslConfiguration ssl = getSslConfiguration();
             SslFilter sslFilter = new SslFilter( ssl.getSSLContext() );
             
             if(ssl.getClientAuth() == ClientAuth.NEED) {

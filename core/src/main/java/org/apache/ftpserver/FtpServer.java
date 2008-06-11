@@ -176,6 +176,19 @@ public class FtpServer {
     }
 
     /**
+     * Get a specific listener identified by its name
+     * @param name The name of the listener
+     * @return The {@link Listener} matching the provided name
+     */
+    public Listener getListener(String name) {
+        return getServerContext().getListener(name);
+    }
+    
+    public void addListener(String name, Listener listener) {
+        checkAndGetContext().addListener(name, listener);
+    }
+    
+    /**
      * Set the listeners for this server, replaces existing listeners
      * @param listeners The listeners to use for this server with the name as the key
      *   and the listener as the value

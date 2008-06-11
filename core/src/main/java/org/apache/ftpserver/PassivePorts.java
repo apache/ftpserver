@@ -134,6 +134,8 @@ public class PassivePorts {
     
     public PassivePorts(String passivePorts) {
         this(parse(passivePorts));
+        
+        this.passivePortsString = passivePorts;
     }
 
     public PassivePorts(int[] passivePorts) {

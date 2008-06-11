@@ -61,7 +61,7 @@ class PASV extends AbstractCommand {
         
         // set data connection
         ServerDataConnectionFactory dataCon = session.getDataConnection();
-        InetAddress externalPassiveAddress = session.getListener().getDataConnectionConfig().getPassiveExernalAddress();
+        InetAddress externalPassiveAddress = session.getListener().getDataConnectionConfiguration().getPassiveExernalAddress();
         
         try {
             InetSocketAddress dataConAddress = dataCon.initPassiveDataConnection();

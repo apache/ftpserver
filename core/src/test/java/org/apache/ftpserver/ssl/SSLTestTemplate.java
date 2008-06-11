@@ -29,7 +29,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.DefaultDataConnectionConfig;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
@@ -60,7 +60,7 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         sslConfig.setClientAuthentication(getClientAuth());
         sslConfig.setKeyPassword(KEYSTORE_PASSWORD);
 
-        listener.setSsl(sslConfig);
+        listener.setSslConfiguration(sslConfig);
         
         DefaultSslConfiguration dataSslConfig = new DefaultSslConfiguration();
         dataSslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
@@ -69,10 +69,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         dataSslConfig.setClientAuthentication(getClientAuth());
         dataSslConfig.setKeyPassword(KEYSTORE_PASSWORD);
         
-        DefaultDataConnectionConfig dataConfig = new DefaultDataConnectionConfig();
-        dataConfig.setSsl(dataSslConfig);
+        DefaultDataConnectionConfiguration dataConfig = new DefaultDataConnectionConfiguration();
+        dataConfig.setSslConfiguration(dataSslConfig);
         
-        listener.setDataConnectionConfig(dataConfig);
+        listener.setDataConnectionConfiguration(dataConfig);
         
         return server;
     }

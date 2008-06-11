@@ -59,7 +59,7 @@ class AUTH extends AbstractCommand {
         }
         
         // check SSL configuration
-        if(session.getListener().getSsl() == null) {
+        if(session.getListener().getSslConfiguration() == null) {
             session.write(FtpReplyUtil.translate(session, request, context, 431, "AUTH", null));
             return;
         }
@@ -94,7 +94,7 @@ class AUTH extends AbstractCommand {
     }
     
     private void secureSession(FtpIoSession session, String type) throws GeneralSecurityException, FtpException {
-        SslConfiguration ssl = session.getListener().getSsl();
+        SslConfiguration ssl = session.getListener().getSslConfiguration();
         
         if(ssl != null) {
             session.setAttribute(SslFilter.DISABLE_ENCRYPTION_ONCE);

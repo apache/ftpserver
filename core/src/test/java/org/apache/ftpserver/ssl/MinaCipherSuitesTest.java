@@ -41,7 +41,7 @@ public class MinaCipherSuitesTest extends SSLTestTemplate {
         DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
         MinaListener listener = (MinaListener) context.getListener("default");
 
-        DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener.getSsl();
+        DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener.getSslConfiguration();
         sslConfig.setEnabledCipherSuites(new String[]{"SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA"});
 
         return server;

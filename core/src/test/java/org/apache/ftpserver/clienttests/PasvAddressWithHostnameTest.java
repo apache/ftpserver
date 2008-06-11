@@ -21,7 +21,7 @@ package org.apache.ftpserver.clienttests;
 
 import java.net.InetAddress;
 
-import org.apache.ftpserver.DefaultDataConnectionConfig;
+import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 
@@ -36,7 +36,7 @@ public class PasvAddressWithHostnameTest extends ClientTestTemplate {
         
     	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
 
-    	DefaultDataConnectionConfig ddcc = (DefaultDataConnectionConfig) context.getListener("default").getDataConnectionConfig();
+    	DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) context.getListener("default").getDataConnectionConfiguration();
     	ddcc.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
     	
         return server;

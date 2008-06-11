@@ -30,6 +30,9 @@ public class SpringConfigTest extends TestCase {
         assertNotNull(listener);
         assertTrue(listener instanceof MinaListener);
         assertEquals(2222, ((MinaListener)listener).getPort());
+        assertEquals(true, ((MinaListener)listener).getDataConnectionConfiguration().isActiveEnabled());
+        assertEquals(InetAddress.getByName("1.2.3.4"), ((MinaListener)listener).getDataConnectionConfiguration().getActiveLocalAddress());
+        assertEquals("123-125", ((MinaListener)listener).getDataConnectionConfiguration().getPassivePorts());
         
         List<Subnet> subnets = ((MinaListener)listener).getBlockedSubnets();
         assertEquals(3, subnets.size());

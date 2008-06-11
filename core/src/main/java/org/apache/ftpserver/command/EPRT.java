@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -64,7 +64,7 @@ class EPRT extends AbstractCommand {
         }
         
         // is port enabled
-        DataConnectionConfig dataCfg = session.getListener().getDataConnectionConfig();
+        DataConnectionConfiguration dataCfg = session.getListener().getDataConnectionConfiguration();
         if(!dataCfg.isActiveEnabled()) {
             session.write(FtpReplyUtil.translate(session, request, context, 510, "EPRT.disabled", null));
             return;

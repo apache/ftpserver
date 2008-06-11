@@ -19,9 +19,10 @@
 
 package org.apache.ftpserver.listener;
 
+import java.net.InetAddress;
 import java.util.Set;
 
-import org.apache.ftpserver.interfaces.DataConnectionConfig;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -33,10 +34,6 @@ import org.apache.ftpserver.ssl.SslConfiguration;
  *
  */
 public interface Listener {
-    
-    SslConfiguration getSsl();
-    
-    DataConnectionConfig getDataConnectionConfig();
     
     /**
      * Start the listener, will initiate the listener waiting
@@ -89,4 +86,71 @@ public interface Listener {
      * @return The currently active sessions
      */
     Set<FtpIoSession> getActiveSessions();
+
+    /**
+     * Is this listener in SSL mode automatically or must
+     * the client explicitly request to use SSL
+     * @return true is the listener is automatically in SSL mode, false otherwise
+     */
+    boolean isImplicitSsl();
+
+    /**
+     * Should this listener be in SSL mode automatically or must
+     * the client explicitly request to use SSL
+     * @param implicitSsl true is the listener should automatically be in SSL mode, false otherwise
+     */
+    void setImplicitSsl(boolean implicitSsl);
+
+    /**
+     * Get the {@link SslConfiguration} used for this listener
+     * @return The current {@link SslConfiguration}
+     */
+    SslConfiguration getSslConfiguration();
+    
+    /**
+     * Set the {@link SslConfiguration} used for this listener
+     * @param sslConfiguration The {@link SslConfiguration}
+     */
+    void setSslConfiguration(SslConfiguration sslConfiguration);
+    
+    /**
+     * Get the port on which this listener is waiting for requests.
+     * For listeners where the port is automatically assigned, this 
+     * will return the bound port.
+     * @return The port
+     */
+    int getPort();
+
+    /**
+     * Set the port on which this listener will accept requests. Or set to 
+     * 0 (zero) is the port should be automatically assigned
+     * @param port The port to use.
+     */
+    void setPort(int port);
+
+    /**
+     * Get the {@link InetAddress} used for binding the local socket. Defaults
+     * to null, that is, the server binds to all available network interfaces
+     * @return The local socket {@link InetAddress}, if set
+     */
+    InetAddress getServerAddress();
+
+    /**
+     * Set the {@link InetAddress} used for binding the local socket. Defaults
+     * to null, that is, the server binds to all available network interfaces
+     * @param serverAddress The local socket {@link InetAddress}
+     */
+    void setServerAddress(InetAddress serverAddress);
+
+    /**
+     * Get configuration for data connections made within this listener
+     * @return The data connection configuration
+     */
+    DataConnectionConfiguration getDataConnectionConfiguration();
+
+    /**
+     * Set configuration for data connections made within this listener
+     * @param dataConnectionConfig The data connection configuration 
+     */
+    void setDataConnectionConfiguration(DataConnectionConfiguration dataConnectionConfig);
 }
