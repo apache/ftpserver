@@ -33,7 +33,7 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -49,7 +49,7 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         FtpServer server = super.createServer();
         DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
-        MinaListener listener = (MinaListener) context.getListener("default");
+        NioListener listener = (NioListener) context.getListener("default");
         
         listener.setImplicitSsl(useImplicit());
         

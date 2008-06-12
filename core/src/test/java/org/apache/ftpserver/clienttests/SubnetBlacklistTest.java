@@ -25,14 +25,14 @@ import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
 
 public class SubnetBlacklistTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
         
-        MinaListener listener = (MinaListener) server.getServerContext().getListener("default");
+        NioListener listener = (NioListener) server.getServerContext().getListener("default");
         
         List<Subnet> blockedSubnets = new ArrayList<Subnet>();
         blockedSubnets.add(new Subnet(InetAddress.getByName("localhost"), 32));

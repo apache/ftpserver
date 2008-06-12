@@ -20,7 +20,6 @@
 package org.apache.ftpserver;
 
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.listener.ConnectionObserver;
 
 /**
  * FTP request object.
@@ -31,7 +30,6 @@ public class FtpRequestImpl implements FtpRequest {
     private String command;
     private String argument;
     
-    private ConnectionObserver observer;
 
     /**
      * Default constructor.
@@ -44,9 +42,6 @@ public class FtpRequestImpl implements FtpRequest {
      * Parse the ftp command line.
      */
     private void parse(String lineToParse) {
-        
-        // notify connection observer
-        spyRequest(lineToParse);
         
         // parse request
         line = lineToParse.trim();
@@ -66,16 +61,6 @@ public class FtpRequestImpl implements FtpRequest {
         
         if( (command.length() > 0) && (command.charAt(0) == 'X') ) {
             command = command.substring(1);
-        }
-    }
-    
-    /**
-     * Spy print. Monitor user request.
-     */
-    private void spyRequest(String str) {
-        ConnectionObserver observer = this.observer;
-        if(observer != null) {
-            observer.request(str + "\r\n");
         }
     }
     

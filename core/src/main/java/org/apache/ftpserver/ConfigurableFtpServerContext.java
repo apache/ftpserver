@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,7 +40,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
@@ -119,7 +118,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
         Configuration listenersConfig = conf.subset(prefix);
         if(listenersConfig.isEmpty()) {
             // create default listener
-            Bean listenerBean = createComponent(listenersConfig, "default", MinaListener.class.getName());
+            Bean listenerBean = createComponent(listenersConfig, "default", NioListener.class.getName());
             
             map.put("default", listenerBean);
         } else {
@@ -129,7 +128,7 @@ public class ConfigurableFtpServerContext implements FtpServerContext {
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 
-                Bean listenerBean = createComponent(listenersConfig, key, MinaListener.class.getName());
+                Bean listenerBean = createComponent(listenersConfig, key, NioListener.class.getName());
                 
                 map.put(key, listenerBean);
             }

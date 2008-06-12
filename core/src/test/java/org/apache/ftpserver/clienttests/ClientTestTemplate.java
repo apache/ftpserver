@@ -30,7 +30,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.util.IoUtils;
@@ -65,7 +65,7 @@ public abstract class ClientTestTemplate extends TestCase {
 
         DefaultFtpServerContext context = new DefaultFtpServerContext(false);
 
-        MinaListener listener = new MinaListener();
+        NioListener listener = new NioListener();
         listener.setPort(port);
         context.setListener("default", listener);
         

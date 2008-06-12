@@ -37,7 +37,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
@@ -111,7 +111,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
 	}
 
 	private void createListeners() throws Exception {
-		listeners.put("default", new MinaListener());
+		listeners.put("default", new NioListener());
 	}
 
 	/**

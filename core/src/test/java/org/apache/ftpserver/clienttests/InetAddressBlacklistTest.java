@@ -25,13 +25,13 @@ import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 public class InetAddressBlacklistTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
         
-        MinaListener listener = (MinaListener) server.getServerContext().getListener("default");
+        NioListener listener = (NioListener) server.getServerContext().getListener("default");
         
         List<InetAddress> blockedAddresses = new ArrayList<InetAddress>();
         blockedAddresses.add(InetAddress.getByName("localhost"));

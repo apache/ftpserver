@@ -27,25 +27,25 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 
 public class ConfigurableFtpServerContextTest extends TestCase {
 
     public void testConfigListeners() throws Exception {
         Properties props = new Properties();
-        props.setProperty("config.listeners.foo1.class", MinaListener.class.getName());
-        props.setProperty("config.listeners.foo2.class", MinaListener.class.getName());
+        props.setProperty("config.listeners.foo1.class", NioListener.class.getName());
+        props.setProperty("config.listeners.foo2.class", NioListener.class.getName());
         
         Configuration config = new PropertiesConfiguration(props);
         
         ConfigurableFtpServerContext ctx = new ConfigurableFtpServerContext(config);
         
         assertNotNull(ctx.getListener("foo1"));
-        assertTrue(ctx.getListener("foo1") instanceof MinaListener);
+        assertTrue(ctx.getListener("foo1") instanceof NioListener);
 
         assertNotNull(ctx.getListener("foo2"));
-        assertTrue(ctx.getListener("foo2") instanceof MinaListener);
+        assertTrue(ctx.getListener("foo2") instanceof NioListener);
         
         Map<String, Listener> listeners = ctx.getListeners();
         

@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.listener.mina.MinaListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 
 public class ConnectTest extends ClientTestTemplate {
@@ -35,19 +35,19 @@ public class ConnectTest extends ClientTestTemplate {
     }
 
     public void testPortWithZeroPort() throws Exception {
-        ((MinaListener)server.getServerContext().getListener("default")).setPort(0);
-        assertEquals(0, ((MinaListener)server.getServerContext().getListener("default")).getPort());
+        ((NioListener)server.getServerContext().getListener("default")).setPort(0);
+        assertEquals(0, ((NioListener)server.getServerContext().getListener("default")).getPort());
         
         server.start();
         
-        assertTrue(((MinaListener)server.getServerContext().getListener("default")).getPort() > 0);
+        assertTrue(((NioListener)server.getServerContext().getListener("default")).getPort() > 0);
     }
     
     public void testPort() throws Exception {
-        assertEquals(port, ((MinaListener)server.getServerContext().getListener("default")).getPort());
+        assertEquals(port, ((NioListener)server.getServerContext().getListener("default")).getPort());
         
         server.start();
         
-        assertEquals(port, ((MinaListener)server.getServerContext().getListener("default")).getPort());
+        assertEquals(port, ((NioListener)server.getServerContext().getListener("default")).getPort());
     }
 }
