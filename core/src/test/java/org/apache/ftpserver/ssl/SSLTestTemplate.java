@@ -33,7 +33,7 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
-import org.apache.ftpserver.listener.nio.NioListener;
+import org.apache.ftpserver.listener.impl.NioListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 

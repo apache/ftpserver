@@ -24,7 +24,7 @@ import javax.net.ssl.SSLHandshakeException;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.nio.NioListener;
+import org.apache.ftpserver.listener.impl.NioListener;
 
 public class MinaCipherSuitesTest extends SSLTestTemplate {
 

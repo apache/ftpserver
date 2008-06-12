@@ -40,7 +40,7 @@ import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.nio.NioListener;
+import org.apache.ftpserver.listener.impl.NioListener;
 import org.apache.ftpserver.message.MessageResourceImpl;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
