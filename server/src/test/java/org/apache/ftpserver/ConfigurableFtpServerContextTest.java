@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.config.PropertiesConfiguration;
 import org.apache.ftpserver.ftplet.Configuration;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.listener.impl.NioListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 
 public class ConfigurableFtpServerContextTest extends TestCase {

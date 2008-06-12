@@ -28,7 +28,7 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Active;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Passive;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
-import org.apache.ftpserver.listener.impl.NioListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.DefaultSslConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;

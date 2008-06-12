@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.impl.NioListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
 
 public class SubnetBlacklistTest extends ClientTestTemplate {

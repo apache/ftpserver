@@ -17,7 +17,7 @@
  * under the License.
  */ 
 
-package org.apache.ftpserver.listener.impl;
+package org.apache.ftpserver.listener.nio;
 
 import java.io.IOException;
 import java.net.InetAddress;

@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.listener.impl.NioListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 
 public class ConnectTest extends ClientTestTemplate {

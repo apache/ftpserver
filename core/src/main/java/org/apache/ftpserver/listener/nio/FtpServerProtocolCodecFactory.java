@@ -17,7 +17,7 @@
  *  under the License. 
  *  
  */
-package org.apache.ftpserver.listener.impl;
+package org.apache.ftpserver.listener.nio;
 
 import java.nio.charset.Charset;
 

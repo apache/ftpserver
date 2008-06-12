@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.listener.impl.NioListener;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 public class InetAddressBlacklistTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
