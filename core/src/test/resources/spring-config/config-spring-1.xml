@@ -25,7 +25,7 @@
 	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
 	   ">
 
-	<beans:bean id="listener1" class="org.apache.ftpserver.listener.mina.MinaListener">
+	<beans:bean id="listener1" class="org.apache.ftpserver.listener.nio.NioListener">
 		<beans:property name="port" value="2223"/>
 	</beans:bean>
 
@@ -45,7 +45,7 @@
 				<beans:ref bean="listener1"/>
 			</listener>
 			<listener name="listener2">
-				<beans:bean class="org.apache.ftpserver.listener.mina.MinaListener">
+				<beans:bean class="org.apache.ftpserver.listener.nio.NioListener">
 					<beans:property name="port" value="2224"/>
 				</beans:bean>
 			</listener>
