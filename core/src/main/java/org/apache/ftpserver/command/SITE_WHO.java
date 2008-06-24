@@ -22,7 +22,7 @@ package org.apache.ftpserver.command;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -35,7 +35,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.StringUtils;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.common.session.IoSession;
 
 
 /**
@@ -65,10 +65,10 @@ class SITE_WHO extends AbstractCommand {
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
 
-        Set<IoSession> sessions = session.getService().getManagedSessions();
+        Map<Long,IoSession> sessions = session.getService().getManagedSessions();
         
         sb.append('\n');
-        Iterator<IoSession> sessionIterator = sessions.iterator();
+        Iterator<IoSession> sessionIterator = sessions.values().iterator();
         
         while(sessionIterator.hasNext()) {
             FtpIoSession managedSession = new FtpIoSession(sessionIterator.next(), context);

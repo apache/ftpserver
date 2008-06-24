@@ -26,9 +26,9 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.common.session.IdleStatus;
+import org.apache.mina.common.service.IoHandler;
+import org.apache.mina.common.session.IoSession;
 
 public interface FtpHandler {
 	

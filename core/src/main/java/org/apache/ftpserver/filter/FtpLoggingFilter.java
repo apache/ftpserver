@@ -19,8 +19,8 @@
 
 package org.apache.ftpserver.filter;
 
-import org.apache.mina.common.IoEventType;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.common.session.IoEventType;
+import org.apache.mina.common.session.IoSession;
 import org.apache.mina.filter.logging.LoggingFilter;
 
 /**

@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,8 +39,8 @@ import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
-import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.common.session.IdleStatus;
+import org.apache.mina.common.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
@@ -297,10 +298,10 @@ public class NioListener extends AbstractListener {
      * @see Listener#getActiveSessions()
      */
     public Set<FtpIoSession> getActiveSessions() {
-        Set<IoSession> sessions = acceptor.getManagedSessions();
+        Map<Long,IoSession> sessions = acceptor.getManagedSessions();
         
         Set<FtpIoSession> ftpSessions = new HashSet<FtpIoSession>();
-        for(IoSession session : sessions) {
+        for(IoSession session : sessions.values()) {
             ftpSessions.add(new FtpIoSession(session, context));
         }
         return ftpSessions;
