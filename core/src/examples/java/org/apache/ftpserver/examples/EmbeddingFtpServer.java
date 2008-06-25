@@ -33,11 +33,12 @@ public class EmbeddingFtpServer {
 
         // define SSL configuration
         DefaultSslConfiguration ssl = new DefaultSslConfiguration();
-        ssl.setKeystoreFile(new File("mykeystore.jks"));
-        ssl.setKeystorePassword("secret");
+        ssl.setKeystoreFile(new File("src/test/resources/ftpserver.jks"));
+        ssl.setKeystorePassword("password");
 
         // set the SSL configuration for the listener
         server.getListener("default").setSslConfiguration(ssl);
+        server.getListener("default").setImplicitSsl(true);
 
         // start the server
         server.start();
