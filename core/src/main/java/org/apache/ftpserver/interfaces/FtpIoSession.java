@@ -38,17 +38,17 @@ import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.mina.common.future.CloseFuture;
-import org.apache.mina.common.session.IdleStatus;
 import org.apache.mina.common.filterchain.IoFilterChain;
+import org.apache.mina.common.future.CloseFuture;
+import org.apache.mina.common.future.ReadFuture;
+import org.apache.mina.common.future.WriteFuture;
 import org.apache.mina.common.service.IoHandler;
 import org.apache.mina.common.service.IoService;
+import org.apache.mina.common.service.TransportMetadata;
+import org.apache.mina.common.session.IdleStatus;
 import org.apache.mina.common.session.IoSession;
 import org.apache.mina.common.session.IoSessionConfig;
-import org.apache.mina.common.future.ReadFuture;
 import org.apache.mina.common.session.TrafficMask;
-import org.apache.mina.common.service.TransportMetadata;
-import org.apache.mina.common.future.WriteFuture;
 import org.apache.mina.common.write.WriteRequest;
 import org.apache.mina.filter.ssl.SslFilter;
 
@@ -57,21 +57,22 @@ public class FtpIoSession implements IoSession {
     /**
      * Contains user name between USER and PASS commands
      */
-	public static final  String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
-	private static final  String ATTRIBUTE_USER_ARGUMENT 		= ATTRIBUTE_PREFIX + "user-argument";
-	private static final  String ATTRIBUTE_USER							= ATTRIBUTE_PREFIX + "user";
-	private static final  String ATTRIBUTE_LANGUAGE			 		= ATTRIBUTE_PREFIX + "language";
-	private static final  String ATTRIBUTE_LOGIN_TIME		 		= ATTRIBUTE_PREFIX + "login-time";
-	private static final  String ATTRIBUTE_DATA_CONNECTION	= ATTRIBUTE_PREFIX + "data-connection";
-	private static final  String ATTRIBUTE_FILE_SYSTEM		 		= ATTRIBUTE_PREFIX + "file-system";
-	private static final  String ATTRIBUTE_RENAME_FROM	 		= ATTRIBUTE_PREFIX + "rename-from";
-	private static final  String ATTRIBUTE_FILE_OFFSET		 		= ATTRIBUTE_PREFIX + "file-offset";
-	private static final  String ATTRIBUTE_DATA_TYPE			 		= ATTRIBUTE_PREFIX + "data-type";
-	private static final  String ATTRIBUTE_STRUCTURE		 		= ATTRIBUTE_PREFIX + "structure";
-	private static final  String ATTRIBUTE_FAILED_LOGINS	 		= ATTRIBUTE_PREFIX + "failed-logins";
-    private static final  String ATTRIBUTE_LISTENER			 		= ATTRIBUTE_PREFIX + "listener";
-    private static final Object ATTRIBUTE_MAX_IDLE_TIME 			= ATTRIBUTE_PREFIX + "max-idle-time";
-	private static final Object ATTRIBUTE_LAST_ACCESS_TIME 	= ATTRIBUTE_PREFIX + "last-access-time";
+	private static final String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
+	private static final String ATTRIBUTE_USER_ARGUMENT 		= ATTRIBUTE_PREFIX + "user-argument";
+	private static final String ATTRIBUTE_USER							= ATTRIBUTE_PREFIX + "user";
+	private static final String ATTRIBUTE_LANGUAGE			 		= ATTRIBUTE_PREFIX + "language";
+	private static final String ATTRIBUTE_LOGIN_TIME		 		= ATTRIBUTE_PREFIX + "login-time";
+	private static final String ATTRIBUTE_DATA_CONNECTION	= ATTRIBUTE_PREFIX + "data-connection";
+	private static final String ATTRIBUTE_FILE_SYSTEM		 		= ATTRIBUTE_PREFIX + "file-system";
+	private static final String ATTRIBUTE_RENAME_FROM	 		= ATTRIBUTE_PREFIX + "rename-from";
+	private static final String ATTRIBUTE_FILE_OFFSET		 		= ATTRIBUTE_PREFIX + "file-offset";
+	private static final String ATTRIBUTE_DATA_TYPE			 		= ATTRIBUTE_PREFIX + "data-type";
+	private static final String ATTRIBUTE_STRUCTURE		 		= ATTRIBUTE_PREFIX + "structure";
+	private static final String ATTRIBUTE_FAILED_LOGINS	 		= ATTRIBUTE_PREFIX + "failed-logins";
+    private static final String ATTRIBUTE_LISTENER			 		= ATTRIBUTE_PREFIX + "listener";
+    private static final String ATTRIBUTE_MAX_IDLE_TIME 			= ATTRIBUTE_PREFIX + "max-idle-time";
+	private static final String ATTRIBUTE_LAST_ACCESS_TIME 	= ATTRIBUTE_PREFIX + "last-access-time";
+	private static final String ATTRIBUTE_CACHED_REMOTE_ADDRESS     = ATTRIBUTE_PREFIX + "cached-remote-address";
 
 	private IoSession wrappedSession;
 	private FtpServerContext context;
@@ -286,7 +287,16 @@ public class FtpIoSession implements IoSession {
 	 * @see IoSession#getRemoteAddress()
 	 */
 	public SocketAddress getRemoteAddress() {
-		return wrappedSession.getRemoteAddress();
+	    // when closing a socket, the remote address might be reset to null
+	    // therefore, we attempt to keep a cached copy around
+	    
+	    SocketAddress address = wrappedSession.getRemoteAddress();
+	    if(address == null && containsAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS)) {
+	        return (SocketAddress) getAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS);
+	    } else {
+	        setAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS, address);
+	        return address;
+	    }
 	}
 
 	/**
