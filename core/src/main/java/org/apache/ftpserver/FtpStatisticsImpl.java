@@ -371,12 +371,13 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
         }
 
         synchronized (user) {
-            UserLogins statisticsTable = userLoginTable.get(user.getName());
+            UserLogins userLogins = userLoginTable.get(user.getName());
 
-            if (statisticsTable != null) {
-                statisticsTable.totalLogins.decrementAndGet();
+            if (userLogins != null) {
+                userLogins.totalLogins.decrementAndGet();
                 if (session.getRemoteAddress() instanceof InetSocketAddress) {
                     InetAddress address = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
+                    userLogins.loginsFromInetAddress(address).decrementAndGet();
                 }
             }
 
