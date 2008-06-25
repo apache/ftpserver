@@ -49,7 +49,7 @@ public
 class CommandLine {
 
     /**
-     * The pourpose of this class is to allow the final user to start the
+     * The purpose of this class is to allow the final user to start the
      * FtpServer application. Because of that it has only <code>static</code>
      * methods and cannot be instanced.
      */
@@ -57,7 +57,7 @@ class CommandLine {
     }
 
     /**
-     * This method is the FtpServer starting poing when running by using the
+     * This method is the FtpServer starting point when running by using the
      * command line mode.
      *
      * @param args The first element of this array must specify the kind of
