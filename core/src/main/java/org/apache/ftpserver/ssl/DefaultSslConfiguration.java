@@ -283,9 +283,16 @@ public class DefaultSslConfiguration implements SslConfiguration {
                 trustStore = keyStore;
             }
             
+            
+            String keyPassToUse;
+            if(keyPass == null) {
+                keyPassToUse = keystorePass;
+            } else {
+                keyPassToUse = keyPass;
+            }
             // initialize key manager factory
             keyManagerFactory = KeyManagerFactory.getInstance(keystoreAlgorithm);
-            keyManagerFactory.init(keyStore, keyPass.toCharArray());
+            keyManagerFactory.init(keyStore, keyPassToUse.toCharArray());
             
             // initialize trust manager factory
             trustManagerFactory = TrustManagerFactory.getInstance(trustStoreAlgorithm);
