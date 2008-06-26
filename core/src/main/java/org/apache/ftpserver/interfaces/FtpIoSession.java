@@ -57,7 +57,7 @@ public class FtpIoSession implements IoSession {
     /**
      * Contains user name between USER and PASS commands
      */
-	private static final String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
+	public static final String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
 	private static final String ATTRIBUTE_USER_ARGUMENT 		= ATTRIBUTE_PREFIX + "user-argument";
 	private static final String ATTRIBUTE_USER							= ATTRIBUTE_PREFIX + "user";
 	private static final String ATTRIBUTE_LANGUAGE			 		= ATTRIBUTE_PREFIX + "language";
