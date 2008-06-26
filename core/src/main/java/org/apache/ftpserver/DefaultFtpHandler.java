@@ -30,7 +30,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.util.FtpReplyUtil;
-import org.apache.mina.common.session.IdleStatus;
+import org.apache.mina.core.session.IdleStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -35,7 +35,7 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.StringUtils;
-import org.apache.mina.common.session.IoSession;
+import org.apache.mina.core.session.IoSession;
 
 
 /**

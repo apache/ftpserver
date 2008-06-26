@@ -21,7 +21,7 @@ package org.apache.ftpserver.listener.nio;
 
 import java.nio.charset.Charset;
 
-import org.apache.mina.common.session.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;

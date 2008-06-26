@@ -19,8 +19,8 @@
 
 package org.apache.ftpserver.filter;
 
-import org.apache.mina.common.session.IoEventType;
-import org.apache.mina.common.session.IoSession;
+import org.apache.mina.core.session.IoEventType;
+import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LoggingFilter;
 
 /**
@@ -53,7 +53,7 @@ public class FtpLoggingFilter extends LoggingFilter {
 	}
 
 	/**
-	 * @see LoggingFilter#messageReceived(org.apache.mina.common.IoFilter.NextFilter, IoSession, Object)
+	 * @see LoggingFilter#messageReceived(org.apache.mina.core.IoFilter.NextFilter, IoSession, Object)
 	 */
 	@Override
 	public void messageReceived(NextFilter nextFilter, IoSession session,
