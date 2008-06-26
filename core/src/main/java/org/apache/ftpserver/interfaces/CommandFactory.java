@@ -19,9 +19,6 @@
 
 package org.apache.ftpserver.interfaces;
 
-import java.util.Map;
-
-import com.sun.org.apache.bcel.internal.generic.ISUB;
 
 
 /**
