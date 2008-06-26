@@ -18,85 +18,87 @@
  under the License. -->  
 
 <project>
-	<parent>
-		<artifactId>ftpserver-parent</artifactId>
-		<groupId>org.apache.ftpserver</groupId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.apache.ftpserver</groupId>
-	<artifactId>ftpserver-server</artifactId>
-	<name>Apache FtpServer Server</name>
-	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<scm>
-		<connection>
-			scm:svn:http://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
-		</connection>
-		<developerConnection>
-			scm:svn:https://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
-		</developerConnection>
-		<url>
-			http://svn.apache.org/viewvc/mina/ftpserver/trunk/server
-		</url>
-	</scm>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<includes>
-					<include>*.properties</include>
-				</includes>
-			</testResource>
-		</testResources>
-	</build>
+  <parent>
+    <artifactId>ftpserver-parent</artifactId>
+    <groupId>org.apache.ftpserver</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.ftpserver</groupId>
+  <artifactId>ftpserver-server</artifactId>
+  <name>Apache FtpServer Server</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<dependencies>
-		<dependency>
-		      <groupId>${groupId}</groupId>
-			<artifactId>ftplet-api</artifactId>
-		</dependency>
-		<dependency>
-		      <groupId>${groupId}</groupId>
-			<artifactId>ftpserver-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-core</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-core</artifactId>
-		</dependency>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
+    </connection>
+    <developerConnection>
+      scm:svn:https://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
+    </developerConnection>
+    <url>
+      http://svn.apache.org/viewvc/mina/ftpserver/trunk/server
+    </url>
+  </scm>
 
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+      </testResource>
+    </testResources>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>ftplet-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>ftpserver-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.mina</groupId>
+      <artifactId>mina-core</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
