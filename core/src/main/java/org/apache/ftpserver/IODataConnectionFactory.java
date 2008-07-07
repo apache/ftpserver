@@ -137,7 +137,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
      * It returns the success flag.
      */
     public synchronized InetSocketAddress initPassiveDataConnection() throws DataConnectionException {
-        
+        LOG.debug("Initiating passive data connection");
         // close old sockets if any
         closeDataConnection(); 
         
@@ -158,18 +158,20 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             }
 
             if(secure) {
+                LOG.debug("Opening SSL passive data connection on address \"{}\" and port {}", address, passivePort);
                 SslConfiguration ssl = dataCfg.getSSLConfiguration();
                 if(ssl == null) {
                     throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
                 servSoc = createServerSocket(ssl, address, passivePort);
                 port = servSoc.getLocalPort();
-                LOG.debug("SSL data connection created on " + address + ":" + port);
+                LOG.debug("SSL Passive data connection created on address \"{}\" and port {}", address, passivePort);
             }
             else {
-                servSoc = new ServerSocket(passivePort, 1, address);
+                LOG.debug("Opening passive data connection on address \"{}\" and port {}", address, passivePort);
+                servSoc = new ServerSocket(passivePort, 0, address);
                 port = servSoc.getLocalPort();
-                LOG.debug("Data connection created on " + address + ":" + port);
+                LOG.debug("Passive data connection created on address \"{}\" and port {}", address, passivePort);
             }
             servSoc.setSoTimeout(dataCfg.getMaxIdleTimeMillis());
 
@@ -182,7 +184,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         catch(Exception ex) {
             servSoc = null;
             closeDataConnection();
-            throw new DataConnectionException("FtpDataConnection.setPasvCommand()", ex);
+            throw new DataConnectionException("Failed to initate passive data connection: " + ex.getMessage(), ex);
         }
     }
      
