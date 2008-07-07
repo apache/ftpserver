@@ -115,6 +115,27 @@ public class TestUtil {
         
         return hostIps.toArray(new String[0]);
     }
+
+    public static InetAddress findNonLocalhostIp() throws Exception {
+        Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
+        
+        while (nifs.hasMoreElements()) {
+            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
+            Enumeration<InetAddress> ips = nif.getInetAddresses();
+            
+            while (ips.hasMoreElements()) {
+                InetAddress ip = (InetAddress) ips.nextElement();
+                if(ip instanceof java.net.Inet4Address && !ip.isLoopbackAddress()) {
+                    return ip;
+                } else {
+                    // IPv6 not tested
+                }
+            }
+        }
+        
+        return null;
+    }
+
     
     public static void writeDataToFile(File file, byte[] data) throws IOException {
         FileOutputStream fos = null;

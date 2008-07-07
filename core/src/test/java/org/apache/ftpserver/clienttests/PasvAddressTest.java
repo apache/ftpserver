@@ -20,19 +20,26 @@
 package org.apache.ftpserver.clienttests;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.util.SocketAddressEncoder;
 
 public class PasvAddressTest extends ClientTestTemplate {
 
+    private InetAddress passiveAddress;
+    
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
 
         DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server.getServerContext()
                 .getListener("default").getDataConnectionConfiguration();
 
-        ddcc.setPassiveAddress(InetAddress.getByName("127.0.0.200"));
+        passiveAddress = TestUtil.findNonLocalhostIp();
+        ddcc.setPassiveAddress(passiveAddress);
+        ddcc.setPassivePorts("12347");
 
         return server;
     }
@@ -43,7 +50,10 @@ public class PasvAddressTest extends ClientTestTemplate {
 
         String reply = client.getReplyString();
 
-        assertTrue("The PASV address should contain \"127,0,0,200\" but was \"" + reply + "\"", 
-                reply.indexOf("(127,0,0,200,") > -1);
+        String ipEncoded = SocketAddressEncoder.encode(new InetSocketAddress(passiveAddress, 12347));
+        
+        
+        assertTrue("The PASV address should contain \"" + ipEncoded + "\" but was \"" + reply + "\"", 
+                reply.indexOf(ipEncoded) > -1);
     }
 }
