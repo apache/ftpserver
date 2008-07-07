@@ -27,12 +27,13 @@ import org.apache.ftpserver.FtpServer;
 public class PasvAddressTest extends ClientTestTemplate {
 
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
+        FtpServer server = super.createServer();
 
-    	DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server.getServerContext().getListener("default").getDataConnectionConfiguration();
-    	
-    	ddcc.setPassiveAddress(InetAddress.getByName("127.0.0.200"));
-    	
+        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server.getServerContext()
+                .getListener("default").getDataConnectionConfiguration();
+
+        ddcc.setPassiveAddress(InetAddress.getByName("127.0.0.200"));
+
         return server;
     }
 
@@ -40,6 +41,9 @@ public class PasvAddressTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         client.pasv();
 
-        assertTrue(client.getReplyString().indexOf("(127,0,0,200,") > -1);
+        String reply = client.getReplyString();
+
+        assertTrue("The PASV address should contain \"127,0,0,200\" but was \"" + reply + "\"", 
+                reply.indexOf("(127,0,0,200,") > -1);
     }
 }
