@@ -181,7 +181,7 @@
                 </configuration>
               </execution>
               <execution>
-                <id>unpack-admingui-javadoc</id>
+                <id>unpack-server-javadoc</id>
                 <phase>package</phase>
                 <goals>
                   <goal>unpack</goal>
