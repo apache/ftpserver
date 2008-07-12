@@ -97,7 +97,7 @@ rem Each command line option is prefixed with PR_
 
 set FTPD_LOGPATH=%FTPD_HOME%\res\log
 
-set PR_DESCRIPTION=Apache FtpServer (http://incubator.apache.org/ftpserver/)
+set PR_DESCRIPTION=Apache FtpServer (http://mina.apache.org/ftpserver/)
 set PR_INSTALL=%EXECUTABLE%
 set PR_LOGPATH=%FTPD_LOGPATH%
 set PR_CLASSPATH=%FTPD_CLASSPATH%
@@ -127,7 +127,7 @@ goto buildArgs
 :endInit
 echo %CMD_LINE_ARGS%
 
-"%EXECUTABLE%" //IS//%SERVICE_NAME% --StartClass org.apache.ftpserver.commandline.Daemon --StartParams %CMD_LINE_ARGS% --StartPath "%FTPD_HOME%" --StopClass org.apache.ftpserver.commandline.Daemon --StopParams stop 
+"%EXECUTABLE%" //IS//%SERVICE_NAME% --StartClass org.apache.ftpserver.main.Daemon --StartParams %CMD_LINE_ARGS% --StartPath "%FTPD_HOME%" --StopClass org.apache.ftpserver.main.Daemon --StopParams stop 
 if not errorlevel 1 goto installed
 echo Failed installing '%SERVICE_NAME%' service
 goto end

@@ -57,7 +57,7 @@ for %%i in ("*.jar") do call "%FTPD_HOME%\bin\appendcp.bat" "%FTPD_HOME%\common\
 cd /d %FTPD_HOME%
 
 rem ----- call java.. ---------------------------------------------------
-set MAIN_CLASS=org.apache.ftpserver.commandline.CommandLine
+set MAIN_CLASS=org.apache.ftpserver.main.CommandLine
 set JAVA_CMD=%JAVA_HOME%\bin\java
 
 "%JAVA_CMD%" -classpath "%FTPD_CLASSPATH%" %MAIN_CLASS% %*
