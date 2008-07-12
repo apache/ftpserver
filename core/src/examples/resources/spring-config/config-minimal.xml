@@ -16,13 +16,10 @@
  KIND, either express or implied.  See the License for the
  specific language governing permissions and limitations
  under the License. --> 
-<beans:beans xmlns="http://mina.apache.org/ftpserver/spring/v1"
-	xmlns:beans="http://www.springframework.org/schema/beans"
+<server xmlns="http://mina.apache.org/ftpserver/spring/v1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
 	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
-	   ">
-
-	<server id="myServer" /> 
-</beans:beans>
+	   "
+	   id="myServer" />

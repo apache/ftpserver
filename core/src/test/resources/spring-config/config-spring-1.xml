@@ -17,7 +17,7 @@
  specific language governing permissions and limitations
  under the License. -->  
 
-<beans:beans xmlns="http://mina.apache.org/ftpserver/spring/v1"
+<server id="server" xmlns="http://mina.apache.org/ftpserver/spring/v1"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
@@ -25,11 +25,7 @@
 	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
 	   ">
 
-	<beans:bean id="listener1" class="org.apache.ftpserver.listener.nio.NioListener">
-		<beans:property name="port" value="2223"/>
-	</beans:bean>
 
-	<server id="server">
 		<listeners>
 			<nio-listener name="listener0" port="2222">
 				<data-connection>
@@ -42,7 +38,10 @@
 				<blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>				
 			</nio-listener>
 			<listener name="listener1">
-				<beans:ref bean="listener1"/>
+				    <beans:bean id="listener1" class="org.apache.ftpserver.listener.nio.NioListener">
+        <beans:property name="port" value="2223"/>
+    </beans:bean>
+
 			</listener>
 			<listener name="listener2">
 				<beans:bean class="org.apache.ftpserver.listener.nio.NioListener">
@@ -70,4 +69,4 @@
 		</commands>
 		<messages languages="se no ,da" />
 	</server>
-</beans:beans>
+

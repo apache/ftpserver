@@ -21,9 +21,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
-	   http://mina.apache.org/ftpserver/spring/v1 file:///home/niklas/workspaces/apache/ftpserver/core/src/main/resources/org/apache/ftpserver/config/spring/ftpserver-1.0.xsd	
+	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
 	   ">
-    <!-- 	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd -->
+
     <server id="myServer">
         <listeners>
             <nio-listener name="default" port="2222" implicit-ssl="true"  idle-timeout="60" local-address="1.2.3.4">

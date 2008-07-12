@@ -101,7 +101,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         
         SslConfiguration ssl = parseSsl(element);
         if(ssl != null) {
-            builder.addPropertyValue("ssl", ssl);
+            builder.addPropertyValue("sslConfiguration", ssl);
         }
         
         Element dataConElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "data-connection");
