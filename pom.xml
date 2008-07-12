@@ -35,6 +35,16 @@
     <url>http://issues.apache.org/jira/browse/FTPSERVER</url>
   </issueManagement>
   <inceptionYear>2003</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache 2.0 License</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+
   <mailingLists>
     <mailingList>
       <name>FtpServer Users mailing list</name>
@@ -255,7 +265,6 @@
             <configuration>
               <resourceBundles>
                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.1</resourceBundle>
-                <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.0</resourceBundle>
               </resourceBundles>
               <properties>
                 <addLicense>true</addLicense>
@@ -360,6 +369,11 @@
         <module>server</module>
       </modules>
       <distributionManagement>
+        <site>
+          <id>apache.website</id>
+          <url>scp://people.apache.org/www/mina.apache.org/ftpserver/report/trunk/</url>
+        </site>
+
         <repository>
           <id>apache.snapshots</id>
           <name>Apache Development Snapshot Repository</name>
