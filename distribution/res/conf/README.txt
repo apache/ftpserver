@@ -1,3 +1,3 @@
-You can find two sample configuration files here. One is a properties
-file based configuration file and the other is a XML file based 
-configuration file.
+You can find two sample configuration files here. One is a typical
+configuration file containing the common settings. The other is a full-fledged
+configuration file showing all available parameters.
