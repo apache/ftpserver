@@ -141,6 +141,16 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(testData, testFile);
     }
 
+    public void testStoreWithLeadingSlash() throws Exception {
+        TEST_DIR.mkdirs();
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+        
+        assertTrue(client.storeFile("/" + TEST_FILENAME, new ByteArrayInputStream(testData)));
+        
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(testData, testFile);
+    }
+    
     public void testStoreWithNonExistingPath() throws Exception {
         File testFile = new File(TEST_DIR, TEST_FILENAME);
 
