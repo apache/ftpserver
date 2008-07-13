@@ -60,7 +60,8 @@ class EncryptUtils {
             result = encrypt(source, "MD5");
         }
         catch(NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+            // this should never happen
+            throw new RuntimeException(ex);
         }
         return result;
     }
@@ -78,7 +79,8 @@ class EncryptUtils {
             result = encrypt(source, "SHA");
         }
         catch(NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+            // this should never happen
+            throw new RuntimeException(ex);
         }
         return result;
     }
