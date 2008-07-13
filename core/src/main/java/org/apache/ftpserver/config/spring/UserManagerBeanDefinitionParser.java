@@ -26,6 +26,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
+import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -51,6 +52,7 @@ public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitio
                     element.getAttribute("encrypt-passwords").equals("true")) {
                 builder.addPropertyValue("encryptPasswords", true);
             }
+            builder.setInitMethodName("configure");
         } else {
             Element dsElm = SpringUtil.getChildElement(element, 
                     FtpServerNamespaceHandler.FTPSERVER_NS, "data-source");
@@ -66,6 +68,20 @@ public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitio
 
             }
             builder.addPropertyValue("dataSource", o);
+            
+            builder.addPropertyValue("sqlUserInsert",       getSql(element, "insert-user"));
+            builder.addPropertyValue("sqlUserUpdate",       getSql(element, "update-user"));
+            builder.addPropertyValue("sqlUserDelete",       getSql(element, "delete-user"));
+            builder.addPropertyValue("sqlUserSelect",       getSql(element, "select-user"));
+            builder.addPropertyValue("sqlUserSelectAll",    getSql(element, "select-all-users"));
+            builder.addPropertyValue("SqlUserAdmin",        getSql(element, "is-admin"));
+            builder.addPropertyValue("sqlUserAuthenticate", getSql(element, "authenticate"));
+            
+            builder.setInitMethodName("configure");
         }
+    }
+    
+    private String getSql(Element element, String elmName) {
+        return SpringUtil.getChildElementText(element, FtpServerNamespaceHandler.FTPSERVER_NS, elmName);    
     }
 }

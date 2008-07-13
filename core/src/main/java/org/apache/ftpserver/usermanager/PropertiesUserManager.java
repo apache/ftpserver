@@ -106,9 +106,18 @@ class PropertiesUserManager extends AbstractUserManager {
     }
     
     /**
+     * Lazy init the user manager
+     */
+    private void lazyInit() {
+        if(!isConfigured) {
+            configure();
+        }
+    }
+    
+    /**
      * Configure user manager.
      */
-public void configure() {
+    public void configure() {
         isConfigured  = true;
         File dir = userDataFile.getParentFile();
         if( (!dir.exists()) && (!dir.mkdirs()) ) {
@@ -163,6 +172,7 @@ public void configure() {
      * Save user data. Store the properties.
      */
     public synchronized void save(User usr) throws FtpException {
+        lazyInit();
         
        // null value check
        if(usr.getName() == null) {
@@ -236,6 +246,7 @@ public void configure() {
      * After removing the corresponding from the properties, save the data.
      */
     public synchronized void delete(String usrName) throws FtpException {
+        lazyInit();
         
         // remove entries from properties
         String thisPrefix = PREFIX + usrName + '.';
@@ -297,7 +308,8 @@ public void configure() {
      * Get all user names.
      */
     public synchronized String[] getAllUserNames() {
-
+        lazyInit();
+        
         // get all user names
         String suffix = '.' + ATTR_HOME;
         ArrayList<String> ulst = new ArrayList<String>();
@@ -322,6 +334,7 @@ public void configure() {
      * Load user data.
      */
     public synchronized User getUserByName(String userName) {
+        lazyInit();
         
         if (!doesExist(userName)) {
             return null;
@@ -360,6 +373,8 @@ public void configure() {
      * User existance check
      */
     public synchronized boolean doesExist(String name) {
+        lazyInit();
+        
         String key = PREFIX + name + '.' + ATTR_HOME;
         return userDataProp.containsKey(key);
     }
@@ -368,6 +383,7 @@ public void configure() {
      * User authenticate method
      */
     public synchronized User authenticate(Authentication authentication) throws AuthenticationFailedException {
+        lazyInit();
         
         if(authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;

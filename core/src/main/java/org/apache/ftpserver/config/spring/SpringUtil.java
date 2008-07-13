@@ -29,6 +29,7 @@ import org.apache.ftpserver.FtpServerConfigurationException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
+import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -77,6 +78,29 @@ public class SpringUtil {
         return null;
     }
 
+    /**
+     * Get the text context of first child element matching the local name and namespace
+     * @param parent The element for which to locate the child
+     * @param ns The namespace to match, or null for any namespace
+     * @param localName The local name to match, or null for any local name
+     * @return The text content of the first child matching the criteria 
+     *         or null if element not found
+     */
+    public static String getChildElementText(Element parent, String ns, String localName) {
+        List<Element> elements = getChildElements(parent);
+        
+        for(Element element : elements) {
+            if((ns == null || ns.equals(element.getNamespaceURI()) &&
+                    (localName == null || localName.equals(element.getLocalName())))) {
+                return DomUtils.getTextValue(element);
+            }
+        }
+        
+        return null;
+    }
+    
+    
+    
     /**
      * Parse specific Spring elements, bean and ref
      * @param parent The element in which we will look for Spring elements

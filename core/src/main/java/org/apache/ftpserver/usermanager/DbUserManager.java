@@ -62,6 +62,10 @@ public class DbUserManager extends AbstractUserManager {
 
     private DataSource dataSource;
     private Connection cachedConnection;
+
+    // Set to true when the user manager has been configured, 
+    // used for lazy init.
+    private boolean configured = false;
     
     /**
      * Retrive the data source used by the user manager
@@ -192,9 +196,19 @@ public class DbUserManager extends AbstractUserManager {
     }
     
     /**
+     * Lazy init the user manager
+     */
+    private void lazyInit() {
+        if(!configured) {
+            configure();
+        }
+    }
+    
+    /**
      * Configure user manager.
      */
     public void configure() {
+        configured = true;
         
         if(dataSource == null) {
             throw new FtpServerConfigurationException("Required data source not provided");
@@ -328,6 +342,7 @@ public class DbUserManager extends AbstractUserManager {
      * Delete user. Delete the row from the table.
      */
     public synchronized void delete(String name) throws FtpException {
+        lazyInit();
         
         // create sql query
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -361,6 +376,7 @@ public class DbUserManager extends AbstractUserManager {
      * Save user. If new insert a new row, else update the existing row.
      */
     public synchronized void save(User user) throws FtpException {
+        lazyInit();
         
         // null value check
         if(user.getName() == null) {
@@ -511,6 +527,8 @@ public class DbUserManager extends AbstractUserManager {
      * User existance check.
      */
     public synchronized boolean doesExist(String name) throws FtpException {
+        lazyInit();
+        
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -554,6 +572,8 @@ public class DbUserManager extends AbstractUserManager {
      * Get all user names from the database.
      */
     public synchronized String[] getAllUserNames() throws FtpException {
+        
+        lazyInit();
         
         Statement stmt = null;
         ResultSet rs = null;
@@ -662,6 +682,8 @@ public class DbUserManager extends AbstractUserManager {
      * User authentication.
      */
     public synchronized User authenticate(Authentication authentication) throws AuthenticationFailedException {
+        lazyInit();
+        
         if(authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
             
