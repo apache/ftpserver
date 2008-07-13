@@ -124,7 +124,13 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>2.5.5</version>
     </dependency>
+    
+    <!-- Use as Spring uses JCL -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    
   </dependencies>
 </project>
