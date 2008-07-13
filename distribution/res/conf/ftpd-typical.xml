@@ -20,11 +20,7 @@
 	   "
 	id="myServer">
 	<listeners>
-		<nio-listener name="default" port="2121">
-			<ssl>
-				<keystore file="mykeystore.jks" password="secret" />
-			</ssl>
-		</nio-listener>
+		<nio-listener name="default" port="2121" />
 	</listeners>
-	<file-user-manager file="users.properties" />
+	<file-user-manager file="./res/conf/users.properties" />
 </server>
