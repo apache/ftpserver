@@ -57,6 +57,7 @@ class CommandLine {
 
             // start the server
             server.start();
+            System.out.println("FtpServer started");
 
             // add shutdown hook if possible
             addShutdownHook(server);
