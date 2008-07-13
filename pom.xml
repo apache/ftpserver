@@ -153,13 +153,40 @@
         <groupId>org.apache.mina</groupId>
         <artifactId>mina-core</artifactId>
         <version>2.0.0-M2</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymockclassextension</artifactId>
+            </exclusion>
+	</exclusions>
       </dependency>
 
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>2.5.5</version>
+        <exclusions>
+            <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+            </exclusion>
+	</exclusions>
+    </dependency>
 
       <!-- Logging -->
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
+        <version>1.5.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
         <version>1.5.2</version>
       </dependency>
 
