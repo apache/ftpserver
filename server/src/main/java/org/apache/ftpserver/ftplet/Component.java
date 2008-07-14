@@ -17,36 +17,31 @@
  * under the License.
  */  
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.ftplet;
 
-import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.Configuration;
+import org.apache.ftpserver.ftplet.FtpException;
 
-public class ComponentBean extends Bean {
 
-    private Configuration config;
-    private Component component;
-    private Class<Component> clazz;
+/**
+ * This interface abstracts the basic lifecycle method. 
+ * <ol>
+ *     <li>Default constructor will be called.</li>
+ *     <li>The component will be configured using Component.configure(Configuration)</li>
+ *     <li>Other component specific methods will be called.</li>
+ *     <li>Finnaly Component.dispose() method will be called.</li>
+ * </ol>
+ */
+public 
+interface Component {
     
-    public ComponentBean(Configuration config, Class<Component> clazz) {
-        this.clazz = clazz;
-        this.config = config;
-    }
+    /**
+     * Configure the component.
+     */
+    void configure(Configuration config) throws FtpException;
     
-    public Object initBean() throws Exception {
-        component = clazz.newInstance();
-        
-        component.configure(config);
-        return component;
-    }
-    
-    public Object getBean() {
-        return component;
-    }
-
-    public void destroyBean() {
-        component.dispose();
-        component = null;
-    }
-    
+    /**
+     * Dispose component - release all the resources.
+     */
+    void dispose();
 }

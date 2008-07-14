@@ -34,17 +34,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
-
-import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.ftplet.Configuration;
 
 
 
@@ -66,7 +60,7 @@ public class ClassUtils {
         setProperty(target, setter, propertyValue);
     }
     
-    private static void setProperty(Object target, PropertyDescriptor setter, Object castValue) {
+    static void setProperty(Object target, PropertyDescriptor setter, Object castValue) {
         Method setterMethod = setter.getWriteMethod();
         
         if(setter != null && setterMethod != null) {
@@ -115,7 +109,7 @@ public class ClassUtils {
         
     }
     
-    private static PropertyDescriptor getDescriptor(Class<?> clazz, String propertyName) {
+    static PropertyDescriptor getDescriptor(Class<?> clazz, String propertyName) {
         propertyName = normalizePropertyName(propertyName);
         
         BeanInfo beanInfo;
@@ -136,86 +130,6 @@ public class ClassUtils {
         return null;
     }
         
-    private static Object createObject(Class<?> clazz, Configuration config, String propValue) {
-        Object value;
-        
-        if(config.isEmpty()) {
-            // regular property
-            value = cast(clazz, propValue);
-        } else {
-            if(clazz == null) {
-                String className = config.getString("class", null);
-                if(className != null) {
-                    try {
-                        clazz = Class.forName(className);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("Class not found: " + className, e);
-                    }
-                } else {
-                    // TODO improve error message
-                    throw new RuntimeException("Can not resolve class");
-                }
-            }
-            
-            if(Map.class.isAssignableFrom(clazz)) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                
-                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
-                
-                while (mapKeys.hasNext()) {
-                    String mapKey = mapKeys.next();
-                    String mapValue = config.getString(mapKey, null);
-                    Configuration mapConfig = config.subset(mapKey);
-                    
-                    map.put(mapKey, createObject(String.class, mapConfig, mapValue));
-                }
-                
-                value = map;
-            } else if(Collection.class.isAssignableFrom(clazz)) {
-                List<Object> list = new ArrayList<Object>();
-                
-                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
-                
-                while (mapKeys.hasNext()) {
-                    String mapKey = mapKeys.next();
-                    
-                    String listValue = config.getString(mapKey, null);
-
-                    list.add(createObject(null, config.subset(mapKey), listValue));
-                }
-                
-                value = list;
-            } else if(clazz.isArray()) {
-                List<Object> list = new ArrayList<Object>();
-                
-                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
-                
-                while (mapKeys.hasNext()) {
-                    String mapKey = mapKeys.next();
-                    
-                    String listValue = config.getString(mapKey, null);
-
-                    list.add(createObject(clazz.getComponentType(), config.subset(mapKey), listValue));
-                }
-                
-                Object castArray = Array.newInstance(clazz.getComponentType(), list.size());
-                
-                for (int i = 0; i < list.size(); i++) {
-                    Array.set(castArray, i, list.get(i));
-                } 
-                
-                
-                value = castArray;
-            } else {
-                // create new bean
-                
-                value = createBean(config, clazz.getName());
-            }
-            
-        }
-
-        return value;
-    }
     
     public static class KeyComparator implements Comparator<String> {
         public int compare(String key1, String key2) {
@@ -232,7 +146,7 @@ public class ClassUtils {
         }
     }
     
-    private static Iterator<String> getKeysInOrder(Iterator<String> keys) {
+    static Iterator<String> getKeysInOrder(Iterator<String> keys) {
         List<String> keyList = new ArrayList<String>();
         
         while (keys.hasNext()) {
@@ -245,51 +159,6 @@ public class ClassUtils {
         return keyList.iterator();
     }
     
-    public static Map<?, ?> createMap(Configuration config) {
-        return (Map<?, ?>) createObject(Map.class, config, null);
-        
-    }
-    
-    public static Object createBean(Configuration config, String defaultClass) {
-        String className = config.getString("class", defaultClass);
-        
-        Class<?> clazz;
-        Object bean;
-        try {
-            clazz = Class.forName(className);
-            bean = clazz.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create instance of class " + className, e);
-        }
-        
-        
-        Iterator<String> keys = config.getKeys();
-        
-        while (keys.hasNext()) {
-            String key = keys.next();
-
-            if(key.equals("class")) {
-                continue;
-            }
-            
-            Configuration subConfig = config.subset(key);
-            
-            String propValue = config.getString(key, null);
-            
-            PropertyDescriptor descriptor = getDescriptor(clazz, key);
-            
-            if(descriptor == null) {
-                throw new FtpServerConfigurationException("Unknown property \"" + key + "\" on class " + className);
-            }
-
-            Object value = createObject(descriptor.getPropertyType(), subConfig, propValue);
-
-            setProperty(bean, descriptor, value);
-        }
-        
-        
-        return bean;
-    }
     
     public static void invokeMethod(Object target, String methodName) {
         try {

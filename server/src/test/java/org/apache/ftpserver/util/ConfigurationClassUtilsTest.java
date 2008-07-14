@@ -40,7 +40,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyBean bean = (MyBean) ClassUtils.createBean(config, null);
+        MyBean bean = (MyBean) ConfigurationClassUtils.createBean(config, null);
         assertEquals("flopp", bean.getFoo());
         assertEquals(123, bean.getBar());
     }
@@ -55,7 +55,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyOtherBean otherBean = (MyOtherBean) ClassUtils.createBean(config, null);
+        MyOtherBean otherBean = (MyOtherBean) ConfigurationClassUtils.createBean(config, null);
         assertEquals(InetAddress.getByName("1.2.3.4"), otherBean.getBaz());
         
         MyBean bean = otherBean.getMyBean();
@@ -73,7 +73,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyOtherBean otherBean = (MyOtherBean) ClassUtils.createBean(config, null);
+        MyOtherBean otherBean = (MyOtherBean) ConfigurationClassUtils.createBean(config, null);
         assertEquals(InetAddress.getByName("1.2.3.4"), otherBean.getBaz());
         
         MyBean bean = otherBean.getMyBean();
@@ -89,7 +89,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         Iterator<?> iter = bean.getList().iterator();
         
@@ -112,7 +112,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         Iterator<?> iter = bean.getList().iterator();
         
@@ -135,7 +135,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         int[] array = bean.getArray();
         
@@ -155,7 +155,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         MyBean[] array = bean.getMyBeans();
         
@@ -173,7 +173,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         MyBean[] array = bean.getMyBeans();
         
@@ -192,7 +192,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyCollectionBean bean = (MyCollectionBean) ClassUtils.createBean(config, null);
+        MyCollectionBean bean = (MyCollectionBean) ConfigurationClassUtils.createBean(config, null);
         
         int[] array = bean.getArray();
         
@@ -212,7 +212,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        MyMapBean bean = (MyMapBean) ClassUtils.createBean(config, null);
+        MyMapBean bean = (MyMapBean) ConfigurationClassUtils.createBean(config, null);
         
         Map<?, ?> map = bean.getMap();
         
@@ -236,7 +236,7 @@ public class ConfigurationClassUtilsTest extends TestCase {
         
         Configuration config = new PropertiesConfiguration(props);
         
-        Map<?, ?> map = ClassUtils.createMap(config);
+        Map<?, ?> map = ConfigurationClassUtils.createMap(config);
         
         for(int i = 1; i<5; i++) {
             MyBean bean = (MyBean) map.get("foo" + i);

@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.Component;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.FtpStatistics;
@@ -214,26 +213,6 @@ public class DefaultFtpServerContext implements FtpServerContext {
 		while (listenerIter.hasNext()) {
 			Listener listener = listenerIter.next();
 			listener.stop();
-		}
-
-		if (ftpletContainer != null && ftpletContainer instanceof Component) {
-			((Component) ftpletContainer).dispose();
-		}
-
-		if (userManager != null && userManager instanceof Component) {
-			((Component) userManager).dispose();
-		}
-
-		if (fileSystemManager != null && fileSystemManager instanceof Component) {
-			((Component) fileSystemManager).dispose();
-		}
-
-		if (statistics != null && statistics instanceof Component) {
-			((Component) statistics).dispose();
-		}
-
-		if (messageResource != null && messageResource instanceof Component) {
-			((Component) messageResource).dispose();
 		}
 	}
 

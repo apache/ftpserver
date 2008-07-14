@@ -123,7 +123,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.ftpserver</groupId>
-      <artifactId>ftpserver-server</artifactId>
+      <artifactId>ftpserver-deprecated</artifactId>
     </dependency>
     <dependency>
         <groupId>org.slf4j</groupId>
@@ -181,17 +181,17 @@
                 </configuration>
               </execution>
               <execution>
-                <id>unpack-server-javadoc</id>
+                <id>unpack-deprecated-javadoc</id>
                 <phase>package</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.directory}/api/ftpserver-server</outputDirectory>
+                  <outputDirectory>${project.build.directory}/api/ftpserver-deprecated</outputDirectory>
                   <artifactItems>
                     <artifactItem>
                       <groupId>${pom.groupId}</groupId>
-                      <artifactId>ftpserver-server</artifactId>
+                      <artifactId>ftpserver-deprecated</artifactId>
                       <classifier>javadoc</classifier>
                       <version>${pom.version}</version>
                     </artifactItem>

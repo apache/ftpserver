@@ -25,20 +25,20 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
-  <artifactId>ftpserver-server</artifactId>
-  <name>Apache FtpServer Server</name>
+  <artifactId>ftpserver-deprecated</artifactId>
+  <name>Apache FtpServer Deprecated classes</name>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <scm>
     <connection>
-      scm:svn:http://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
+      scm:svn:http://svn.apache.org/repos/asf/mina/ftpserver/trunk/deprecated
     </connection>
     <developerConnection>
-      scm:svn:https://svn.apache.org/repos/asf/mina/ftpserver/trunk/server
+      scm:svn:https://svn.apache.org/repos/asf/mina/ftpserver/trunk/deprecated
     </developerConnection>
     <url>
-      http://svn.apache.org/viewvc/mina/ftpserver/trunk/server
+      http://svn.apache.org/viewvc/mina/ftpserver/trunk/deprecated
     </url>
   </scm>
 
