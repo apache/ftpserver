@@ -165,7 +165,8 @@ public class DefaultSslConfiguration implements SslConfiguration {
      */
     public void setClientAuthentication(String clientAuthReqd) {
         if("true".equalsIgnoreCase(clientAuthReqd) 
-                || "yes".equalsIgnoreCase(clientAuthReqd)) {
+                || "yes".equalsIgnoreCase(clientAuthReqd)
+                || "need".equalsIgnoreCase(clientAuthReqd) ) {
             this.clientAuthReqd = ClientAuth.NEED;
         } else if("want".equalsIgnoreCase(clientAuthReqd)) {
             this.clientAuthReqd = ClientAuth.WANT;

@@ -96,13 +96,20 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
         }
     }
     
-    private int maxIdleTimeMillis = 10000;
+    // maximum idle time in seconds
+    private int idleTime = 300;
     
     private SslConfiguration ssl;
     
+    /**
+     * Get the maximum idle time in seconds.
+     */
+    public int getIdleTime() {
+        return idleTime;
+    }
+    
     public void setIdleTime(int idleTime) {
-        // get the maximum idle time in millis
-        maxIdleTimeMillis = idleTime * 1000;
+        this.idleTime = idleTime;
     }
     
     private Active active = new Active();
@@ -120,12 +127,6 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
         this.ssl = ssl;
     }
 
-    /**
-     * Get the maximum idle time in millis.
-     */
-    public int getMaxIdleTimeMillis() {
-        return maxIdleTimeMillis;
-    }
     
     /**
      * Is PORT enabled?

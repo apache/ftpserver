@@ -60,10 +60,10 @@
 	<xs:element name="ssl">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element minOccurs="0" name="keystore">
+				<xs:element name="keystore">
 					<xs:complexType>
-						<xs:attribute name="file"/>
-						<xs:attribute name="password"/>
+						<xs:attribute name="file" use="required"/>
+						<xs:attribute name="password" use="required"/>
 						<xs:attribute name="type"/>
 						<xs:attribute name="algorithm"/>
 						<xs:attribute name="key-alias"/>
@@ -72,15 +72,32 @@
 				</xs:element>
 				<xs:element minOccurs="0" name="truststore">
 					<xs:complexType>
-						<xs:attribute name="file"/>
+						<xs:attribute name="file" use="required"/>
 						<xs:attribute name="password"/>
 						<xs:attribute name="type"/>
 						<xs:attribute name="algorithm"/>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
-			<xs:attribute name="client-authentication" type="xs:string"/>
-			<xs:attribute name="enabled-ciphersuites"/>
+			<xs:attribute name="client-authentication">
+             <xs:simpleType>
+                 <xs:restriction base="xs:string">
+                     <xs:enumeration value="NEED" />
+                     <xs:enumeration value="WANT" />
+                     <xs:enumeration value="NONE" />
+                 </xs:restriction>
+             </xs:simpleType>
+            </xs:attribute>			
+			
+			<xs:attribute name="enabled-ciphersuites" type="xs:string"/>
+			<xs:attribute name="protocol">
+			 <xs:simpleType>
+			     <xs:restriction base="xs:string">
+			         <xs:enumeration value="SSL" />
+			         <xs:enumeration value="TLS" />
+			     </xs:restriction>
+			 </xs:simpleType>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 

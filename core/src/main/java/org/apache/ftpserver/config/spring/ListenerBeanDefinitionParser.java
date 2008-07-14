@@ -193,7 +193,13 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             if(enabledCiphersuites != null) { 
                 ssl.setEnabledCipherSuites(enabledCiphersuites.split(" "));
             }  
-        
+
+            String protocol = SpringUtil.parseString(sslElm, "protocol");
+            if(protocol != null) { 
+                ssl.setSslProtocol(protocol);
+            }  
+
+            
             return ssl;
         } else {
             return null;

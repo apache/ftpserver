@@ -30,9 +30,9 @@ public
 interface DataConnectionConfiguration {
 
     /**
-     * Get the maximum idle time in millis.
+     * Get the maximum idle time in seconds.
      */
-    int getMaxIdleTimeMillis();
+    int getIdleTime();
     
     /**
      * Is active data connection enabled?

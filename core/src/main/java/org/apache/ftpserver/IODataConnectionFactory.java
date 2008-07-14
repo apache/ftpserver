@@ -173,7 +173,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 port = servSoc.getLocalPort();
                 LOG.debug("Passive data connection created on address \"{}\" and port {}", address, passivePort);
             }
-            servSoc.setSoTimeout(dataCfg.getMaxIdleTimeMillis());
+            servSoc.setSoTimeout(dataCfg.getIdleTime() * 1000);
 
             // set different state variables
             passive = true;
@@ -361,7 +361,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
         
         // no idle time limit - not a timeout
-        int maxIdleTime = session.getListener().getDataConnectionConfiguration().getMaxIdleTimeMillis();
+        int maxIdleTime = session.getListener().getDataConnectionConfiguration().getIdleTime() * 1000;
         if(maxIdleTime == 0) {
             return false;
         }
