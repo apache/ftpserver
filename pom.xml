@@ -447,7 +447,7 @@
       <modules>
         <module>ftplet-api</module>
         <module>core</module>
-        <module>server</module>
+        <module>deprecated</module>
         <module>distribution</module>
       </modules>
       <distributionManagement>
@@ -470,7 +470,7 @@
   <modules>
     <module>ftplet-api</module>
     <module>core</module>
-    <module>server</module>
+    <module>deprecated</module>
   </modules>
 
   <distributionManagement>
