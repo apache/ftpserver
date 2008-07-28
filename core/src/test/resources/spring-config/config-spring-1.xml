@@ -23,7 +23,13 @@
 	xsi:schemaLocation="
 	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
 	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
-	   ">
+	   "
+	   max-logins="500"
+	   anon-enabled="false"
+	   max-anon-logins="123"
+	   max-login-failures="124"
+	   login-failure-delay="125"
+	   >
 
 
 		<listeners>

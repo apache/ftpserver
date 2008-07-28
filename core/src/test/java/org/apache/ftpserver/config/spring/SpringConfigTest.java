@@ -42,6 +42,12 @@ public class SpringConfigTest extends TestCase {
         FtpServer server = (FtpServer) factory.getBean("server");
         server.start();
         
+        assertEquals(500, server.getConnectionConfig().getMaxLogins());
+        assertEquals(false, server.getConnectionConfig().isAnonymousLoginEnabled());
+        assertEquals(123, server.getConnectionConfig().getMaxAnonymousLogins());
+        assertEquals(124, server.getConnectionConfig().getMaxLoginFailures());
+        assertEquals(125, server.getConnectionConfig().getLoginFailureDelay());
+        
         Map<String, Listener> listeners = server.getServerContext().getListeners(); 
         assertEquals(3, listeners.size());
         

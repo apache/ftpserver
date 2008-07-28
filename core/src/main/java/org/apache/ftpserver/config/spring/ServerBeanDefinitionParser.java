@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ftpserver.DefaultConnectionConfig;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.interfaces.MessageResource;
@@ -88,6 +89,27 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
                 throw new FtpServerConfigurationException("Unknown configuration name: " + childName);
             }
         }
+
+        // Configure login limits
+        DefaultConnectionConfig connectionConfig = new DefaultConnectionConfig();
+        if(StringUtils.hasText(element.getAttribute("max-logins"))) {
+            connectionConfig.setMaxLogins(SpringUtil.parseInt(element, "max-logins"));
+        }
+        if(StringUtils.hasText(element.getAttribute("max-anon-logins"))) {
+            connectionConfig.setMaxAnonymousLogins(SpringUtil.parseInt(element, "max-anon-logins"));
+        }
+        if(StringUtils.hasText(element.getAttribute("anon-enabled"))) {
+            connectionConfig.setAnonymousLoginEnabled(SpringUtil.parseBoolean(element, "anon-enabled", true));
+        }
+        if(StringUtils.hasText(element.getAttribute("max-login-failures"))) {
+            connectionConfig.setMaxLoginFailures(SpringUtil.parseInt(element, "max-login-failures"));
+        }
+        if(StringUtils.hasText(element.getAttribute("login-failure-delay"))) {
+            connectionConfig.setLoginFailureDelay(SpringUtil.parseInt(element, "login-failure-delay"));
+        }
+        
+        builder.addPropertyValue("connectionConfig", connectionConfig);
+
     }
 
     /**

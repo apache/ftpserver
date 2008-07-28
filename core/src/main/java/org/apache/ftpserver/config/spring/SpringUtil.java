@@ -138,6 +138,17 @@ public class SpringUtil {
     
     /**
      * Parses a attribute value into an integer. 
+     * @param parent The element
+     * @param attrName The attribute name
+     * @return The value
+     * @throws NumberFormatException If the attribute does not contain a number
+     */
+    public static int parseInt(Element parent, String attrName) {
+        return Integer.parseInt(parent.getAttribute(attrName));
+    }
+    
+    /**
+     * Parses a attribute value into an integer. 
      * If the attribute is missing or has no content, a default value is returned
      * @param parent The element
      * @param attrName The attribute name

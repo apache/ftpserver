@@ -52,7 +52,11 @@
 				<xs:element minOccurs="0" ref="messages"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID"/>
-
+            <xs:attribute name="max-logins" type="xs:int"/>
+            <xs:attribute name="max-anon-logins" type="xs:int"/>
+            <xs:attribute name="anon-enabled" type="xs:boolean"/>
+            <xs:attribute name="max-login-failures" type="xs:int"/>
+            <xs:attribute name="login-failure-delay" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>
 

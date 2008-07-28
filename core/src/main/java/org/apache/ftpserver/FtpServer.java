@@ -283,4 +283,20 @@ public class FtpServer {
         checkAndGetContext().setMessageResource(messageResource);
     }
 
+    /**
+     * Retrieve the connection configuration this server
+     * @return The {@link MessageResource}
+     */
+    public ConnectionConfig getConnectionConfig() {
+        return getServerContext().getConnectionConfig();
+    }
+
+    /**
+     * Set the message resource to be used with this server
+     * @param messageResource The {@link MessageResource}
+     * @throws IllegalStateException If a custom server context has been set
+     */
+    public void setConnectionConfig(ConnectionConfig connectionConfig) {
+        checkAndGetContext().setConnectionConfig(connectionConfig);
+    }
 }
