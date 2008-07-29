@@ -32,6 +32,7 @@ import org.apache.ftpserver.interfaces.Command;
 public class DefaultCommandFactoryTest extends TestCase {
 
 	public void testReturnFromDefaultUpper() {
+	    fail("Failing a test to test the Hudson build");
 		DefaultCommandFactory factory = new DefaultCommandFactory();
 		Command command = factory.getCommand("STOR");
 		
