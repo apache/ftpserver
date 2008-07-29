@@ -411,7 +411,7 @@
     </profile>
 
     <profile>
-      <id>relase</id>
+      <id>release</id>
       <build>
         <plugins>
           <plugin>
