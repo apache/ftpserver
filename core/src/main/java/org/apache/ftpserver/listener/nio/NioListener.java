@@ -139,9 +139,9 @@ public class NioListener extends AbstractListener {
         acceptor.getFilterChain().addLast(
         		"codec",
         		new ProtocolCodecFilter( new FtpServerProtocolCodecFactory() ) );
+        acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
         acceptor.getFilterChain().addLast("logger", new FtpLoggingFilter() );
         
-        acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
 
         
         if(isImplicitSsl()) {
