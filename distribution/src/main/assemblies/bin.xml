@@ -28,6 +28,7 @@
         <fileSet>
             <includes>
                 <include>README.txt</include>
+                <include>LICENSE.*.txt</include>
                 <include>common/**</include>
             </includes>
         </fileSet>
