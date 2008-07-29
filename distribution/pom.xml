@@ -38,46 +38,6 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <copy todir="${project.build.outputDirectory}/META-INF">
-                  <fileset dir="${basedir}">
-                    <include name="LICENSE.txt"></include>
-                    <include name="NOTICE.txt"></include>
-                    <include name="DISCLAIMER.txt"></include>
-                  </fileset>
-                </copy>
-              </tasks>
-            </configuration>
-          </execution>
-          <execution>
-            <id>download-site</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <echo>Downloading Manual</echo>
-                <mkdir dir="${project.build.directory}/site"></mkdir>
-                <!--  
-                <get src="http://mina.apache.org/ftpserver/ftpserver.zip" dest="${project.build.directory}/${pom.artifactId}-site.zip"></get>
-                <unzip src="${project.build.directory}/${pom.artifactId}-site.zip" dest="${project.build.directory}/site"></unzip>
-                 -->
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.2-beta-2</version>
         <executions>
@@ -146,16 +106,38 @@
   
   <profiles>
     <profile>
-      <id>rc</id>
+      <id>release</id>
       <build>
         <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>download-docs</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>Downloading Manual</echo>
+                <mkdir dir="${project.build.directory}/site"></mkdir>
+                <get src="http://mina.apache.org/ftpserver/ftpserver.zip" dest="${project.build.directory}/${pom.artifactId}-docs.zip"></get>
+                <unzip src="${project.build.directory}/${pom.artifactId}-docs.zip" dest="${project.build.directory}/docs"></unzip>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
           <plugin>
             <artifactId>maven-dependency-plugin</artifactId>
             <version>2.0</version>
             <executions>
               <execution>
                 <id>unpack-ftplet-javadoc</id>
-                <phase>package</phase>
+                <phase>process-resources</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
@@ -173,7 +155,7 @@
               </execution>
               <execution>
                 <id>unpack-core-javadoc</id>
-                <phase>package</phase>
+                <phase>process-resources</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
@@ -191,12 +173,12 @@
               </execution>
               <execution>
                 <id>unpack-deprecated-javadoc</id>
-                <phase>package</phase>
+                <phase>process-resources</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.directory}/api/ftpserver-deprecated</outputDirectory>
+                  <outputDirectory>${project.build.directory}/api/deprecated</outputDirectory>
                   <artifactItems>
                     <artifactItem>
                       <groupId>${pom.groupId}</groupId>

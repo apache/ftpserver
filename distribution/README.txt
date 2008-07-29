@@ -1,5 +1,5 @@
-The Apache Incubator FtpServer project team is proud to announce the release of 
-Apache Incubator FtpServer, version 1.0-M1-incubator. 
+The Apache FtpServer project team is proud to announce the release of 
+Apache FtpServer, version 1.0-M2 
 
 The Apache FTP Server is a 100% pure Java FTP server. It's designed to be 
 a complete and portable FTP server engine solution based on currently 
@@ -10,14 +10,14 @@ asyncronous IO library.
 
 It is also a FTP application platform. We have developed a Java API to let 
 you write Java code to process FTP event notifications that we call the Ftplet 
-API. Apache FTP Server provides an implementation of FTP server to support 
+API. Apache FtpServer provides an implementation of FTP server to support 
 this API. 
 
-1.0-M1-incubator
+1.0-M2
 --------------------------------
-This is the very first release of Apache Incubator FtpServer.
+This is the very first release of Apache FtpServer.
 
 
 The Apache Incubator FtpServer project team is always open for your feedback.  
 Please let us know what you think about FtpServer via our mailing
-list <http://incubator.apache.org/ftpserver/mailing-lists.html>
+list <http://mina.apache.org/ftpserver/mailing-lists.html>

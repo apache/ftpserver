@@ -411,7 +411,7 @@
     </profile>
 
     <profile>
-      <id>rc</id>
+      <id>relase</id>
       <build>
         <plugins>
           <plugin>
@@ -457,13 +457,6 @@
           <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/</url>
         </repository>
       </distributionManagement>
-    </profile>
-
-    <profile>
-      <id>ssl-tests</id>
-      <modules>
-        <module>ssl-tests</module>
-      </modules>
     </profile>
   </profiles>
 
