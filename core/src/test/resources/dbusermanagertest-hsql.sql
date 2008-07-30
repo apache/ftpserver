@@ -16,7 +16,7 @@
 -- under the License.
 
 CREATE TABLE FTP_USER (      
-   uid VARCHAR(64) NOT NULL PRIMARY KEY,       
+   userid VARCHAR(64) NOT NULL PRIMARY KEY,       
    userpassword VARCHAR(64),      
    homedirectory VARCHAR(128) NOT NULL,             
    enableflag BOOLEAN DEFAULT TRUE,    
@@ -28,8 +28,8 @@ CREATE TABLE FTP_USER (
    maxloginperip INT DEFAULT 0
 );
 
-INSERT INTO FTP_USER (uid, userpassword, homedirectory) VALUES ('user1', 'pw1', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user1', 'pw1', 'home');
 INSERT INTO FTP_USER VALUES ('user2', 'pw2', 'home', false, true, 2, 5, 1, 3, 4);
-INSERT INTO FTP_USER (uid, userpassword, homedirectory) VALUES ('user3', '', 'home');
-INSERT INTO FTP_USER (uid, userpassword, homedirectory) VALUES ('admin', 'admin', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user3', '', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('admin', 'admin', 'home');
 

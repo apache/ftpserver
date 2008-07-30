@@ -51,13 +51,13 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
         DbUserManager manager = new DbUserManager();
         
         manager.setDataSource(ds);
-        manager.setSqlUserInsert("INSERT INTO FTP_USER (uid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate, maxloginnumber, maxloginperip) VALUES ('{uid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");
-        manager.setSqlUserUpdate("UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate},maxloginnumber={maxloginnumber}, maxloginperip={maxloginperip} WHERE uid='{uid}'");
-        manager.setSqlUserDelete("DELETE FROM FTP_USER WHERE uid = '{uid}'");
-        manager.setSqlUserSelect("SELECT * FROM FTP_USER WHERE uid = '{uid}'");
-        manager.setSqlUserSelectAll("SELECT uid FROM FTP_USER ORDER BY uid");
-        manager.setSqlUserAuthenticate("SELECT uid FROM FTP_USER WHERE uid='{uid}' AND userpassword='{userpassword}'");
-        manager.setSqlUserAdmin("SELECT uid FROM FTP_USER WHERE uid='{uid}' AND uid='admin'");
+        manager.setSqlUserInsert("INSERT INTO FTP_USER (userid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate, maxloginnumber, maxloginperip) VALUES ('{userid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");
+        manager.setSqlUserUpdate("UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate},maxloginnumber={maxloginnumber}, maxloginperip={maxloginperip} WHERE userid='{userid}'");
+        manager.setSqlUserDelete("DELETE FROM FTP_USER WHERE userid = '{userid}'");
+        manager.setSqlUserSelect("SELECT * FROM FTP_USER WHERE userid = '{userid}'");
+        manager.setSqlUserSelectAll("SELECT userid FROM FTP_USER ORDER BY userid");
+        manager.setSqlUserAuthenticate("SELECT userid FROM FTP_USER WHERE userid='{userid}' AND userpassword='{userpassword}'");
+        manager.setSqlUserAdmin("SELECT userid FROM FTP_USER WHERE userid='{userid}' AND userid='admin'");
         
         return manager;
         

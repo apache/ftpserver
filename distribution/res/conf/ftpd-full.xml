@@ -52,24 +52,24 @@
 		<data-source>
 			<beans:bean class="some.datasoure.class" />
 		</data-source>
-		<insert-user>INSERT INTO FTP_USER (uid, userpassword,
+		<insert-user>INSERT INTO FTP_USER (userid, userpassword,
 			homedirectory, enableflag, writepermission, idletime, uploadrate,
-			downloadrate) VALUES ('{uid}', '{userpassword}', '{homedirectory}',
+			downloadrate) VALUES ('{userid}', '{userpassword}', '{homedirectory}',
 			'{enableflag}', '{writepermission}', {idletime}, {uploadrate},
 			{downloadrate})</insert-user>
 		<update-user>UPDATE FTP_USER SET
 			userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate}
-			WHERE uid='{uid}'</update-user>
-		<delete-user>DELETE FROM FTP_USER WHERE uid = '{uid}'
+			WHERE userid='{userid}'</update-user>
+		<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
 		</delete-user>
-		<select-user>SELECT uid, userpassword, homedirectory,
+		<select-user>SELECT userid, userpassword, homedirectory,
 			enableflag, writepermission, idletime, uploadrate, downloadrate FROM
-			FTP_USER WHERE uid = '{uid}'</select-user>
-		<select-all-users>SELECT uid FROM FTP_USER ORDER BY uid
+			FTP_USER WHERE userid = '{userid}'</select-user>
+		<select-all-users>SELECT userid FROM FTP_USER ORDER BY userid
 		</select-all-users>
-		<is-admin>SELECT uid FROM FTP_USER WHERE uid='{uid}' AND
-			uid='admin'</is-admin>
-		<authenticate>SELECT uid from FTP_USER WHERE uid='{uid}' AND
+		<is-admin>SELECT userid FROM FTP_USER WHERE userid='{userid}' AND
+			userid='admin'</is-admin>
+		<authenticate>SELECT userid from FTP_USER WHERE userid='{userid}' AND
 			userpassword='{userpassword}'</authenticate>
 	</db-user-manager> -->
 	<!-- The file system -->

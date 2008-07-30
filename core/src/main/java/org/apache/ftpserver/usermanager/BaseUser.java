@@ -31,7 +31,7 @@ import org.apache.ftpserver.ftplet.User;
  * Generic user class. 
  * The user attributes are:
  * <ul>
- *   <li>uid</li>
+ *   <li>userid</li>
  *   <li>userpassword</li>
  *   <li>enableflag</li>
  *   <li>homedirectory</li>
