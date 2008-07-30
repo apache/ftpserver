@@ -104,7 +104,7 @@ public class DbUserManager extends AbstractUserManager {
      * @return The SQL statement
      */
     public String getSqlUserDelete() {
-        return insertUserStmt;
+        return deleteUserStmt;
     }
     
     /**
@@ -168,7 +168,7 @@ public class DbUserManager extends AbstractUserManager {
      * @return The SQL statement
      */
     public String getSqlUserAuthenticate() {
-        return selectAllStmt;
+        return authenticateStmt;
     }
     
     /**
@@ -184,7 +184,7 @@ public class DbUserManager extends AbstractUserManager {
      * @return The SQL statement
      */
     public String getSqlUserAdmin() {
-        return selectAllStmt;
+        return isAdminStmt;
     }
     
     /**

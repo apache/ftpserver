@@ -179,19 +179,13 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="data-source" type="spring-bean-or-ref"/>
-				<xs:element name="statements">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="insert-user" type="xs:string"/>
-							<xs:element name="update-user" type="xs:string"/>
-							<xs:element name="delete-user" type="xs:string"/>
-							<xs:element name="select-user" type="xs:string"/>
-							<xs:element name="select-all-users" type="xs:string"/>
-							<xs:element name="is-admin" type="xs:string"/>
-							<xs:element name="authenticate" type="xs:string"/>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
+				<xs:element name="insert-user" type="xs:string"/>
+				<xs:element name="update-user" type="xs:string"/>
+				<xs:element name="delete-user" type="xs:string"/>
+				<xs:element name="select-user" type="xs:string"/>
+				<xs:element name="select-all-users" type="xs:string"/>
+				<xs:element name="is-admin" type="xs:string"/>
+				<xs:element name="authenticate" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
