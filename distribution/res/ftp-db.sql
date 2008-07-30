@@ -16,7 +16,7 @@ managermanager-- Licensed to the Apache Software Foundation (ASF) under one
 -- under the License.
 
 CREATE TABLE FTP_USER (      
-   uid VARCHAR(64) NOT NULL PRIMARY KEY,       
+   userid VARCHAR(64) NOT NULL PRIMARY KEY,       
    userpassword VARCHAR(64),      
    homedirectory VARCHAR(128) NOT NULL,             
    enableflag BOOLEAN DEFAULT TRUE,    
