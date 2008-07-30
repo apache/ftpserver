@@ -105,5 +105,5 @@ interface DataConnectionConfiguration {
     /**
      * Get SSL configuration for this data connection.
      */
-    SslConfiguration getSSLConfiguration();
+    SslConfiguration getSslConfiguration();
 }

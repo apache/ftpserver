@@ -60,7 +60,7 @@ class PROT extends AbstractCommand {
             session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         }
         else if(arg.equals("P")) {
-            if(session.getListener().getDataConnectionConfiguration().getSSLConfiguration() == null) {
+            if(session.getListener().getDataConnectionConfiguration().getSslConfiguration() == null) {
                 session.write(FtpReplyUtil.translate(session, request, context, 431, "PROT", null));
             }
             else {

@@ -20,7 +20,11 @@
 	   "
 	id="myServer">
 	<listeners>
-		<nio-listener name="default" port="2121" />
+		<nio-listener name="default" port="2121">
+		    <ssl>
+                <keystore file="./res/ftpserver.jks" password="password" />
+            </ssl>
+		</nio-listener>
 	</listeners>
 	<file-user-manager file="./res/conf/users.properties" />
 </server>

@@ -169,7 +169,11 @@ public class SpringUtil {
      * @return The attribute string value
      */
     public static String parseString(Element parent, String attrName) {
-        return parent.getAttribute(attrName);
+        if(parent.hasAttribute(attrName)) {
+            return parent.getAttribute(attrName);
+        } else {
+            return null;
+        }
     }
     
     /**

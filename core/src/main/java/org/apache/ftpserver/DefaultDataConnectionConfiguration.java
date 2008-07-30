@@ -243,7 +243,7 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
     /**
      * Get SSL component.
      */
-    public SslConfiguration getSSLConfiguration() {
+    public SslConfiguration getSslConfiguration() {
         return ssl;
     }
 }

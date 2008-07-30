@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.config.spring;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.command.HELP;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
+import org.apache.ftpserver.ssl.DefaultSslConfiguration;
+import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -64,6 +67,16 @@ public class SpringConfigTest extends TestCase {
         assertEquals(new Subnet(InetAddress.getByName("1.2.3.0"), 16), subnets.get(0));
         assertEquals(new Subnet(InetAddress.getByName("1.2.4.0"), 16), subnets.get(1));
         assertEquals(new Subnet(InetAddress.getByName("1.2.3.4"), 32), subnets.get(2));
+        
+        DefaultSslConfiguration ssl = (DefaultSslConfiguration) listener.getSslConfiguration();
+        assertEquals(new File("/tmp/tmp.jks"), ssl.getKeystoreFile());
+        assertEquals("password", ssl.getKeystorePassword());
+
+        // make sure the data connection got the same config
+        ssl = (DefaultSslConfiguration) listener.getDataConnectionConfiguration().getSslConfiguration();
+        assertEquals(new File("/tmp/tmp.jks"), ssl.getKeystoreFile());
+        assertEquals("password", ssl.getKeystorePassword());
+
         
         listener = listeners.get("listener1");
         assertNotNull(listener);

@@ -32,6 +32,8 @@ import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.DefaultSslConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -44,6 +46,9 @@ import org.w3c.dom.Element;
  */
 public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
+    private final Logger LOG = LoggerFactory.getLogger(ListenerBeanDefinitionParser.class);
+
+    
     /**
      * {@inheritDoc}
      */
@@ -105,10 +110,8 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         }
         
         Element dataConElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "data-connection");
-        if(dataConElm != null) {
-            DataConnectionConfiguration dc = parseDataConnection(dataConElm);
-            builder.addPropertyValue("dataConnectionConfiguration", dc);
-        }
+        DataConnectionConfiguration dc = parseDataConnection(dataConElm, ssl);
+        builder.addPropertyValue("dataConnectionConfiguration", dc);
         
         Element blacklistElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "blacklist");
         if(blacklistElm != null && StringUtils.hasText(blacklistElm.getTextContent())) {
@@ -208,48 +211,66 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     
     }
     
-    private DataConnectionConfiguration parseDataConnection(Element element) {
+    private DataConnectionConfiguration parseDataConnection(Element element, SslConfiguration listenerSslConfiguration) {
         DefaultDataConnectionConfiguration dc = new DefaultDataConnectionConfiguration();
         
-        SslConfiguration ssl = parseSsl(element);
-        if(ssl != null) {
-            dc.setSslConfiguration(ssl);
-        }
-        
-        Element activeElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "active");
-        if(activeElm != null) {
-            Active active = new Active();
-            active.setEnable(SpringUtil.parseBoolean(activeElm, "enabled", true));
-            active.setIpCheck(SpringUtil.parseBoolean(activeElm, "ip-check", false));
-            active.setLocalPort(SpringUtil.parseInt(activeElm, "local-port", 0));
-            
-            InetAddress localAddress = SpringUtil.parseInetAddress(activeElm, "local-address");
-            if(localAddress != null) {
-                active.setLocalAddress(localAddress);
+        if(element != null) {
+            // data con config element available
+            SslConfiguration ssl = parseSsl(element);
+            if(ssl != null) {
+                LOG.debug("SSL configuration found for the data connection");
+                dc.setSslConfiguration(ssl);
+            } else {
+                // go look for the parent element SSL config
+                // find the listener element
+                if(listenerSslConfiguration != null) {
+                    LOG.debug("SSL configuration found for the listener, falling back for that for the data connection");
+                    dc.setSslConfiguration(listenerSslConfiguration);
+                }
             }
             
-            dc.setActive(active);
-        }
-        
-        Element passiveElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "passive");
-        if(passiveElm != null) {
-            Passive passive = new Passive();
+            Element activeElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "active");
+            if(activeElm != null) {
+                Active active = new Active();
+                active.setEnable(SpringUtil.parseBoolean(activeElm, "enabled", true));
+                active.setIpCheck(SpringUtil.parseBoolean(activeElm, "ip-check", false));
+                active.setLocalPort(SpringUtil.parseInt(activeElm, "local-port", 0));
+                
+                InetAddress localAddress = SpringUtil.parseInetAddress(activeElm, "local-address");
+                if(localAddress != null) {
+                    active.setLocalAddress(localAddress);
+                }
+                
+                dc.setActive(active);
+            }
+            
+            Element passiveElm = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "passive");
+            if(passiveElm != null) {
+                Passive passive = new Passive();
+                
+                InetAddress address = SpringUtil.parseInetAddress(passiveElm, "address");
+                if(address != null) {
+                    passive.setAddress(address);
+                }
+                
+                InetAddress externalAddress = SpringUtil.parseInetAddress(passiveElm, "external-address");
+                if(externalAddress != null) {
+                    passive.setExternalAddress(externalAddress);
+                }
+                
+                String ports = SpringUtil.parseString(passiveElm, "ports");
+                if(ports != null) {
+                    passive.setPorts(ports);
+                }
+                dc.setPassive(passive);
+            }
+        } else {
+            // no data conn config element, do we still have SSL config from the parent?
+            if(listenerSslConfiguration != null) {
+                LOG.debug("SSL configuration found for the listener, falling back for that for the data connection");
+                dc.setSslConfiguration(listenerSslConfiguration);
+            }
 
-            InetAddress address = SpringUtil.parseInetAddress(passiveElm, "address");
-            if(address != null) {
-                passive.setAddress(address);
-            }
-
-            InetAddress externalAddress = SpringUtil.parseInetAddress(passiveElm, "external-address");
-            if(externalAddress != null) {
-                passive.setExternalAddress(externalAddress);
-            }
-            
-            String ports = SpringUtil.parseString(passiveElm, "ports");
-            if(ports != null) {
-                passive.setPorts(ports);
-            }
-            dc.setPassive(passive);
         }
 
         return dc;

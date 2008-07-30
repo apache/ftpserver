@@ -275,10 +275,12 @@ public class DefaultSslConfiguration implements SslConfiguration {
         
         try {
             // initialize keystore
+            LOG.debug("Loading key store from \"{}\", using the key store type \"{}\"", keystoreFile.getAbsolutePath(), keystoreType);
             KeyStore keyStore = loadStore(keystoreFile, keystoreType, keystorePass);
             
             KeyStore trustStore;
             if(trustStoreFile != null) {
+                LOG.debug("Loading trust store from \"{}\", using the key store type \"{}\"", trustStoreFile.getAbsolutePath(), trustStoreType);
                 trustStore = loadStore(trustStoreFile, trustStoreType, trustStorePass);
             } else {
                 trustStore = keyStore;

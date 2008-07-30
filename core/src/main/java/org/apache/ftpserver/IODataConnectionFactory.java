@@ -159,7 +159,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
             if(secure) {
                 LOG.debug("Opening SSL passive data connection on address \"{}\" and port {}", address, passivePort);
-                SslConfiguration ssl = dataCfg.getSSLConfiguration();
+                SslConfiguration ssl = dataCfg.getSslConfiguration();
                 if(ssl == null) {
                     throw new DataConnectionException("Data connection SSL required but not configured.");
                 }
@@ -249,7 +249,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             if(!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if(secure) {
-                    SslConfiguration ssl = dataConfig.getSSLConfiguration();
+                    SslConfiguration ssl = dataConfig.getSslConfiguration();
                     if(ssl == null) {
                         throw new FtpException("Data connection SSL not configured");
                     }
