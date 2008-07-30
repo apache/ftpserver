@@ -73,7 +73,7 @@ public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitio
             builder.addPropertyValue("sqlUserDelete",       getSql(element, "delete-user"));
             builder.addPropertyValue("sqlUserSelect",       getSql(element, "select-user"));
             builder.addPropertyValue("sqlUserSelectAll",    getSql(element, "select-all-users"));
-            builder.addPropertyValue("SqlUserAdmin",        getSql(element, "is-admin"));
+            builder.addPropertyValue("sqlUserAdmin",        getSql(element, "is-admin"));
             builder.addPropertyValue("sqlUserAuthenticate", getSql(element, "authenticate"));
             
             builder.setInitMethodName("configure");
