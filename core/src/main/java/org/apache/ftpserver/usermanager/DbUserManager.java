@@ -462,6 +462,7 @@ public class DbUserManager extends AbstractUserManager {
      * Get the user object. Fetch the row from the table.
      */
     public synchronized User getUserByName(String name) throws FtpException {
+        lazyInit();
         
         Statement stmt = null;
         ResultSet rs = null;
