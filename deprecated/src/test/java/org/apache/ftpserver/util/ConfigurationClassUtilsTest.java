@@ -326,5 +326,66 @@ public class ConfigurationClassUtilsTest extends TestCase {
             this.myBean = myBean;
         }
     }
+ 
+    public void testImplementsInterface() {
+        assertTrue(ClassUtils.extendsClass(MySubBean.class, MyBean.class.getName()));
+        assertFalse(ClassUtils.extendsClass(MySubBean.class, "foo"));
+    }
     
+    public void testNormalizePropertyName() {
+        assertEquals("foo", ConfigurationClassUtils.normalizePropertyName("foo"));
+        assertEquals("fooBar", ConfigurationClassUtils.normalizePropertyName("fooBar"));
+        assertEquals("fooBar", ConfigurationClassUtils.normalizePropertyName("foo-bar"));
+    }
+
+    public void testSetProperty() {
+        MyBean bean = new MyBean();
+        
+        ConfigurationClassUtils.setProperty(bean, "foo", "flopp");
+        assertEquals("flopp", bean.getFoo());
+
+        ConfigurationClassUtils.setProperty(bean, "foo", "flipp");
+        assertEquals("flipp", bean.getFoo());
+        
+        ConfigurationClassUtils.setProperty(bean, "bar", "123");
+
+        assertEquals(123, bean.getBar());
+    }
+    
+    public void testSetCamelCasesProperty() {
+        MyBean bean = new MyBean();
+        
+        ConfigurationClassUtils.setProperty(bean, "camelCasedProp", "flopp");
+        assertEquals("flopp", bean.getCamelCasedProp());
+    }
+
+    public void testSetDashedProperty() {
+        MyBean bean = new MyBean();
+        
+        ConfigurationClassUtils.setProperty(bean, "camel-cased-prop", "flopp");
+        assertEquals("flopp", bean.getCamelCasedProp());
+    }
+
+    public void testSetPropertyWrongCast() {
+        MyBean bean = new MyBean();
+        
+        try{
+            ConfigurationClassUtils.setProperty(bean, "bar", "flopp");
+            fail("Must throw exception");
+        } catch(RuntimeException e) {
+            // ok
+        }
+    }
+
+    public void testSetPropertyUnknownProperty() {
+        MyBean bean = new MyBean();
+        
+        try{
+            ConfigurationClassUtils.setProperty(bean, "dummy", "flopp");
+            fail("Must throw exception");
+        } catch(RuntimeException e) {
+            // ok
+        }
+    }
+ 
 }

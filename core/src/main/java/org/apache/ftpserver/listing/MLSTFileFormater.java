@@ -37,7 +37,7 @@ public class MLSTFileFormater implements FileFormater {
      */
     public MLSTFileFormater(String[] selectedTypes) {
         if(selectedTypes != null) {
-            this.selectedTypes = selectedTypes;
+            this.selectedTypes = selectedTypes.clone();
         }
     }
     

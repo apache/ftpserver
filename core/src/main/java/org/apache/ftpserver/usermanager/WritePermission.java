@@ -40,14 +40,14 @@ public class WritePermission implements Authority {
      * Construct a write permission for a file or directory relative to the user home directory
      * @param permissionRoot The file or directory
      */
-    public WritePermission(String permissionRoot) {
+    public WritePermission(final String permissionRoot) {
         this.permissionRoot = permissionRoot;
     }
     
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
-    public AuthorizationRequest authorize(AuthorizationRequest request) {
+    public AuthorizationRequest authorize(final AuthorizationRequest request) {
         if(request instanceof WriteRequest) {
             WriteRequest writeRequest = (WriteRequest) request;
             
@@ -66,7 +66,7 @@ public class WritePermission implements Authority {
     /**
      * @see Authority#canAuthorize(AuthorizationRequest)
      */
-    public boolean canAuthorize(AuthorizationRequest request) {
+    public boolean canAuthorize(final AuthorizationRequest request) {
         return request instanceof WriteRequest;
     }
    

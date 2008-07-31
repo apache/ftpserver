@@ -50,18 +50,18 @@ public class PassivePorts {
         List<Integer> passivePortsList = new ArrayList<Integer>();
         
         boolean inRange = false;
-        Integer lastPort = new Integer(1);
+        Integer lastPort = 1;
         StringTokenizer st = new StringTokenizer(portsString, ",;-", true);
         while(st.hasMoreTokens()) {
             String token = st.nextToken().trim();
 
             if(",".equals(token) || ";".equals(token)) {
                 if(inRange) {
-                    fillRange(passivePortsList, lastPort, new Integer(MAX_PORT));
+                    fillRange(passivePortsList, lastPort, MAX_PORT);
                 }
                 
                 // reset state
-                lastPort = new Integer(1);
+                lastPort = 1;
                 inRange = false;
             } else if("-".equals(token)) {
                 inRange = true;
@@ -86,7 +86,7 @@ public class PassivePorts {
         }
         
         if(inRange) {
-            fillRange(passivePortsList, lastPort, new Integer(MAX_PORT));
+            fillRange(passivePortsList, lastPort, MAX_PORT);
         }
         
         int[] passivePorts = new int[passivePortsList.size()];
@@ -139,7 +139,7 @@ public class PassivePorts {
     }
 
     public PassivePorts(int[] passivePorts) {
-        this.passivePorts = passivePorts;
+        this.passivePorts = passivePorts.clone();
         
         reservedPorts = new boolean[passivePorts.length];
     }

@@ -264,7 +264,7 @@ public class NioListener extends AbstractListener {
 	 * Retrives the {@link InetAddress} for which this listener blocks connections
 	 * @return The list of {@link InetAddress}es
 	 */
-    public List<InetAddress> getBlockedAddresses() {
+    public synchronized List<InetAddress> getBlockedAddresses() {
         return blockedAddresses;
     }
 
@@ -281,7 +281,7 @@ public class NioListener extends AbstractListener {
      * Retrives the {@link Subnet}s for which this acceptor blocks connections
      * @return The list of {@link Subnet}s
      */
-    public List<Subnet> getBlockedSubnets() {
+    public synchronized List<Subnet> getBlockedSubnets() {
         return blockedSubnets;
     }
 

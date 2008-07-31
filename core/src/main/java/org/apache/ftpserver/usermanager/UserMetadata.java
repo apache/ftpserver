@@ -37,7 +37,7 @@ public class UserMetadata {
      *   is available (e.g. SSL not used)
      */
     public Certificate[] getCertificateChain() {
-        return certificateChain;
+        return certificateChain.clone();
     }
 
     /**
@@ -45,8 +45,8 @@ public class UserMetadata {
      * @param certificateChain
      *            The certificate chain to set
      */
-    public void setCertificateChain(Certificate[] certificateChain) {
-        this.certificateChain = certificateChain;
+    public void setCertificateChain(final Certificate[] certificateChain) {
+        this.certificateChain = certificateChain.clone();
     }
 
     /**
@@ -62,7 +62,7 @@ public class UserMetadata {
      * @param inetAddress
      *            The client IP adress
      */
-    public void setInetAddress(InetAddress inetAddress) {
+    public void setInetAddress(final InetAddress inetAddress) {
         this.inetAddress = inetAddress;
     }
 

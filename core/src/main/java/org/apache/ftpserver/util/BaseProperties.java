@@ -52,14 +52,14 @@ class BaseProperties extends Properties {
     /**
      * Load existing property.
      */
-    public BaseProperties(Properties prop)  {
+    public BaseProperties(final Properties prop)  {
         super(prop);
     }
     
     /**
      * Load properties from file
      */
-    public BaseProperties(File fl) throws IOException {
+    public BaseProperties(final File fl) throws IOException {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(fl);
@@ -72,7 +72,7 @@ class BaseProperties extends Properties {
     /**
      * Load properties from <code>InputStream</code>
      */
-    public BaseProperties(InputStream is) throws IOException  {
+    public BaseProperties(final InputStream is) throws IOException  {
         load(is);
     }
     

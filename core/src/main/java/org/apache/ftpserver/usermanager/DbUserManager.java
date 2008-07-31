@@ -399,18 +399,18 @@ public class DbUserManager extends AbstractUserManager {
             map.put( ATTR_ENABLE, String.valueOf(user.getEnabled()) );
             
             map.put( ATTR_WRITE_PERM, String.valueOf(user.authorize(new WriteRequest()) != null) );
-            map.put( ATTR_MAX_IDLE_TIME, new Integer(user.getMaxIdleTime()) );
+            map.put( ATTR_MAX_IDLE_TIME, user.getMaxIdleTime() );
             
             
             TransferRateRequest transferRateRequest = new TransferRateRequest();
             transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
             
             if(transferRateRequest != null) {
-                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(transferRateRequest.getMaxUploadRate()) );
-                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(transferRateRequest.getMaxDownloadRate()) ); 
+                map.put( ATTR_MAX_UPLOAD_RATE, transferRateRequest.getMaxUploadRate() );
+                map.put( ATTR_MAX_DOWNLOAD_RATE, transferRateRequest.getMaxDownloadRate() ); 
             } else {
-                map.put( ATTR_MAX_UPLOAD_RATE, new Integer(0));
-                map.put( ATTR_MAX_DOWNLOAD_RATE, new Integer(0) ); 
+                map.put( ATTR_MAX_UPLOAD_RATE, 0);
+                map.put( ATTR_MAX_DOWNLOAD_RATE, 0 ); 
             }
 
             // request that always will succeed
@@ -419,12 +419,12 @@ public class DbUserManager extends AbstractUserManager {
             
             if(concurrentLoginRequest != null) {
                 map.put( ATTR_MAX_LOGIN_NUMBER, 
-                        new Integer(concurrentLoginRequest.getMaxConcurrentLogins()));
+                        concurrentLoginRequest.getMaxConcurrentLogins());
                 map.put( ATTR_MAX_LOGIN_PER_IP, 
-                        new Integer(concurrentLoginRequest.getMaxConcurrentLoginsPerIP()));
+                        concurrentLoginRequest.getMaxConcurrentLoginsPerIP());
             } else {
-                map.put( ATTR_MAX_LOGIN_NUMBER, new Integer(0));
-                map.put( ATTR_MAX_LOGIN_PER_IP, new Integer(0));
+                map.put( ATTR_MAX_LOGIN_NUMBER, 0);
+                map.put( ATTR_MAX_LOGIN_PER_IP, 0);
             }
             
 

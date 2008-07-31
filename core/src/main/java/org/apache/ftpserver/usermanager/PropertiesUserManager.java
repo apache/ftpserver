@@ -260,7 +260,7 @@ class PropertiesUserManager extends AbstractUserManager {
         }
         Iterator<String> remKeysIt = remKeys.iterator();
         while (remKeysIt.hasNext()) {
-            userDataProp.remove(remKeysIt.next().toString());
+            userDataProp.remove(remKeysIt.next());
         }
         
         saveUserData();

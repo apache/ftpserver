@@ -262,6 +262,7 @@ public class IoUtils {
 
 	private final static void deleteFile(File file) throws IOException {
 		if (!file.delete()) {
+		    // hack around bug where files will sometimes not be deleted on Windows
 			if (OS.isFamilyWindows()) {
 				System.gc();
 			}

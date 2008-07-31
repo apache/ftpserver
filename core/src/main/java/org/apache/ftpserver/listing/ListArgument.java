@@ -38,7 +38,7 @@ public class ListArgument {
         if(options == null) {
             this.options = new char[0];
         } else {
-            this.options = options;
+            this.options = options.clone();
         }
     }
     
@@ -47,7 +47,7 @@ public class ListArgument {
      * @return All options
      */
     public char[] getOptions() {
-        return options;
+        return options.clone();
     }
     
     /**

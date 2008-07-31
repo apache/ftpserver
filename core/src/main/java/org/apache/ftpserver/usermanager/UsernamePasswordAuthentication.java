@@ -37,7 +37,7 @@ class UsernamePasswordAuthentication implements Authentication {
      * @param username The user name
      * @param password The password, can be null
      */
-    public UsernamePasswordAuthentication(String username, String password) {
+    public UsernamePasswordAuthentication(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -48,7 +48,7 @@ class UsernamePasswordAuthentication implements Authentication {
      * @param password The password, can be null
      * @param userMetadata The user metadata
      */
-    public UsernamePasswordAuthentication(String username, String password, UserMetadata userMetadata) {
+    public UsernamePasswordAuthentication(final String username, final String password, final UserMetadata userMetadata) {
         this(username, password);
         this.userMetadata = userMetadata;
     }
@@ -76,7 +76,4 @@ class UsernamePasswordAuthentication implements Authentication {
     public UserMetadata getUserMetadata() {
         return userMetadata;
     }
-    
-    
-    
 }

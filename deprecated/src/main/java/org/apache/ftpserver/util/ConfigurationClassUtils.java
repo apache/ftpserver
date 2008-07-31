@@ -19,6 +19,9 @@
 
 package org.apache.ftpserver.util;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.lang.reflect.Array;
@@ -32,10 +35,13 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.Configuration;
@@ -44,6 +50,123 @@ import org.apache.ftpserver.ftplet.Configuration;
 
 public class ConfigurationClassUtils {
  
+    
+    public static void setProperty(Object target, String propertyName, String propertyValue) {
+        PropertyDescriptor setter = getDescriptor(target.getClass(), propertyName);
+
+        setProperty(target, setter, propertyValue);
+    }
+
+    public static void setProperty(Object target, String propertyName, Object propertyValue) {
+        PropertyDescriptor setter = getDescriptor(target.getClass(), propertyName);
+        
+        if(setter == null) {
+            return;
+        }
+        
+        setProperty(target, setter, propertyValue);
+    }
+    
+    static void setProperty(Object target, PropertyDescriptor setter, Object castValue) {
+        if(setter != null) {
+            Method setterMethod = setter.getWriteMethod();
+        
+            if(setterMethod != null) {
+                try {
+                    setterMethod.invoke(target, new Object[]{castValue});
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed invoking setter " + setter.getDisplayName() + " on " + target, e);
+                }
+            } else {
+                throw new RuntimeException("Property \"" + setter.getDisplayName() + "\" is not settable on class "+ target.getClass());
+            }
+        } else {
+            throw new RuntimeException("Property is not settable on class "+ target.getClass());
+        }
+    }
+    
+    private static void setProperty(Object target, PropertyDescriptor setter, String propertyValue) {
+        Object castValue = cast(setter.getPropertyType(), propertyValue);
+        
+        setProperty(target, setter, castValue);
+    }
+    
+    public static String normalizePropertyName(String propertyName){
+        StringTokenizer st = new StringTokenizer(propertyName, "-");
+        
+        if(st.countTokens() > 1) {
+            StringBuffer sb = new StringBuffer();
+            
+            // add first unchanged
+            sb.append(st.nextToken());
+            
+            while(st.hasMoreTokens()) {
+                String token = st.nextToken().trim();
+                
+                if(token.length() > 0) {
+                    sb.append(Character.toUpperCase(token.charAt(0)));
+                    sb.append(token.substring(1));
+                }
+            }
+            
+            return sb.toString();
+        } else {
+            return propertyName;
+        }
+        
+    }
+    
+    static PropertyDescriptor getDescriptor(Class<?> clazz, String propertyName) {
+        propertyName = normalizePropertyName(propertyName);
+        
+        BeanInfo beanInfo;
+        try {
+            beanInfo = Introspector.getBeanInfo(clazz);
+        } catch (IntrospectionException e) {
+            throw new RuntimeException("Failed to introspect class: " + clazz);
+        }
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            PropertyDescriptor propertyDescriptor = propertyDescriptors[i];
+            if(propertyDescriptor.getName().equals(propertyName)) {
+                return propertyDescriptor;
+            }
+        }
+        
+        return null;
+    }
+        
+    
+    public static class KeyComparator implements Comparator<String> {
+        public int compare(String key1, String key2) {
+
+            // assume they are integers
+            try {
+                int intKey1 = Integer.parseInt(key1);
+                int intKey2 = Integer.parseInt(key2);
+            
+                return intKey1 - intKey2;
+            } catch(NumberFormatException e) {
+                return key1.compareToIgnoreCase(key2);
+            }
+        }
+    }
+    
+    static Iterator<String> getKeysInOrder(Iterator<String> keys) {
+        List<String> keyList = new ArrayList<String>();
+        
+        while (keys.hasNext()) {
+            String key = keys.next();
+            keyList.add(key);
+        }
+        
+        Collections.sort(keyList, new KeyComparator());
+
+        return keyList.iterator();
+    }
+    
+    
     private static Object createObject(Class<?> clazz, Configuration config, String propValue) {
         Object value;
         
@@ -68,7 +191,7 @@ public class ConfigurationClassUtils {
             if(Map.class.isAssignableFrom(clazz)) {
                 Map<String, Object> map = new HashMap<String, Object>();
                 
-                Iterator<String> mapKeys = ClassUtils.getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
                     String mapKey = mapKeys.next();
@@ -82,7 +205,7 @@ public class ConfigurationClassUtils {
             } else if(Collection.class.isAssignableFrom(clazz)) {
                 List<Object> list = new ArrayList<Object>();
                 
-                Iterator<String> mapKeys = ClassUtils.getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
                     String mapKey = mapKeys.next();
@@ -96,7 +219,7 @@ public class ConfigurationClassUtils {
             } else if(clazz.isArray()) {
                 List<Object> list = new ArrayList<Object>();
                 
-                Iterator<String> mapKeys = ClassUtils.getKeysInOrder(config.getKeys());
+                Iterator<String> mapKeys = getKeysInOrder(config.getKeys());
                 
                 while (mapKeys.hasNext()) {
                     String mapKey = mapKeys.next();
@@ -156,7 +279,7 @@ public class ConfigurationClassUtils {
             
             String propValue = config.getString(key, null);
             
-            PropertyDescriptor descriptor = ClassUtils.getDescriptor(clazz, key);
+            PropertyDescriptor descriptor = getDescriptor(clazz, key);
             
             if(descriptor == null) {
                 throw new FtpServerConfigurationException("Unknown property \"" + key + "\" on class " + className);
@@ -164,7 +287,7 @@ public class ConfigurationClassUtils {
 
             Object value = createObject(descriptor.getPropertyType(), subConfig, propValue);
 
-            ClassUtils.setProperty(bean, descriptor, value);
+            setProperty(bean, descriptor, value);
         }
         
         
