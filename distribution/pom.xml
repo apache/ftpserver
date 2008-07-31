@@ -51,7 +51,6 @@
               <descriptors>
                 <descriptor>src/main/assemblies/bin.xml</descriptor>
               </descriptors>
-              <appendAssemblyId>false</appendAssemblyId>
               <tarLongFileMode>gnu</tarLongFileMode>
             </configuration>
           </execution>
