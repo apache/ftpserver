@@ -59,9 +59,9 @@ class STOU extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(FtpIoSession session, 
-                        FtpServerContext context,
-                        FtpRequest request) throws IOException, FtpException {
+    public void execute(final FtpIoSession session, 
+            final FtpServerContext context,
+            final FtpRequest request) throws IOException, FtpException {
         
         try {
         	// 24-10-2007 - added check if PORT or PASV is issued, see https://issues.apache.org/jira/browse/FTPSERVER-110

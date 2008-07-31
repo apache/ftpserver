@@ -46,7 +46,7 @@ public class PassivePorts {
      * @throws IllegalArgumentException If any of of the ports in the string is
      *   invalid (e.g. not an integer or too large for a port number) 
      */
-    private static int[] parse(String portsString) {
+    private static int[] parse(final String portsString) {
         List<Integer> passivePortsList = new ArrayList<Integer>();
         
         boolean inRange = false;
@@ -106,7 +106,7 @@ public class PassivePorts {
     /**
      * Fill a range of ports
      */
-    private static void fillRange(List<Integer> passivePortsList, Integer beginPort, Integer endPort) {
+    private static void fillRange(final List<Integer> passivePortsList, final Integer beginPort, final Integer endPort) {
         for(int i = beginPort.intValue(); i<=endPort.intValue(); i++ ) {
             addPort(passivePortsList, i);
         }
@@ -115,7 +115,7 @@ public class PassivePorts {
     /**
      * Add a single port if not already in list
      */
-    private static void addPort(List<Integer> passivePortsList, Integer rangePort) {
+    private static void addPort(final List<Integer> passivePortsList, final Integer rangePort) {
         if(!passivePortsList.contains(rangePort)) {
             passivePortsList.add(rangePort);
         }
@@ -124,7 +124,7 @@ public class PassivePorts {
     /**
      * Verify that the port is within the range of allowed ports
      */
-    private static void verifyPort(int port) {
+    private static void verifyPort(final int port) {
         if(port < 0) {
             throw new IllegalArgumentException("Port can not be negative: " + port);
         } else if(port > MAX_PORT) {
@@ -132,14 +132,18 @@ public class PassivePorts {
         }
     }
     
-    public PassivePorts(String passivePorts) {
+    public PassivePorts(final String passivePorts) {
         this(parse(passivePorts));
         
         this.passivePortsString = passivePorts;
     }
 
-    public PassivePorts(int[] passivePorts) {
-        this.passivePorts = passivePorts.clone();
+    public PassivePorts(final int[] passivePorts) {
+        if(passivePorts != null) {
+            this.passivePorts = passivePorts.clone();
+        } else {
+            this.passivePorts = null;
+        }
         
         reservedPorts = new boolean[passivePorts.length];
     }
@@ -158,7 +162,7 @@ public class PassivePorts {
         return -1;
     }
     
-    public void releasePort(int port) {
+    public void releasePort(final int port) {
         for(int i=0; i<passivePorts.length; i++) {
             if(passivePorts[i] == port) {
                 reservedPorts[i] = false;

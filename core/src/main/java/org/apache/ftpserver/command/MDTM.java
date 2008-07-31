@@ -45,9 +45,9 @@ class MDTM extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(FtpIoSession session,
-                        FtpServerContext context, 
-                        FtpRequest request) throws IOException, FtpException {
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, 
+            final FtpRequest request) throws IOException, FtpException {
         
         // reset state
         session.resetState();

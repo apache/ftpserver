@@ -47,23 +47,23 @@ public class DefaultConnectionConfig implements ConnectionConfig {
 		return anonymousLoginEnabled;
 	}
 
-	public void setMaxLogins(int maxLogins) {
+	public void setMaxLogins(final int maxLogins) {
 		this.maxLogins = maxLogins;
 	}
 
-	public void setAnonymousLoginEnabled(boolean anonymousLoginEnabled) {
+	public void setAnonymousLoginEnabled(final boolean anonymousLoginEnabled) {
 		this.anonymousLoginEnabled = anonymousLoginEnabled;
 	}
 
-	public void setMaxAnonymousLogins(int maxAnonymousLogins) {
+	public void setMaxAnonymousLogins(final int maxAnonymousLogins) {
 		this.maxAnonymousLogins = maxAnonymousLogins;
 	}
 
-	public void setMaxLoginFailures(int maxLoginFailures) {
+	public void setMaxLoginFailures(final int maxLoginFailures) {
 		this.maxLoginFailures = maxLoginFailures;
 	}
 
-	public void setLoginFailureDelay(int loginFailureDelay) {
+	public void setLoginFailureDelay(final int loginFailureDelay) {
 		this.loginFailureDelay = loginFailureDelay;
 	}
 

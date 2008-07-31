@@ -108,22 +108,22 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
         return idleTime;
     }
     
-    public void setIdleTime(int idleTime) {
+    public void setIdleTime(final int idleTime) {
         this.idleTime = idleTime;
     }
     
     private Active active = new Active();
     private Passive passive = new Passive();
     
-    public void setActive(Active active) {
+    public void setActive(final Active active) {
         this.active = active;
     }
     
-    public void setPassive(Passive passive) {
+    public void setPassive(final Passive passive) {
         this.passive = passive;
     }
     
-    public void setSslConfiguration(SslConfiguration ssl) {
+    public void setSslConfiguration(final SslConfiguration ssl) {
         this.ssl = ssl;
     }
 
@@ -167,7 +167,7 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
      * Set the passive host
      * @param address The passive host
      */
-    public void setPassiveAddress(InetAddress address) {
+    public void setPassiveAddress(final InetAddress address) {
     	passive.setAddress(address);
     }
     
@@ -182,7 +182,7 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
      * Set the passive external host
      * @param address The passive external  host
      */
-    public void setPassiveExernalAddress(InetAddress address) {
+    public void setPassiveExernalAddress(final InetAddress address) {
     	passive.setExternalAddress(address);
     }
     
@@ -227,14 +227,14 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
      *  <p>22,23,24</p>
      *  <p>22-24,28</p>
      */
-    public void setPassivePorts(String passivePorts) {
+    public void setPassivePorts(final String passivePorts) {
         passive.passivePorts = new PassivePorts(passivePorts);
     }
 
     /**
      * Release data port
      */
-    public synchronized void releasePassivePort(int port) {
+    public synchronized void releasePassivePort(final int port) {
         passive.getPassivePorts().releasePort(port);
 
         notify();

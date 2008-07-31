@@ -147,7 +147,7 @@ class DefaultCommandFactory implements CommandFactory {
      * Sets whether the default commands will be used.
      * @param useDefaultCommands true if default commands should be used
      */
-	public void setUseDefaultCommands(boolean useDefaultCommands) {
+	public void setUseDefaultCommands(final boolean useDefaultCommands) {
 		this.useDefaultCommands = useDefaultCommands;
 	}
 
@@ -164,7 +164,7 @@ class DefaultCommandFactory implements CommandFactory {
 	 * @param commandMap The map of commands, the key will be used to map 
 	 * 	to requests. 
 	 */
-	public synchronized void setCommandMap(Map<String, Command> commandMap) {
+	public synchronized void setCommandMap(final Map<String, Command> commandMap) {
 		if(commandMap == null) {
 			throw new NullPointerException("commandMap can not be null");
 		}
@@ -179,15 +179,15 @@ class DefaultCommandFactory implements CommandFactory {
     /**
      * Get command. Returns null if not found.
      */
-    public Command getCommand(String cmdName) {
+    public Command getCommand(final String cmdName) {
     	if(cmdName == null || cmdName.equals("")) {
             return null;
         }
-    	cmdName = cmdName.toUpperCase();
-    	Command command = commandMap.get(cmdName);
+    	String upperCaseCmdName = cmdName.toUpperCase();
+    	Command command = commandMap.get(upperCaseCmdName);
     	
     	if(command == null && useDefaultCommands) {
-    		command = DEFAULT_COMMAND_MAP.get(cmdName);
+    		command = DEFAULT_COMMAND_MAP.get(upperCaseCmdName);
     	}
     	
         return command;

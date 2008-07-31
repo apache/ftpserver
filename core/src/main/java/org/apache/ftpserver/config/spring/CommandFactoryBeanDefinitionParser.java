@@ -40,7 +40,7 @@ public class CommandFactoryBeanDefinitionParser extends AbstractSingleBeanDefini
      * {@inheritDoc}
      */
     @Override
-    protected Class<? extends CommandFactory> getBeanClass(Element element) {
+    protected Class<? extends CommandFactory> getBeanClass(final Element element) {
         return DefaultCommandFactory.class;
     }
 
@@ -48,7 +48,7 @@ public class CommandFactoryBeanDefinitionParser extends AbstractSingleBeanDefini
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         ManagedMap commands = new ManagedMap();
         
         List<Element> childs = SpringUtil.getChildElements(element);

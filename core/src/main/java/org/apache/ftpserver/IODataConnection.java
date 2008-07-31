@@ -48,7 +48,7 @@ class IODataConnection implements DataConnection {
     private Socket socket;
     private ServerDataConnectionFactory factory;
     
-    public IODataConnection(Socket socket, FtpIoSession session, ServerDataConnectionFactory factory) {
+    public IODataConnection(final Socket socket, final FtpIoSession session, final ServerDataConnectionFactory factory) {
         this.session = session;
         this.socket = socket;
         this.factory = factory;
@@ -108,7 +108,7 @@ class IODataConnection implements DataConnection {
     /* (non-Javadoc)
      * @see org.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.OutputStream)
      */
-    public final long transferFromClient(OutputStream out) throws IOException {
+    public final long transferFromClient(final OutputStream out) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
         transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
         int maxRate = 0;
@@ -127,7 +127,7 @@ class IODataConnection implements DataConnection {
     /* (non-Javadoc)
      * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream)
      */
-    public final long transferToClient(InputStream in) throws IOException {
+    public final long transferToClient(final InputStream in) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
         transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
         int maxRate = 0;
@@ -146,7 +146,7 @@ class IODataConnection implements DataConnection {
     /* (non-Javadoc)
      * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String)
      */
-    public final void transferToClient(String str) throws IOException {
+    public final void transferToClient(final String str) throws IOException {
         OutputStream out = getDataOutputStream();
         Writer writer = null;
         try {
@@ -161,7 +161,7 @@ class IODataConnection implements DataConnection {
         
     }
     
-    private final long transfer(InputStream in, OutputStream out, int maxRate) throws IOException {
+    private final long transfer(final InputStream in, final OutputStream out, final int maxRate) throws IOException {
         long transferredSize = 0L;
 
         boolean isAscii = session.getDataType() == DataType.ASCII;

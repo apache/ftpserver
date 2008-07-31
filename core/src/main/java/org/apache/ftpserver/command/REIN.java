@@ -39,9 +39,9 @@ class REIN extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(FtpIoSession session,
-                        FtpServerContext context,
-                        FtpRequest request) throws IOException {
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context,
+            final FtpRequest request) throws IOException {
         
         session.reinitialize();
         session.setLanguage(null);

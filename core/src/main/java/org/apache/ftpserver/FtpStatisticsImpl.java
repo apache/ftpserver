@@ -98,14 +98,14 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Set the observer.
      */
-    public void setObserver(StatisticsObserver observer) {
+    public void setObserver(final StatisticsObserver observer) {
         this.observer = observer;
     }
 
     /**
      * Set the file observer.
      */
-    public void setFileObserver(FileObserver observer) {
+    public void setFileObserver(final FileObserver observer) {
         fileObserver = observer;
     }
 
@@ -115,7 +115,11 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Get server start time.
      */
     public Date getStartTime() {
-        return (Date) startTime.clone();
+        if(startTime != null) {
+            return (Date) startTime.clone();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -219,7 +223,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Get the login number for the specific user
      */
-    public synchronized int getCurrentUserLoginNumber(User user) {
+    public synchronized int getCurrentUserLoginNumber(final User user) {
         UserLogins userLogins = userLoginTable.get(user.getName());
         if (userLogins == null) {// not found the login user's statistics info
             return 0;
@@ -236,7 +240,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * @param ipAddress
      *            the ip address of the remote user
      */
-    public synchronized int getCurrentUserLoginNumber(User user, InetAddress ipAddress) {
+    public synchronized int getCurrentUserLoginNumber(final User user, final InetAddress ipAddress) {
         UserLogins userLogins = userLoginTable.get(user.getName());
         if (userLogins == null) {// not found the login user's statistics info
             return 0;
@@ -250,7 +254,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment upload count.
      */
-    public synchronized void setUpload(FtpIoSession session, FileObject file, long size) {
+    public synchronized void setUpload(final FtpIoSession session, final FileObject file, final long size) {
         uploadCount.incrementAndGet();
         bytesUpload.addAndGet(size);
         notifyUpload(session, file, size);
@@ -259,7 +263,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment download count.
      */
-    public synchronized void setDownload(FtpIoSession session, FileObject file, long size) {
+    public synchronized void setDownload(final FtpIoSession session, final FileObject file, final long size) {
         downloadCount.incrementAndGet();
         bytesDownload.addAndGet(size);
         notifyDownload(session, file, size);
@@ -268,7 +272,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment delete count.
      */
-    public synchronized void setDelete(FtpIoSession session, FileObject file) {
+    public synchronized void setDelete(final FtpIoSession session, final FileObject file) {
         deleteCount.incrementAndGet();
         notifyDelete(session, file);
     }
@@ -276,7 +280,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment make directory count.
      */
-    public synchronized void setMkdir(FtpIoSession session, FileObject file) {
+    public synchronized void setMkdir(final FtpIoSession session, final FileObject file) {
         mkdirCount.incrementAndGet();
         notifyMkdir(session, file);
     }
@@ -284,7 +288,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment remove directory count.
      */
-    public synchronized void setRmdir(FtpIoSession session, FileObject file) {
+    public synchronized void setRmdir(final FtpIoSession session, final FileObject file) {
         rmdirCount.incrementAndGet();
         notifyRmdir(session, file);
     }
@@ -292,7 +296,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment open connection count.
      */
-    public synchronized void setOpenConnection(FtpIoSession session) {
+    public synchronized void setOpenConnection(final FtpIoSession session) {
         currConnections.incrementAndGet();
         totalConnections.incrementAndGet();
         notifyOpenConnection(session);
@@ -301,7 +305,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Decrement open connection count.
      */
-    public synchronized void setCloseConnection(FtpIoSession session) {
+    public synchronized void setCloseConnection(final FtpIoSession session) {
         if (currConnections.get() > 0) {
             currConnections.decrementAndGet();
         }
@@ -311,7 +315,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * New login.
      */
-    public synchronized void setLogin(FtpIoSession session) {
+    public synchronized void setLogin(final FtpIoSession session) {
         currLogins.incrementAndGet();
         totalLogins.incrementAndGet();
         User user = session.getUser();
@@ -350,7 +354,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Increment failed login count.
      */
-    public synchronized void setLoginFail(FtpIoSession session) {
+    public synchronized void setLoginFail(final FtpIoSession session) {
         totalFailedLogins.incrementAndGet();
         notifyLoginFail(session);
     }
@@ -358,7 +362,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * User logout
      */
-    public synchronized void setLogout(FtpIoSession session) {
+    public synchronized void setLogout(final FtpIoSession session) {
         User user = session.getUser();
         if (user == null) {
             return;
@@ -391,7 +395,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer upload notification.
      */
-    private void notifyUpload(FtpIoSession session, FileObject file, long size) {
+    private void notifyUpload(final FtpIoSession session, final FileObject file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyUpload();
@@ -406,7 +410,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer download notification.
      */
-    private void notifyDownload(FtpIoSession session, FileObject file, long size) {
+    private void notifyDownload(final FtpIoSession session, final FileObject file, final long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDownload();
@@ -421,7 +425,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer delete notification.
      */
-    private void notifyDelete(FtpIoSession session, FileObject file) {
+    private void notifyDelete(final FtpIoSession session, final FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDelete();
@@ -436,7 +440,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer make directory notification.
      */
-    private void notifyMkdir(FtpIoSession session, FileObject file) {
+    private void notifyMkdir(final FtpIoSession session, final FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyMkdir();
@@ -451,7 +455,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer remove directory notification.
      */
-    private void notifyRmdir(FtpIoSession session, FileObject file) {
+    private void notifyRmdir(final FtpIoSession session, final FileObject file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyRmdir();
@@ -466,7 +470,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer open connection notification.
      */
-    private void notifyOpenConnection(FtpIoSession session) {
+    private void notifyOpenConnection(final FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyOpenConnection();
@@ -476,7 +480,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer close connection notification.
      */
-    private void notifyCloseConnection(FtpIoSession session) {
+    private void notifyCloseConnection(final FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyCloseConnection();
@@ -486,7 +490,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer login notification.
      */
-    private void notifyLogin(FtpIoSession session) {
+    private void notifyLogin(final FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
 
@@ -504,7 +508,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer failed login notification.
      */
-    private void notifyLoginFail(FtpIoSession session) {
+    private void notifyLoginFail(final FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             if (session.getRemoteAddress() instanceof InetSocketAddress) {
@@ -517,7 +521,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer logout notification.
      */
-    private void notifyLogout(FtpIoSession session) {
+    private void notifyLogout(final FtpIoSession session) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             // is anonymous login

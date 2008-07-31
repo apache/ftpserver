@@ -43,7 +43,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Default constructor.
      */
-    public FtpSessionImpl(FtpIoSession ioSession) {
+    public FtpSessionImpl(final FtpIoSession ioSession) {
         this.ioSession = ioSession;
     } 
     
@@ -142,7 +142,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Get attribute
      */
-    public Object getAttribute(String name) {
+    public Object getAttribute(final String name) {
     	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
     		throw new IllegalArgumentException("Illegal lookup of internal attribute");
     	}
@@ -153,7 +153,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Set attribute.
      */
-    public void setAttribute(String name, Object value) {
+    public void setAttribute(final String name, final Object value) {
     	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
     		throw new IllegalArgumentException("Illegal setting of internal attribute");
     	}
@@ -165,7 +165,7 @@ public class FtpSessionImpl implements FtpSession {
         return ioSession.getMaxIdleTime();
     }
 
-    public void setMaxIdleTime(int maxIdleTime) {
+    public void setMaxIdleTime(final int maxIdleTime) {
         ioSession.setMaxIdleTime(maxIdleTime);
     }
 
@@ -207,7 +207,7 @@ public class FtpSessionImpl implements FtpSession {
         return ioSession.getFailedLogins();
     }
 
-	public void removeAttribute(String name) {
+	public void removeAttribute(final String name) {
     	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
     		throw new IllegalArgumentException("Illegal removal of internal attribute");
     	}

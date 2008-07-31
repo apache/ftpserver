@@ -37,7 +37,7 @@ public class FileSystemBeanDefinitionParser extends AbstractSingleBeanDefinition
      * {@inheritDoc}
      */
     @Override
-    protected Class<? extends FileSystemManager> getBeanClass(Element element) {
+    protected Class<? extends FileSystemManager> getBeanClass(final Element element) {
         return NativeFileSystemManager.class;
     }
 
@@ -45,7 +45,7 @@ public class FileSystemBeanDefinitionParser extends AbstractSingleBeanDefinition
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         if(StringUtils.hasText(element.getAttribute("case-insensitive"))) {
             builder.addPropertyValue("caseInsensitive", Boolean.parseBoolean(element.getAttribute("case-insensitive")));
         }

@@ -39,9 +39,9 @@ class QUIT extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(FtpIoSession session, 
-                        FtpServerContext context,
-                        FtpRequest request) throws IOException {
+    public void execute(final FtpIoSession session, 
+            final FtpServerContext context,
+            final FtpRequest request) throws IOException {
         session.resetState();
         session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
 		

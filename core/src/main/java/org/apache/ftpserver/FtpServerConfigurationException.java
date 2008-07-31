@@ -39,21 +39,21 @@ class FtpServerConfigurationException extends RuntimeException {
     /**
      * {@link RuntimeException#RuntimeException(String, Throwable)}
      */
-    public FtpServerConfigurationException(String message, Throwable cause) {
+    public FtpServerConfigurationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
      * {@link RuntimeException#RuntimeException(String)}
      */
-    public FtpServerConfigurationException(String message) {
+    public FtpServerConfigurationException(final String message) {
         super(message);
     }
 
     /**
      * {@link RuntimeException#RuntimeException(Throwable)}
      */
-    public FtpServerConfigurationException(Throwable cause) {
+    public FtpServerConfigurationException(final Throwable cause) {
         super(cause);
     }
 

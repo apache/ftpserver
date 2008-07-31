@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IODataConnectionFactory implements ServerDataConnectionFactory {
     
-    private static final Logger LOG = LoggerFactory.getLogger(IODataConnectionFactory.class);
+    private final Logger LOG = LoggerFactory.getLogger(IODataConnectionFactory.class);
     
     private FtpServerContext    serverContext;
     private Socket        dataSoc;
@@ -69,7 +69,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     FtpIoSession session;
     
-    public IODataConnectionFactory(FtpServerContext serverContext, FtpIoSession session) {
+    public IODataConnectionFactory(final FtpServerContext serverContext, final FtpIoSession session) {
         this.session = session;
         this.serverContext = serverContext;
         
@@ -120,7 +120,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     /**
      * Port command.
      */
-    public synchronized void initActiveDataConnection(InetSocketAddress address) {
+    public synchronized void initActiveDataConnection(final InetSocketAddress address) {
         
         // close old sockets if any
         closeDataConnection();
@@ -188,7 +188,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
     }
      
-    private ServerSocket createServerSocket(SslConfiguration ssl, InetAddress address2, int passivePort) throws IOException, GeneralSecurityException {
+    private ServerSocket createServerSocket(final SslConfiguration ssl, final InetAddress address2, final int passivePort) throws IOException, GeneralSecurityException {
         // get server socket factory
         SSLContext ctx = ssl.getSSLContext();
         SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
@@ -292,8 +292,8 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         return dataSoc;
     }
     
-    private Socket createSocket(SslConfiguration ssl, InetAddress address2,
-            int port2, InetAddress localAddress, int localPort, boolean clientMode) throws IOException, GeneralSecurityException {
+    private Socket createSocket(final SslConfiguration ssl, final InetAddress address2,
+            final int port2, final InetAddress localAddress, final int localPort, final boolean clientMode) throws IOException, GeneralSecurityException {
         
         // get socket factory
         SSLContext ctx = ssl.getSSLContext();
@@ -327,7 +327,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     /**
      * Set the security protocol.
      */
-    public void setSecure(boolean secure) {
+    public void setSecure(final boolean secure) {
         this.secure = secure;
     }
     
@@ -341,14 +341,14 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     /**
      * Set zip mode.
      */
-    public void setZipMode(boolean zip) {
+    public void setZipMode(final boolean zip) {
         isZip = zip;
     }
     
     /**
      * Check the data connection idle status.
      */
-    public synchronized boolean isTimeout(long currTime) {
+    public synchronized boolean isTimeout(final long currTime) {
         
         // data connection not requested - not a timeout
         if(requestTime == 0L) {
@@ -384,7 +384,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     /**
      * Sets the server's control address. 
      */
-    public void setServerControlAddress(InetAddress serverControlAddress) {
+    public void setServerControlAddress(final InetAddress serverControlAddress) {
         this.serverControlAddress = serverControlAddress;
     }
 }

@@ -45,7 +45,7 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
     /**
      * {@inheritDoc}
      */
-    protected Class<? extends FtpServer> getBeanClass(Element element) {
+    protected Class<? extends FtpServer> getBeanClass(final Element element) {
         return FtpServer.class;
     }
 
@@ -53,7 +53,7 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         List<Element> childs = SpringUtil.getChildElements(element);
         for(Element childElm : childs) {
             String childName = childElm.getLocalName();
@@ -115,8 +115,8 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
     /**
      * Parse the "messages" element
      */
-    private MessageResource parseMessageResource(Element childElm, ParserContext parserContext,
-            BeanDefinitionBuilder builder) {
+    private MessageResource parseMessageResource(final Element childElm, final ParserContext parserContext,
+            final BeanDefinitionBuilder builder) {
         
         MessageResourceImpl mr = new MessageResourceImpl();
         
@@ -139,7 +139,7 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
     /**
      * Parse the "ftplets" element
      */
-    private Map parseFtplets(Element childElm, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    private Map parseFtplets(final Element childElm, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         ManagedMap ftplets = new ManagedMap();
 
         List<Element> childs = SpringUtil.getChildElements(childElm);
@@ -156,7 +156,7 @@ public class ServerBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
      * Parse listeners elements
      */
     @SuppressWarnings("unchecked")
-    private Map parseListeners(Element listenersElm, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    private Map parseListeners(final Element listenersElm, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         ManagedMap listeners = new ManagedMap();
 
         List<Element> childs = SpringUtil.getChildElements(listenersElm);

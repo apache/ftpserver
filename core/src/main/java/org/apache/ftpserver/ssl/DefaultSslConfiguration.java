@@ -375,7 +375,11 @@ public class DefaultSslConfiguration implements SslConfiguration {
      * @see SslConfiguration#getEnabledCipherSuites()
      */
     public String[] getEnabledCipherSuites() {
-        return enabledCipherSuites;
+        if(enabledCipherSuites != null) {
+            return enabledCipherSuites.clone();
+        } else {
+            return null;
+        }
     }
     
     /**
@@ -385,7 +389,11 @@ public class DefaultSslConfiguration implements SslConfiguration {
      * @param enabledCipherSuites
      */
     public void setEnabledCipherSuites(String[] enabledCipherSuites) {
-        this.enabledCipherSuites = enabledCipherSuites;
+        if(enabledCipherSuites != null) {
+            this.enabledCipherSuites = enabledCipherSuites.clone();
+        } else {
+            this.enabledCipherSuites = null;
+        }
     }
 
     /**

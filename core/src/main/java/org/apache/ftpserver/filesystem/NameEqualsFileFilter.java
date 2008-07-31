@@ -36,12 +36,12 @@ public class NameEqualsFileFilter implements FileFilter {
 	 * @param nameToMatch The exact file name to match
 	 * @param caseInsensitive Wether that match should be case insensitive
 	 */
-	public NameEqualsFileFilter(String nameToMatch, boolean caseInsensitive) {
+	public NameEqualsFileFilter(final String nameToMatch, final boolean caseInsensitive) {
 		this.nameToMatch = nameToMatch;
 		this.caseInsensitive = caseInsensitive;
 	}	
 	
-	public boolean accept(File file) {
+	public boolean accept(final File file) {
 		
 		if(caseInsensitive) {
 			return file.getName().equalsIgnoreCase(nameToMatch);

@@ -39,7 +39,7 @@ public class DataConnectionException extends FtpException {
      * 
      * @param msg a description of the exception 
      */
-    public DataConnectionException(String msg) {
+    public DataConnectionException(final String msg) {
         super(msg);
     }
 
@@ -49,7 +49,7 @@ public class DataConnectionException extends FtpException {
      * 
      * @param th the original cause
      */
-    public DataConnectionException(Throwable th) {
+    public DataConnectionException(final Throwable th) {
         super(th);
     }
 
@@ -59,7 +59,7 @@ public class DataConnectionException extends FtpException {
      * 
      * @param th the original cause
      */
-    public DataConnectionException(String msg, Throwable th) {
+    public DataConnectionException(final String msg, final Throwable th) {
         super(msg);
     }
 }

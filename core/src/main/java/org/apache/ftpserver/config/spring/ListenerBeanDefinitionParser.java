@@ -53,7 +53,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
      * {@inheritDoc}
      */
     @Override
-    protected Class<NioListener> getBeanClass(Element element) {
+    protected Class<NioListener> getBeanClass(final Element element) {
         return NioListener.class;
     }
 
@@ -61,7 +61,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
      * Parse CIDR notations into MINA {@link Subnet}s. 
      * TODO: move to Mina
      */
-    private Subnet parseSubnet(String subnet) {
+    private Subnet parseSubnet(final String subnet) {
         if(subnet == null) {
             throw new NullPointerException("subnet can not be null");
         }
@@ -99,7 +99,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         if(StringUtils.hasText(element.getAttribute("port"))) {
             builder.addPropertyValue("port", Integer.parseInt(element.getAttribute("port")));
         }
@@ -139,7 +139,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     }
     
     
-    private SslConfiguration parseSsl(Element parent) {
+    private SslConfiguration parseSsl(final Element parent) {
         Element sslElm = SpringUtil.getChildElement(parent, FtpServerNamespaceHandler.FTPSERVER_NS, "ssl");
         
         if(sslElm != null) {
@@ -211,7 +211,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     
     }
     
-    private DataConnectionConfiguration parseDataConnection(Element element, SslConfiguration listenerSslConfiguration) {
+    private DataConnectionConfiguration parseDataConnection(final Element element, final SslConfiguration listenerSslConfiguration) {
         DefaultDataConnectionConfiguration dc = new DefaultDataConnectionConfiguration();
         
         if(element != null) {

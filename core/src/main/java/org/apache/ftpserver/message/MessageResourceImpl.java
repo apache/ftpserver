@@ -60,11 +60,19 @@ class MessageResourceImpl implements MessageResource {
     } 
     
     public String[] getLanguages() {
-		return languages;
+        if(languages != null) {
+            return languages.clone();
+        } else {
+            return null;
+        }
 	}
 
 	public void setLanguages(String[] languages) {
-		this.languages = languages;
+	    if(languages != null) {
+	        this.languages = languages.clone();
+	    } else {
+	        this.languages = null;
+	    }
 	}
 
 	public File getCustomMessageDirectory() {

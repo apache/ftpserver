@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
     
     @Override
-    protected Class<? extends UserManager> getBeanClass(Element element) {
+    protected Class<? extends UserManager> getBeanClass(final Element element) {
         if(element.getLocalName().equals("file-user-manager")) {
             return PropertiesUserManager.class;
         } else {
@@ -44,7 +44,7 @@ public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitio
     }
 
     @Override
-    protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
         if(getBeanClass(element) == PropertiesUserManager.class) {
             builder.addPropertyValue("propFile", element.getAttribute("file"));
             if(StringUtils.hasText(element.getAttribute("encrypt-passwords")) &&
@@ -80,7 +80,7 @@ public class UserManagerBeanDefinitionParser extends AbstractSingleBeanDefinitio
         }
     }
     
-    private String getSql(Element element, String elmName) {
+    private String getSql(final Element element, final String elmName) {
         return SpringUtil.getChildElementText(element, FtpServerNamespaceHandler.FTPSERVER_NS, elmName);    
     }
 }

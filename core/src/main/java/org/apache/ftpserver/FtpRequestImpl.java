@@ -34,14 +34,14 @@ public class FtpRequestImpl implements FtpRequest {
     /**
      * Default constructor.
      */
-    public FtpRequestImpl(String requestLine) {
+    public FtpRequestImpl(final String requestLine) {
         parse(requestLine);
     } 
     
     /**
      * Parse the ftp command line.
      */
-    private void parse(String lineToParse) {
+    private void parse(final String lineToParse) {
         
         // parse request
         line = lineToParse.trim();

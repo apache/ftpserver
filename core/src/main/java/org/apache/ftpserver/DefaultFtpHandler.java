@@ -41,22 +41,22 @@ public class DefaultFtpHandler implements FtpHandler {
 	private FtpServerContext context;
 	private Listener listener;
 	
-    public void init(FtpServerContext context, Listener listener) {
+    public void init(final FtpServerContext context, final Listener listener) {
     	this.context = context;
     	this.listener = listener;
     }
 
-	public void sessionCreated(FtpIoSession session) throws Exception {
+	public void sessionCreated(final FtpIoSession session) throws Exception {
     	session.setListener(listener);
     }
 
-    public void sessionOpened(FtpIoSession session) throws Exception {
+    public void sessionOpened(final FtpIoSession session) throws Exception {
         context.getFtpletContainer().onConnect(session.getFtpletSession());
         
     	session.write(FtpReplyUtil.translate(session,  null, context, FtpReply.REPLY_220_SERVICE_READY, null, null));
     }
 
-    public void sessionClosed(FtpIoSession session) throws Exception {
+    public void sessionClosed(final FtpIoSession session) throws Exception {
         try {
             context.getFtpletContainer().onDisconnect(session.getFtpletSession());
         } catch(Exception e) {
@@ -71,12 +71,12 @@ public class DefaultFtpHandler implements FtpHandler {
     	}
     }
 
-    public void exceptionCaught( FtpIoSession session, Throwable cause ) throws Exception {
+    public void exceptionCaught(final FtpIoSession session, final Throwable cause ) throws Exception {
     	LOG.error("Exception caught, closing session", cause);
     	session.closeOnFlush().awaitUninterruptibly(10000);
     }
 
-    public void messageReceived( FtpIoSession session, FtpRequest request ) throws Exception {
+    public void messageReceived( final FtpIoSession session, final FtpRequest request ) throws Exception {
         try {
             String commandName = request.getCommand();
             CommandFactory commandFactory = context.getCommandFactory();
@@ -111,12 +111,12 @@ public class DefaultFtpHandler implements FtpHandler {
 
     }
 
-    public void sessionIdle( FtpIoSession session, IdleStatus status ) throws Exception {
+    public void sessionIdle( final FtpIoSession session, final IdleStatus status ) throws Exception {
     	LOG.info("Session idle, closing");
         session.closeOnFlush().awaitUninterruptibly(10000);
     }
 
-	public void messageSent(FtpIoSession session, FtpReply reply)
+	public void messageSent(final FtpIoSession session, final FtpReply reply)
 			throws Exception {
 		// do nothing
 		

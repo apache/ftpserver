@@ -61,7 +61,7 @@ public class FtpServer {
      * @throws Exception
      * TODO consider removing 
      */
-    public FtpServer(FtpServerContext serverContext) throws Exception {
+    public FtpServer(final FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
     }
 
@@ -155,7 +155,7 @@ public class FtpServer {
      * Set a custom server context to be used for this server
      * @param serverContext The custom server context
      */
-	public void setServerContext(FtpServerContext serverContext) {
+	public void setServerContext(final FtpServerContext serverContext) {
 		this.serverContext = serverContext;
 	}
 	
@@ -180,11 +180,11 @@ public class FtpServer {
      * @param name The name of the listener
      * @return The {@link Listener} matching the provided name
      */
-    public Listener getListener(String name) {
+    public Listener getListener(final String name) {
         return getServerContext().getListener(name);
     }
     
-    public void addListener(String name, Listener listener) {
+    public void addListener(final String name, final Listener listener) {
         checkAndGetContext().addListener(name, listener);
     }
     
@@ -194,7 +194,7 @@ public class FtpServer {
      *   and the listener as the value
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setListeners(Map<String, Listener> listeners) {
+    public void setListeners(final Map<String, Listener> listeners) {
         checkAndGetContext().setListeners(listeners);
     }
     
@@ -211,7 +211,7 @@ public class FtpServer {
      * @param ftplets Ftplets as a map with the name as the key and the Ftplet as the value
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setFtplets(Map<String, Ftplet> ftplets) {
+    public void setFtplets(final Map<String, Ftplet> ftplets) {
         getServerContext().getFtpletContainer().setFtplets(ftplets);
     }
 
@@ -228,7 +228,7 @@ public class FtpServer {
      * @param userManager The {@link UserManager}
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setUserManager(UserManager userManager) {
+    public void setUserManager(final UserManager userManager) {
         checkAndGetContext().setUserManager(userManager);
     }
     
@@ -245,7 +245,7 @@ public class FtpServer {
      * @param fileSystem The {@link FileSystemManager}
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setFileSystem(FileSystemManager fileSystem) {
+    public void setFileSystem(final FileSystemManager fileSystem) {
         checkAndGetContext().setFileSystemManager(fileSystem);
     }
     
@@ -262,7 +262,7 @@ public class FtpServer {
      * @param commandFactory The {@link CommandFactory}
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setCommandFactory(CommandFactory commandFactory) {
+    public void setCommandFactory(final CommandFactory commandFactory) {
         checkAndGetContext().setCommandFactory(commandFactory);
     }
     
@@ -279,7 +279,7 @@ public class FtpServer {
      * @param messageResource The {@link MessageResource}
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setMessageResource(MessageResource messageResource) {
+    public void setMessageResource(final MessageResource messageResource) {
         checkAndGetContext().setMessageResource(messageResource);
     }
 
@@ -296,7 +296,7 @@ public class FtpServer {
      * @param messageResource The {@link MessageResource}
      * @throws IllegalStateException If a custom server context has been set
      */
-    public void setConnectionConfig(ConnectionConfig connectionConfig) {
+    public void setConnectionConfig(final ConnectionConfig connectionConfig) {
         checkAndGetContext().setConnectionConfig(connectionConfig);
     }
 }

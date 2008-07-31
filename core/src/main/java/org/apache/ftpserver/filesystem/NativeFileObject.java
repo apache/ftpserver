@@ -51,7 +51,7 @@ public class NativeFileObject implements FileObject {
     /**
      * Constructor.
      */
-    protected NativeFileObject(String fileName, File file, User user) {
+    protected NativeFileObject(final String fileName, final File file, final User user) {
         if (fileName == null) {
             throw new IllegalArgumentException("fileName can not be null");
         }
@@ -222,7 +222,7 @@ public class NativeFileObject implements FileObject {
     /**
      * Move file object.
      */
-    public boolean move(FileObject dest) {
+    public boolean move(final FileObject dest) {
         boolean retVal = false;
         if (dest.hasWritePermission() && hasReadPermission()) {
             File destFile = ((NativeFileObject) dest).file;
@@ -300,7 +300,7 @@ public class NativeFileObject implements FileObject {
     /**
      * Create output stream for writing.
      */
-    public OutputStream createOutputStream(long offset) throws IOException {
+    public OutputStream createOutputStream(final long offset) throws IOException {
 
         // permission check
         if (!hasWritePermission()) {
@@ -327,7 +327,7 @@ public class NativeFileObject implements FileObject {
     /**
      * Create input stream for reading.
      */
-    public InputStream createInputStream(long offset) throws IOException {
+    public InputStream createInputStream(final long offset) throws IOException {
 
         // permission check
         if (!hasReadPermission()) {
@@ -351,12 +351,12 @@ public class NativeFileObject implements FileObject {
     }
 
     /**
-     * Normalize separate characher. Separate character should be '/' always.
+     * Normalize separate character. Separate character should be '/' always.
      */
-    public final static String normalizeSeparateChar(String pathName) {
-        pathName = pathName.replace(File.separatorChar, '/');
-        pathName = pathName.replace('\\', '/');
-        return pathName;
+    public final static String normalizeSeparateChar(final String pathName) {
+        String normalizedPathName = pathName.replace(File.separatorChar, '/');
+        normalizedPathName = normalizedPathName.replace('\\', '/');
+        return normalizedPathName;
     }
 
     /**
@@ -373,42 +373,43 @@ public class NativeFileObject implements FileObject {
      * @return The return string will always begin with the root directory. It
      *         will never be null.
      */
-    public final static String getPhysicalName(String rootDir, String currDir,
-            String fileName) {
+    public final static String getPhysicalName(final String rootDir, final String currDir,
+            final String fileName) {
         return getPhysicalName(rootDir, currDir, fileName, false);
     }
 
-    public final static String getPhysicalName(String rootDir, String currDir,
-            String fileName, boolean caseInsensitive) {
+    public final static String getPhysicalName(final String rootDir, final String currDir,
+            final String fileName, final boolean caseInsensitive) {
 
         // get the starting directory
-        rootDir = normalizeSeparateChar(rootDir);
-        if (rootDir.charAt(rootDir.length() - 1) != '/') {
-            rootDir += '/';
+        String normalizedRootDir = normalizeSeparateChar(rootDir);
+        if (normalizedRootDir.charAt(normalizedRootDir.length() - 1) != '/') {
+            normalizedRootDir += '/';
         }
 
-        fileName = normalizeSeparateChar(fileName);
+        String normalizedFileName = normalizeSeparateChar(fileName);
         String resArg;
-        if (fileName.charAt(0) != '/') {
-            if (currDir == null) {
-                currDir = "/";
+        String normalizedCurrDir = currDir;
+        if (normalizedFileName.charAt(0) != '/') {
+            if (normalizedCurrDir == null) {
+                normalizedCurrDir = "/";
             }
-            if (currDir.length() == 0) {
-                currDir = "/";
-            }
-
-            currDir = normalizeSeparateChar(currDir);
-
-            if (currDir.charAt(0) != '/') {
-                currDir = '/' + currDir;
-            }
-            if (currDir.charAt(currDir.length() - 1) != '/') {
-                currDir += '/';
+            if (normalizedCurrDir.length() == 0) {
+                normalizedCurrDir = "/";
             }
 
-            resArg = rootDir + currDir.substring(1);
+            normalizedCurrDir = normalizeSeparateChar(normalizedCurrDir);
+
+            if (normalizedCurrDir.charAt(0) != '/') {
+                normalizedCurrDir = '/' + normalizedCurrDir;
+            }
+            if (normalizedCurrDir.charAt(normalizedCurrDir.length() - 1) != '/') {
+                normalizedCurrDir += '/';
+            }
+
+            resArg = normalizedRootDir + normalizedCurrDir.substring(1);
         } else {
-            resArg = rootDir;
+            resArg = normalizedRootDir;
         }
 
         // strip last '/'
@@ -418,7 +419,7 @@ public class NativeFileObject implements FileObject {
 
         // replace ., ~ and ..
         // in this loop resArg will never end with '/'
-        StringTokenizer st = new StringTokenizer(fileName, "/");
+        StringTokenizer st = new StringTokenizer(normalizedFileName, "/");
         while (st.hasMoreTokens()) {
             String tok = st.nextToken();
 
@@ -429,7 +430,7 @@ public class NativeFileObject implements FileObject {
 
             // .. => parent directory (if not root)
             if (tok.equals("..")) {
-                if (resArg.startsWith(rootDir)) {
+                if (resArg.startsWith(normalizedRootDir)) {
                     int slashIndex = resArg.lastIndexOf('/');
                     if (slashIndex != -1) {
                         resArg = resArg.substring(0, slashIndex);
@@ -440,7 +441,7 @@ public class NativeFileObject implements FileObject {
 
             // ~ => home directory (in this case the root directory)
             if (tok.equals("~")) {
-                resArg = rootDir.substring(0, rootDir.length() - 1);
+                resArg = normalizedRootDir.substring(0, normalizedRootDir.length() - 1);
                 continue;
             }
 
@@ -457,13 +458,13 @@ public class NativeFileObject implements FileObject {
         }
 
         // add last slash if necessary
-        if ((resArg.length()) + 1 == rootDir.length()) {
+        if ((resArg.length()) + 1 == normalizedRootDir.length()) {
             resArg += '/';
         }
 
         // final check
-        if (!resArg.regionMatches(0, rootDir, 0, rootDir.length())) {
-            resArg = rootDir;
+        if (!resArg.regionMatches(0, normalizedRootDir, 0, normalizedRootDir.length())) {
+            resArg = normalizedRootDir;
         }
 
         return resArg;

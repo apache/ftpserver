@@ -104,11 +104,19 @@ class BaseUser implements User, Serializable {
     }
 
     public Authority[] getAuthorities() {
-        return authorities.clone();
+        if(authorities != null) {
+            return authorities.clone();
+        } else {
+            return null;
+        }
     }
 
     public void setAuthorities(Authority[] authorities) {
-        this.authorities = authorities.clone();
+        if(authorities != null) {
+            this.authorities = authorities.clone();
+        } else {
+            this.authorities = null;
+        }
     }
     
     /**

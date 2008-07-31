@@ -47,9 +47,9 @@ class RNFR extends AbstractCommand {
     /**
      * Execute command
      */
-    public void execute(FtpIoSession session,
-                        FtpServerContext context,
-                        FtpRequest request) throws IOException, FtpException {
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context,
+            final FtpRequest request) throws IOException, FtpException {
         
         // reset state variable
         session.resetState();
@@ -64,6 +64,7 @@ class RNFR extends AbstractCommand {
         // get filename
         FileObject renFr = null;
         try {
+            System.out.println("######" + session.getFileSystemView());
             renFr = session.getFileSystemView().getFileObject(fileName);
         }
         catch(Exception ex) {

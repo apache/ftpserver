@@ -58,9 +58,9 @@ class PASS extends AbstractCommand {
     /**
      * Execute command.
      */
-    public void execute(FtpIoSession session, 
-                        FtpServerContext context,
-                        FtpRequest request) throws IOException, FtpException {
+    public void execute(final FtpIoSession session, 
+            final FtpServerContext context,
+            final FtpRequest request) throws IOException, FtpException {
     
         boolean success = false;
         
@@ -223,7 +223,7 @@ class PASS extends AbstractCommand {
         }
     }
 
-    private void delayAfterLoginFailure(int loginFailureDelay) {
+    private void delayAfterLoginFailure(final int loginFailureDelay) {
         
         if(loginFailureDelay > 0) {
             LOG.debug("Waiting for " + loginFailureDelay + " milliseconds due to login failure");

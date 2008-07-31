@@ -33,12 +33,12 @@ public class DefaultFtpReply implements FtpReply {
      * @param code
      * @param message
      */
-    public DefaultFtpReply(int code, String message) {
+    public DefaultFtpReply(final int code, final String message) {
         this.code = code;
         this.message = message;
     }
 
-    public DefaultFtpReply(int code, String[] message) {
+    public DefaultFtpReply(final int code, final String[] message) {
         this.code = code;
         
         StringBuffer sb = new StringBuffer();

@@ -37,7 +37,11 @@ public class UserMetadata {
      *   is available (e.g. SSL not used)
      */
     public Certificate[] getCertificateChain() {
-        return certificateChain.clone();
+        if(certificateChain != null) {
+            return certificateChain.clone();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -46,7 +50,11 @@ public class UserMetadata {
      *            The certificate chain to set
      */
     public void setCertificateChain(final Certificate[] certificateChain) {
-        this.certificateChain = certificateChain.clone();
+        if(certificateChain != null) {
+            this.certificateChain = certificateChain.clone();
+        } else {
+            this.certificateChain = null;
+        }
     }
 
     /**
