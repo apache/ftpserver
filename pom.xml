@@ -24,11 +24,11 @@
     <version>4</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.ftpserver</groupId>
+  <groupId>org.apache.ftpserver</groupId>r
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-M2-SNAPSHOT</version>
   <url>http://mina.apache.org/ftpserver</url>
   <issueManagement>
     <system>Jira</system>
