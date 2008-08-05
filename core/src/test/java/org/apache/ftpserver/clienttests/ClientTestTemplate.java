@@ -56,7 +56,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected FTPClient client;
 
    
-    private static final File USERS_FILE = new File(TestUtil.getBaseDir(), "src/test/resources/users.gen");
+    private static final File USERS_FILE = new File(TestUtil.getBaseDir(), "src/test/resources/users.properties");
     private static final File TEST_TMP_DIR = new File("test-tmp");
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
     
