@@ -69,6 +69,18 @@
           </execution>
         </executions>
       </plugin>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>rat-maven-plugin</artifactId>
+	    <version>1.0-alpha-3</version>
+	    <configuration>
+	      <excludes>
+			<exclude>LICENSE.slf4j.txt</exclude>
+			<exclude>LICENSE.springframework.txt</exclude>
+		</excludes>
+	    </configuration>
+	  </plugin>
+
     </plugins>
   </build>
   <dependencies>

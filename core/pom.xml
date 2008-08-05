@@ -60,6 +60,19 @@
         </includes>
       </testResource>
     </testResources>
+
+  <plugins>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>rat-maven-plugin</artifactId>
+	    <version>1.0-alpha-3</version>
+	    <configuration>
+	      <excludes>
+			<exclude>res/user.gen</exclude>
+		</excludes>
+	    </configuration>
+	  </plugin>
+  </plugins>
   </build>
   
   <dependencies>
@@ -134,7 +147,6 @@
       <artifactId>hsqldb</artifactId>
       <scope>test</scope>
     </dependency>
-
-    
   </dependencies>
+
 </project>

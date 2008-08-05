@@ -310,6 +310,12 @@
         </configuration>
       </plugin>
 
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>rat-maven-plugin</artifactId>
+	    <version>1.0-alpha-3</version>
+	  </plugin>
+
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
         <version>2.0.4</version>
@@ -345,72 +351,6 @@
 
   <profiles>
     <profile>
-      <id>rat</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>rat-maven-plugin</artifactId>
-            <version>1.0-alpha-3</version>
-            <executions>
-              <execution>
-                <phase>verify</phase>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <reportFile>${project.build.directory}/${project.build.finalName}.rat</reportFile>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-      <repositories>
-        <repository>
-          <releases>
-            <enabled>false</enabled>
-          </releases>
-          <snapshots/>
-          <id>Codehaus Snapshots</id>
-          <url>http://snapshots.repository.codehaus.org/</url>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <releases>
-            <enabled>false</enabled>
-          </releases>
-          <snapshots/>
-          <id>Codehaus Snapshots</id>
-          <url>http://snapshots.repository.codehaus.org/</url>
-        </pluginRepository>
-      </pluginRepositories>
-    </profile>
-
-    <profile>
-      <id>snapshot</id>
-      <modules>
-        <module>ftplet-api</module>
-        <module>core</module>
-        <module>deprecated</module>
-      </modules>
-      <distributionManagement>
-        <site>
-          <id>apache.website</id>
-          <url>scp://people.apache.org/www/mina.apache.org/ftpserver/report/trunk/</url>
-        </site>
-
-        <repository>
-          <id>apache.snapshots</id>
-          <name>Apache Development Snapshot Repository</name>
-          <!-- <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/</url> -->
-          <url>scp://people.apache.org/home/ngn/m2-incubating-repository/</url>
-        </repository>
-      </distributionManagement>
-    </profile>
-
-    <profile>
       <id>release</id>
       <build>
         <plugins>
@@ -442,6 +382,20 @@
               </execution>
             </executions>
           </plugin>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>rat-maven-plugin</artifactId>
+	    <version>1.0-alpha-3</version>
+            <executions>
+              <execution>
+                <id>verify-licenses</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+	  </plugin>
         </plugins>
       </build>
       <modules>
@@ -496,6 +450,13 @@
       <id>commons-net Snapshots</id>
       <url>http://people.apache.org/~ngn/ftpserver-repos</url>
     </repository>
+    <repository>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <id>Codehaus Snapshots</id>
+	<url>http://snapshots.repository.codehaus.org/</url>
+     </repository>
   </repositories>
 
   <pluginRepositories>
@@ -509,5 +470,13 @@
         <enabled>false</enabled>
       </releases>
     </pluginRepository>
+        <pluginRepository>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots/>
+          <id>Codehaus Snapshots</id>
+          <url>http://snapshots.repository.codehaus.org/</url>
+        </pluginRepository>
   </pluginRepositories>
 </project>
