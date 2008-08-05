@@ -70,7 +70,7 @@
         </fileSet>
         <fileSet>
             <directory>target/api</directory>
-            <outputDirectory>/api</outputDirectory>
+            <outputDirectory>/javadocs</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
