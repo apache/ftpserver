@@ -73,6 +73,9 @@
 		  <command name="FOO">
 			  <beans:bean class="org.apache.ftpserver.command.HELP" />
 		  </command>
+          <command name="FOO2">
+              <beans:bean class="org.apache.ftpserver.command.STAT" />
+          </command>
 		</commands>
 		<messages languages="se no ,da" />
 	</server>

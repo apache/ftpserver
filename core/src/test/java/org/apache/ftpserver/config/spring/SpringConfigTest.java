@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.DefaultCommandFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.command.HELP;
+import org.apache.ftpserver.command.STAT;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.DefaultSslConfiguration;
@@ -88,8 +89,10 @@ public class SpringConfigTest extends TestCase {
         assertEquals(2224, ((NioListener)listener).getPort());
         
         DefaultCommandFactory cf = (DefaultCommandFactory) server.getServerContext().getCommandFactory();
-        assertEquals(1, cf.getCommandMap().size());
+        assertEquals(2, cf.getCommandMap().size());
         assertTrue(cf.getCommand("FOO") instanceof HELP);
+        assertTrue(cf.getCommand("FOO2") instanceof STAT);
+
         
         String[] languages = server.getServerContext().getMessageResource().getAvailableLanguages();
         

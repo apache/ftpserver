@@ -208,7 +208,7 @@
 	<xs:element name="commands">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="command">
+				<xs:element name="command" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
 							<xs:choice maxOccurs="unbounded">
