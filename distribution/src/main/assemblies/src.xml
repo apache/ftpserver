@@ -41,6 +41,8 @@
       </includes>
       <excludes>
         <exclude>KEYS</exclude>
+        <exclude>LICENSE.txt</exclude>
+        <exclude>NOTICE.txt</exclude>
         <exclude>core/res</exclude>
         <exclude>core/res/**/*</exclude>
         <exclude>deprecated/res</exclude>
