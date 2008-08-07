@@ -24,10 +24,10 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-import org.apache.ftpserver.DefaultFtpReply;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;

@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
+
 import junit.framework.TestCase;
 
 

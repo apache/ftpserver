@@ -17,9 +17,8 @@
  * under the License.
  */  
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.ftplet;
 
-import org.apache.ftpserver.ftplet.FtpReply;
 
 /**
  * FTP reply object.

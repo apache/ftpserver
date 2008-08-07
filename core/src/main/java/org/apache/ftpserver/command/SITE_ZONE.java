@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.ftpserver.DefaultFtpReply;
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
