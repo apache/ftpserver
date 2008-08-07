@@ -28,6 +28,8 @@ import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
@@ -214,4 +216,8 @@ public class FtpSessionImpl implements FtpSession {
 		
     	ioSession.removeAttribute(name);
 	}
+
+    public void write(FtpReply reply) throws FtpException {
+        ioSession.write(reply);        
+    }
 }

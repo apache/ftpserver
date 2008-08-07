@@ -147,4 +147,11 @@ interface FtpSession {
      * Removes an attribute from this request.
      */
     void removeAttribute(String name);
+    
+    /**
+     * Write a reply to the client
+     * @param reply The reply that will be sent to the client
+     * @throws FtpException
+     */
+    void write(FtpReply reply) throws FtpException;
 }
