@@ -154,4 +154,13 @@ interface FtpSession {
      * @throws FtpException
      */
     void write(FtpReply reply) throws FtpException;
+    
+    /**
+     * Indicates whether the control socket for this session is secure,
+     * that is, running over SSL/TLS
+     * @return true if the control socket is secured
+     */
+    boolean isSecure();
+    
+    
 }

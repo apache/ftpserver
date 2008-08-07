@@ -220,4 +220,11 @@ public class FtpSessionImpl implements FtpSession {
     public void write(FtpReply reply) throws FtpException {
         ioSession.write(reply);        
     }
+
+    public boolean isSecure() {
+        // TODO Auto-generated method stub
+        return ioSession.isSecure();
+    }
+    
+    
 }

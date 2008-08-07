@@ -30,6 +30,13 @@ public interface DataConnectionFactory {
      */
     DataConnection openConnection() throws Exception;
 
+    /**
+     * Indicates whether the data socket created by this factory will be secure
+     * that is, running over SSL/TLS.
+     * @return true if the data socket will be secured
+     */
+
+    boolean isSecure();
     
     /**
      * Close data socket.

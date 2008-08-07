@@ -318,7 +318,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
 
     /* (non-Javadoc)
-     * @see org.apache.ftpserver.FtpDataConnectionFactory2#isSecure()
+     * @see org.apache.ftpserver.DataConnectionFactory#isSecure()
      */
     public boolean isSecure() {
         return secure;
@@ -332,7 +332,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     }
     
     /* (non-Javadoc)
-     * @see org.apache.ftpserver.FtpDataConnectionFactory2#isZipMode()
+     * @see org.apache.ftpserver.DataConnectionFactory#isZipMode()
      */
     public boolean isZipMode() {
         return isZip;
