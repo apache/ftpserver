@@ -44,9 +44,10 @@ public class FtpServer {
     
     private FtpServerContext serverContext;
 
-    private boolean suspended;
+    private boolean suspended = false;
 
     private boolean started = false;
+    
 
     /**
      * Creates a server with the default configuration
@@ -59,7 +60,6 @@ public class FtpServer {
     /**
      * Constructor. Set a custom the server context.
      * @throws Exception
-     * TODO consider removing 
      */
     public FtpServer(final FtpServerContext serverContext) throws Exception {
         this.serverContext = serverContext;
@@ -69,6 +69,7 @@ public class FtpServer {
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
+       
         Map<String, Listener> listeners = serverContext.getListeners(); 
         for (Listener listener : listeners.values()) {
             listener.start(serverContext);
@@ -115,6 +116,10 @@ public class FtpServer {
      * Suspend further requests
      */
     public void suspend() {
+        if(!started) {
+            return;
+        }
+        
         // stop all listeners
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
@@ -128,6 +133,10 @@ public class FtpServer {
      * Resume the server handler
      */
     public void resume() {
+        if(!suspended) {
+            return;
+        }
+        
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.resume();
@@ -150,14 +159,6 @@ public class FtpServer {
     public FtpServerContext getServerContext() {
         return serverContext;
     }
-
-    /**
-     * Set a custom server context to be used for this server
-     * @param serverContext The custom server context
-     */
-	public void setServerContext(final FtpServerContext serverContext) {
-		this.serverContext = serverContext;
-	}
 	
     private DefaultFtpServerContext checkAndGetContext() {
         if(getServerContext() instanceof DefaultFtpServerContext) {

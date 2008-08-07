@@ -63,7 +63,7 @@ public abstract class ClientTestTemplate extends TestCase {
     protected FtpServer createServer() throws Exception {
         assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE.exists());
 
-        DefaultFtpServerContext context = new DefaultFtpServerContext(false);
+        DefaultFtpServerContext context = new DefaultFtpServerContext();
 
         NioListener listener = new NioListener();
         listener.setPort(port);

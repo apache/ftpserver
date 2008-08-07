@@ -53,12 +53,12 @@ public class DefaultFtpServerContext implements FtpServerContext {
 	private final Logger LOG = LoggerFactory
 			.getLogger(DefaultFtpServerContext.class);
 
-	private MessageResource messageResource;
-	private UserManager userManager;
-	private FileSystemManager fileSystemManager;
-	private FtpletContainer ftpletContainer;
-	private FtpStatistics statistics;
-	private CommandFactory commandFactory;
+	private MessageResource messageResource = new MessageResourceImpl();
+	private UserManager userManager = new PropertiesUserManager();
+	private FileSystemManager fileSystemManager = new NativeFileSystemManager();
+	private FtpletContainer ftpletContainer = new DefaultFtpletContainer();
+	private FtpStatistics statistics = new FtpStatisticsImpl();
+	private CommandFactory commandFactory = new DefaultCommandFactory();
 	private ConnectionConfig connectionConfig = new DefaultConnectionConfig();
 
 	private Map<String, Listener> listeners = new HashMap<String, Listener>();
@@ -69,53 +69,15 @@ public class DefaultFtpServerContext implements FtpServerContext {
 			new ConcurrentLoginPermission(20, 2),
 			new TransferRatePermission(4800, 4800) };
 
-	/**
-	 * Constructor - set the root configuration.
-	 */
 	public DefaultFtpServerContext() throws Exception {
-		this(true);
-	}
-
-	public DefaultFtpServerContext(boolean createDefaultUsers) throws Exception {
-
-		try {
-			createListeners();
-
-			// create all the components
-			messageResource = new MessageResourceImpl();
-			((MessageResourceImpl) messageResource)
-					.configure();
-
-			userManager = new PropertiesUserManager();
-			((PropertiesUserManager) userManager).configure();
-
-			fileSystemManager = new NativeFileSystemManager();
-
-			statistics = new FtpStatisticsImpl();
-
-			commandFactory = new DefaultCommandFactory();
-
-			// create user if necessary
-			// TODO turn into a setter
-			if (createDefaultUsers) {
-				createDefaultUsers();
-			}
-
-			ftpletContainer = new DefaultFtpletContainer();
-		} catch (Exception ex) {
-			dispose();
-			throw ex;
-		}
-	}
-
-	private void createListeners() throws Exception {
-		listeners.put("default", new NioListener());
+        // create the default listener
+	    listeners.put("default", new NioListener());
 	}
 
 	/**
 	 * Create default users.
 	 */
-	private void createDefaultUsers() throws Exception {
+	public void createDefaultUsers() throws Exception {
 		UserManager userManager = getUserManager();
 
 		// create admin user

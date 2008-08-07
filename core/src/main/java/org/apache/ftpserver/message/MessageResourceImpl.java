@@ -27,8 +27,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.util.IoUtils;
@@ -51,8 +53,10 @@ class MessageResourceImpl implements MessageResource {
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
     
     private String[] languages;
-    private HashMap<String, PropertiesPair> messages;
+    private Map<String, PropertiesPair> messages;
     private File customMessageDirectory;
+
+    private boolean isConfigured = false;
 
     private static class PropertiesPair {
         public Properties defaultProperties = new Properties();
@@ -86,7 +90,7 @@ class MessageResourceImpl implements MessageResource {
 	/**
      * Configure - load properties file.
      */
-    public void configure() throws FtpException {
+    public void configure() {
         // populate different properties
         messages = new HashMap<String, PropertiesPair>();
         if(languages != null) {
@@ -100,10 +104,19 @@ class MessageResourceImpl implements MessageResource {
     }
     
     /**
+     * Lazy init the user manager
+     */
+    private void lazyInit() {
+        if(!isConfigured ) {
+            configure();
+        }
+    }
+    
+    /**
      * Create Properties pair object. It stores the default 
      * and the custom messages.
      */
-    private PropertiesPair createPropertiesPair(String lang) throws FtpException {
+    private PropertiesPair createPropertiesPair(String lang) {
         PropertiesPair pair = new PropertiesPair();
         
         // load default resource
@@ -123,7 +136,7 @@ class MessageResourceImpl implements MessageResource {
         }
         catch(Exception ex) {
             LOG.warn("MessageResourceImpl.createPropertiesPair()", ex);
-            throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
+            throw new FtpServerConfigurationException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
             IoUtils.close(in);
@@ -146,7 +159,7 @@ class MessageResourceImpl implements MessageResource {
         }
         catch(Exception ex) {
             LOG.warn("MessageResourceImpl.createPropertiesPair()", ex);
-            throw new FtpException("MessageResourceImpl.createPropertiesPair()", ex);
+            throw new FtpServerConfigurationException("MessageResourceImpl.createPropertiesPair()", ex);
         }
         finally {
             IoUtils.close(in);
@@ -170,6 +183,7 @@ class MessageResourceImpl implements MessageResource {
      * Get the message. If the message not found, it will return null.
      */
     public String getMessage(int code, String subId, String language) {
+        lazyInit();
         
         // find the message key
         String key = String.valueOf(code);
@@ -209,6 +223,8 @@ class MessageResourceImpl implements MessageResource {
      * Get all messages.
      */
     public Properties getMessages(String language) {
+        lazyInit();
+        
         Properties messages = new Properties();
         
         // load properties sequentially 
@@ -233,6 +249,7 @@ class MessageResourceImpl implements MessageResource {
      * Save properties in file.
      */
     public void save(Properties prop, String language) throws FtpException {
+        lazyInit();
         
         // null properties - nothing to save
         if(prop == null) {

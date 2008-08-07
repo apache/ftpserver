@@ -20,6 +20,7 @@
 package org.apache.ftpserver.usermanager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -119,21 +120,18 @@ class PropertiesUserManager extends AbstractUserManager {
      */
     public void configure() {
         isConfigured  = true;
-        File dir = userDataFile.getParentFile();
-        if( (!dir.exists()) && (!dir.mkdirs()) ) {
-            String dirName = dir.getAbsolutePath();
-            throw new FtpServerConfigurationException("Cannot create directory for user data file : " + dirName);
-        }
-        
-        if(!userDataFile.exists()) {
-            try {
-                userDataFile.createNewFile();
-            } catch (IOException e) {
-                throw new FtpServerConfigurationException("Cannot user data file : " + userDataFile.getAbsolutePath(), e);
-            }
-        }
         try {
-            userDataProp = new BaseProperties(userDataFile);
+            userDataProp = new BaseProperties();
+            
+            if(userDataFile != null && userDataFile.exists()) {
+                FileInputStream fis = null;
+                try {
+                    fis = new FileInputStream(userDataFile);
+                    userDataProp.load(fis);
+                } finally {
+                    IoUtils.close(fis);
+                }
+            }
         } catch (IOException e) {
             throw new FtpServerConfigurationException("Error loading user data file : " + userDataFile.getAbsolutePath(), e);
         }
@@ -226,19 +224,23 @@ class PropertiesUserManager extends AbstractUserManager {
      * @throws FtpException
      */
     private void saveUserData() throws FtpException {
+        File dir = userDataFile.getParentFile();
+        if(dir != null && !dir.exists() && !dir.mkdirs() ) {
+            String dirName = dir.getAbsolutePath();
+            throw new FtpServerConfigurationException("Cannot create directory for user data file : " + dirName);
+        }
+        
         // save user data
-           FileOutputStream fos = null;
-           try {
-               fos = new FileOutputStream(userDataFile);
-               userDataProp.store(fos, "Generated file - don't edit (please)");
-           }
-           catch(IOException ex) {
-               LOG.error("Failed saving user data", ex);
-               throw new FtpException("Failed saving user data", ex);
-           }
-           finally {
-               IoUtils.close(fos);
-           }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(userDataFile);
+            userDataProp.store(fos, "Generated file - don't edit (please)");
+        } catch (IOException ex) {
+            LOG.error("Failed saving user data", ex);
+            throw new FtpException("Failed saving user data", ex);
+        } finally {
+            IoUtils.close(fos);
+        }
     }
      
     /**

@@ -20,9 +20,6 @@
 package org.apache.ftpserver.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
@@ -55,27 +52,6 @@ class BaseProperties extends Properties {
     public BaseProperties(final Properties prop)  {
         super(prop);
     }
-    
-    /**
-     * Load properties from file
-     */
-    public BaseProperties(final File fl) throws IOException {
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(fl);
-            load(fis);
-        } finally {
-            IoUtils.close(fis);
-        }
-    }
-    
-    /**
-     * Load properties from <code>InputStream</code>
-     */
-    public BaseProperties(final InputStream is) throws IOException  {
-        load(is);
-    }
-    
     
     //////////////////////////////////////////
     ////////  Properties Get Methods  ////////
