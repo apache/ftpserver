@@ -25,6 +25,7 @@ import java.io.InputStream;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.util.IoUtils;
 
 
@@ -40,20 +41,41 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
+    private FtpIoSession getActiveSession() {
+        return server.getListener("default").getActiveSessions().iterator().next();
+    }
+
     /**
      * Tests that we can send command over the command channel.
      * This is, in fact already tested by login in setup but 
      * an explicit test is good anyways.
      */
     public void testCommandChannel() throws Exception {
+        assertTrue(getActiveSession().isSecure());
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
 
+
+    public void testReissueAuth() throws Exception {
+        assertTrue(getActiveSession().isSecure());        
+        assertTrue(FTPReply.isPositiveCompletion(client.noop()));
+        
+        // we do not accept reissued AUTH or AUTH on implicitly secured socket
+        assertEquals(534, client.sendCommand("AUTH SSL"));
+    }
+
+    
+    public void testIsSecure() {
+        assertTrue(getActiveSession().isSecure());
+    }
+    
     public void testStoreWithProtPInPassiveMode() throws Exception {
         client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
         
         ((FTPSClient)client).execPROT("P");
+
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -66,6 +88,8 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.enterLocalPassiveMode();
         
         ((FTPSClient)client).execPROT("P");
+
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -74,6 +98,8 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 
         ((FTPSClient)client).execPROT("C");
         
+        assertFalse(getActiveSession().getDataConnection().isSecure());
+
         client.storeFile(TEST_FILE2.getName(), new ByteArrayInputStream(TEST_DATA));
         
         assertTrue(TEST_FILE2.exists());
@@ -82,6 +108,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 
     public void testStoreWithProtPInActiveMode() throws Exception {
         ((FTPSClient)client).execPROT("P");
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -91,6 +118,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 
     public void testStoreWithProtPAndReturnToProtCInActiveMode() throws Exception {
         ((FTPSClient)client).execPROT("P");
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TEST_DATA));
         
@@ -113,6 +141,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.enterLocalPassiveMode();
         
         ((FTPSClient)client).execPROT("P");
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         File dir = new File(ROOT_DIR, "dir");
         dir.mkdir();
@@ -125,6 +154,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.enterLocalPassiveMode();
         
         ((FTPSClient)client).execPROT("P");
+        assertTrue(getActiveSession().getDataConnection().isSecure());
         
         File file = new File(ROOT_DIR, "foo");
         file.createNewFile();

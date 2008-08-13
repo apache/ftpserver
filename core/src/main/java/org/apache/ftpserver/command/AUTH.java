@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -37,79 +37,103 @@ import org.slf4j.LoggerFactory;
 /**
  * This server supports explicit SSL support.
  */
-public 
-class AUTH extends AbstractCommand {
+public class AUTH extends AbstractCommand {
 
+    private static final String SSL_SESSION_FILTER_NAME = "sslSessionFilter";
     private final Logger LOG = LoggerFactory.getLogger(AUTH.class);
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session,
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
-        
+    public void execute(final FtpIoSession session, final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // argument check
-        if(!request.hasArgument()) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
-            return;  
+        if (!request.hasArgument()) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
+            return;
         }
-        
+
         // check SSL configuration
-        if(session.getListener().getSslConfiguration() == null) {
+        if (session.getListener().getSslConfiguration() == null) {
             session.write(FtpReplyUtil.translate(session, request, context, 431, "AUTH", null));
             return;
         }
-        
+
+        // check that we don't already have a SSL filter in place due to running
+        // in implicit mode
+        // or because the AUTH command has already been issued. This is what the
+        // RFC says:
+
+        // "Some servers will allow the AUTH command to be reissued in order
+        // to establish new authentication. The AUTH command, if accepted,
+        // removes any state associated with prior FTP Security commands.
+        // The server must also require that the user reauthorize (that is,
+        // reissue some or all of the USER, PASS, and ACCT commands) in this
+        // case (see section 4 for an explanation of "authorize" in this
+        // context)."
+
+        // Here we choose not to support reissued AUTH
+        if (session.getFilterChain().contains(SslFilter.class)) {
+            session.write(FtpReplyUtil.translate(session, request, context, 534, "AUTH", null));
+            return;
+        }
+
         // check parameter
         String authType = request.getArgument().toUpperCase();
-        if(authType.equals("SSL")) {
+        if (authType.equals("SSL")) {
             try {
                 secureSession(session, "SSL");
                 session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.SSL", null));
-            } catch(FtpException ex) {
+            } catch (FtpException ex) {
                 throw ex;
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 LOG.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
-        }
-        else if(authType.equals("TLS")) {
+        } else if (authType.equals("TLS")) {
             try {
                 secureSession(session, "TLS");
                 session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.TLS", null));
-            } catch(FtpException ex) {
+            } catch (FtpException ex) {
                 throw ex;
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 LOG.warn("AUTH.execute()", ex);
                 throw new FtpException("AUTH.execute()", ex);
             }
-        }
-        else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null));
+        } else {
+            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
+                    "AUTH", null));
         }
     }
-    
-    private void secureSession(final FtpIoSession session, final String type) throws GeneralSecurityException, FtpException {
+
+    private void secureSession(final FtpIoSession session, final String type) throws GeneralSecurityException,
+            FtpException {
         SslConfiguration ssl = session.getListener().getSslConfiguration();
-        
-        if(ssl != null) {
+
+        if (ssl != null) {
             session.setAttribute(SslFilter.DISABLE_ENCRYPTION_ONCE);
-            
-            SslFilter sslFilter = new SslFilter( ssl.getSSLContext() );
-            if(ssl.getClientAuth() == ClientAuth.NEED) {
+
+            SslFilter sslFilter = new SslFilter(ssl.getSSLContext());
+            if (ssl.getClientAuth() == ClientAuth.NEED) {
                 sslFilter.setNeedClientAuth(true);
-            } else if(ssl.getClientAuth() == ClientAuth.WANT) {
+            } else if (ssl.getClientAuth() == ClientAuth.WANT) {
                 sslFilter.setWantClientAuth(true);
             }
-            
-            if(ssl.getEnabledCipherSuites() != null) {
+
+            // note that we do not care about the protocol, we allow both types
+            // and leave it to the SSL handshake to determine the protocol to
+            // use. Thus the type argument is ignored.
+
+            if (ssl.getEnabledCipherSuites() != null) {
                 sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
             }
-            session.getFilterChain().addFirst("sslSessionFilter", sslFilter);
+
+            session.getFilterChain().addFirst(SSL_SESSION_FILTER_NAME, sslFilter);
 
         } else {
             throw new FtpException("Socket factory SSL not configured");

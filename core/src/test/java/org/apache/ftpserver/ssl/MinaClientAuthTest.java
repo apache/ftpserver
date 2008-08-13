@@ -21,11 +21,13 @@ package org.apache.ftpserver.ssl;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.KeyManagerFactory;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.interfaces.FtpIoSession;
 
 
 public class MinaClientAuthTest extends SSLTestTemplate {
@@ -35,7 +37,9 @@ public class MinaClientAuthTest extends SSLTestTemplate {
         client.setNeedClientAuth(true);
         
         KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(new FileInputStream(FTPCLIENT_KEYSTORE), KEYSTORE_PASSWORD.toCharArray());
+        FileInputStream fis = new FileInputStream(FTPCLIENT_KEYSTORE);
+        ks.load(fis, KEYSTORE_PASSWORD.toCharArray());
+        fis.close();
         
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(ks, KEYSTORE_PASSWORD.toCharArray());
@@ -58,5 +62,14 @@ public class MinaClientAuthTest extends SSLTestTemplate {
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
 
+
+    public void testClientCertificates() throws Exception {
+        FtpIoSession session = server.getListener("default").getActiveSessions().iterator().next();
+        assertEquals(1, session.getClientCertificates().length);
+        
+        X509Certificate cert = (X509Certificate) session.getClientCertificates()[0];
+        
+        assertTrue(cert.getSubjectDN().toString().contains("FtpClient"));
+    }
 
 }

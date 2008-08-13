@@ -661,8 +661,8 @@ public class FtpIoSession implements IoSession {
 	}
 
     public Certificate[] getClientCertificates() {
-        if(getFilterChain().contains("sslFilter")) {
-            SslFilter sslFilter = (SslFilter) getFilterChain().get("sslFilter");
+        if(getFilterChain().contains(SslFilter.class)) {
+            SslFilter sslFilter = (SslFilter) getFilterChain().get(SslFilter.class);
             
             SSLSession sslSession = sslFilter.getSslSession(this);
             
@@ -727,7 +727,7 @@ public class FtpIoSession implements IoSession {
 	 * @return true if the control socket is secured
 	 */
     public boolean isSecure() {
-        return getFilterChain().contains("sslSessionFilter");
+        return getFilterChain().contains(SslFilter.class);
     }
 
 }
