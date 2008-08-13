@@ -133,7 +133,7 @@ public class ListenerBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         }
         InetAddress localAddress = SpringUtil.parseInetAddress(element, "local-address");
         if(localAddress != null) {
-            builder.addPropertyValue("localAddress", localAddress);
+            builder.addPropertyValue("serverAddress", localAddress);
         }
         builder.addPropertyValue("implicitSsl", SpringUtil.parseBoolean(element, "implicit-ssl", false));
     }

@@ -43,7 +43,6 @@ public class SpringConfigTest extends TestCase {
         XmlBeanFactory factory = new XmlBeanFactory(new FileSystemResource("src/test/resources/spring-config/config-spring-1.xml"));
 
         FtpServer server = (FtpServer) factory.getBean("server");
-        server.start();
         
         assertEquals(500, server.getConnectionConfig().getMaxLogins());
         assertEquals(false, server.getConnectionConfig().isAnonymousLoginEnabled());
@@ -58,6 +57,7 @@ public class SpringConfigTest extends TestCase {
         assertNotNull(listener);
         assertTrue(listener instanceof NioListener);
         assertEquals(2222, ((NioListener)listener).getPort());
+        assertEquals(InetAddress.getByName("1.2.3.4"), ((NioListener)listener).getServerAddress());
         assertEquals(true, ((NioListener)listener).getDataConnectionConfiguration().isActiveEnabled());
         assertEquals(InetAddress.getByName("1.2.3.4"), ((NioListener)listener).getDataConnectionConfiguration().getActiveLocalAddress());
         assertEquals("123-125", ((NioListener)listener).getDataConnectionConfiguration().getPassivePorts());

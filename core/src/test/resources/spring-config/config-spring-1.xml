@@ -33,7 +33,7 @@
 
 
 		<listeners>
-			<nio-listener name="listener0" port="2222">
+			<nio-listener name="listener0" port="2222" local-address="1.2.3.4">
                 <ssl>
                     <keystore file="/tmp/tmp.jks" password="password"/>
                 </ssl>
