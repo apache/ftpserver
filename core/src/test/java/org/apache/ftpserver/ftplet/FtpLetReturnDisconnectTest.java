@@ -72,6 +72,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
 
         try {
             client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+            client.noop();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK

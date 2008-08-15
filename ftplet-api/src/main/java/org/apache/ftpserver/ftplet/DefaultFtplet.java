@@ -38,9 +38,7 @@ class DefaultFtplet implements Ftplet {
     public FtpletEnum beforeCommand(FtpSession session, FtpRequest request) throws FtpException, IOException {
         String command = request.getCommand().toUpperCase();
 
-        if("PASS".equals(command)) {
-            return onLogin(session, request);
-        } else if("DELE".equals(command)) {
+        if("DELE".equals(command)) {
             return onDeleteStart(session, request);
         } else if("STOR".equals(command)) {
             return onUploadStart(session, request);
@@ -66,7 +64,9 @@ class DefaultFtplet implements Ftplet {
         
         String command = request.getCommand().toUpperCase();
 
-        if("DELE".equals(command)) {
+        if("PASS".equals(command)) {
+            return onLogin(session, request);
+        } else if("DELE".equals(command)) {
             return onDeleteEnd(session, request);
         } else if("STOR".equals(command)) {
             return onUploadEnd(session, request);

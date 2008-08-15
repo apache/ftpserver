@@ -70,7 +70,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
             }
         };
 
-        assertFalse(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
 
     public void testExceptionDuringDeleteStart() throws Exception {

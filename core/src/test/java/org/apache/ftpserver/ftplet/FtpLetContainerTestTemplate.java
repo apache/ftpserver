@@ -156,7 +156,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("PASS"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("PASS"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
