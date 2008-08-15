@@ -19,13 +19,23 @@
 
 package org.apache.ftpserver.ftplet;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
+import org.apache.ftpserver.test.TestUtil;
 
 public class FtpLetReturnSkipTest extends ClientTestTemplate {
-    
+    private static final byte[] TESTDATA = "TESTDATA".getBytes();
+    private static final byte[] DOUBLE_TESTDATA = "TESTDATATESTDATA".getBytes();
+    private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+    private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
+    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
+
     protected FtpletEnum mockReturnValue = FtpletEnum.RET_DISCONNECT;
     
     /*
@@ -59,15 +69,15 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
         assertFalse(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
-/*
+
     public void testExceptionDuringDeleteStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 return FtpletEnum.RET_SKIP;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertFalse(client.deleteFile(TEST_FILE1.getName()));
@@ -77,17 +87,18 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.deleteFile(TEST_FILE1.getName());
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -98,7 +109,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -117,7 +128,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -126,6 +137,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.makeDirectory(TEST_DIR1.getName());
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -136,7 +148,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -157,7 +169,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -168,6 +180,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.removeDirectory(TEST_DIR1.getName());
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -178,7 +191,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringSite() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onSite(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onSite(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -195,13 +208,13 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRenameStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -217,17 +230,18 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.rename(TEST_FILE1.getName(), TEST_FILE2.getName());
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -240,13 +254,13 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -259,18 +273,19 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             client.retrieveFile(TEST_FILE1.getName(), baos);
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -281,13 +296,13 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onAppendStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
@@ -302,17 +317,18 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
         
-        writeDataToFile(TEST_FILE1, TESTDATA);
+        TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -323,7 +339,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -342,7 +358,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -351,6 +367,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK
@@ -361,7 +378,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueStart(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
@@ -380,7 +397,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueEnd(FtpRequest request, FtpResponse response) throws FtpException, IOException {
+            public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
                 throwException();
                 
                 return mockReturnValue;
@@ -402,5 +419,5 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     protected void throwException() throws FtpException, IOException {
         // do not throw, we want to check the result of return values
     }
-*/
+
 }
