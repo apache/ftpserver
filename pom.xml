@@ -28,7 +28,7 @@
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer</name>
-  <version>1.0.0-M2-SNAPSHOT</version>
+  <version>1.0.0-M3-SNAPSHOT</version>
   <url>http://mina.apache.org/ftpserver</url>
   <issueManagement>
     <system>Jira</system>
