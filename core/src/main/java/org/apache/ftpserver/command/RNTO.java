@@ -25,8 +25,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
@@ -59,23 +57,6 @@ class RNTO extends AbstractCommand {
             if(toFileStr == null) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RNTO", null));
                 return;  
-            }
-            
-            // call Ftplet.onRenameStart() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            FtpletEnum ftpletRet;
-            try {
-                ftpletRet = ftpletContainer.onRenameStart(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                return;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
             }
             
             // get the "rename from" file object
@@ -118,24 +99,11 @@ class RNTO extends AbstractCommand {
                 LOG.info("File rename (" + session.getUser().getName() + ") " 
                                          + frFile.getFullName() + " -> " + toFile.getFullName());
                 
-                // call Ftplet.onRenameEnd() method
-                try {
-                    ftpletRet = ftpletContainer.onRenameEnd(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                }
-            }
-            else {
+            } else {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "RNTO", toFileStr));
             }
         
-        }
-        finally {
+        } finally {
             session.resetState(); 
         }
     } 

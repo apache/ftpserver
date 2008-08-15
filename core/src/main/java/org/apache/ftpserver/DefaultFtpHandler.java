@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpletContainer;
+import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpIoSession;
@@ -37,6 +39,12 @@ import org.slf4j.LoggerFactory;
 public class DefaultFtpHandler implements FtpHandler {
 	
 	private final Logger LOG = LoggerFactory.getLogger(DefaultFtpHandler.class);
+	
+	private final static String[] NON_AUTHENTICATED_COMMANDS = new String[] {
+	        "USER",
+	        "PASS",
+	        "AUTH"
+	};
 	
 	private FtpServerContext context;
 	private Listener listener;
@@ -76,21 +84,64 @@ public class DefaultFtpHandler implements FtpHandler {
     	session.closeOnFlush().awaitUninterruptibly(10000);
     }
 
+    private boolean isCommandOkWithoutAuthentication(String command) {
+        boolean okay = false;
+        for(String allowed : NON_AUTHENTICATED_COMMANDS) {
+            if(allowed.equals(command)) {
+                okay = true;
+                break;
+            }
+        }
+        return okay;
+    }
+    
     public void messageReceived( final FtpIoSession session, final FtpRequest request ) throws Exception {
         try {
             String commandName = request.getCommand();
             CommandFactory commandFactory = context.getCommandFactory();
             Command command = commandFactory.getCommand(commandName);
             
+            // make sure the user is authenticated before he issues commands
+            if(!session.isLoggedIn() && !isCommandOkWithoutAuthentication(commandName)) {
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "permission", null));
+                return;
+            }
             
-            if(command != null) {
-            	synchronized (session) {
-            		command.execute(session, context, request);
-				}
+            FtpletContainer ftplets = context.getFtpletContainer();
+            
+            FtpletEnum ftpletRet;
+            try {
+                ftpletRet = ftplets.beforeCommand(session.getFtpletSession(), request);
+            } catch(Exception e) {
+                LOG.debug("Ftplet container threw exception", e);
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
             }
-            else {
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "not.implemented", null));
+            if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
+                session.closeOnFlush().awaitUninterruptibly(10000);
+                return;
+            } else if(ftpletRet != FtpletEnum.RET_SKIP) {
+
+                if(command != null) {
+                	synchronized (session) {
+                		command.execute(session, context, request);
+    				}
+                }
+                else {
+                    session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "not.implemented", null));
+                }
             }
+            
+            try {
+                ftpletRet = ftplets.afterCommand(session.getFtpletSession(), request);
+            } catch(Exception e) {
+                LOG.debug("Ftplet container threw exception", e);
+                ftpletRet = FtpletEnum.RET_DISCONNECT;
+            }
+            if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
+                session.closeOnFlush().awaitUninterruptibly(10000);
+                return;
+            }
+
         }
         catch(Exception ex) {
             

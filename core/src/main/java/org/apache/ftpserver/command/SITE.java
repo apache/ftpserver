@@ -25,8 +25,6 @@ import java.util.HashMap;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -52,23 +50,6 @@ class SITE extends AbstractCommand {
     public void execute(final FtpIoSession session,
             final FtpServerContext context,
             final FtpRequest request) throws IOException, FtpException {
-        
-        // call Ftplet.onSite method
-        Ftplet ftpletContainer = context.getFtpletContainer();
-        FtpletEnum ftpletRet;
-        try {
-            ftpletRet = ftpletContainer.onSite(session.getFtpletSession(), request);
-        } catch(Exception e) {
-            LOG.debug("Ftplet container threw exception", e);
-            ftpletRet = FtpletEnum.RET_DISCONNECT;
-        }
-        if(ftpletRet == FtpletEnum.RET_SKIP) {
-            return;
-        }
-        else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            session.closeOnFlush().awaitUninterruptibly(10000);
-            return;
-        }
         
         // get request name
         String argument = request.getArgument();

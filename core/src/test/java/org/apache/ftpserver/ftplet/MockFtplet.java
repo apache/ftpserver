@@ -21,7 +21,7 @@ package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
 
-public class MockFtplet implements Ftplet {
+public class MockFtplet extends DefaultFtplet {
 
     protected static MockFtpletCallback callback = new MockFtpletCallback();
     

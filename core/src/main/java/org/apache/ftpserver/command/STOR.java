@@ -32,8 +32,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -85,23 +83,6 @@ class STOR extends AbstractCommand {
                     session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
-            }
-            
-            // call Ftplet.onUploadStart() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            FtpletEnum ftpletRet;
-            try {
-                ftpletRet = ftpletContainer.onUploadStart(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                return;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
             }
             
             // get filename
@@ -169,18 +150,6 @@ class STOR extends AbstractCommand {
             if(!failure) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOR", fileName));
                 
-                // call Ftplet.onUploadEnd() method
-                try {
-                    ftpletRet = ftpletContainer.onUploadEnd(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                }
-
             }
         }
         finally {

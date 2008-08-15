@@ -56,13 +56,52 @@ interface Ftplet {
     void init(FtpletContext ftpletContext) throws FtpException;
     
     /**
-     * Called by the servlet container to indicate to a ftplet that the ftplet is 
+     * Called by the Ftplet container to indicate to a ftplet that the ftplet is 
      * being taken out of service. This method is only called once all threads within 
      * the ftplet's service method have exited. After the ftplet container calls this 
      * method, callback methods will not be executed. If the ftplet initialization 
      * method fails, this method will not be called. 
      */
     void destroy();
+    
+    /**
+     * Called by the ftplet container before a command is executed by the server.
+     * The implementation should return based on the desired action to be taken by the server:
+     * <ul>
+     * <li>{@link FtpletEnum#RET_DEFAULT}: The server continues as normal and executes the command</li> 
+     * <li>{@link FtpletEnum#RET_NO_FTPLET}: The server does not call any more Ftplets before this command
+     *   but continues execution of the command as usual</li>
+     * <li>{@link FtpletEnum#RET_SKIP}: The server skips over execution of the command. Note that the Ftplet is 
+     *   responsible for returning the appropriate reply to the client, or the client might deadlock.</li> 
+     * <li>{@link FtpletEnum#RET_DISCONNECT}: The server will immediately disconnect the client.</li>
+     * <li>Ftplet throws exception: Same as {@link FtpletEnum#RET_DISCONNECT}</li>
+     * </ul>
+     * @param session The current session
+     * @param request The current request
+     * @return The desired action to be performed by the server
+     * @throws FtpException
+     * @throws IOException
+     */
+    FtpletEnum beforeCommand(FtpSession session, FtpRequest request) throws FtpException, IOException;
+
+    /**
+     * Called by the ftplet container after a command has been executed by the server.
+     * The implementation should return based on the desired action to be taken by the server:
+     * <ul>
+     * <li>{@link FtpletEnum#RET_DEFAULT}: The server continues as normal</li> 
+     * <li>{@link FtpletEnum#RET_NO_FTPLET}: The server does not call any more Ftplets before this command
+     *   but continues as normal</li>
+     * <li>{@link FtpletEnum#RET_SKIP}: Same as {@link FtpletEnum#RET_DEFAULT}</li> 
+     * <li>{@link FtpletEnum#RET_DISCONNECT}: The server will immediately disconnect the client.</li>
+     * <li>Ftplet throws exception: Same as {@link FtpletEnum#RET_DISCONNECT}</li>
+     * </ul>
+     * @param session The current session
+     * @param request The current request
+     * @return The desired action to be performed by the server
+     * @throws FtpException
+     * @throws IOException
+     */
+    FtpletEnum afterCommand(FtpSession session, FtpRequest request) throws FtpException, IOException;
     
     /**
      * Client connect notification method.
@@ -73,97 +112,4 @@ interface Ftplet {
      * Client disconnect notification method. This is the last callback method.
      */
     FtpletEnum onDisconnect(FtpSession session) throws FtpException, IOException;
-    
-    /**
-     * Client successful login notification method. 
-     * If the user has successfully authenticated, the 
-     * {@link FtpSession#getUser()} method will return the user,
-     * otherwise it will return null.
-     */
-    FtpletEnum onLogin(FtpSession session, FtpRequest request) throws FtpException, IOException;
-            
-    /**
-     * File delete request notification method.
-     */
-    FtpletEnum onDeleteStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * File delete success notification method.
-     */
-    FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * File upload request notification method.
-     */
-    FtpletEnum onUploadStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-
-    /**
-     * File upload success notification method.
-     */
-    FtpletEnum onUploadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * File download request notification method.
-     */
-    FtpletEnum onDownloadStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * File download success notification method.
-     */
-    FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Remove directory request notification method.
-     */
-    FtpletEnum onRmdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Directory removal success notification method.
-     */
-    FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Directory creation request notification method.
-     */
-    FtpletEnum onMkdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Directory creation success notification method.
-     */
-    FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-            
-    /**
-     * File append request notification method.
-     */
-    FtpletEnum onAppendStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * File append success notification method.
-     */
-    FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Unique file create request notification method.
-     */
-    FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Unique file create success notification method.
-     */
-    FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Rename start notification method.
-     */
-    FtpletEnum onRenameStart(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * Rename end notification method.
-     */
-    FtpletEnum onRenameEnd(FtpSession session, FtpRequest request) throws FtpException, IOException;
-    
-    /**
-     * SITE command notification method.
-     */
-    FtpletEnum onSite(FtpSession session, FtpRequest request) throws FtpException, IOException;
 }

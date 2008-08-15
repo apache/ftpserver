@@ -156,7 +156,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onLogin(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("PASS"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -180,7 +180,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onDeleteStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("DELE"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -204,7 +204,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onDeleteEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("DELE"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -227,8 +227,8 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
-        
-        container.onUploadStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("STOR"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -251,8 +251,8 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
-        
-        container.onUploadEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("STOR"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -276,7 +276,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onDownloadStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("RETR"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -300,7 +300,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onDownloadEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("RETR"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -324,7 +324,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onRmdirStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("RMD"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -348,7 +348,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onRmdirEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("RMD"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -372,7 +372,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onMkdirStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("MKD"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -396,7 +396,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onMkdirEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("MKD"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -420,7 +420,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onAppendStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("APPE"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -444,7 +444,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onAppendEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("APPE"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -468,7 +468,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onUploadUniqueStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("STOU"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -492,7 +492,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onUploadUniqueEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("STOU"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -516,7 +516,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onRenameStart(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl("RNTO"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -540,7 +540,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onRenameEnd(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("RNTO"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -564,7 +564,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
         
-        container.onSite(new FtpSessionImpl(null), new FtpRequestImpl("foo"));
+        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl("SITE"));
         
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));

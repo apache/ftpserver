@@ -31,8 +31,7 @@ import java.util.Date;
  * So the attributes set by <code>setAttribute()</code> will be always 
  * available later unless that attribute is removed or the client disconnects.
  */
-public 
-interface FtpSession {
+public interface FtpSession {
 
     /**
      * Returns the IP address of the client that sent the request.

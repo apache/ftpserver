@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
+import java.io.ByteArrayInputStream;
+
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
@@ -31,6 +33,9 @@ public class LoginTest extends ClientTestTemplate {
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
     
+    public void testCommandWithoutLogin() throws Exception {
+        assertFalse(client.storeFile("foo", new ByteArrayInputStream("foo".getBytes())));
+    }
 
 
     public void testLoginNoUser() throws Exception {

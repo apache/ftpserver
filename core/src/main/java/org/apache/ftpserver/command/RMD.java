@@ -25,8 +25,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -62,23 +60,6 @@ class RMD extends AbstractCommand {
         if(fileName == null) {
             session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "RMD", null));
             return;  
-        }
-        
-        // call Ftplet.onRmdirStart() method
-        Ftplet ftpletContainer = context.getFtpletContainer();
-        FtpletEnum ftpletRet;
-        try{
-            ftpletRet = ftpletContainer.onRmdirStart(session.getFtpletSession(), request);
-        } catch(Exception e) {
-            LOG.debug("Ftplet container threw exception", e);
-            ftpletRet = FtpletEnum.RET_DISCONNECT;
-        }
-        if(ftpletRet == FtpletEnum.RET_SKIP) {
-            return;
-        }
-        else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            session.closeOnFlush().awaitUninterruptibly(10000);
-            return;
         }
         
         // get file object
@@ -119,20 +100,7 @@ class RMD extends AbstractCommand {
             ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
             ftpStat.setRmdir(session, file);
             
-            // call Ftplet.onRmdirEnd() method
-            try{
-                ftpletRet = ftpletContainer.onRmdirEnd(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
-            }
-
-        }
-        else {
+        } else {
             session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD", fileName));
         }
     }

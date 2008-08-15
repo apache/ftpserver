@@ -29,8 +29,6 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpIoSession;
@@ -129,6 +127,7 @@ class PASS extends AbstractCommand {
                 else {
                     auth = new UsernamePasswordAuthentication(userName, password, userMetadata);
                 }
+
                 authenticatedUser = userManager.authenticate(auth);
             } catch(AuthenticationFailedException e) { 
                 authenticatedUser = null;
@@ -139,8 +138,6 @@ class PASS extends AbstractCommand {
                 LOG.warn("PASS.execute()", e);
             }
 
-            // set the user so that the Ftplets will be able to verify it
-            
             // first save old values so that we can reset them if Ftplets
             // tell us to fail
             User oldUser = session.getUser();
@@ -154,24 +151,6 @@ class PASS extends AbstractCommand {
                 success = true;
             } else {
                 session.setUser(null);
-            }
-            
-            // call Ftplet.onLogin() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            if(ftpletContainer != null) {
-                FtpletEnum ftpletRet;
-                try{
-                    ftpletRet = ftpletContainer.onLogin(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                } else if(ftpletRet == FtpletEnum.RET_SKIP) {
-                    success = false;
-                }
             }
             
             if(!success) {

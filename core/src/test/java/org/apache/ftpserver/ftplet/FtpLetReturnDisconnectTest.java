@@ -61,23 +61,6 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         return server;
     }
 
-
-/*    public void testExceptionDuringInit() throws Exception {
-        MockFtplet.callback = new MockFtpletCallback() {
-            public void init(FtpletContext ftpConfig, Configuration config)
-                    throws FtpException {
-                throw new RuntimeException();
-            }
-        };
-
-        try {
-            initServer();
-            fail("Must throw FtpException");
-        } catch (FtpException e) {
-            // OK
-        }
-    }*/
-
     public void testExceptionDuringLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletEnum onLogin(FtpSession session, FtpRequest request)
@@ -248,6 +231,7 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         try {
             client.site("HELP");
+            client.completePendingCommand();
             fail("Must throw FTPConnectionClosedException");
         } catch (FTPConnectionClosedException e) {
             // OK

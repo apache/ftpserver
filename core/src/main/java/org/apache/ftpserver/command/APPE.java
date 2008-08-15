@@ -32,8 +32,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -84,23 +82,6 @@ class APPE extends AbstractCommand {
                 	session.write(new DefaultFtpReply(FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PORT or PASV must be issued first"));
                     return;
                 }
-            }
-            
-            // call Ftplet.onAppendStart() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            FtpletEnum ftpletRet;
-            try {
-                ftpletRet = ftpletContainer.onAppendStart(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                return;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
             }
             
             // get filenames
@@ -183,20 +164,7 @@ class APPE extends AbstractCommand {
             
             // if data transfer ok - send transfer complete message
             if(!failure) {
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));
-                
-                // call Ftplet.onAppendEnd() method
-                try {
-                    ftpletRet = ftpletContainer.onAppendEnd(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                }
-
+                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE", fileName));                
             }
         }
         finally {

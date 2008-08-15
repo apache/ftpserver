@@ -31,9 +31,65 @@ class DefaultFtplet implements Ftplet {
 
     public void init(FtpletContext ftpletContext) throws FtpException {}
     public void destroy() {}
-    
+
     public FtpletEnum onConnect(FtpSession session) throws FtpException, IOException {return null;}
     public FtpletEnum onDisconnect(FtpSession session) throws FtpException, IOException {return null;}
+
+    public FtpletEnum beforeCommand(FtpSession session, FtpRequest request) throws FtpException, IOException {
+        String command = request.getCommand().toUpperCase();
+
+        if("PASS".equals(command)) {
+            return onLogin(session, request);
+        } else if("DELE".equals(command)) {
+            return onDeleteStart(session, request);
+        } else if("STOR".equals(command)) {
+            return onUploadStart(session, request);
+        } else if("RETR".equals(command)) {
+            return onDownloadStart(session, request);
+        } else if("RMD".equals(command)) {
+            return onRmdirStart(session, request);
+        } else if("MKD".equals(command)) {
+            return onMkdirStart(session, request);
+        } else if("APPE".equals(command)) {
+            return onAppendStart(session, request);
+        } else if("STOU".equals(command)) {
+            return onUploadUniqueStart(session, request);
+        } else if("RNTO".equals(command)) {
+            return onRenameStart(session, request);
+        } else {
+            // TODO should we call a catch all?
+            return null;
+        }        
+    }
+    
+    public FtpletEnum afterCommand(FtpSession session, FtpRequest request) throws FtpException, IOException {
+        
+        String command = request.getCommand().toUpperCase();
+
+        if("DELE".equals(command)) {
+            return onDeleteEnd(session, request);
+        } else if("STOR".equals(command)) {
+            return onUploadEnd(session, request);
+        } else if("RETR".equals(command)) {
+            return onDownloadEnd(session, request);
+        } else if("RMD".equals(command)) {
+            return onRmdirEnd(session, request);
+        } else if("MKD".equals(command)) {
+            return onMkdirEnd(session, request);
+        } else if("APPE".equals(command)) {
+            return onAppendEnd(session, request);
+        } else if("STOU".equals(command)) {
+            return onUploadUniqueEnd(session, request);
+        } else if("RNTO".equals(command)) {
+            return onRenameEnd(session, request);
+        } else if("SITE".equals(command)) {
+            return onSite(session, request);
+        } else {
+            // TODO should we call a catch all?
+            return null;
+        }        
+    }
+
     public FtpletEnum onLogin(FtpSession session, FtpRequest request) throws FtpException, IOException {return null;}
     
     public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request) throws FtpException, IOException {return null;}

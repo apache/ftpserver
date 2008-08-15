@@ -21,7 +21,7 @@ package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
 
-public class MockFtpletCallback implements Ftplet {
+public class MockFtpletCallback extends DefaultFtplet {
 
     public static FtpletEnum returnValue;
     

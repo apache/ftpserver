@@ -33,8 +33,6 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -76,23 +74,6 @@ class STOU extends AbstractCommand {
         
             // reset state variables
             session.resetState();
-            
-            // call Ftplet.onUploadUniqueStart() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            FtpletEnum ftpletRet;
-            try {
-                ftpletRet = ftpletContainer.onUploadUniqueStart(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                return;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
-            }
             
             String pathName = request.getArgument();
             
@@ -184,21 +165,8 @@ class STOU extends AbstractCommand {
             if(!failure) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "STOU", fileName));
                 
-                // call Ftplet.onUploadUniqueEnd() method
-                try {
-                    ftpletRet = ftpletContainer.onUploadUniqueEnd(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                }
-
             }
-        }
-        finally {
+        } finally {
             session.getDataConnection().closeDataConnection();
         }
         

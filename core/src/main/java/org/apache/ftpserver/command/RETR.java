@@ -34,8 +34,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -76,23 +74,6 @@ class RETR extends AbstractCommand {
                 return;  
             }
     
-            // call Ftplet.onDownloadStart() method
-            Ftplet ftpletContainer = context.getFtpletContainer();
-            FtpletEnum ftpletRet;
-            try {
-                ftpletRet = ftpletContainer.onDownloadStart(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_SKIP) {
-                return;
-            }
-            else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
-            }
-            
             // get file object
             FileObject file = null;
             try {
@@ -188,21 +169,8 @@ class RETR extends AbstractCommand {
             if(!failure) {
                 session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "RETR", fileName));
                 
-                // call Ftplet.onDownloadEnd() method
-                try {
-                    ftpletRet = ftpletContainer.onDownloadEnd(session.getFtpletSession(), request);
-                } catch(Exception e) {
-                    LOG.debug("Ftplet container threw exception", e);
-                    ftpletRet = FtpletEnum.RET_DISCONNECT;
-                }
-                if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
-                    return;
-                }
-
             }
-        }
-        finally {
+        } finally {
             session.resetState();
             session.getDataConnection().closeDataConnection();
         }

@@ -26,6 +26,8 @@ public class FeatTest extends ClientTestTemplate {
 
 
     public void test() throws Exception {
+        client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+        
         client.sendCommand("FEAT");
         String[] featReplies = client.getReplyString().split("\r\n");
         

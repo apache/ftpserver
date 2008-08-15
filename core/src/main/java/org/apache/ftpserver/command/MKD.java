@@ -26,8 +26,6 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftplet.FtpletEnum;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
@@ -64,24 +62,7 @@ class MKD extends AbstractCommand {
             session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MKD", null));
             return;  	
         }
-        
-        // call Ftplet.onMkdirStart() method
-        Ftplet ftpletContainer = context.getFtpletContainer();
-        FtpletEnum ftpletRet;
-        try{
-            ftpletRet = ftpletContainer.onMkdirStart(session.getFtpletSession(), request);
-        } catch(Exception e) {
-            LOG.debug("Ftplet container threw exception", e);
-            ftpletRet = FtpletEnum.RET_DISCONNECT;
-        }
-        if(ftpletRet == FtpletEnum.RET_SKIP) {
-            return;
-        }
-        else if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-            session.closeOnFlush().awaitUninterruptibly(10000);
-            return;
-        }
-        
+                
         // get file object
         FileObject file = null;
         try {
@@ -120,20 +101,7 @@ class MKD extends AbstractCommand {
             ServerFtpStatistics ftpStat = (ServerFtpStatistics)context.getFtpStatistics();
             ftpStat.setMkdir(session, file);
             
-            // call Ftplet.onMkdirEnd() method
-            try{
-                ftpletRet = ftpletContainer.onMkdirEnd(session.getFtpletSession(), request);
-            } catch(Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
-            }
-            if(ftpletRet == FtpletEnum.RET_DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
-            }
-
-        }
-        else {
+        } else {
             session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD", fileName));
         }
     }

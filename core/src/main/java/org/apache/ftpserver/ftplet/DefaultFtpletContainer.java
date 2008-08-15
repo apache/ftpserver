@@ -78,6 +78,26 @@ public class DefaultFtpletContainer implements FtpletContainer {
        
         return ftplets.get(name);
     }
+
+    public void init(FtpletContext ftpletContext) throws FtpException {
+        // dummy, forced by Ftplet API       
+    }
+
+    /**
+     * @see FtpletContainer#getFtplets()
+     */
+    public Map<String, Ftplet> getFtplets() {
+        return ftplets;
+    }
+
+    /**
+     * @see FtpletContainer#setFtplets(Map)
+     */
+    public void setFtplets(Map<String, Ftplet> ftplets) {
+        this.ftplets = ftplets;
+    }
+
+
     
     /**
      * Destroy all ftplets.
@@ -125,14 +145,29 @@ public class DefaultFtpletContainer implements FtpletContainer {
         return retVal;
     }
     
-    /**
-     * Call ftplet onLogin.
-     */
-    public FtpletEnum onLogin(FtpSession session, FtpRequest request) throws FtpException, IOException {
+
+    public FtpletEnum afterCommand(FtpSession session, FtpRequest request) throws FtpException, IOException {
         FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
         for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
 
-            retVal = entry.getValue().onLogin(session, request);
+            retVal = entry.getValue().afterCommand(session, request);
+            if(retVal == null) {
+                retVal = FtpletEnum.RET_DEFAULT;
+            }
+            
+            // proceed only if the return value is FtpletEnum.RET_DEFAULT
+            if(retVal != FtpletEnum.RET_DEFAULT) {
+                break;
+            }
+        }
+        return retVal;    
+    }
+
+    public FtpletEnum beforeCommand(FtpSession session, FtpRequest request) throws FtpException, IOException {
+        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
+        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
+
+            retVal = entry.getValue().beforeCommand(session, request);
             if(retVal == null) {
                 retVal = FtpletEnum.RET_DEFAULT;
             }
@@ -143,365 +178,6 @@ public class DefaultFtpletContainer implements FtpletContainer {
             }
         }
         return retVal;
-    }
-
-    /** 
-     * Call ftplet onDeleteStart.
-     */
-    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onDeleteStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    
-    /**
-     * Call ftplet onDeleteEnd.
-     */
-    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onDeleteEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onUploadStart.
-     */
-    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onUploadStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onUploadEnd.
-     */
-    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onUploadEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onDownloadStart.
-     */
-    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onDownloadStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onDownloadEnd.
-     */
-    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onDownloadEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onRmdirStart.
-     */
-    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onRmdirStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onRmdirEnd.
-     */
-    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onRmdirEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onMkdirStart.
-     */
-    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onMkdirStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /** 
-     * Call ftplet onMkdirEnd.
-     */
-    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onMkdirEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-    
-    /**
-     * Call ftplet onAppendStart.
-     */
-    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onAppendStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onAppendEnd.
-     */
-    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onAppendEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onUploadUniqueStart.
-     */
-    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onUploadUniqueStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-    
-    /**
-     * Call ftplet onUploadUniqueEnd.
-     */
-    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onUploadUniqueEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Call ftplet onRenameStart.
-     */
-    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onRenameStart(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-    
-    /**
-     * Call ftplet onRenameEnd.
-     */
-    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onRenameEnd(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-    
-    /**
-     * Call ftplet onSite.
-     */
-    public FtpletEnum onSite(FtpSession session, FtpRequest request) throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
-        for(Entry<String, Ftplet> entry : ftplets.entrySet()) {
-
-            retVal = entry.getValue().onSite(session, request);
-            if(retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
-            }
-            
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if(retVal != FtpletEnum.RET_DEFAULT) {
-                break;
-            }
-        }
-        return retVal;
-    }
-
-    public void init(FtpletContext ftpletContext) throws FtpException {
-        // dummy, forced by Ftplet API       
-    }
-
-    /**
-     * @see FtpletContainer#getFtplets()
-     */
-    public Map<String, Ftplet> getFtplets() {
-        return ftplets;
-    }
-
-    /**
-     * @see FtpletContainer#setFtplets(Map)
-     */
-    public void setFtplets(Map<String, Ftplet> ftplets) {
-        this.ftplets = ftplets;
     }
 
 
