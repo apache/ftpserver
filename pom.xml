@@ -144,12 +144,6 @@
       </dependency>
 
       <dependency>
-        <groupId>${groupId}</groupId>
-        <artifactId>ftpserver-deprecated</artifactId>
-        <version>${pom.version}</version>
-      </dependency>
-
-      <dependency>
         <groupId>org.apache.mina</groupId>
         <artifactId>mina-core</artifactId>
         <version>2.0.0-M2</version>
@@ -401,7 +395,6 @@
       <modules>
         <module>ftplet-api</module>
         <module>core</module>
-        <module>deprecated</module>
         <module>distribution</module>
       </modules>
       <distributionManagement>
@@ -417,7 +410,6 @@
   <modules>
     <module>ftplet-api</module>
     <module>core</module>
-    <module>deprecated</module>
   </modules>
 
   <distributionManagement>

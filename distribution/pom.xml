@@ -93,10 +93,6 @@
       <artifactId>ftpserver-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.ftpserver</groupId>
-      <artifactId>ftpserver-deprecated</artifactId>
-    </dependency>
-    <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
     </dependency>
@@ -176,24 +172,6 @@
                     <artifactItem>
                       <groupId>${pom.groupId}</groupId>
                       <artifactId>ftpserver-core</artifactId>
-                      <classifier>javadoc</classifier>
-                      <version>${pom.version}</version>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-deprecated-javadoc</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/api/deprecated</outputDirectory>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>${pom.groupId}</groupId>
-                      <artifactId>ftpserver-deprecated</artifactId>
                       <classifier>javadoc</classifier>
                       <version>${pom.version}</version>
                     </artifactItem>
