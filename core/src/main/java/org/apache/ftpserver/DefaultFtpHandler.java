@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpletContainer;
-import org.apache.ftpserver.ftplet.FtpletEnum;
+import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpIoSession;
@@ -119,18 +119,18 @@ public class DefaultFtpHandler implements FtpHandler {
 
             FtpletContainer ftplets = context.getFtpletContainer();
 
-            FtpletEnum ftpletRet;
+            FtpletResult ftpletRet;
             try {
                 ftpletRet = ftplets.beforeCommand(session.getFtpletSession(),
                         request);
             } catch (Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
+                ftpletRet = FtpletResult.DISCONNECT;
             }
-            if (ftpletRet == FtpletEnum.RET_DISCONNECT) {
+            if (ftpletRet == FtpletResult.DISCONNECT) {
                 session.closeOnFlush().awaitUninterruptibly(10000);
                 return;
-            } else if (ftpletRet != FtpletEnum.RET_SKIP) {
+            } else if (ftpletRet != FtpletResult.SKIP) {
 
                 if (command != null) {
                     synchronized (session) {
@@ -149,9 +149,9 @@ public class DefaultFtpHandler implements FtpHandler {
                         request);
             } catch (Exception e) {
                 LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletEnum.RET_DISCONNECT;
+                ftpletRet = FtpletResult.DISCONNECT;
             }
-            if (ftpletRet == FtpletEnum.RET_DISCONNECT) {
+            if (ftpletRet == FtpletResult.DISCONNECT) {
                 session.closeOnFlush().awaitUninterruptibly(10000);
                 return;
             }

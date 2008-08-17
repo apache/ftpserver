@@ -46,7 +46,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
 
-    protected FtpletEnum mockReturnValue = FtpletEnum.RET_SKIP;
+    protected FtpletResult mockReturnValue = FtpletResult.SKIP;
 
     /*
      * (non-Javadoc)
@@ -73,7 +73,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+            public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_530_NOT_LOGGED_IN, "foo"));
@@ -88,7 +88,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteStart(FtpSession session,
+            public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
 
                 session.write(new DefaultFtpReply(
@@ -109,7 +109,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -126,7 +126,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirStart(FtpSession session,
+            public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
 
                 session.write(new DefaultFtpReply(
@@ -144,7 +144,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -159,7 +159,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirStart(FtpSession session,
+            public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
@@ -180,7 +180,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -197,7 +197,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringSite() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onSite(FtpSession session, FtpRequest request)
+            public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -211,7 +211,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameStart(FtpSession session,
+            public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session
                         .write(new DefaultFtpReply(
@@ -234,7 +234,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -253,7 +253,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadStart(FtpSession session,
+            public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
@@ -273,7 +273,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadEnd(FtpSession session,
+            public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -291,7 +291,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendStart(FtpSession session,
+            public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
@@ -312,7 +312,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -330,7 +330,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadStart(FtpSession session,
+            public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
@@ -349,7 +349,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
@@ -365,7 +365,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueStart(FtpSession session,
+            public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
@@ -383,7 +383,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueEnd(FtpSession session,
+            public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 throwException();
 

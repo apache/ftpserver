@@ -36,7 +36,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
-        MockFtpletCallback.returnValue = FtpletEnum.RET_DEFAULT;
+        MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
     }
 
     protected abstract FtpletContainer createFtpletContainer();
@@ -93,14 +93,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnConnect() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onConnect(FtpSession session)
+            public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onConnect(session);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onConnect(FtpSession session)
+            public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onConnect(session);
@@ -119,14 +119,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDisconnect() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onDisconnect(FtpSession session)
+            public FtpletResult onDisconnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onDisconnect(session);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onDisconnect(FtpSession session)
+            public FtpletResult onDisconnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onDisconnect(session);
@@ -145,14 +145,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnLogin() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+            public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onLogin(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+            public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onLogin(session, request);
@@ -172,14 +172,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDeleteStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onDeleteStart(FtpSession session,
+            public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onDeleteStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onDeleteStart(FtpSession session,
+            public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onDeleteStart(session, request);
@@ -199,14 +199,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDeleteEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onDeleteEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onDeleteEnd(session, request);
@@ -226,14 +226,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onUploadStart(FtpSession session,
+            public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onUploadStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onUploadStart(FtpSession session,
+            public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onUploadStart(session, request);
@@ -253,14 +253,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onUploadEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onUploadEnd(session, request);
@@ -280,14 +280,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDownloadStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onDownloadStart(FtpSession session,
+            public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onDownloadStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onDownloadStart(FtpSession session,
+            public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onDownloadStart(session, request);
@@ -307,14 +307,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDownloadEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onDownloadEnd(FtpSession session,
+            public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onDownloadEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onDownloadEnd(FtpSession session,
+            public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onDownloadEnd(session, request);
@@ -334,14 +334,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRmdirStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onRmdirStart(FtpSession session,
+            public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onRmdirStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onRmdirStart(FtpSession session,
+            public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onRmdirStart(session, request);
@@ -361,14 +361,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRmdirEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onRmdirEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onRmdirEnd(session, request);
@@ -388,14 +388,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnMkdirStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onMkdirStart(FtpSession session,
+            public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onMkdirStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onMkdirStart(FtpSession session,
+            public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onMkdirStart(session, request);
@@ -415,14 +415,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnMkdirEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onMkdirEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onMkdirEnd(session, request);
@@ -442,14 +442,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnAppendStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onAppendStart(FtpSession session,
+            public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onAppendStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onAppendStart(FtpSession session,
+            public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onAppendStart(session, request);
@@ -469,14 +469,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnAppendEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onAppendEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onAppendEnd(session, request);
@@ -496,14 +496,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadUniqueStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onUploadUniqueStart(FtpSession session,
+            public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onUploadUniqueStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onUploadUniqueStart(FtpSession session,
+            public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onUploadUniqueStart(session, request);
@@ -523,14 +523,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadUniqueEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onUploadUniqueEnd(FtpSession session,
+            public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onUploadUniqueEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onUploadUniqueEnd(FtpSession session,
+            public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onUploadUniqueEnd(session, request);
@@ -550,14 +550,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRenameStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onRenameStart(FtpSession session,
+            public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onRenameStart(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onRenameStart(FtpSession session,
+            public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onRenameStart(session, request);
@@ -577,14 +577,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRenameEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onRenameEnd(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request)
+            public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onRenameEnd(session, request);
@@ -604,14 +604,14 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnSite() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
-            public FtpletEnum onSite(FtpSession session, FtpRequest request)
+            public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
                 return super.onSite(session, request);
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
-            public FtpletEnum onSite(FtpSession session, FtpRequest request)
+            public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
                 return super.onSite(session, request);

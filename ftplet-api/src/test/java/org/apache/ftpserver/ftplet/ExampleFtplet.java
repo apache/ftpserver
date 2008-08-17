@@ -29,14 +29,14 @@ import java.io.IOException;
 public class ExampleFtplet extends DefaultFtplet {
 
     @Override
-    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         session.write(new DefaultFtpReply(550, "Error!"));
-        return FtpletEnum.RET_SKIP;
+        return FtpletResult.SKIP;
     }
 
     @Override
-    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request)
+    public FtpletResult onMkdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         if (session.isSecure() && session.getDataConnection().isSecure()) {
             // all is good

@@ -29,7 +29,7 @@ import java.io.IOException;
 */
 public class MockFtpletCallback extends DefaultFtplet {
 
-    public static FtpletEnum returnValue;
+    public static FtpletResult returnValue;
 
     public void destroy() {
     }
@@ -37,102 +37,102 @@ public class MockFtpletCallback extends DefaultFtplet {
     public void init(FtpletContext ftpletContext) throws FtpException {
     }
 
-    public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onAppendStart(FtpSession session, FtpRequest request)
+    public FtpletResult onAppendStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onConnect(FtpSession session) throws FtpException,
+    public FtpletResult onConnect(FtpSession session) throws FtpException,
             IOException {
         return returnValue;
     }
 
-    public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request)
+    public FtpletResult onDeleteStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onDisconnect(FtpSession session) throws FtpException,
+    public FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException {
         return returnValue;
     }
 
-    public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onDownloadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request)
+    public FtpletResult onDownloadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+    public FtpletResult onLogin(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request)
+    public FtpletResult onMkdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onRenameStart(FtpSession session, FtpRequest request)
+    public FtpletResult onRenameStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request)
+    public FtpletResult onRmdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onSite(FtpSession session, FtpRequest request)
+    public FtpletResult onSite(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onUploadStart(FtpSession session, FtpRequest request)
+    public FtpletResult onUploadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request)
+    public FtpletResult onUploadUniqueEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request)
+    public FtpletResult onUploadUniqueStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }

@@ -25,12 +25,12 @@ package org.apache.ftpserver.ftplet;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class Structure {
+public enum Structure {
 
     /**
      * File structure
      */
-    public static final Structure FILE = new Structure("F");
+    FILE;
 
     /**
      * Parses the argument value from the STRU command into the type safe class
@@ -50,21 +50,5 @@ public class Structure {
         default:
             throw new IllegalArgumentException("Unknown structure: " + argument);
         }
-    }
-
-    private String structure;
-
-    /**
-     * Private constructor.
-     */
-    private Structure(String structure) {
-        this.structure = structure;
-    }
-
-    /**
-     * String representation of the structure.
-     */
-    public String toString() {
-        return structure;
     }
 }

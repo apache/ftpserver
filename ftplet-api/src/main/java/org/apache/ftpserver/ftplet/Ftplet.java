@@ -41,7 +41,7 @@ import java.io.IOException;
  * </ol>
  * 
  * All the callback methods return FtpletEnum. If it returns null
- * FtpletEnum.RET_DEFAULT will be assumed. If any ftplet callback method throws
+ * FtpletEnum.DEFAULT will be assumed. If any ftplet callback method throws
  * exception, that particular connection will be disconnected.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
@@ -71,17 +71,17 @@ public interface Ftplet {
      * server. The implementation should return based on the desired action to
      * be taken by the server:
      * <ul>
-     * <li>{@link FtpletEnum#RET_DEFAULT}: The server continues as normal and
+     * <li>{@link FtpletResult#DEFAULT}: The server continues as normal and
      * executes the command</li>
-     * <li>{@link FtpletEnum#RET_NO_FTPLET}: The server does not call any more
+     * <li>{@link FtpletResult#NO_FTPLET}: The server does not call any more
      * Ftplets before this command but continues execution of the command as
      * usual</li>
-     * <li>{@link FtpletEnum#RET_SKIP}: The server skips over execution of the
+     * <li>{@link FtpletResult#SKIP}: The server skips over execution of the
      * command. Note that the Ftplet is responsible for returning the
      * appropriate reply to the client, or the client might deadlock.</li>
-     * <li>{@link FtpletEnum#RET_DISCONNECT}: The server will immediately
+     * <li>{@link FtpletResult#DISCONNECT}: The server will immediately
      * disconnect the client.</li>
-     * <li>Ftplet throws exception: Same as {@link FtpletEnum#RET_DISCONNECT}</li>
+     * <li>Ftplet throws exception: Same as {@link FtpletResult#DISCONNECT}</li>
      * </ul>
      * 
      * @param session
@@ -92,7 +92,7 @@ public interface Ftplet {
      * @throws FtpException
      * @throws IOException
      */
-    FtpletEnum beforeCommand(FtpSession session, FtpRequest request)
+    FtpletResult beforeCommand(FtpSession session, FtpRequest request)
             throws FtpException, IOException;
 
     /**
@@ -100,13 +100,13 @@ public interface Ftplet {
      * server. The implementation should return based on the desired action to
      * be taken by the server:
      * <ul>
-     * <li>{@link FtpletEnum#RET_DEFAULT}: The server continues as normal</li>
-     * <li>{@link FtpletEnum#RET_NO_FTPLET}: The server does not call any more
+     * <li>{@link FtpletResult#DEFAULT}: The server continues as normal</li>
+     * <li>{@link FtpletResult#NO_FTPLET}: The server does not call any more
      * Ftplets before this command but continues as normal</li>
-     * <li>{@link FtpletEnum#RET_SKIP}: Same as {@link FtpletEnum#RET_DEFAULT}</li>
-     * <li>{@link FtpletEnum#RET_DISCONNECT}: The server will immediately
+     * <li>{@link FtpletResult#SKIP}: Same as {@link FtpletResult#DEFAULT}</li>
+     * <li>{@link FtpletResult#DISCONNECT}: The server will immediately
      * disconnect the client.</li>
-     * <li>Ftplet throws exception: Same as {@link FtpletEnum#RET_DISCONNECT}</li>
+     * <li>Ftplet throws exception: Same as {@link FtpletResult#DISCONNECT}</li>
      * </ul>
      * 
      * @param session
@@ -117,17 +117,17 @@ public interface Ftplet {
      * @throws FtpException
      * @throws IOException
      */
-    FtpletEnum afterCommand(FtpSession session, FtpRequest request)
+    FtpletResult afterCommand(FtpSession session, FtpRequest request)
             throws FtpException, IOException;
 
     /**
      * Client connect notification method.
      */
-    FtpletEnum onConnect(FtpSession session) throws FtpException, IOException;
+    FtpletResult onConnect(FtpSession session) throws FtpException, IOException;
 
     /**
      * Client disconnect notification method. This is the last callback method.
      */
-    FtpletEnum onDisconnect(FtpSession session) throws FtpException,
+    FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException;
 }

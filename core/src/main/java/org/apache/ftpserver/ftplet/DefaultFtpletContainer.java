@@ -111,17 +111,17 @@ public class DefaultFtpletContainer implements FtpletContainer {
     /**
      * Call ftplet onConnect.
      */
-    public FtpletEnum onConnect(FtpSession session) throws FtpException,
+    public FtpletResult onConnect(FtpSession session) throws FtpException,
             IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
+        FtpletResult retVal = FtpletResult.DEFAULT;
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
             retVal = entry.getValue().onConnect(session);
             if (retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
+                retVal = FtpletResult.DEFAULT;
             }
 
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if (retVal != FtpletEnum.RET_DEFAULT) {
+            // proceed only if the return value is FtpletResult.DEFAULT
+            if (retVal != FtpletResult.DEFAULT) {
                 break;
             }
         }
@@ -131,54 +131,54 @@ public class DefaultFtpletContainer implements FtpletContainer {
     /**
      * Call ftplet onDisconnect.
      */
-    public FtpletEnum onDisconnect(FtpSession session) throws FtpException,
+    public FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
+        FtpletResult retVal = FtpletResult.DEFAULT;
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
 
             retVal = entry.getValue().onDisconnect(session);
             if (retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
+                retVal = FtpletResult.DEFAULT;
             }
 
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if (retVal != FtpletEnum.RET_DEFAULT) {
+            // proceed only if the return value is FtpletResult.DEFAULT
+            if (retVal != FtpletResult.DEFAULT) {
                 break;
             }
         }
         return retVal;
     }
 
-    public FtpletEnum afterCommand(FtpSession session, FtpRequest request)
+    public FtpletResult afterCommand(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
+        FtpletResult retVal = FtpletResult.DEFAULT;
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
 
             retVal = entry.getValue().afterCommand(session, request);
             if (retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
+                retVal = FtpletResult.DEFAULT;
             }
 
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if (retVal != FtpletEnum.RET_DEFAULT) {
+            // proceed only if the return value is FtpletResult.DEFAULT
+            if (retVal != FtpletResult.DEFAULT) {
                 break;
             }
         }
         return retVal;
     }
 
-    public FtpletEnum beforeCommand(FtpSession session, FtpRequest request)
+    public FtpletResult beforeCommand(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        FtpletEnum retVal = FtpletEnum.RET_DEFAULT;
+        FtpletResult retVal = FtpletResult.DEFAULT;
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
 
             retVal = entry.getValue().beforeCommand(session, request);
             if (retVal == null) {
-                retVal = FtpletEnum.RET_DEFAULT;
+                retVal = FtpletResult.DEFAULT;
             }
 
-            // proceed only if the return value is FtpletEnum.RET_DEFAULT
-            if (retVal != FtpletEnum.RET_DEFAULT) {
+            // proceed only if the return value is FtpletResult.DEFAULT
+            if (retVal != FtpletResult.DEFAULT) {
                 break;
             }
         }

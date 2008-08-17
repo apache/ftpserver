@@ -25,17 +25,17 @@ package org.apache.ftpserver.ftplet;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class DataType {
+public enum DataType {
 
     /**
      * Binary data type
      */
-    public static final DataType BINARY = new DataType("I");
+    BINARY,
 
     /**
      * ASCII data type
      */
-    public static final DataType ASCII = new DataType("A");
+    ASCII;
 
     /**
      * Parses the argument value from the TYPE command into the type safe class
@@ -57,21 +57,5 @@ public class DataType {
         default:
             throw new IllegalArgumentException("Unknown data type: " + argument);
         }
-    }
-
-    private String type;
-
-    /**
-     * Private constructor.
-     */
-    private DataType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * Return the data type string.
-     */
-    public String toString() {
-        return type;
     }
 }
