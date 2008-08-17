@@ -25,6 +25,12 @@ import java.io.IOException;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class NativeFileSystemViewTest extends FileSystemViewTemplate {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
@@ -45,30 +51,26 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
         NativeFileSystemView view = new NativeFileSystemView(user);
         assertEquals("/", view.getCurrentDirectory().getFullName());
     }
-    
-
 
     public void testConstructorWithNullUser() throws FtpException {
-        try{
+        try {
             new NativeFileSystemView(null);
             fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // OK
         }
     }
 
     public void testConstructorWithNullHomeDir() throws FtpException {
         user.setHomeDirectory(null);
-        try{
+        try {
             new NativeFileSystemView(user);
             fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // OK
         }
     }
-    
-    
-    
+
     /*
      * (non-Javadoc)
      * 

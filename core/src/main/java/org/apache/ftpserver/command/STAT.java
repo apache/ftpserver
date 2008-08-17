@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -29,25 +29,28 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>STAT [&lt;SP&gt; &lt;pathname&gt;] &lt;CRLF&gt;</code><br>
+ * 
+ * This command shall cause a status response to be sent over the control
+ * connection in the form of a reply.
  *
- * This command shall cause a status response to be sent over
- * the control connection in the form of a reply.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class STAT extends AbstractCommand {
+public class STAT extends AbstractCommand {
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
+
         // write the status info
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null)); 
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null));
     }
-    
+
 }

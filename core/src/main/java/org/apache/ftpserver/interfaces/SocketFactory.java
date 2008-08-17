@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -24,32 +24,33 @@ import java.net.ServerSocket;
 
 import org.apache.ftpserver.ssl.SslConfiguration;
 
-
 /**
  * This interface is responsible to create appropriate server socket.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-interface SocketFactory {
-    
+public interface SocketFactory {
+
     /**
-     * Create the server socket. 
+     * Create the server socket.
      */
     ServerSocket createServerSocket() throws Exception;
-    
+
     /**
      * Get server address.
      * 
      * @return {@link InetAddress} obtained from host address from
-     *         {@link SocketFactory} configuration, or <code>null</code> if
-     *         not specified.
+     *         {@link SocketFactory} configuration, or <code>null</code> if not
+     *         specified.
      */
     InetAddress getServerAddress();
-    
+
     /**
      * Get server port.
      */
     int getPort();
-    
+
     /**
      * Get SSL component.
      */

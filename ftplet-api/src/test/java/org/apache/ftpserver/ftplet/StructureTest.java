@@ -15,12 +15,17 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 import junit.framework.TestCase;
 
+/**
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ */
 public class StructureTest extends TestCase {
     public void testParseF() {
         assertSame(Structure.FILE, Structure.parseArgument('F'));
@@ -28,11 +33,11 @@ public class StructureTest extends TestCase {
     }
 
     public void testParseUnknown() {
-        try{
+        try {
             Structure.parseArgument('x');
             fail("Exception must be thrown");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // ignore
-        } 
+        }
     }
 }

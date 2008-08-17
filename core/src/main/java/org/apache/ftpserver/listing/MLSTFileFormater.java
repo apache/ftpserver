@@ -23,70 +23,69 @@ import org.apache.ftpserver.util.DateUtils;
 
 /**
  * Formats files according to the MLST specification
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class MLSTFileFormater implements FileFormater {
 
-    private static final String[] DEFAULT_TYPES = new String[] {"Size", "Modify", "Type"};
+    private static final String[] DEFAULT_TYPES = new String[] { "Size",
+            "Modify", "Type" };
 
-    private final static char[] NEWLINE  = {'\r', '\n'};
-    
+    private final static char[] NEWLINE = { '\r', '\n' };
+
     private String[] selectedTypes = DEFAULT_TYPES;
-    
+
     /**
-     * @param selectedTypes The types to show in the formated file
+     * @param selectedTypes
+     *            The types to show in the formated file
      */
     public MLSTFileFormater(String[] selectedTypes) {
-        if(selectedTypes != null) {
+        if (selectedTypes != null) {
             this.selectedTypes = selectedTypes.clone();
         }
     }
-    
+
     /**
      * @see FileFormater#format(FileObject)
      */
     public String format(FileObject file) {
         StringBuffer sb = new StringBuffer();
-        
-        for(int i=0; i<selectedTypes.length; ++i) {
+
+        for (int i = 0; i < selectedTypes.length; ++i) {
             String type = selectedTypes[i];
-            if(type.equalsIgnoreCase("size")) {
+            if (type.equalsIgnoreCase("size")) {
                 sb.append("Size=");
                 sb.append(String.valueOf(file.getSize()));
                 sb.append(';');
-            }
-            else if(type.equalsIgnoreCase("modify")) {
-                String timeStr = DateUtils.getFtpDate( file.getLastModified() );
+            } else if (type.equalsIgnoreCase("modify")) {
+                String timeStr = DateUtils.getFtpDate(file.getLastModified());
                 sb.append("Modify=");
                 sb.append(timeStr);
                 sb.append(';');
-            }
-            else if(type.equalsIgnoreCase("type")) {
-                if(file.isFile()) {
+            } else if (type.equalsIgnoreCase("type")) {
+                if (file.isFile()) {
                     sb.append("Type=file;");
-                }
-                else if(file.isDirectory()) {
+                } else if (file.isDirectory()) {
                     sb.append("Type=dir;");
                 }
-            }
-            else if(type.equalsIgnoreCase("perm")) {
+            } else if (type.equalsIgnoreCase("perm")) {
                 sb.append("Perm=");
-                if(file.hasReadPermission()) {
-                    if(file.isFile()) {
+                if (file.hasReadPermission()) {
+                    if (file.isFile()) {
                         sb.append('r');
-                    }
-                    else if(file.isDirectory()) {
+                    } else if (file.isDirectory()) {
                         sb.append('e');
                         sb.append('l');
                     }
                 }
-                if(file.hasWritePermission()) {
-                    if(file.isFile()) {
+                if (file.hasWritePermission()) {
+                    if (file.isFile()) {
                         sb.append('a');
                         sb.append('d');
                         sb.append('f');
                         sb.append('w');
-                    }
-                    else if(file.isDirectory()) {
+                    } else if (file.isDirectory()) {
                         sb.append('f');
                         sb.append('p');
                         sb.append('c');
@@ -98,7 +97,7 @@ public class MLSTFileFormater implements FileFormater {
         }
         sb.append(' ');
         sb.append(file.getShortName());
-        
+
         sb.append(NEWLINE);
 
         return sb.toString();

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -23,18 +23,22 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
  * Tests that commands sent simultaniously are handled correctly.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
  */
 public class ConcatedCommandsTest extends ClientTestTemplate {
-	
+
     public void testLogin() throws Exception {
-		// send both commands, expect a 331 response
-    	assertEquals(331, client.sendCommand("USER admin\r\nPASS admin"));
-        
-    	// make sure we wait for the 230 to come back
-    	client.completePendingCommand();
-    	assertEquals(230, client.getReplyCode());
+        // send both commands, expect a 331 response
+        assertEquals(331, client.sendCommand("USER admin\r\nPASS admin"));
+
+        // make sure we wait for the 230 to come back
+        client.completePendingCommand();
+        assertEquals(230, client.getReplyCode());
 
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
-    
+
 }

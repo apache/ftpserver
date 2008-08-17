@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -32,40 +32,52 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <code>STRU &lt;SP&gt; &lt;structure-code&gt; &lt;CRLF&gt;</code><br>
+ * 
+ * The argument is a single Telnet character code specifying file structure.
  *
- * The argument is a single Telnet character code specifying
- * file structure.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class STRU extends AbstractCommand {
-    
+public class STRU extends AbstractCommand {
+
     private final Logger LOG = LoggerFactory.getLogger(STRU.class);
-    
+
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
+
         // argument check
-        if(!request.hasArgument()) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "STRU", null));
-            return;  
+        if (!request.hasArgument()) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "STRU", null));
+            return;
         }
-        
+
         // set structure
         char stru = request.getArgument().charAt(0);
-        try  {
+        try {
             session.setStructure(Structure.parseArgument(stru));
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "STRU", null));
-        } 
-        catch(IllegalArgumentException e) {
-            LOG.debug("Illegal structure argument: " + request.getArgument(), e);
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "STRU", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_200_COMMAND_OKAY, "STRU", null));
+        } catch (IllegalArgumentException e) {
+            LOG
+                    .debug("Illegal structure argument: "
+                            + request.getArgument(), e);
+            session
+                    .write(FtpReplyUtil
+                            .translate(
+                                    session,
+                                    request,
+                                    context,
+                                    FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                    "STRU", null));
         }
     }
 

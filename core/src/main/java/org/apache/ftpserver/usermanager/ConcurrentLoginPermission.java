@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -24,33 +24,43 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
  * The max upload rate permission
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class ConcurrentLoginPermission implements Authority {
 
     private int maxConcurrentLogins;
+
     private int maxConcurrentLoginsPerIP;
 
-    public ConcurrentLoginPermission(int maxConcurrentLogins, int maxConcurrentLoginsPerIP) {
+    public ConcurrentLoginPermission(int maxConcurrentLogins,
+            int maxConcurrentLoginsPerIP) {
         this.maxConcurrentLogins = maxConcurrentLogins;
         this.maxConcurrentLoginsPerIP = maxConcurrentLoginsPerIP;
     }
-    
+
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
     public AuthorizationRequest authorize(AuthorizationRequest request) {
         if (request instanceof ConcurrentLoginRequest) {
             ConcurrentLoginRequest concurrentLoginRequest = (ConcurrentLoginRequest) request;
-            
-            if(maxConcurrentLogins != 0 && maxConcurrentLogins < concurrentLoginRequest.getConcurrentLogins()) {
-                return null; 
-            } else if(maxConcurrentLoginsPerIP != 0 
-                    && maxConcurrentLoginsPerIP < concurrentLoginRequest.getConcurrentLoginsFromThisIP()) {
+
+            if (maxConcurrentLogins != 0
+                    && maxConcurrentLogins < concurrentLoginRequest
+                            .getConcurrentLogins()) {
+                return null;
+            } else if (maxConcurrentLoginsPerIP != 0
+                    && maxConcurrentLoginsPerIP < concurrentLoginRequest
+                            .getConcurrentLoginsFromThisIP()) {
                 return null;
             } else {
-                concurrentLoginRequest.setMaxConcurrentLogins(maxConcurrentLogins);
-                concurrentLoginRequest.setMaxConcurrentLoginsPerIP(maxConcurrentLoginsPerIP);
-                
+                concurrentLoginRequest
+                        .setMaxConcurrentLogins(maxConcurrentLogins);
+                concurrentLoginRequest
+                        .setMaxConcurrentLoginsPerIP(maxConcurrentLoginsPerIP);
+
                 return concurrentLoginRequest;
             }
         } else {

@@ -15,20 +15,21 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
- * This is the file system manager - it returns the file system 
- * view for user.
+ * This is the file system manager - it returns the file system view for user.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface FileSystemManager {
-    
+public interface FileSystemManager {
+
     /**
      * Create user specific file system view.
      */
     FileSystemView createFileSystemView(User user) throws FtpException;
-    
+
 }

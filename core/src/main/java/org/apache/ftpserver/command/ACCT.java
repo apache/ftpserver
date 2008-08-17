@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -29,25 +29,27 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>ACCT &lt;CRLF&gt;</code><br>
+ * 
+ * Acknowledges the ACCT (account) command with a 202 reply. The command however
+ * is irrelevant to any workings.
  *
- * Acknowledges the ACCT (account) command with a 202 reply.
- * The command however is irrelevant to any workings.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class ACCT extends AbstractCommand {
+public class ACCT extends AbstractCommand {
 
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
-        // and abort any data connection
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "ACCT", null));
-    }   
-}
 
+        // and abort any data connection
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "ACCT", null));
+    }
+}

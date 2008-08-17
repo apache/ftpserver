@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
@@ -23,13 +23,21 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FtpException;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class EncryptUtilsTest extends TestCase {
 
     public void testEncryptMd5() throws FtpException {
-        assertEquals("21232F297A57A5A743894A0E4A801FC3", EncryptUtils.encryptMD5("admin"));
+        assertEquals("21232F297A57A5A743894A0E4A801FC3", EncryptUtils
+                .encryptMD5("admin"));
     }
 
     public void testEncryptSha() throws FtpException {
-        assertEquals("D033E22AE348AEB5660FC2140AEC35850C4DA997", EncryptUtils.encryptSHA("admin"));
+        assertEquals("D033E22AE348AEB5660FC2140AEC35850C4DA997", EncryptUtils
+                .encryptSHA("admin"));
     }
 }

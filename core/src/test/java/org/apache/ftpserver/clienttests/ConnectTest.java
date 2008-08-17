@@ -15,13 +15,18 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.listener.nio.NioListener;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class ConnectTest extends ClientTestTemplate {
 
     @Override
@@ -35,19 +40,24 @@ public class ConnectTest extends ClientTestTemplate {
     }
 
     public void testPortWithZeroPort() throws Exception {
-        ((NioListener)server.getServerContext().getListener("default")).setPort(0);
-        assertEquals(0, ((NioListener)server.getServerContext().getListener("default")).getPort());
-        
+        ((NioListener) server.getServerContext().getListener("default"))
+                .setPort(0);
+        assertEquals(0, ((NioListener) server.getServerContext().getListener(
+                "default")).getPort());
+
         server.start();
-        
-        assertTrue(((NioListener)server.getServerContext().getListener("default")).getPort() > 0);
+
+        assertTrue(((NioListener) server.getServerContext().getListener(
+                "default")).getPort() > 0);
     }
-    
+
     public void testPort() throws Exception {
-        assertEquals(port, ((NioListener)server.getServerContext().getListener("default")).getPort());
-        
+        assertEquals(port, ((NioListener) server.getServerContext()
+                .getListener("default")).getPort());
+
         server.start();
-        
-        assertEquals(port, ((NioListener)server.getServerContext().getListener("default")).getPort());
+
+        assertEquals(port, ((NioListener) server.getServerContext()
+                .getListener("default")).getPort());
     }
 }

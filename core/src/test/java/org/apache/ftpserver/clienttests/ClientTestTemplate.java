@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -37,16 +37,29 @@ import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public abstract class ClientTestTemplate extends TestCase {
 
-    private final Logger LOG = LoggerFactory.getLogger(ClientTestTemplate.class);
-    
+    private final Logger LOG = LoggerFactory
+            .getLogger(ClientTestTemplate.class);
+
     protected static final String ADMIN_PASSWORD = "admin";
+
     protected static final String ADMIN_USERNAME = "admin";
+
     protected static final String ANONYMOUS_PASSWORD = "foo@bar.com";
+
     protected static final String ANONYMOUS_USERNAME = "anonymous";
+
     protected static final String TESTUSER2_USERNAME = "testuser2";
+
     protected static final String TESTUSER1_USERNAME = "testuser1";
+
     protected static final String TESTUSER_PASSWORD = "password";
 
     protected FtpServer server;
@@ -55,31 +68,34 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected FTPClient client;
 
-   
-    private static final File USERS_FILE = new File(TestUtil.getBaseDir(), "src/test/resources/users.properties");
+    private static final File USERS_FILE = new File(TestUtil.getBaseDir(),
+            "src/test/resources/users.properties");
+
     private static final File TEST_TMP_DIR = new File("test-tmp");
+
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
-    
+
     protected FtpServer createServer() throws Exception {
-        assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE.exists());
+        assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE
+                .exists());
 
         DefaultFtpServerContext context = new DefaultFtpServerContext();
 
         NioListener listener = new NioListener();
         listener.setPort(port);
         context.setListener("default", listener);
-        
+
         PropertiesUserManager userManager = new PropertiesUserManager();
         userManager.setAdminName("admin");
         userManager.setEncryptPasswords(false);
         userManager.setPropFile(USERS_FILE);
         userManager.configure();
-        
+
         context.setUserManager(userManager);
-        
-        return new FtpServer(context);        
+
+        return new FtpServer(context);
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -87,7 +103,7 @@ public abstract class ClientTestTemplate extends TestCase {
      */
     protected void setUp() throws Exception {
         initDirs();
-        
+
         initServer();
 
         connectClient();
@@ -98,7 +114,7 @@ public abstract class ClientTestTemplate extends TestCase {
      */
     protected void initDirs() throws IOException {
         cleanTmpDirs();
-        
+
         TEST_TMP_DIR.mkdirs();
         ROOT_DIR.mkdirs();
     }
@@ -111,8 +127,8 @@ public abstract class ClientTestTemplate extends TestCase {
         initPort();
 
         server = createServer();
-        
-        if(isStartServer()) {
+
+        if (isStartServer()) {
             server.start();
         }
     }
@@ -120,49 +136,51 @@ public abstract class ClientTestTemplate extends TestCase {
     protected boolean isStartServer() {
         return true;
     }
-    
+
     protected FTPClient createFTPClient() throws Exception {
         return new FTPClient();
     }
 
     /**
-     * @throws Exception 
+     * @throws Exception
      */
     protected void connectClient() throws Exception {
         client = createFTPClient();
-        client.addProtocolCommandListener(new ProtocolCommandListener(){
+        client.addProtocolCommandListener(new ProtocolCommandListener() {
 
             public void protocolCommandSent(ProtocolCommandEvent event) {
                 LOG.debug("> " + event.getMessage().trim());
-                
+
             }
 
             public void protocolReplyReceived(ProtocolCommandEvent event) {
                 LOG.debug("< " + event.getMessage().trim());
-            }});
-        
-        if(isConnectClient()) {
-        	doConnect();
+            }
+        });
+
+        if (isConnectClient()) {
+            doConnect();
         }
     }
 
     protected void doConnect() throws Exception {
-    	try{
+        try {
             client.connect("localhost", port);
-        } catch(FTPConnectionClosedException e) {
+        } catch (FTPConnectionClosedException e) {
             // try again
             Thread.sleep(200);
             client.connect("localhost", port);
         }
     }
-    
+
     protected boolean isConnectClient() {
         return true;
     }
-    
+
     /**
      * Attempts to find a free port or fallback to a default
-     * @throws IOException 
+     * 
+     * @throws IOException
      * 
      * @throws IOException
      */
@@ -173,29 +191,29 @@ public abstract class ClientTestTemplate extends TestCase {
     }
 
     protected void cleanTmpDirs() throws IOException {
-        if(TEST_TMP_DIR.exists()) {
+        if (TEST_TMP_DIR.exists()) {
             IoUtils.delete(TEST_TMP_DIR);
         }
     }
-    
+
     /*
      * (non-Javadoc)
      * 
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception {
-    	if(isConnectClient() ) {
-    		try {
-    			client.quit();
-    		} catch(Exception e) {
-    			// ignore
-    		}
-    	}
-    	
-        if(server != null) {
+        if (isConnectClient()) {
+            try {
+                client.quit();
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
+        if (server != null) {
             server.stop();
         }
-        
+
         cleanTmpDirs();
     }
 

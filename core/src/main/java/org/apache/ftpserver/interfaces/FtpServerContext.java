@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -27,33 +27,35 @@ import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.listener.Listener;
 
 /**
- * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with added
- * connection manager, message resource functionalities.
+ * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with
+ * added connection manager, message resource functionalities.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface FtpServerContext extends FtpletContext {
+public interface FtpServerContext extends FtpletContext {
 
-	ConnectionConfig getConnectionConfig();
-	
+    ConnectionConfig getConnectionConfig();
+
     /**
      * Get message resource.
      */
     MessageResource getMessageResource();
-    
+
     /**
      * Get ftplet container.
      */
     FtpletContainer getFtpletContainer();
-    
+
     Listener getListener(String name);
 
     Map<String, Listener> getListeners();
-    
+
     /**
      * Get the command factory.
      */
     CommandFactory getCommandFactory();
-    
+
     /**
      * Release all components.
      */

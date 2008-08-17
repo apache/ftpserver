@@ -23,12 +23,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ */
 public interface DataConnection {
 
     /**
      * Transfer data from the client (e.g. STOR).
-     * @param out The {@link OutputStream} containing the destination
-     * of the data from the client.
+     * 
+     * @param out
+     *            The {@link OutputStream} containing the destination of the
+     *            data from the client.
      * @return The length of the transferred data
      * @throws IOException
      */
@@ -36,7 +43,9 @@ public interface DataConnection {
 
     /**
      * Transfer data to the client (e.g. RETR).
-     * @param in Data to be transfered to the client
+     * 
+     * @param in
+     *            Data to be transfered to the client
      * @return The length of the transferred data
      * @throws IOException
      */
@@ -44,9 +53,11 @@ public interface DataConnection {
 
     /**
      * Transfer a string to the client, e.g. during LIST
-     * @param str The string to transfer
+     * 
+     * @param str
+     *            The string to transfer
      * @throws IOException
      */
     void transferToClient(String str) throws IOException;
-    
+
 }

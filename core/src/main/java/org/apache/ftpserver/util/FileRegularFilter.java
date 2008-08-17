@@ -15,39 +15,44 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
-
 /**
- * This is regular expression filename filter. 
+ * This is regular expression filename filter.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-class FileRegularFilter implements FilenameFilter {
-    
+public class FileRegularFilter implements FilenameFilter {
+
     private RegularExpr regularExpr = null;
-    
+
     /**
      * Constructor.
-     * @param pattern regular expression
+     * 
+     * @param pattern
+     *            regular expression
      */
     public FileRegularFilter(String pattern) {
         if ((pattern == null) || pattern.equals("") || pattern.equals("*")) {
             regularExpr = null;
-        }
-        else {
+        } else {
             regularExpr = new RegularExpr(pattern);
         }
     }
-    
+
     /**
      * Tests if a specified file should be included in a file list.
-     * @param dir - the directory in which the file was found
-     * @param name - the name of the file.
+     * 
+     * @param dir
+     *            - the directory in which the file was found
+     * @param name
+     *            - the name of the file.
      */
     public boolean accept(File dir, String name) {
         if (regularExpr == null) {
@@ -55,4 +60,4 @@ class FileRegularFilter implements FilenameFilter {
         }
         return regularExpr.isMatch(name);
     }
-}    
+}

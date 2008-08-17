@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -32,67 +32,74 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * <code>OPTS&lt;SP&gt; <commandt> &lt;SP&gt; <option> &lt;CRLF&gt;</code><br>
+ * <code>OPTS&lt;SP&gt; <command> &lt;SP&gt; <option> &lt;CRLF&gt;</code><br>
+ * 
+ * This command shall cause the server use optional features for the command
+ * specified.
  *
- * This command shall cause the server use optional features for the 
- * command specified.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class OPTS extends AbstractCommand {
+public class OPTS extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(OPTS.class);
-    
-    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(16);
-    
-    
+
+    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(
+            16);
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state
         session.resetState();
-        
+
         // no params
         String argument = request.getArgument();
-        if(argument == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "OPTS", null));
+        if (argument == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "OPTS", null));
             return;
         }
-        
+
         // get request name
         int spaceIndex = argument.indexOf(' ');
-        if(spaceIndex != -1) {
+        if (spaceIndex != -1) {
             argument = argument.substring(0, spaceIndex);
         }
         argument = argument.toUpperCase();
-        
+
         // call appropriate command method
-        String optsRequest = "OPTS_" + argument; 
-        Command command = (Command)COMMAND_MAP.get( optsRequest );
+        String optsRequest = "OPTS_" + argument;
+        Command command = (Command) COMMAND_MAP.get(optsRequest);
         try {
-            if(command != null) {
+            if (command != null) {
                 command.execute(session, context, request);
-            }
-            else {
+            } else {
                 session.resetState();
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "OPTS.not.implemented", argument));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
+                        "OPTS.not.implemented", argument));
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.warn("OPTS.execute()", ex);
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "OPTS", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED,
+                    "OPTS", null));
         }
     }
-    
+
     // initialize all the OPTS command handlers
     static {
-        COMMAND_MAP.put("OPTS_MLST", new org.apache.ftpserver.command.OPTS_MLST());
-        COMMAND_MAP.put("OPTS_UTF8", new org.apache.ftpserver.command.OPTS_UTF8());
+        COMMAND_MAP.put("OPTS_MLST",
+                new org.apache.ftpserver.command.OPTS_MLST());
+        COMMAND_MAP.put("OPTS_UTF8",
+                new org.apache.ftpserver.command.OPTS_UTF8());
     }
 }

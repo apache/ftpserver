@@ -29,65 +29,70 @@ import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 
-public class FtpHandlerAdapter implements IoHandler
-{
-	private FtpServerContext context;
-	private FtpHandler ftpHandler;
-	
-	public FtpHandlerAdapter(FtpServerContext context, 
-			FtpHandler ftpHandler) {
-		this.context = context;
-		this.ftpHandler = ftpHandler;
-	}
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
+public class FtpHandlerAdapter implements IoHandler {
+    private FtpServerContext context;
 
-	public void exceptionCaught(IoSession session, Throwable cause)
-			throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.exceptionCaught(ftpSession, cause);
-	}
+    private FtpHandler ftpHandler;
 
-	public void messageReceived(IoSession session, Object message)
-			throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	FtpRequest request = new FtpRequestImpl(message.toString());
-    	
-    	ftpHandler.messageReceived(ftpSession, request);
-	}
+    public FtpHandlerAdapter(FtpServerContext context, FtpHandler ftpHandler) {
+        this.context = context;
+        this.ftpHandler = ftpHandler;
+    }
 
-	public void messageSent(IoSession session, Object message) throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.messageSent(ftpSession, (FtpReply)message);
-	}
+    public void exceptionCaught(IoSession session, Throwable cause)
+            throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.exceptionCaught(ftpSession, cause);
+    }
 
-	public void sessionClosed(IoSession session) throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.sessionClosed(ftpSession);
-	}
+    public void messageReceived(IoSession session, Object message)
+            throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        FtpRequest request = new FtpRequestImpl(message.toString());
 
-	public void sessionCreated(IoSession session) throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.sessionCreated(ftpSession);
-	}
+        ftpHandler.messageReceived(ftpSession, request);
+    }
 
-	public void sessionIdle(IoSession session, IdleStatus status)
-			throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.sessionIdle(ftpSession, status);
-	}
+    public void messageSent(IoSession session, Object message) throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.messageSent(ftpSession, (FtpReply) message);
+    }
 
-	public void sessionOpened(IoSession session) throws Exception {
-    	FtpIoSession ftpSession = new FtpIoSession(session, context);
-    	ftpHandler.sessionOpened(ftpSession);
-	}
+    public void sessionClosed(IoSession session) throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.sessionClosed(ftpSession);
+    }
 
-	public FtpHandler getFtpHandler() {
-		return ftpHandler;
-	}
+    public void sessionCreated(IoSession session) throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.sessionCreated(ftpSession);
+    }
 
-	public void setFtpHandler(FtpHandler handler) {
-		this.ftpHandler = handler;
-		
-	}
-	
+    public void sessionIdle(IoSession session, IdleStatus status)
+            throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.sessionIdle(ftpSession, status);
+    }
+
+    public void sessionOpened(IoSession session) throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.sessionOpened(ftpSession);
+    }
+
+    public FtpHandler getFtpHandler() {
+        return ftpHandler;
+    }
+
+    public void setFtpHandler(FtpHandler handler) {
+        this.ftpHandler = handler;
+
+    }
 
 }

@@ -15,28 +15,31 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
  * Basic user interface.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface User {
-    
+public interface User {
+
     /**
      * Get the user name.
      */
     String getName();
-    
+
     /**
      * Get password.
      */
     String getPassword();
-    
+
     /**
      * Get all authorities granted to this user
+     * 
      * @return All authorities
      */
     Authority[] getAuthorities();
@@ -45,42 +48,42 @@ interface User {
 
     /**
      * Authorize a {@link AuthorizationRequest} for this user
-     * @param request The {@link AuthorizationRequest} to authorize
-     * @return A populated AuthorizationRequest if the user was 
-     * authorized, null otherwise.
+     * 
+     * @param request
+     *            The {@link AuthorizationRequest} to authorize
+     * @return A populated AuthorizationRequest if the user was authorized, null
+     *         otherwise.
      */
     AuthorizationRequest authorize(AuthorizationRequest request);
-    
+
     /**
-     * Get the maximum idle time in seconds. Zero or less idle time means no limit.
+     * Get the maximum idle time in seconds. Zero or less idle time means no
+     * limit.
      */
     int getMaxIdleTime();
-    
+
     /**
      * Get the user enable status.
      */
     boolean getEnabled();
-    
+
     /**
      * Get maximum user upload rate in bytes/sec. Zero or less means no limit.
      */
-    //int getMaxUploadRate();
-    
+    // int getMaxUploadRate();
     /**
      * Get maximum user download rate in bytes/sec. Zero or less means no limit.
      */
-    //int getMaxDownloadRate();
-    
+    // int getMaxDownloadRate();
     /**
      * Get maximum login number allowed for this user account
      */
-    //int getMaxLoginNumber();
-    
+    // int getMaxLoginNumber();
     /**
-     * Get maximum login number allowed from the same IP address when using this user account
+     * Get maximum login number allowed from the same IP address when using this
+     * user account
      */
-    //int getMaxLoginPerIP();
-    
+    // int getMaxLoginPerIP();
     /**
      * get user home directory
      */

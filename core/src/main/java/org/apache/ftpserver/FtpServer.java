@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver;
 
-
 import java.util.Map;
 
 import org.apache.ftpserver.ftplet.FileSystemManager;
@@ -36,22 +35,24 @@ import org.slf4j.LoggerFactory;
  * This is the starting point of all the servers. It invokes a new listener
  * thread. <code>Server</code> implementation is used to create the server
  * socket and handle client connection.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class FtpServer {
 
     private final Logger LOG = LoggerFactory.getLogger(FtpServer.class);
-    
-    
+
     private FtpServerContext serverContext;
 
     private boolean suspended = false;
 
     private boolean started = false;
-    
 
     /**
      * Creates a server with the default configuration
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     public FtpServer() throws Exception {
         serverContext = new DefaultFtpServerContext();
@@ -59,6 +60,7 @@ public class FtpServer {
 
     /**
      * Constructor. Set a custom the server context.
+     * 
      * @throws Exception
      */
     public FtpServer(final FtpServerContext serverContext) throws Exception {
@@ -69,29 +71,29 @@ public class FtpServer {
      * Start the server. Open a new listener thread.
      */
     public void start() throws Exception {
-       
-        Map<String, Listener> listeners = serverContext.getListeners(); 
+
+        Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.start(serverContext);
         }
 
         started = true;
-        
+
         LOG.info("FTP server started");
 
     }
-    
+
     /**
      * Stop the server. Stop the listener thread.
      */
     public void stop() {
-    	if(!started || serverContext == null) {
-    		// we have already been stopped, ignore
-    		return;
-    	}
-    	
+        if (!started || serverContext == null) {
+            // we have already been stopped, ignore
+            return;
+        }
+
         // stop all listeners
-    	Map<String, Listener> listeners = serverContext.getListeners();
+        Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.stop();
         }
@@ -116,16 +118,16 @@ public class FtpServer {
      * Suspend further requests
      */
     public void suspend() {
-        if(!started) {
+        if (!started) {
             return;
         }
-        
+
         // stop all listeners
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.suspend();
         }
-        
+
         suspended = true;
     }
 
@@ -133,16 +135,15 @@ public class FtpServer {
      * Resume the server handler
      */
     public void resume() {
-        if(!suspended) {
+        if (!suspended) {
             return;
         }
-        
+
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.resume();
         }
 
-        
         suspended = false;
     }
 
@@ -159,17 +160,19 @@ public class FtpServer {
     public FtpServerContext getServerContext() {
         return serverContext;
     }
-	
+
     private DefaultFtpServerContext checkAndGetContext() {
-        if(getServerContext() instanceof DefaultFtpServerContext) {
+        if (getServerContext() instanceof DefaultFtpServerContext) {
             return (DefaultFtpServerContext) getServerContext();
         } else {
-            throw new IllegalStateException("Custom FtpServerContext provided, setters can not be used on FtpServer");
+            throw new IllegalStateException(
+                    "Custom FtpServerContext provided, setters can not be used on FtpServer");
         }
     }
-    
+
     /**
      * Get all listeners available one this server
+     * 
      * @return The current listeners
      */
     public Map<String, Listener> getListeners() {
@@ -178,29 +181,35 @@ public class FtpServer {
 
     /**
      * Get a specific listener identified by its name
-     * @param name The name of the listener
+     * 
+     * @param name
+     *            The name of the listener
      * @return The {@link Listener} matching the provided name
      */
     public Listener getListener(final String name) {
         return getServerContext().getListener(name);
     }
-    
+
     public void addListener(final String name, final Listener listener) {
         checkAndGetContext().addListener(name, listener);
     }
-    
+
     /**
      * Set the listeners for this server, replaces existing listeners
-     * @param listeners The listeners to use for this server with the name as the key
-     *   and the listener as the value
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param listeners
+     *            The listeners to use for this server with the name as the key
+     *            and the listener as the value
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setListeners(final Map<String, Listener> listeners) {
         checkAndGetContext().setListeners(listeners);
     }
-    
+
     /**
      * Get all {@link Ftplet}s registered at this server
+     * 
      * @return All {@link Ftplet}s
      */
     public Map<String, Ftplet> getFtplets() {
@@ -208,9 +217,14 @@ public class FtpServer {
     }
 
     /**
-     * Set the {@link Ftplet}s to be active for this server. Replaces existing {@link Ftplet}s
-     * @param ftplets Ftplets as a map with the name as the key and the Ftplet as the value
-     * @throws IllegalStateException If a custom server context has been set
+     * Set the {@link Ftplet}s to be active for this server. Replaces existing
+     * {@link Ftplet}s
+     * 
+     * @param ftplets
+     *            Ftplets as a map with the name as the key and the Ftplet as
+     *            the value
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setFtplets(final Map<String, Ftplet> ftplets) {
         getServerContext().getFtpletContainer().setFtplets(ftplets);
@@ -218,6 +232,7 @@ public class FtpServer {
 
     /**
      * Retrieve the user manager used with this server
+     * 
      * @return The user manager
      */
     public UserManager getUserManager() {
@@ -226,15 +241,19 @@ public class FtpServer {
 
     /**
      * Set the user manager to be used for this server
-     * @param userManager The {@link UserManager}
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param userManager
+     *            The {@link UserManager}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setUserManager(final UserManager userManager) {
         checkAndGetContext().setUserManager(userManager);
     }
-    
+
     /**
      * Retrieve the file system used with this server
+     * 
      * @return The {@link FileSystemManager}
      */
     public FileSystemManager getFileSystem() {
@@ -243,15 +262,19 @@ public class FtpServer {
 
     /**
      * Set the file system to be used for this server
-     * @param fileSystem The {@link FileSystemManager}
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param fileSystem
+     *            The {@link FileSystemManager}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setFileSystem(final FileSystemManager fileSystem) {
         checkAndGetContext().setFileSystemManager(fileSystem);
     }
-    
+
     /**
      * Retrieve the command factory used with this server
+     * 
      * @return The {@link CommandFactory}
      */
     public CommandFactory getCommandFactory() {
@@ -260,15 +283,19 @@ public class FtpServer {
 
     /**
      * Set the command factory to be used for this server
-     * @param commandFactory The {@link CommandFactory}
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param commandFactory
+     *            The {@link CommandFactory}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setCommandFactory(final CommandFactory commandFactory) {
         checkAndGetContext().setCommandFactory(commandFactory);
     }
-    
+
     /**
      * Retrieve the message resource used with this server
+     * 
      * @return The {@link MessageResource}
      */
     public MessageResource getMessageResource() {
@@ -277,8 +304,11 @@ public class FtpServer {
 
     /**
      * Set the message resource to be used with this server
-     * @param messageResource The {@link MessageResource}
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param messageResource
+     *            The {@link MessageResource}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setMessageResource(final MessageResource messageResource) {
         checkAndGetContext().setMessageResource(messageResource);
@@ -286,6 +316,7 @@ public class FtpServer {
 
     /**
      * Retrieve the connection configuration this server
+     * 
      * @return The {@link MessageResource}
      */
     public ConnectionConfig getConnectionConfig() {
@@ -294,8 +325,11 @@ public class FtpServer {
 
     /**
      * Set the message resource to be used with this server
-     * @param messageResource The {@link MessageResource}
-     * @throws IllegalStateException If a custom server context has been set
+     * 
+     * @param messageResource
+     *            The {@link MessageResource}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setConnectionConfig(final ConnectionConfig connectionConfig) {
         checkAndGetContext().setConnectionConfig(connectionConfig);

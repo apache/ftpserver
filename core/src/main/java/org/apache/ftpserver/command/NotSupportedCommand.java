@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -28,23 +28,27 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
- * A command used primarily for overriding already
- * installed commands when one wants to disable the command.
+ * A command used primarily for overriding already installed commands when one
+ * wants to disable the command.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class NotSupportedCommand extends AbstractCommand {
+public class NotSupportedCommand extends AbstractCommand {
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
+
         // We do not support this command
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "Not supported", null));
-    }   
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "Not supported",
+                null));
+    }
 }

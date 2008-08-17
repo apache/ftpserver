@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
@@ -32,30 +32,32 @@ import java.util.TimeZone;
 import org.apache.ftpserver.ftplet.FtpException;
 
 /**
- * This class encapsulates <code>java.util.Properties</code> to
- * add java primitives and some other java classes.
+ * This class encapsulates <code>java.util.Properties</code> to add java
+ * primitives and some other java classes.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-class BaseProperties extends Properties {
-    
+public class BaseProperties extends Properties {
+
     private static final long serialVersionUID = 5572645129592131953L;
 
     /**
      * Default constructor.
      */
-    public BaseProperties()  {
+    public BaseProperties() {
     }
-    
+
     /**
      * Load existing property.
      */
-    public BaseProperties(final Properties prop)  {
+    public BaseProperties(final Properties prop) {
         super(prop);
     }
-    
-    //////////////////////////////////////////
-    ////////  Properties Get Methods  ////////
-    //////////////////////////////////////////
+
+    // ////////////////////////////////////////
+    // ////// Properties Get Methods ////////
+    // ////////////////////////////////////////
     /**
      * Get boolean value.
      */
@@ -68,7 +70,7 @@ class BaseProperties extends Properties {
         return prop.toLowerCase().equals("true");
     }
 
-    public boolean getBoolean(final String str, final boolean bol)  {
+    public boolean getBoolean(final String str, final boolean bol) {
         try {
             return getBoolean(str);
         } catch (FtpException ex) {
@@ -76,11 +78,10 @@ class BaseProperties extends Properties {
         }
     }
 
-
     /**
      * Get integer value.
      */
-    public int getInteger(final String str) throws FtpException  {
+    public int getInteger(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -88,17 +89,15 @@ class BaseProperties extends Properties {
 
         try {
             return Integer.parseInt(value);
-        } 
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             throw new FtpException("BaseProperties.getInteger()", ex);
         }
     }
 
-    public int getInteger(final String str, final int intVal)  {
+    public int getInteger(final String str, final int intVal) {
         try {
             return getInteger(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return intVal;
         }
     }
@@ -114,91 +113,83 @@ class BaseProperties extends Properties {
 
         try {
             return Long.parseLong(value);
-        } 
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             throw new FtpException("BaseProperties.getLong()", ex);
         }
     }
 
-    public long getLong(final String str, final long val)  {
+    public long getLong(final String str, final long val) {
         try {
             return getLong(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return val;
         }
     }
 
-
     /**
      * Get double value.
      */
-    public double getDouble(final String str) throws FtpException  {
+    public double getDouble(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
         }
 
         try {
-            return Double.parseDouble(value); 
-        } 
-        catch (NumberFormatException ex) {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException ex) {
             throw new FtpException("BaseProperties.getDouble()", ex);
         }
     }
 
-    public double getDouble(final String str, final double doubleVal)  {
+    public double getDouble(final String str, final double doubleVal) {
         try {
             return getDouble(str);
-        } 
-        catch (FtpException ex) {
-            return doubleVal; 
+        } catch (FtpException ex) {
+            return doubleVal;
         }
-    } 
-    
+    }
+
     /**
      * Get <code>InetAddress</code>.
      */
     public InetAddress getInetAddress(final String str) throws FtpException {
         String value = getProperty(str);
-        if(value == null) {
+        if (value == null) {
             throw new FtpException(str + " not found");
         }
-        
+
         try {
             return InetAddress.getByName(value);
-        }
-        catch(UnknownHostException ex) {
+        } catch (UnknownHostException ex) {
             throw new FtpException("Host " + value + " not found");
         }
     }
-    
+
     public InetAddress getInetAddress(final String str, final InetAddress addr) {
         try {
             return getInetAddress(str);
-        }
-        catch(FtpException ex) {
+        } catch (FtpException ex) {
             return addr;
         }
     }
-    
+
     /**
      * Get <code>String</code>.
      */
     public String getString(final String str) throws FtpException {
         String value = getProperty(str);
-        if(value == null) {
+        if (value == null) {
             throw new FtpException(str + " not found");
         }
-        
+
         return value;
     }
-    
+
     public String getString(final String str, final String s) {
         try {
             return getString(str);
-        }
-        catch(FtpException ex) {
+        } catch (FtpException ex) {
             return s;
         }
     }
@@ -206,7 +197,7 @@ class BaseProperties extends Properties {
     /**
      * Get <code>File</code> object.
      */
-    public File getFile(final String str) throws FtpException  {
+    public File getFile(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -214,20 +205,18 @@ class BaseProperties extends Properties {
         return new File(value);
     }
 
-    public File getFile(final String str, final File fl)  {
+    public File getFile(final String str, final File fl) {
         try {
             return getFile(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return fl;
         }
     }
 
-
     /**
      * Get <code>Class</code> object
      */
-    public Class<?> getClass(final String str) throws FtpException  {
+    public Class<?> getClass(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -235,25 +224,23 @@ class BaseProperties extends Properties {
 
         try {
             return Class.forName(value);
-        } 
-        catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex) {
             throw new FtpException("BaseProperties.getClass()", ex);
         }
     }
 
-    public Class<?> getClass(final String str, final Class<?> cls)  {
+    public Class<?> getClass(final String str, final Class<?> cls) {
         try {
             return getClass(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return cls;
         }
-    } 
+    }
 
     /**
      * Get <code>TimeZone</code>
      */
-    public TimeZone getTimeZone(final String str) throws FtpException  {
+    public TimeZone getTimeZone(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -261,11 +248,10 @@ class BaseProperties extends Properties {
         return TimeZone.getTimeZone(value);
     }
 
-    public TimeZone getTimeZone(final String str, final TimeZone tz)  {
+    public TimeZone getTimeZone(final String str, final TimeZone tz) {
         try {
             return getTimeZone(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return tz;
         }
     }
@@ -273,32 +259,32 @@ class BaseProperties extends Properties {
     /**
      * Get <code>DateFormat</code> object.
      */
-    public SimpleDateFormat getDateFormat(final String str) throws FtpException  {
+    public SimpleDateFormat getDateFormat(final String str) throws FtpException {
         String value = getProperty(str);
         if (value == null) {
-            throw new FtpException(str +  " not found");
+            throw new FtpException(str + " not found");
         }
         try {
-        return new SimpleDateFormat(value);
-        } catch(IllegalArgumentException e) {
+            return new SimpleDateFormat(value);
+        } catch (IllegalArgumentException e) {
             throw new FtpException("Date format was incorrect: " + value, e);
         }
     }
 
-    public SimpleDateFormat getDateFormat(final String str, final SimpleDateFormat fmt)  {
+    public SimpleDateFormat getDateFormat(final String str,
+            final SimpleDateFormat fmt) {
         try {
             return getDateFormat(str);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return fmt;
         }
     }
 
-
     /**
      * Get <code>Date</code> object.
      */
-    public Date getDate(final String str, final DateFormat fmt) throws FtpException  {
+    public Date getDate(final String str, final DateFormat fmt)
+            throws FtpException {
         String value = getProperty(str);
         if (value == null) {
             throw new FtpException(str + " not found");
@@ -306,72 +292,68 @@ class BaseProperties extends Properties {
 
         try {
             return fmt.parse(value);
-        } 
-        catch (ParseException ex) {
+        } catch (ParseException ex) {
             throw new FtpException("BaseProperties.getdate()", ex);
         }
     }
 
-    public Date getDate(final String str, final DateFormat fmt, final Date dt)  {
+    public Date getDate(final String str, final DateFormat fmt, final Date dt) {
         try {
             return getDate(str, fmt);
-        } 
-        catch (FtpException ex) {
+        } catch (FtpException ex) {
             return dt;
         }
     }
 
-
-    //////////////////////////////////////////
-    ////////  Properties Set Methods  ////////
-    //////////////////////////////////////////
+    // ////////////////////////////////////////
+    // ////// Properties Set Methods ////////
+    // ////////////////////////////////////////
     /**
      * Set boolean value.
      */
-    public void setProperty(final String key, final boolean val)  {
+    public void setProperty(final String key, final boolean val) {
         setProperty(key, String.valueOf(val));
     }
 
     /**
      * Set integer value.
      */
-    public void setProperty(final String key, final int val)  {
+    public void setProperty(final String key, final int val) {
         setProperty(key, String.valueOf(val));
     }
-
 
     /**
      * Set double value.
      */
-    public void setProperty(final String key, final double val)  {
+    public void setProperty(final String key, final double val) {
         setProperty(key, String.valueOf(val));
     }
 
     /**
      * Set float value.
      */
-    public void setProperty(final String key, final float val)  {
+    public void setProperty(final String key, final float val) {
         setProperty(key, String.valueOf(val));
-    } 
+    }
 
     /**
      * Set long value.
      */
-    public void setProperty(final String key, final long val)  {
+    public void setProperty(final String key, final long val) {
         setProperty(key, String.valueOf(val));
     }
-    
+
     /**
      * Set <code>InetAddress</code>.
      */
     public void setInetAddress(final String key, final InetAddress val) {
         setProperty(key, val.getHostAddress());
     }
-     
+
     /**
      * Set <code>File</code> object.
      */
-    public void setProperty(final String key, final File val)  {
+    public void setProperty(final String key, final File val) {
         setProperty(key, val.getAbsolutePath());
     }
 
@@ -385,21 +367,22 @@ class BaseProperties extends Properties {
     /**
      * Set <code>TimeZone</code> object.
      */
-    public void setProperty(final String key, final TimeZone val)  {
+    public void setProperty(final String key, final TimeZone val) {
         setProperty(key, val.getID());
     }
 
     /**
      * Set <code>Date</code> object.
      */
-    public void setProperty(final String key, final Date val, final DateFormat fmt)  {
+    public void setProperty(final String key, final Date val,
+            final DateFormat fmt) {
         setProperty(key, fmt.format(val));
     }
 
     /**
      * Set <code>Class</code> object.
      */
-    public void setProperty(final String key, final Class<?> val)  {
+    public void setProperty(final String key, final Class<?> val) {
         setProperty(key, val.getName());
     }
 

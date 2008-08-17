@@ -26,58 +26,65 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.nio.NioListener;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class MinaCipherSuitesTest extends SSLTestTemplate {
 
     protected String getAuthValue() {
         return "TLS";
     }
-    
+
     protected boolean useImplicit() {
-    	return true;
+        return true;
     }
-    
+
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+        FtpServer server = super.createServer();
+        DefaultFtpServerContext context = (DefaultFtpServerContext) server
+                .getServerContext();
         NioListener listener = (NioListener) context.getListener("default");
 
-        DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener.getSslConfiguration();
-        sslConfig.setEnabledCipherSuites(new String[]{"SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA"});
+        DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener
+                .getSslConfiguration();
+        sslConfig
+                .setEnabledCipherSuites(new String[] { "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA" });
 
         return server;
     }
-    
+
     protected FTPSClient createFTPClient() throws Exception {
         return new FTPSClient(true);
     }
 
-	protected boolean isConnectClient() {
-		return false;
-	}
+    protected boolean isConnectClient() {
+        return false;
+    }
 
-	/*
-     * Only certain cipher suites will work with the keys and protocol 
-     * we're using for this test. 
-     * Two suites known to work is:
-     *  * SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA
-     *  * SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
+    /*
+     * Only certain cipher suites will work with the keys and protocol we're
+     * using for this test. Two suites known to work is:
+     * SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
      */
     public void testEnabled() throws Exception {
-        
-        ((FTPSClient)client).setEnabledCipherSuites(new String[]{ 
-                "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA"});
-        
+
+        ((FTPSClient) client)
+                .setEnabledCipherSuites(new String[] { "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA" });
+
         connectClient();
     }
-    
+
     public void testDisabled() throws Exception {
-    	((FTPSClient)client).setEnabledCipherSuites(new String[]{ 
-                "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA"});
-        
+        ((FTPSClient) client)
+                .setEnabledCipherSuites(new String[] { "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA" });
+
         try {
-        	doConnect();
-            fail("Must throw SSLHandshakeException"); 
-        } catch(SSLHandshakeException e) {
+            doConnect();
+            fail("Must throw SSLHandshakeException");
+        } catch (SSLHandshakeException e) {
             // OK
         }
     }

@@ -15,93 +15,96 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 import java.util.StringTokenizer;
 
 /**
  * Parses a list argument (e.g. for LIST or NLST) into a {@link ListArgument}
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class ListArgumentParser {
-    
+
     /**
      * Parse the argument
-     * @param argument The argument string
+     * 
+     * @param argument
+     *            The argument string
      * @return The parsed argument
-     * @throws IllegalArgumentException If the argument string is incorrectly formated
+     * @throws IllegalArgumentException
+     *             If the argument string is incorrectly formated
      */
     public static ListArgument parse(String argument) {
         String file = "./";
         String options = "";
         String pattern = "*";
-        
+
         // find options and file name (may have regular expression)
-        if(argument != null) {
+        if (argument != null) {
             argument = argument.trim();
             StringBuffer optionsSb = new StringBuffer(4);
             StringBuffer fileSb = new StringBuffer(16);
             StringTokenizer st = new StringTokenizer(argument, " ", true);
-            while(st.hasMoreTokens()) {
+            while (st.hasMoreTokens()) {
                 String token = st.nextToken();
-                
-                if(fileSb.length() != 0) {
+
+                if (fileSb.length() != 0) {
                     // file name started - append to file name buffer
                     fileSb.append(token);
-                }
-                else if(token.equals(" ")) {
+                } else if (token.equals(" ")) {
                     // delimiter and file not started - ignore
                     continue;
-                } 
-                else if(token.charAt(0) == '-') {
-                    // token and file name not started - append to options buffer
+                } else if (token.charAt(0) == '-') {
+                    // token and file name not started - append to options
+                    // buffer
                     if (token.length() > 1) {
                         optionsSb.append(token.substring(1));
                     }
-                }
-                else {
+                } else {
                     // filename - append to the filename buffer
                     fileSb.append(token);
                 }
             }
-            
-            if(fileSb.length() != 0) {
+
+            if (fileSb.length() != 0) {
                 file = fileSb.toString();
             }
             options = optionsSb.toString();
         }
-        
+
         int slashIndex = file.lastIndexOf('/');
-        if(slashIndex == -1) {
-            if(containsPattern(file)) {
+        if (slashIndex == -1) {
+            if (containsPattern(file)) {
                 pattern = file;
                 file = "./";
             }
-        } else if( slashIndex != (file.length() -1) ) {
-            String after = file.substring(slashIndex+1);
-            
-            if(containsPattern(after)) {
-                pattern = file.substring(slashIndex+1);
-                file = file.substring(0, slashIndex+1);
-            }            
-            
-            if(containsPattern(file)) {
-                throw new IllegalArgumentException("Directory path can not contain regular expression");
+        } else if (slashIndex != (file.length() - 1)) {
+            String after = file.substring(slashIndex + 1);
+
+            if (containsPattern(after)) {
+                pattern = file.substring(slashIndex + 1);
+                file = file.substring(0, slashIndex + 1);
+            }
+
+            if (containsPattern(file)) {
+                throw new IllegalArgumentException(
+                        "Directory path can not contain regular expression");
             }
         }
 
-        if( "*".equals(pattern) || "".equals(pattern) ) {
+        if ("*".equals(pattern) || "".equals(pattern)) {
             pattern = null;
         }
-        
-        
+
         return new ListArgument(file, pattern, options.toCharArray());
     }
 
     private static boolean containsPattern(String file) {
-        return file.indexOf('*') > -1 || 
-               file.indexOf('?') > -1 ||
-               file.indexOf('[') > -1;
+        return file.indexOf('*') > -1 || file.indexOf('?') > -1
+                || file.indexOf('[') > -1;
 
     }
 }

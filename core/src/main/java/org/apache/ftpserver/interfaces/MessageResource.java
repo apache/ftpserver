@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -25,27 +25,29 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This is message resource interface.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface MessageResource {
+public interface MessageResource {
 
     /**
      * Get all the available languages.
      */
     String[] getAvailableLanguages();
-    
+
     /**
-     * Get the message for the corresponding code and sub id. 
-     * If not found it will return null. 
+     * Get the message for the corresponding code and sub id. If not found it
+     * will return null.
      */
     String getMessage(int code, String subId, String language);
-    
+
     /**
-     * Save properties. This properties object contain all the
-     * available messages. Old properties will not be overwritten.
+     * Save properties. This properties object contain all the available
+     * messages. Old properties will not be overwritten.
      */
     void save(Properties prop, String language) throws FtpException;
-    
+
     /**
      * Get all the messages.
      */

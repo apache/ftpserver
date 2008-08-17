@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -41,61 +41,69 @@ import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- * Properties file based <code>UserManager</code> implementation. 
- * We use <code>user.properties</code> file to store user data.
+ * Properties file based <code>UserManager</code> implementation. We use
+ * <code>user.properties</code> file to store user data.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-class PropertiesUserManager extends AbstractUserManager {
+public class PropertiesUserManager extends AbstractUserManager {
 
-    private final Logger LOG = LoggerFactory.getLogger(PropertiesUserManager.class);
-    
-    private final static String DEPRECATED_PREFIX    = "FtpServer.user.";
-    private final static String PREFIX    = "ftpserver.user.";
+    private final Logger LOG = LoggerFactory
+            .getLogger(PropertiesUserManager.class);
+
+    private final static String DEPRECATED_PREFIX = "FtpServer.user.";
+
+    private final static String PREFIX = "ftpserver.user.";
 
     private BaseProperties userDataProp;
-    private File           userDataFile = new File("./res/user.gen");
-    private boolean        isPasswordEncrypt = true;
 
+    private File userDataFile = new File("./res/user.gen");
 
-    private boolean isConfigured = false; 
-    
+    private boolean isPasswordEncrypt = true;
+
+    private boolean isConfigured = false;
+
     /**
-     * Set the file used to store and read users. Must be set before 
+     * Set the file used to store and read users. Must be set before
      * {@link #configure()} is called.
-     * @param propFile A file containing users
+     * 
+     * @param propFile
+     *            A file containing users
      */
     public void setPropFile(File propFile) {
-        if(isConfigured) {
+        if (isConfigured) {
             throw new IllegalStateException("Must be called before configure()");
         }
-        
-        this.userDataFile = propFile; 
+
+        this.userDataFile = propFile;
     }
-  
+
     /**
-     * If true is returned, passwords will be stored as hashes rather 
-     * than in clear text. Default is true.
+     * If true is returned, passwords will be stored as hashes rather than in
+     * clear text. Default is true.
+     * 
      * @return True if passwords are stored as hashes.
      */
     public boolean isEncryptPassword() {
         return isPasswordEncrypt;
     }
-    
+
     /**
-     * If set to true, passwords will be stored as a 
-     * hash to ensure that it can not be retrived from the
-     * user file.
-     * Must be set before {@link #configure()} is called.
-     * @param encryptPassword True to store a hash of the passwords,
-     *      false to store the passwords in clear text.
+     * If set to true, passwords will be stored as a hash to ensure that it can
+     * not be retrived from the user file. Must be set before
+     * {@link #configure()} is called.
+     * 
+     * @param encryptPassword
+     *            True to store a hash of the passwords, false to store the
+     *            passwords in clear text.
      */
     public void setEncryptPasswords(boolean encryptPassword) {
-        if(isConfigured) {
+        if (isConfigured) {
             throw new IllegalStateException("Must be called before configure()");
         }
-        
+
         this.isPasswordEncrypt = encryptPassword;
     }
 
@@ -105,25 +113,25 @@ class PropertiesUserManager extends AbstractUserManager {
     public void setPropPasswordEncrypt(boolean encryptPassword) {
         setEncryptPasswords(encryptPassword);
     }
-    
+
     /**
      * Lazy init the user manager
      */
     private void lazyInit() {
-        if(!isConfigured) {
+        if (!isConfigured) {
             configure();
         }
     }
-    
+
     /**
      * Configure user manager.
      */
     public void configure() {
-        isConfigured  = true;
+        isConfigured = true;
         try {
             userDataProp = new BaseProperties();
-            
-            if(userDataFile != null && userDataFile.exists()) {
+
+            if (userDataFile != null && userDataFile.exists()) {
                 FileInputStream fis = null;
                 try {
                     fis = new FileInputStream(userDataFile);
@@ -133,91 +141,99 @@ class PropertiesUserManager extends AbstractUserManager {
                 }
             }
         } catch (IOException e) {
-            throw new FtpServerConfigurationException("Error loading user data file : " + userDataFile.getAbsolutePath(), e);
+            throw new FtpServerConfigurationException(
+                    "Error loading user data file : "
+                            + userDataFile.getAbsolutePath(), e);
         }
-        
+
         convertDeprecatedPropertyNames();
     }
-    
+
     private void convertDeprecatedPropertyNames() {
         Enumeration<?> keys = userDataProp.propertyNames();
-        
+
         boolean doSave = false;
-        
+
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
-            
-            if(key.startsWith(DEPRECATED_PREFIX)) {
-                String newKey = PREFIX + key.substring(DEPRECATED_PREFIX.length());
+
+            if (key.startsWith(DEPRECATED_PREFIX)) {
+                String newKey = PREFIX
+                        + key.substring(DEPRECATED_PREFIX.length());
                 userDataProp.setProperty(newKey, userDataProp.getProperty(key));
                 userDataProp.remove(key);
-                
+
                 doSave = true;
             }
         }
-        
-        if(doSave) {
+
+        if (doSave) {
             try {
                 saveUserData();
             } catch (FtpException e) {
-                throw new FtpServerConfigurationException("Failed to save updated user data", e);
+                throw new FtpServerConfigurationException(
+                        "Failed to save updated user data", e);
             }
         }
     }
 
-    
     /**
      * Save user data. Store the properties.
      */
     public synchronized void save(User usr) throws FtpException {
         lazyInit();
-        
-       // null value check
-       if(usr.getName() == null) {
-           throw new NullPointerException("User name is null.");
-       }
-       String thisPrefix = PREFIX + usr.getName() + '.';
-       
-       // set other properties
-       userDataProp.setProperty(thisPrefix + ATTR_PASSWORD,          getPassword(usr));
-       
-       String home = usr.getHomeDirectory();
-       if(home == null) {
-           home = "/";
-       }
-       userDataProp.setProperty(thisPrefix + ATTR_HOME,              home);
-       userDataProp.setProperty(thisPrefix + ATTR_ENABLE,            usr.getEnabled());
-       userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM,        usr.authorize(new WriteRequest()) != null);
-       userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME,     usr.getMaxIdleTime());
-       
-       TransferRateRequest transferRateRequest = new TransferRateRequest();
-       transferRateRequest = (TransferRateRequest) usr.authorize(transferRateRequest);
-       
-       if(transferRateRequest != null) {
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,   
-                   transferRateRequest.getMaxUploadRate());
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE, 
-                   transferRateRequest.getMaxDownloadRate());
-       } else {
-           userDataProp.remove(thisPrefix + ATTR_MAX_UPLOAD_RATE);
-           userDataProp.remove(thisPrefix + ATTR_MAX_DOWNLOAD_RATE);       
-       }
-       
-       // request that always will succeed
-       ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
-       concurrentLoginRequest = (ConcurrentLoginRequest) usr.authorize(concurrentLoginRequest);
-       
-       if(concurrentLoginRequest != null) {
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER, 
-                   concurrentLoginRequest.getMaxConcurrentLogins());
-           userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP, 
-                   concurrentLoginRequest.getMaxConcurrentLoginsPerIP());
-       } else {
-           userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_NUMBER);
-           userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_PER_IP);   
-       }
-       
-       saveUserData();
+
+        // null value check
+        if (usr.getName() == null) {
+            throw new NullPointerException("User name is null.");
+        }
+        String thisPrefix = PREFIX + usr.getName() + '.';
+
+        // set other properties
+        userDataProp.setProperty(thisPrefix + ATTR_PASSWORD, getPassword(usr));
+
+        String home = usr.getHomeDirectory();
+        if (home == null) {
+            home = "/";
+        }
+        userDataProp.setProperty(thisPrefix + ATTR_HOME, home);
+        userDataProp.setProperty(thisPrefix + ATTR_ENABLE, usr.getEnabled());
+        userDataProp.setProperty(thisPrefix + ATTR_WRITE_PERM, usr
+                .authorize(new WriteRequest()) != null);
+        userDataProp.setProperty(thisPrefix + ATTR_MAX_IDLE_TIME, usr
+                .getMaxIdleTime());
+
+        TransferRateRequest transferRateRequest = new TransferRateRequest();
+        transferRateRequest = (TransferRateRequest) usr
+                .authorize(transferRateRequest);
+
+        if (transferRateRequest != null) {
+            userDataProp.setProperty(thisPrefix + ATTR_MAX_UPLOAD_RATE,
+                    transferRateRequest.getMaxUploadRate());
+            userDataProp.setProperty(thisPrefix + ATTR_MAX_DOWNLOAD_RATE,
+                    transferRateRequest.getMaxDownloadRate());
+        } else {
+            userDataProp.remove(thisPrefix + ATTR_MAX_UPLOAD_RATE);
+            userDataProp.remove(thisPrefix + ATTR_MAX_DOWNLOAD_RATE);
+        }
+
+        // request that always will succeed
+        ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(
+                0, 0);
+        concurrentLoginRequest = (ConcurrentLoginRequest) usr
+                .authorize(concurrentLoginRequest);
+
+        if (concurrentLoginRequest != null) {
+            userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_NUMBER,
+                    concurrentLoginRequest.getMaxConcurrentLogins());
+            userDataProp.setProperty(thisPrefix + ATTR_MAX_LOGIN_PER_IP,
+                    concurrentLoginRequest.getMaxConcurrentLoginsPerIP());
+        } else {
+            userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_NUMBER);
+            userDataProp.remove(thisPrefix + ATTR_MAX_LOGIN_PER_IP);
+        }
+
+        saveUserData();
     }
 
     /**
@@ -225,11 +241,12 @@ class PropertiesUserManager extends AbstractUserManager {
      */
     private void saveUserData() throws FtpException {
         File dir = userDataFile.getAbsoluteFile().getParentFile();
-        if(dir != null && !dir.exists() && !dir.mkdirs() ) {
+        if (dir != null && !dir.exists() && !dir.mkdirs()) {
             String dirName = dir.getAbsolutePath();
-            throw new FtpServerConfigurationException("Cannot create directory for user data file : " + dirName);
+            throw new FtpServerConfigurationException(
+                    "Cannot create directory for user data file : " + dirName);
         }
-        
+
         // save user data
         FileOutputStream fos = null;
         try {
@@ -242,21 +259,21 @@ class PropertiesUserManager extends AbstractUserManager {
             IoUtils.close(fos);
         }
     }
-     
+
     /**
-     * Delete an user. Removes all this user entries from the properties.
-     * After removing the corresponding from the properties, save the data.
+     * Delete an user. Removes all this user entries from the properties. After
+     * removing the corresponding from the properties, save the data.
      */
     public synchronized void delete(String usrName) throws FtpException {
         lazyInit();
-        
+
         // remove entries from properties
         String thisPrefix = PREFIX + usrName + '.';
         Enumeration<?> propNames = userDataProp.propertyNames();
         ArrayList<String> remKeys = new ArrayList<String>();
-        while(propNames.hasMoreElements()) {
+        while (propNames.hasMoreElements()) {
             String thisKey = propNames.nextElement().toString();
-            if(thisKey.startsWith(thisPrefix)) {
+            if (thisKey.startsWith(thisPrefix)) {
                 remKeys.add(thisKey);
             }
         }
@@ -264,12 +281,13 @@ class PropertiesUserManager extends AbstractUserManager {
         while (remKeysIt.hasNext()) {
             userDataProp.remove(remKeysIt.next());
         }
-        
+
         saveUserData();
     }
-    
+
     /**
      * Get user password. Returns the encrypted value.
+     * 
      * <pre>
      * If the password value is not null
      *    password = new password 
@@ -277,57 +295,55 @@ class PropertiesUserManager extends AbstractUserManager {
      *   if user does exist
      *     password = old password
      *   else 
-     *     password = ""
+     *     password = &quot;&quot;
      * </pre>
      */
     private String getPassword(User usr) {
         String name = usr.getName();
         String password = usr.getPassword();
-        
-        if(password != null) {
+
+        if (password != null) {
             if (isPasswordEncrypt) {
                 password = EncryptUtils.encryptMD5(password);
             }
-        }
-        else {
+        } else {
             String blankPassword = "";
-            if(isPasswordEncrypt) {
+            if (isPasswordEncrypt) {
                 blankPassword = EncryptUtils.encryptMD5("");
             }
-            
-            if( doesExist(name) ) {
+
+            if (doesExist(name)) {
                 String key = PREFIX + name + '.' + ATTR_PASSWORD;
                 password = userDataProp.getProperty(key, blankPassword);
-            }
-            else {
+            } else {
                 password = blankPassword;
             }
         }
         return password;
-    } 
-    
+    }
+
     /**
      * Get all user names.
      */
     public synchronized String[] getAllUserNames() {
         lazyInit();
-        
+
         // get all user names
         String suffix = '.' + ATTR_HOME;
         ArrayList<String> ulst = new ArrayList<String>();
         Enumeration<?> allKeys = userDataProp.propertyNames();
         int prefixlen = PREFIX.length();
         int suffixlen = suffix.length();
-        while(allKeys.hasMoreElements()) {
-            String key = (String)allKeys.nextElement();
-            if(key.endsWith(suffix)) {
+        while (allKeys.hasMoreElements()) {
+            String key = (String) allKeys.nextElement();
+            if (key.endsWith(suffix)) {
                 String name = key.substring(prefixlen);
                 int endIndex = name.length() - suffixlen;
                 name = name.substring(0, endIndex);
                 ulst.add(name);
             }
         }
-        
+
         Collections.sort(ulst);
         return ulst.toArray(new String[0]);
     }
@@ -337,91 +353,100 @@ class PropertiesUserManager extends AbstractUserManager {
      */
     public synchronized User getUserByName(String userName) {
         lazyInit();
-        
+
         if (!doesExist(userName)) {
             return null;
         }
-        
+
         String baseKey = PREFIX + userName + '.';
         BaseUser user = new BaseUser();
         user.setName(userName);
         user.setEnabled(userDataProp.getBoolean(baseKey + ATTR_ENABLE, true));
-        user.setHomeDirectory( userDataProp.getProperty(baseKey + ATTR_HOME, "/") );
-        
+        user.setHomeDirectory(userDataProp
+                .getProperty(baseKey + ATTR_HOME, "/"));
+
         List<Authority> authorities = new ArrayList<Authority>();
-        
-        if(userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false)) {
+
+        if (userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false)) {
             authorities.add(new WritePermission());
         }
-        
-        int maxLogin = userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER, 0);
-        int maxLoginPerIP = userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_PER_IP, 0);
-        
+
+        int maxLogin = userDataProp.getInteger(baseKey + ATTR_MAX_LOGIN_NUMBER,
+                0);
+        int maxLoginPerIP = userDataProp.getInteger(baseKey
+                + ATTR_MAX_LOGIN_PER_IP, 0);
+
         authorities.add(new ConcurrentLoginPermission(maxLogin, maxLoginPerIP));
 
-        int uploadRate = userDataProp.getInteger(baseKey + ATTR_MAX_UPLOAD_RATE, 0);
-        int downloadRate = userDataProp.getInteger(baseKey + ATTR_MAX_DOWNLOAD_RATE, 0);
-        
+        int uploadRate = userDataProp.getInteger(
+                baseKey + ATTR_MAX_UPLOAD_RATE, 0);
+        int downloadRate = userDataProp.getInteger(baseKey
+                + ATTR_MAX_DOWNLOAD_RATE, 0);
+
         authorities.add(new TransferRatePermission(downloadRate, uploadRate));
-        
+
         user.setAuthorities(authorities.toArray(new Authority[0]));
-        
-        user.setMaxIdleTime(userDataProp.getInteger(baseKey + ATTR_MAX_IDLE_TIME, 0));
+
+        user.setMaxIdleTime(userDataProp.getInteger(baseKey
+                + ATTR_MAX_IDLE_TIME, 0));
 
         return user;
     }
-    
+
     /**
      * User existance check
      */
     public synchronized boolean doesExist(String name) {
         lazyInit();
-        
+
         String key = PREFIX + name + '.' + ATTR_HOME;
         return userDataProp.containsKey(key);
     }
-    
+
     /**
      * User authenticate method
      */
-    public synchronized User authenticate(Authentication authentication) throws AuthenticationFailedException {
+    public synchronized User authenticate(Authentication authentication)
+            throws AuthenticationFailedException {
         lazyInit();
-        
-        if(authentication instanceof UsernamePasswordAuthentication) {
+
+        if (authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
-            
-            String user = upauth.getUsername(); 
-            String password = upauth.getPassword(); 
-        
-            if(user == null) {
+
+            String user = upauth.getUsername();
+            String password = upauth.getPassword();
+
+            if (user == null) {
                 throw new AuthenticationFailedException("Authentication failed");
             }
-            
-            if(password == null) {
+
+            if (password == null) {
                 password = "";
             }
-            
-            String passVal = userDataProp.getProperty(PREFIX + user + '.' + ATTR_PASSWORD);
+
+            String passVal = userDataProp.getProperty(PREFIX + user + '.'
+                    + ATTR_PASSWORD);
             if (isPasswordEncrypt) {
                 password = EncryptUtils.encryptMD5(password);
             }
-            if(password.equals(passVal)) {
+            if (password.equals(passVal)) {
                 return getUserByName(user);
             } else {
                 throw new AuthenticationFailedException("Authentication failed");
             }
-            
-        } else if(authentication instanceof AnonymousAuthentication) {
-            if(doesExist("anonymous")) {
+
+        } else if (authentication instanceof AnonymousAuthentication) {
+            if (doesExist("anonymous")) {
                 return getUserByName("anonymous");
             } else {
                 throw new AuthenticationFailedException("Authentication failed");
             }
         } else {
-            throw new IllegalArgumentException("Authentication not supported by this user manager");
+            throw new IllegalArgumentException(
+                    "Authentication not supported by this user manager");
         }
     }
-        
+
     /**
      * Close the user manager - remove existing entries.
      */
@@ -432,4 +457,3 @@ class PropertiesUserManager extends AbstractUserManager {
         }
     }
 }
-

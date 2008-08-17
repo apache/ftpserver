@@ -15,27 +15,29 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
-
-
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class FeatTest extends ClientTestTemplate {
-
 
     public void test() throws Exception {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        
+
         client.sendCommand("FEAT");
         String[] featReplies = client.getReplyString().split("\r\n");
-        
-        for(int i = 0; i<featReplies.length; i++) {
-            if(i == 0) {
+
+        for (int i = 0; i < featReplies.length; i++) {
+            if (i == 0) {
                 // first must be 211-Extensions supported
                 assertEquals("211-Extensions supported", featReplies[i]);
-            } else if(i +1 == featReplies.length) {
+            } else if (i + 1 == featReplies.length) {
                 // last must be 211 End
                 assertEquals("211 End", featReplies[i]);
             } else {

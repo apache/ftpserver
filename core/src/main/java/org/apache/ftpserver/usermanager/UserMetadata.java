@@ -24,6 +24,9 @@ import java.security.cert.Certificate;
 
 /**
  * User metadata used during authentication
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class UserMetadata {
 
@@ -33,11 +36,12 @@ public class UserMetadata {
 
     /**
      * Retrive the certificate chain used for an SSL connection.
-     * @return The certificate chain, can be null if no peer certificate
-     *   is available (e.g. SSL not used)
+     * 
+     * @return The certificate chain, can be null if no peer certificate is
+     *         available (e.g. SSL not used)
      */
     public Certificate[] getCertificateChain() {
-        if(certificateChain != null) {
+        if (certificateChain != null) {
             return certificateChain.clone();
         } else {
             return null;
@@ -46,11 +50,12 @@ public class UserMetadata {
 
     /**
      * Set the certificate chain
+     * 
      * @param certificateChain
      *            The certificate chain to set
      */
     public void setCertificateChain(final Certificate[] certificateChain) {
-        if(certificateChain != null) {
+        if (certificateChain != null) {
             this.certificateChain = certificateChain.clone();
         } else {
             this.certificateChain = null;
@@ -59,6 +64,7 @@ public class UserMetadata {
 
     /**
      * Retrive the remote IP adress of the client
+     * 
      * @return The client IP adress
      */
     public InetAddress getInetAddress() {
@@ -67,6 +73,7 @@ public class UserMetadata {
 
     /**
      * Set the remote IP adress of the client
+     * 
      * @param inetAddress
      *            The client IP adress
      */

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -25,18 +25,22 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
- * This interface encapsulates all the FTP commands. 
+ * This interface encapsulates all the FTP commands.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface Command {
+public interface Command {
 
     /**
      * Execute command.
-     * @param session TODO
-     * @param context TODO
+     * 
+     * @param session
+     *            TODO
+     * @param context
+     *            TODO
      */
-    void execute(FtpIoSession session, 
-                 FtpServerContext context,
-                 FtpRequest request) throws IOException, FtpException;
-    
+    void execute(FtpIoSession session, FtpServerContext context,
+            FtpRequest request) throws IOException, FtpException;
+
 }

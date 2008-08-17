@@ -24,6 +24,13 @@ import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public interface ServerDataConnectionFactory extends DataConnectionFactory {
 
     /**
@@ -32,11 +39,13 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
     void initActiveDataConnection(InetSocketAddress address);
 
     /**
-     * Initate the passive data connection. 
-     * @return The {@link InetSocketAddress} on which the data connection 
-     *  if bound.
+     * Initate the passive data connection.
+     * 
+     * @return The {@link InetSocketAddress} on which the data connection if
+     *         bound.
      */
-    InetSocketAddress initPassiveDataConnection() throws DataConnectionException;
+    InetSocketAddress initPassiveDataConnection()
+            throws DataConnectionException;
 
     /**
      * Set the security protocol.
@@ -44,7 +53,7 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
     void setSecure(boolean secure);
 
     /**
-     * Sets the server's control address. 
+     * Sets the server's control address.
      */
     void setServerControlAddress(InetAddress serverControlAddress);
 
@@ -54,12 +63,11 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
      * Check the data connection idle status.
      */
     boolean isTimeout(long currTime);
-    
+
     /**
      * Dispose data connection - close all the sockets.
      */
     void dispose();
-    
 
     /**
      * Is secure?
@@ -70,7 +78,6 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
      * Is zip mode?
      */
     boolean isZipMode();
-    
 
     /**
      * Get client address.

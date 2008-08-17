@@ -15,16 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
 import org.apache.commons.net.ftp.FTPReply;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class SystTest extends ClientTestTemplate {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
@@ -36,7 +43,8 @@ public class SystTest extends ClientTestTemplate {
     public void testSyst() throws Exception {
         assertTrue(FTPReply.isPositiveCompletion(client.syst()));
         // hardcoded to Unix as that's the type of list etc we use
-        assertEquals("215 UNIX Type: Apache FtpServer", client.getReplyString().trim());
+        assertEquals("215 UNIX Type: Apache FtpServer", client.getReplyString()
+                .trim());
     }
 
 }

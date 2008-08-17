@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -28,61 +28,67 @@ import org.apache.ftpserver.command.NOOP;
 import org.apache.ftpserver.command.STOR;
 import org.apache.ftpserver.interfaces.Command;
 
-
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class DefaultCommandFactoryTest extends TestCase {
 
-	public void testReturnFromDefaultUpper() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		Command command = factory.getCommand("STOR");
-		
-		assertNotNull(command);
-		assertTrue(command instanceof STOR);
-	}
+    public void testReturnFromDefaultUpper() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        Command command = factory.getCommand("STOR");
 
-	public void testReturnFromDefaultLower() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		Command command = factory.getCommand("stor");
-		
-		assertNotNull(command);
-		assertTrue(command instanceof STOR);
-	}
+        assertNotNull(command);
+        assertTrue(command instanceof STOR);
+    }
 
-	public void testReturnFromDefaultUnknown() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		Command command = factory.getCommand("dummy");
-		
-		assertNull(command);
-	}
+    public void testReturnFromDefaultLower() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        Command command = factory.getCommand("stor");
 
-	public void testOverride() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		Map<String, Command> commands = new HashMap<String, Command>();
-		commands.put("stor", new NOOP());
-		factory.setCommandMap(commands);
-		
-		Command command = factory.getCommand("Stor");
-		
-		assertTrue(command instanceof NOOP);
-	}
+        assertNotNull(command);
+        assertTrue(command instanceof STOR);
+    }
 
-	public void testAppend() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		Map<String, Command> commands = new HashMap<String, Command>();
-		commands.put("foo", new NOOP());
-		factory.setCommandMap(commands);
-		
-		assertTrue(factory.getCommand("FOO") instanceof NOOP);
-		assertTrue(factory.getCommand("stor") instanceof STOR);
-	}
+    public void testReturnFromDefaultUnknown() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        Command command = factory.getCommand("dummy");
 
-	public void testAppendWithoutDefault() {
-		DefaultCommandFactory factory = new DefaultCommandFactory();
-		factory.setUseDefaultCommands(false);
-		Map<String, Command> commands = new HashMap<String, Command>();
-		commands.put("foo", new NOOP());
-		factory.setCommandMap(commands);
-		
-		assertTrue(factory.getCommand("FOO") instanceof NOOP);
-		assertNull(factory.getCommand("stor"));
-	}
+        assertNull(command);
+    }
+
+    public void testOverride() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        Map<String, Command> commands = new HashMap<String, Command>();
+        commands.put("stor", new NOOP());
+        factory.setCommandMap(commands);
+
+        Command command = factory.getCommand("Stor");
+
+        assertTrue(command instanceof NOOP);
+    }
+
+    public void testAppend() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        Map<String, Command> commands = new HashMap<String, Command>();
+        commands.put("foo", new NOOP());
+        factory.setCommandMap(commands);
+
+        assertTrue(factory.getCommand("FOO") instanceof NOOP);
+        assertTrue(factory.getCommand("stor") instanceof STOR);
+    }
+
+    public void testAppendWithoutDefault() {
+        DefaultCommandFactory factory = new DefaultCommandFactory();
+        factory.setUseDefaultCommands(false);
+        Map<String, Command> commands = new HashMap<String, Command>();
+        commands.put("foo", new NOOP());
+        factory.setCommandMap(commands);
+
+        assertTrue(factory.getCommand("FOO") instanceof NOOP);
+        assertNull(factory.getCommand("stor"));
+    }
 }

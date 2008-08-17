@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -38,106 +38,133 @@ import org.slf4j.LoggerFactory;
 /**
  * <code>MD5 &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
  * <code>MMD5 &lt;SP&gt; &lt;pathnames&gt; &lt;CRLF&gt;</code><br>
- *
- * Returns the MD5 value for a file or multiple files according to 
- * draft-twine-ftpmd5-00.txt.
  * 
+ * Returns the MD5 value for a file or multiple files according to
+ * draft-twine-ftpmd5-00.txt.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class MD5 extends AbstractCommand {
+public class MD5 extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MD5.class);
-    
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
 
         boolean isMMD5 = false;
-        
-        if("MMD5".equals(request.getCommand())) {
+
+        if ("MMD5".equals(request.getCommand())) {
             isMMD5 = true;
         }
-        
+
         // print file information
         String argument = request.getArgument();
-        
-        if(argument == null || argument.trim().length() == 0) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", null));
+
+        if (argument == null || argument.trim().length() == 0) {
+            session
+                    .write(FtpReplyUtil
+                            .translate(
+                                    session,
+                                    request,
+                                    context,
+                                    FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                    "MD5.invalid", null));
             return;
         }
 
         String[] fileNames = null;
-        if(isMMD5) {
+        if (isMMD5) {
             fileNames = argument.split(",");
         } else {
-            fileNames = new String[]{argument};
+            fileNames = new String[] { argument };
         }
 
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i<fileNames.length; i++) {
+        for (int i = 0; i < fileNames.length; i++) {
             String fileName = fileNames[i].trim();
-            
+
             // get file object
             FileObject file = null;
-            
+
             try {
                 file = session.getFileSystemView().getFileObject(fileName);
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 LOG.debug("Exception getting the file object: " + fileName, ex);
             }
-            
-            if(file == null) {
-            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
+
+            if (file == null) {
+                session
+                        .write(FtpReplyUtil
+                                .translate(
+                                        session,
+                                        request,
+                                        context,
+                                        FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                        "MD5.invalid", fileName));
                 return;
             }
-    
+
             // check file
-            if(!file.isFile()) {
-            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "MD5.invalid", fileName));
+            if (!file.isFile()) {
+                session
+                        .write(FtpReplyUtil
+                                .translate(
+                                        session,
+                                        request,
+                                        context,
+                                        FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                        "MD5.invalid", fileName));
                 return;
             }
-            
+
             InputStream is = null;
-            try{
+            try {
                 is = file.createInputStream(0);
                 String md5Hash = md5(is);
 
-                if(i > 0) {
+                if (i > 0) {
                     sb.append(", ");
                 }
 
                 sb.append(fileName);
                 sb.append(' ');
                 sb.append(md5Hash);
-                
-            } catch(NoSuchAlgorithmException e) {
+
+            } catch (NoSuchAlgorithmException e) {
                 LOG.debug("MD5 algorithm not available", e);
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "MD5.notimplemened", null));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
+                        "MD5.notimplemened", null));
             } finally {
                 IoUtils.close(is);
             }
         }
-        if(isMMD5) {
-        	session.write(FtpReplyUtil.translate(session, request, context, 252, "MMD5", sb.toString()));
+        if (isMMD5) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    252, "MMD5", sb.toString()));
         } else {
-        	session.write(FtpReplyUtil.translate(session, request,  context, 251, "MD5", sb.toString()));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    251, "MD5", sb.toString()));
         }
     }
 
     /**
-     * @param is InputStream for which the MD5 hash is calculated
+     * @param is
+     *            InputStream for which the MD5 hash is calculated
      * @return The hash of the content in the input stream
      * @throws IOException
-     * @throws NoSuchAlgorithmException 
+     * @throws NoSuchAlgorithmException
      */
-    private String md5(InputStream is) throws IOException, NoSuchAlgorithmException {
+    private String md5(InputStream is) throws IOException,
+            NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("MD5");
         DigestInputStream dis = new DigestInputStream(is, digest);
 
@@ -149,8 +176,8 @@ class MD5 extends AbstractCommand {
         }
 
         return new String(encodeHex(dis.getMessageDigest().digest()));
-    } 
-    
+    }
+
     /**
      * Converts an array of bytes into an array of characters representing the
      * hexidecimal values of each byte in order. The returned array will be
@@ -179,7 +206,7 @@ class MD5 extends AbstractCommand {
     /**
      * Used to build output as Hex
      */
-    private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6',
-            '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6',
+            '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 }

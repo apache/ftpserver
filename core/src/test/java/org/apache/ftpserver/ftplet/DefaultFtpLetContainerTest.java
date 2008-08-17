@@ -19,10 +19,13 @@
 
 package org.apache.ftpserver.ftplet;
 
-
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class DefaultFtpLetContainerTest extends FtpLetContainerTestTemplate {
-
 
     protected FtpletContainer createFtpletContainer() {
         return new DefaultFtpletContainer();

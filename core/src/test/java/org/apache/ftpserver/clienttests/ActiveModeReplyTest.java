@@ -26,14 +26,20 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.ftpserver.test.TestUtil;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class ActiveModeReplyTest extends ClientTestTemplate {
     private static final File TEST_TMP_DIR = new File("test-tmp");
+
     private static final File TEST_FILE = new File(ROOT_DIR, "test.txt");
+
     private static final File TEST_FILE1 = new File(TEST_TMP_DIR, "test1.txt");
 
     private static byte[] testData;
-
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -45,13 +51,11 @@ public class ActiveModeReplyTest extends ClientTestTemplate {
         TestUtil.writeDataToFile(TEST_FILE, testData);
         assertTrue(TEST_FILE.exists());
 
-
-        FTPClientConfig config = new FTPClientConfig ("UNIX");
+        FTPClientConfig config = new FTPClientConfig("UNIX");
         client.configure(config);
 
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
-
 
     public void testStoreInActiveModeIfNotAllowed() throws Exception {
         assertTrue(client.getDataConnectionMode() == FTPClient.ACTIVE_LOCAL_DATA_CONNECTION_MODE);
@@ -65,12 +69,11 @@ public class ActiveModeReplyTest extends ClientTestTemplate {
         sendCommand("STOU");
     }
 
-    private void sendCommand(final String command) throws IOException
-    {
+    private void sendCommand(final String command) throws IOException {
         final int returnCode = client.sendCommand(command);
         assertEquals(503, returnCode);
-        assertEquals("503 PORT or PASV must be issued first", client.getReplyString().trim());
+        assertEquals("503 PORT or PASV must be issued first", client
+                .getReplyString().trim());
     }
 
 }
- 

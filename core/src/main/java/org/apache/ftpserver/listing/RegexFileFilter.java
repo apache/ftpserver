@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
@@ -23,15 +23,21 @@ import org.apache.ftpserver.util.RegularExpr;
 
 /**
  * Selects files which short name matches a regular expression
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class RegexFileFilter implements FileFilter {
 
     private RegularExpr regex;
+
     private FileFilter wrappedFilter;
-    
+
     /**
      * Constructor with a regular expression
-     * @param regex The regular expression to select by
+     * 
+     * @param regex
+     *            The regular expression to select by
      */
     public RegexFileFilter(String regex) {
         this.regex = new RegularExpr(regex);
@@ -39,23 +45,26 @@ public class RegexFileFilter implements FileFilter {
 
     /**
      * Constructor with a wrapped filter, allows for chaining filters
-     * @param regex The regular expression to select by
-     * @param wrappedFilter The {@link FileFilter} to wrap
+     * 
+     * @param regex
+     *            The regular expression to select by
+     * @param wrappedFilter
+     *            The {@link FileFilter} to wrap
      */
     public RegexFileFilter(String regex, FileFilter wrappedFilter) {
         this(regex);
-        
+
         this.wrappedFilter = wrappedFilter;
     }
-    
+
     /**
      * @see FileFilter#accept(FileObject)
      */
     public boolean accept(FileObject file) {
-        if(wrappedFilter != null && !wrappedFilter.accept(file)) {
+        if (wrappedFilter != null && !wrappedFilter.accept(file)) {
             return false;
         }
-        
+
         return regex.isMatch(file.getShortName());
     }
 

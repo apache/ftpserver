@@ -15,16 +15,21 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
-
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class HelpTest extends ClientTestTemplate {
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
@@ -33,22 +38,20 @@ public class HelpTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
-    /*public void testHelpMulti() throws Exception {
-    	client.quit();
-    	
-    	for(int i = 0; i<1000000; i++) {
-    		client.connect("localhost", port);
-	    	client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-	    	client.help();
-	    	client.quit();
-    	}
-    }*/
-    
+    /*
+     * public void testHelpMulti() throws Exception { client.quit();
+     * 
+     * for(int i = 0; i<1000000; i++) { client.connect("localhost", port);
+     * client.login(ADMIN_USERNAME, ADMIN_PASSWORD); client.help();
+     * client.quit(); } }
+     */
+
     public void testHelp() throws Exception {
         assertEquals(214, client.help());
-        assertTrue(client.getReplyString().indexOf("The following commands are implemented") > -1);
+        assertTrue(client.getReplyString().indexOf(
+                "The following commands are implemented") > -1);
     }
-    
+
     public void testHelpForCWD() throws Exception {
         assertEquals(214, client.help("CWD"));
         assertTrue(client.getReplyString().indexOf("Syntax: CWD") > -1);
@@ -61,6 +64,7 @@ public class HelpTest extends ClientTestTemplate {
 
     public void testHelpForUnknownCommand() throws Exception {
         assertEquals(214, client.help("foo"));
-        assertTrue(client.getReplyString().indexOf("The following commands are implemented") > -1);
+        assertTrue(client.getReplyString().indexOf(
+                "The following commands are implemented") > -1);
     }
 }

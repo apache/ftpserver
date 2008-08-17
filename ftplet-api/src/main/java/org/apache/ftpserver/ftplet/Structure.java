@@ -15,12 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
  * Type safe enum for describing the structure
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class Structure {
 
@@ -28,19 +31,19 @@ public class Structure {
      * File structure
      */
     public static final Structure FILE = new Structure("F");
-    
+
     /**
-     * Parses the argument value from the STRU command into
-     * the type safe class
+     * Parses the argument value from the STRU command into the type safe class
      * 
-     * @param argument The argument value from the STRU command.
-     *     Not case sensitive
+     * @param argument
+     *            The argument value from the STRU command. Not case sensitive
      * @return The appropriate structure
-     * @throws IllegalArgumentException If the structure is unknown
+     * @throws IllegalArgumentException
+     *             If the structure is unknown
      */
 
     public static Structure parseArgument(char argument) {
-        switch(argument) {
+        switch (argument) {
         case 'F':
         case 'f':
             return FILE;
@@ -48,7 +51,7 @@ public class Structure {
             throw new IllegalArgumentException("Unknown structure: " + argument);
         }
     }
-    
+
     private String structure;
 
     /**

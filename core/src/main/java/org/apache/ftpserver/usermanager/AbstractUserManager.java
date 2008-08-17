@@ -15,33 +15,42 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 
-
 /**
  * Abstract common base type for {@link UserManager} implementations
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public abstract 
-class AbstractUserManager implements UserManager {
+public abstract class AbstractUserManager implements UserManager {
 
-    public static final String ATTR_LOGIN             = "userid";
-    public static final String ATTR_PASSWORD          = "userpassword";
-    public static final String ATTR_HOME              = "homedirectory";
-    public static final String ATTR_WRITE_PERM        = "writepermission";
-    public static final String ATTR_ENABLE            = "enableflag";
-    public static final String ATTR_MAX_IDLE_TIME     = "idletime";
-    public static final String ATTR_MAX_UPLOAD_RATE   = "uploadrate";
+    public static final String ATTR_LOGIN = "userid";
+
+    public static final String ATTR_PASSWORD = "userpassword";
+
+    public static final String ATTR_HOME = "homedirectory";
+
+    public static final String ATTR_WRITE_PERM = "writepermission";
+
+    public static final String ATTR_ENABLE = "enableflag";
+
+    public static final String ATTR_MAX_IDLE_TIME = "idletime";
+
+    public static final String ATTR_MAX_UPLOAD_RATE = "uploadrate";
+
     public static final String ATTR_MAX_DOWNLOAD_RATE = "downloadrate";
-    public static final String ATTR_MAX_LOGIN_NUMBER  = "maxloginnumber";
-    public static final String ATTR_MAX_LOGIN_PER_IP  = "maxloginperip";
 
-    private String         adminName = "admin";
-    
+    public static final String ATTR_MAX_LOGIN_NUMBER = "maxloginnumber";
+
+    public static final String ATTR_MAX_LOGIN_PER_IP = "maxloginperip";
+
+    private String adminName = "admin";
 
     /**
      * Get the admin name.
@@ -49,11 +58,13 @@ class AbstractUserManager implements UserManager {
     public String getAdminName() {
         return adminName;
     }
-    
+
     /**
-     * Set the name to use as the administrator of the server.
-     * The default value is "admin".
-     * @param adminName The administrator user name
+     * Set the name to use as the administrator of the server. The default value
+     * is "admin".
+     * 
+     * @param adminName
+     *            The administrator user name
      */
     public void setAdminName(String adminName) {
         this.adminName = adminName;
@@ -61,15 +72,15 @@ class AbstractUserManager implements UserManager {
 
     /**
      * Set the name to use as the administrator of the server
-     * @param adminName The administrator user name
+     * 
+     * @param adminName
+     *            The administrator user name
      * @deprecated Use {@link #setAdminName(String)} instead
      */
     public void setAdmin(String adminName) {
         this.adminName = adminName;
     }
-    
 
-    
     /**
      * @return true if user with this login is administrator
      */
@@ -77,4 +88,3 @@ class AbstractUserManager implements UserManager {
         return adminName.equals(login);
     }
 }
-

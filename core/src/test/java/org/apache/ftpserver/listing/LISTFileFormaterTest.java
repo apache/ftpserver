@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.listing;
 
@@ -28,16 +28,25 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 @SuppressWarnings("deprecation")
 public class LISTFileFormaterTest extends TestCase {
 
     private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);
+
     private static final FileObject TEST_FILE = new MockFileObject();
+
     private static final String TEST_FILE_FORMAT = "-r--------   1 owner group           13 Feb  2  2005 short\r\n";
-    private static final String TEST_DIR_FORMAT =  "dr--------   3 owner group            0 Feb  2  2005 short\r\n";
-    
+
+    private static final String TEST_DIR_FORMAT = "dr--------   3 owner group            0 Feb  2  2005 short\r\n";
+
     public LISTFileFormater formater = new LISTFileFormater();
-    
+
     public static class MockFileObject implements FileObject {
         public InputStream createInputStream(long offset) throws IOException {
             return null;
@@ -119,7 +128,7 @@ public class LISTFileFormaterTest extends TestCase {
             return false;
         }
     }
-    
+
     public void testSingleFile() {
         assertEquals(TEST_FILE_FORMAT, formater.format(TEST_FILE));
     }
@@ -137,9 +146,9 @@ public class LISTFileFormaterTest extends TestCase {
             public boolean isFile() {
                 return false;
             }
-            
+
         };
-        
+
         assertEquals(TEST_DIR_FORMAT, formater.format(dir));
     }
 

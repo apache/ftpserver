@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -36,86 +36,92 @@ import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
-
 /**
- * An active open data connection, used for transfering data over the 
- * data connection.
+ * An active open data connection, used for transfering data over the data
+ * connection.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-class IODataConnection implements DataConnection {
-    
+public class IODataConnection implements DataConnection {
+
     private FtpIoSession session;
+
     private Socket socket;
+
     private ServerDataConnectionFactory factory;
-    
-    public IODataConnection(final Socket socket, final FtpIoSession session, final ServerDataConnectionFactory factory) {
+
+    public IODataConnection(final Socket socket, final FtpIoSession session,
+            final ServerDataConnectionFactory factory) {
         this.session = session;
         this.socket = socket;
         this.factory = factory;
     }
 
-    
     /**
      * Get data input stream. The return value will never be null.
      */
     private InputStream getDataInputStream() throws IOException {
         try {
-            
+
             // get data socket
             Socket dataSoc = socket;
-            if(dataSoc == null) {
+            if (dataSoc == null) {
                 throw new IOException("Cannot open data connection.");
             }
-            
+
             // create input stream
             InputStream is = dataSoc.getInputStream();
-            if(factory.isZipMode()) {
+            if (factory.isZipMode()) {
                 is = new InflaterInputStream(is);
             }
             return is;
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             factory.closeDataConnection();
             throw ex;
         }
     }
-    
+
     /**
      * Get data output stream. The return value will never be null.
      */
     private OutputStream getDataOutputStream() throws IOException {
         try {
-            
+
             // get data socket
             Socket dataSoc = socket;
-            if(dataSoc == null) {
+            if (dataSoc == null) {
                 throw new IOException("Cannot open data connection.");
             }
-            
+
             // create output stream
             OutputStream os = dataSoc.getOutputStream();
-            if(factory.isZipMode()) {
+            if (factory.isZipMode()) {
                 os = new DeflaterOutputStream(os);
             }
             return os;
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             factory.closeDataConnection();
             throw ex;
         }
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.OutputStream)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.
+     * OutputStream)
      */
-    public final long transferFromClient(final OutputStream out) throws IOException {
+    public final long transferFromClient(final OutputStream out)
+            throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
-        transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
+        transferRateRequest = (TransferRateRequest) session.getUser()
+                .authorize(transferRateRequest);
         int maxRate = 0;
-        if(transferRateRequest != null) {
+        if (transferRateRequest != null) {
             maxRate = transferRateRequest.getMaxUploadRate();
         }
-        
+
         InputStream is = getDataInputStream();
         try {
             return transfer(is, out, maxRate);
@@ -124,17 +130,22 @@ class IODataConnection implements DataConnection {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream
+     * )
      */
     public final long transferToClient(final InputStream in) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
-        transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
+        transferRateRequest = (TransferRateRequest) session.getUser()
+                .authorize(transferRateRequest);
         int maxRate = 0;
-        if(transferRateRequest != null) {
+        if (transferRateRequest != null) {
             maxRate = transferRateRequest.getMaxDownloadRate();
         }
-        
+
         OutputStream out = getDataOutputStream();
         try {
             return transfer(in, out, maxRate);
@@ -142,9 +153,13 @@ class IODataConnection implements DataConnection {
             IoUtils.close(out);
         }
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String
+     * )
      */
     public final void transferToClient(final String str) throws IOException {
         OutputStream out = getDataOutputStream();
@@ -153,98 +168,102 @@ class IODataConnection implements DataConnection {
             writer = new OutputStreamWriter(out, "UTF-8");
             writer.write(str);
         } finally {
-            if(writer != null) {
+            if (writer != null) {
                 writer.flush();
             }
             IoUtils.close(writer);
         }
-        
+
     }
-    
-    private final long transfer(final InputStream in, final OutputStream out, final int maxRate) throws IOException {
+
+    private final long transfer(final InputStream in, final OutputStream out,
+            final int maxRate) throws IOException {
         long transferredSize = 0L;
 
         boolean isAscii = session.getDataType() == DataType.ASCII;
         long startTime = System.currentTimeMillis();
         byte[] buff = new byte[4096];
-        
+
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         try {
             bis = IoUtils.getBufferedInputStream(in);
-    
-            bos = IoUtils.getBufferedOutputStream( out );
-            
+
+            bos = IoUtils.getBufferedOutputStream(out);
+
             boolean lastWasCR = false;
-            while(true) {
-                
-                // if current rate exceeds the max rate, sleep for 50ms 
+            while (true) {
+
+                // if current rate exceeds the max rate, sleep for 50ms
                 // and again check the current transfer rate
-                if(maxRate > 0) {
-                    
+                if (maxRate > 0) {
+
                     // prevent "divide by zero" exception
                     long interval = System.currentTimeMillis() - startTime;
-                    if(interval == 0) {
+                    if (interval == 0) {
                         interval = 1;
                     }
-                    
+
                     // check current rate
-                    long currRate = (transferredSize*1000L)/interval;
-                    if(currRate > maxRate) {
-                        try { Thread.sleep(50); } catch(InterruptedException ex) {break;}
+                    long currRate = (transferredSize * 1000L) / interval;
+                    if (currRate > maxRate) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException ex) {
+                            break;
+                        }
                         continue;
                     }
                 }
-                
+
                 // read data
                 int count = bis.read(buff);
-    
-                if(count == -1) {
+
+                if (count == -1) {
                     break;
                 }
-                
+
                 // write data
                 // if ascii, replace \n by \r\n
-                if(isAscii) {
-                    for(int i=0; i<count; ++i) {
+                if (isAscii) {
+                    for (int i = 0; i < count; ++i) {
                         byte b = buff[i];
-                        if(b == '\n' && !lastWasCR) {
+                        if (b == '\n' && !lastWasCR) {
                             bos.write('\r');
-                        } 
-                        
-                        if(b == '\r') {
+                        }
+
+                        if (b == '\r') {
                             lastWasCR = true;
                         } else {
                             lastWasCR = false;
                         }
                         bos.write(b);
                     }
-                }
-                else {
+                } else {
                     bos.write(buff, 0, count);
                 }
-                
+
                 transferredSize += count;
-                
+
                 notifyObserver();
             }
         } finally {
-            if(bos != null) {
+            if (bos != null) {
                 bos.flush();
             }
         }
 
         return transferredSize;
     }
-    
+
     /**
      * Notify connection manager observer.
      */
     protected void notifyObserver() {
         session.updateLastAccessTime();
-        
-        // TODO this has been moved from AbstractConnection, do we need to keep it?
+
+        // TODO this has been moved from AbstractConnection, do we need to keep
+        // it?
         // serverContext.getConnectionManager().updateConnection(this);
     }
 }
-    

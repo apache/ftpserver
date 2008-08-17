@@ -15,48 +15,53 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.test.TestUtil;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class PasvTest extends ClientTestTemplate {
-    
+
     protected boolean isConnectClient() {
         return false;
     }
 
     /**
-     * This tests that the correct IP is returned, that is
-     * the IP that the client has connected to.
+     * This tests that the correct IP is returned, that is the IP that the
+     * client has connected to.
      * 
-     * Note that this test will only work if you got more than one 
-     * NIC and the server is allowed to listen an all NICs
+     * Note that this test will only work if you got more than one NIC and the
+     * server is allowed to listen an all NICs
      */
     public void testPasvIp() throws Exception {
         String[] ips = TestUtil.getHostAddresses();
-        
+
         for (int i = 0; i < ips.length; i++) {
 
             String ip = ips[i];
             String ftpIp = ip.replace('.', ',');
-            
-            if(!ip.startsWith("0.")) {
-                try{
+
+            if (!ip.startsWith("0.")) {
+                try {
                     client.connect(ip, port);
-                } catch(FTPConnectionClosedException e) {
+                } catch (FTPConnectionClosedException e) {
                     // try again
                     Thread.sleep(200);
                     client.connect(ip, port);
                 }
                 client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
                 client.pasv();
-                
-                assertTrue(client.getReplyString().indexOf(ftpIp) > -1 );
-                
+
+                assertTrue(client.getReplyString().indexOf(ftpIp) > -1);
+
                 client.quit();
                 client.disconnect();
             }

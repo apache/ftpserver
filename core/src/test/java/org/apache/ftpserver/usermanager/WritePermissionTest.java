@@ -15,31 +15,33 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
-
-
 import junit.framework.TestCase;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class WritePermissionTest extends TestCase {
-    
 
     public void testRootDir() throws Exception {
         WritePermission permission = new WritePermission("/");
-        
-        assertNotNull(permission.authorize(new WriteRequest("/")));    
+
+        assertNotNull(permission.authorize(new WriteRequest("/")));
     }
-    
-    
+
     public void testDirs() throws Exception {
         WritePermission permission = new WritePermission("/bar");
-        
-        assertNull(permission.authorize(new WriteRequest("/foo")));    
-        assertNull(permission.authorize(new WriteRequest("/foo/bar")));    
-        assertNotNull(permission.authorize(new WriteRequest("/bar")));    
-        assertNotNull(permission.authorize(new WriteRequest("/bar/foo")));    
+
+        assertNull(permission.authorize(new WriteRequest("/foo")));
+        assertNull(permission.authorize(new WriteRequest("/foo/bar")));
+        assertNotNull(permission.authorize(new WriteRequest("/bar")));
+        assertNotNull(permission.authorize(new WriteRequest("/bar/foo")));
     }
 
 }

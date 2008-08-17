@@ -15,13 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
- * One FtpRequest made by the client. 
+ * One FtpRequest made by the client.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface FtpRequest {
 
@@ -29,7 +31,7 @@ public interface FtpRequest {
      * Get the client request string.
      */
     String getRequestLine();
-    
+
     /**
      * Returns the ftp request command.
      */
@@ -39,9 +41,10 @@ public interface FtpRequest {
      * Get the ftp request argument.
      */
     String getArgument();
-    
+
     /**
      * Check if request contains an argument
+     * 
      * @return true if an argument is available
      */
     boolean hasArgument();

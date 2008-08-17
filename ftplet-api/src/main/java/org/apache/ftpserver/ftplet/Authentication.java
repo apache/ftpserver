@@ -15,13 +15,16 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
- * Represents a type of authentication request, typically
- * anonymous or a username and password combination
+ * Represents a type of authentication request, typically anonymous or a
+ * username and password combination
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface Authentication {
 

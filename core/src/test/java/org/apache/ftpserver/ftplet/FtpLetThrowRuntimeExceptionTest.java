@@ -21,8 +21,14 @@ package org.apache.ftpserver.ftplet;
 
 import java.io.IOException;
 
-
-public class FtpLetThrowRuntimeExceptionTest extends FtpLetThrowFtpExceptionTest {
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
+public class FtpLetThrowRuntimeExceptionTest extends
+        FtpLetThrowFtpExceptionTest {
     protected void throwException() throws IOException {
         throw new IOException();
     }

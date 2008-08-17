@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -31,46 +31,58 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Data channel protection level.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class PROT extends AbstractCommand {
+public class PROT extends AbstractCommand {
 
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-    
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // check argument
         String arg = request.getArgument();
-        if(arg == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "PROT", null));
+        if (arg == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "PROT", null));
             return;
         }
-        
+
         // check argument
         arg = arg.toUpperCase();
         ServerDataConnectionFactory dcon = session.getDataConnection();
-        if(arg.equals("C")) {
+        if (arg.equals("C")) {
             dcon.setSecure(false);
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
-        }
-        else if(arg.equals("P")) {
-            if(session.getListener().getDataConnectionConfiguration().getSslConfiguration() == null) {
-                session.write(FtpReplyUtil.translate(session, request, context, 431, "PROT", null));
-            }
-            else {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
+        } else if (arg.equals("P")) {
+            if (session.getListener().getDataConnectionConfiguration()
+                    .getSslConfiguration() == null) {
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        431, "PROT", null));
+            } else {
                 dcon.setSecure(true);
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
             }
-        }
-        else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "PROT", null));
+        } else {
+            session
+                    .write(FtpReplyUtil
+                            .translate(
+                                    session,
+                                    request,
+                                    context,
+                                    FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                    "PROT", null));
         }
     }
-    
+
 }

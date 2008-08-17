@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.filesystem;
 
@@ -24,30 +24,37 @@ import java.io.FileFilter;
 
 /**
  * FileFilter used for simple file name matching
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class NameEqualsFileFilter implements FileFilter {
 
-	private String nameToMatch;
-	private boolean caseInsensitive = false;
+    private String nameToMatch;
 
-	/**
-	 * Constructor 
-	 * 
-	 * @param nameToMatch The exact file name to match
-	 * @param caseInsensitive Wether that match should be case insensitive
-	 */
-	public NameEqualsFileFilter(final String nameToMatch, final boolean caseInsensitive) {
-		this.nameToMatch = nameToMatch;
-		this.caseInsensitive = caseInsensitive;
-	}	
-	
-	public boolean accept(final File file) {
-		
-		if(caseInsensitive) {
-			return file.getName().equalsIgnoreCase(nameToMatch);
-		} else {
-			return file.getName().equals(nameToMatch);
-		}
-	}
+    private boolean caseInsensitive = false;
+
+    /**
+     * Constructor
+     * 
+     * @param nameToMatch
+     *            The exact file name to match
+     * @param caseInsensitive
+     *            Wether that match should be case insensitive
+     */
+    public NameEqualsFileFilter(final String nameToMatch,
+            final boolean caseInsensitive) {
+        this.nameToMatch = nameToMatch;
+        this.caseInsensitive = caseInsensitive;
+    }
+
+    public boolean accept(final File file) {
+
+        if (caseInsensitive) {
+            return file.getName().equalsIgnoreCase(nameToMatch);
+        } else {
+            return file.getName().equals(nameToMatch);
+        }
+    }
 
 }

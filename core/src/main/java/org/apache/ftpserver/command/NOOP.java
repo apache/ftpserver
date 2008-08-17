@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -30,22 +30,24 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>NOOP &lt;CRLF&gt;</code><br>
+ * 
+ * This command does not affect any parameters or previously entered commands.
+ * It specifies no action other than that the server send an OK reply.
  *
- * This command does not affect any parameters or previously
- * entered commands. It specifies no action other than that the
- * server send an OK reply.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class NOOP extends AbstractCommand {
+public class NOOP extends AbstractCommand {
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         session.resetState();
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "NOOP", null));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_200_COMMAND_OKAY, "NOOP", null));
     }
 }

@@ -27,16 +27,24 @@ import org.hsqldb.jdbc.jdbcDataSource;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class XmlDbUserManagerConfigTest extends TestCase {
 
     public void test() throws Throwable {
-        XmlBeanFactory factory = new XmlBeanFactory(new FileSystemResource(
-                "src/test/resources/spring-config/config-spring-db-user-manager.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(
+                new FileSystemResource(
+                        "src/test/resources/spring-config/config-spring-db-user-manager.xml"));
 
         FtpServer server = (FtpServer) factory.getBean("server");
 
-        DbUserManager um = (DbUserManager) server.getServerContext().getUserManager();
-       assertTrue(um.getDataSource() instanceof jdbcDataSource);
+        DbUserManager um = (DbUserManager) server.getServerContext()
+                .getUserManager();
+        assertTrue(um.getDataSource() instanceof jdbcDataSource);
 
         assertEquals("INSERT USER", um.getSqlUserInsert());
         assertEquals("UPDATE USER", um.getSqlUserUpdate());

@@ -27,15 +27,22 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class PasvAddressTest extends ClientTestTemplate {
 
     private InetAddress passiveAddress;
-    
+
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
 
-        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server.getServerContext()
-                .getListener("default").getDataConnectionConfiguration();
+        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server
+                .getServerContext().getListener("default")
+                .getDataConnectionConfiguration();
 
         passiveAddress = TestUtil.findNonLocalhostIp();
         ddcc.setPassiveAddress(passiveAddress);
@@ -50,10 +57,10 @@ public class PasvAddressTest extends ClientTestTemplate {
 
         String reply = client.getReplyString();
 
-        String ipEncoded = SocketAddressEncoder.encode(new InetSocketAddress(passiveAddress, 12347));
-        
-        
-        assertTrue("The PASV address should contain \"" + ipEncoded + "\" but was \"" + reply + "\"", 
-                reply.indexOf(ipEncoded) > -1);
+        String ipEncoded = SocketAddressEncoder.encode(new InetSocketAddress(
+                passiveAddress, 12347));
+
+        assertTrue("The PASV address should contain \"" + ipEncoded
+                + "\" but was \"" + reply + "\"", reply.indexOf(ipEncoded) > -1);
     }
 }

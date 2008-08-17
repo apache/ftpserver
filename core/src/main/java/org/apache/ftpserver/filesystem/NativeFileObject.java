@@ -36,6 +36,9 @@ import org.apache.ftpserver.usermanager.WriteRequest;
 
 /**
  * This class wraps native file object.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class NativeFileObject implements FileObject {
 
@@ -51,7 +54,8 @@ public class NativeFileObject implements FileObject {
     /**
      * Constructor.
      */
-    protected NativeFileObject(final String fileName, final File file, final User user) {
+    protected NativeFileObject(final String fileName, final File file,
+            final User user) {
         if (fileName == null) {
             throw new IllegalArgumentException("fileName can not be null");
         }
@@ -300,7 +304,8 @@ public class NativeFileObject implements FileObject {
     /**
      * Create output stream for writing.
      */
-    public OutputStream createOutputStream(final long offset) throws IOException {
+    public OutputStream createOutputStream(final long offset)
+            throws IOException {
 
         // permission check
         if (!hasWritePermission()) {
@@ -314,10 +319,8 @@ public class NativeFileObject implements FileObject {
 
         // The IBM jre needs to have both the stream and the random access file
         // objects closed to actually close the file
-        return new FileOutputStream(raf.getFD())
-        {
-            public void close() throws IOException
-            {
+        return new FileOutputStream(raf.getFD()) {
+            public void close() throws IOException {
                 super.close();
                 raf.close();
             }
@@ -340,10 +343,8 @@ public class NativeFileObject implements FileObject {
 
         // The IBM jre needs to have both the stream and the random access file
         // objects closed to actually close the file
-        return new FileInputStream(raf.getFD())
-        {
-            public void close() throws IOException
-            {
+        return new FileInputStream(raf.getFD()) {
+            public void close() throws IOException {
                 super.close();
                 raf.close();
             }
@@ -373,13 +374,14 @@ public class NativeFileObject implements FileObject {
      * @return The return string will always begin with the root directory. It
      *         will never be null.
      */
-    public final static String getPhysicalName(final String rootDir, final String currDir,
-            final String fileName) {
+    public final static String getPhysicalName(final String rootDir,
+            final String currDir, final String fileName) {
         return getPhysicalName(rootDir, currDir, fileName, false);
     }
 
-    public final static String getPhysicalName(final String rootDir, final String currDir,
-            final String fileName, final boolean caseInsensitive) {
+    public final static String getPhysicalName(final String rootDir,
+            final String currDir, final String fileName,
+            final boolean caseInsensitive) {
 
         // get the starting directory
         String normalizedRootDir = normalizeSeparateChar(rootDir);
@@ -441,7 +443,8 @@ public class NativeFileObject implements FileObject {
 
             // ~ => home directory (in this case the root directory)
             if (tok.equals("~")) {
-                resArg = normalizedRootDir.substring(0, normalizedRootDir.length() - 1);
+                resArg = normalizedRootDir.substring(0, normalizedRootDir
+                        .length() - 1);
                 continue;
             }
 
@@ -463,7 +466,8 @@ public class NativeFileObject implements FileObject {
         }
 
         // final check
-        if (!resArg.regionMatches(0, normalizedRootDir, 0, normalizedRootDir.length())) {
+        if (!resArg.regionMatches(0, normalizedRootDir, 0, normalizedRootDir
+                .length())) {
             resArg = normalizedRootDir;
         }
 

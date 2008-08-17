@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 
 package org.apache.ftpserver.filter;
 
@@ -24,76 +24,80 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LoggingFilter;
 
 /**
- * Specialized @see {@link LoggingFilter} that optionally
- * masks FTP passwords.
+ * Specialized @see {@link LoggingFilter} that optionally masks FTP passwords.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class FtpLoggingFilter extends LoggingFilter {
 
-	private boolean maskPassword = true;
-	
-	/**
-	 * @see LoggingFilter#LoggingFilter()
-	 */
-	public FtpLoggingFilter() {
-		super();
-	}
+    private boolean maskPassword = true;
 
-	/**
-	 * @see LoggingFilter#LoggingFilter(Class)
-	 */
-	public FtpLoggingFilter(Class<?> clazz) {
-		super(clazz);
-	}
+    /**
+     * @see LoggingFilter#LoggingFilter()
+     */
+    public FtpLoggingFilter() {
+        super();
+    }
 
-	/**
-	 * @see LoggingFilter#LoggingFilter(String)
-	 */
-	public FtpLoggingFilter(String name) {
-		super(name);
-	}
+    /**
+     * @see LoggingFilter#LoggingFilter(Class)
+     */
+    public FtpLoggingFilter(Class<?> clazz) {
+        super(clazz);
+    }
 
-	/**
-	 * @see LoggingFilter#messageReceived(org.apache.mina.core.IoFilter.NextFilter, IoSession, Object)
-	 */
-	@Override
-	public void messageReceived(NextFilter nextFilter, IoSession session,
-			Object message) throws Exception {
-		String request = (String) message;
+    /**
+     * @see LoggingFilter#LoggingFilter(String)
+     */
+    public FtpLoggingFilter(String name) {
+        super(name);
+    }
 
-		String logMessage;
-		if(maskPassword) {
-			
-			request = request.trim().toUpperCase();
-			
-			if(request.startsWith("PASS ")) {
-				logMessage = "PASS *****";
-			} else {
-				logMessage = request;
-			}
-		} else {
-			logMessage = request;
-		}
-		
+    /**
+     * @see LoggingFilter#messageReceived(org.apache.mina.core.IoFilter.NextFilter,
+     *      IoSession, Object)
+     */
+    @Override
+    public void messageReceived(NextFilter nextFilter, IoSession session,
+            Object message) throws Exception {
+        String request = (String) message;
+
+        String logMessage;
+        if (maskPassword) {
+
+            request = request.trim().toUpperCase();
+
+            if (request.startsWith("PASS ")) {
+                logMessage = "PASS *****";
+            } else {
+                logMessage = request;
+            }
+        } else {
+            logMessage = request;
+        }
+
         log(IoEventType.MESSAGE_RECEIVED, "RECEIVED: {}", logMessage);
         nextFilter.messageReceived(session, message);
-	}
+    }
 
-	/**
-	 * Are password masked?
-	 * @return true if passwords are masked
-	 */
-	public boolean isMaskPassword() {
-		return maskPassword;
-	}
+    /**
+     * Are password masked?
+     * 
+     * @return true if passwords are masked
+     */
+    public boolean isMaskPassword() {
+        return maskPassword;
+    }
 
-	/**
-	 * Mask password in log messages
-	 * @param maskPassword true if passwords should be masked
-	 */
-	public void setMaskPassword(boolean maskPassword) {
-		this.maskPassword = maskPassword;
-	}
+    /**
+     * Mask password in log messages
+     * 
+     * @param maskPassword
+     *            true if passwords should be masked
+     */
+    public void setMaskPassword(boolean maskPassword) {
+        this.maskPassword = maskPassword;
+    }
 
-	
-	
 }

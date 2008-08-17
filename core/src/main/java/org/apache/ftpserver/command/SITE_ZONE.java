@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -32,24 +32,28 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * Displays the FTP server timezone in RFC 822 format.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SITE_ZONE extends AbstractCommand {
+public class SITE_ZONE extends AbstractCommand {
 
-    private final static SimpleDateFormat TIMEZONE_FMT = new SimpleDateFormat("Z"); 
+    private final static SimpleDateFormat TIMEZONE_FMT = new SimpleDateFormat(
+            "Z");
 
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-  
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // send timezone data
         String timezone = TIMEZONE_FMT.format(new Date());
-        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, timezone));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY,
+                timezone));
     }
 }

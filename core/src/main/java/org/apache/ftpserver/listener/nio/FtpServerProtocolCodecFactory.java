@@ -29,17 +29,21 @@ import org.apache.mina.filter.codec.textline.TextLineDecoder;
 
 /**
  * Factory for creating decoders and encoders
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory
-{
-    private ProtocolDecoder decoder = new TextLineDecoder(Charset.forName("UTF-8"));
+public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory {
+    private ProtocolDecoder decoder = new TextLineDecoder(Charset
+            .forName("UTF-8"));
+
     private ProtocolEncoder encoder = new FtpResponseEncoder();
 
-	public ProtocolDecoder getDecoder(IoSession session) throws Exception {
-		return decoder;
-	}
+    public ProtocolDecoder getDecoder(IoSession session) throws Exception {
+        return decoder;
+    }
 
-	public ProtocolEncoder getEncoder(IoSession session) throws Exception {
+    public ProtocolEncoder getEncoder(IoSession session) throws Exception {
         return encoder;
     }
 }

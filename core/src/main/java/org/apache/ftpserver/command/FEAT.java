@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -29,21 +29,24 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
- * The FEAT command (introduced in [RFC-2389]) allows servers with
- * additional features to advertise these to a client by responding to
- * the FEAT command.  If a server supports the FEAT command then it MUST
- * advertise supported AUTH, PBSZ and PROT commands in the reply.
+ * The FEAT command (introduced in [RFC-2389]) allows servers with additional
+ * features to advertise these to a client by responding to the FEAT command. If
+ * a server supports the FEAT command then it MUST advertise supported AUTH,
+ * PBSZ and PROT commands in the reply.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class FEAT extends AbstractCommand {
+public class FEAT extends AbstractCommand {
 
     public void execute(final FtpIoSession session,
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
 
         // reset state variables
         session.resetState();
-        
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "FEAT", null));
+
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "FEAT", null));
     }
 }

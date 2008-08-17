@@ -36,16 +36,21 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This server supports explicit SSL support.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class AUTH extends AbstractCommand {
 
     private static final String SSL_SESSION_FILTER_NAME = "sslSessionFilter";
+
     private final Logger LOG = LoggerFactory.getLogger(AUTH.class);
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, final FtpServerContext context, final FtpRequest request)
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
             throws IOException, FtpException {
 
         // reset state variables
@@ -54,13 +59,15 @@ public class AUTH extends AbstractCommand {
         // argument check
         if (!request.hasArgument()) {
             session.write(FtpReplyUtil.translate(session, request, context,
-                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "AUTH", null));
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "AUTH", null));
             return;
         }
 
         // check SSL configuration
         if (session.getListener().getSslConfiguration() == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, 431, "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    431, "AUTH", null));
             return;
         }
 
@@ -79,7 +86,8 @@ public class AUTH extends AbstractCommand {
 
         // Here we choose not to support reissued AUTH
         if (session.getFilterChain().contains(SslFilter.class)) {
-            session.write(FtpReplyUtil.translate(session, request, context, 534, "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    534, "AUTH", null));
             return;
         }
 
@@ -88,7 +96,8 @@ public class AUTH extends AbstractCommand {
         if (authType.equals("SSL")) {
             try {
                 secureSession(session, "SSL");
-                session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.SSL", null));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        234, "AUTH.SSL", null));
             } catch (FtpException ex) {
                 throw ex;
             } catch (Exception ex) {
@@ -98,7 +107,8 @@ public class AUTH extends AbstractCommand {
         } else if (authType.equals("TLS")) {
             try {
                 secureSession(session, "TLS");
-                session.write(FtpReplyUtil.translate(session, request, context, 234, "AUTH.TLS", null));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        234, "AUTH.TLS", null));
             } catch (FtpException ex) {
                 throw ex;
             } catch (Exception ex) {
@@ -106,13 +116,13 @@ public class AUTH extends AbstractCommand {
                 throw new FtpException("AUTH.execute()", ex);
             }
         } else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
-                    "AUTH", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "AUTH", null));
         }
     }
 
-    private void secureSession(final FtpIoSession session, final String type) throws GeneralSecurityException,
-            FtpException {
+    private void secureSession(final FtpIoSession session, final String type)
+            throws GeneralSecurityException, FtpException {
         SslConfiguration ssl = session.getListener().getSslConfiguration();
 
         if (ssl != null) {
@@ -133,7 +143,8 @@ public class AUTH extends AbstractCommand {
                 sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
             }
 
-            session.getFilterChain().addFirst(SSL_SESSION_FILTER_NAME, sslFilter);
+            session.getFilterChain().addFirst(SSL_SESSION_FILTER_NAME,
+                    sslFilter);
 
         } else {
             throw new FtpException("Socket factory SSL not configured");

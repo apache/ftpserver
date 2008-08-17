@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -23,14 +23,23 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class MDTMTest extends ClientTestTemplate {
-    private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
+    private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat(
+            "yyyyMMddHHmmss.SSS");
+
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
@@ -42,11 +51,12 @@ public class MDTMTest extends ClientTestTemplate {
     public void testMDTMForFile() throws Exception {
         assertFalse(TEST_FILE1.exists());
         assertTrue(TEST_FILE1.createNewFile());
-        
+
         Date expected = new Date(TEST_FILE1.lastModified());
         assertEquals(213, client.sendCommand("MDTM " + TEST_FILE1.getName()));
 
-        Date actual = FTP_DATE_FORMAT.parse(client.getReplyString().substring(4).trim());
+        Date actual = FTP_DATE_FORMAT.parse(client.getReplyString()
+                .substring(4).trim());
         assertEquals(expected, actual);
     }
 
@@ -56,11 +66,12 @@ public class MDTMTest extends ClientTestTemplate {
 
         Date expected = new Date(TEST_DIR1.lastModified());
         assertEquals(213, client.sendCommand("MDTM " + TEST_DIR1.getName()));
-        
-        Date actual = FTP_DATE_FORMAT.parse(client.getReplyString().substring(4).trim());
+
+        Date actual = FTP_DATE_FORMAT.parse(client.getReplyString()
+                .substring(4).trim());
         assertEquals(expected, actual);
     }
-    
+
     public void testMDTMForNonExistingFile() throws Exception {
         assertEquals(550, client.sendCommand("MDTM " + TEST_FILE1.getName()));
     }

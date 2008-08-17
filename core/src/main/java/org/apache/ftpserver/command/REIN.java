@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -28,23 +28,26 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
-  * <code>REIN &lt;CRLF&gt;</code><br>
-  *
-  * This command flushes a USER, without affecting transfers in progress.
-  * The server state should otherwise be as when the user first connects.
-  */
-public 
-class REIN extends AbstractCommand {
+ * <code>REIN &lt;CRLF&gt;</code><br>
+ * 
+ * This command flushes a USER, without affecting transfers in progress. The
+ * server state should otherwise be as when the user first connects.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ */
+public class REIN extends AbstractCommand {
 
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         session.reinitialize();
         session.setLanguage(null);
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_220_SERVICE_READY, "REIN", null));
-    }   
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_220_SERVICE_READY, "REIN", null));
+    }
 }

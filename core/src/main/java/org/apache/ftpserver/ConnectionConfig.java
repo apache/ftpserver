@@ -15,19 +15,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
+/**
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public interface ConnectionConfig {
 
-	int getMaxLoginFailures();
-	
-	int getLoginFailureDelay();
-	
-	int getMaxAnonymousLogins();
-	
-	int getMaxLogins();
-	
-	boolean isAnonymousLoginEnabled();
+    int getMaxLoginFailures();
+
+    int getLoginFailureDelay();
+
+    int getMaxAnonymousLogins();
+
+    int getMaxLogins();
+
+    boolean isAnonymousLoginEnabled();
 }

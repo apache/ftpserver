@@ -15,19 +15,24 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
  * FTP reply object.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class DefaultFtpReply implements FtpReply {
-    
+
     private int code;
+
     private String message;
-    private final static String CRLF     = "\r\n";
+
+    private final static String CRLF = "\r\n";
+
     /**
      * @param code
      * @param message
@@ -39,37 +44,41 @@ public class DefaultFtpReply implements FtpReply {
 
     public DefaultFtpReply(final int code, final String[] message) {
         this.code = code;
-        
+
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i<message.length; i++) {
+        for (int i = 0; i < message.length; i++) {
             sb.append(message[i]);
             sb.append('\n');
         }
         this.message = sb.toString();
     }
+
     /**
      * @return the code
      */
     public int getCode() {
         return code;
     }
+
     /**
      * @return the message
      */
     public String getMessage() {
         return message;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     public String toString() {
         int code = getCode();
         String notNullMessage = getMessage();
-        if(notNullMessage == null) {
+        if (notNullMessage == null) {
             notNullMessage = "";
         }
-        
+
         StringBuffer sb = new StringBuffer();
 
         // no newline
@@ -80,25 +89,25 @@ public class DefaultFtpReply implements FtpReply {
             sb.append(CRLF);
         } else {
             String[] lines = notNullMessage.split("\n");
-            
+
             sb.append(code);
             sb.append("-");
 
             for (int i = 0; i < lines.length; i++) {
                 String line = lines[i];
-                
-                if(i + 1 == lines.length) {
+
+                if (i + 1 == lines.length) {
                     sb.append(code);
                     sb.append(" ");
                 }
-                
+
                 sb.append(line);
                 sb.append(CRLF);
             }
-            
+
         }
-        
+
         return sb.toString();
     }
-    
+
 }

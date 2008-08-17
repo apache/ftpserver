@@ -29,13 +29,23 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.test.TestUtil;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();
+
     private static final byte[] DOUBLE_TESTDATA = "TESTDATATESTDATA".getBytes();
+
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
+
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -54,29 +64,31 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
+        FtpServer server = super.createServer();
 
-    	server.getServerContext().getFtpletContainer().addFtplet("f1", new MockFtplet());
+        server.getServerContext().getFtpletContainer().addFtplet("f1",
+                new MockFtplet());
         return server;
     }
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 assertNotNull(session.getUserArgument());
-                
+
                 return super.onLogin(session, request);
             }
-            
+
         };
         MockFtpletCallback.returnValue = FtpletEnum.RET_DEFAULT;
-        
+
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
     }
 
     public void testDelete() throws Exception {
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.deleteFile(TEST_FILE1.getName()));
         assertFalse(TEST_FILE1.exists());
@@ -90,7 +102,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testRmdir() throws Exception {
         TEST_DIR1.mkdirs();
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.removeDirectory(TEST_DIR1.getName()));
         assertFalse(TEST_DIR1.exists());
@@ -103,7 +115,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testRename() throws Exception {
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
 
@@ -113,9 +125,9 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testDownload() throws Exception {
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         client.retrieveFile(TEST_FILE1.getName(), baos);
 
@@ -124,25 +136,27 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testAppend() throws Exception {
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-            
-        client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
-        
+
+        client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(
+                TESTDATA));
+
         TestUtil.assertFileEqual(DOUBLE_TESTDATA, TEST_FILE1);
     }
 
     public void testUpload() throws Exception {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA));
-        
+        client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(
+                TESTDATA));
+
         TestUtil.assertFileEqual(TESTDATA, TEST_FILE1);
     }
-    
+
     public void testUploadUnique() throws Exception {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         client.storeUniqueFile(new ByteArrayInputStream(TESTDATA));
-        
+
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }
 }

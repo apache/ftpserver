@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -33,49 +33,53 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <code>CWD  &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
+ * 
+ * This command allows the user to work with a different directory for file
+ * storage or retrieval without altering his login or accounting information.
+ * Transfer parameters are similarly unchanged. The argument is a pathname
+ * specifying a directory.
  *
- * This command allows the user to work with a different
- * directory for file storage or retrieval without
- * altering his login or accounting information.  Transfer
- * parameters are similarly unchanged.  The argument is a
- * pathname specifying a directory.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class CWD extends AbstractCommand {
+public class CWD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(CWD.class);
-    
+
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // get new directory name
         String dirName = "/";
         if (request.hasArgument()) {
             dirName = request.getArgument();
-        } 
-        
+        }
+
         // change directory
         FileSystemView fsview = session.getFileSystemView();
         boolean success = false;
         try {
             success = fsview.changeDirectory(dirName);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.debug("Failed to change directory in file system", ex);
         }
-        if(success) {
+        if (success) {
             dirName = fsview.getCurrentDirectory().getFullName();
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CWD", dirName));
-        }
-        else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "CWD", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CWD",
+                    dirName));
+        } else {
+            session
+                    .write(FtpReplyUtil.translate(session, request, context,
+                            FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                            "CWD", null));
         }
     }
 }

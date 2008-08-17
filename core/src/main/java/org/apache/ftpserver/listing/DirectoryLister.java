@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.listing;
 
@@ -27,73 +27,78 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * This class prints file listing.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class DirectoryLister {
+public class DirectoryLister {
 
-    
-	private String traverseFiles(final FileObject[] files, final FileFilter filter, final FileFormater formater) {
-		StringBuffer sb = new StringBuffer();
-
-		sb.append(traverseFiles(files, filter, formater, true));
-		sb.append(traverseFiles(files, filter, formater, false));
-		
-		return sb.toString();
-	}
-    private String traverseFiles(final FileObject[] files, final FileFilter filter, final FileFormater formater, boolean matchDirs) {
+    private String traverseFiles(final FileObject[] files,
+            final FileFilter filter, final FileFormater formater) {
         StringBuffer sb = new StringBuffer();
-        for(int i=0; i<files.length; i++) {
-            if(files[i] == null) {
+
+        sb.append(traverseFiles(files, filter, formater, true));
+        sb.append(traverseFiles(files, filter, formater, false));
+
+        return sb.toString();
+    }
+
+    private String traverseFiles(final FileObject[] files,
+            final FileFilter filter, final FileFormater formater,
+            boolean matchDirs) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < files.length; i++) {
+            if (files[i] == null) {
                 continue;
             }
-            
-            if(filter == null || filter.accept(files[i])) {
-            	if(files[i].isDirectory() == matchDirs) {
-            		sb.append(formater.format(files[i]));
-            	}
+
+            if (filter == null || filter.accept(files[i])) {
+                if (files[i].isDirectory() == matchDirs) {
+                    sb.append(formater.format(files[i]));
+                }
             }
-         }
-        
+        }
+
         return sb.toString();
     }
-    
-    public String listFiles(final ListArgument argument, final FileSystemView fileSystemView, final FileFormater formater) throws IOException {
-       
+
+    public String listFiles(final ListArgument argument,
+            final FileSystemView fileSystemView, final FileFormater formater)
+            throws IOException {
+
         StringBuffer sb = new StringBuffer();
-        
+
         // get all the file objects
         FileObject[] files = listFiles(fileSystemView, argument.getFile());
-        if(files != null) {
+        if (files != null) {
             FileFilter filter = null;
-            if ( (argument.hasOption('a'))) {
+            if ((argument.hasOption('a'))) {
                 filter = new VisibleFileFilter();
             }
-            if(argument.getPattern() != null) {
+            if (argument.getPattern() != null) {
                 filter = new RegexFileFilter(argument.getPattern(), filter);
             }
-            
+
             sb.append(traverseFiles(files, filter, formater));
         }
-        
+
         return sb.toString();
     }
-    
+
     /**
      * Get the file list. Files will be listed in alphabetlical order.
      */
     private FileObject[] listFiles(FileSystemView fileSystemView, String file) {
-    	FileObject[] files = null;
-    	try {
-	    	FileObject virtualFile = fileSystemView.getFileObject(file);
-	    	if(virtualFile.isFile()) {
-	    		files = new FileObject[] {virtualFile};
-	    	}
-	    	else {
-	    		files = virtualFile.listFiles();
-	    	}
-    	}
-    	catch(FtpException ex) {
-    	}
-    	return files;
+        FileObject[] files = null;
+        try {
+            FileObject virtualFile = fileSystemView.getFileObject(file);
+            if (virtualFile.isFile()) {
+                files = new FileObject[] { virtualFile };
+            } else {
+                files = virtualFile.listFiles();
+            }
+        } catch (FtpException ex) {
+        }
+        return files;
     }
 }

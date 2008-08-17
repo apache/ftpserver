@@ -22,11 +22,14 @@ import org.apache.ftpserver.ftplet.FileObject;
 
 /**
  * Formats files according to the NLST specification
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class NLSTFileFormater implements FileFormater {
 
-    private final static char[] NEWLINE  = {'\r', '\n'};
-    
+    private final static char[] NEWLINE = { '\r', '\n' };
+
     /**
      * @see FileFormater#format(FileObject)
      */

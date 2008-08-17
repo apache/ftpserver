@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.config.spring;
 
@@ -23,6 +23,9 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
  * Registration point for FtpServer bean defintion parsers
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class FtpServerNamespaceHandler extends NamespaceHandlerSupport {
 
@@ -31,19 +34,23 @@ public class FtpServerNamespaceHandler extends NamespaceHandlerSupport {
      */
     public static final String FTPSERVER_NS = "http://mina.apache.org/ftpserver/spring/v1";
 
-   
     /**
-     * Register the necessary element names with the appropriate
-     * bean definition parser
+     * Register the necessary element names with the appropriate bean definition
+     * parser
      */
     public FtpServerNamespaceHandler() {
-        registerBeanDefinitionParser("server", new ServerBeanDefinitionParser());        
-        registerBeanDefinitionParser("nio-listener", new ListenerBeanDefinitionParser());        
-        registerBeanDefinitionParser("file-user-manager", new UserManagerBeanDefinitionParser());        
-        registerBeanDefinitionParser("db-user-manager", new UserManagerBeanDefinitionParser());        
-        registerBeanDefinitionParser("native-filesystem", new FileSystemBeanDefinitionParser());        
-        registerBeanDefinitionParser("commands", new CommandFactoryBeanDefinitionParser());
-        
+        registerBeanDefinitionParser("server", new ServerBeanDefinitionParser());
+        registerBeanDefinitionParser("nio-listener",
+                new ListenerBeanDefinitionParser());
+        registerBeanDefinitionParser("file-user-manager",
+                new UserManagerBeanDefinitionParser());
+        registerBeanDefinitionParser("db-user-manager",
+                new UserManagerBeanDefinitionParser());
+        registerBeanDefinitionParser("native-filesystem",
+                new FileSystemBeanDefinitionParser());
+        registerBeanDefinitionParser("commands",
+                new CommandFactoryBeanDefinitionParser());
+
     }
 
     /**

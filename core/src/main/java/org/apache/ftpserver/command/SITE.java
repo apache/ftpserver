@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -32,68 +32,77 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Handle SITE command.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SITE extends AbstractCommand {
+public class SITE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE.class);
-    
-    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(16);
-    
-    
+
+    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(
+            16);
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // get request name
         String argument = request.getArgument();
-        if(argument != null) {
+        if (argument != null) {
             int spaceIndex = argument.indexOf(' ');
-            if(spaceIndex != -1) {
+            if (spaceIndex != -1) {
                 argument = argument.substring(0, spaceIndex);
             }
             argument = argument.toUpperCase();
         }
-        
+
         // no params
-        if(argument == null) {
+        if (argument == null) {
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_200_COMMAND_OKAY, "SITE", null));
             return;
         }
-        
+
         // call appropriate command method
-        String siteRequest = "SITE_" + argument; 
-        Command command = (Command)COMMAND_MAP.get( siteRequest );
+        String siteRequest = "SITE_" + argument;
+        Command command = (Command) COMMAND_MAP.get(siteRequest);
         try {
-            if(command != null) {
+            if (command != null) {
                 command.execute(session, context, request);
-            }
-            else {
+            } else {
                 session.resetState();
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE", argument));
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE",
+                        argument));
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.warn("SITE.execute()", ex);
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED, "SITE", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED,
+                    "SITE", null));
         }
-    
+
     }
-    
+
     // initialize all the SITE command handlers
     static {
-        COMMAND_MAP.put("SITE_DESCUSER", new org.apache.ftpserver.command.SITE_DESCUSER());
-        COMMAND_MAP.put("SITE_HELP",     new org.apache.ftpserver.command.SITE_HELP());
-        COMMAND_MAP.put("SITE_STAT",     new org.apache.ftpserver.command.SITE_STAT());
-        COMMAND_MAP.put("SITE_WHO",      new org.apache.ftpserver.command.SITE_WHO());
-        COMMAND_MAP.put("SITE_ZONE",     new org.apache.ftpserver.command.SITE_ZONE());
+        COMMAND_MAP.put("SITE_DESCUSER",
+                new org.apache.ftpserver.command.SITE_DESCUSER());
+        COMMAND_MAP.put("SITE_HELP",
+                new org.apache.ftpserver.command.SITE_HELP());
+        COMMAND_MAP.put("SITE_STAT",
+                new org.apache.ftpserver.command.SITE_STAT());
+        COMMAND_MAP
+                .put("SITE_WHO", new org.apache.ftpserver.command.SITE_WHO());
+        COMMAND_MAP.put("SITE_ZONE",
+                new org.apache.ftpserver.command.SITE_ZONE());
     }
 }

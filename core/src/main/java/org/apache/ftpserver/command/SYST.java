@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -28,36 +28,36 @@ import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
- * <code>SYST &lt;CRLF&gt;</code><br> 
+ * <code>SYST &lt;CRLF&gt;</code><br>
+ * 
+ * This command is used to find out the type of operating system at the server.
  *
- * This command is used to find out the type of operating
- * system at the server.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SYST extends AbstractCommand {
-    
-    
+public class SYST extends AbstractCommand {
+
     /**
      * Execute command
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
-        // get server system info 
+
+        // get server system info
         String systemName = System.getProperty("os.name");
-        if(systemName == null) {
+        if (systemName == null) {
             systemName = "UNKNOWN";
-        }
-        else {
+        } else {
             systemName = systemName.toUpperCase();
             systemName = systemName.replace(' ', '-');
         }
         // print server system info
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_215_NAME_SYSTEM_TYPE, "SYST", systemName));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_215_NAME_SYSTEM_TYPE, "SYST", systemName));
     }
 
 }

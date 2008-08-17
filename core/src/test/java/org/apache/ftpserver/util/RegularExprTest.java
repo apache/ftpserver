@@ -15,12 +15,18 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
 import junit.framework.TestCase;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class RegularExprTest extends TestCase {
 
     public void testMatchText() {
@@ -30,7 +36,7 @@ public class RegularExprTest extends TestCase {
         assertFalse(expr.isMatch("xfoo"));
         assertFalse(expr.isMatch("foox"));
     }
-    
+
     public void testMatchingTrailingWhitespace() {
         RegularExpr expr = new RegularExpr("foo");
         assertFalse(expr.isMatch("foo "));
@@ -44,7 +50,7 @@ public class RegularExprTest extends TestCase {
         assertFalse(expr.isMatch("\nfoo"));
         assertFalse(expr.isMatch("\tfoo"));
     }
-    
+
     public void testMatchStar() {
         RegularExpr expr = new RegularExpr("*");
         assertTrue(expr.isMatch("foo"));
@@ -62,7 +68,7 @@ public class RegularExprTest extends TestCase {
         assertTrue(expr.isMatch("\nfoo"));
         assertFalse(expr.isMatch("bar"));
     }
-    
+
     public void testMatchTextThenStar() {
         RegularExpr expr = new RegularExpr("foo*");
         assertTrue(expr.isMatch("foo"));
@@ -82,7 +88,7 @@ public class RegularExprTest extends TestCase {
         assertTrue(expr.isMatch("\nfoo"));
         assertFalse(expr.isMatch("bar"));
     }
-    
+
     public void testMatchStarThenQuestionMark() {
         RegularExpr expr = new RegularExpr("foo*?bar");
         assertFalse(expr.isMatch("foobar"));
@@ -133,7 +139,7 @@ public class RegularExprTest extends TestCase {
         assertFalse(expr.isMatch("foocbar"));
         assertFalse(expr.isMatch("fooabbar"));
     }
-    
+
     /**
      * Star is allowed as a choice character
      */

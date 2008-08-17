@@ -15,20 +15,21 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
-
 /**
- * Exception used during startup to indicate that the configuration is 
- * not correct.
+ * Exception used during startup to indicate that the configuration is not
+ * correct.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class FtpServerConfigurationException extends RuntimeException {
+public class FtpServerConfigurationException extends RuntimeException {
 
     private static final long serialVersionUID = -1328432839915898987L;
-    
+
     /**
      * {@link RuntimeException#RuntimeException()}
      */
@@ -39,7 +40,8 @@ class FtpServerConfigurationException extends RuntimeException {
     /**
      * {@link RuntimeException#RuntimeException(String, Throwable)}
      */
-    public FtpServerConfigurationException(final String message, final Throwable cause) {
+    public FtpServerConfigurationException(final String message,
+            final Throwable cause) {
         super(message, cause);
     }
 

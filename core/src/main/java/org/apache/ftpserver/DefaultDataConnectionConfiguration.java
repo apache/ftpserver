@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -27,135 +27,156 @@ import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
  * Data connection configuration.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class DefaultDataConnectionConfiguration implements DataConnectionConfiguration {
+public class DefaultDataConnectionConfiguration implements
+        DataConnectionConfiguration {
 
     public static class Active {
         private boolean enable = true;
+
         private InetAddress localAddress;
+
         private int localPort = 0;
+
         private boolean ipCheck = false;
-        
+
         public Active() {
             try {
                 localAddress = InetAddress.getLocalHost();
             } catch (UnknownHostException e) {
-                throw new FtpServerConfigurationException("Failed to resolve localhost", e);
+                throw new FtpServerConfigurationException(
+                        "Failed to resolve localhost", e);
             }
         }
-        
+
         public boolean isEnable() {
             return enable;
         }
+
         public void setEnable(boolean enable) {
             this.enable = enable;
         }
+
         public boolean isIpCheck() {
             return ipCheck;
         }
+
         public void setIpCheck(boolean ipCheck) {
             this.ipCheck = ipCheck;
         }
+
         public InetAddress getLocalAddress() {
             return localAddress;
         }
+
         public void setLocalAddress(InetAddress localAddress) {
             this.localAddress = localAddress;
         }
+
         public int getLocalPort() {
             return localPort;
         }
+
         public void setLocalPort(int localPort) {
             this.localPort = localPort;
         }
     }
-    
-    public static class Passive  {
+
+    public static class Passive {
         private InetAddress address;
+
         private InetAddress externalAddress;
-        private PassivePorts passivePorts = new PassivePorts(new int[]{0});
-        
+
+        private PassivePorts passivePorts = new PassivePorts(new int[] { 0 });
+
         public InetAddress getAddress() {
             return address;
         }
+
         public void setAddress(InetAddress address) {
             this.address = address;
         }
+
         public PassivePorts getPassivePorts() {
             return passivePorts;
         }
+
         public void setPorts(String ports) {
             this.passivePorts = new PassivePorts(ports);
         }
+
         public InetAddress getExternalAddress() {
             return externalAddress;
         }
+
         public void setExternalAddress(InetAddress externalAddress) {
             this.externalAddress = externalAddress;
         }
     }
-    
+
     // maximum idle time in seconds
     private int idleTime = 300;
-    
+
     private SslConfiguration ssl;
-    
+
     /**
      * Get the maximum idle time in seconds.
      */
     public int getIdleTime() {
         return idleTime;
     }
-    
+
     public void setIdleTime(final int idleTime) {
         this.idleTime = idleTime;
     }
-    
+
     private Active active = new Active();
+
     private Passive passive = new Passive();
-    
+
     public void setActive(final Active active) {
         this.active = active;
     }
-    
+
     public void setPassive(final Passive passive) {
         this.passive = passive;
     }
-    
+
     public void setSslConfiguration(final SslConfiguration ssl) {
         this.ssl = ssl;
     }
 
-    
     /**
      * Is PORT enabled?
      */
     public boolean isActiveEnabled() {
         return active.isEnable();
     }
-    
+
     /**
      * Check the PORT IP?
      */
     public boolean isActiveIpCheck() {
         return active.isIpCheck();
     }
-    
+
     /**
      * Get the local address for active mode data transfer.
      */
     public InetAddress getActiveLocalAddress() {
         return active.getLocalAddress();
     }
-    
+
     /**
      * Get the active local port number.
      */
     public int getActiveLocalPort() {
         return active.getLocalPort();
     }
-    
+
     /**
      * Get passive host.
      */
@@ -165,12 +186,14 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
 
     /**
      * Set the passive host
-     * @param address The passive host
+     * 
+     * @param address
+     *            The passive host
      */
     public void setPassiveAddress(final InetAddress address) {
-    	passive.setAddress(address);
+        passive.setAddress(address);
     }
-    
+
     /**
      * Get external passive host.
      */
@@ -180,32 +203,34 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
 
     /**
      * Set the passive external host
-     * @param address The passive external  host
+     * 
+     * @param address
+     *            The passive external host
      */
     public void setPassiveExernalAddress(final InetAddress address) {
-    	passive.setExternalAddress(address);
+        passive.setExternalAddress(address);
     }
-    
+
     /**
-     * Get passive data port. Data port number zero (0) means that 
-     * any available port will be used.
+     * Get passive data port. Data port number zero (0) means that any available
+     * port will be used.
      */
-    public synchronized int requestPassivePort() {        
+    public synchronized int requestPassivePort() {
         int dataPort = -1;
         int loopTimes = 2;
         Thread currThread = Thread.currentThread();
-        
-        while( (dataPort==-1) && (--loopTimes >= 0)  && (!currThread.isInterrupted()) ) {
 
-            // search for a free port            
+        while ((dataPort == -1) && (--loopTimes >= 0)
+                && (!currThread.isInterrupted())) {
+
+            // search for a free port
             dataPort = passive.getPassivePorts().reserveNextPort();
 
             // no available free port - wait for the release notification
-            if(dataPort == -1) {
+            if (dataPort == -1) {
                 try {
                     wait();
-                }
-                catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                 }
             }
         }
@@ -214,6 +239,7 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
 
     /**
      * Retrive the passive ports configured for this data connection
+     * 
      * @return The String of passive ports
      */
     public String getPassivePorts() {
@@ -221,11 +247,17 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
     }
 
     /**
-     * Set the passive ports allowed for this data connection. 
-     * @param passivePorts A string consisting of port numbers 
-     *  separated by commas. It can also include ranged. For example:
-     *  <p>22,23,24</p>
-     *  <p>22-24,28</p>
+     * Set the passive ports allowed for this data connection.
+     * 
+     * @param passivePorts
+     *            A string consisting of port numbers separated by commas. It
+     *            can also include ranged. For example:
+     *            <p>
+     *            22,23,24
+     *            </p>
+     *            <p>
+     *            22-24,28
+     *            </p>
      */
     public void setPassivePorts(final String passivePorts) {
         passive.passivePorts = new PassivePorts(passivePorts);
@@ -239,7 +271,7 @@ class DefaultDataConnectionConfiguration implements DataConnectionConfiguration 
 
         notify();
     }
-    
+
     /**
      * Get SSL component.
      */

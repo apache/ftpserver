@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -23,9 +23,12 @@ import org.apache.ftpserver.ftplet.Authentication;
 
 /**
  * Class representing an anonymous authentication attempt
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class AnonymousAuthentication implements Authentication {
-   
+
     private UserMetadata userMetadata;
 
     /**
@@ -34,23 +37,24 @@ public class AnonymousAuthentication implements Authentication {
     public AnonymousAuthentication() {
         // empty
     }
-    
-    
+
     /**
      * Constructor with an additional user metadata parameter
-     * @param userMetadata User metadata
+     * 
+     * @param userMetadata
+     *            User metadata
      */
     public AnonymousAuthentication(UserMetadata userMetadata) {
         this.userMetadata = userMetadata;
     }
 
-
     /**
      * Retrive the user metadata
+     * 
      * @return The user metadata
      */
     public UserMetadata getUserMetadata() {
         return userMetadata;
     }
-    
+
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -37,25 +37,28 @@ import org.apache.ftpserver.interfaces.FtpIoSession;
 
 /**
  * FTP session
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class FtpSessionImpl implements FtpSession {
 
-	private FtpIoSession ioSession;
-	
+    private FtpIoSession ioSession;
+
     /**
      * Default constructor.
      */
     public FtpSessionImpl(final FtpIoSession ioSession) {
         this.ioSession = ioSession;
-    } 
-    
+    }
+
     /**
      * Is logged-in
      */
     public boolean isLoggedIn() {
         return ioSession.isLoggedIn();
     }
-    
+
     /**
      * Get FTP data connection.
      */
@@ -69,42 +72,42 @@ public class FtpSessionImpl implements FtpSession {
     public FileSystemView getFileSystemView() {
         return ioSession.getFileSystemView();
     }
-    
+
     /**
      * Get connection time.
      */
     public Date getConnectionTime() {
         return new Date(ioSession.getCreationTime());
     }
-    
+
     /**
      * Get the login time.
      */
     public Date getLoginTime() {
         return ioSession.getLoginTime();
     }
-    
+
     /**
      * Get last access time.
      */
     public Date getLastAccessTime() {
         return ioSession.getLastAccessTime();
     }
-    
+
     /**
      * Get file offset.
      */
     public long getFileOffset() {
         return ioSession.getFileOffset();
     }
-    
+
     /**
      * Get rename from file object.
      */
     public FileObject getRenameFrom() {
         return ioSession.getRenameFrom();
     }
-    
+
     /**
      * Returns user name entered in USER command
      * 
@@ -120,49 +123,50 @@ public class FtpSessionImpl implements FtpSession {
     public String getLanguage() {
         return ioSession.getLanguage();
     }
-    
+
     /**
      * Get user.
      */
     public User getUser() {
         return ioSession.getUser();
     }
-    
+
     /**
      * Get remote address
      */
     public InetAddress getClientAddress() {
-        if(ioSession.getRemoteAddress() instanceof InetSocketAddress) {
-        	return ((InetSocketAddress)ioSession.getRemoteAddress()).getAddress();
+        if (ioSession.getRemoteAddress() instanceof InetSocketAddress) {
+            return ((InetSocketAddress) ioSession.getRemoteAddress())
+                    .getAddress();
         } else {
-        	return null;
+            return null;
         }
     }
-    
 
-    
     /**
      * Get attribute
      */
     public Object getAttribute(final String name) {
-    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
-    		throw new IllegalArgumentException("Illegal lookup of internal attribute");
-    	}
-    	
+        if (name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+            throw new IllegalArgumentException(
+                    "Illegal lookup of internal attribute");
+        }
+
         return ioSession.getAttribute(name);
     }
-    
+
     /**
      * Set attribute.
      */
     public void setAttribute(final String name, final Object value) {
-    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
-    		throw new IllegalArgumentException("Illegal setting of internal attribute");
-    	}
+        if (name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+            throw new IllegalArgumentException(
+                    "Illegal setting of internal attribute");
+        }
 
-    	ioSession.setAttribute(name, value);
+        ioSession.setAttribute(name, value);
     }
-    
+
     public int getMaxIdleTime() {
         return ioSession.getMaxIdleTime();
     }
@@ -177,31 +181,32 @@ public class FtpSessionImpl implements FtpSession {
     public DataType getDataType() {
         return ioSession.getDataType();
     }
-    
+
     /**
      * Get structure.
      */
     public Structure getStructure() {
         return ioSession.getStructure();
     }
-    
+
     public Certificate[] getClientCertificates() {
         return ioSession.getClientCertificates();
     }
-    
+
     public InetAddress getServerAddress() {
-        if(ioSession.getLocalAddress() instanceof InetSocketAddress) {
-        	return ((InetSocketAddress)ioSession.getLocalAddress()).getAddress();
+        if (ioSession.getLocalAddress() instanceof InetSocketAddress) {
+            return ((InetSocketAddress) ioSession.getLocalAddress())
+                    .getAddress();
         } else {
-        	return null;
+            return null;
         }
     }
 
     public int getServerPort() {
-        if(ioSession.getLocalAddress() instanceof InetSocketAddress) {
-        	return ((InetSocketAddress)ioSession.getLocalAddress()).getPort();
+        if (ioSession.getLocalAddress() instanceof InetSocketAddress) {
+            return ((InetSocketAddress) ioSession.getLocalAddress()).getPort();
         } else {
-        	return 0;
+            return 0;
         }
     }
 
@@ -209,22 +214,22 @@ public class FtpSessionImpl implements FtpSession {
         return ioSession.getFailedLogins();
     }
 
-	public void removeAttribute(final String name) {
-    	if(name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
-    		throw new IllegalArgumentException("Illegal removal of internal attribute");
-    	}
-		
-    	ioSession.removeAttribute(name);
-	}
+    public void removeAttribute(final String name) {
+        if (name.startsWith(FtpIoSession.ATTRIBUTE_PREFIX)) {
+            throw new IllegalArgumentException(
+                    "Illegal removal of internal attribute");
+        }
+
+        ioSession.removeAttribute(name);
+    }
 
     public void write(FtpReply reply) throws FtpException {
-        ioSession.write(reply);        
+        ioSession.write(reply);
     }
 
     public boolean isSecure() {
         // TODO Auto-generated method stub
         return ioSession.isSecure();
     }
-    
-    
+
 }

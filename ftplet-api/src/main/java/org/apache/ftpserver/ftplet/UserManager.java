@@ -15,27 +15,28 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
  * User manager interface.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface UserManager {
+public interface UserManager {
 
     /**
      * Get user by name.
      */
     User getUserByName(String login) throws FtpException;
-    
+
     /**
      * Get all user names in the system.
      */
     String[] getAllUserNames() throws FtpException;
-    
+
     /**
      * Delete the user from the system.
      * 
@@ -43,7 +44,7 @@ interface UserManager {
      *             if UserManager in read-only mode
      */
     void delete(String login) throws FtpException;
-    
+
     /**
      * Save user. If a new user, create it else update the existing user.
      * 
@@ -51,22 +52,23 @@ interface UserManager {
      *             if UserManager in read-only mode
      */
     void save(User user) throws FtpException;
-    
+
     /**
      * User existance check.
      */
     boolean doesExist(String login) throws FtpException;
-    
+
     /**
      * Authenticate user
      */
-    User authenticate(Authentication authentication) throws AuthenticationFailedException;
-    
+    User authenticate(Authentication authentication)
+            throws AuthenticationFailedException;
+
     /**
      * Get admin user name
      */
     String getAdminName() throws FtpException;
-    
+
     /**
      * @return true if user with this login is administrator
      */

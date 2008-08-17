@@ -15,12 +15,18 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.config.spring;
 
 import org.apache.ftpserver.ftplet.DefaultFtplet;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class TestFtplet extends DefaultFtplet {
 
     private int foo;
@@ -32,5 +38,5 @@ public class TestFtplet extends DefaultFtplet {
     public void setFoo(int foo) {
         this.foo = foo;
     }
-    
+
 }

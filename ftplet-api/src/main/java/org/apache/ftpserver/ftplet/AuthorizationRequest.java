@@ -15,14 +15,16 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
- * A request for authorization for a specific task, for example
- * write access.
+ * A request for authorization for a specific task, for example write access.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface AuthorizationRequest {
-    
+
 }

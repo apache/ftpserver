@@ -15,56 +15,67 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class DefaultConnectionConfig implements ConnectionConfig {
 
-    private int maxLogins         = 10;
-    private boolean anonymousLoginEnabled       = true;
-    private int maxAnonymousLogins     = 10;
-    private int maxLoginFailures  = 3;
+    private int maxLogins = 10;
+
+    private boolean anonymousLoginEnabled = true;
+
+    private int maxAnonymousLogins = 10;
+
+    private int maxLoginFailures = 3;
+
     private int loginFailureDelay = 500;
-	
-	public int getLoginFailureDelay() {
-		return loginFailureDelay;
-	}
 
-	public int getMaxAnonymousLogins() {
-		return maxAnonymousLogins;
-	}
+    public int getLoginFailureDelay() {
+        return loginFailureDelay;
+    }
 
-	public int getMaxLoginFailures() {
-		return maxLoginFailures;
-	}
+    public int getMaxAnonymousLogins() {
+        return maxAnonymousLogins;
+    }
 
-	public int getMaxLogins() {
-		return maxLogins;
-	}
+    public int getMaxLoginFailures() {
+        return maxLoginFailures;
+    }
 
-	public boolean isAnonymousLoginEnabled() {
-		return anonymousLoginEnabled;
-	}
+    public int getMaxLogins() {
+        return maxLogins;
+    }
 
-	public void setMaxLogins(final int maxLogins) {
-		this.maxLogins = maxLogins;
-	}
+    public boolean isAnonymousLoginEnabled() {
+        return anonymousLoginEnabled;
+    }
 
-	public void setAnonymousLoginEnabled(final boolean anonymousLoginEnabled) {
-		this.anonymousLoginEnabled = anonymousLoginEnabled;
-	}
+    public void setMaxLogins(final int maxLogins) {
+        this.maxLogins = maxLogins;
+    }
 
-	public void setMaxAnonymousLogins(final int maxAnonymousLogins) {
-		this.maxAnonymousLogins = maxAnonymousLogins;
-	}
+    public void setAnonymousLoginEnabled(final boolean anonymousLoginEnabled) {
+        this.anonymousLoginEnabled = anonymousLoginEnabled;
+    }
 
-	public void setMaxLoginFailures(final int maxLoginFailures) {
-		this.maxLoginFailures = maxLoginFailures;
-	}
+    public void setMaxAnonymousLogins(final int maxAnonymousLogins) {
+        this.maxAnonymousLogins = maxAnonymousLogins;
+    }
 
-	public void setLoginFailureDelay(final int loginFailureDelay) {
-		this.loginFailureDelay = loginFailureDelay;
-	}
+    public void setMaxLoginFailures(final int maxLoginFailures) {
+        this.maxLoginFailures = maxLoginFailures;
+    }
+
+    public void setLoginFailureDelay(final int loginFailureDelay) {
+        this.loginFailureDelay = loginFailureDelay;
+    }
 
 }

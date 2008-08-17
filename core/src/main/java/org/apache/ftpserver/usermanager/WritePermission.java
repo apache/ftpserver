@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -24,6 +24,9 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
  * Class representing a write permission
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class WritePermission implements Authority {
 
@@ -37,23 +40,26 @@ public class WritePermission implements Authority {
     }
 
     /**
-     * Construct a write permission for a file or directory relative to the user home directory
-     * @param permissionRoot The file or directory
+     * Construct a write permission for a file or directory relative to the user
+     * home directory
+     * 
+     * @param permissionRoot
+     *            The file or directory
      */
     public WritePermission(final String permissionRoot) {
         this.permissionRoot = permissionRoot;
     }
-    
+
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
     public AuthorizationRequest authorize(final AuthorizationRequest request) {
-        if(request instanceof WriteRequest) {
+        if (request instanceof WriteRequest) {
             WriteRequest writeRequest = (WriteRequest) request;
-            
+
             String requestFile = writeRequest.getFile();
 
-            if(requestFile.startsWith(permissionRoot)) {
+            if (requestFile.startsWith(permissionRoot)) {
                 return writeRequest;
             } else {
                 return null;
@@ -69,7 +75,5 @@ public class WritePermission implements Authority {
     public boolean canAuthorize(final AuthorizationRequest request) {
         return request instanceof WriteRequest;
     }
-   
 
-    
 }

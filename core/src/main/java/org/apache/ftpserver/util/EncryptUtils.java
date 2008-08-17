@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
@@ -24,29 +24,32 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * String encryption utility methods.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
+public class EncryptUtils {
 
-public
-class EncryptUtils {
-    
     /**
      * Encrypt byte array.
      */
-    public final static byte[] encrypt(byte[] source, String algorithm) throws NoSuchAlgorithmException {
+    public final static byte[] encrypt(byte[] source, String algorithm)
+            throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(algorithm);
         md.reset();
         md.update(source);
         return md.digest();
     }
-    
+
     /**
      * Encrypt string
      */
-    public final static String encrypt(String source, String algorithm) throws NoSuchAlgorithmException {
+    public final static String encrypt(String source, String algorithm)
+            throws NoSuchAlgorithmException {
         byte[] resByteArray = encrypt(source.getBytes(), algorithm);
         return StringUtils.toHexString(resByteArray);
     }
-    
+
     /**
      * Encrypt string using MD5 algorithm
      */
@@ -54,18 +57,17 @@ class EncryptUtils {
         if (source == null) {
             source = "";
         }
-    
+
         String result = "";
         try {
             result = encrypt(source, "MD5");
-        }
-        catch(NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             // this should never happen
             throw new RuntimeException(ex);
         }
         return result;
     }
-    
+
     /**
      * Encrypt string using SHA algorithm
      */
@@ -73,16 +75,15 @@ class EncryptUtils {
         if (source == null) {
             source = "";
         }
-    
+
         String result = "";
         try {
             result = encrypt(source, "SHA");
-        }
-        catch(NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             // this should never happen
             throw new RuntimeException(ex);
         }
         return result;
     }
-     
+
 }

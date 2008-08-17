@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -23,21 +23,26 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
  * Class representing a write request
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class WriteRequest implements AuthorizationRequest {
-   
+
     private String file;
-    
+
     /**
      * Request write access to the user home directory (/)
-     *
+     * 
      */
     public WriteRequest() {
         this("/");
     }
-    
+
     /**
-     * Request write access to a file or directory relative to the user home directory
+     * Request write access to a file or directory relative to the user home
+     * directory
+     * 
      * @param file
      */
     public WriteRequest(final String file) {
@@ -46,12 +51,11 @@ public class WriteRequest implements AuthorizationRequest {
 
     /**
      * Get the file or directory to which write access is requested
+     * 
      * @return the file The file or directory
      */
     public String getFile() {
         return file;
     }
-    
-    
-    
+
 }

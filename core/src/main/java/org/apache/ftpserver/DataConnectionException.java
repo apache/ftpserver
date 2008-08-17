@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -23,6 +23,9 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
  * Thrown if a data connection can not be established
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class DataConnectionException extends FtpException {
     private static final long serialVersionUID = -1328383839917648987L;
@@ -37,27 +40,30 @@ public class DataConnectionException extends FtpException {
     /**
      * Constructs a <code>DataConnectionException</code> object with a message.
      * 
-     * @param msg a description of the exception 
+     * @param msg
+     *            a description of the exception
      */
     public DataConnectionException(final String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a <code>DataConnectionException</code> object with a 
+     * Constructs a <code>DataConnectionException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public DataConnectionException(final Throwable th) {
         super(th);
     }
 
     /**
-     * Constructs a <code>DataConnectionException</code> object with a 
+     * Constructs a <code>DataConnectionException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public DataConnectionException(final String msg, final Throwable th) {
         super(msg);

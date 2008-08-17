@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -23,25 +23,34 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.message.MessageResourceImpl;
 
-
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class LangTest extends ClientTestTemplate {
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
-        
-    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+        FtpServer server = super.createServer();
 
-    	MessageResourceImpl resource = (MessageResourceImpl) context.getMessageResource();
-    	resource.setLanguages(new String[] {"en", "zh-tw"});
+        DefaultFtpServerContext context = (DefaultFtpServerContext) server
+                .getServerContext();
+
+        MessageResourceImpl resource = (MessageResourceImpl) context
+                .getMessageResource();
+        resource.setLanguages(new String[] { "en", "zh-tw" });
         return server;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
@@ -65,7 +74,7 @@ public class LangTest extends ClientTestTemplate {
     public void testLangZHTWLowerCase() throws Exception {
         assertEquals(200, client.sendCommand("LANG zh-tw"));
     }
-    
+
     public void testLangUnknownLang() throws Exception {
         assertEquals(504, client.sendCommand("LANG FOO"));
     }

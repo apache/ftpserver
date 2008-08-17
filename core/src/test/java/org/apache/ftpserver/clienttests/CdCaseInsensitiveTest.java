@@ -15,29 +15,37 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class CdCaseInsensitiveTest extends CdTest {
     protected FtpServer createServer() throws Exception {
-		FtpServer server = super.createServer();
-		
-		NativeFileSystemManager fs = (NativeFileSystemManager) server.getServerContext().getFileSystemManager();
-		fs.setCaseInsensitive(true);
-		
-		return server;
-	}
+        FtpServer server = super.createServer();
+
+        NativeFileSystemManager fs = (NativeFileSystemManager) server
+                .getServerContext().getFileSystemManager();
+        fs.setCaseInsensitive(true);
+
+        return server;
+    }
 
     public void testCWDCaseInsensitive() throws Exception {
-        assertTrue(client.changeWorkingDirectory(TEST_DIR1.getName().toUpperCase()));
+        assertTrue(client.changeWorkingDirectory(TEST_DIR1.getName()
+                .toUpperCase()));
         assertEquals("/dir1", client.printWorkingDirectory());
 
-        assertTrue(client.changeWorkingDirectory(TEST_DIR_IN_DIR1.getName().toUpperCase()));
+        assertTrue(client.changeWorkingDirectory(TEST_DIR_IN_DIR1.getName()
+                .toUpperCase()));
         assertEquals("/dir1/dir3", client.printWorkingDirectory());
 
         assertTrue(client.changeWorkingDirectory("/DiR2"));

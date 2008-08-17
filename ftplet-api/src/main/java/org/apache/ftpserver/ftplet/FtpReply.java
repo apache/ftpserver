@@ -21,6 +21,9 @@ package org.apache.ftpserver.ftplet;
 
 /**
  * Interface for a reply to an FTP request.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface FtpReply {
 
@@ -231,19 +234,22 @@ public interface FtpReply {
 
     /**
      * The reply code
+     * 
      * @return The reply code
      */
     int getCode();
 
     /**
      * The reply message, might be multiple lines
+     * 
      * @return The reply message
      */
     String getMessage();
 
-    /** 
-     * Must implement toString to format the reply as described in the RFC. 
-     * Most important is the handling of multi-line replies.
+    /**
+     * Must implement toString to format the reply as described in the RFC. Most
+     * important is the handling of multi-line replies.
+     * 
      * @return The formated reply
      */
     String toString();

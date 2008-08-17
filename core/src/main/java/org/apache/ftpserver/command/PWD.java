@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -31,23 +31,26 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>PWD  &lt;CRLF&gt;</code><br>
+ * 
+ * This command causes the name of the current working directory to be returned
+ * in the reply.
  *
- * This command causes the name of the current working
- * directory to be returned in the reply.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class PWD extends AbstractCommand {
+public class PWD extends AbstractCommand {
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
         session.resetState();
         FileSystemView fsview = session.getFileSystemView();
         String currDir = fsview.getCurrentDirectory().getFullName();
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_257_PATHNAME_CREATED, "PWD", currDir));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_257_PATHNAME_CREATED, "PWD", currDir));
     }
-    
+
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -28,41 +28,44 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.User;
 
 /**
- * Generic user class. 
- * The user attributes are:
+ * Generic user class. The user attributes are:
  * <ul>
- *   <li>userid</li>
- *   <li>userpassword</li>
- *   <li>enableflag</li>
- *   <li>homedirectory</li>
- *   <li>writepermission</li>
- *   <li>idletime</li>
- *   <li>uploadrate</li>
- *   <li>downloadrate</li>
+ * <li>userid</li>
+ * <li>userpassword</li>
+ * <li>enableflag</li>
+ * <li>homedirectory</li>
+ * <li>writepermission</li>
+ * <li>idletime</li>
+ * <li>uploadrate</li>
+ * <li>downloadrate</li>
  * </ul>
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 
-public
-class BaseUser implements User, Serializable {
-    
+public class BaseUser implements User, Serializable {
+
     private static final long serialVersionUID = -47371353779731294L;
-    
-    private String name        = null;
-    private String password    = null;
 
-    private int maxIdleTimeSec  = 0; // no limit
+    private String name = null;
 
-    private String homeDir    = null;
+    private String password = null;
+
+    private int maxIdleTimeSec = 0; // no limit
+
+    private String homeDir = null;
+
     private boolean isEnabled = true;
 
     private Authority[] authorities = new Authority[0];
-    
+
     /**
      * Default constructor.
      */
     public BaseUser() {
     }
-    
+
     /**
      * Copy constructor.
      */
@@ -74,28 +77,28 @@ class BaseUser implements User, Serializable {
         homeDir = user.getHomeDirectory();
         isEnabled = user.getEnabled();
     }
-    
+
     /**
      * Get the user name.
      */
     public String getName() {
         return name;
     }
-        
+
     /**
      * Set user name.
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * Get the user password.
      */
     public String getPassword() {
         return password;
     }
-    
+
     /**
      * Set user password.
      */
@@ -104,7 +107,7 @@ class BaseUser implements User, Serializable {
     }
 
     public Authority[] getAuthorities() {
-        if(authorities != null) {
+        if (authorities != null) {
             return authorities.clone();
         } else {
             return null;
@@ -112,13 +115,13 @@ class BaseUser implements User, Serializable {
     }
 
     public void setAuthorities(Authority[] authorities) {
-        if(authorities != null) {
+        if (authorities != null) {
             this.authorities = authorities.clone();
         } else {
             this.authorities = null;
         }
     }
-    
+
     /**
      * Get the maximum idle time in second.
      */
@@ -131,7 +134,7 @@ class BaseUser implements User, Serializable {
      */
     public void setMaxIdleTime(int idleSec) {
         maxIdleTimeSec = idleSec;
-        if(maxIdleTimeSec < 0) {
+        if (maxIdleTimeSec < 0) {
             maxIdleTimeSec = 0;
         }
     }
@@ -142,14 +145,14 @@ class BaseUser implements User, Serializable {
     public boolean getEnabled() {
         return isEnabled;
     }
-    
+
     /**
      * Set the user enable status.
      */
     public void setEnabled(boolean enb) {
         isEnabled = enb;
     }
-    
+
     /**
      * Get the user home directory.
      */
@@ -164,38 +167,37 @@ class BaseUser implements User, Serializable {
         homeDir = home;
     }
 
-
-    /** 
+    /**
      * String representation.
      */
     public String toString() {
         return name;
-    }  
-    
+    }
+
     /**
      * {@inheritDoc}
      */
     public AuthorizationRequest authorize(AuthorizationRequest request) {
         Authority[] authorities = getAuthorities();
-        
+
         boolean someoneCouldAuthorize = false;
         for (int i = 0; i < authorities.length; i++) {
             Authority authority = authorities[i];
-            
-            if(authority.canAuthorize(request)) {
+
+            if (authority.canAuthorize(request)) {
                 someoneCouldAuthorize = true;
-                
+
                 request = authority.authorize(request);
-                
+
                 // authorization failed, return null
-                if(request == null) {
+                if (request == null) {
                     return null;
                 }
             }
-            
+
         }
-        
-        if(someoneCouldAuthorize) {
+
+        if (someoneCouldAuthorize) {
             return request;
         } else {
             return null;
@@ -207,13 +209,13 @@ class BaseUser implements User, Serializable {
      */
     public Authority[] getAuthorities(Class<? extends Authority> clazz) {
         List<Authority> selected = new ArrayList<Authority>();
-        
+
         for (int i = 0; i < authorities.length; i++) {
-            if(authorities[i].getClass().equals(clazz)) {
+            if (authorities[i].getClass().equals(clazz)) {
                 selected.add(authorities[i]);
             }
         }
-        
+
         return selected.toArray(new Authority[0]);
     }
 }

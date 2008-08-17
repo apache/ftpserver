@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -25,12 +25,17 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpStatisticsImpl;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
-    
     public void testConnectionCount() {
         ServerFtpStatistics stats = createStatistics();
-        
+
         assertEquals(0, stats.getTotalConnectionNumber());
         assertEquals(0, stats.getCurrentConnectionNumber());
 
@@ -41,7 +46,7 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         stats.setOpenConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(2, stats.getCurrentConnectionNumber());
-        
+
         stats.setCloseConnection(new FtpIoSession(null, null));
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(1, stats.getCurrentConnectionNumber());
@@ -55,17 +60,17 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
         assertEquals(2, stats.getTotalConnectionNumber());
         assertEquals(0, stats.getCurrentConnectionNumber());
     }
-    
+
     @SuppressWarnings("deprecation")
-	public void testStartDateImmutable() {
+    public void testStartDateImmutable() {
         ServerFtpStatistics stats = createStatistics();
         Date date = stats.getStartTime();
         date.setYear(1);
-        
+
         Date actual = stats.getStartTime();
-        
+
         assertFalse(1 == actual.getYear());
-        
+
     }
 
     protected abstract FtpStatisticsImpl createStatistics();

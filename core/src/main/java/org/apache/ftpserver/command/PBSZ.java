@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -30,18 +30,21 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Protection buffer size.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class PBSZ extends AbstractCommand {
+public class PBSZ extends AbstractCommand {
 
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         session.resetState();
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "PBSZ", null));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_200_COMMAND_OKAY, "PBSZ", null));
     }
 }

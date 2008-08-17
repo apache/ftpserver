@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -23,24 +23,31 @@ import org.apache.ftpserver.DefaultConnectionConfig;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class LoginNoAnonTest extends ClientTestTemplate {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
-        
-    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
-    	
-    	DefaultConnectionConfig cc = (DefaultConnectionConfig) context.getConnectionConfig();
-    	cc.setAnonymousLoginEnabled(false);
+        FtpServer server = super.createServer();
+
+        DefaultFtpServerContext context = (DefaultFtpServerContext) server
+                .getServerContext();
+
+        DefaultConnectionConfig cc = (DefaultConnectionConfig) context
+                .getConnectionConfig();
+        cc.setAnonymousLoginEnabled(false);
 
         return server;
     }
-
-
 
     public void testLoginWithAnon() throws Exception {
         assertFalse(client.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD));

@@ -15,75 +15,68 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
- * This class encapsulates the return values of the ftplet methods. 
+ * This class encapsulates the return values of the ftplet methods.
  * 
  * RET_DEFAULT < RET_NO_FTPLET < RET_SKIP < RET_DISCONNECT
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-final class FtpletEnum {
+public final class FtpletEnum {
 
+    /**
+     * This return value indicates that the next ftplet method will be called.
+     * If no other ftplet is available, the ftpserver will process the request.
+     */
+    public static final FtpletEnum RET_DEFAULT = new FtpletEnum(0);
 
-     /**
-      * This return value indicates that the next ftplet method will 
-      * be called. If no other ftplet is available, the ftpserver will
-      * process the request.
-      */
-     public static final FtpletEnum RET_DEFAULT = new FtpletEnum(0);
+    /**
+     * This return value indicates that the other ftplet methods will not be
+     * called but the ftpserver will continue processing this request.
+     */
+    public static final FtpletEnum RET_NO_FTPLET = new FtpletEnum(1);
 
+    /**
+     * It indicates that the ftpserver will skip everything. No further
+     * processing (both ftplet and server) will be done for this request.
+     */
+    public static final FtpletEnum RET_SKIP = new FtpletEnum(2);
 
-     /**
-      * This return value indicates that the other ftplet methods will
-      * not be called but the ftpserver will continue processing this 
-      * request.
-      */
-     public static final FtpletEnum RET_NO_FTPLET = new FtpletEnum(1); 
-      
-      
-     /**
-      * It indicates that the ftpserver will skip everything. No further 
-      * processing (both ftplet and server) will be done for this request.
-      */ 
-     public static final FtpletEnum RET_SKIP = new FtpletEnum(2);
-     
-     
-     /**
-      * It indicates that the server will skip and disconnect the client.
-      * No other request from the same client will be served.
-      */
-     public static final FtpletEnum RET_DISCONNECT = new FtpletEnum(3);
+    /**
+     * It indicates that the server will skip and disconnect the client. No
+     * other request from the same client will be served.
+     */
+    public static final FtpletEnum RET_DISCONNECT = new FtpletEnum(3);
 
+    private int type;
 
-     private int type;
+    /**
+     * Private constructor - set the type
+     */
+    private FtpletEnum(int type) {
+        this.type = type;
+    }
 
+    /**
+     * Equality check
+     */
+    public boolean equals(Object obj) {
+        if (obj instanceof FtpletEnum) {
+            return type == ((FtpletEnum) obj).type;
+        }
+        return false;
+    }
 
-     /**
-      * Private constructor - set the type
-      */
-     private FtpletEnum(int type) {
-         this.type = type;
-     }
-
-     /**
-      * Equality check
-      */
-     public boolean equals(Object obj) {
-         if(obj instanceof FtpletEnum) {
-             return type == ((FtpletEnum)obj).type;
-         }
-         return false;
-     }
-
-     /**
-      * String representation
-      */
-     public String toString() {
-         return String.valueOf(type);
-     }
+    /**
+     * String representation
+     */
+    public String toString() {
+        return String.valueOf(type);
+    }
 
 }

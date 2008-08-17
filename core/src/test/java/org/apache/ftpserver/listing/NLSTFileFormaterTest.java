@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.listing;
 
@@ -27,12 +27,18 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class NLSTFileFormaterTest extends TestCase {
 
     private static final FileObject TEST_FILE = new MockFileObject();
 
     public NLSTFileFormater formater = new NLSTFileFormater();
-    
+
     public static class MockFileObject implements FileObject {
         public InputStream createInputStream(long offset) throws IOException {
             return null;
@@ -114,7 +120,7 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
         }
     }
-    
+
     public void testSingleFile() {
         assertEquals("short\r\n", formater.format(TEST_FILE));
     }
@@ -128,9 +134,9 @@ public class NLSTFileFormaterTest extends TestCase {
             public boolean isFile() {
                 return false;
             }
-            
+
         };
-        
+
         assertEquals("short\r\n", formater.format(dir));
     }
 

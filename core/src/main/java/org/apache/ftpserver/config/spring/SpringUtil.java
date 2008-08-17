@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.config.spring;
 
@@ -36,167 +36,217 @@ import org.w3c.dom.NodeList;
 
 /**
  * Various util methods for the Spring config parsing and configuration
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class SpringUtil {
 
     /**
      * Get all child elements for the element
-     * @param elm The element for which to locate children
+     * 
+     * @param elm
+     *            The element for which to locate children
      * @return All children
      */
     public static List<Element> getChildElements(final Element elm) {
         List<Element> elements = new ArrayList<Element>();
         NodeList childs = elm.getChildNodes();
-        for(int i = 0; i<childs.getLength(); i++) {
+        for (int i = 0; i < childs.getLength(); i++) {
             Node child = childs.item(i);
-            
-            if(child instanceof Element) {
+
+            if (child instanceof Element) {
                 elements.add((Element) child);
             }
         }
-        
+
         return elements;
     }
-    
+
     /**
      * Get the first child element matching the local name and namespace
-     * @param parent The element for which to locate the child
-     * @param ns The namespace to match, or null for any namespace
-     * @param localName The local name to match, or null for any local name
+     * 
+     * @param parent
+     *            The element for which to locate the child
+     * @param ns
+     *            The namespace to match, or null for any namespace
+     * @param localName
+     *            The local name to match, or null for any local name
      * @return The first child matching the criteria
      */
-    public static Element getChildElement(final Element parent, final String ns, final String localName) {
+    public static Element getChildElement(final Element parent,
+            final String ns, final String localName) {
         List<Element> elements = getChildElements(parent);
-        
-        for(Element element : elements) {
-            if((ns == null || ns.equals(element.getNamespaceURI()) &&
-                    (localName == null || localName.equals(element.getLocalName())))) {
+
+        for (Element element : elements) {
+            if ((ns == null || ns.equals(element.getNamespaceURI())
+                    && (localName == null || localName.equals(element
+                            .getLocalName())))) {
                 return element;
             }
         }
-        
+
         return null;
     }
 
     /**
-     * Get the text context of first child element matching the local name and namespace
-     * @param parent The element for which to locate the child
-     * @param ns The namespace to match, or null for any namespace
-     * @param localName The local name to match, or null for any local name
-     * @return The text content of the first child matching the criteria 
-     *         or null if element not found
+     * Get the text context of first child element matching the local name and
+     * namespace
+     * 
+     * @param parent
+     *            The element for which to locate the child
+     * @param ns
+     *            The namespace to match, or null for any namespace
+     * @param localName
+     *            The local name to match, or null for any local name
+     * @return The text content of the first child matching the criteria or null
+     *         if element not found
      */
-    public static String getChildElementText(final Element parent, final String ns, final String localName) {
+    public static String getChildElementText(final Element parent,
+            final String ns, final String localName) {
         List<Element> elements = getChildElements(parent);
-        
-        for(Element element : elements) {
-            if((ns == null || ns.equals(element.getNamespaceURI()) &&
-                    (localName == null || localName.equals(element.getLocalName())))) {
+
+        for (Element element : elements) {
+            if ((ns == null || ns.equals(element.getNamespaceURI())
+                    && (localName == null || localName.equals(element
+                            .getLocalName())))) {
                 return DomUtils.getTextValue(element);
             }
         }
-        
+
         return null;
     }
-    
-    
-    
+
     /**
      * Parse specific Spring elements, bean and ref
-     * @param parent The element in which we will look for Spring elements
-     * @param parserContext The Spring parser context
-     * @param builder The Spring bean definition builder
+     * 
+     * @param parent
+     *            The element in which we will look for Spring elements
+     * @param parserContext
+     *            The Spring parser context
+     * @param builder
+     *            The Spring bean definition builder
      * @return The Spring bean definition
      */
-    public static Object parseSpringChildElement(final Element parent, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
+    public static Object parseSpringChildElement(final Element parent,
+            final ParserContext parserContext,
+            final BeanDefinitionBuilder builder) {
         Element springElm = getChildElement(parent, null, null);
-        
+
         String ln = springElm.getLocalName();
-        if("bean".equals(ln)) {
-            return parserContext.getDelegate().parseBeanDefinitionElement(springElm, builder.getBeanDefinition());
-        } else if("ref".equals(ln)) {
-            return parserContext.getDelegate().parsePropertySubElement(springElm, builder.getBeanDefinition());
+        if ("bean".equals(ln)) {
+            return parserContext.getDelegate().parseBeanDefinitionElement(
+                    springElm, builder.getBeanDefinition());
+        } else if ("ref".equals(ln)) {
+            return parserContext.getDelegate().parsePropertySubElement(
+                    springElm, builder.getBeanDefinition());
         } else {
-            throw new FtpServerConfigurationException("Unknown spring element " + ln);
+            throw new FtpServerConfigurationException("Unknown spring element "
+                    + ln);
         }
     }
 
     /**
-     * Parses a attribute value into a boolean. 
-     * If the attribute is missing or has no content, a default value is returned
-     * @param parent The element
-     * @param attrName The attribute name
-     * @param defaultValue The default value
+     * Parses a attribute value into a boolean. If the attribute is missing or
+     * has no content, a default value is returned
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
+     * @param defaultValue
+     *            The default value
      * @return The value, or the default value
      */
-    public static boolean parseBoolean(final Element parent, final String attrName, final boolean defaultValue) {
-        if(StringUtils.hasText(parent.getAttribute(attrName))) {
+    public static boolean parseBoolean(final Element parent,
+            final String attrName, final boolean defaultValue) {
+        if (StringUtils.hasText(parent.getAttribute(attrName))) {
             return Boolean.parseBoolean(parent.getAttribute(attrName));
         }
         return defaultValue;
     }
-    
+
     /**
-     * Parses a attribute value into an integer. 
-     * @param parent The element
-     * @param attrName The attribute name
+     * Parses a attribute value into an integer.
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
      * @return The value
-     * @throws NumberFormatException If the attribute does not contain a number
+     * @throws NumberFormatException
+     *             If the attribute does not contain a number
      */
     public static int parseInt(final Element parent, final String attrName) {
         return Integer.parseInt(parent.getAttribute(attrName));
     }
-    
+
     /**
-     * Parses a attribute value into an integer. 
-     * If the attribute is missing or has no content, a default value is returned
-     * @param parent The element
-     * @param attrName The attribute name
-     * @param defaultValue The default value
+     * Parses a attribute value into an integer. If the attribute is missing or
+     * has no content, a default value is returned
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
+     * @param defaultValue
+     *            The default value
      * @return The value, or the default value
      */
-    public static int parseInt(final Element parent, final String attrName, final int defaultValue) {
-        if(StringUtils.hasText(parent.getAttribute(attrName))) {
+    public static int parseInt(final Element parent, final String attrName,
+            final int defaultValue) {
+        if (StringUtils.hasText(parent.getAttribute(attrName))) {
             return Integer.parseInt(parent.getAttribute(attrName));
         }
         return defaultValue;
     }
-    
+
     /**
-     * Return the string value of an attribute, or null if the attribute is missing
-     * @param parent The element
-     * @param attrName The attribute name
+     * Return the string value of an attribute, or null if the attribute is
+     * missing
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
      * @return The attribute string value
      */
     public static String parseString(final Element parent, final String attrName) {
-        if(parent.hasAttribute(attrName)) {
+        if (parent.hasAttribute(attrName)) {
             return parent.getAttribute(attrName);
         } else {
             return null;
         }
     }
-    
+
     /**
      * Return an attribute value as a {@link File}
-     * @param parent The element
-     * @param attrName The attribute name
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
      * @return The file representing the path used in the attribute
      */
     public static File parseFile(final Element parent, final String attrName) {
-        if(StringUtils.hasText(parent.getAttribute(attrName))) {
+        if (StringUtils.hasText(parent.getAttribute(attrName))) {
             return new File(parent.getAttribute(attrName));
         }
         return null;
     }
-    
+
     /**
      * Return an attribute value as an {@link InetAddress}
-     * @param parent The element
-     * @param attrName The attribute name
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
      * @return The attribute value parsed into a {@link InetAddress}
      */
-    public static InetAddress parseInetAddress(final Element parent, final String attrName) {
-        if(StringUtils.hasText(parent.getAttribute(attrName))) {
+    public static InetAddress parseInetAddress(final Element parent,
+            final String attrName) {
+        if (StringUtils.hasText(parent.getAttribute(attrName))) {
             try {
                 return InetAddress.getByName(parent.getAttribute(attrName));
             } catch (UnknownHostException e) {

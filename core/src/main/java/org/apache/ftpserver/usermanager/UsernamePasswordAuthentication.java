@@ -15,46 +15,60 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
 import org.apache.ftpserver.ftplet.Authentication;
 
 /**
- * Class representing a normal authentication attempt using
- * username and password
+ * Class representing a normal authentication attempt using username and
+ * password
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-class UsernamePasswordAuthentication implements Authentication {
+public class UsernamePasswordAuthentication implements Authentication {
 
     private String username;
+
     private String password;
+
     private UserMetadata userMetadata;
-    
+
     /**
      * Constructor with the minimal data for an authentication
-     * @param username The user name
-     * @param password The password, can be null
+     * 
+     * @param username
+     *            The user name
+     * @param password
+     *            The password, can be null
      */
-    public UsernamePasswordAuthentication(final String username, final String password) {
+    public UsernamePasswordAuthentication(final String username,
+            final String password) {
         this.username = username;
         this.password = password;
     }
-    
+
     /**
      * Constructor with an additonal parameter for user metadata
-     * @param username The user name
-     * @param password The password, can be null
-     * @param userMetadata The user metadata
+     * 
+     * @param username
+     *            The user name
+     * @param password
+     *            The password, can be null
+     * @param userMetadata
+     *            The user metadata
      */
-    public UsernamePasswordAuthentication(final String username, final String password, final UserMetadata userMetadata) {
+    public UsernamePasswordAuthentication(final String username,
+            final String password, final UserMetadata userMetadata) {
         this(username, password);
         this.userMetadata = userMetadata;
     }
 
     /**
      * Retrive the password
+     * 
      * @return The password
      */
     public String getPassword() {
@@ -63,6 +77,7 @@ class UsernamePasswordAuthentication implements Authentication {
 
     /**
      * Retrive the user name
+     * 
      * @return The user name
      */
     public String getUsername() {
@@ -71,6 +86,7 @@ class UsernamePasswordAuthentication implements Authentication {
 
     /**
      * Retrive the user metadata
+     * 
      * @return The user metadata
      */
     public UserMetadata getUserMetadata() {

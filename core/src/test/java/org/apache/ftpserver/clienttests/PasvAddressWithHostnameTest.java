@@ -26,19 +26,25 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 
 /**
- * Test for external passive address configured as hostname rather than
- * IP address.
+ * Test for external passive address configured as hostname rather than IP
+ * address.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {
 
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
-        
-    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
+        FtpServer server = super.createServer();
 
-    	DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) context.getListener("default").getDataConnectionConfiguration();
-    	ddcc.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
-    	
+        DefaultFtpServerContext context = (DefaultFtpServerContext) server
+                .getServerContext();
+
+        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) context
+                .getListener("default").getDataConnectionConfiguration();
+        ddcc.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
+
         return server;
     }
 

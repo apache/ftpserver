@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -70,19 +70,20 @@ import org.apache.ftpserver.command.USER;
 import org.apache.ftpserver.interfaces.Command;
 import org.apache.ftpserver.interfaces.CommandFactory;
 
-
 /**
- * Command factory to return appropriate command implementation
- * depending on the FTP request command string.
+ * Command factory to return appropriate command implementation depending on the
+ * FTP request command string.
  * 
- * Used a default setup of commands which can be appended or 
- * overriden using {@link #setCommandMap(HashMap)}.
+ * Used a default setup of commands which can be appended or overriden using
+ * {@link #setCommandMap(HashMap)}.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class DefaultCommandFactory implements CommandFactory {
+public class DefaultCommandFactory implements CommandFactory {
 
-    private static final HashMap<String, Command> DEFAULT_COMMAND_MAP = new HashMap<String, Command>();  
-    
+    private static final HashMap<String, Command> DEFAULT_COMMAND_MAP = new HashMap<String, Command>();
+
     static {
         // first populate the default command list
         DEFAULT_COMMAND_MAP.put("ABOR", new ABOR());
@@ -90,7 +91,7 @@ class DefaultCommandFactory implements CommandFactory {
         DEFAULT_COMMAND_MAP.put("APPE", new APPE());
         DEFAULT_COMMAND_MAP.put("AUTH", new AUTH());
         DEFAULT_COMMAND_MAP.put("CDUP", new CDUP());
-        DEFAULT_COMMAND_MAP.put("CWD",  new CWD());
+        DEFAULT_COMMAND_MAP.put("CWD", new CWD());
         DEFAULT_COMMAND_MAP.put("DELE", new DELE());
         DEFAULT_COMMAND_MAP.put("EPRT", new EPRT());
         DEFAULT_COMMAND_MAP.put("EPSV", new EPSV());
@@ -102,7 +103,7 @@ class DefaultCommandFactory implements CommandFactory {
         DEFAULT_COMMAND_MAP.put("MMD5", new MD5());
         DEFAULT_COMMAND_MAP.put("MDTM", new MDTM());
         DEFAULT_COMMAND_MAP.put("MLST", new MLST());
-        DEFAULT_COMMAND_MAP.put("MKD",  new MKD());
+        DEFAULT_COMMAND_MAP.put("MKD", new MKD());
         DEFAULT_COMMAND_MAP.put("MLSD", new MLSD());
         DEFAULT_COMMAND_MAP.put("MODE", new MODE());
         DEFAULT_COMMAND_MAP.put("NLST", new NLST());
@@ -113,12 +114,12 @@ class DefaultCommandFactory implements CommandFactory {
         DEFAULT_COMMAND_MAP.put("PBSZ", new PBSZ());
         DEFAULT_COMMAND_MAP.put("PORT", new PORT());
         DEFAULT_COMMAND_MAP.put("PROT", new PROT());
-        DEFAULT_COMMAND_MAP.put("PWD",  new PWD());
+        DEFAULT_COMMAND_MAP.put("PWD", new PWD());
         DEFAULT_COMMAND_MAP.put("QUIT", new QUIT());
         DEFAULT_COMMAND_MAP.put("REIN", new REIN());
         DEFAULT_COMMAND_MAP.put("REST", new REST());
         DEFAULT_COMMAND_MAP.put("RETR", new RETR());
-        DEFAULT_COMMAND_MAP.put("RMD",  new RMD());
+        DEFAULT_COMMAND_MAP.put("RMD", new RMD());
         DEFAULT_COMMAND_MAP.put("RNFR", new RNFR());
         DEFAULT_COMMAND_MAP.put("RNTO", new RNTO());
         DEFAULT_COMMAND_MAP.put("SITE", new SITE());
@@ -133,63 +134,69 @@ class DefaultCommandFactory implements CommandFactory {
     }
 
     private Map<String, Command> commandMap = new HashMap<String, Command>();
+
     private boolean useDefaultCommands = true;
-    
+
     /**
      * Are default commands used?
+     * 
      * @return true if default commands are used
      */
     public boolean isUseDefaultCommands() {
-		return useDefaultCommands;
-	}
+        return useDefaultCommands;
+    }
 
     /**
      * Sets whether the default commands will be used.
-     * @param useDefaultCommands true if default commands should be used
+     * 
+     * @param useDefaultCommands
+     *            true if default commands should be used
      */
-	public void setUseDefaultCommands(final boolean useDefaultCommands) {
-		this.useDefaultCommands = useDefaultCommands;
-	}
+    public void setUseDefaultCommands(final boolean useDefaultCommands) {
+        this.useDefaultCommands = useDefaultCommands;
+    }
 
-	/**
-	 * Get the installed commands
-	 * @return The installed commands
-	 */
+    /**
+     * Get the installed commands
+     * 
+     * @return The installed commands
+     */
     public Map<String, Command> getCommandMap() {
-		return commandMap;
-	}
+        return commandMap;
+    }
 
-	/**
-	 * Set commands to add or override to the default commands
-	 * @param commandMap The map of commands, the key will be used to map 
-	 * 	to requests. 
-	 */
-	public synchronized void setCommandMap(final Map<String, Command> commandMap) {
-		if(commandMap == null) {
-			throw new NullPointerException("commandMap can not be null");
-		}
+    /**
+     * Set commands to add or override to the default commands
+     * 
+     * @param commandMap
+     *            The map of commands, the key will be used to map to requests.
+     */
+    public synchronized void setCommandMap(final Map<String, Command> commandMap) {
+        if (commandMap == null) {
+            throw new NullPointerException("commandMap can not be null");
+        }
 
-		this.commandMap.clear();
-		
-		for(Entry<String, Command> entry : commandMap.entrySet()) {
-			this.commandMap.put(entry.getKey().toUpperCase(), entry.getValue());
-		}
-	}
-    
+        this.commandMap.clear();
+
+        for (Entry<String, Command> entry : commandMap.entrySet()) {
+            this.commandMap.put(entry.getKey().toUpperCase(), entry.getValue());
+        }
+    }
+
     /**
      * Get command. Returns null if not found.
      */
     public Command getCommand(final String cmdName) {
-    	if(cmdName == null || cmdName.equals("")) {
+        if (cmdName == null || cmdName.equals("")) {
             return null;
         }
-    	String upperCaseCmdName = cmdName.toUpperCase();
-    	Command command = commandMap.get(upperCaseCmdName);
-    	
-    	if(command == null && useDefaultCommands) {
-    		command = DEFAULT_COMMAND_MAP.get(upperCaseCmdName);
-    	}
-    	
+        String upperCaseCmdName = cmdName.toUpperCase();
+        Command command = commandMap.get(upperCaseCmdName);
+
+        if (command == null && useDefaultCommands) {
+            command = DEFAULT_COMMAND_MAP.get(upperCaseCmdName);
+        }
+
         return command;
     }
 }

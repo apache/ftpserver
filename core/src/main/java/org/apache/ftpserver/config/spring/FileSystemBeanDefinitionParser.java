@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.config.spring;
 
@@ -28,16 +28,20 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
- * Parses the FtpServer "native-filesystem" element into a Spring
- * bean graph
+ * Parses the FtpServer "native-filesystem" element into a Spring bean graph
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public class FileSystemBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
-    
+public class FileSystemBeanDefinitionParser extends
+        AbstractSingleBeanDefinitionParser {
+
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Class<? extends FileSystemManager> getBeanClass(final Element element) {
+    protected Class<? extends FileSystemManager> getBeanClass(
+            final Element element) {
         return NativeFileSystemManager.class;
     }
 
@@ -45,12 +49,16 @@ public class FileSystemBeanDefinitionParser extends AbstractSingleBeanDefinition
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
-        if(StringUtils.hasText(element.getAttribute("case-insensitive"))) {
-            builder.addPropertyValue("caseInsensitive", Boolean.parseBoolean(element.getAttribute("case-insensitive")));
+    protected void doParse(final Element element,
+            final ParserContext parserContext,
+            final BeanDefinitionBuilder builder) {
+        if (StringUtils.hasText(element.getAttribute("case-insensitive"))) {
+            builder.addPropertyValue("caseInsensitive", Boolean
+                    .parseBoolean(element.getAttribute("case-insensitive")));
         }
-        if(StringUtils.hasText(element.getAttribute("create-home"))) {
-            builder.addPropertyValue("create-home", Boolean.parseBoolean(element.getAttribute("create-home")));
+        if (StringUtils.hasText(element.getAttribute("create-home"))) {
+            builder.addPropertyValue("create-home", Boolean
+                    .parseBoolean(element.getAttribute("create-home")));
         }
     }
 }

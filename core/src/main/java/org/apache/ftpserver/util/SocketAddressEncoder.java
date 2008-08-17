@@ -27,50 +27,53 @@ import java.util.StringTokenizer;
 /**
  * Encodes and decodes socket addresses (IP and port) from and to the format
  * used with for example the PORT and PASV command
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class SocketAddressEncoder {
 
     private static int convertAndValidateNumber(String s) {
         int i = Integer.parseInt(s);
-        if(i < 0) {
+        if (i < 0) {
             throw new IllegalArgumentException("Token can not be less than 0");
-        } else if(i > 255) {
-            throw new IllegalArgumentException("Token can not be larger than 255");
+        } else if (i > 255) {
+            throw new IllegalArgumentException(
+                    "Token can not be larger than 255");
         }
-        
+
         return i;
     }
-    
-    public static InetSocketAddress decode(String str) throws UnknownHostException {
+
+    public static InetSocketAddress decode(String str)
+            throws UnknownHostException {
         StringTokenizer st = new StringTokenizer(str, ",");
-        if(st.countTokens() != 6) {
+        if (st.countTokens() != 6) {
             throw new IllegalInetAddressException("Illegal amount of tokens");
         }
-        
+
         StringBuffer sb = new StringBuffer();
         try {
-        sb.append(convertAndValidateNumber(st.nextToken()));
-        sb.append('.');
-        sb.append(convertAndValidateNumber(st.nextToken()));
-        sb.append('.');
-        sb.append(convertAndValidateNumber(st.nextToken()));
-        sb.append('.');
-        sb.append(convertAndValidateNumber(st.nextToken()));
-        } catch(IllegalArgumentException e) {
+            sb.append(convertAndValidateNumber(st.nextToken()));
+            sb.append('.');
+            sb.append(convertAndValidateNumber(st.nextToken()));
+            sb.append('.');
+            sb.append(convertAndValidateNumber(st.nextToken()));
+            sb.append('.');
+            sb.append(convertAndValidateNumber(st.nextToken()));
+        } catch (IllegalArgumentException e) {
             throw new IllegalInetAddressException(e.getMessage());
         }
-        
+
         InetAddress dataAddr = InetAddress.getByName(sb.toString());
 
-        
         // get data server port
         int dataPort = 0;
         try {
             int hi = convertAndValidateNumber(st.nextToken());
             int lo = convertAndValidateNumber(st.nextToken());
-            dataPort = (hi << 8) | lo;     
-        }
-        catch(IllegalArgumentException ex) {
+            dataPort = (hi << 8) | lo;
+        } catch (IllegalArgumentException ex) {
             throw new IllegalPortException("Invalid data port: " + str);
         }
 
@@ -80,7 +83,8 @@ public class SocketAddressEncoder {
     public static String encode(InetSocketAddress address) {
         InetAddress servAddr = address.getAddress();
         int servPort = address.getPort();
-        return servAddr.getHostAddress().replace( '.', ',' ) + ',' + (servPort>>8) + ',' + (servPort&0xFF);
+        return servAddr.getHostAddress().replace('.', ',') + ','
+                + (servPort >> 8) + ',' + (servPort & 0xFF);
     }
 
 }

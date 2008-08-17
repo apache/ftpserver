@@ -15,42 +15,43 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
  * This is an abstraction over the user file system view.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public
-interface FileSystemView {
+public interface FileSystemView {
 
     /**
      * Get the user home directory.
      */
     FileObject getHomeDirectory() throws FtpException;
-    
+
     /**
      * Get user current directory.
      */
     FileObject getCurrentDirectory() throws FtpException;
-    
+
     /**
      * Change directory.
-     */ 
+     */
     boolean changeDirectory(String dir) throws FtpException;
-    
+
     /**
      * Get file object.
      */
     FileObject getFileObject(String file) throws FtpException;
-    
+
     /**
-     * Does the file system support random file access? 
+     * Does the file system support random file access?
      */
-    boolean isRandomAccessible() throws FtpException; 
-    
+    boolean isRandomAccessible() throws FtpException;
+
     /**
      * Dispose file system view.
      */

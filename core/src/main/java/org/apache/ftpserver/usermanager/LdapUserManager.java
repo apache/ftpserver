@@ -45,170 +45,186 @@ import org.slf4j.LoggerFactory;
  * Ldap based user manager class where the object class is ftpusers. This has
  * been tested with OpenLDAP. The BaseUser object will be serialized in LDAP.
  * Here the assumption is that the java object schema is available (RFC 2713).
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class LdapUserManager extends AbstractUserManager {
-    
+
     private final Logger LOG = LoggerFactory.getLogger(LdapUserManager.class);
-    
+
     // LDAP attributes
-    private final static String CN         = "cn";
+    private final static String CN = "cn";
+
     private final static String CLASS_NAME = "javaClassName";
-    private final static String OBJ_CLASS  = "objectClass";
-    
-    private final static String[] CN_ATTRS = {
-        CN
-    };
-    
+
+    private final static String OBJ_CLASS = "objectClass";
+
+    private final static String[] CN_ATTRS = { CN };
+
     private String adminName;
+
     private DirContext adminContext;
+
     private String ldapUserBaseDn;
+
     private Attribute objClassAttr;
 
     private String ldapUrl;
+
     private String ldapAdminDn;
+
     private String ldapAdminPassword;
+
     private String ldapAuthentication = "simple";
-    
-    
+
     /**
      * Instantiate LDAP based <code>UserManager</code> implementation.
      */
-    public void configure() throws FtpException { 
-        
+    public void configure() throws FtpException {
+
         try {
-        	if(ldapUrl == null) {
-        		throw new IllegalStateException("LDAP URL not set");
-        	}
-        	
+            if (ldapUrl == null) {
+                throw new IllegalStateException("LDAP URL not set");
+            }
+
             // create connection
             Properties adminEnv = new Properties();
-            adminEnv.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            adminEnv.setProperty(Context.INITIAL_CONTEXT_FACTORY,
+                    "com.sun.jndi.ldap.LdapCtxFactory");
             adminEnv.setProperty(Context.PROVIDER_URL, ldapUrl);
-            adminEnv.setProperty(Context.SECURITY_AUTHENTICATION, ldapAuthentication);             
-            adminEnv.setProperty(Context.SECURITY_PRINCIPAL, ldapAdminDn);             
-            adminEnv.setProperty(Context.SECURITY_CREDENTIALS, ldapAdminPassword);                     
+            adminEnv.setProperty(Context.SECURITY_AUTHENTICATION,
+                    ldapAuthentication);
+            adminEnv.setProperty(Context.SECURITY_PRINCIPAL, ldapAdminDn);
+            adminEnv.setProperty(Context.SECURITY_CREDENTIALS,
+                    ldapAdminPassword);
             adminContext = new InitialDirContext(adminEnv);
-            
+
             // create objectClass attribute
             objClassAttr = new BasicAttribute(OBJ_CLASS, false);
             objClassAttr.add("javaObject");
             objClassAttr.add("top");
-            
+
             LOG.info("LDAP user manager opened.");
-    
-        } catch(Exception ex) {
+
+        } catch (Exception ex) {
             LOG.error("LdapUserManager.configure()", ex);
             throw new FtpException("LdapUserManager.configure()", ex);
         }
     }
-    
+
     /**
      * Get the admin name.
      */
     public String getAdminName() {
         return adminName;
     }
-    
+
     /**
      * @return true if user with this login is administrator
      */
     public boolean isAdmin(String login) throws FtpException {
         return adminName.equals(login);
     }
-    
+
     /**
      * Get all user names.
      */
     public synchronized String[] getAllUserNames() throws FtpException {
-        
+
         try {
             // search ldap
             Attributes matchAttrs = new BasicAttributes(true);
             matchAttrs.put(objClassAttr);
-            matchAttrs.put( new BasicAttribute(CLASS_NAME, BaseUser.class.getName()) );
-            NamingEnumeration<SearchResult> answers = adminContext.search(ldapUserBaseDn, matchAttrs, CN_ATTRS);
+            matchAttrs.put(new BasicAttribute(CLASS_NAME, BaseUser.class
+                    .getName()));
+            NamingEnumeration<SearchResult> answers = adminContext.search(
+                    ldapUserBaseDn, matchAttrs, CN_ATTRS);
             LOG.info("Getting all users under " + ldapUserBaseDn);
-            
+
             // populate list
             ArrayList<String> allUsers = new ArrayList<String>();
             while (answers.hasMore()) {
-                SearchResult sr = (SearchResult)answers.next();
+                SearchResult sr = (SearchResult) answers.next();
                 String cn = sr.getAttributes().get(CN).get().toString();
                 allUsers.add(cn);
             }
             Collections.sort(allUsers);
             return allUsers.toArray(new String[0]);
-        }
-        catch(NamingException ex) {
+        } catch (NamingException ex) {
             LOG.error("LdapUserManager.getAllUserNames()", ex);
             throw new FtpException("LdapUserManager.getAllUserNames()", ex);
         }
-    } 
-    
+    }
+
     /**
      * Get user object.
      */
     public synchronized User getUserByName(String name) throws FtpException {
-        
+
         User user = null;
         try {
             String dn = getDN(name);
             LOG.info("Getting user object for " + dn);
-            user = (User)adminContext.lookup(dn);
-        }
-        catch(NamingException ex) {
+            user = (User) adminContext.lookup(dn);
+        } catch (NamingException ex) {
             LOG.debug("Failed to retrive user: " + name, ex);
             user = null;
         }
         return user;
     }
-    
+
     /**
      * User authentication.
      */
-    public User authenticate(Authentication authentication) throws AuthenticationFailedException {
-        if(authentication instanceof UsernamePasswordAuthentication) {
+    public User authenticate(Authentication authentication)
+            throws AuthenticationFailedException {
+        if (authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
-            
-            String login = upauth.getUsername(); 
-            String password = upauth.getPassword(); 
-            
-            if(login == null) {
+
+            String login = upauth.getUsername();
+            String password = upauth.getPassword();
+
+            if (login == null) {
                 throw new AuthenticationFailedException("Authentication failed");
             }
-            
-            if(password == null) {
+
+            if (password == null) {
                 password = "";
             }
-            
+
             User user;
             try {
                 user = getUserByName(login);
             } catch (FtpException e) {
-                throw new AuthenticationFailedException("Authentication failed", e); 
+                throw new AuthenticationFailedException(
+                        "Authentication failed", e);
             }
-            
-            if(user != null && password.equals(user.getPassword())) {
-                    return user;
+
+            if (user != null && password.equals(user.getPassword())) {
+                return user;
             } else {
-                    throw new AuthenticationFailedException("Authentication failed"); 
+                throw new AuthenticationFailedException("Authentication failed");
             }
-        } else if(authentication instanceof AnonymousAuthentication) {
+        } else if (authentication instanceof AnonymousAuthentication) {
             try {
-                if(doesExist("anonymous")) {
+                if (doesExist("anonymous")) {
                     return getUserByName("anonymous");
                 } else {
-                    throw new AuthenticationFailedException("Authentication failed");
+                    throw new AuthenticationFailedException(
+                            "Authentication failed");
                 }
             } catch (FtpException e) {
-                throw new AuthenticationFailedException("Authentication failed", e);
+                throw new AuthenticationFailedException(
+                        "Authentication failed", e);
             }
         } else {
-            throw new IllegalArgumentException("Authentication not supported by this user manager");
+            throw new IllegalArgumentException(
+                    "Authentication not supported by this user manager");
         }
 
     }
-    
+
     /**
      * Save user.
      */
@@ -217,11 +233,11 @@ public class LdapUserManager extends AbstractUserManager {
             String name = user.getName();
             String dn = getDN(name);
             BaseUser newUser = new BaseUser(user);
-            
+
             // if password is not available,
             // do not change the existing password
             User existUser = getUserByName(name);
-            if( (existUser != null) && (newUser.getPassword() == null) ) {
+            if ((existUser != null) && (newUser.getPassword() == null)) {
                 newUser.setPassword(existUser.getPassword());
             }
 
@@ -229,24 +245,23 @@ public class LdapUserManager extends AbstractUserManager {
             Attributes attrs = new BasicAttributes(true);
             attrs.put(new BasicAttribute(CN, name));
             attrs.put(new BasicAttribute(CLASS_NAME, BaseUser.class.getName()));
-            
+
             // bind object
             LOG.info("Rebinding user " + dn);
             adminContext.rebind(dn, newUser, attrs);
-        }
-        catch(NamingException ex) {
+        } catch (NamingException ex) {
             LOG.error("LdapUserManager.save()", ex);
             throw new FtpException("LdapUserManager.save()", ex);
         }
     }
-    
+
     /**
      * User existance check.
      */
     public synchronized boolean doesExist(String name) throws FtpException {
         return getUserByName(name) != null;
     }
-    
+
     /**
      * Delete user.
      */
@@ -255,13 +270,12 @@ public class LdapUserManager extends AbstractUserManager {
             String dn = getDN(userName);
             LOG.info("Unbinding " + dn);
             adminContext.unbind(dn);
-        }
-        catch(NamingException ex) {
+        } catch (NamingException ex) {
             LOG.error("LdapUserManager.delete()", ex);
             throw new FtpException("LdapUserManager.delete()", ex);
         }
     }
-    
+
     /**
      * Close user manager.
      */
@@ -269,76 +283,70 @@ public class LdapUserManager extends AbstractUserManager {
         if (adminContext != null) {
             try {
                 adminContext.close();
-            }
-            catch(NamingException ex) {
+            } catch (NamingException ex) {
             }
             adminContext = null;
         }
     }
-    
+
     /**
      * Get the distinguished name (DN) for this user name.
      */
     private String getDN(String userName) throws NamingException {
-        
+
         StringBuffer valBuf = new StringBuffer(userName);
-        for (int i=0; i<valBuf.length(); i++) {
+        for (int i = 0; i < valBuf.length(); i++) {
             char ch = valBuf.charAt(i);
-            if (ch == '\\' || 
-                ch == ','  || 
-                ch == '+'  ||
-                ch == '\"' || 
-                ch == '<'  || 
-                ch == '>'  || 
-                ch == ';'  ) {
-                valBuf.insert(i, '\\'); 
+            if (ch == '\\' || ch == ',' || ch == '+' || ch == '\"' || ch == '<'
+                    || ch == '>' || ch == ';') {
+                valBuf.insert(i, '\\');
                 i++;
             }
         }
         return CN + '=' + valBuf.toString() + ',' + ldapUserBaseDn;
     }
 
-	public String getLdapUrl() {
-		return ldapUrl;
-	}
+    public String getLdapUrl() {
+        return ldapUrl;
+    }
 
-	public void setLdapUrl(String ldapUrl) {
-		this.ldapUrl = ldapUrl;
-	}
+    public void setLdapUrl(String ldapUrl) {
+        this.ldapUrl = ldapUrl;
+    }
 
-	public String getLdapAdminDn() {
-		return ldapAdminDn;
-	}
+    public String getLdapAdminDn() {
+        return ldapAdminDn;
+    }
 
-	public void setLdapAdminDn(String ldapAdminDn) {
-		this.ldapAdminDn = ldapAdminDn;
-	}
+    public void setLdapAdminDn(String ldapAdminDn) {
+        this.ldapAdminDn = ldapAdminDn;
+    }
 
-	public String getLdapAdminPassword() {
-		return ldapAdminPassword;
-	}
+    public String getLdapAdminPassword() {
+        return ldapAdminPassword;
+    }
 
-	public void setLdapAdminPassword(String ldapAdminPassword) {
-		this.ldapAdminPassword = ldapAdminPassword;
-	}
+    public void setLdapAdminPassword(String ldapAdminPassword) {
+        this.ldapAdminPassword = ldapAdminPassword;
+    }
 
-	public String getLdapAuthentication() {
-		return ldapAuthentication;
-	}
+    public String getLdapAuthentication() {
+        return ldapAuthentication;
+    }
 
-	public void setLdapAuthentication(String ldapAuthentication) {
-		this.ldapAuthentication = ldapAuthentication;
-	}
+    public void setLdapAuthentication(String ldapAuthentication) {
+        this.ldapAuthentication = ldapAuthentication;
+    }
 
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
-	}
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
 
-	public String getLdapUserBaseDn() {
-		return ldapUserBaseDn;
-	}
+    public String getLdapUserBaseDn() {
+        return ldapUserBaseDn;
+    }
 
-	public void setLdapUserBaseDn(String ldapUserBaseDn) {
-		this.ldapUserBaseDn = ldapUserBaseDn;
-	}
-}    
+    public void setLdapUserBaseDn(String ldapUserBaseDn) {
+        this.ldapUserBaseDn = ldapUserBaseDn;
+    }
+}

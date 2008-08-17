@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -28,16 +28,23 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class PropertiesUserManagerTest extends UserManagerTestTemplate {
 
     private static final File TEST_DIR = new File("test-tmp");
+
     private static final File USERS_FILE = new File(TEST_DIR, "users.props");
-    
+
     private void createUserFile() throws IOException {
         Properties users = new Properties();
         users.setProperty("FtpServer.user.user1.userpassword", "pw1");
         users.setProperty("FtpServer.user.user1.homedirectory", "home");
-        
+
         users.setProperty("FtpServer.user.user2.userpassword", "pw2");
         users.setProperty("FtpServer.user.user2.homedirectory", "home");
         users.setProperty("FtpServer.user.user2.writepermission", "true");
@@ -50,42 +57,41 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
 
         users.setProperty("FtpServer.user.user3.userpassword", "");
         users.setProperty("FtpServer.user.user3.homedirectory", "home");
-        
+
         FileOutputStream fos = new FileOutputStream(USERS_FILE);
         users.store(fos, null);
-        
+
         fos.close();
     }
 
-
-    
     protected UserManager createUserManager() throws FtpException {
         PropertiesUserManager um = new PropertiesUserManager();
         um.setPropFile(USERS_FILE);
         um.setEncryptPasswords(false);
         um.configure();
-        
+
         return um;
-        
+
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
-        
+
         TEST_DIR.mkdirs();
-        
+
         createUserFile();
-        
+
         super.setUp();
     }
 
-
     protected void tearDown() throws Exception {
         super.tearDown();
-        
+
         IoUtils.delete(TEST_DIR);
     }
-    
+
 }

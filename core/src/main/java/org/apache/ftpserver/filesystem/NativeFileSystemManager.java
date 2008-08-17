@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.filesystem;
 
@@ -30,53 +30,57 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Native file system manager. It uses the OS file system.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class NativeFileSystemManager implements FileSystemManager {
+public class NativeFileSystemManager implements FileSystemManager {
 
-    private final Logger LOG = LoggerFactory.getLogger(NativeFileSystemManager.class);
-    
+    private final Logger LOG = LoggerFactory
+            .getLogger(NativeFileSystemManager.class);
+
     private boolean createHome;
+
     private boolean caseInsensitive;
-    
+
     public boolean isCreateHome() {
-		return createHome;
-	}
+        return createHome;
+    }
 
-	public void setCreateHome(boolean createHome) {
-		this.createHome = createHome;
-	}
+    public void setCreateHome(boolean createHome) {
+        this.createHome = createHome;
+    }
 
-	public boolean isCaseInsensitive() {
-		return caseInsensitive;
-	}
+    public boolean isCaseInsensitive() {
+        return caseInsensitive;
+    }
 
-	public void setCaseInsensitive(boolean caseInsensitive) {
-		this.caseInsensitive = caseInsensitive;
-	}
+    public void setCaseInsensitive(boolean caseInsensitive) {
+        this.caseInsensitive = caseInsensitive;
+    }
 
-   
     /**
      * Create the appropriate user file system view.
      */
     public FileSystemView createFileSystemView(User user) throws FtpException {
 
         // create home if does not exist
-        if(createHome) {
+        if (createHome) {
             String homeDirStr = user.getHomeDirectory();
             File homeDir = new File(homeDirStr);
-            if(homeDir.isFile()) {
+            if (homeDir.isFile()) {
                 LOG.warn("Not a directory :: " + homeDirStr);
                 throw new FtpException("Not a directory :: " + homeDirStr);
             }
-            if( (!homeDir.exists()) && (!homeDir.mkdirs()) ) {
+            if ((!homeDir.exists()) && (!homeDir.mkdirs())) {
                 LOG.warn("Cannot create user home :: " + homeDirStr);
-                throw new FtpException("Cannot create user home :: " + homeDirStr);
+                throw new FtpException("Cannot create user home :: "
+                        + homeDirStr);
             }
         }
-        
+
         FileSystemView fsView = new NativeFileSystemView(user, caseInsensitive);
         return fsView;
     }
-    
+
 }

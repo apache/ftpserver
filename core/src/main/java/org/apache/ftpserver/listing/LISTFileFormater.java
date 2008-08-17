@@ -25,12 +25,16 @@ import org.apache.ftpserver.util.DateUtils;
 
 /**
  * Formats files according to the LIST specification
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class LISTFileFormater implements FileFormater {
 
     private final static char DELIM = ' ';
-    private final static char[] NEWLINE  = {'\r', '\n'};
-    
+
+    private final static char[] NEWLINE = { '\r', '\n' };
+
     /**
      * @see FileFormater#format(FileObject)
      */
@@ -55,51 +59,49 @@ public class LISTFileFormater implements FileFormater {
 
         return sb.toString();
     }
-    
+
     /**
      * Get size
      */
     private String getLength(FileObject file) {
         String initStr = "            ";
         long sz = 0;
-        if(file.isFile()) {
+        if (file.isFile()) {
             sz = file.getSize();
         }
         String szStr = String.valueOf(sz);
-        if(szStr.length() > initStr.length()) {
+        if (szStr.length() > initStr.length()) {
             return szStr;
         }
         return initStr.substring(0, initStr.length() - szStr.length()) + szStr;
     }
-    
+
     /**
      * Get last modified date string.
      */
     private String getLastModified(FileObject file) {
-        return DateUtils.getUnixDate( file.getLastModified() );
+        return DateUtils.getUnixDate(file.getLastModified());
     }
-    
+
     /**
      * Get permission string.
      */
     private char[] getPermission(FileObject file) {
         char permission[] = new char[10];
         Arrays.fill(permission, '-');
-        
+
         permission[0] = file.isDirectory() ? 'd' : '-';
         permission[1] = file.hasReadPermission() ? 'r' : '-';
         permission[2] = file.hasWritePermission() ? 'w' : '-';
         return permission;
     }
 
-    /*public String format(FileObject[] files) {
-        StringBuffer sb = new StringBuffer();
-        
-        for (int i = 0; i < files.length; i++) {
-            sb.append(format(files[i]));
-            sb.append(NEWLINE);
-        }
-        return sb.toString();
-    }*/
+    /*
+     * public String format(FileObject[] files) { StringBuffer sb = new
+     * StringBuffer();
+     * 
+     * for (int i = 0; i < files.length; i++) { sb.append(format(files[i]));
+     * sb.append(NEWLINE); } return sb.toString(); }
+     */
 
 }

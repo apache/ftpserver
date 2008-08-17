@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -28,25 +28,27 @@ import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
-
 /**
  * Show SITE help message.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SITE_HELP extends AbstractCommand {
-    
+public class SITE_HELP extends AbstractCommand {
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // print help message
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "SITE.HELP", null));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_200_COMMAND_OKAY, "SITE.HELP", null));
     }
 
 }

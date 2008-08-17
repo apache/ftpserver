@@ -15,58 +15,70 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 import java.util.Map;
 
 /**
- * Interface describing an Ftplet container. 
- * Ftplet containers extend the {@link Ftplet} interface and 
- * forward any events to the Ftplets hosted by the container.
+ * Interface describing an Ftplet container. Ftplet containers extend the
+ * {@link Ftplet} interface and forward any events to the Ftplets hosted by the
+ * container.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface FtpletContainer extends Ftplet {
 
     /**
      * Add an {@link Ftplet} to the container.
      * 
-     * @param name The name of the Ftplet to be added
-     * @param ftplet The Ftplet
-     * @throws IllegalArgumentException If an Ftplet with the same
-     *   name already exist within the container
+     * @param name
+     *            The name of the Ftplet to be added
+     * @param ftplet
+     *            The Ftplet
+     * @throws IllegalArgumentException
+     *             If an Ftplet with the same name already exist within the
+     *             container
      */
     void addFtplet(String name, Ftplet ftplet);
 
     /**
-     * Remove the {@link Ftplet} identified by the name (as
-     * provided in the {@link #addFtplet(String, Ftplet)} method.
+     * Remove the {@link Ftplet} identified by the name (as provided in the
+     * {@link #addFtplet(String, Ftplet)} method.
      * 
-     * @param name The name of the Ftplet to be removed
-     * @return The removed Ftplet if found, or null if the name is
-     *   unknown to the container.
+     * @param name
+     *            The name of the Ftplet to be removed
+     * @return The removed Ftplet if found, or null if the name is unknown to
+     *         the container.
      */
     Ftplet removeFtplet(String name);
-    
+
     /**
-     * Retrive the {@link Ftplet} identified by the name (as
-     * provided in the {@link #addFtplet(String, Ftplet)} method.
-     * @param name The name of the Ftplet to retrive
-     * @return The Ftplet if found, or null if the name is
-     *   unknown to the container.
+     * Retrive the {@link Ftplet} identified by the name (as provided in the
+     * {@link #addFtplet(String, Ftplet)} method.
+     * 
+     * @param name
+     *            The name of the Ftplet to retrive
+     * @return The Ftplet if found, or null if the name is unknown to the
+     *         container.
      */
     Ftplet getFtplet(String name);
 
     /**
      * Retrive all Ftplets registered with this container
+     * 
      * @return A map of all Ftplets with their name as the key
      */
     Map<String, Ftplet> getFtplets();
-    
+
     /**
-     * Set the Ftplets for this container. Will remove all
-     * previously registred Ftplets in this container
-     * @param ftplets A map of all Ftplets with their name as the key
+     * Set the Ftplets for this container. Will remove all previously registred
+     * Ftplets in this container
+     * 
+     * @param ftplets
+     *            A map of all Ftplets with their name as the key
      */
     void setFtplets(Map<String, Ftplet> ftplets);
 }

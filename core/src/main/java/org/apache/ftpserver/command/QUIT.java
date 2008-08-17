@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -29,22 +29,25 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>QUIT &lt;CRLF&gt;</code><br>
+ * 
+ * This command terminates a USER and if file transfer is not in progress, the
+ * server closes the control connection.
  *
- * This command terminates a USER and if file transfer is not
- * in progress, the server closes the control connection.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class QUIT extends AbstractCommand {
-    
+public class QUIT extends AbstractCommand {
+
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
         session.resetState();
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
-		
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
+
         session.closeOnFlush().awaitUninterruptibly(10000);
     }
 

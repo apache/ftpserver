@@ -15,12 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
  * Type safe enum for describing the data type
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class DataType {
 
@@ -28,23 +31,23 @@ public class DataType {
      * Binary data type
      */
     public static final DataType BINARY = new DataType("I");
-    
+
     /**
      * ASCII data type
      */
     public static final DataType ASCII = new DataType("A");
-    
+
     /**
-     * Parses the argument value from the TYPE command into
-     * the type safe class
+     * Parses the argument value from the TYPE command into the type safe class
      * 
-     * @param argument The argument value from the TYPE command.
-     *     Not case sensitive
+     * @param argument
+     *            The argument value from the TYPE command. Not case sensitive
      * @return The appropriate data type
-     * @throws IllegalArgumentException If the data type is unknown
+     * @throws IllegalArgumentException
+     *             If the data type is unknown
      */
     public static DataType parseArgument(char argument) {
-        switch(argument) {
+        switch (argument) {
         case 'A':
         case 'a':
             return ASCII;
@@ -55,9 +58,9 @@ public class DataType {
             throw new IllegalArgumentException("Unknown data type: " + argument);
         }
     }
-    
+
     private String type;
-    
+
     /**
      * Private constructor.
      */
@@ -70,5 +73,5 @@ public class DataType {
      */
     public String toString() {
         return type;
-    }    
+    }
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -32,39 +32,48 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <code>TYPE &lt;SP&gt; &lt;type-code&gt; &lt;CRLF&gt;</code><br>
- *
+ * 
  * The argument specifies the representation type.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class TYPE extends AbstractCommand {
-    
+public class TYPE extends AbstractCommand {
+
     private final Logger LOG = LoggerFactory.getLogger(TYPE.class);
-    
+
     /**
      * Execute command
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
+
         // get type from argument
         char type = 'A';
-        if (request.hasArgument()){
+        if (request.hasArgument()) {
             type = request.getArgument().charAt(0);
         }
-        
+
         // set type
         try {
             session.setDataType(DataType.parseArgument(type));
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
-        } 
-        catch(IllegalArgumentException e) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
+        } catch (IllegalArgumentException e) {
             LOG.debug("Illegal type argument: " + request.getArgument(), e);
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER, "TYPE", null));
+            session
+                    .write(FtpReplyUtil
+                            .translate(
+                                    session,
+                                    request,
+                                    context,
+                                    FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
+                                    "TYPE", null));
         }
     }
-    
+
 }

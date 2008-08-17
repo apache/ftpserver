@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -28,27 +28,28 @@ import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
-
 /**
- * Client-Server encoding negotiation.
- * Force server from default encoding to UTF-8 and back.
- * Note that the servers default encoding is UTF-8.
- * So this command has no effect.
+ * Client-Server encoding negotiation. Force server from default encoding to
+ * UTF-8 and back. Note that the servers default encoding is UTF-8. So this
+ * command has no effect.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class OPTS_UTF8 extends AbstractCommand {
-    
+public class OPTS_UTF8 extends AbstractCommand {
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state
         session.resetState();
-        
+
         // send default message
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_200_COMMAND_OKAY, "OPTS.UTF8", null));
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_200_COMMAND_OKAY, "OPTS.UTF8", null));
     }
 }

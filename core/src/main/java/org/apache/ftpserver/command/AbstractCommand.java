@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -23,8 +23,10 @@ import org.apache.ftpserver.interfaces.Command;
 
 /**
  * Common base class recommended for {@link Command} implementations
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public abstract class AbstractCommand implements Command {
 
-    
 }

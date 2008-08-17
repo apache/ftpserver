@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.listener;
 
@@ -25,18 +25,24 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
-
 /**
  * Common base class for listener implementations
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public abstract class AbstractListener implements Listener {
-    
+
     private InetAddress serverAddress;
+
     private int port = 21;
+
     private SslConfiguration ssl;
+
     private boolean implicitSsl = false;
+
     private DataConnectionConfiguration dataConnectionConfig = new DefaultDataConnectionConfiguration();
-    
+
     /**
      * {@inheritDoc}
      */
@@ -64,14 +70,14 @@ public abstract class AbstractListener implements Listener {
     public void setPort(int port) {
         this.port = port;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public InetAddress getServerAddress() {
         return serverAddress;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -85,7 +91,7 @@ public abstract class AbstractListener implements Listener {
     public SslConfiguration getSslConfiguration() {
         return ssl;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -99,11 +105,12 @@ public abstract class AbstractListener implements Listener {
     public DataConnectionConfiguration getDataConnectionConfiguration() {
         return dataConnectionConfig;
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public void setDataConnectionConfiguration(DataConnectionConfiguration dataConnectionConfig) {
+    public void setDataConnectionConfiguration(
+            DataConnectionConfiguration dataConnectionConfig) {
         this.dataConnectionConfig = dataConnectionConfig;
     }
 }

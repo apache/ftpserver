@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -23,59 +23,63 @@ import java.net.InetAddress;
 
 /**
  * Ftp statistics observer interface.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface StatisticsObserver {
-    
+public interface StatisticsObserver {
+
     /**
      * User file upload notification.
      */
     void notifyUpload();
-    
+
     /**
      * User file download notification.
      */
     void notifyDownload();
-    
+
     /**
      * User file delete notification.
      */
     void notifyDelete();
-     
+
     /**
      * User make directory notification.
      */
     void notifyMkdir();
-    
+
     /**
      * User remove directory notification.
      */
     void notifyRmdir();
-    
+
     /**
      * New user login notification.
      */
     void notifyLogin(boolean anonymous);
-    
+
     /**
      * Failed user login notification.
-     * @param address Remote address that the failure came from
+     * 
+     * @param address
+     *            Remote address that the failure came from
      */
     void notifyLoginFail(InetAddress address);
-    
+
     /**
      * User logout notification.
      */
     void notifyLogout(boolean anonymous);
-    
+
     /**
      * Connection open notification
      */
-    void notifyOpenConnection(); 
-    
+    void notifyOpenConnection();
+
     /**
      * Connection close notification
      */
     void notifyCloseConnection();
 
-}    
+}

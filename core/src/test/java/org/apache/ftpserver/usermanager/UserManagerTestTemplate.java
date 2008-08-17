@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -30,13 +30,21 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public abstract class UserManagerTestTemplate extends TestCase {
 
     protected UserManager userManager;
 
     protected abstract UserManager createUserManager() throws Exception;
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
@@ -44,55 +52,62 @@ public abstract class UserManagerTestTemplate extends TestCase {
     }
 
     public void testAuthenticate() throws Exception {
-        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user1", "pw1")));
+        assertNotNull(userManager
+                .authenticate(new UsernamePasswordAuthentication("user1", "pw1")));
     }
 
     public void testAuthenticateWrongPassword() throws Exception {
         try {
-            userManager.authenticate(new UsernamePasswordAuthentication("user1", "foo"));
+            userManager.authenticate(new UsernamePasswordAuthentication(
+                    "user1", "foo"));
             fail("Must throw AuthenticationFailedException");
-        } catch(AuthenticationFailedException e) {
+        } catch (AuthenticationFailedException e) {
             // ok
         }
     }
 
     public void testAuthenticateUnknownUser() throws Exception {
         try {
-            userManager.authenticate(new UsernamePasswordAuthentication("foo", "foo"));
+            userManager.authenticate(new UsernamePasswordAuthentication("foo",
+                    "foo"));
             fail("Must throw AuthenticationFailedException");
-        } catch(AuthenticationFailedException e) {
+        } catch (AuthenticationFailedException e) {
             // ok
         }
     }
-    
+
     public void testAuthenticateEmptyPassword() throws Exception {
-        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user3", "")));
+        assertNotNull(userManager
+                .authenticate(new UsernamePasswordAuthentication("user3", "")));
     }
 
     public void testAuthenticateNullPassword() throws Exception {
-        assertNotNull(userManager.authenticate(new UsernamePasswordAuthentication("user3", null)));
+        assertNotNull(userManager
+                .authenticate(new UsernamePasswordAuthentication("user3", null)));
     }
 
-    public static class FooAuthentication implements Authentication {}
-    
+    public static class FooAuthentication implements Authentication {
+    }
+
     public void testAuthenticateNullUser() throws Exception {
         try {
-            userManager.authenticate(new UsernamePasswordAuthentication(null, "foo"));
+            userManager.authenticate(new UsernamePasswordAuthentication(null,
+                    "foo"));
             fail("Must throw AuthenticationFailedException");
-        } catch(AuthenticationFailedException e) {
+        } catch (AuthenticationFailedException e) {
             // ok
         }
     }
-    
+
     public void testAuthenticateUnknownAuthentication() throws Exception {
         try {
             userManager.authenticate(new FooAuthentication());
             fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // ok
         }
     }
-    
+
     public void testDoesExist() throws Exception {
         assertTrue(userManager.doesExist("user1"));
         assertTrue(userManager.doesExist("user2"));
@@ -142,7 +157,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
     public void testGetUserByName() throws Exception {
         User user = userManager.getUserByName("user2");
-        
+
         assertEquals("user2", user.getName());
         assertNull("Password must not be set", user.getPassword());
         assertEquals("home", user.getHomeDirectory());
@@ -161,9 +176,10 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
     private int getMaxDownloadRate(User user) {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
-        transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
-    
-        if(transferRateRequest != null) {
+        transferRateRequest = (TransferRateRequest) user
+                .authorize(transferRateRequest);
+
+        if (transferRateRequest != null) {
             return transferRateRequest.getMaxDownloadRate();
         } else {
             return 0;
@@ -172,37 +188,42 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
     private int getMaxUploadRate(User user) {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
-        transferRateRequest = (TransferRateRequest) user.authorize(transferRateRequest);
-    
-        if(transferRateRequest != null) {
+        transferRateRequest = (TransferRateRequest) user
+                .authorize(transferRateRequest);
+
+        if (transferRateRequest != null) {
             return transferRateRequest.getMaxUploadRate();
         } else {
             return 0;
-        } 
+        }
     }
 
     private int getMaxLoginNumber(User user) {
-        ConcurrentLoginRequest  concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
-        concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
-        
-        if(concurrentLoginRequest != null) {
+        ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(
+                0, 0);
+        concurrentLoginRequest = (ConcurrentLoginRequest) user
+                .authorize(concurrentLoginRequest);
+
+        if (concurrentLoginRequest != null) {
             return concurrentLoginRequest.getMaxConcurrentLogins();
         } else {
             return 0;
-        } 
+        }
     }
 
     private int getMaxLoginPerIP(User user) {
-        ConcurrentLoginRequest  concurrentLoginRequest = new ConcurrentLoginRequest(0, 0);
-        concurrentLoginRequest = (ConcurrentLoginRequest) user.authorize(concurrentLoginRequest);
-        
-        if(concurrentLoginRequest != null) {
+        ConcurrentLoginRequest concurrentLoginRequest = new ConcurrentLoginRequest(
+                0, 0);
+        concurrentLoginRequest = (ConcurrentLoginRequest) user
+                .authorize(concurrentLoginRequest);
+
+        if (concurrentLoginRequest != null) {
             return concurrentLoginRequest.getMaxConcurrentLoginsPerIP();
         } else {
             return 0;
-        } 
+        }
     }
-    
+
     public void testSave() throws Exception {
         BaseUser user = new BaseUser();
         user.setName("newuser");
@@ -218,12 +239,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setAuthorities(authorities.toArray(new Authority[0]));
 
         userManager.save(user);
-        
+
         UserManager newUserManager = createUserManager();
 
-        
         User actualUser = newUserManager.getUserByName("newuser");
-        
+
         assertEquals(user.getName(), actualUser.getName());
         assertNull(actualUser.getPassword());
         assertEquals(user.getHomeDirectory(), actualUser.getHomeDirectory());
@@ -241,9 +261,9 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setName("user2");
         user.setHomeDirectory("newhome");
         userManager.save(user);
-        
+
         User actualUser = userManager.getUserByName("user2");
-        
+
         assertEquals("user2", actualUser.getName());
         assertNull(actualUser.getPassword());
         assertEquals("newhome", actualUser.getHomeDirectory());
@@ -261,11 +281,11 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setName("newuser");
         user.setPassword("newpw");
         userManager.save(user);
-        
+
         UserManager newUserManager = createUserManager();
-        
+
         User actualUser = newUserManager.getUserByName("newuser");
-        
+
         assertEquals(user.getName(), actualUser.getName());
         assertNull(actualUser.getPassword());
         assertEquals("/", actualUser.getHomeDirectory());

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.config.spring;
 
@@ -31,11 +31,14 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
- * Parses the FtpServer "commands" element into a Spring
- * bean graph
+ * Parses the FtpServer "commands" element into a Spring bean graph
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public class CommandFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
-    
+public class CommandFactoryBeanDefinitionParser extends
+        AbstractSingleBeanDefinitionParser {
+
     /**
      * {@inheritDoc}
      */
@@ -48,21 +51,25 @@ public class CommandFactoryBeanDefinitionParser extends AbstractSingleBeanDefini
      * {@inheritDoc}
      */
     @Override
-    protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
+    protected void doParse(final Element element,
+            final ParserContext parserContext,
+            final BeanDefinitionBuilder builder) {
         ManagedMap commands = new ManagedMap();
-        
+
         List<Element> childs = SpringUtil.getChildElements(element);
 
-        for(Element commandElm : childs) {
+        for (Element commandElm : childs) {
             String name = commandElm.getAttribute("name");
-            Object bean = SpringUtil.parseSpringChildElement(commandElm, parserContext, builder); 
+            Object bean = SpringUtil.parseSpringChildElement(commandElm,
+                    parserContext, builder);
             commands.put(name, bean);
         }
-        
+
         builder.addPropertyValue("commandMap", commands);
-        
-        if(StringUtils.hasText(element.getAttribute("use-default"))) {
-            builder.addPropertyValue("useDefaultCommands", Boolean.parseBoolean(element.getAttribute("use-default")));
+
+        if (StringUtils.hasText(element.getAttribute("use-default"))) {
+            builder.addPropertyValue("useDefaultCommands", Boolean
+                    .parseBoolean(element.getAttribute("use-default")));
         }
     }
 }

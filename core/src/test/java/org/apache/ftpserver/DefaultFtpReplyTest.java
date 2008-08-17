@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver;
 
@@ -23,48 +23,54 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
 
-
+/**
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class DefaultFtpReplyTest extends TestCase {
 
     public void testSingleLineToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo bar");
-        
+
         assertEquals("123 foo bar\r\n", response.toString());
     }
 
     public void testNullToString() {
-        DefaultFtpReply response = new DefaultFtpReply(123, (String)null);
-        
+        DefaultFtpReply response = new DefaultFtpReply(123, (String) null);
+
         assertEquals("123 \r\n", response.toString());
     }
 
     public void testMultipleLinesToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\nbaz");
-        
+
         assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
     }
 
     public void testMultipleLinesEndWithNewlineToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\nbaz\n");
-        
+
         assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
     }
-    
+
     public void testArrayLinesToString() {
-        DefaultFtpReply response = new DefaultFtpReply(123, new String[]{"foo", "bar", "baz"});
-        
+        DefaultFtpReply response = new DefaultFtpReply(123, new String[] {
+                "foo", "bar", "baz" });
+
         assertEquals("123-foo\r\nbar\r\n123 baz\r\n", response.toString());
     }
 
     public void testMultipleLinesToString1() {
         DefaultFtpReply response = new DefaultFtpReply(123, "\nfoo\nbar\nbaz");
-        
+
         assertEquals("123-\r\nfoo\r\nbar\r\n123 baz\r\n", response.toString());
     }
-    
+
     public void testMultipleLinesToStringSpaceFirst() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo\n bar\nbaz");
-        
+
         assertEquals("123-foo\r\n bar\r\n123 baz\r\n", response.toString());
     }
 }

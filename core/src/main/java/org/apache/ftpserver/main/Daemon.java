@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.main;
 
@@ -27,48 +27,52 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
 /**
- * Invokes FtpServer as a daemon, running in the background. 
- * Used for example for the Windows service.
+ * Invokes FtpServer as a daemon, running in the background. Used for example
+ * for the Windows service.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class Daemon {
 
     private static final Logger LOG = LoggerFactory.getLogger(Daemon.class);
-    
+
     private static FtpServer server;
+
     private static Object lock = new Object();
-    
+
     public static void main(String[] args) throws Exception {
-        try{
-            if(server == null) {
+        try {
+            if (server == null) {
                 // get configuration
                 FtpServer server = getConfiguration(args);
-                if(server == null) {
+                if (server == null) {
                     LOG.error("No configuration provided");
                     throw new FtpException("No configuration provided");
                 }
             }
-            
+
             String command = "start";
-            
-            if(args != null && args.length > 0) {
+
+            if (args != null && args.length > 0) {
                 command = args[0];
             }
-            
-            if(command.equals("start")) {
+
+            if (command.equals("start")) {
                 LOG.info("Starting FTP server daemon");
                 server.start();
-                
+
                 synchronized (lock) {
                     lock.wait();
                 }
-            } else if(command.equals("stop")) {
+            } else if (command.equals("stop")) {
                 synchronized (lock) {
                     lock.notify();
                 }
                 LOG.info("Stopping FTP server daemon");
                 server.stop();
             }
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             LOG.error("Daemon error", t);
         }
     }
@@ -77,40 +81,44 @@ public class Daemon {
      * Get the configuration object.
      */
     private static FtpServer getConfiguration(String[] args) throws Exception {
-    
+
         FtpServer server = null;
-        if(args == null || args.length < 2) {
+        if (args == null || args.length < 2) {
             LOG.info("Using default configuration....");
             server = new FtpServer();
-        } else if( (args.length == 2) && args[1].equals("-default") ) {
+        } else if ((args.length == 2) && args[1].equals("-default")) {
             // supported for backwards compatibility, but not documented
-            System.out.println("The -default switch is deprecated, please use --default instead");
+            System.out
+                    .println("The -default switch is deprecated, please use --default instead");
             LOG.info("Using default configuration....");
             server = new FtpServer();
-        } else if( (args.length == 2) && args[1].equals("--default") ) {
+        } else if ((args.length == 2) && args[1].equals("--default")) {
             LOG.info("Using default configuration....");
             server = new FtpServer();
-        }
-        else if( args.length == 2 ) {
+        } else if (args.length == 2) {
             LOG.info("Using xml configuration file " + args[1] + "...");
-            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(args[1]));
-            if(bf.containsBean("server")) {
+            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(
+                    args[1]));
+            if (bf.containsBean("server")) {
                 server = (FtpServer) bf.getBean("server");
             } else {
                 String[] beanNames = bf.getBeanNamesForType(FtpServer.class);
-                if(beanNames.length == 1) {
+                if (beanNames.length == 1) {
                     server = (FtpServer) bf.getBean(beanNames[0]);
-                } else if(beanNames.length > 1) {
-                    System.out.println("Using the first server defined in the configuration, named " + beanNames[0]);
+                } else if (beanNames.length > 1) {
+                    System.out
+                            .println("Using the first server defined in the configuration, named "
+                                    + beanNames[0]);
                     server = (FtpServer) bf.getBean(beanNames[0]);
                 } else {
-                    System.err.println("XML configuration does not contain a server configuration");
+                    System.err
+                            .println("XML configuration does not contain a server configuration");
                 }
             }
         } else {
             throw new FtpException("Invalid configuration option");
         }
-        
+
         return server;
     }
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -27,44 +27,52 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.DateUtils;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class ListTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
 
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+
     private static final File TEST_DIR2 = new File(ROOT_DIR, "dir2");
 
-    private static final File TEST_FILE_IN_DIR1 = new File(TEST_DIR1, "test3.txt");
+    private static final File TEST_FILE_IN_DIR1 = new File(TEST_DIR1,
+            "test3.txt");
+
     private static final File TEST_DIR_IN_DIR1 = new File(TEST_DIR1, "dir3");
 
     private byte[] testData;
-    
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
         super.setUp();
 
         testData = "TESDATA".getBytes("UTF-8");
-        
-        FTPClientConfig config = new FTPClientConfig ("UNIX");
+
+        FTPClientConfig config = new FTPClientConfig("UNIX");
         client.configure(config);
 
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
-
-
     public void testListFilesInDir() throws Exception {
-        
+
         TEST_DIR1.mkdirs();
         TEST_FILE_IN_DIR1.createNewFile();
         TEST_DIR_IN_DIR1.mkdirs();
-        
+
         FTPFile[] files = client.listFiles(TEST_DIR1.getName());
-        
+
         assertEquals(2, files.length);
 
         FTPFile file = getFile(files, TEST_FILE_IN_DIR1.getName());
@@ -74,7 +82,7 @@ public class ListTest extends ClientTestTemplate {
         assertEquals("user", file.getUser());
         assertTrue(file.isFile());
         assertFalse(file.isDirectory());
-        
+
         file = getFile(files, TEST_DIR_IN_DIR1.getName());
         assertEquals(TEST_DIR_IN_DIR1.getName(), file.getName());
         assertEquals(0, file.getSize());
@@ -82,19 +90,19 @@ public class ListTest extends ClientTestTemplate {
         assertEquals("user", file.getUser());
         assertFalse(file.isFile());
         assertTrue(file.isDirectory());
-        
+
     }
-    
+
     public void testListFile() throws Exception {
-        
+
         TEST_DIR1.mkdirs();
         TEST_FILE1.createNewFile();
         TEST_FILE2.createNewFile();
 
         FTPFile[] files = client.listFiles(TEST_FILE1.getName());
-        
+
         assertEquals(1, files.length);
-        
+
         FTPFile file = getFile(files, TEST_FILE1.getName());
         assertEquals(TEST_FILE1.getName(), file.getName());
         assertEquals(0, file.getSize());
@@ -103,14 +111,14 @@ public class ListTest extends ClientTestTemplate {
         assertTrue(file.isFile());
         assertFalse(file.isDirectory());
     }
-    
+
     public void testListFileNoArgument() throws Exception {
         TEST_DIR1.mkdirs();
-        
+
         FTPFile[] files = client.listFiles();
-        
+
         assertEquals(1, files.length);
-        
+
         FTPFile file = getFile(files, TEST_DIR1.getName());
         assertEquals(TEST_DIR1.getName(), file.getName());
         assertEquals(0, file.getSize());
@@ -125,9 +133,9 @@ public class ListTest extends ClientTestTemplate {
         TEST_FILE2.createNewFile();
         TEST_DIR1.mkdirs();
         TEST_DIR2.mkdirs();
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, testData);
-        
+
         FTPFile[] files = client.listFiles();
 
         assertEquals(4, files.length);
@@ -138,7 +146,7 @@ public class ListTest extends ClientTestTemplate {
         assertEquals("user", file.getUser());
         assertTrue(file.isFile());
         assertFalse(file.isDirectory());
-        
+
         file = getFile(files, TEST_FILE2.getName());
         assertEquals(TEST_FILE2.getName(), file.getName());
         assertEquals(0, file.getSize());
@@ -167,20 +175,20 @@ public class ListTest extends ClientTestTemplate {
     public void testListFileNonExistingFile() throws Exception {
 
         FTPFile[] files = client.listFiles("foo");
-        
+
         assertEquals(0, files.length);
     }
-    
+
     public void testListNames() throws Exception {
         TEST_FILE1.createNewFile();
         TEST_FILE2.createNewFile();
         TEST_DIR1.mkdirs();
         TEST_DIR2.mkdirs();
-        
+
         String[] files = client.listNames();
-        
+
         assertEquals(4, files.length);
-        
+
         TestUtil.assertInArrays(TEST_FILE1.getName(), files);
         TestUtil.assertInArrays(TEST_FILE2.getName(), files);
         TestUtil.assertInArrays(TEST_DIR1.getName(), files);
@@ -191,50 +199,58 @@ public class ListTest extends ClientTestTemplate {
         TEST_FILE1.createNewFile();
         TEST_FILE2.createNewFile();
         TEST_DIR1.mkdirs();
-        
+
         String[] files = client.listNames(TEST_FILE2.getName());
-        
+
         assertEquals(1, files.length);
-        
+
         TestUtil.assertInArrays(TEST_FILE2.getName(), files);
     }
-    
+
     public void testMLST() throws Exception {
         TEST_FILE1.createNewFile();
-        
-        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST " + TEST_FILE1.getName())));
-        
+
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST "
+                + TEST_FILE1.getName())));
+
         String[] reply = client.getReplyString().split("\\r\\n");
-        
-        assertEquals("Size=0;Modify=" + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + ";Type=file; " + TEST_FILE1.getName(), reply[1]);
+
+        assertEquals("Size=0;Modify="
+                + DateUtils.getFtpDate(TEST_FILE1.lastModified())
+                + ";Type=file; " + TEST_FILE1.getName(), reply[1]);
     }
-    
+
     public void testOPTSMLST() throws Exception {
         TEST_FILE1.createNewFile();
-        
-        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("OPTS MLST Size;Modify")));
-        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST " + TEST_FILE1.getName())));
-        
+
+        assertTrue(FTPReply.isPositiveCompletion(client
+                .sendCommand("OPTS MLST Size;Modify")));
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST "
+                + TEST_FILE1.getName())));
+
         String[] reply = client.getReplyString().split("\\r\\n");
-        
-        assertEquals("Size=0;Modify=" + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + "; " + TEST_FILE1.getName(), reply[1]);
+
+        assertEquals("Size=0;Modify="
+                + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + "; "
+                + TEST_FILE1.getName(), reply[1]);
     }
-    
+
     public void testOPTSMLSTInvalidType() throws Exception {
         TEST_FILE1.createNewFile();
-        
-        assertTrue(FTPReply.isNegativePermanent(client.sendCommand("OPTS MLST Foo;Size")));
+
+        assertTrue(FTPReply.isNegativePermanent(client
+                .sendCommand("OPTS MLST Foo;Size")));
     }
-    
+
     private FTPFile getFile(FTPFile[] files, String name) {
         for (int i = 0; i < files.length; i++) {
             FTPFile file = files[i];
-            
-            if(name.equals(file.getName())) {
+
+            if (name.equals(file.getName())) {
                 return file;
             }
         }
-        
+
         return null;
     }
 }

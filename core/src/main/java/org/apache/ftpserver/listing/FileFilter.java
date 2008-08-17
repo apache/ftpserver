@@ -15,20 +15,26 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
  * Interface for selecting files based on some critera.
+ * 
  * @see java.io.FileFilter
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface FileFilter {
 
     /**
      * Decide if the {@link FileObject} should be selected
-     * @param file The {@link FileObject}
+     * 
+     * @param file
+     *            The {@link FileObject}
      * @return true if the {@link FileObject} was selected
      */
     boolean accept(FileObject file);

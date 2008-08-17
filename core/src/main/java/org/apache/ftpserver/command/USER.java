@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -37,109 +37,149 @@ import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
+ * 
+ * The argument field is a Telnet string identifying the user. The user
+ * identification is that which is required by the server for access to its file
+ * system. This command will normally be the first command transmitted by the
+ * user after the control connections are made.
  *
- * The argument field is a Telnet string identifying the user.
- * The user identification is that which is required by the
- * server for access to its file system.  This command will
- * normally be the first command transmitted by the user after
- * the control connections are made.
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class USER extends AbstractCommand {
-    
+public class USER extends AbstractCommand {
+
     /**
      * Execute command.
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-    
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         boolean success = false;
-        ServerFtpStatistics stat = (ServerFtpStatistics)context.getFtpStatistics();
+        ServerFtpStatistics stat = (ServerFtpStatistics) context
+                .getFtpStatistics();
         try {
-            
+
             // reset state variables
             session.resetState();
-            
+
             // argument check
             String userName = request.getArgument();
-            if(userName == null) {
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "USER", null));
-                return;  
+            if (userName == null) {
+                session
+                        .write(FtpReplyUtil
+                                .translate(
+                                        session,
+                                        request,
+                                        context,
+                                        FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                                        "USER", null));
+                return;
             }
-            
+
             // Add to the MDC logging
             MdcInjectionFilter.setProperty(session, "userName", userName);
-            
+
             // already logged-in
-            BaseUser user = (BaseUser)session.getUser();
-            if(session.isLoggedIn()) {
-                if( userName.equals(user.getName()) ) {
-                    session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_230_USER_LOGGED_IN, "USER", null));
+            BaseUser user = (BaseUser) session.getUser();
+            if (session.isLoggedIn()) {
+                if (userName.equals(user.getName())) {
+                    session.write(FtpReplyUtil.translate(session, request,
+                            context, FtpReply.REPLY_230_USER_LOGGED_IN, "USER",
+                            null));
                     success = true;
-                }
-                else {
-                    session.write(FtpReplyUtil.translate(session, request, context, 530, "USER.invalid", null));
+                } else {
+                    session.write(FtpReplyUtil.translate(session, request,
+                            context, 530, "USER.invalid", null));
                 }
                 return;
             }
-            
+
             // anonymous login is not enabled
             boolean anonymous = userName.equals("anonymous");
-            if( anonymous && (!context.getConnectionConfig().isAnonymousLoginEnabled()) ) {
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "USER.anonymous", null));
+            if (anonymous
+                    && (!context.getConnectionConfig()
+                            .isAnonymousLoginEnabled())) {
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_530_NOT_LOGGED_IN, "USER.anonymous",
+                        null));
                 return;
             }
-            
+
             // anonymous login limit check
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
-            int maxAnonLogin = context.getConnectionConfig().getMaxAnonymousLogins();
-            if( anonymous && (currAnonLogin >= maxAnonLogin) ) {
-                session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.anonymous", null));
+            int maxAnonLogin = context.getConnectionConfig()
+                    .getMaxAnonymousLogins();
+            if (anonymous && (currAnonLogin >= maxAnonLogin)) {
+                session
+                        .write(FtpReplyUtil
+                                .translate(
+                                        session,
+                                        request,
+                                        context,
+                                        FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION,
+                                        "USER.anonymous", null));
                 return;
             }
-            
+
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = context.getConnectionConfig().getMaxLogins();
-            if(maxLogin != 0 && currLogin >= maxLogin) {
-            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null));
+            if (maxLogin != 0 && currLogin >= maxLogin) {
+                session
+                        .write(FtpReplyUtil
+                                .translate(
+                                        session,
+                                        request,
+                                        context,
+                                        FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION,
+                                        "USER.login", null));
                 return;
             }
-            
+
             User configUser = context.getUserManager().getUserByName(userName);
-            if(configUser != null){
-                //user login limit check
-                
-            	InetAddress address = null;
-            	if(session.getRemoteAddress() instanceof InetSocketAddress) {
-            		address = ((InetSocketAddress)session.getRemoteAddress()).getAddress();
-            	}
-            	
-                ConcurrentLoginRequest loginRequest = new  ConcurrentLoginRequest(
+            if (configUser != null) {
+                // user login limit check
+
+                InetAddress address = null;
+                if (session.getRemoteAddress() instanceof InetSocketAddress) {
+                    address = ((InetSocketAddress) session.getRemoteAddress())
+                            .getAddress();
+                }
+
+                ConcurrentLoginRequest loginRequest = new ConcurrentLoginRequest(
                         stat.getCurrentUserLoginNumber(configUser) + 1,
                         stat.getCurrentUserLoginNumber(configUser, address) + 1);
-                
-                if(configUser.authorize(loginRequest) == null) {
-                	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION, "USER.login", null));
+
+                if (configUser.authorize(loginRequest) == null) {
+                    session
+                            .write(FtpReplyUtil
+                                    .translate(
+                                            session,
+                                            request,
+                                            context,
+                                            FtpReply.REPLY_421_SERVICE_NOT_AVAILABLE_CLOSING_CONTROL_CONNECTION,
+                                            "USER.login", null));
                     return;
                 }
             }
-            
+
             // finally set the user name
             success = true;
             session.setUserArgument(userName);
-            if(anonymous) {
-            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER.anonymous", userName));
+            if (anonymous) {
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD,
+                        "USER.anonymous", userName));
+            } else {
+                session.write(FtpReplyUtil.translate(session, request, context,
+                        FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD,
+                        "USER", userName));
             }
-            else {
-            	session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD, "USER", userName));
-            }
-        }
-        finally {
+        } finally {
 
             // if not ok - close connection
-            if(!success) {
+            if (!success) {
                 session.closeOnFlush().awaitUninterruptibly(10000);
             }
         }

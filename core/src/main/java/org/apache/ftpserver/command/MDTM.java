@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -36,50 +36,57 @@ import org.slf4j.LoggerFactory;
  * <code>MDTM &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
  * 
  * Returns the date and time of when a file was modified.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class MDTM extends AbstractCommand {
+public class MDTM extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MDTM.class);
-    
+
     /**
      * Execute command
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state
         session.resetState();
-        
+
         // argument check
         String fileName = request.getArgument();
-        if(fileName == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "MDTM", null));
-            return;  
+        if (fileName == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "MDTM", null));
+            return;
         }
-        
+
         // get file object
         FileObject file = null;
         try {
             file = session.getFileSystemView().getFileObject(fileName);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.debug("Exception getting file object", ex);
         }
-        if(file == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
+        if (file == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM",
+                    fileName));
             return;
         }
-        
+
         // now print date
         fileName = file.getFullName();
-        if(file.doesExist()) {
-            String dateStr = DateUtils.getFtpDate( file.getLastModified() );
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
+        if (file.doesExist()) {
+            String dateStr = DateUtils.getFtpDate(file.getLastModified());
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
+        } else {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM",
+                    fileName));
         }
-        else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM", fileName));
-        }
-    } 
+    }
 }

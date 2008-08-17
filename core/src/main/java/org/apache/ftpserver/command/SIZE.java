@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -33,56 +33,64 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <code>SIZE &lt;SP&gt; &lt;pathname&gt; &lt;CRLF&gt;</code><br>
- *
+ * 
  * Returns the size of the file in bytes.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SIZE extends AbstractCommand {
-    
+public class SIZE extends AbstractCommand {
+
     private final Logger LOG = LoggerFactory.getLogger(SIZE.class);
-    
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // argument check
         String fileName = request.getArgument();
-        if(fileName == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SIZE", null));
-            return;  
+        if (fileName == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "SIZE", null));
+            return;
         }
-        
+
         // get file object
         FileObject file = null;
         try {
             file = session.getFileSystemView().getFileObject(fileName);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.debug("Exception getting file object", ex);
         }
-        if(file == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
+        if (file == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                    "SIZE.missing", fileName));
             return;
         }
-        
+
         // print file size
         fileName = file.getFullName();
-        if(!file.doesExist()) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.missing", fileName));
+        if (!file.doesExist()) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                    "SIZE.missing", fileName));
+        } else if (!file.isFile()) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                    "SIZE.invalid", fileName));
+        } else {
+            String fileLen = String.valueOf(file.getSize());
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_213_FILE_STATUS, "SIZE", fileLen));
         }
-        else if(!file.isFile()) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "SIZE.invalid", fileName));
-        }
-        else {
-            String fileLen = String.valueOf(file.getSize());             
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_213_FILE_STATUS, "SIZE", fileLen));
-        }
-    } 
+    }
 
 }

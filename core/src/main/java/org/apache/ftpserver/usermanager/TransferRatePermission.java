@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
@@ -24,27 +24,31 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
  * The max upload rate permission
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class TransferRatePermission implements Authority {
 
     private int maxDownloadRate;
+
     private int maxUploadRate;
 
     public TransferRatePermission(int maxDownloadRate, int maxUploadRate) {
         this.maxDownloadRate = maxDownloadRate;
         this.maxUploadRate = maxUploadRate;
     }
-    
+
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
     public AuthorizationRequest authorize(AuthorizationRequest request) {
         if (request instanceof TransferRateRequest) {
             TransferRateRequest transferRateRequest = (TransferRateRequest) request;
-            
+
             transferRateRequest.setMaxDownloadRate(maxDownloadRate);
             transferRateRequest.setMaxUploadRate(maxUploadRate);
-            
+
             return transferRateRequest;
         } else {
             return null;

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.interfaces;
 
@@ -52,490 +52,531 @@ import org.apache.mina.core.session.TrafficMask;
 import org.apache.mina.core.write.WriteRequest;
 import org.apache.mina.filter.ssl.SslFilter;
 
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class FtpIoSession implements IoSession {
 
     /**
      * Contains user name between USER and PASS commands
      */
-	public static final String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
-	private static final String ATTRIBUTE_USER_ARGUMENT 		= ATTRIBUTE_PREFIX + "user-argument";
-	private static final String ATTRIBUTE_USER							= ATTRIBUTE_PREFIX + "user";
-	private static final String ATTRIBUTE_LANGUAGE			 		= ATTRIBUTE_PREFIX + "language";
-	private static final String ATTRIBUTE_LOGIN_TIME		 		= ATTRIBUTE_PREFIX + "login-time";
-	private static final String ATTRIBUTE_DATA_CONNECTION	= ATTRIBUTE_PREFIX + "data-connection";
-	private static final String ATTRIBUTE_FILE_SYSTEM		 		= ATTRIBUTE_PREFIX + "file-system";
-	private static final String ATTRIBUTE_RENAME_FROM	 		= ATTRIBUTE_PREFIX + "rename-from";
-	private static final String ATTRIBUTE_FILE_OFFSET		 		= ATTRIBUTE_PREFIX + "file-offset";
-	private static final String ATTRIBUTE_DATA_TYPE			 		= ATTRIBUTE_PREFIX + "data-type";
-	private static final String ATTRIBUTE_STRUCTURE		 		= ATTRIBUTE_PREFIX + "structure";
-	private static final String ATTRIBUTE_FAILED_LOGINS	 		= ATTRIBUTE_PREFIX + "failed-logins";
-    private static final String ATTRIBUTE_LISTENER			 		= ATTRIBUTE_PREFIX + "listener";
-    private static final String ATTRIBUTE_MAX_IDLE_TIME 			= ATTRIBUTE_PREFIX + "max-idle-time";
-	private static final String ATTRIBUTE_LAST_ACCESS_TIME 	= ATTRIBUTE_PREFIX + "last-access-time";
-	private static final String ATTRIBUTE_CACHED_REMOTE_ADDRESS     = ATTRIBUTE_PREFIX + "cached-remote-address";
+    public static final String ATTRIBUTE_PREFIX = "org.apache.ftpserver.";
 
-	private IoSession wrappedSession;
-	private FtpServerContext context;
-	
+    private static final String ATTRIBUTE_USER_ARGUMENT = ATTRIBUTE_PREFIX
+            + "user-argument";
+
+    private static final String ATTRIBUTE_USER = ATTRIBUTE_PREFIX + "user";
+
+    private static final String ATTRIBUTE_LANGUAGE = ATTRIBUTE_PREFIX
+            + "language";
+
+    private static final String ATTRIBUTE_LOGIN_TIME = ATTRIBUTE_PREFIX
+            + "login-time";
+
+    private static final String ATTRIBUTE_DATA_CONNECTION = ATTRIBUTE_PREFIX
+            + "data-connection";
+
+    private static final String ATTRIBUTE_FILE_SYSTEM = ATTRIBUTE_PREFIX
+            + "file-system";
+
+    private static final String ATTRIBUTE_RENAME_FROM = ATTRIBUTE_PREFIX
+            + "rename-from";
+
+    private static final String ATTRIBUTE_FILE_OFFSET = ATTRIBUTE_PREFIX
+            + "file-offset";
+
+    private static final String ATTRIBUTE_DATA_TYPE = ATTRIBUTE_PREFIX
+            + "data-type";
+
+    private static final String ATTRIBUTE_STRUCTURE = ATTRIBUTE_PREFIX
+            + "structure";
+
+    private static final String ATTRIBUTE_FAILED_LOGINS = ATTRIBUTE_PREFIX
+            + "failed-logins";
+
+    private static final String ATTRIBUTE_LISTENER = ATTRIBUTE_PREFIX
+            + "listener";
+
+    private static final String ATTRIBUTE_MAX_IDLE_TIME = ATTRIBUTE_PREFIX
+            + "max-idle-time";
+
+    private static final String ATTRIBUTE_LAST_ACCESS_TIME = ATTRIBUTE_PREFIX
+            + "last-access-time";
+
+    private static final String ATTRIBUTE_CACHED_REMOTE_ADDRESS = ATTRIBUTE_PREFIX
+            + "cached-remote-address";
+
+    private IoSession wrappedSession;
+
+    private FtpServerContext context;
+
     /* Begin wrapped IoSession methods */
-    
-	/**
-	 * @see IoSession#close()
-	 */
-	public CloseFuture close() {
-		return wrappedSession.close();
-	}
 
-	/**
-	 * @see IoSession#close(boolean)
-	 */
-	public CloseFuture close(boolean immediately) {
-		return wrappedSession.close(immediately);
-	}
+    /**
+     * @see IoSession#close()
+     */
+    public CloseFuture close() {
+        return wrappedSession.close();
+    }
 
-	/**
-	 * @see IoSession#closeOnFlush()
-	 */
-	public CloseFuture closeOnFlush() {
-		return wrappedSession.closeOnFlush();
-	}
+    /**
+     * @see IoSession#close(boolean)
+     */
+    public CloseFuture close(boolean immediately) {
+        return wrappedSession.close(immediately);
+    }
 
-	/**
-	 * @see IoSession#containsAttribute(Object)
-	 */
-	public boolean containsAttribute(Object key) {
-		return wrappedSession.containsAttribute(key);
-	}
+    /**
+     * @see IoSession#closeOnFlush()
+     */
+    public CloseFuture closeOnFlush() {
+        return wrappedSession.closeOnFlush();
+    }
 
-	/**
-	 * @see IoSession#getAttachment()
-	 */
-	@SuppressWarnings("deprecation")
-	public Object getAttachment() {
-		return wrappedSession.getAttachment();
-	}
+    /**
+     * @see IoSession#containsAttribute(Object)
+     */
+    public boolean containsAttribute(Object key) {
+        return wrappedSession.containsAttribute(key);
+    }
 
-	/**
-	 * @see IoSession#getAttribute(Object)
-	 */
-	public Object getAttribute(Object key) {
-		return wrappedSession.getAttribute(key);
-	}
+    /**
+     * @see IoSession#getAttachment()
+     */
+    @SuppressWarnings("deprecation")
+    public Object getAttachment() {
+        return wrappedSession.getAttachment();
+    }
 
-	/**
-	 * @see IoSession#getAttribute(Object, Object)
-	 */
-	public Object getAttribute(Object key, Object defaultValue) {
-		return wrappedSession.getAttribute(key, defaultValue);
-	}
+    /**
+     * @see IoSession#getAttribute(Object)
+     */
+    public Object getAttribute(Object key) {
+        return wrappedSession.getAttribute(key);
+    }
 
-	/**
-	 * @see IoSession#getAttributeKeys()
-	 */
-	public Set<Object> getAttributeKeys() {
-		return wrappedSession.getAttributeKeys();
-	}
+    /**
+     * @see IoSession#getAttribute(Object, Object)
+     */
+    public Object getAttribute(Object key, Object defaultValue) {
+        return wrappedSession.getAttribute(key, defaultValue);
+    }
 
-	/**
-	 * @see IoSession#getBothIdleCount()
-	 */
-	public int getBothIdleCount() {
-		return wrappedSession.getBothIdleCount();
-	}
+    /**
+     * @see IoSession#getAttributeKeys()
+     */
+    public Set<Object> getAttributeKeys() {
+        return wrappedSession.getAttributeKeys();
+    }
 
-	/**
-	 * @see IoSession#getCloseFuture()
-	 */
-	public CloseFuture getCloseFuture() {
-		return wrappedSession.getCloseFuture();
-	}
+    /**
+     * @see IoSession#getBothIdleCount()
+     */
+    public int getBothIdleCount() {
+        return wrappedSession.getBothIdleCount();
+    }
 
-	/**
-	 * @see IoSession#getConfig()
-	 */
-	public IoSessionConfig getConfig() {
-		return wrappedSession.getConfig();
-	}
+    /**
+     * @see IoSession#getCloseFuture()
+     */
+    public CloseFuture getCloseFuture() {
+        return wrappedSession.getCloseFuture();
+    }
 
-	/**
-	 * @see IoSession#getCreationTime()
-	 */
-	public long getCreationTime() {
-		return wrappedSession.getCreationTime();
-	}
+    /**
+     * @see IoSession#getConfig()
+     */
+    public IoSessionConfig getConfig() {
+        return wrappedSession.getConfig();
+    }
 
-	/**
-	 * @see IoSession#getFilterChain()
-	 */
-	public IoFilterChain getFilterChain() {
-		return wrappedSession.getFilterChain();
-	}
+    /**
+     * @see IoSession#getCreationTime()
+     */
+    public long getCreationTime() {
+        return wrappedSession.getCreationTime();
+    }
 
-	/**
-	 * @see IoSession#getHandler()
-	 */
-	public IoHandler getHandler() {
-		return wrappedSession.getHandler();
-	}
+    /**
+     * @see IoSession#getFilterChain()
+     */
+    public IoFilterChain getFilterChain() {
+        return wrappedSession.getFilterChain();
+    }
 
-	/**
-	 * @see IoSession#getId()
-	 */
-	public long getId() {
-		return wrappedSession.getId();
-	}
+    /**
+     * @see IoSession#getHandler()
+     */
+    public IoHandler getHandler() {
+        return wrappedSession.getHandler();
+    }
 
-	/**
-	 * @see IoSession#getIdleCount(IdleStatus)
-	 */
-	public int getIdleCount(IdleStatus status) {
-		return wrappedSession.getIdleCount(status);
-	}
+    /**
+     * @see IoSession#getId()
+     */
+    public long getId() {
+        return wrappedSession.getId();
+    }
 
-	/**
-	 * @see IoSession#getLastBothIdleTime()
-	 */
-	public long getLastBothIdleTime() {
-		return wrappedSession.getLastBothIdleTime();
-	}
+    /**
+     * @see IoSession#getIdleCount(IdleStatus)
+     */
+    public int getIdleCount(IdleStatus status) {
+        return wrappedSession.getIdleCount(status);
+    }
 
-	/**
-	 * @see IoSession#getLastIdleTime(IdleStatus)
-	 */
-	public long getLastIdleTime(IdleStatus status) {
-		return wrappedSession.getLastIdleTime(status);
-	}
+    /**
+     * @see IoSession#getLastBothIdleTime()
+     */
+    public long getLastBothIdleTime() {
+        return wrappedSession.getLastBothIdleTime();
+    }
 
-	/**
-	 * @see IoSession#getLastIoTime()
-	 */
-	public long getLastIoTime() {
-		return wrappedSession.getLastIoTime();
-	}
+    /**
+     * @see IoSession#getLastIdleTime(IdleStatus)
+     */
+    public long getLastIdleTime(IdleStatus status) {
+        return wrappedSession.getLastIdleTime(status);
+    }
 
-	/**
-	 * @see IoSession#getLastReadTime()
-	 */
-	public long getLastReadTime() {
-		return wrappedSession.getLastReadTime();
-	}
+    /**
+     * @see IoSession#getLastIoTime()
+     */
+    public long getLastIoTime() {
+        return wrappedSession.getLastIoTime();
+    }
 
-	/**
-	 * @see IoSession#getLastReaderIdleTime()
-	 */
-	public long getLastReaderIdleTime() {
-		return wrappedSession.getLastReaderIdleTime();
-	}
+    /**
+     * @see IoSession#getLastReadTime()
+     */
+    public long getLastReadTime() {
+        return wrappedSession.getLastReadTime();
+    }
 
-	/**
-	 * @see IoSession#getLastWriteTime()
-	 */
-	public long getLastWriteTime() {
-		return wrappedSession.getLastWriteTime();
-	}
+    /**
+     * @see IoSession#getLastReaderIdleTime()
+     */
+    public long getLastReaderIdleTime() {
+        return wrappedSession.getLastReaderIdleTime();
+    }
 
-	/**
-	 * @see IoSession#getLastWriterIdleTime()
-	 */
-	public long getLastWriterIdleTime() {
-		return wrappedSession.getLastWriterIdleTime();
-	}
+    /**
+     * @see IoSession#getLastWriteTime()
+     */
+    public long getLastWriteTime() {
+        return wrappedSession.getLastWriteTime();
+    }
 
-	/**
-	 * @see IoSession#getLocalAddress()
-	 */
-	public SocketAddress getLocalAddress() {
-		return wrappedSession.getLocalAddress();
-	}
+    /**
+     * @see IoSession#getLastWriterIdleTime()
+     */
+    public long getLastWriterIdleTime() {
+        return wrappedSession.getLastWriterIdleTime();
+    }
 
-	/**
-	 * @see IoSession#getReadBytes()
-	 */
-	public long getReadBytes() {
-		return wrappedSession.getReadBytes();
-	}
+    /**
+     * @see IoSession#getLocalAddress()
+     */
+    public SocketAddress getLocalAddress() {
+        return wrappedSession.getLocalAddress();
+    }
 
-	/**
-	 * @see IoSession#getReadBytesThroughput()
-	 */
-	public double getReadBytesThroughput() {
-		return wrappedSession.getReadBytesThroughput();
-	}
+    /**
+     * @see IoSession#getReadBytes()
+     */
+    public long getReadBytes() {
+        return wrappedSession.getReadBytes();
+    }
 
-	/**
-	 * @see IoSession#getReadMessages()
-	 */
-	public long getReadMessages() {
-		return wrappedSession.getReadMessages();
-	}
+    /**
+     * @see IoSession#getReadBytesThroughput()
+     */
+    public double getReadBytesThroughput() {
+        return wrappedSession.getReadBytesThroughput();
+    }
 
-	/**
-	 * @see IoSession#getReadMessagesThroughput()
-	 */
-	public double getReadMessagesThroughput() {
-		return wrappedSession.getReadMessagesThroughput();
-	}
+    /**
+     * @see IoSession#getReadMessages()
+     */
+    public long getReadMessages() {
+        return wrappedSession.getReadMessages();
+    }
 
-	/**
-	 * @see IoSession#getReaderIdleCount()
-	 */
-	public int getReaderIdleCount() {
-		return wrappedSession.getReaderIdleCount();
-	}
+    /**
+     * @see IoSession#getReadMessagesThroughput()
+     */
+    public double getReadMessagesThroughput() {
+        return wrappedSession.getReadMessagesThroughput();
+    }
 
-	/**
-	 * @see IoSession#getRemoteAddress()
-	 */
-	public SocketAddress getRemoteAddress() {
-	    // when closing a socket, the remote address might be reset to null
-	    // therefore, we attempt to keep a cached copy around
-	    
-	    SocketAddress address = wrappedSession.getRemoteAddress();
-	    if(address == null && containsAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS)) {
-	        return (SocketAddress) getAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS);
-	    } else {
-	        setAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS, address);
-	        return address;
-	    }
-	}
+    /**
+     * @see IoSession#getReaderIdleCount()
+     */
+    public int getReaderIdleCount() {
+        return wrappedSession.getReaderIdleCount();
+    }
 
-	/**
-	 * @see IoSession#getScheduledWriteBytes()
-	 */
-	public long getScheduledWriteBytes() {
-		return wrappedSession.getScheduledWriteBytes();
-	}
+    /**
+     * @see IoSession#getRemoteAddress()
+     */
+    public SocketAddress getRemoteAddress() {
+        // when closing a socket, the remote address might be reset to null
+        // therefore, we attempt to keep a cached copy around
 
-	/**
-	 * @see IoSession#getScheduledWriteMessages()
-	 */
-	public int getScheduledWriteMessages() {
-		return wrappedSession.getScheduledWriteMessages();
-	}
+        SocketAddress address = wrappedSession.getRemoteAddress();
+        if (address == null
+                && containsAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS)) {
+            return (SocketAddress) getAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS);
+        } else {
+            setAttribute(ATTRIBUTE_CACHED_REMOTE_ADDRESS, address);
+            return address;
+        }
+    }
 
-	/**
-	 * @see IoSession#getService()
-	 */
-	public IoService getService() {
-		return wrappedSession.getService();
-	}
+    /**
+     * @see IoSession#getScheduledWriteBytes()
+     */
+    public long getScheduledWriteBytes() {
+        return wrappedSession.getScheduledWriteBytes();
+    }
 
-	/**
-	 * @see IoSession#getServiceAddress()
-	 */
-	public SocketAddress getServiceAddress() {
-		return wrappedSession.getServiceAddress();
-	}
+    /**
+     * @see IoSession#getScheduledWriteMessages()
+     */
+    public int getScheduledWriteMessages() {
+        return wrappedSession.getScheduledWriteMessages();
+    }
 
-	/**
-	 * @see IoSession#getTrafficMask()
-	 */
-	public TrafficMask getTrafficMask() {
-		return wrappedSession.getTrafficMask();
-	}
+    /**
+     * @see IoSession#getService()
+     */
+    public IoService getService() {
+        return wrappedSession.getService();
+    }
 
-	/**
-	 * @see IoSession#getTransportMetadata()
-	 */
-	public TransportMetadata getTransportMetadata() {
-		return wrappedSession.getTransportMetadata();
-	}
+    /**
+     * @see IoSession#getServiceAddress()
+     */
+    public SocketAddress getServiceAddress() {
+        return wrappedSession.getServiceAddress();
+    }
 
-	/**
-	 * @see IoSession#getWriterIdleCount()
-	 */
-	public int getWriterIdleCount() {
-		return wrappedSession.getWriterIdleCount();
-	}
+    /**
+     * @see IoSession#getTrafficMask()
+     */
+    public TrafficMask getTrafficMask() {
+        return wrappedSession.getTrafficMask();
+    }
 
-	/**
-	 * @see IoSession#getWrittenBytes()
-	 */
-	public long getWrittenBytes() {
-		return wrappedSession.getWrittenBytes();
-	}
+    /**
+     * @see IoSession#getTransportMetadata()
+     */
+    public TransportMetadata getTransportMetadata() {
+        return wrappedSession.getTransportMetadata();
+    }
 
-	/**
-	 * @see IoSession#getWrittenBytesThroughput()
-	 */
-	public double getWrittenBytesThroughput() {
-		return wrappedSession.getWrittenBytesThroughput();
-	}
+    /**
+     * @see IoSession#getWriterIdleCount()
+     */
+    public int getWriterIdleCount() {
+        return wrappedSession.getWriterIdleCount();
+    }
 
-	/**
-	 * @see IoSession#getWrittenMessages()
-	 */
-	public long getWrittenMessages() {
-		return wrappedSession.getWrittenMessages();
-	}
+    /**
+     * @see IoSession#getWrittenBytes()
+     */
+    public long getWrittenBytes() {
+        return wrappedSession.getWrittenBytes();
+    }
 
-	/**
-	 * @see IoSession#getWrittenMessagesThroughput()
-	 */
-	public double getWrittenMessagesThroughput() {
-		return wrappedSession.getWrittenMessagesThroughput();
-	}
+    /**
+     * @see IoSession#getWrittenBytesThroughput()
+     */
+    public double getWrittenBytesThroughput() {
+        return wrappedSession.getWrittenBytesThroughput();
+    }
 
-	/**
-	 * @see IoSession#isClosing()
-	 */
-	public boolean isClosing() {
-		return wrappedSession.isClosing();
-	}
+    /**
+     * @see IoSession#getWrittenMessages()
+     */
+    public long getWrittenMessages() {
+        return wrappedSession.getWrittenMessages();
+    }
 
-	/**
-	 * @see IoSession#isConnected()
-	 */
-	public boolean isConnected() {
-		return wrappedSession.isConnected();
-	}
+    /**
+     * @see IoSession#getWrittenMessagesThroughput()
+     */
+    public double getWrittenMessagesThroughput() {
+        return wrappedSession.getWrittenMessagesThroughput();
+    }
 
-	/**
-	 * @see IoSession#isIdle(IdleStatus)
-	 */
-	public boolean isIdle(IdleStatus status) {
-		return wrappedSession.isIdle(status);
-	}
+    /**
+     * @see IoSession#isClosing()
+     */
+    public boolean isClosing() {
+        return wrappedSession.isClosing();
+    }
 
-	/**
-	 * @see IoSession#read()
-	 */
-	public ReadFuture read() {
-		return wrappedSession.read();
-	}
+    /**
+     * @see IoSession#isConnected()
+     */
+    public boolean isConnected() {
+        return wrappedSession.isConnected();
+    }
 
-	/**
-	 * @see IoSession#removeAttribute(Object)
-	 */
-	public Object removeAttribute(Object key) {
-		return wrappedSession.removeAttribute(key);
-	}
+    /**
+     * @see IoSession#isIdle(IdleStatus)
+     */
+    public boolean isIdle(IdleStatus status) {
+        return wrappedSession.isIdle(status);
+    }
 
-	/**
-	 * @see IoSession#removeAttribute(Object, Object)
-	 */
-	public boolean removeAttribute(Object key, Object value) {
-		return wrappedSession.removeAttribute(key, value);
-	}
+    /**
+     * @see IoSession#read()
+     */
+    public ReadFuture read() {
+        return wrappedSession.read();
+    }
 
-	/**
-	 * @see IoSession#replaceAttribute(Object, Object, Object)
-	 */
-	public boolean replaceAttribute(Object key, Object oldValue, Object newValue) {
-		return wrappedSession.replaceAttribute(key, oldValue, newValue);
-	}
+    /**
+     * @see IoSession#removeAttribute(Object)
+     */
+    public Object removeAttribute(Object key) {
+        return wrappedSession.removeAttribute(key);
+    }
 
-	/**
-	 * @see IoSession#resumeRead()
-	 */
-	public void resumeRead() {
-		wrappedSession.resumeRead();
-	}
+    /**
+     * @see IoSession#removeAttribute(Object, Object)
+     */
+    public boolean removeAttribute(Object key, Object value) {
+        return wrappedSession.removeAttribute(key, value);
+    }
 
-	/**
-	 * @see IoSession#resumeWrite()
-	 */
-	public void resumeWrite() {
-		wrappedSession.resumeWrite();
-	}
+    /**
+     * @see IoSession#replaceAttribute(Object, Object, Object)
+     */
+    public boolean replaceAttribute(Object key, Object oldValue, Object newValue) {
+        return wrappedSession.replaceAttribute(key, oldValue, newValue);
+    }
 
-	/**
-	 * @see IoSession#setAttachment(Object)
-	 */
-	@SuppressWarnings("deprecation")
-	public Object setAttachment(Object attachment) {
-		return wrappedSession.setAttachment(attachment);
-	}
+    /**
+     * @see IoSession#resumeRead()
+     */
+    public void resumeRead() {
+        wrappedSession.resumeRead();
+    }
 
-	/**
-	 * @see IoSession#setAttribute(Object)
-	 */
-	public Object setAttribute(Object key) {
-		return wrappedSession.setAttribute(key);
-	}
+    /**
+     * @see IoSession#resumeWrite()
+     */
+    public void resumeWrite() {
+        wrappedSession.resumeWrite();
+    }
 
-	/**
-	 * @see IoSession#setAttribute(Object, Object)
-	 */
-	public Object setAttribute(Object key, Object value) {
-		return wrappedSession.setAttribute(key, value);
-	}
+    /**
+     * @see IoSession#setAttachment(Object)
+     */
+    @SuppressWarnings("deprecation")
+    public Object setAttachment(Object attachment) {
+        return wrappedSession.setAttachment(attachment);
+    }
 
-	/**
-	 * @see IoSession#setAttributeIfAbsent(Object)
-	 */
-	public Object setAttributeIfAbsent(Object key) {
-		return wrappedSession.setAttributeIfAbsent(key);
-	}
+    /**
+     * @see IoSession#setAttribute(Object)
+     */
+    public Object setAttribute(Object key) {
+        return wrappedSession.setAttribute(key);
+    }
 
-	/**
-	 * @see IoSession#setAttributeIfAbsent(Object, Object)
-	 */
-	public Object setAttributeIfAbsent(Object key, Object value) {
-		return wrappedSession.setAttributeIfAbsent(key, value);
-	}
+    /**
+     * @see IoSession#setAttribute(Object, Object)
+     */
+    public Object setAttribute(Object key, Object value) {
+        return wrappedSession.setAttribute(key, value);
+    }
 
-	/**
-	 * @see IoSession#setTrafficMask(TrafficMask)
-	 */
-	public void setTrafficMask(TrafficMask trafficMask) {
-		wrappedSession.setTrafficMask(trafficMask);
-	}
+    /**
+     * @see IoSession#setAttributeIfAbsent(Object)
+     */
+    public Object setAttributeIfAbsent(Object key) {
+        return wrappedSession.setAttributeIfAbsent(key);
+    }
 
-	/**
-	 * @see IoSession#suspendRead()
-	 */
-	public void suspendRead() {
-		wrappedSession.suspendRead();
-	}
+    /**
+     * @see IoSession#setAttributeIfAbsent(Object, Object)
+     */
+    public Object setAttributeIfAbsent(Object key, Object value) {
+        return wrappedSession.setAttributeIfAbsent(key, value);
+    }
 
-	/**
-	 * @see IoSession#suspendWrite()
-	 */
-	public void suspendWrite() {
-		wrappedSession.suspendWrite();
-	}
+    /**
+     * @see IoSession#setTrafficMask(TrafficMask)
+     */
+    public void setTrafficMask(TrafficMask trafficMask) {
+        wrappedSession.setTrafficMask(trafficMask);
+    }
 
-	/**
-	 * @see IoSession#write(Object)
-	 */
-	public WriteFuture write(Object message) {
-		return wrappedSession.write(message);
-	}
+    /**
+     * @see IoSession#suspendRead()
+     */
+    public void suspendRead() {
+        wrappedSession.suspendRead();
+    }
 
-	/**
-	 * @see IoSession#write(Object, SocketAddress)
-	 */
-	public WriteFuture write(Object message, SocketAddress destination) {
-		return wrappedSession.write(message, destination);
-	}
-	
-	/* End wrapped IoSession methods */
+    /**
+     * @see IoSession#suspendWrite()
+     */
+    public void suspendWrite() {
+        wrappedSession.suspendWrite();
+    }
 
-	public void resetState() {
-		removeAttribute(ATTRIBUTE_RENAME_FROM);
-		removeAttribute(ATTRIBUTE_FILE_OFFSET);
-	}
+    /**
+     * @see IoSession#write(Object)
+     */
+    public WriteFuture write(Object message) {
+        return wrappedSession.write(message);
+    }
 
-	public synchronized ServerDataConnectionFactory getDataConnection() {
-		if(containsAttribute(ATTRIBUTE_DATA_CONNECTION)) {
-			return (ServerDataConnectionFactory) getAttribute(ATTRIBUTE_DATA_CONNECTION);
-		} else {
-			IODataConnectionFactory dataCon = new IODataConnectionFactory(context, this);
-			dataCon.setServerControlAddress(((InetSocketAddress)getLocalAddress()).getAddress());
-			setAttribute(ATTRIBUTE_DATA_CONNECTION, dataCon);
-			
-			return dataCon;
-		}
-	}
+    /**
+     * @see IoSession#write(Object, SocketAddress)
+     */
+    public WriteFuture write(Object message, SocketAddress destination) {
+        return wrappedSession.write(message, destination);
+    }
 
-	public FileSystemView getFileSystemView() {
-		return (FileSystemView) getAttribute(ATTRIBUTE_FILE_SYSTEM);
-	}
+    /* End wrapped IoSession methods */
 
-	public User getUser() {
-		return (User) getAttribute(ATTRIBUTE_USER);
-	}
+    public void resetState() {
+        removeAttribute(ATTRIBUTE_RENAME_FROM);
+        removeAttribute(ATTRIBUTE_FILE_OFFSET);
+    }
+
+    public synchronized ServerDataConnectionFactory getDataConnection() {
+        if (containsAttribute(ATTRIBUTE_DATA_CONNECTION)) {
+            return (ServerDataConnectionFactory) getAttribute(ATTRIBUTE_DATA_CONNECTION);
+        } else {
+            IODataConnectionFactory dataCon = new IODataConnectionFactory(
+                    context, this);
+            dataCon
+                    .setServerControlAddress(((InetSocketAddress) getLocalAddress())
+                            .getAddress());
+            setAttribute(ATTRIBUTE_DATA_CONNECTION, dataCon);
+
+            return dataCon;
+        }
+    }
+
+    public FileSystemView getFileSystemView() {
+        return (FileSystemView) getAttribute(ATTRIBUTE_FILE_SYSTEM);
+    }
+
+    public User getUser() {
+        return (User) getAttribute(ATTRIBUTE_USER);
+    }
 
     /**
      * Is logged-in
@@ -544,136 +585,137 @@ public class FtpIoSession implements IoSession {
         return containsAttribute(ATTRIBUTE_USER);
     }
 
-	public Listener getListener() {
-		return (Listener) getAttribute(ATTRIBUTE_LISTENER);
-	}
+    public Listener getListener() {
+        return (Listener) getAttribute(ATTRIBUTE_LISTENER);
+    }
 
-	public void setListener(Listener listener) {
-		setAttribute(ATTRIBUTE_LISTENER, listener);
-	}
+    public void setListener(Listener listener) {
+        setAttribute(ATTRIBUTE_LISTENER, listener);
+    }
 
-	
-	public FtpSession getFtpletSession() {
-		return new FtpSessionImpl(this);
-	}
+    public FtpSession getFtpletSession() {
+        return new FtpSessionImpl(this);
+    }
 
-	public String getLanguage() {
-		return (String) getAttribute(ATTRIBUTE_LANGUAGE);
-	}
+    public String getLanguage() {
+        return (String) getAttribute(ATTRIBUTE_LANGUAGE);
+    }
 
-	public void setLanguage(String language) {
-		setAttribute(ATTRIBUTE_LANGUAGE, language);
-		
-	}
+    public void setLanguage(String language) {
+        setAttribute(ATTRIBUTE_LANGUAGE, language);
 
-	public String getUserArgument() {
-		return (String) getAttribute(ATTRIBUTE_USER_ARGUMENT);
-	}
+    }
 
-	public void setUser(User user) {
-		setAttribute(ATTRIBUTE_USER, user);
-		
-	}
+    public String getUserArgument() {
+        return (String) getAttribute(ATTRIBUTE_USER_ARGUMENT);
+    }
 
-	public void setUserArgument(String userArgument) {
-		setAttribute(ATTRIBUTE_USER_ARGUMENT, userArgument);
-		
-	}
+    public void setUser(User user) {
+        setAttribute(ATTRIBUTE_USER, user);
 
-	public int getMaxIdleTime() {
-		return (Integer) getAttribute(ATTRIBUTE_MAX_IDLE_TIME, 0);
-	}
+    }
 
-	public void setMaxIdleTime(int maxIdleTime) {
-		setAttribute(ATTRIBUTE_MAX_IDLE_TIME, maxIdleTime);
-		
-	}
+    public void setUserArgument(String userArgument) {
+        setAttribute(ATTRIBUTE_USER_ARGUMENT, userArgument);
 
-	public synchronized void increaseFailedLogins() {
-		int failedLogins = (Integer) getAttribute(ATTRIBUTE_FAILED_LOGINS, 0);
-		failedLogins++;
-		setAttribute(ATTRIBUTE_FAILED_LOGINS, failedLogins);
-	}
+    }
 
-	public int getFailedLogins() {
-		return (Integer) getAttribute(ATTRIBUTE_FAILED_LOGINS, 0);
-	}
+    public int getMaxIdleTime() {
+        return (Integer) getAttribute(ATTRIBUTE_MAX_IDLE_TIME, 0);
+    }
 
-	public void setLogin(FileSystemView fsview) {
-		setAttribute(ATTRIBUTE_LOGIN_TIME, new Date());
-		setAttribute(ATTRIBUTE_FILE_SYSTEM, fsview);
-	}
+    public void setMaxIdleTime(int maxIdleTime) {
+        setAttribute(ATTRIBUTE_MAX_IDLE_TIME, maxIdleTime);
 
-	public void reinitialize() {
-		removeAttribute(ATTRIBUTE_USER);
-		removeAttribute(ATTRIBUTE_USER_ARGUMENT);
-		removeAttribute(ATTRIBUTE_LOGIN_TIME);
-		removeAttribute(ATTRIBUTE_FILE_SYSTEM);
-		removeAttribute(ATTRIBUTE_RENAME_FROM);
+    }
+
+    public synchronized void increaseFailedLogins() {
+        int failedLogins = (Integer) getAttribute(ATTRIBUTE_FAILED_LOGINS, 0);
+        failedLogins++;
+        setAttribute(ATTRIBUTE_FAILED_LOGINS, failedLogins);
+    }
+
+    public int getFailedLogins() {
+        return (Integer) getAttribute(ATTRIBUTE_FAILED_LOGINS, 0);
+    }
+
+    public void setLogin(FileSystemView fsview) {
+        setAttribute(ATTRIBUTE_LOGIN_TIME, new Date());
+        setAttribute(ATTRIBUTE_FILE_SYSTEM, fsview);
+    }
+
+    public void reinitialize() {
+        removeAttribute(ATTRIBUTE_USER);
+        removeAttribute(ATTRIBUTE_USER_ARGUMENT);
+        removeAttribute(ATTRIBUTE_LOGIN_TIME);
+        removeAttribute(ATTRIBUTE_FILE_SYSTEM);
+        removeAttribute(ATTRIBUTE_RENAME_FROM);
         removeAttribute(ATTRIBUTE_FILE_OFFSET);
-	}
+    }
 
-	public void setFileOffset(long fileOffset) {
-		setAttribute(ATTRIBUTE_FILE_OFFSET, fileOffset);
-		
-	}
+    public void setFileOffset(long fileOffset) {
+        setAttribute(ATTRIBUTE_FILE_OFFSET, fileOffset);
 
-	public void setRenameFrom(FileObject renFr) {
-		setAttribute(ATTRIBUTE_RENAME_FROM, renFr);
-		
-	}
+    }
 
-	public FileObject getRenameFrom() {
-		return (FileObject) getAttribute(ATTRIBUTE_RENAME_FROM);
-	}
+    public void setRenameFrom(FileObject renFr) {
+        setAttribute(ATTRIBUTE_RENAME_FROM, renFr);
 
-	public long getFileOffset() {
-		return (Long) getAttribute(ATTRIBUTE_FILE_OFFSET, 0L);
-	}
+    }
 
-	public void setStructure(Structure structure) {
-		setAttribute(ATTRIBUTE_STRUCTURE, structure);
-	}
+    public FileObject getRenameFrom() {
+        return (FileObject) getAttribute(ATTRIBUTE_RENAME_FROM);
+    }
 
-	public void setDataType(DataType dataType) {
-		setAttribute(ATTRIBUTE_DATA_TYPE, dataType);
-		
-	}
+    public long getFileOffset() {
+        return (Long) getAttribute(ATTRIBUTE_FILE_OFFSET, 0L);
+    }
 
-	public FtpIoSession(IoSession wrappedSession, FtpServerContext context) {
-		this.wrappedSession = wrappedSession;
-		this.context = context;
-	}
+    public void setStructure(Structure structure) {
+        setAttribute(ATTRIBUTE_STRUCTURE, structure);
+    }
 
-	public Structure getStructure() {
-		return (Structure) getAttribute(ATTRIBUTE_STRUCTURE, Structure.FILE);
-	}
-	public DataType getDataType() {
-		return (DataType) getAttribute(ATTRIBUTE_DATA_TYPE, DataType.ASCII);
-	}
+    public void setDataType(DataType dataType) {
+        setAttribute(ATTRIBUTE_DATA_TYPE, dataType);
 
-	public Date getLoginTime() {
-		return (Date) getAttribute(ATTRIBUTE_LOGIN_TIME);
-	}
+    }
 
-	public Date getLastAccessTime() {
-		return (Date) getAttribute(ATTRIBUTE_LAST_ACCESS_TIME);
-	}
+    public FtpIoSession(IoSession wrappedSession, FtpServerContext context) {
+        this.wrappedSession = wrappedSession;
+        this.context = context;
+    }
+
+    public Structure getStructure() {
+        return (Structure) getAttribute(ATTRIBUTE_STRUCTURE, Structure.FILE);
+    }
+
+    public DataType getDataType() {
+        return (DataType) getAttribute(ATTRIBUTE_DATA_TYPE, DataType.ASCII);
+    }
+
+    public Date getLoginTime() {
+        return (Date) getAttribute(ATTRIBUTE_LOGIN_TIME);
+    }
+
+    public Date getLastAccessTime() {
+        return (Date) getAttribute(ATTRIBUTE_LAST_ACCESS_TIME);
+    }
 
     public Certificate[] getClientCertificates() {
-        if(getFilterChain().contains(SslFilter.class)) {
-            SslFilter sslFilter = (SslFilter) getFilterChain().get(SslFilter.class);
-            
+        if (getFilterChain().contains(SslFilter.class)) {
+            SslFilter sslFilter = (SslFilter) getFilterChain().get(
+                    SslFilter.class);
+
             SSLSession sslSession = sslFilter.getSslSession(this);
-            
-            if(sslSession != null) {
+
+            if (sslSession != null) {
                 try {
                     return sslSession.getPeerCertificates();
-                } catch(SSLPeerUnverifiedException e) {
+                } catch (SSLPeerUnverifiedException e) {
                     // ignore, certificate will not be available to the session
                 }
             }
-            
+
         }
 
         // no certificates available
@@ -681,51 +723,52 @@ public class FtpIoSession implements IoSession {
 
     }
 
-	public void updateLastAccessTime() {
-		setAttribute(ATTRIBUTE_LAST_ACCESS_TIME, new Date());
-		
-	}
+    public void updateLastAccessTime() {
+        setAttribute(ATTRIBUTE_LAST_ACCESS_TIME, new Date());
 
-	/**
-	 * @see IoSession#getCurrentWriteMessage()
-	 */
-	public Object getCurrentWriteMessage() {
-		return wrappedSession.getCurrentWriteMessage();
-	}
+    }
 
-	/**
-	 * @see IoSession#getCurrentWriteRequest()
-	 */
-	public WriteRequest getCurrentWriteRequest() {
-		return wrappedSession.getCurrentWriteRequest();
-	}
+    /**
+     * @see IoSession#getCurrentWriteMessage()
+     */
+    public Object getCurrentWriteMessage() {
+        return wrappedSession.getCurrentWriteMessage();
+    }
 
-	/**
-	 * @see IoSession#isBothIdle()
-	 */
-	public boolean isBothIdle() {
-		return wrappedSession.isBothIdle();
-	}
+    /**
+     * @see IoSession#getCurrentWriteRequest()
+     */
+    public WriteRequest getCurrentWriteRequest() {
+        return wrappedSession.getCurrentWriteRequest();
+    }
 
-	/**
-	 * @see IoSession#isReaderIdle()
-	 */
-	public boolean isReaderIdle() {
-		return wrappedSession.isReaderIdle();
-	}
+    /**
+     * @see IoSession#isBothIdle()
+     */
+    public boolean isBothIdle() {
+        return wrappedSession.isBothIdle();
+    }
 
-	/**
-	 * @see IoSession#isWriterIdle()
-	 */
-	public boolean isWriterIdle() {
-		return wrappedSession.isWriterIdle();
-	}
+    /**
+     * @see IoSession#isReaderIdle()
+     */
+    public boolean isReaderIdle() {
+        return wrappedSession.isReaderIdle();
+    }
 
-	/**
-	 * Indicates whether the control socket for this session is secure,
-	 * that is, running over SSL/TLS
-	 * @return true if the control socket is secured
-	 */
+    /**
+     * @see IoSession#isWriterIdle()
+     */
+    public boolean isWriterIdle() {
+        return wrappedSession.isWriterIdle();
+    }
+
+    /**
+     * Indicates whether the control socket for this session is secure, that is,
+     * running over SSL/TLS
+     * 
+     * @return true if the control socket is secured
+     */
     public boolean isSecure() {
         return getFilterChain().contains(SslFilter.class);
     }

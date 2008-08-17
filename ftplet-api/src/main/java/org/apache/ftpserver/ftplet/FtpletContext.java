@@ -15,34 +15,35 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
-
 /**
- * A ftplet configuration object used by a ftplet container used to pass 
- * information to a ftplet during initialization. The configuration information 
+ * A ftplet configuration object used by a ftplet container used to pass
+ * information to a ftplet during initialization. The configuration information
  * contains initialization parameters.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface FtpletContext {
-    
+public interface FtpletContext {
+
     /**
      * Get the user manager.
      */
     UserManager getUserManager();
-     
+
     /**
      * Get file system manager
      */
     FileSystemManager getFileSystemManager();
-     
+
     /**
      * Get ftp statistics.
      */
     FtpStatistics getFtpStatistics();
-    
+
     /**
      * Get Ftplet.
      */

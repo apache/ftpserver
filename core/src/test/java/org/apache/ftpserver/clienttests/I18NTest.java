@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -26,55 +26,62 @@ import java.io.File;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.ftpserver.test.TestUtil;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class I18NTest extends ClientTestTemplate {
 
     private static final String TESTDATA = "TESTDATA";
 
     private static final String ENCODING = "UTF-8";
-    
+
     private static byte[] testData = null;
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
         super.setUp();
 
         testData = TESTDATA.getBytes(ENCODING);
-                
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
-    
     protected FTPClient createFTPClient() throws Exception {
         FTPClient client = new FTPClient();
         client.setControlEncoding("UTF-8");
         return client;
     }
-    
+
     public void testStoreWithUTF8FileName() throws Exception {
-        
-        String oddFileName = "åäöç";
+
+        String oddFileName = "ï¿½ï¿½ï¿½ï¿½";
         File testFile = new File(ROOT_DIR, oddFileName);
 
-        assertTrue(client.storeFile(oddFileName, new ByteArrayInputStream(testData)));
-        
+        assertTrue(client.storeFile(oddFileName, new ByteArrayInputStream(
+                testData)));
+
         assertTrue(testFile.exists());
 
         TestUtil.assertFileEqual(testData, testFile);
     }
 
     public void testRetrieveWithUTF8FileName() throws Exception {
-        
-        String oddFileName = "åäöç";
+
+        String oddFileName = "ï¿½ï¿½ï¿½ï¿½";
         File testFile = new File(ROOT_DIR, oddFileName);
         TestUtil.writeDataToFile(testFile, testData);
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        
+
         assertTrue(client.retrieveFile(testFile.getName(), baos));
-        
+
         TestUtil.assertArraysEqual(testData, baos.toByteArray());
     }
 }

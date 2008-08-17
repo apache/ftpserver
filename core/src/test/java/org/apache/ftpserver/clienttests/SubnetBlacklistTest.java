@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -28,17 +28,24 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class SubnetBlacklistTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
-        
-        NioListener listener = (NioListener) server.getServerContext().getListener("default");
-        
+
+        NioListener listener = (NioListener) server.getServerContext()
+                .getListener("default");
+
         List<Subnet> blockedSubnets = new ArrayList<Subnet>();
         blockedSubnets.add(new Subnet(InetAddress.getByName("localhost"), 32));
-        
+
         listener.setBlockedSubnets(blockedSubnets);
-        
+
         return server;
     }
 
@@ -50,7 +57,7 @@ public class SubnetBlacklistTest extends ClientTestTemplate {
         try {
             client.connect("localhost", port);
             fail("Must throw");
-        } catch(FTPConnectionClosedException e) {
+        } catch (FTPConnectionClosedException e) {
             // OK
         }
     }

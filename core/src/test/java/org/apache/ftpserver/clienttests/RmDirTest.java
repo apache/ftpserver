@@ -15,18 +15,26 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class RmDirTest extends ClientTestTemplate {
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+
     private static final File TEST_DIR_IN_DIR1 = new File(TEST_DIR1, "dir3");
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
     protected void setUp() throws Exception {
@@ -38,42 +46,43 @@ public class RmDirTest extends ClientTestTemplate {
     public void testRmdir() throws Exception {
         assertTrue(TEST_DIR1.mkdirs());
         assertTrue(client.removeDirectory(TEST_DIR1.getName()));
-        
+
         assertFalse(TEST_DIR1.exists());
     }
 
     public void testRmdirNestedDir() throws Exception {
         assertTrue(TEST_DIR_IN_DIR1.mkdirs());
-        assertTrue(client.removeDirectory(TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName()));
-        
+        assertTrue(client.removeDirectory(TEST_DIR1.getName() + "/"
+                + TEST_DIR_IN_DIR1.getName()));
+
         assertTrue(TEST_DIR1.exists());
         assertFalse(TEST_DIR_IN_DIR1.exists());
     }
 
     public void testRmdirNoDirectoryName() throws Exception {
-        assertEquals(501 ,client.sendCommand("RMD"));
+        assertEquals(501, client.sendCommand("RMD"));
     }
 
     public void testRmdirInValidDirectoryName() throws Exception {
-        assertEquals(550 ,client.sendCommand("RMD foo:bar;foo"));
+        assertEquals(550, client.sendCommand("RMD foo:bar;foo"));
     }
 
     public void testRmdirOnFile() throws Exception {
         assertTrue(TEST_DIR1.createNewFile());
-        
+
         assertFalse(client.removeDirectory(TEST_DIR1.getName()));
-        
+
         assertTrue(TEST_DIR1.exists());
     }
-    
+
     public void testRmdirWithoutWriteAccess() throws Exception {
         client.rein();
         client.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD);
-        
+
         assertTrue(TEST_DIR1.mkdirs());
-        
+
         assertFalse(client.removeDirectory(TEST_DIR1.getName()));
-        
+
         assertTrue(TEST_DIR1.exists());
     }
 }

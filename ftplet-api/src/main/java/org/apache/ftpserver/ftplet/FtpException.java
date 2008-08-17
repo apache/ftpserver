@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
@@ -24,12 +24,14 @@ import java.io.PrintWriter;
 
 /**
  * Ftplet exception class.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class FtpException extends Exception {
+public class FtpException extends Exception {
 
     private static final long serialVersionUID = -1328383839915898987L;
-    
+
     private Throwable throwable = null;
 
     /**
@@ -42,17 +44,19 @@ class FtpException extends Exception {
     /**
      * Constructs a <code>FtpException</code> object with a message.
      * 
-     * @param msg a description of the exception 
+     * @param msg
+     *            a description of the exception
      */
     public FtpException(String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a <code>FtpException</code> object with a 
+     * Constructs a <code>FtpException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public FtpException(Throwable th) {
         super(th.getMessage());
@@ -60,55 +64,53 @@ class FtpException extends Exception {
     }
 
     /**
-     * Constructs a <code>BaseException</code> object with a 
+     * Constructs a <code>BaseException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public FtpException(String msg, Throwable th) {
         super(msg);
         throwable = th;
     }
-    
+
     /**
      * Get the root cause.
      */
     public Throwable getRootCause() {
         return throwable;
     }
-    
+
     /**
      * Print stack trace.
      */
     public void printStackTrace(PrintWriter pw) {
-        if(throwable == null) {
+        if (throwable == null) {
             super.printStackTrace(pw);
-        }
-        else {
+        } else {
             throwable.printStackTrace(pw);
         }
     }
-    
+
     /**
      * Print stack trace.
      */
     public void printStackTrace(PrintStream ps) {
-        if(throwable == null) {
+        if (throwable == null) {
             super.printStackTrace(ps);
-        }
-        else {
+        } else {
             throwable.printStackTrace(ps);
         }
     }
-    
+
     /**
      * Print stack trace.
      */
     public void printStackTrace() {
-        if(throwable == null) {
+        if (throwable == null) {
             super.printStackTrace();
-        }
-        else {
+        } else {
             throwable.printStackTrace();
         }
     }

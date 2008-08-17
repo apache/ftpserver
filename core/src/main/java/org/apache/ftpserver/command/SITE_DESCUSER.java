@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -37,78 +37,91 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This SITE command returns the specified user information.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SITE_DESCUSER extends AbstractCommand {
+public class SITE_DESCUSER extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE_DESCUSER.class);
-    
+
     /**
      * Execute command.
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-    
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // only administrator can execute this
-        UserManager userManager = context.getUserManager(); 
+        UserManager userManager = context.getUserManager();
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
-        if(!isAdmin) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+        if (!isAdmin) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
-        
+
         // get the user name
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
-        if(spIndex == -1) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "SITE.DESCUSER", null));
+        if (spIndex == -1) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS,
+                    "SITE.DESCUSER", null));
             return;
         }
         String userName = argument.substring(spIndex + 1);
-        
+
         // check the user existance
         UserManager usrManager = context.getUserManager();
         User user = null;
         try {
-            if(usrManager.doesExist(userName)) {
+            if (usrManager.doesExist(userName)) {
                 user = usrManager.getUserByName(userName);
             }
-        }
-        catch(FtpException ex) {
+        } catch (FtpException ex) {
             LOG.debug("Exception trying to get user from user manager", ex);
             user = null;
         }
-        if(user == null) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "SITE.DESCUSER", userName));
+        if (user == null) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                    "SITE.DESCUSER", userName));
             return;
         }
-        
+
         // send the user information
         StringBuffer sb = new StringBuffer(128);
         sb.append("\n");
         sb.append("userid          : ").append(user.getName()).append("\n");
         sb.append("userpassword    : ********\n");
-        sb.append("homedirectory   : ").append(user.getHomeDirectory()).append("\n");
-        sb.append("writepermission : ").append(user.authorize(new WriteRequest())).append("\n");
+        sb.append("homedirectory   : ").append(user.getHomeDirectory()).append(
+                "\n");
+        sb.append("writepermission : ").append(
+                user.authorize(new WriteRequest())).append("\n");
         sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
-        sb.append("idletime        : ").append(user.getMaxIdleTime()).append("\n");
-        
+        sb.append("idletime        : ").append(user.getMaxIdleTime()).append(
+                "\n");
+
         TransferRateRequest transferRateRequest = new TransferRateRequest();
-        transferRateRequest = (TransferRateRequest) session.getUser().authorize(transferRateRequest);
-        
-        if(transferRateRequest != null) {
-            sb.append("uploadrate      : ").append(transferRateRequest.getMaxUploadRate()).append("\n");
-            sb.append("downloadrate    : ").append(transferRateRequest.getMaxDownloadRate()).append("\n");
+        transferRateRequest = (TransferRateRequest) session.getUser()
+                .authorize(transferRateRequest);
+
+        if (transferRateRequest != null) {
+            sb.append("uploadrate      : ").append(
+                    transferRateRequest.getMaxUploadRate()).append("\n");
+            sb.append("downloadrate    : ").append(
+                    transferRateRequest.getMaxDownloadRate()).append("\n");
         } else {
             sb.append("uploadrate      : 0\n");
             sb.append("downloadrate    : 0\n");
         }
         sb.append('\n');
-        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb
+                .toString()));
     }
 
 }

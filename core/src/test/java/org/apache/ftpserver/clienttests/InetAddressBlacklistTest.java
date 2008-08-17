@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -27,17 +27,24 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.nio.NioListener;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class InetAddressBlacklistTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
-        
-        NioListener listener = (NioListener) server.getServerContext().getListener("default");
-        
+
+        NioListener listener = (NioListener) server.getServerContext()
+                .getListener("default");
+
         List<InetAddress> blockedAddresses = new ArrayList<InetAddress>();
         blockedAddresses.add(InetAddress.getByName("localhost"));
-        
+
         listener.setBlockedAddresses(blockedAddresses);
-        
+
         return server;
     }
 
@@ -49,7 +56,7 @@ public class InetAddressBlacklistTest extends ClientTestTemplate {
         try {
             client.connect("localhost", port);
             fail("Must throw");
-        } catch(FTPConnectionClosedException e) {
+        } catch (FTPConnectionClosedException e) {
             // OK
         }
     }

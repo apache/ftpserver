@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -37,58 +37,67 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.StringUtils;
 import org.apache.mina.core.session.IoSession;
 
-
 /**
  * Sends the list of all the connected users.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class SITE_WHO extends AbstractCommand {
-    
+public class SITE_WHO extends AbstractCommand {
+
     /**
      * Execute command.
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException, FtpException {
-        
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // only administrator can execute this
-        UserManager userManager = context.getUserManager(); 
+        UserManager userManager = context.getUserManager();
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
-        if(!isAdmin) {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
+        if (!isAdmin) {
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
-        
+
         // print all the connected user information
         StringBuffer sb = new StringBuffer();
 
-        Map<Long,IoSession> sessions = session.getService().getManagedSessions();
-        
+        Map<Long, IoSession> sessions = session.getService()
+                .getManagedSessions();
+
         sb.append('\n');
         Iterator<IoSession> sessionIterator = sessions.values().iterator();
-        
-        while(sessionIterator.hasNext()) {
-            FtpIoSession managedSession = new FtpIoSession(sessionIterator.next(), context);
 
-            if(!managedSession.isLoggedIn()) {
+        while (sessionIterator.hasNext()) {
+            FtpIoSession managedSession = new FtpIoSession(sessionIterator
+                    .next(), context);
+
+            if (!managedSession.isLoggedIn()) {
                 continue;
             }
-            
+
             User tmpUsr = managedSession.getUser();
-            sb.append( StringUtils.pad(tmpUsr.getName(), ' ', true, 16) );
-            
-            if(managedSession.getRemoteAddress() instanceof InetSocketAddress) {
-            	sb.append( StringUtils.pad(((InetSocketAddress)managedSession.getRemoteAddress()).getAddress().getHostAddress(), ' ', true, 16) );
+            sb.append(StringUtils.pad(tmpUsr.getName(), ' ', true, 16));
+
+            if (managedSession.getRemoteAddress() instanceof InetSocketAddress) {
+                sb.append(StringUtils.pad(((InetSocketAddress) managedSession
+                        .getRemoteAddress()).getAddress().getHostAddress(),
+                        ' ', true, 16));
             }
-            sb.append( StringUtils.pad(DateUtils.getISO8601Date(managedSession.getLoginTime().getTime()), ' ', true, 20) );
-            sb.append( StringUtils.pad(DateUtils.getISO8601Date(managedSession.getLastAccessTime().getTime()), ' ', true, 20) );
+            sb.append(StringUtils.pad(DateUtils.getISO8601Date(managedSession
+                    .getLoginTime().getTime()), ' ', true, 20));
+            sb.append(StringUtils.pad(DateUtils.getISO8601Date(managedSession
+                    .getLastAccessTime().getTime()), ' ', true, 20));
             sb.append('\n');
         }
         sb.append('\n');
-        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb.toString()));
+        session.write(new DefaultFtpReply(FtpReply.REPLY_200_COMMAND_OKAY, sb
+                .toString()));
     }
 
 }

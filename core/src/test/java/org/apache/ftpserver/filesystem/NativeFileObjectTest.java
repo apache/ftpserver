@@ -28,17 +28,28 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class NativeFileObjectTest extends FileObjectTestTemplate {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
+
     private static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
+
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+
     private static final File TEST_FILE1 = new File(ROOT_DIR, "file1");
+
     private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
+
     private static final File TEST_FILE3 = new File(ROOT_DIR, "file3");
 
     private static final Map<String, File> FILE_MAPPINGS = new HashMap<String, File>();
-    
+
     static {
         FILE_MAPPINGS.put("/", ROOT_DIR);
         FILE_MAPPINGS.put(FILE2_PATH, TEST_FILE2_IN_DIR1);
@@ -48,7 +59,7 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
         FILE_MAPPINGS.put(DIR1_WITH_SLASH_PATH, TEST_DIR1);
         FILE_MAPPINGS.put(" \t", TEST_FILE2_IN_DIR1);
     }
-    
+
     private static final String ROOT_DIR_PATH = ROOT_DIR.getAbsolutePath()
             .replace(File.separatorChar, '/');
 
@@ -66,7 +77,6 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
         TEST_FILE2_IN_DIR1.createNewFile();
         TEST_FILE3.createNewFile();
     }
-    
 
     protected FileObject createFileObject(String fileName, User user) {
         return new NativeFileObject(fileName, FILE_MAPPINGS.get(fileName), user);
@@ -135,17 +145,17 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     }
 
     public void testGetPhysicalNameCaseInsensitive() {
-        assertEquals(FULL_PATH, NativeFileObject.getPhysicalName(
-                ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1.getName().toUpperCase(), true));
-        
-        
+        assertEquals(FULL_PATH, NativeFileObject.getPhysicalName(ROOT_DIR
+                .getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1
+                .getName().toUpperCase(), true));
+
     }
 
     public void testConstructorWithNullFile() {
-        try{
+        try {
             new NativeFileObject("foo", null, USER);
             fail("Must throw IllegalArgumentException");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // OK
         }
     }
@@ -169,6 +179,5 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
             IoUtils.delete(TEST_TMP_DIR);
         }
     }
-
 
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -29,31 +29,32 @@ import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>ABOR &lt;CRLF&gt;</code><br>
+ * 
+ * This command tells the server to abort the previous FTP service command and
+ * any associated transfer of data. No action is to be taken if the previous
+ * command has been completed (including data transfer). The control connection
+ * is not to be closed by the server, but the data connection must be closed.
+ * Current implementation does not do anything. As here data transfers are not
+ * multi-threaded.
  *
- * This command tells the server to abort the previous FTP
- * service command and any associated transfer of data.
- * No action is to be taken if the previous command
- * has been completed (including data transfer).  The control
- * connection is not to be closed by the server, but the data
- * connection must be closed.  
- * Current implementation does not do anything. As here data 
- * transfers are not multi-threaded. 
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class ABOR extends AbstractCommand {
+public class ABOR extends AbstractCommand {
 
     /**
      * Execute command
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context,
-            final FtpRequest request) throws IOException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException {
+
         // reset state variables
         session.resetState();
-        
+
         // and abort any data connection
         session.getDataConnection().closeDataConnection();
-        session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "ABOR", null));
-    }   
+        session.write(FtpReplyUtil.translate(session, request, context,
+                FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "ABOR", null));
+    }
 }

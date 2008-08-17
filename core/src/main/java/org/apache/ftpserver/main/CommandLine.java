@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.main;
 
@@ -24,11 +24,13 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
 /**
- * This class is the starting point for the FtpServer when it is started
- * using the command line mode.
+ * This class is the starting point for the FtpServer when it is started using
+ * the command line mode.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class CommandLine {
+public class CommandLine {
 
     /**
      * The purpose of this class is to allow the final user to start the
@@ -41,9 +43,10 @@ class CommandLine {
     /**
      * This method is the FtpServer starting point when running by using the
      * command line mode.
-     *
-     * @param args The first element of this array must specify the kind of
-     *             configuration to be used to start the server.
+     * 
+     * @param args
+     *            The first element of this array must specify the kind of
+     *            configuration to be used to start the server.
      */
     public static void main(String args[]) {
 
@@ -51,7 +54,7 @@ class CommandLine {
 
             // get configuration
             FtpServer server = getConfiguration(args);
-            if(server == null) {
+            if (server == null) {
                 return;
             }
 
@@ -61,8 +64,7 @@ class CommandLine {
 
             // add shutdown hook if possible
             addShutdownHook(server);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -89,12 +91,16 @@ class CommandLine {
      * Print the usage message.
      */
     private static void usage() {
-        System.err.println("Usage: java org.apache.ftpserver.main.CommandLine [OPTION] [CONFIGFILE]");
-        System.err.println("Starts FtpServer using the default configuration of the ");
+        System.err
+                .println("Usage: java org.apache.ftpserver.main.CommandLine [OPTION] [CONFIGFILE]");
+        System.err
+                .println("Starts FtpServer using the default configuration of the ");
         System.err.println("configuration file if provided.");
         System.err.println("");
-        System.err.println("      --default              use the default configuration, ");
-        System.err.println("                             also used if no command line argument is given ");
+        System.err
+                .println("      --default              use the default configuration, ");
+        System.err
+                .println("                             also used if no command line argument is given ");
         System.err.println("  -?, --help                 print this message");
     }
 
@@ -104,43 +110,48 @@ class CommandLine {
     private static FtpServer getConfiguration(String[] args) throws Exception {
 
         FtpServer server = null;
-        if(args.length == 0) {
+        if (args.length == 0) {
             System.out.println("Using default configuration");
             server = new FtpServer();
-        } else if( (args.length == 1) && args[0].equals("-default") ) {
+        } else if ((args.length == 1) && args[0].equals("-default")) {
             // supported for backwards compatibility, but not documented
-            System.out.println("The -default switch is deprecated, please use --default instead");
+            System.out
+                    .println("The -default switch is deprecated, please use --default instead");
             System.out.println("Using default configuration");
             server = new FtpServer();
-        } else if( (args.length == 1) && args[0].equals("--default") ) {
+        } else if ((args.length == 1) && args[0].equals("--default")) {
             System.out.println("Using default configuration");
             server = new FtpServer();
-        } else if( (args.length == 1) && args[0].equals("--help") ) {
+        } else if ((args.length == 1) && args[0].equals("--help")) {
             usage();
-        } else if( (args.length == 1) && args[0].equals("-?") ) {
+        } else if ((args.length == 1) && args[0].equals("-?")) {
             usage();
-        } else if( args.length == 1 ) {
-            System.out.println("Using XML configuration file " + args[0] + "...");
-            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(args[0]));
-            if(bf.containsBean("server")) {
+        } else if (args.length == 1) {
+            System.out.println("Using XML configuration file " + args[0]
+                    + "...");
+            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(
+                    args[0]));
+            if (bf.containsBean("server")) {
                 server = (FtpServer) bf.getBean("server");
             } else {
                 String[] beanNames = bf.getBeanNamesForType(FtpServer.class);
-                if(beanNames.length == 1) {
+                if (beanNames.length == 1) {
                     server = (FtpServer) bf.getBean(beanNames[0]);
-                } else if(beanNames.length > 1) {
-                    System.out.println("Using the first server defined in the configuration, named " + beanNames[0]);
+                } else if (beanNames.length > 1) {
+                    System.out
+                            .println("Using the first server defined in the configuration, named "
+                                    + beanNames[0]);
                     server = (FtpServer) bf.getBean(beanNames[0]);
                 } else {
-                    System.err.println("XML configuration does not contain a server configuration");
+                    System.err
+                            .println("XML configuration does not contain a server configuration");
                 }
-                
+
             }
-        }
-        else {
+        } else {
             usage();
         }
-        
+
         return server;
     }
 }

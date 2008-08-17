@@ -15,19 +15,24 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
  * Interface for formating output based on a {@link FileObject}
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public interface FileFormater {
 
     /**
      * Format the file
-     * @param file The {@link FileObject}
+     * 
+     * @param file
+     *            The {@link FileObject}
      * @return The formated string based on the {@link FileObject}
      */
     String format(FileObject file);

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.clienttests;
 
@@ -26,38 +26,42 @@ import org.apache.ftpserver.DefaultConnectionConfig;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class CustomMaxLoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";
+
     private static final String UNKNOWN_PASSWORD = "bar";
 
-    
-    
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
-        
-    	DefaultFtpServerContext context = (DefaultFtpServerContext) server.getServerContext();
-    	DefaultConnectionConfig cc = (DefaultConnectionConfig) context.getConnectionConfig();
+        FtpServer server = super.createServer();
+
+        DefaultFtpServerContext context = (DefaultFtpServerContext) server
+                .getServerContext();
+        DefaultConnectionConfig cc = (DefaultConnectionConfig) context
+                .getConnectionConfig();
 
         cc.setMaxLoginFailures(2);
 
         return server;
     }
 
-
-
     public void testLogin() throws Exception {
         assertFalse(client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD));
         assertFalse(client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD));
-        
+
         try {
             client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD);
-           
+
             fail("Must be disconnected");
-        } catch(FTPConnectionClosedException e) {
+        } catch (FTPConnectionClosedException e) {
             // OK
-        } catch(SocketException e) {
-        	// OK
+        } catch (SocketException e) {
+            // OK
         }
     }
 }

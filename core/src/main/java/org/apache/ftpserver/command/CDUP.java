@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.command;
 
@@ -33,43 +33,47 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <code>CDUP &lt;CRLF&gt;</code><br>
+ * 
+ * This command is a special case of CWD, and is included to simplify the
+ * implementation of programs for transferring directory trees between operating
+ * systems having different syntaxes for naming the parent directory. The reply
+ * codes shall be identical to the reply codes of CWD.
  *
- * This command is a special case of CWD, and is included to
- * simplify the implementation of programs for transferring
- * directory trees between operating systems having different
- * syntaxes for naming the parent directory.  The reply codes
- * shall be identical to the reply codes of CWD.    
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-class CDUP extends AbstractCommand {
+public class CDUP extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(CDUP.class);
-    
+
     /**
      * Execute command.
      */
-    public void execute(final FtpIoSession session, 
-            final FtpServerContext context, 
-            final FtpRequest request) throws IOException, FtpException {
-        
+    public void execute(final FtpIoSession session,
+            final FtpServerContext context, final FtpRequest request)
+            throws IOException, FtpException {
+
         // reset state variables
         session.resetState();
-        
+
         // change directory
         FileSystemView fsview = session.getFileSystemView();
         boolean success = false;
         try {
             success = fsview.changeDirectory("..");
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             LOG.debug("Failed to change directory in file system", ex);
         }
-        if(success) {
+        if (success) {
             String dirName = fsview.getCurrentDirectory().getFullName();
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CDUP", dirName));
-        }
-        else {
-            session.write(FtpReplyUtil.translate(session, request, context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "CDUP", null));
+            session.write(FtpReplyUtil.translate(session, request, context,
+                    FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CDUP",
+                    dirName));
+        } else {
+            session.write(FtpReplyUtil
+                    .translate(session, request, context,
+                            FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                            "CDUP", null));
         }
     }
 }

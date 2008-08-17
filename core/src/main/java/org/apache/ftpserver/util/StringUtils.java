@@ -15,28 +15,29 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
 import java.util.Map;
 
-
 /**
  * String utility methods.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-
-public
-class StringUtils {
+public class StringUtils {
 
     /**
      * This is a string replacement method.
      */
-    public final static String replaceString(String source, String oldStr, String newStr) {
+    public final static String replaceString(String source, String oldStr,
+            String newStr) {
         StringBuffer sb = new StringBuffer(source.length());
         int sind = 0;
         int cind = 0;
-        while ((cind=source.indexOf(oldStr, sind)) != -1) {
+        while ((cind = source.indexOf(oldStr, sind)) != -1) {
             sb.append(source.substring(sind, cind));
             sb.append(newStr);
             sind = cind + oldStr.length();
@@ -45,82 +46,81 @@ class StringUtils {
         return sb.toString();
     }
 
-    
     /**
      * Replace string
-     */ 
+     */
     public final static String replaceString(String source, Object[] args) {
         int startIndex = 0;
         int openIndex = source.indexOf('{', startIndex);
         if (openIndex == -1) {
             return source;
         }
-        
+
         int closeIndex = source.indexOf('}', startIndex);
-        if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+        if ((closeIndex == -1) || (openIndex > closeIndex)) {
             return source;
         }
-        
+
         StringBuffer sb = new StringBuffer();
         sb.append(source.substring(startIndex, openIndex));
-        while(true) {
-            String intStr = source.substring(openIndex+1, closeIndex);
+        while (true) {
+            String intStr = source.substring(openIndex + 1, closeIndex);
             int index = Integer.parseInt(intStr);
             sb.append(args[index]);
-            
+
             startIndex = closeIndex + 1;
             openIndex = source.indexOf('{', startIndex);
             if (openIndex == -1) {
                 sb.append(source.substring(startIndex));
                 break;
             }
-            
+
             closeIndex = source.indexOf('}', startIndex);
-            if( (closeIndex == -1) || (openIndex > closeIndex) ) {
-               sb.append(source.substring(startIndex));
-               break;
+            if ((closeIndex == -1) || (openIndex > closeIndex)) {
+                sb.append(source.substring(startIndex));
+                break;
             }
             sb.append(source.substring(startIndex, openIndex));
         }
         return sb.toString();
     }
-    
 
     /**
      * Replace string.
-     */ 
-    public final static String replaceString(String source, Map<String, Object> args) {
+     */
+    public final static String replaceString(String source,
+            Map<String, Object> args) {
         int startIndex = 0;
         int openIndex = source.indexOf('{', startIndex);
         if (openIndex == -1) {
             return source;
         }
-        
+
         int closeIndex = source.indexOf('}', startIndex);
-        if( (closeIndex == -1) || (openIndex > closeIndex) ) {
+        if ((closeIndex == -1) || (openIndex > closeIndex)) {
             return source;
         }
-        
+
         StringBuffer sb = new StringBuffer();
         sb.append(source.substring(startIndex, openIndex));
-        while(true) {
-            String key = source.substring(openIndex+1, closeIndex);
+        while (true) {
+            String key = source.substring(openIndex + 1, closeIndex);
             Object val = args.get(key);
-            if(val != null) {
+            if (val != null) {
                 sb.append(val);
             }
-            
+
             startIndex = closeIndex + 1;
             openIndex = source.indexOf('{', startIndex);
             if (openIndex == -1) {
                 sb.append(source.substring(startIndex));
                 break;
             }
-            
+
             closeIndex = source.indexOf('}', startIndex);
-            if( (closeIndex == -1) || (openIndex > closeIndex) ) {
-               sb.append(source.substring(startIndex));
-               break;
+            if ((closeIndex == -1) || (openIndex > closeIndex)) {
+                sb.append(source.substring(startIndex));
+                break;
             }
             sb.append(source.substring(startIndex, openIndex));
         }
@@ -128,45 +128,51 @@ class StringUtils {
     }
 
     /**
-     * This method is used to insert HTML block dynamically
-     *
-     * @param source the HTML code to be processes
-     * @param bReplaceNl if true '\n' will be replaced by <br>
-     * @param bReplaceTag if true '<' will be replaced by &lt; and 
-     *                          '>' will be replaced by &gt;
-     * @param bReplaceQuote if true '\"' will be replaced by &quot; 
-     */
-    public final static String formatHtml(String source, 
-                                    boolean bReplaceNl, 
-                                    boolean bReplaceTag,
-                                    boolean bReplaceQuote) {
+         * This method is used to insert HTML block dynamically
+         *
+         * @param source the HTML code to be processes
+         * @param bReplaceNl if true '\n' will be replaced by <br>
+         * @param bReplaceTag if true '<' will be replaced by &lt; and 
+         *                          '>' will be replaced by &gt;
+         * @param bReplaceQuote if true '\"' will be replaced by &quot; 
+         */
+    public final static String formatHtml(String source, boolean bReplaceNl,
+            boolean bReplaceTag, boolean bReplaceQuote) {
 
         StringBuffer sb = new StringBuffer();
         int len = source.length();
-        for (int i=0; i<len; i++) {
+        for (int i = 0; i < len; i++) {
             char c = source.charAt(i);
             switch (c) {
             case '\"':
-                if (bReplaceQuote)sb.append("&quot;");
-                else sb.append(c);
+                if (bReplaceQuote)
+                    sb.append("&quot;");
+                else
+                    sb.append(c);
                 break;
 
             case '<':
-                if (bReplaceTag) sb.append("&lt;");
-                else sb.append(c);
+                if (bReplaceTag)
+                    sb.append("&lt;");
+                else
+                    sb.append(c);
                 break;
 
             case '>':
-                if (bReplaceTag) sb.append("&gt;");
-                else sb.append(c);
+                if (bReplaceTag)
+                    sb.append("&gt;");
+                else
+                    sb.append(c);
                 break;
 
             case '\n':
                 if (bReplaceNl) {
-                    if (bReplaceTag) sb.append("&lt;br&gt;");
-                    else sb.append("<br>");
+                    if (bReplaceTag)
+                        sb.append("&lt;br&gt;");
+                    else
+                        sb.append("<br>");
                 } else {
-                    sb.append(c);                    
+                    sb.append(c);
                 }
                 break;
 
@@ -183,41 +189,38 @@ class StringUtils {
             }
         }
         return sb.toString();
-    } 
-    
+    }
+
     /**
      * Pad string object
      */
-    public final static String pad(String src, 
-                                   char padChar, 
-                                   boolean rightPad, 
-                                   int totalLength) {
-                             
+    public final static String pad(String src, char padChar, boolean rightPad,
+            int totalLength) {
+
         int srcLength = src.length();
         if (srcLength >= totalLength) {
             return src;
         }
-        
+
         int padLength = totalLength - srcLength;
         StringBuffer sb = new StringBuffer(padLength);
-        for(int i=0; i<padLength; ++i) {
+        for (int i = 0; i < padLength; ++i) {
             sb.append(padChar);
         }
-        
+
         if (rightPad) {
             return src + sb.toString();
-        }
-        else {
+        } else {
             return sb.toString() + src;
         }
-    }   
-     
+    }
+
     /**
      * Get hex string from byte array
      */
     public final static String toHexString(byte[] res) {
         StringBuffer sb = new StringBuffer(res.length << 1);
-        for(int i=0; i<res.length; i++) {
+        for (int i = 0; i < res.length; i++) {
             String digit = Integer.toHexString(0xFF & res[i]);
             if (digit.length() == 1) {
                 digit = '0' + digit;
@@ -225,20 +228,20 @@ class StringUtils {
             sb.append(digit);
         }
         return sb.toString().toUpperCase();
-    } 
-    
+    }
+
     /**
      * Get byte array from hex string
      */
     public final static byte[] toByteArray(String hexString) {
         int arrLength = hexString.length() >> 1;
         byte buff[] = new byte[arrLength];
-        for(int i=0; i<arrLength; i++) {
+        for (int i = 0; i < arrLength; i++) {
             int index = i << 1;
-            String digit = hexString.substring(index, index+2);
-            buff[i] = (byte)Integer.parseInt(digit, 16);
+            String digit = hexString.substring(index, index + 2);
+            buff[i] = (byte) Integer.parseInt(digit, 16);
         }
         return buff;
     }
-       
-} 
+
+}

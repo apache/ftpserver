@@ -19,7 +19,12 @@
 
 package org.apache.ftpserver.ssl;
 
-
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class MinaImplicitTLSTest extends ImplicitSecurityTestTemplate {
 
     protected String getAuthValue() {

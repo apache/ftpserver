@@ -15,33 +15,42 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
 
 import junit.framework.TestCase;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class UsernamePasswordAuthenticationTest extends TestCase {
-    
+
     public void testConstructor() {
-        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication("user", "pass");
-        
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication(
+                "user", "pass");
+
         assertEquals("user", auth.getUsername());
         assertEquals("pass", auth.getPassword());
     }
 
     public void testConstructorNullUsername() {
-        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication(null, "pass");
-        
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication(
+                null, "pass");
+
         assertNull(auth.getUsername());
         assertEquals("pass", auth.getPassword());
     }
-    
+
     public void testConstructorNullPassword() {
-        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication("user", null);
-        
+        UsernamePasswordAuthentication auth = new UsernamePasswordAuthentication(
+                "user", null);
+
         assertEquals("user", auth.getUsername());
         assertNull(auth.getPassword());
     }
-    
+
 }

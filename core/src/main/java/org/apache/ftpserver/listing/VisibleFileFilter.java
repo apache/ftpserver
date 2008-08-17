@@ -15,18 +15,21 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
  * Selects files that are visible
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class VisibleFileFilter implements FileFilter {
 
     private FileFilter wrappedFilter;
-    
+
     /**
      * Default constructor
      */
@@ -36,20 +39,22 @@ public class VisibleFileFilter implements FileFilter {
 
     /**
      * Constructor with a wrapped filter, allows for chaining filters
-     * @param wrappedFilter The {@link FileFilter} to wrap
+     * 
+     * @param wrappedFilter
+     *            The {@link FileFilter} to wrap
      */
     public VisibleFileFilter(FileFilter wrappedFilter) {
         this.wrappedFilter = wrappedFilter;
     }
-    
+
     /**
      * @see FileFilter#accept(FileObject)
      */
     public boolean accept(FileObject file) {
-        if(wrappedFilter != null && !wrappedFilter.accept(file)) {
+        if (wrappedFilter != null && !wrappedFilter.accept(file)) {
             return false;
         }
-        
+
         return !file.isHidden();
     }
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.test;
 
@@ -35,6 +35,12 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.util.IoUtils;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class TestUtil {
 
     private static final int DEFAULT_PORT = 12321;
@@ -42,16 +48,17 @@ public class TestUtil {
     public static File getBaseDir() {
         // check Maven system prop first and use if set
         String basedir = System.getProperty("basedir");
-        if(basedir != null) {
+        if (basedir != null) {
             return new File(basedir);
         } else {
             return new File(".");
         }
     }
-    
+
     /**
      * Attempts to find a free port or fallback to a default
-     * @throws IOException 
+     * 
+     * @throws IOException
      * 
      * @throws IOException
      */
@@ -61,25 +68,26 @@ public class TestUtil {
         // first try the default port
         try {
             tmpSocket = new ServerSocket(DEFAULT_PORT);
-            
+
             port = DEFAULT_PORT;
         } catch (IOException e) {
             System.out.println("Failed to use default port");
-        	// didn't work, try to find one dynamically
+            // didn't work, try to find one dynamically
             try {
                 int attempts = 0;
 
                 while (port < 1024 && attempts < 1000) {
-                	attempts++;
+                    attempts++;
 
-                	tmpSocket = new ServerSocket(0);
+                    tmpSocket = new ServerSocket(0);
 
                     port = tmpSocket.getLocalPort();
                 }
 
             } catch (IOException e1) {
-                throw new IOException("Failed to find a port to use for testing: "
-                        + e1.getMessage());
+                throw new IOException(
+                        "Failed to find a port to use for testing: "
+                                + e1.getMessage());
             }
         } finally {
             if (tmpSocket != null) {
@@ -96,59 +104,62 @@ public class TestUtil {
     }
 
     public static String[] getHostAddresses() throws Exception {
-        Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
-        
+        Enumeration<NetworkInterface> nifs = NetworkInterface
+                .getNetworkInterfaces();
+
         List<String> hostIps = new ArrayList<String>();
         while (nifs.hasMoreElements()) {
             NetworkInterface nif = (NetworkInterface) nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
-            
+
             while (ips.hasMoreElements()) {
                 InetAddress ip = (InetAddress) ips.nextElement();
-                if(ip instanceof java.net.Inet4Address) {
-            		hostIps.add(ip.getHostAddress());
+                if (ip instanceof java.net.Inet4Address) {
+                    hostIps.add(ip.getHostAddress());
                 } else {
-                	// IPv6 not tested
+                    // IPv6 not tested
                 }
             }
         }
-        
+
         return hostIps.toArray(new String[0]);
     }
 
     public static InetAddress findNonLocalhostIp() throws Exception {
-        Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
-        
+        Enumeration<NetworkInterface> nifs = NetworkInterface
+                .getNetworkInterfaces();
+
         while (nifs.hasMoreElements()) {
             NetworkInterface nif = (NetworkInterface) nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
-            
+
             while (ips.hasMoreElements()) {
                 InetAddress ip = (InetAddress) ips.nextElement();
-                if(ip instanceof java.net.Inet4Address && !ip.isLoopbackAddress()) {
+                if (ip instanceof java.net.Inet4Address
+                        && !ip.isLoopbackAddress()) {
                     return ip;
                 } else {
                     // IPv6 not tested
                 }
             }
         }
-        
+
         return null;
     }
 
-    
-    public static void writeDataToFile(File file, byte[] data) throws IOException {
+    public static void writeDataToFile(File file, byte[] data)
+            throws IOException {
         FileOutputStream fos = null;
-        
-        try{
+
+        try {
             fos = new FileOutputStream(file);
-            
+
             fos.write(data);
         } finally {
             IoUtils.close(fos);
         }
     }
-    
+
     public static void assertFileEqual(byte[] expected, File file)
             throws Exception {
         ByteArrayOutputStream baos = null;

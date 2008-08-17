@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.listing;
 
@@ -28,14 +28,21 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 @SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {
 
     private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);
+
     private static final FileObject TEST_FILE = new MockFileObject();
 
     public MLSTFileFormater formater = new MLSTFileFormater(null);
-    
+
     public static class MockFileObject implements FileObject {
         public InputStream createInputStream(long offset) throws IOException {
             return null;
@@ -117,9 +124,10 @@ public class MLSTFileFormaterTest extends TestCase {
             return false;
         }
     }
-    
+
     public void testSingleFile() {
-        assertEquals("Size=13;Modify=20050202030400.000;Type=file; short\r\n", formater.format(TEST_FILE));
+        assertEquals("Size=13;Modify=20050202030400.000;Type=file; short\r\n",
+                formater.format(TEST_FILE));
     }
 
     public void testSingleDir() {
@@ -135,11 +143,11 @@ public class MLSTFileFormaterTest extends TestCase {
             public long getSize() {
                 return 0;
             }
-            
-            
+
         };
-        
-        assertEquals("Size=0;Modify=20050202030400.000;Type=dir; short\r\n", formater.format(dir));
+
+        assertEquals("Size=0;Modify=20050202030400.000;Type=dir; short\r\n",
+                formater.format(dir));
     }
 
 }

@@ -15,19 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.usermanager;
-
-
 
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class BaseUserTest extends TestCase {
-    
+
     private static final Authority ALWAYS_ALLOW_AUTHORITY = new Authority() {
         public AuthorizationRequest authorize(AuthorizationRequest request) {
             return request;
@@ -42,7 +46,7 @@ public class BaseUserTest extends TestCase {
         public AuthorizationRequest authorize(AuthorizationRequest request) {
             return null;
         }
-        
+
         public boolean canAuthorize(AuthorizationRequest request) {
             return true;
         }
@@ -52,66 +56,56 @@ public class BaseUserTest extends TestCase {
         public AuthorizationRequest authorize(AuthorizationRequest request) {
             return null;
         }
-        
+
         public boolean canAuthorize(AuthorizationRequest request) {
             return false;
         }
     };
-    
-    private static final AuthorizationRequest REQUEST = new AuthorizationRequest(){};
-    
+
+    private static final AuthorizationRequest REQUEST = new AuthorizationRequest() {
+    };
+
     private BaseUser user = new BaseUser();
-    
+
     public void testAllow() {
-        Authority[] authorities = new Authority[]{
-                ALWAYS_ALLOW_AUTHORITY
-        };
-        
-        
+        Authority[] authorities = new Authority[] { ALWAYS_ALLOW_AUTHORITY };
+
         user.setAuthorities(authorities);
-        
+
         assertSame(REQUEST, user.authorize(REQUEST));
     }
 
     public void testDisallow() {
-        Authority[] authorities = new Authority[]{
-                NEVER_ALLOW_AUTHORITY
-        };
-        
+        Authority[] authorities = new Authority[] { NEVER_ALLOW_AUTHORITY };
+
         user.setAuthorities(authorities);
-        
+
         assertNull(user.authorize(REQUEST));
     }
 
     public void testMultipleDisallowLast() {
-        Authority[] authorities = new Authority[]{
-                ALWAYS_ALLOW_AUTHORITY,
-                NEVER_ALLOW_AUTHORITY
-        };
-        
+        Authority[] authorities = new Authority[] { ALWAYS_ALLOW_AUTHORITY,
+                NEVER_ALLOW_AUTHORITY };
+
         user.setAuthorities(authorities);
-        
+
         assertNull(user.authorize(REQUEST));
     }
 
     public void testMultipleAllowLast() {
-        Authority[] authorities = new Authority[]{
-                NEVER_ALLOW_AUTHORITY,
-                ALWAYS_ALLOW_AUTHORITY
-        };
-        
+        Authority[] authorities = new Authority[] { NEVER_ALLOW_AUTHORITY,
+                ALWAYS_ALLOW_AUTHORITY };
+
         user.setAuthorities(authorities);
-        
+
         assertNull(user.authorize(REQUEST));
     }
 
     public void testNonCanAuthorize() {
-        Authority[] authorities = new Authority[]{
-                CANT_AUTHORITY
-        };
-        
+        Authority[] authorities = new Authority[] { CANT_AUTHORITY };
+
         user.setAuthorities(authorities);
-        
+
         assertNull(user.authorize(REQUEST));
     }
 }

@@ -17,21 +17,24 @@
 package org.apache.ftpserver.ssl;
 
 /**
- * Enumeration of possible levels of client
- * authentication during an SSL session.
+ * Enumeration of possible levels of client authentication during an SSL
+ * session.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public enum ClientAuth {
-	
-	/**
-	 * Client authentication is required
-	 */
-    NEED,
-    
+
     /**
-     * Client authentication is requested but not required 
+     * Client authentication is required
+     */
+    NEED,
+
+    /**
+     * Client authentication is requested but not required
      */
     WANT,
-    
+
     /**
      * Client authentication is not performed
      */

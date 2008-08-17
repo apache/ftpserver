@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
@@ -25,80 +25,82 @@ import java.io.OutputStream;
 
 /**
  * This is the file abstraction used by the server.
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
-public 
-interface FileObject {
-    
+public interface FileObject {
+
     /**
      * Get the fully qualified name.
      */
     String getFullName();
-    
+
     /**
      * Get the file short name.
      */
     String getShortName();
-    
+
     /**
      * Is a hidden file?
      */
     boolean isHidden();
-     
+
     /**
      * Is it a directory?
      */
     boolean isDirectory();
-    
+
     /**
      * Is it a file?
      */
     boolean isFile();
-    
+
     /**
      * Does this file exists?
      */
     boolean doesExist();
-    
+
     /**
      * Has read permission?
-     */ 
+     */
     boolean hasReadPermission();
-    
+
     /**
      * Has write permission?
-     */ 
-    boolean hasWritePermission(); 
-    
+     */
+    boolean hasWritePermission();
+
     /**
      * Has delete permission?
      */
     boolean hasDeletePermission();
-    
+
     /**
      * Get the owner name.
-     */ 
+     */
     String getOwnerName();
-    
+
     /**
      * Get owner group name.
      */
-    String getGroupName(); 
-    
+    String getGroupName();
+
     /**
      * Get link count.
      */
     int getLinkCount();
-    
+
     /**
      * Get last modified time.
-     */ 
+     */
     long getLastModified();
-    
+
     /**
      * Get file size.
      */
     long getSize();
-    
+
     /**
      * Create directory.
      */
@@ -108,30 +110,27 @@ interface FileObject {
      * Delete file.
      */
     boolean delete();
-    
+
     /**
      * Move file.
      */
     boolean move(FileObject destination);
-    
+
     /**
-     * List file objects. If not a directory or does not exist,
-     * null will be returned.
-     * Files must be returned in alphabetical order.
+     * List file objects. If not a directory or does not exist, null will be
+     * returned. Files must be returned in alphabetical order.
      */
     FileObject[] listFiles();
-    
+
     /**
-     * Create output stream for writing. If the file is
-     * not random accessible, any offset other than zero
-     * will throw an exception.
+     * Create output stream for writing. If the file is not random accessible,
+     * any offset other than zero will throw an exception.
      */
     OutputStream createOutputStream(long offset) throws IOException;
-    
+
     /**
-     * Create input stream for reading. If the file is
-     * not random accessible, any offset other than zero
-     * will throw an exception.
+     * Create input stream for reading. If the file is not random accessible,
+     * any offset other than zero will throw an exception.
      */
     InputStream createInputStream(long offset) throws IOException;
 }

@@ -15,72 +15,83 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
 package org.apache.ftpserver.listing;
 
 /**
  * Contains the parsed argument for a list command (e.g. LIST or NLST)
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class ListArgument {
 
     private String file;
+
     private String pattern;
+
     private char[] options;
-    
+
     /**
-     * @param file The file path including the directory
-     * @param pattern A regular expression pattern that files must match
-     * @param options List options, such as -la
+     * @param file
+     *            The file path including the directory
+     * @param pattern
+     *            A regular expression pattern that files must match
+     * @param options
+     *            List options, such as -la
      */
     public ListArgument(String file, String pattern, char[] options) {
         this.file = file;
         this.pattern = pattern;
-        if(options == null) {
+        if (options == null) {
             this.options = new char[0];
         } else {
             this.options = options.clone();
         }
     }
-    
+
     /**
-     * The listing options, 
+     * The listing options,
+     * 
      * @return All options
      */
     public char[] getOptions() {
         return options.clone();
     }
-    
+
     /**
      * The regular expression pattern that files must match
+     * 
      * @return The regular expression
      */
     public String getPattern() {
         return pattern;
     }
-    
+
     /**
      * Checks if a certain option is set
-     * @param option The option to check
+     * 
+     * @param option
+     *            The option to check
      * @return true if the option is set
      */
     public boolean hasOption(char option) {
         for (int i = 0; i < options.length; i++) {
-            if(option == options[i]) {
+            if (option == options[i]) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     /**
      * The file path including the directory
+     * 
      * @return The file path
      */
     public String getFile() {
         return file;
     }
-
-
 
 }

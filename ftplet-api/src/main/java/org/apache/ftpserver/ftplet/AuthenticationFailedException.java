@@ -15,12 +15,15 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.ftplet;
 
 /**
  * Thrown if an authentication request fails
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
  */
 public class AuthenticationFailedException extends FtpException {
     private static final long serialVersionUID = -1328383839915898987L;
@@ -33,29 +36,33 @@ public class AuthenticationFailedException extends FtpException {
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a message.
+     * Constructs a <code>AuthenticationFailedException</code> object with a
+     * message.
      * 
-     * @param msg a description of the exception 
+     * @param msg
+     *            a description of the exception
      */
     public AuthenticationFailedException(String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a 
+     * Constructs a <code>AuthenticationFailedException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public AuthenticationFailedException(Throwable th) {
         super(th);
     }
 
     /**
-     * Constructs a <code>AuthenticationFailedException</code> object with a 
+     * Constructs a <code>AuthenticationFailedException</code> object with a
      * <code>Throwable</code> cause.
      * 
-     * @param th the original cause
+     * @param th
+     *            the original cause
      */
     public AuthenticationFailedException(String msg, Throwable th) {
         super(msg);

@@ -29,15 +29,25 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.test.TestUtil;
 
+/**
+*
+* @author The Apache MINA Project (dev@mina.apache.org)
+* @version $Rev$, $Date$
+*
+*/
 public class FtpLetReturnSkipTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();
+
     private static final byte[] DOUBLE_TESTDATA = "TESTDATATESTDATA".getBytes();
+
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
+
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
 
     protected FtpletEnum mockReturnValue = FtpletEnum.RET_SKIP;
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -45,7 +55,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
      */
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
-        
+
         initDirs();
 
         initServer();
@@ -54,16 +64,19 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
     }
 
     protected FtpServer createServer() throws Exception {
-    	FtpServer server = super.createServer();
+        FtpServer server = super.createServer();
 
-    	server.getServerContext().getFtpletContainer().addFtplet("f1", new MockFtplet());
+        server.getServerContext().getFtpletContainer().addFtplet("f1",
+                new MockFtplet());
         return server;
     }
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onLogin(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_530_NOT_LOGGED_IN, "foo"));
+            public FtpletEnum onLogin(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_530_NOT_LOGGED_IN, "foo"));
 
                 throwException();
                 return mockReturnValue;
@@ -75,32 +88,36 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                
-                session.write(new DefaultFtpReply(FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "foo"));
+            public FtpletEnum onDeleteStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
+                        "foo"));
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertFalse(client.deleteFile(TEST_FILE1.getName()));
-        
+
         assertTrue(TEST_FILE1.exists());
     }
 
     public void testExceptionDuringDeleteEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onDeleteEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.deleteFile(TEST_FILE1.getName()));
 
@@ -109,110 +126,123 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                
-                session.write(new DefaultFtpReply(FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
+            public FtpletEnum onMkdirStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertFalse(client.makeDirectory(TEST_DIR1.getName()));
-        
+
         assertFalse(TEST_DIR1.exists());
     }
 
     public void testExceptionDuringMkdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onMkdirEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.makeDirectory(TEST_DIR1.getName()));
-        
+
         assertTrue(TEST_DIR1.exists());
     }
 
     public void testExceptionDuringRmdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "foo"));
+            public FtpletEnum onRmdirStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
+                        "foo"));
 
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TEST_DIR1.mkdirs();
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertFalse(client.removeDirectory(TEST_DIR1.getName()));
-        
+
         assertTrue(TEST_DIR1.exists());
     }
 
     public void testExceptionDuringRmdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onRmdirEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TEST_DIR1.mkdirs();
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.removeDirectory(TEST_DIR1.getName()));
-        
+
         assertFalse(TEST_DIR1.exists());
     }
 
     public void testExceptionDuringSite() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onSite(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onSite(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        
+
         client.site("HELP");
     }
 
     public void testExceptionDuringRenameStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED, "foo"));
-                
+            public FtpletEnum onRenameStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session
+                        .write(new DefaultFtpReply(
+                                FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
+                                "foo"));
+
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertFalse(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
-        
+
         assertTrue(TEST_FILE1.exists());
         assertFalse(TEST_FILE2.exists());
     }
-    
+
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onRenameEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.rename(TEST_FILE1.getName(), TEST_FILE2.getName()));
 
@@ -223,130 +253,147 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
-                
+            public FtpletEnum onDownloadStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
+
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         client.retrieveFileStream(TEST_FILE1.getName());
-        
+
         assertTrue(FTPReply.isNegativePermanent(client.getReplyCode()));
     }
 
     public void testExceptionDuringDownloadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onDownloadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onDownloadEnd(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         assertTrue(client.retrieveFile(TEST_FILE1.getName(), baos));
-    
+
         TestUtil.assertArraysEqual(TESTDATA, baos.toByteArray());
     }
 
     public void testExceptionDuringAppendStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
+            public FtpletEnum onAppendStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
 
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        assertFalse(client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
-        
+        assertFalse(client.appendFile(TEST_FILE1.getName(),
+                new ByteArrayInputStream(TESTDATA)));
+
         TestUtil.assertFileEqual(TESTDATA, TEST_FILE1);
     }
-    
+
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onAppendEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         TestUtil.writeDataToFile(TEST_FILE1, TESTDATA);
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        assertTrue(client.appendFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
-        
+        assertTrue(client.appendFile(TEST_FILE1.getName(),
+                new ByteArrayInputStream(TESTDATA)));
+
         TestUtil.assertFileEqual(DOUBLE_TESTDATA, TEST_FILE1);
     }
 
     public void testExceptionDuringUploadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
-                
+            public FtpletEnum onUploadStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
+
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        assertFalse(client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
-        
+        assertFalse(client.storeFile(TEST_FILE1.getName(),
+                new ByteArrayInputStream(TESTDATA)));
+
         assertFalse(TEST_FILE1.exists());
     }
-    
+
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onUploadEnd(FtpSession session, FtpRequest request)
+                    throws FtpException, IOException {
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        assertTrue(client.storeFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
-        
+        assertTrue(client.storeFile(TEST_FILE1.getName(),
+                new ByteArrayInputStream(TESTDATA)));
+
         TestUtil.assertFileEqual(TESTDATA, TEST_FILE1);
     }
-    
+
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueStart(FtpSession session, FtpRequest request) throws FtpException, IOException {
-                session.write(new DefaultFtpReply(FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
+            public FtpletEnum onUploadUniqueStart(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
+                session.write(new DefaultFtpReply(
+                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "foo"));
                 throwException();
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        assertFalse(client.storeUniqueFile(TEST_FILE1.getName(), new ByteArrayInputStream(TESTDATA)));
-        
+        assertFalse(client.storeUniqueFile(TEST_FILE1.getName(),
+                new ByteArrayInputStream(TESTDATA)));
+
         assertEquals(ROOT_DIR.listFiles().length, 0);
     }
-    
+
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            public FtpletEnum onUploadUniqueEnd(FtpSession session, FtpRequest request) throws FtpException, IOException {
+            public FtpletEnum onUploadUniqueEnd(FtpSession session,
+                    FtpRequest request) throws FtpException, IOException {
                 throwException();
-                
+
                 return mockReturnValue;
             }
         };
-        
+
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
         assertTrue(client.storeUniqueFile(new ByteArrayInputStream(TESTDATA)));
-        
+
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }
 

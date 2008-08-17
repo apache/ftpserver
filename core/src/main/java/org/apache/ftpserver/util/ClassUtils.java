@@ -15,31 +15,40 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */  
+ */
 
 package org.apache.ftpserver.util;
 
+/**
+ * 
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class ClassUtils {
 
     /**
-     * Checks if a class is a subclass of a class with the specified name.
-     * Used as an instanceOf without having to load the class, useful when
-     * trying to check for classes that might not be available in the runtime
-     * JRE.
-     * @param clazz The class to check
-     * @param className The class name to look for in the super classes
+     * Checks if a class is a subclass of a class with the specified name. Used
+     * as an instanceOf without having to load the class, useful when trying to
+     * check for classes that might not be available in the runtime JRE.
+     * 
+     * @param clazz
+     *            The class to check
+     * @param className
+     *            The class name to look for in the super classes
      * @return true if the class extends a class by the specified name.
      */
     public static boolean extendsClass(final Class<?> clazz, String className) {
-    	Class<?> superClass = clazz.getSuperclass();
-    	
-    	while(superClass != null) {
-    		if(superClass.getName().equals(className)) {
-    			return true;
-    		}
-    		superClass = superClass.getSuperclass();
-    		
-    	}
-    	return false;
+        Class<?> superClass = clazz.getSuperclass();
+
+        while (superClass != null) {
+            if (superClass.getName().equals(className)) {
+                return true;
+            }
+            superClass = superClass.getSuperclass();
+
+        }
+        return false;
     }
 }
