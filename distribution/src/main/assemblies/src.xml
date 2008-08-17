@@ -45,8 +45,6 @@
         <exclude>NOTICE.txt</exclude>
         <exclude>core/res</exclude>
         <exclude>core/res/**/*</exclude>
-        <exclude>deprecated/res</exclude>
-        <exclude>deprecated/res/**/*</exclude>
 
         <exclude>**/target</exclude>
         <exclude>**/target/**/*</exclude>
