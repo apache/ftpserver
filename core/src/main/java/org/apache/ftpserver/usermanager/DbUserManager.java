@@ -343,7 +343,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Open connection to database.
      */
-    private synchronized Connection createConnection() throws SQLException {
+    protected synchronized Connection createConnection() throws SQLException {
         boolean isClosed = false;
         try {
             if ((cachedConnection == null) || cachedConnection.isClosed()) {
