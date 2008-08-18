@@ -41,7 +41,25 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     protected abstract FtpletContainer createFtpletContainer();
 
-    public void testAddAndGetFtplet() {
+    private static class MockFtpletContext implements FtpletContext {
+        public FileSystemManager getFileSystemManager() {
+            return null;
+        }
+
+        public FtpStatistics getFtpStatistics() {
+            return null;
+        }
+
+        public Ftplet getFtplet(String name) {
+            return null;
+        }
+
+        public UserManager getUserManager() {
+            return null;
+        }
+    }
+    
+    public void testAddAndGetFtplet() throws FtpException {
         MockFtplet ftplet1 = new MockFtplet();
         MockFtplet ftplet2 = new MockFtplet();
 
@@ -50,12 +68,51 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         container.addFtplet("ftplet1", ftplet1);
         container.addFtplet("ftplet2", ftplet2);
-
+        
         assertSame(ftplet1, container.getFtplet("ftplet1"));
         assertSame(ftplet2, container.getFtplet("ftplet2"));
     }
+    
+    public void testFtpletLifecyclePreContainerInit() throws FtpException {
+        MockFtplet ftplet = new MockFtplet();
 
-    public void testAddFtpletWithDuplicateName() {
+        container.addFtplet("ftplet1", ftplet);
+        
+        // ftplet should be initialized before the container is
+        assertNull(ftplet.context);
+        container.init(new MockFtpletContext());
+        assertNotNull(ftplet.context);
+        
+        // make sure ftplets get's destroyed
+        assertFalse(ftplet.destroyed);
+        
+        container.destroy();
+
+        assertTrue(ftplet.destroyed);
+        
+    }
+
+    public void testFtpletLifecyclePostContainerInit() throws FtpException {
+        MockFtplet ftplet = new MockFtplet();
+
+        assertNull(ftplet.context);
+        container.init(new MockFtpletContext());
+
+        container.addFtplet("ftplet1", ftplet);
+        
+        assertNotNull(ftplet.context);
+        
+        // make sure ftplets get's destroyed
+        assertFalse(ftplet.destroyed);
+        
+        container.destroy();
+
+        assertTrue(ftplet.destroyed);
+        
+    }
+
+    
+    public void testAddFtpletWithDuplicateName() throws FtpException {
         MockFtplet ftplet1 = new MockFtplet();
         MockFtplet ftplet2 = new MockFtplet();
 
@@ -73,7 +130,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         assertSame(ftplet1, container.getFtplet("ftplet1"));
     }
 
-    public void testRemoveFtplet() {
+    public void testRemoveFtplet() throws FtpException {
         MockFtplet ftplet1 = new MockFtplet();
         MockFtplet ftplet2 = new MockFtplet();
 

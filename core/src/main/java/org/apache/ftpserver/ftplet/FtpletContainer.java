@@ -38,11 +38,12 @@ public interface FtpletContainer extends Ftplet {
      *            The name of the Ftplet to be added
      * @param ftplet
      *            The Ftplet
+     * @throws FtpException 
      * @throws IllegalArgumentException
      *             If an Ftplet with the same name already exist within the
      *             container
      */
-    void addFtplet(String name, Ftplet ftplet);
+    void addFtplet(String name, Ftplet ftplet) throws FtpException;
 
     /**
      * Remove the {@link Ftplet} identified by the name (as provided in the

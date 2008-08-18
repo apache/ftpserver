@@ -77,6 +77,9 @@ public class FtpServer {
             listener.start(serverContext);
         }
 
+        // init the Ftplet container
+        serverContext.getFtpletContainer().init(serverContext);
+        
         started = true;
 
         LOG.info("FTP server started");

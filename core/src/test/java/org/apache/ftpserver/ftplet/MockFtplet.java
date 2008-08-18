@@ -31,11 +31,18 @@ public class MockFtplet extends DefaultFtplet {
 
     protected static MockFtpletCallback callback = new MockFtpletCallback();
 
+    public FtpletContext context;
+    public boolean destroyed = false;
+    
     public void destroy() {
+        destroyed = true;
+        
         callback.destroy();
     }
 
     public void init(FtpletContext ftpletContext) throws FtpException {
+        this.context = ftpletContext;
+        
         callback.init(ftpletContext);
     }
 

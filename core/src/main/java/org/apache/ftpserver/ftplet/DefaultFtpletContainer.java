@@ -38,9 +38,11 @@ public class DefaultFtpletContainer implements FtpletContainer {
     private final Logger LOG = LoggerFactory
             .getLogger(DefaultFtpletContainer.class);
 
+    private FtpletContext ftpletContext;
+    
     private Map<String, Ftplet> ftplets = new ConcurrentHashMap<String, Ftplet>();
 
-    public void dispose() {
+    public synchronized void dispose() {
 
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
             try {
@@ -52,16 +54,20 @@ public class DefaultFtpletContainer implements FtpletContainer {
         ftplets.clear();
     }
 
-    public void addFtplet(String name, Ftplet ftplet) {
+    public synchronized void addFtplet(String name, Ftplet ftplet) throws FtpException {
         if (getFtplet(name) != null) {
             throw new IllegalArgumentException("Ftplet with name \"" + name
                     + "\" already registred with container");
         }
 
         ftplets.put(name, ftplet);
+        
+        if(ftpletContext != null) {
+            ftplet.init(ftpletContext);
+        }
     }
 
-    public Ftplet removeFtplet(String name) {
+    public synchronized Ftplet removeFtplet(String name) {
         Ftplet ftplet = ftplets.get(name);
 
         if (ftplet != null) {
@@ -75,7 +81,7 @@ public class DefaultFtpletContainer implements FtpletContainer {
     /**
      * Get Ftplet for the given name.
      */
-    public Ftplet getFtplet(String name) {
+    public synchronized Ftplet getFtplet(String name) {
         if (name == null) {
             return null;
         }
@@ -83,21 +89,27 @@ public class DefaultFtpletContainer implements FtpletContainer {
         return ftplets.get(name);
     }
 
-    public void init(FtpletContext ftpletContext) throws FtpException {
-        // dummy, forced by Ftplet API
+    public synchronized void init(FtpletContext ftpletContext) throws FtpException {
+        this.ftpletContext = ftpletContext;
+        
+        // initialize Ftplets already added
+
+        for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
+            entry.getValue().init(ftpletContext);
+        }
     }
 
     /**
      * @see FtpletContainer#getFtplets()
      */
-    public Map<String, Ftplet> getFtplets() {
+    public synchronized Map<String, Ftplet> getFtplets() {
         return ftplets;
     }
 
     /**
      * @see FtpletContainer#setFtplets(Map)
      */
-    public void setFtplets(Map<String, Ftplet> ftplets) {
+    public synchronized void setFtplets(Map<String, Ftplet> ftplets) {
         this.ftplets = ftplets;
     }
 
