@@ -67,7 +67,6 @@ public class RNFR extends AbstractCommand {
         // get filename
         FileObject renFr = null;
         try {
-            System.out.println("######" + session.getFileSystemView());
             renFr = session.getFileSystemView().getFileObject(fileName);
         } catch (Exception ex) {
             LOG.debug("Exception getting file object", ex);
