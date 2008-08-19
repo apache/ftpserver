@@ -30,6 +30,7 @@ import org.apache.ftpserver.DefaultCommandFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.command.HELP;
 import org.apache.ftpserver.command.STAT;
+import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.DefaultSslConfiguration;
@@ -118,5 +119,9 @@ public class SpringConfigTest extends TestCase {
         assertEquals("se", languages[0]);
         assertEquals("no", languages[1]);
         assertEquals("da", languages[2]);
+        
+        NativeFileSystemManager fs = (NativeFileSystemManager) server.getFileSystem();
+        assertTrue(fs.isCreateHome());
+        assertTrue(fs.isCaseInsensitive());
     }
 }

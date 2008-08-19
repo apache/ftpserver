@@ -68,7 +68,7 @@
 		<user-manager>
 			<beans:bean class="org.apache.ftpserver.usermanager.PropertiesUserManager"/>
 		</user-manager>
-		<native-filesystem case-insensitive="false" />
+		<native-filesystem case-insensitive="true" create-home="true" />
 		<commands use-default="false">
 		  <command name="FOO">
 			  <beans:bean class="org.apache.ftpserver.command.HELP" />

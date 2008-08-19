@@ -57,7 +57,7 @@ public class FileSystemBeanDefinitionParser extends
                     .parseBoolean(element.getAttribute("case-insensitive")));
         }
         if (StringUtils.hasText(element.getAttribute("create-home"))) {
-            builder.addPropertyValue("create-home", Boolean
+            builder.addPropertyValue("createHome", Boolean
                     .parseBoolean(element.getAttribute("create-home")));
         }
     }
