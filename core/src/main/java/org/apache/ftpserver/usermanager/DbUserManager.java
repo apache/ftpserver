@@ -496,6 +496,12 @@ public class DbUserManager extends AbstractUserManager {
         }
     }
 
+    private boolean isTrue(String s) {
+        return "true".equalsIgnoreCase(s) ||
+                "1".equalsIgnoreCase(s) ||
+                "yes".equalsIgnoreCase(s);
+    }
+    
     /**
      * Get the user object. Fetch the row from the table.
      */
@@ -518,17 +524,16 @@ public class DbUserManager extends AbstractUserManager {
 
             // populate user object
             BaseUser thisUser = null;
-            String trueStr = Boolean.TRUE.toString();
             if (rs.next()) {
                 thisUser = new BaseUser();
                 thisUser.setName(rs.getString(ATTR_LOGIN));
                 thisUser.setHomeDirectory(rs.getString(ATTR_HOME));
-                thisUser.setEnabled(trueStr.equalsIgnoreCase(rs
+                thisUser.setEnabled(isTrue(rs
                         .getString(ATTR_ENABLE)));
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
 
                 List<Authority> authorities = new ArrayList<Authority>();
-                if (trueStr.equalsIgnoreCase(rs.getString(ATTR_WRITE_PERM))) {
+                if (isTrue(rs.getString(ATTR_WRITE_PERM))) {
                     authorities.add(new WritePermission());
                 }
 
