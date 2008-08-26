@@ -45,7 +45,7 @@ public class Daemon {
         try {
             if (server == null) {
                 // get configuration
-                FtpServer server = getConfiguration(args);
+                server = getConfiguration(args);
                 if (server == null) {
                     LOG.error("No configuration provided");
                     throw new FtpException("No configuration provided");
