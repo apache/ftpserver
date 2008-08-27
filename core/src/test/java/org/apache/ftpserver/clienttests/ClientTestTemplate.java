@@ -32,6 +32,7 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -87,8 +88,8 @@ public abstract class ClientTestTemplate extends TestCase {
 
         PropertiesUserManager userManager = new PropertiesUserManager();
         userManager.setAdminName("admin");
-        userManager.setEncryptPasswords(false);
-        userManager.setPropFile(USERS_FILE);
+        userManager.setPasswordEncryptor(new ClearTextPasswordEncryptor());
+        userManager.setFile(USERS_FILE);
         userManager.configure();
 
         context.setUserManager(userManager);

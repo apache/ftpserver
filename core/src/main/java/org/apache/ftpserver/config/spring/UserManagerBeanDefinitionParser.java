@@ -20,8 +20,11 @@
 package org.apache.ftpserver.config.spring;
 
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.DbUserManager;
+import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -51,12 +54,22 @@ public class UserManagerBeanDefinitionParser extends
     protected void doParse(final Element element,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
-        if (getBeanClass(element) == PropertiesUserManager.class) {
-            builder.addPropertyValue("propFile", element.getAttribute("file"));
-            if (StringUtils.hasText(element.getAttribute("encrypt-passwords"))
-                    && element.getAttribute("encrypt-passwords").equals("true")) {
-                builder.addPropertyValue("encryptPasswords", true);
+        
+        // common for both user managers
+        if (StringUtils.hasText(element.getAttribute("encrypt-passwords"))) {
+            String encryptionStrategy = element.getAttribute("encrypt-passwords"); 
+            
+            if(encryptionStrategy.equals("true") || encryptionStrategy.equals("md5")) {
+                builder.addPropertyValue("passwordEncryptor", new Md5PasswordEncryptor());
+            } else if(encryptionStrategy.equals("salted")) {
+                builder.addPropertyValue("passwordEncryptor", new SaltedPasswordEncryptor());
+            } else {
+                builder.addPropertyValue("passwordEncryptor", new ClearTextPasswordEncryptor());
             }
+        }
+        
+        if (getBeanClass(element) == PropertiesUserManager.class) {
+            builder.addPropertyValue("file", element.getAttribute("file"));
             builder.setInitMethodName("configure");
         } else {
             Element dsElm = SpringUtil.getChildElement(element,

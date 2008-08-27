@@ -75,6 +75,8 @@ public class DbUserManager extends AbstractUserManager {
     // used for lazy init.
     private boolean configured = false;
 
+    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
+    
     /**
      * Retrive the data source used by the user manager
      * 
@@ -428,7 +430,7 @@ public class DbUserManager extends AbstractUserManager {
             // create sql query
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(ATTR_LOGIN, escapeString(user.getName()));
-            map.put(ATTR_PASSWORD, escapeString(getPassword(user)));
+            map.put(ATTR_PASSWORD, escapeString(passwordEncryptor.encrypt(user.getPassword())));
 
             String home = user.getHomeDirectory();
             if (home == null) {
@@ -649,64 +651,6 @@ public class DbUserManager extends AbstractUserManager {
     }
 
     /**
-     * Get user password.
-     * 
-     * <pre>
-     * If the password value is not null
-     *    password = new password 
-     * else 
-     *   if user does exist
-     *     password = old password
-     *   else 
-     *     password = &quot;&quot;
-     * </pre>
-     */
-    private synchronized String getPassword(User user) throws SQLException {
-
-        String password = user.getPassword();
-        if (password != null) {
-            return password;
-        }
-
-        // create sql query
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(ATTR_LOGIN, escapeString(user.getName()));
-        String sql = StringUtils.replaceString(selectUserStmt, map);
-        LOG.info(sql);
-
-        // execute query
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = createConnection().createStatement();
-            rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                password = rs.getString(ATTR_PASSWORD);
-            }
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getPassword()", ex);
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getPassword()", ex);
-                }
-            }
-        }
-
-        if (password == null) {
-            password = "";
-        }
-        return password;
-    }
-
-    /**
      * User authentication.
      */
     public synchronized User authenticate(Authentication authentication)
@@ -734,7 +678,6 @@ public class DbUserManager extends AbstractUserManager {
                 // create the sql query
                 HashMap<String, Object> map = new HashMap<String, Object>();
                 map.put(ATTR_LOGIN, escapeString(user));
-                map.put(ATTR_PASSWORD, escapeString(password));
                 String sql = StringUtils.replaceString(authenticateStmt, map);
                 LOG.info(sql);
 
@@ -743,7 +686,13 @@ public class DbUserManager extends AbstractUserManager {
                 rs = stmt.executeQuery(sql);
                 if (rs.next()) {
                     try {
-                        return getUserByName(user);
+                        String storedPassword = rs.getString(ATTR_PASSWORD);
+                        if(passwordEncryptor.matches(password, storedPassword)) {
+                            return getUserByName(user);
+                        } else {
+                            throw new AuthenticationFailedException(
+                                    "Authentication failed");
+                        }
                     } catch (FtpException e) {
                         throw new AuthenticationFailedException(
                                 "Authentication failed", e);
@@ -818,5 +767,25 @@ public class DbUserManager extends AbstractUserManager {
             }
         }
         return valBuf.toString();
+    }
+    
+
+    
+    /**
+     * Retrieve the password encryptor used for this user manager
+     * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
+     *  if no other has been provided
+     */    
+    public PasswordEncryptor getPasswordEncryptor() {
+        return passwordEncryptor;
+    }
+
+
+    /**
+     * Set the password encryptor to use for this user manager
+     * @param passwordEncryptor The password encryptor
+     */
+    public void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
+        this.passwordEncryptor = passwordEncryptor;
     }
 }

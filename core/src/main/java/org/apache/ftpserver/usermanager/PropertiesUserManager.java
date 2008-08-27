@@ -36,7 +36,6 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.BaseProperties;
-import org.apache.ftpserver.util.EncryptUtils;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +60,18 @@ public class PropertiesUserManager extends AbstractUserManager {
 
     private File userDataFile = new File("./res/user.gen");
 
-    private boolean isPasswordEncrypt = true;
-
     private boolean isConfigured = false;
+    
+    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
+
+    
+    /**
+     * Retrieve the file used to load and store users
+     * @return The file
+     */
+    public File getFile() {
+        return userDataFile;
+    }
 
     /**
      * Set the file used to store and read users. Must be set before
@@ -72,7 +80,7 @@ public class PropertiesUserManager extends AbstractUserManager {
      * @param propFile
      *            A file containing users
      */
-    public void setPropFile(File propFile) {
+    public void setFile(File propFile) {
         if (isConfigured) {
             throw new IllegalStateException("Must be called before configure()");
         }
@@ -80,39 +88,26 @@ public class PropertiesUserManager extends AbstractUserManager {
         this.userDataFile = propFile;
     }
 
+    
     /**
-     * If true is returned, passwords will be stored as hashes rather than in
-     * clear text. Default is true.
-     * 
-     * @return True if passwords are stored as hashes.
-     */
-    public boolean isEncryptPassword() {
-        return isPasswordEncrypt;
+     * Retrieve the password encryptor used for this user manager
+     * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
+     *  if no other has been provided
+     */    
+    public PasswordEncryptor getPasswordEncryptor() {
+        return passwordEncryptor;
     }
 
-    /**
-     * If set to true, passwords will be stored as a hash to ensure that it can
-     * not be retrived from the user file. Must be set before
-     * {@link #configure()} is called.
-     * 
-     * @param encryptPassword
-     *            True to store a hash of the passwords, false to store the
-     *            passwords in clear text.
-     */
-    public void setEncryptPasswords(boolean encryptPassword) {
-        if (isConfigured) {
-            throw new IllegalStateException("Must be called before configure()");
-        }
-
-        this.isPasswordEncrypt = encryptPassword;
-    }
 
     /**
-     * @deprecated Use {@link #setEncryptPasswords(boolean)}
+     * Set the password encryptor to use for this user manager
+     * @param passwordEncryptor The password encryptor
      */
-    public void setPropPasswordEncrypt(boolean encryptPassword) {
-        setEncryptPasswords(encryptPassword);
+    public void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
+        this.passwordEncryptor = passwordEncryptor;
     }
+
+
 
     /**
      * Lazy init the user manager
@@ -303,14 +298,9 @@ public class PropertiesUserManager extends AbstractUserManager {
         String password = usr.getPassword();
 
         if (password != null) {
-            if (isPasswordEncrypt) {
-                password = EncryptUtils.encryptMD5(password);
-            }
+            password = passwordEncryptor.encrypt(password);
         } else {
-            String blankPassword = "";
-            if (isPasswordEncrypt) {
-                blankPassword = EncryptUtils.encryptMD5("");
-            }
+            String blankPassword = passwordEncryptor.encrypt("");
 
             if (doesExist(name)) {
                 String key = PREFIX + name + '.' + ATTR_PASSWORD;
@@ -424,12 +414,15 @@ public class PropertiesUserManager extends AbstractUserManager {
                 password = "";
             }
 
-            String passVal = userDataProp.getProperty(PREFIX + user + '.'
+            String storedPassword = userDataProp.getProperty(PREFIX + user + '.'
                     + ATTR_PASSWORD);
-            if (isPasswordEncrypt) {
-                password = EncryptUtils.encryptMD5(password);
+            
+            if(storedPassword == null) {
+                // user does not exist
+                throw new AuthenticationFailedException("Authentication failed");
             }
-            if (password.equals(passVal)) {
+
+            if (passwordEncryptor.matches(password, storedPassword)) {
                 return getUserByName(user);
             } else {
                 throw new AuthenticationFailedException("Authentication failed");

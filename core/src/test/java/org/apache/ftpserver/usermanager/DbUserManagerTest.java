@@ -38,18 +38,20 @@ import org.hsqldb.jdbc.jdbcDataSource;
 */
 public class DbUserManagerTest extends UserManagerTestTemplate {
 
-    private static final File INIT_SQL_SCRIPT = new File(TestUtil.getBaseDir(),
-            "src/test/resources/dbusermanagertest-hsql.sql");
-
     private jdbcDataSource ds;
 
     private Connection conn;
 
+    protected File getInitSqlScript() {
+        return new File(TestUtil.getBaseDir(),
+            "src/test/resources/dbusermanagertest-hsql.sql");  
+    }
+    
     private void createDatabase() throws Exception {
         conn = ds.getConnection();
         conn.setAutoCommit(true);
 
-        String ddl = IoUtils.readFully(new FileReader(INIT_SQL_SCRIPT));
+        String ddl = IoUtils.readFully(new FileReader(getInitSqlScript()));
 
         Statement stm = conn.createStatement();
         stm.execute(ddl);
@@ -70,7 +72,7 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
         manager
                 .setSqlUserSelectAll("SELECT userid FROM FTP_USER ORDER BY userid");
         manager
-                .setSqlUserAuthenticate("SELECT userid FROM FTP_USER WHERE userid='{userid}' AND userpassword='{userpassword}'");
+                .setSqlUserAuthenticate("SELECT userid, userpassword FROM FTP_USER WHERE userid='{userid}'");
         manager
                 .setSqlUserAdmin("SELECT userid FROM FTP_USER WHERE userid='{userid}' AND userid='admin'");
 

@@ -29,14 +29,14 @@ CREATE TABLE FTP_USER (
 );
 
 -- password="pw1"
-INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user1', '6E6FDF956D04289354DCF1619E28FE77', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user1', 'pw1', 'home');
 
 -- password="pw2"
-INSERT INTO FTP_USER VALUES ('user2', '6D5779B9B85BD4F11E44C9772E0DE602', 'home', false, true, 2, 5, 1, 3, 4);
+INSERT INTO FTP_USER VALUES ('user2', 'pw2', 'home', false, true, 2, 5, 1, 3, 4);
 
 -- password=""
-INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user3', 'D41D8CD98F00B204E9800998ECF8427E', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('user3', '', 'home');
 
 -- password="admin"
-INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('admin', '21232F297A57A5A743894A0E4A801FC3', 'home');
+INSERT INTO FTP_USER (userid, userpassword, homedirectory) VALUES ('admin', 'admin', 'home');
 

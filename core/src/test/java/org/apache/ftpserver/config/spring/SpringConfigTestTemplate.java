@@ -22,10 +22,8 @@ package org.apache.ftpserver.config.spring;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.usermanager.DbUserManager;
-import org.hsqldb.jdbc.jdbcDataSource;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ByteArrayResource;
 
 /**
 *
@@ -33,26 +31,23 @@ import org.springframework.core.io.FileSystemResource;
 * @version $Rev$, $Date$
 *
 */
-public class XmlDbUserManagerConfigTest extends TestCase {
+public abstract class SpringConfigTestTemplate extends TestCase {
 
-    public void test() throws Throwable {
+    protected FtpServer createServer(String config) {
+        String completeConfig = "<server id=\"server\" xmlns=\"http://mina.apache.org/ftpserver/spring/v1\" "
+            + "xmlns:beans=\"http://www.springframework.org/schema/beans\" " 
+            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+            + "xsi:schemaLocation=\" "
+            + "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd "
+            + "http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd "
+            + "\">"
+            + config
+            + "</server>";
+
         XmlBeanFactory factory = new XmlBeanFactory(
-                new FileSystemResource(
-                        "src/test/resources/spring-config/config-spring-db-user-manager.xml"));
-
-        FtpServer server = (FtpServer) factory.getBean("server");
-
-        DbUserManager um = (DbUserManager) server.getServerContext()
-                .getUserManager();
-        assertTrue(um.getDataSource() instanceof jdbcDataSource);
-
-        assertEquals("INSERT USER", um.getSqlUserInsert());
-        assertEquals("UPDATE USER", um.getSqlUserUpdate());
-        assertEquals("DELETE USER", um.getSqlUserDelete());
-        assertEquals("SELECT USER", um.getSqlUserSelect());
-        assertEquals("SELECT ALL USERS", um.getSqlUserSelectAll());
-        assertEquals("IS ADMIN", um.getSqlUserAdmin());
-        assertEquals("AUTHENTICATE", um.getSqlUserAuthenticate());
+                new ByteArrayResource(completeConfig.getBytes()));
+        
+        return (FtpServer) factory.getBean("server");
 
     }
 }

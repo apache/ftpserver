@@ -33,7 +33,7 @@ public interface User {
     String getName();
 
     /**
-     * Get password.
+     * Get password. Might return null if the user manager can not provide the password
      */
     String getPassword();
 

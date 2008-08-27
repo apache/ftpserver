@@ -32,7 +32,10 @@ import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.WriteRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class wraps native file object.
@@ -42,6 +45,8 @@ import org.apache.ftpserver.usermanager.WriteRequest;
  */
 public class NativeFileObject implements FileObject {
 
+    private final Logger LOG = LoggerFactory.getLogger(NativeFileObject.class);
+    
     // the file name with respect to the user root.
     // The path separator character will be '/' and
     // it will always begin with '/'.
@@ -189,13 +194,19 @@ public class NativeFileObject implements FileObject {
      * Check file write permission.
      */
     public boolean hasWritePermission() {
+        LOG.debug("Checking authorization for " + getFullName());
         if (user.authorize(new WriteRequest(getFullName())) == null) {
+            LOG.debug("Not authorized");
             return false;
         }
 
+        LOG.debug("Checking if file exists");
         if (file.exists()) {
+            LOG.debug("Checking can write: " + file.canWrite());
             return file.canWrite();
         }
+        
+        LOG.debug("Authorized");
         return true;
     }
 
