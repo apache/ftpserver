@@ -180,6 +180,11 @@ public class BaseUser implements User, Serializable {
     public AuthorizationRequest authorize(AuthorizationRequest request) {
         Authority[] authorities = getAuthorities();
 
+        // check for no authorities at all
+        if(authorities == null) {
+            return null;
+        }
+        
         boolean someoneCouldAuthorize = false;
         for (int i = 0; i < authorities.length; i++) {
             Authority authority = authorities[i];
