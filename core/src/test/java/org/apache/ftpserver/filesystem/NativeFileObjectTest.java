@@ -159,6 +159,22 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
             // OK
         }
     }
+    public void testDeleteReadOnlyFiles(){
+    	
+    	NativeFileObject fileObj=(NativeFileObject)createFileObject(FILE2_PATH, USER);
+    	File physicalFile=fileObj.getPhysicalFile();
+    	// First check
+    	assertTrue(fileObj.hasDeletePermission());
+    	
+    	// Now file is read only.
+    	if (!physicalFile.setReadOnly() ){
+    		fail("Test cannot be setup properly");   		
+    	}
+    
+    	assertTrue(fileObj.hasDeletePermission());
+    	//can we actually delete this file?
+    	assertTrue(physicalFile.delete());
+    }
 
     protected void tearDown() throws Exception {
         cleanTmpDirs();

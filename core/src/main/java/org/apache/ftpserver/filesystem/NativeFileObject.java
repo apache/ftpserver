@@ -215,12 +215,35 @@ public class NativeFileObject implements FileObject {
      */
     public boolean hasDeletePermission() {
 
+
         // root cannot be deleted
         if ("/".equals(fileName)) {
             return false;
         }
 
-        return hasWritePermission();
+        /* Added 12/08/2008: in the case that the permission is not explicitly denied for this file
+         * we will check if the parent file has write permission as most systems consider that a file can
+         * be deleted when their parent directory is writable.
+        */
+        String fullName=getFullName();
+        
+        // we check FTPServer's write permission for this file.
+        if (user.authorize(new WriteRequest(fullName)) == null) {
+            return false;
+        }
+        // In order to maintain consistency, when possible we delete the last '/' character in the String
+        int indexOfSlash=fullName.lastIndexOf('/');
+        String parentFullName;
+        if (indexOfSlash==0){
+         parentFullName="/";
+        }
+        else{
+         parentFullName=fullName.substring(0,indexOfSlash);
+        }
+        
+        // we check if the parent FileObject is writable.
+        NativeFileObject parentObject=new NativeFileObject(parentFullName,file.getAbsoluteFile().getParentFile(),user);
+        return parentObject.hasWritePermission(); 
     }
 
     /**
