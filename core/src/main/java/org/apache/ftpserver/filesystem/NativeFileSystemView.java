@@ -113,7 +113,7 @@ public class NativeFileSystemView implements FileSystemView {
 
         // get actual file object
         String physicalName = NativeFileObject.getPhysicalName(rootDir,
-                currDir, file);
+                currDir, file, caseInsensitive);
         File fileObj = new File(physicalName);
 
         // strip the root directory and return
