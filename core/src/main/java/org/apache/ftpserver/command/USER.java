@@ -30,7 +30,6 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
 import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
@@ -81,7 +80,7 @@ public class USER extends AbstractCommand {
             MdcInjectionFilter.setProperty(session, "userName", userName);
 
             // already logged-in
-            BaseUser user = (BaseUser) session.getUser();
+            User user = (User) session.getUser();
             if (session.isLoggedIn()) {
                 if (userName.equals(user.getName())) {
                     session.write(FtpReplyUtil.translate(session, request,
