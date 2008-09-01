@@ -80,7 +80,7 @@ public class USER extends AbstractCommand {
             MdcInjectionFilter.setProperty(session, "userName", userName);
 
             // already logged-in
-            User user = (User) session.getUser();
+            User user = session.getUser();
             if (session.isLoggedIn()) {
                 if (userName.equals(user.getName())) {
                     session.write(FtpReplyUtil.translate(session, request,
