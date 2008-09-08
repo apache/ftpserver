@@ -17,11 +17,12 @@
 	<parent>
 		<artifactId>ftpserver-parent</artifactId>
 		<groupId>org.apache.ftpserver</groupId>
-		<version>1.0.0-M3-SNAPSHOT</version>
+		<version>1.0.0-M3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.ftpserver</groupId>
 	<artifactId>ftplet-api</artifactId>
+	<version>1.0.0-M3</version>
     <packaging>bundle</packaging>
 	<name>Apache Ftplet API</name>
 	<description>
@@ -29,7 +30,6 @@
 	  lifecycle of FtpServer. Ftplets are called on session connect and disconnect
 	  as well as before and after each command within a user session. 
 	</description>
-	<version>1.0.0-M3-SNAPSHOT</version>
 	<url>http://mina.apache.org/ftpserver</url>
 	<scm>
 		<connection>

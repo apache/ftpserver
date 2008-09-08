@@ -22,14 +22,14 @@
   <parent>
     <artifactId>ftpserver-parent</artifactId>
     <groupId>org.apache.ftpserver</groupId>
-    <version>1.0.0-M3-SNAPSHOT</version>
+    <version>1.0.0-M3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
   <artifactId>ftpserver</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer</name>
-  <version>1.0.0-M3-SNAPSHOT</version>
+  <version>1.0.0-M3</version>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/mina/ftpserver/trunk/distribution</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/mina/ftpserver/trunk/distribution</developerConnection>
