@@ -21,13 +21,13 @@
   <parent>
     <artifactId>ftpserver-parent</artifactId>
     <groupId>org.apache.ftpserver</groupId>
-    <version>1.0.0-M3-SNAPSHOT</version>
+    <version>1.0.0-M4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>
   <artifactId>ftpserver-core</artifactId>
   <name>Apache FtpServer Core</name>
-  <version>1.0.0-M3-SNAPSHOT</version>
+  <version>1.0.0-M4-SNAPSHOT</version>
   <packaging>jar</packaging>
   <scm>
     <connection>
