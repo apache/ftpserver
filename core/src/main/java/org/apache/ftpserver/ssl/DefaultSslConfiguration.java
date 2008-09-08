@@ -378,9 +378,6 @@ public class DefaultSslConfiguration implements SslConfiguration {
             return ctx;
         }
 
-        // create SSLContext
-        ctx = SSLContext.getInstance(protocol);
-
         KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 
         // wrap key managers to allow us to control their behavior
