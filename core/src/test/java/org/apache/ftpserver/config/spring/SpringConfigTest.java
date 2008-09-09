@@ -26,10 +26,10 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.DefaultCommandFactory;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.command.HELP;
-import org.apache.ftpserver.command.STAT;
+import org.apache.ftpserver.command.impl.DefaultCommandFactory;
+import org.apache.ftpserver.command.impl.HELP;
+import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;

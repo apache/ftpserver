@@ -21,12 +21,12 @@ package org.apache.ftpserver;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.command.Command;
+import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.FtpletResult;
-import org.apache.ftpserver.interfaces.Command;
-import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;

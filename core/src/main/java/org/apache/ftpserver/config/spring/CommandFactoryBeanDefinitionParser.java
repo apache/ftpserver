@@ -21,8 +21,8 @@ package org.apache.ftpserver.config.spring;
 
 import java.util.List;
 
-import org.apache.ftpserver.DefaultCommandFactory;
-import org.apache.ftpserver.interfaces.CommandFactory;
+import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.command.impl.DefaultCommandFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;

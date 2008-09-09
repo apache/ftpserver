@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.command.impl.DefaultCommandFactory;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.DefaultFtpletContainer;
@@ -31,7 +33,6 @@ import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;

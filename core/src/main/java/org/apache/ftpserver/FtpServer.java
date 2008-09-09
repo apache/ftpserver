@@ -21,10 +21,10 @@ package org.apache.ftpserver;
 
 import java.util.Map;
 
+import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.interfaces.CommandFactory;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;

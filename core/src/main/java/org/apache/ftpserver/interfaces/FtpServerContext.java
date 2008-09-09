@@ -22,6 +22,7 @@ package org.apache.ftpserver.interfaces;
 import java.util.Map;
 
 import org.apache.ftpserver.ConnectionConfig;
+import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.listener.Listener;

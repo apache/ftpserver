@@ -19,13 +19,30 @@
 
 package org.apache.ftpserver.command;
 
+import java.io.IOException;
+
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
- * Common base class recommended for {@link Command} implementations
+ * This interface encapsulates all the FTP commands.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public abstract class AbstractCommand implements Command {
+public interface Command {
+
+    /**
+     * Execute command.
+     * 
+     * @param session
+     *            TODO
+     * @param context
+     *            TODO
+     */
+    void execute(FtpIoSession session, FtpServerContext context,
+            FtpRequest request) throws IOException, FtpException;
 
 }
