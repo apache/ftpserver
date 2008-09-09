@@ -44,9 +44,7 @@ import org.apache.ftpserver.ftplet.User;
  * @version $Rev$, $Date$
  */
 
-public class BaseUser implements User, Serializable {
-
-    private static final long serialVersionUID = -47371353779731294L;
+public class BaseUser implements User {
 
     private String name = null;
 
