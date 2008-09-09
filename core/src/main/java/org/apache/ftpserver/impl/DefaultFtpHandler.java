@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -31,7 +32,6 @@ import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.mina.core.session.IdleStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class DefaultFtpHandler implements FtpHandler {
     public void sessionOpened(final FtpIoSession session) throws Exception {
         context.getFtpletContainer().onConnect(session.getFtpletSession());
 
-        session.write(FtpReplyUtil.translate(session, null, context,
+        session.write(LocalizedFtpReply.translate(session, null, context,
                 FtpReply.REPLY_220_SERVICE_READY, null, null));
     }
 
@@ -112,7 +112,7 @@ public class DefaultFtpHandler implements FtpHandler {
             // make sure the user is authenticated before he issues commands
             if (!session.isLoggedIn()
                     && !isCommandOkWithoutAuthentication(commandName)) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_530_NOT_LOGGED_IN, "permission", null));
                 return;
             }
@@ -137,7 +137,7 @@ public class DefaultFtpHandler implements FtpHandler {
                         command.execute(session, context, request);
                     }
                 } else {
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context,
                             FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
                             "not.implemented", null));
@@ -160,7 +160,7 @@ public class DefaultFtpHandler implements FtpHandler {
 
             // send error reply
             try {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, null,
                         null));
             } catch (Exception ex1) {

@@ -26,9 +26,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Client-Server listing negotation. Instruct the server what listing types to
@@ -56,7 +56,7 @@ public class OPTS_MLST extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if (spIndex == -1) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "OPTS.MLST",
                     null));
             return;
@@ -74,10 +74,10 @@ public class OPTS_MLST extends AbstractCommand {
         String[] validatedTypes = validateSelectedTypes(types);
         if (validatedTypes != null) {
             session.setAttribute("MLST.types", validatedTypes);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "OPTS.MLST", listTypes));
         } else {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "OPTS.MLST", listTypes));
         }

@@ -20,9 +20,9 @@
 package org.apache.ftpserver.listener.nio;
 
 import org.apache.ftpserver.FtpHandler;
-import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.FtpRequestImpl;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.mina.core.service.IoHandler;

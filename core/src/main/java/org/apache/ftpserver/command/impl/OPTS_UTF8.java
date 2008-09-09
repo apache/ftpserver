@@ -25,9 +25,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Client-Server encoding negotiation. Force server from default encoding to
@@ -50,7 +50,7 @@ public class OPTS_UTF8 extends AbstractCommand {
         session.resetState();
 
         // send default message
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_200_COMMAND_OKAY, "OPTS.UTF8", null));
     }
 }

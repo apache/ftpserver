@@ -24,9 +24,9 @@ import java.io.IOException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class REST extends AbstractCommand {
         // argument check
         String argument = request.getArgument();
         if (argument == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "REST", null));
             return;
@@ -72,7 +72,7 @@ public class REST extends AbstractCommand {
             if (skipLen < 0L) {
                 skipLen = 0L;
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -81,7 +81,7 @@ public class REST extends AbstractCommand {
                                         "REST.negetive", null));
             } else {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -91,7 +91,7 @@ public class REST extends AbstractCommand {
             }
         } catch (NumberFormatException ex) {
             LOG.debug("Invalid restart position: " + argument, ex);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "REST.invalid", null));
         }

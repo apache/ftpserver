@@ -25,9 +25,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,12 +62,12 @@ public class TYPE extends AbstractCommand {
         // set type
         try {
             session.setDataType(DataType.parseArgument(type));
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "TYPE", null));
         } catch (IllegalArgumentException e) {
             LOG.debug("Illegal type argument: " + request.getArgument(), e);
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,

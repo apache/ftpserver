@@ -26,10 +26,10 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.util.DateUtils;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class MDTM extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if (fileName == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "MDTM", null));
             return;
@@ -72,7 +72,7 @@ public class MDTM extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if (file == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM",
                     fileName));
             return;
@@ -82,10 +82,10 @@ public class MDTM extends AbstractCommand {
         fileName = file.getFullName();
         if (file.doesExist()) {
             String dateStr = DateUtils.getFtpDate(file.getLastModified());
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_213_FILE_STATUS, "MDTM", dateStr));
         } else {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MDTM",
                     fileName));
         }

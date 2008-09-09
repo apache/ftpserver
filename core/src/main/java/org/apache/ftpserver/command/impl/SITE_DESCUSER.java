@@ -28,11 +28,11 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.usermanager.TransferRateRequest;
 import org.apache.ftpserver.usermanager.WriteRequest;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class SITE_DESCUSER extends AbstractCommand {
         UserManager userManager = context.getUserManager();
         boolean isAdmin = userManager.isAdmin(session.getUser().getName());
         if (!isAdmin) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_530_NOT_LOGGED_IN, "SITE", null));
             return;
         }
@@ -69,7 +69,7 @@ public class SITE_DESCUSER extends AbstractCommand {
         String argument = request.getArgument();
         int spIndex = argument.indexOf(' ');
         if (spIndex == -1) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS,
                     "SITE.DESCUSER", null));
             return;
@@ -88,7 +88,7 @@ public class SITE_DESCUSER extends AbstractCommand {
             user = null;
         }
         if (user == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "SITE.DESCUSER", userName));
             return;

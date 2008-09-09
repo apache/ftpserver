@@ -26,9 +26,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * Data channel protection level.
@@ -51,7 +51,7 @@ public class PROT extends AbstractCommand {
         // check argument
         String arg = request.getArgument();
         if (arg == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "PROT", null));
             return;
@@ -62,21 +62,21 @@ public class PROT extends AbstractCommand {
         ServerDataConnectionFactory dcon = session.getDataConnection();
         if (arg.equals("C")) {
             dcon.setSecure(false);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         } else if (arg.equals("P")) {
             if (session.getListener().getDataConnectionConfiguration()
                     .getSslConfiguration() == null) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         431, "PROT", null));
             } else {
                 dcon.setSecure(true);
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
             }
         } else {
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,

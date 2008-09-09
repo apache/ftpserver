@@ -25,10 +25,10 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.message.MessageResource;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * A new command "LANG" is added to the FTP command set to allow server-FTP
@@ -54,7 +54,7 @@ public class LANG extends AbstractCommand {
         String language = request.getArgument();
         if (language == null) {
             session.setLanguage(null);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "LANG", null));
             return;
         }
@@ -67,7 +67,7 @@ public class LANG extends AbstractCommand {
             for (int i = 0; i < availableLanguages.length; ++i) {
                 if (availableLanguages[i].equals(language)) {
                     session.setLanguage(language);
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context, FtpReply.REPLY_200_COMMAND_OKAY, "LANG",
                             null));
                     return;
@@ -76,7 +76,7 @@ public class LANG extends AbstractCommand {
         }
 
         // not found - send error message
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_504_COMMAND_NOT_IMPLEMENTED_FOR_THAT_PARAMETER,
                 "LANG", null));
     }

@@ -26,9 +26,9 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class RNTO extends AbstractCommand {
             String toFileStr = request.getArgument();
             if (toFileStr == null) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -71,7 +71,7 @@ public class RNTO extends AbstractCommand {
             // get the "rename from" file object
             FileObject frFile = session.getRenameFrom();
             if (frFile == null) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "RNTO",
                         null));
                 return;
@@ -86,7 +86,7 @@ public class RNTO extends AbstractCommand {
             }
             if (toFile == null) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -100,7 +100,7 @@ public class RNTO extends AbstractCommand {
             // check permission
             if (!toFile.hasWritePermission()) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -113,7 +113,7 @@ public class RNTO extends AbstractCommand {
             // check file existance
             if (!frFile.doesExist()) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -125,7 +125,7 @@ public class RNTO extends AbstractCommand {
 
             // now rename
             if (frFile.move(toFile)) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO",
                         toFileStr));
 
@@ -134,7 +134,7 @@ public class RNTO extends AbstractCommand {
 
             } else {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,

@@ -27,10 +27,10 @@ import java.net.UnknownHostException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IllegalInetAddressException;
 import org.apache.ftpserver.util.IllegalPortException;
 import org.apache.ftpserver.util.SocketAddressEncoder;
@@ -72,7 +72,7 @@ public class PORT extends AbstractCommand {
 
         // argument check
         if (!request.hasArgument()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "PORT", null));
             return;
@@ -82,7 +82,7 @@ public class PORT extends AbstractCommand {
         DataConnectionConfiguration dataCfg = session.getListener()
                 .getDataConnectionConfiguration();
         if (!dataCfg.isActiveEnabled()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     510, "PORT.disabled", null));
             return;
         }
@@ -91,13 +91,13 @@ public class PORT extends AbstractCommand {
         try {
             address = SocketAddressEncoder.decode(request.getArgument());
         } catch (IllegalInetAddressException e) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     510, "PORT", null));
             return;
         } catch (IllegalPortException e) {
             LOG.debug("Invalid data port: " + request.getArgument(), e);
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,
@@ -108,7 +108,7 @@ public class PORT extends AbstractCommand {
         } catch (UnknownHostException e) {
             LOG.debug("Unknown host", e);
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,
@@ -124,7 +124,7 @@ public class PORT extends AbstractCommand {
                 InetAddress clientAddr = ((InetSocketAddress) session
                         .getRemoteAddress()).getAddress();
                 if (!address.getAddress().equals(clientAddr)) {
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context, 510, "PORT.mismatch", null));
                     return;
                 }
@@ -132,7 +132,7 @@ public class PORT extends AbstractCommand {
         }
 
         session.getDataConnection().initActiveDataConnection(address);
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_200_COMMAND_OKAY, "PORT", null));
     }
 

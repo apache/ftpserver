@@ -29,9 +29,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class MD5 extends AbstractCommand {
 
         if (argument == null || argument.trim().length() == 0) {
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,
@@ -103,7 +103,7 @@ public class MD5 extends AbstractCommand {
 
             if (file == null) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -116,7 +116,7 @@ public class MD5 extends AbstractCommand {
             // check file
             if (!file.isFile()) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -141,7 +141,7 @@ public class MD5 extends AbstractCommand {
 
             } catch (NoSuchAlgorithmException e) {
                 LOG.debug("MD5 algorithm not available", e);
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
                         "MD5.notimplemened", null));
             } finally {
@@ -149,10 +149,10 @@ public class MD5 extends AbstractCommand {
             }
         }
         if (isMMD5) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     252, "MMD5", sb.toString()));
         } else {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     251, "MD5", sb.toString()));
         }
     }

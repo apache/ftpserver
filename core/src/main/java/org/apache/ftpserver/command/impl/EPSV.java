@@ -27,9 +27,9 @@ import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * The EPSV command requests that a server listen on a data port and wait for a
@@ -68,12 +68,12 @@ public class EPSV extends AbstractCommand {
 
             // send connection info to client
             String portStr = "|||" + servPort + '|';
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     229, "EPSV", portStr));
 
         } catch (DataConnectionException e) {
             session
-                    .write(FtpReplyUtil.translate(session, request, context,
+                    .write(LocalizedFtpReply.translate(session, request, context,
                             FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION,
                             "EPSV", null));
             return;

@@ -25,9 +25,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>NOOP &lt;CRLF&gt;</code><br>
@@ -48,7 +48,7 @@ public class NOOP extends AbstractCommand {
             throws IOException, FtpException {
 
         session.resetState();
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_200_COMMAND_OKAY, "NOOP", null));
     }
 }

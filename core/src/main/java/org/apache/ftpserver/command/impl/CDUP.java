@@ -26,9 +26,9 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +67,11 @@ public class CDUP extends AbstractCommand {
         }
         if (success) {
             String dirName = fsview.getCurrentDirectory().getFullName();
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CDUP",
                     dirName));
         } else {
-            session.write(FtpReplyUtil
+            session.write(LocalizedFtpReply
                     .translate(session, request, context,
                             FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                             "CDUP", null));

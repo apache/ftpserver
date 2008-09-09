@@ -29,9 +29,9 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +84,12 @@ public class PASV extends AbstractCommand {
 
             String addrStr = SocketAddressEncoder
                     .encode(externalDataConAddress);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
         } catch (DataConnectionException e) {
             LOG.warn("Failed to open passive data connection", e);
             session
-                    .write(FtpReplyUtil.translate(session, request, context,
+                    .write(LocalizedFtpReply.translate(session, request, context,
                             FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION,
                             "PASV", null));
             return;

@@ -24,9 +24,9 @@ import java.io.IOException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>MODE &lt;SP&gt; <mode-code> &lt;CRLF&gt;</code><br>
@@ -51,7 +51,7 @@ public class MODE extends AbstractCommand {
 
         // argument check
         if (!request.hasArgument()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "MODE", null));
             return;
@@ -62,15 +62,15 @@ public class MODE extends AbstractCommand {
         md = Character.toUpperCase(md);
         if (md == 'S') {
             session.getDataConnection().setZipMode(false);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "S"));
         } else if (md == 'Z') {
             session.getDataConnection().setZipMode(true);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "MODE", "Z"));
         } else {
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,

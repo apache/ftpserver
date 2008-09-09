@@ -27,10 +27,10 @@ import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public class MKD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if (fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "MKD", null));
             return;
@@ -75,7 +75,7 @@ public class MKD extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if (file == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                     "MKD.invalid", fileName));
             return;
@@ -84,7 +84,7 @@ public class MKD extends AbstractCommand {
         // check permission
         fileName = file.getFullName();
         if (!file.hasWritePermission()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                     "MKD.permission", fileName));
             return;
@@ -92,7 +92,7 @@ public class MKD extends AbstractCommand {
 
         // check file existance
         if (file.doesExist()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                     "MKD.exists", fileName));
             return;
@@ -100,7 +100,7 @@ public class MKD extends AbstractCommand {
 
         // now create directory
         if (file.mkdir()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
 
             // write log message
@@ -113,7 +113,7 @@ public class MKD extends AbstractCommand {
             ftpStat.setMkdir(session, file);
 
         } else {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD",
                     fileName));
         }

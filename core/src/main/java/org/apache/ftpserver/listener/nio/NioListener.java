@@ -30,9 +30,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.ftpserver.DefaultFtpHandler;
 import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.filter.FtpLoggingFilter;
+import org.apache.ftpserver.impl.DefaultFtpHandler;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.AbstractListener;

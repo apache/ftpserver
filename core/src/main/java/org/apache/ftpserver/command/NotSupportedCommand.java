@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * A command used primarily for overriding already installed commands when one
@@ -47,7 +47,7 @@ public class NotSupportedCommand extends AbstractCommand {
         session.resetState();
 
         // We do not support this command
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "Not supported",
                 null));
     }

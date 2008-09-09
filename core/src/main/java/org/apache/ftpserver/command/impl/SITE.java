@@ -27,9 +27,9 @@ import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +66,7 @@ public class SITE extends AbstractCommand {
         // no params
         if (argument == null) {
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "SITE", null));
             return;
         }
@@ -79,14 +79,14 @@ public class SITE extends AbstractCommand {
                 command.execute(session, context, request);
             } else {
                 session.resetState();
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED, "SITE",
                         argument));
             }
         } catch (Exception ex) {
             LOG.warn("SITE.execute()", ex);
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED,
                     "SITE", null));
         }

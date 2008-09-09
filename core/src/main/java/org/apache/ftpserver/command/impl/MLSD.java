@@ -31,6 +31,7 @@ import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listing.DirectoryLister;
@@ -38,7 +39,6 @@ import org.apache.ftpserver.listing.FileFormater;
 import org.apache.ftpserver.listing.ListArgument;
 import org.apache.ftpserver.listing.ListArgumentParser;
 import org.apache.ftpserver.listing.MLSTFileFormater;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +86,7 @@ public class MLSD extends AbstractCommand {
             }
 
             // get data connection
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_150_FILE_STATUS_OKAY, "MLSD", null));
 
             // print listing data
@@ -95,7 +95,7 @@ public class MLSD extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "MLSD",
                         null));
                 return;
@@ -115,14 +115,14 @@ public class MLSD extends AbstractCommand {
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED,
                         "MLSD", null));
             } catch (IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -135,7 +135,7 @@ public class MLSD extends AbstractCommand {
                                 + request.getArgument(), e);
                 // if listing syntax error - send message
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -146,7 +146,7 @@ public class MLSD extends AbstractCommand {
 
             // if data transfer ok - send transfer complete message
             if (!failure) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "MLSD",
                         null));
             }

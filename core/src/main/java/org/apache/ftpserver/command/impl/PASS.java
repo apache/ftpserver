@@ -32,13 +32,13 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +75,7 @@ public class PASS extends AbstractCommand {
             String password = request.getArgument();
             if (password == null) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -89,7 +89,7 @@ public class PASS extends AbstractCommand {
             String userName = session.getUserArgument();
 
             if (userName == null && session.getUser() == null) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "PASS",
                         null));
                 return;
@@ -97,7 +97,7 @@ public class PASS extends AbstractCommand {
 
             // already logged-in
             if (session.isLoggedIn()) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_202_COMMAND_NOT_IMPLEMENTED, "PASS",
                         null));
                 return;
@@ -113,7 +113,7 @@ public class PASS extends AbstractCommand {
                         .getMaxAnonymousLogins();
                 if (currAnonLogin >= maxAnonLogin) {
                     session
-                            .write(FtpReplyUtil
+                            .write(LocalizedFtpReply
                                     .translate(
                                             session,
                                             request,
@@ -129,7 +129,7 @@ public class PASS extends AbstractCommand {
             int maxLogin = context.getConnectionConfig().getMaxLogins();
             if (maxLogin != 0 && currLogin >= maxLogin) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -194,7 +194,7 @@ public class PASS extends AbstractCommand {
                         .getLoginFailureDelay());
 
                 LOG.warn("Login failure - " + userName);
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_530_NOT_LOGGED_IN, "PASS", userName));
                 stat.setLoginFail(session);
 
@@ -219,7 +219,7 @@ public class PASS extends AbstractCommand {
             stat.setLogin(session);
 
             // everything is fine - send login ok message
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_230_USER_LOGGED_IN, "PASS", userName));
             if (anonymous) {
                 LOG.info("Anonymous login success - " + password);

@@ -28,11 +28,11 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**
@@ -67,7 +67,7 @@ public class USER extends AbstractCommand {
             String userName = request.getArgument();
             if (userName == null) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -84,12 +84,12 @@ public class USER extends AbstractCommand {
             User user = session.getUser();
             if (session.isLoggedIn()) {
                 if (userName.equals(user.getName())) {
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context, FtpReply.REPLY_230_USER_LOGGED_IN, "USER",
                             null));
                     success = true;
                 } else {
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context, 530, "USER.invalid", null));
                 }
                 return;
@@ -100,7 +100,7 @@ public class USER extends AbstractCommand {
             if (anonymous
                     && (!context.getConnectionConfig()
                             .isAnonymousLoginEnabled())) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_530_NOT_LOGGED_IN, "USER.anonymous",
                         null));
                 return;
@@ -112,7 +112,7 @@ public class USER extends AbstractCommand {
                     .getMaxAnonymousLogins();
             if (anonymous && (currAnonLogin >= maxAnonLogin)) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -127,7 +127,7 @@ public class USER extends AbstractCommand {
             int maxLogin = context.getConnectionConfig().getMaxLogins();
             if (maxLogin != 0 && currLogin >= maxLogin) {
                 session
-                        .write(FtpReplyUtil
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
@@ -153,7 +153,7 @@ public class USER extends AbstractCommand {
 
                 if (configUser.authorize(loginRequest) == null) {
                     session
-                            .write(FtpReplyUtil
+                            .write(LocalizedFtpReply
                                     .translate(
                                             session,
                                             request,
@@ -168,11 +168,11 @@ public class USER extends AbstractCommand {
             success = true;
             session.setUserArgument(userName);
             if (anonymous) {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD,
                         "USER.anonymous", userName));
             } else {
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_331_USER_NAME_OKAY_NEED_PASSWORD,
                         "USER", userName));
             }

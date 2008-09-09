@@ -24,10 +24,10 @@ import java.io.IOException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.message.MessageResource;
-import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**
  * <code>HELP [&lt;SP&gt; <string>] &lt;CRLF&gt;</code><br>
@@ -54,7 +54,7 @@ public class HELP extends AbstractCommand {
 
         // print global help
         if (!request.hasArgument()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_214_HELP_MESSAGE, null, null));
             return;
         }
@@ -66,7 +66,7 @@ public class HELP extends AbstractCommand {
                 session.getLanguage()) == null) {
             ftpCmd = null;
         }
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_214_HELP_MESSAGE, ftpCmd, null));
     }
 }

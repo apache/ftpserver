@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.util;
+package org.apache.ftpserver.impl;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -31,6 +31,7 @@ import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.message.MessageResource;
+import org.apache.ftpserver.util.DateUtils;
 
 /**
  * FTP reply translator.
@@ -38,7 +39,8 @@ import org.apache.ftpserver.message.MessageResource;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class FtpReplyUtil {
+public class LocalizedFtpReply extends DefaultFtpReply {
+
 
     public static final String CLIENT_ACCESS_TIME = "client.access.time";
 
@@ -97,12 +99,12 @@ public class FtpReplyUtil {
 
     public static final String STAT_START_TIME = "stat.start.time";
 
-    public static FtpReply translate(FtpIoSession session, FtpRequest request,
+    public static LocalizedFtpReply translate(FtpIoSession session, FtpRequest request,
             FtpServerContext context, int code, String subId, String basicMsg) {
         String msg = translateMessage(session, request, context, code, subId,
                 basicMsg);
 
-        return new DefaultFtpReply(code, msg);
+        return new LocalizedFtpReply(code, msg);
     }
 
     private static String translateMessage(FtpIoSession session,
@@ -494,4 +496,12 @@ public class FtpReplyUtil {
         return varVal;
     }
 
+    /**
+     * Private constructor, only allow creating through factory method
+     */
+    private LocalizedFtpReply(int code, String message) {
+        super(code, message);
+    }
+
+    
 }

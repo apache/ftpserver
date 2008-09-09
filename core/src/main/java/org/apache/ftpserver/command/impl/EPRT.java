@@ -27,10 +27,10 @@ import java.net.UnknownHostException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public class EPRT extends AbstractCommand {
         // argument check
         String arg = request.getArgument();
         if (arg == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "EPRT", null));
             return;
@@ -71,7 +71,7 @@ public class EPRT extends AbstractCommand {
         DataConnectionConfiguration dataCfg = session.getListener()
                 .getDataConnectionConfiguration();
         if (!dataCfg.isActiveEnabled()) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     510, "EPRT.disabled", null));
             return;
         }
@@ -86,7 +86,7 @@ public class EPRT extends AbstractCommand {
             port = arg.substring(lastDelimIdx + 1, arg.length() - 1);
         } catch (Exception ex) {
             LOG.debug("Exception parsing host and port: " + arg, ex);
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     510, "EPRT", null));
             return;
         }
@@ -98,7 +98,7 @@ public class EPRT extends AbstractCommand {
         } catch (UnknownHostException ex) {
             LOG.debug("Unknown host: " + host, ex);
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,
@@ -114,7 +114,7 @@ public class EPRT extends AbstractCommand {
                 InetAddress clientAddr = ((InetSocketAddress) session
                         .getRemoteAddress()).getAddress();
                 if (!dataAddr.equals(clientAddr)) {
-                    session.write(FtpReplyUtil.translate(session, request,
+                    session.write(LocalizedFtpReply.translate(session, request,
                             context, 510, "EPRT.mismatch", null));
                     return;
                 }
@@ -128,7 +128,7 @@ public class EPRT extends AbstractCommand {
         } catch (NumberFormatException ex) {
             LOG.debug("Invalid port: " + port, ex);
             session
-                    .write(FtpReplyUtil
+                    .write(LocalizedFtpReply
                             .translate(
                                     session,
                                     request,
@@ -140,7 +140,7 @@ public class EPRT extends AbstractCommand {
 
         session.getDataConnection().initActiveDataConnection(
                 new InetSocketAddress(dataAddr, dataPort));
-        session.write(FtpReplyUtil.translate(session, request, context,
+        session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_200_COMMAND_OKAY, "EPRT", null));
     }
 }

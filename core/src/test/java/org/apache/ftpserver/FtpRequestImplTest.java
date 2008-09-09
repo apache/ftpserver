@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.impl.FtpRequestImpl;
+
 import junit.framework.TestCase;
 
 /**

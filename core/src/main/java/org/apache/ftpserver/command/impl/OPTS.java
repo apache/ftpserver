@@ -27,9 +27,9 @@ import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.util.FtpReplyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class OPTS extends AbstractCommand {
         // no params
         String argument = request.getArgument();
         if (argument == null) {
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "OPTS", null));
             return;
@@ -83,14 +83,14 @@ public class OPTS extends AbstractCommand {
                 command.execute(session, context, request);
             } else {
                 session.resetState();
-                session.write(FtpReplyUtil.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
                         "OPTS.not.implemented", argument));
             }
         } catch (Exception ex) {
             LOG.warn("OPTS.execute()", ex);
             session.resetState();
-            session.write(FtpReplyUtil.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_500_SYNTAX_ERROR_COMMAND_UNRECOGNIZED,
                     "OPTS", null));
         }
