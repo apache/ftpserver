@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.IOException;
 

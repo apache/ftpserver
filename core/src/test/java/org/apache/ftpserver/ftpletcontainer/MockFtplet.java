@@ -17,9 +17,16 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.IOException;
+
+import org.apache.ftpserver.ftplet.DefaultFtplet;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.ftplet.FtpletContext;
+import org.apache.ftpserver.ftplet.FtpletResult;
 
 /**
 *
@@ -27,114 +34,122 @@ import java.io.IOException;
 * @version $Rev$, $Date$
 *
 */
-public class MockFtpletCallback extends DefaultFtplet {
+public class MockFtplet extends DefaultFtplet {
 
-    public static FtpletResult returnValue;
+    protected static MockFtpletCallback callback = new MockFtpletCallback();
 
+    public FtpletContext context;
+    public boolean destroyed = false;
+    
     public void destroy() {
+        destroyed = true;
+        
+        callback.destroy();
     }
 
     public void init(FtpletContext ftpletContext) throws FtpException {
+        this.context = ftpletContext;
+        
+        callback.init(ftpletContext);
     }
 
     public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onAppendEnd(session, request);
     }
 
     public FtpletResult onAppendStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onAppendStart(session, request);
     }
 
     public FtpletResult onConnect(FtpSession session) throws FtpException,
             IOException {
-        return returnValue;
+        return callback.onConnect(session);
     }
 
     public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onDeleteEnd(session, request);
     }
 
     public FtpletResult onDeleteStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onDeleteStart(session, request);
     }
 
     public FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException {
-        return returnValue;
+        return callback.onDisconnect(session);
     }
 
     public FtpletResult onDownloadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onDownloadEnd(session, request);
     }
 
     public FtpletResult onDownloadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onDownloadStart(session, request);
     }
 
     public FtpletResult onLogin(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onLogin(session, request);
     }
 
     public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onMkdirEnd(session, request);
     }
 
     public FtpletResult onMkdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onMkdirStart(session, request);
     }
 
     public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onRenameEnd(session, request);
     }
 
     public FtpletResult onRenameStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onRenameStart(session, request);
     }
 
     public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onRmdirEnd(session, request);
     }
 
     public FtpletResult onRmdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onRmdirStart(session, request);
     }
 
     public FtpletResult onSite(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onSite(session, request);
     }
 
     public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onUploadEnd(session, request);
     }
 
     public FtpletResult onUploadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onUploadStart(session, request);
     }
 
     public FtpletResult onUploadUniqueEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onUploadUniqueEnd(session, request);
     }
 
     public FtpletResult onUploadUniqueStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
-        return returnValue;
+        return callback.onUploadUniqueStart(session, request);
     }
-
 }

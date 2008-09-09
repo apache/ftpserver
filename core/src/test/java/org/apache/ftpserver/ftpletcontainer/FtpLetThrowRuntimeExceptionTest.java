@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.IOException;
 
@@ -27,9 +27,9 @@ import java.io.IOException;
 * @version $Rev$, $Date$
 *
 */
-public class FtpLetThrowFtpExceptionTest extends FtpLetReturnDisconnectTest {
-
-    protected void throwException() throws FtpException, IOException {
-        throw new FtpException();
+public class FtpLetThrowRuntimeExceptionTest extends
+        FtpLetThrowFtpExceptionTest {
+    protected void throwException() throws IOException {
+        throw new IOException();
     }
 }

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +27,12 @@ import java.io.IOException;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReply;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.test.TestUtil;
 
 /**

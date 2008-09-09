@@ -17,7 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
+
+import java.io.IOException;
+
+import org.apache.ftpserver.ftplet.FtpException;
 
 /**
 *
@@ -25,10 +29,9 @@ package org.apache.ftpserver.ftplet;
 * @version $Rev$, $Date$
 *
 */
-public class DefaultFtpLetContainerTest extends FtpLetContainerTestTemplate {
+public class FtpLetThrowFtpExceptionTest extends FtpLetReturnDisconnectTest {
 
-    protected FtpletContainer createFtpletContainer() {
-        return new DefaultFtpletContainer();
+    protected void throwException() throws FtpException, IOException {
+        throw new FtpException();
     }
-
 }

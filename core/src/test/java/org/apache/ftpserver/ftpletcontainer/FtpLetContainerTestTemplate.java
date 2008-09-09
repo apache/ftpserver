@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftplet;
+package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +27,15 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpRequestImpl;
 import org.apache.ftpserver.FtpSessionImpl;
+import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.ftplet.FtpStatistics;
+import org.apache.ftpserver.ftplet.Ftplet;
+import org.apache.ftpserver.ftplet.FtpletContext;
+import org.apache.ftpserver.ftplet.FtpletResult;
+import org.apache.ftpserver.ftplet.UserManager;
 
 public abstract class FtpLetContainerTestTemplate extends TestCase {
 

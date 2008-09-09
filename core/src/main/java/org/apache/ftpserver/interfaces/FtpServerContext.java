@@ -23,8 +23,8 @@ import java.util.Map;
 
 import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.command.CommandFactory;
-import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.FtpletContext;
+import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.message.MessageResource;
 

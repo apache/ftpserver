@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ftpletcontainer;
+package org.apache.ftpserver.ftpletcontainer.impl;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,6 +30,7 @@ import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.FtpletResult;
+import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
