@@ -27,7 +27,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.util.FtpReplyUtil;
 
 /**

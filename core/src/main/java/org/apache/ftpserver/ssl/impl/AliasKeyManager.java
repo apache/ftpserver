@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.apache.ftpserver.ssl;
+package org.apache.ftpserver.ssl.impl;
 
 import java.net.Socket;
 import java.security.Principal;
@@ -22,22 +22,24 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.X509ExtendedKeyManager;
+import javax.net.ssl.X509KeyManager;
 
 /**
  * X509KeyManager which allows selection of a specific keypair and certificate
  * chain (identified by their keystore alias name) to be used by the server to
  * authenticate itself to SSL clients.
  * 
+ * This class is only used on Java 1.4 systems, on Java 1.5 and newer the @see
+ * {@link ExtendedAliasKeyManager} is used instead
+ * 
  * Based of org.apache.tomcat.util.net.jsse.JSSEKeyManager.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
+public final class AliasKeyManager implements X509KeyManager {
 
-    private X509ExtendedKeyManager delegate;
+    private X509KeyManager delegate;
 
     private String serverKeyAlias;
 
@@ -52,8 +54,8 @@ public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
      *            certificate chain
      * @param keyAlias
      */
-    public ExtendedAliasKeyManager(KeyManager mgr, String keyAlias) {
-        this.delegate = (X509ExtendedKeyManager) mgr;
+    public AliasKeyManager(KeyManager mgr, String keyAlias) {
+        this.delegate = (X509KeyManager) mgr;
         this.serverKeyAlias = keyAlias;
     }
 
@@ -83,7 +85,7 @@ public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
 
     /**
      * Returns this key manager's server key alias that was provided in the
-     * constructor if matching the key type.
+     * constructor.
      * 
      * @param keyType
      *            The key algorithm type name
@@ -175,62 +177,5 @@ public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
      */
     public PrivateKey getPrivateKey(String alias) {
         return delegate.getPrivateKey(alias);
-    }
-
-    /**
-     * Choose an alias to authenticate the client side of a secure socket, given
-     * the public key type and the list of certificate issuer authorities
-     * recognized by the peer (if any).
-     * 
-     * @param keyType
-     *            The key algorithm type name
-     * @param issuers
-     *            The list of acceptable CA issuer subject names, or null if it
-     *            does not matter which issuers are used (ignored)
-     * @param socket
-     *            The socket to be used for this connection. This parameter can
-     *            be null, in which case this method will return the most
-     *            generic alias to use (ignored)
-     * @return The alias name for the desired key, or null if there are no
-     *         matches
-     */
-    public String chooseEngineClientAlias(String[] keyType,
-            Principal[] issuers, SSLEngine engine) {
-        return delegate.chooseEngineClientAlias(keyType, issuers, engine);
-    }
-
-    /**
-     * Returns this key manager's server key alias that was provided in the
-     * constructor if matching the key type.
-     * 
-     * @param keyType
-     *            The key algorithm type name
-     * @param issuers
-     *            The list of acceptable CA issuer subject names, or null if it
-     *            does not matter which issuers are used (ignored)
-     * @param socket
-     *            The socket to be used for this connection. This parameter can
-     *            be null, in which case this method will return the most
-     *            generic alias to use (ignored)
-     * 
-     * @return Alias name for the desired key
-     */
-    public String chooseEngineServerAlias(String keyType, Principal[] issuers,
-            SSLEngine engine) {
-
-        if (serverKeyAlias != null) {
-            PrivateKey key = delegate.getPrivateKey(serverKeyAlias);
-            if (key != null) {
-                if (key.getAlgorithm().equals(keyType)) {
-                    return serverKeyAlias;
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        } else {
-            return delegate.chooseEngineServerAlias(keyType, issuers, engine);
-        }
     }
 }

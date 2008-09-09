@@ -30,7 +30,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.message.MessageResource;
 
 /**
  * FTP reply translator.

@@ -21,7 +21,7 @@ package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.message.MessageResourceImpl;
+import org.apache.ftpserver.message.impl.DefaultMessageResource;
 
 /**
 *
@@ -42,7 +42,7 @@ public class LangTest extends ClientTestTemplate {
         DefaultFtpServerContext context = (DefaultFtpServerContext) server
                 .getServerContext();
 
-        MessageResourceImpl resource = (MessageResourceImpl) context
+        DefaultMessageResource resource = (DefaultMessageResource) context
                 .getMessageResource();
         resource.setLanguages(new String[] { "en", "zh-tw" });
         return server;

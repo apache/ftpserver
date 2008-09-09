@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.message;
 
 import java.util.Properties;
 

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ssl;
+package org.apache.ftpserver.ssl.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +33,8 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.ssl.ClientAuth;
+import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.util.ClassUtils;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;

@@ -26,8 +26,8 @@ import org.apache.ftpserver.ftplet.FileSystemManager;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.MessageResource;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.message.MessageResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

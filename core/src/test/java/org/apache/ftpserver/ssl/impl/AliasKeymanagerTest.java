@@ -17,13 +17,15 @@
  * under the License.
  */
 
-package org.apache.ftpserver.ssl;
+package org.apache.ftpserver.ssl.impl;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
+
+import org.apache.ftpserver.ssl.impl.AliasKeyManager;
 
 import junit.framework.TestCase;
 
@@ -33,7 +35,7 @@ import junit.framework.TestCase;
 * @version $Rev$, $Date$
 *
 */
-public class ExtendedAliasKeymanagerTest extends TestCase {
+public class AliasKeymanagerTest extends TestCase {
 
     private KeyManager km;
 
@@ -51,60 +53,31 @@ public class ExtendedAliasKeymanagerTest extends TestCase {
     }
 
     public void testServerAliasWithAliasDSAKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, "dsakey");
+        AliasKeyManager akm = new AliasKeyManager(km, "dsakey");
 
         assertEquals("dsakey", akm.chooseServerAlias("DSA", null, null));
         assertEquals(null, akm.chooseServerAlias("RSA", null, null));
     }
 
     public void testServerAliasWithAliasRSAKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, "rsakey");
+        AliasKeyManager akm = new AliasKeyManager(km, "rsakey");
 
         assertEquals(null, akm.chooseServerAlias("DSA", null, null));
         assertEquals("rsakey", akm.chooseServerAlias("RSA", null, null));
     }
 
     public void testServerAliasWithoutAlias() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, null);
+        AliasKeyManager akm = new AliasKeyManager(km, null);
 
         assertEquals("dsakey", akm.chooseServerAlias("DSA", null, null));
         assertEquals("rsakey", akm.chooseServerAlias("RSA", null, null));
     }
 
     public void testServerAliasNonExistingKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km,
-                "nonexisting");
+        AliasKeyManager akm = new AliasKeyManager(km, "nonexisting");
 
         assertEquals(null, akm.chooseServerAlias("DSA", null, null));
         assertEquals(null, akm.chooseServerAlias("RSA", null, null));
     }
 
-    public void testEngineServerAliasWithAliasDSAKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, "dsakey");
-
-        assertEquals("dsakey", akm.chooseEngineServerAlias("DSA", null, null));
-        assertEquals(null, akm.chooseEngineServerAlias("RSA", null, null));
-    }
-
-    public void testEngineServerAliasWithAliasRSAKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, "rsakey");
-
-        assertEquals(null, akm.chooseEngineServerAlias("DSA", null, null));
-        assertEquals("rsakey", akm.chooseEngineServerAlias("RSA", null, null));
-    }
-
-    public void testEngineServerAliasWithoutAlias() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km, null);
-
-        assertEquals("dsakey", akm.chooseEngineServerAlias("DSA", null, null));
-        assertEquals("rsakey", akm.chooseEngineServerAlias("RSA", null, null));
-    }
-
-    public void testEngineServerAliasNonExistingKey() throws Exception {
-        ExtendedAliasKeyManager akm = new ExtendedAliasKeyManager(km,
-                "nonexisting");
-
-        assertEquals(null, akm.chooseEngineServerAlias("DSA", null, null));
-        assertEquals(null, akm.chooseEngineServerAlias("RSA", null, null));
-    }
 }

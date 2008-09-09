@@ -26,6 +26,7 @@ import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpletContainer;
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.message.MessageResource;
 
 /**
  * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with

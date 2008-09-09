@@ -33,7 +33,7 @@ import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.NativeFileSystemManager;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
-import org.apache.ftpserver.ssl.DefaultSslConfiguration;
+import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;

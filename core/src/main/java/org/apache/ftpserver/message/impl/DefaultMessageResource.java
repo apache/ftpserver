@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.message;
+package org.apache.ftpserver.message.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,7 +32,7 @@ import java.util.Properties;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.interfaces.MessageResource;
+import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +47,10 @@ import org.slf4j.LoggerFactory;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class MessageResourceImpl implements MessageResource {
+public class DefaultMessageResource implements MessageResource {
 
     private final Logger LOG = LoggerFactory
-            .getLogger(MessageResourceImpl.class);
+            .getLogger(DefaultMessageResource.class);
 
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
 
