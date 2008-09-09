@@ -71,10 +71,10 @@
 		<native-filesystem case-insensitive="true" create-home="true" />
 		<commands use-default="false">
 		  <command name="FOO">
-			  <beans:bean class="org.apache.ftpserver.command.HELP" />
+			  <beans:bean class="org.apache.ftpserver.command.impl.HELP" />
 		  </command>
           <command name="FOO2">
-              <beans:bean class="org.apache.ftpserver.command.STAT" />
+              <beans:bean class="org.apache.ftpserver.command.impl.STAT" />
           </command>
 		</commands>
 		<messages languages="se no ,da" />
