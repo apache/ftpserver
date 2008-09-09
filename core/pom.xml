@@ -93,7 +93,7 @@
 
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
+      <artifactId>spring-context</artifactId>
       <optional>true</optional>
     </dependency>
     

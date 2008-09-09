@@ -20,8 +20,7 @@
 package org.apache.ftpserver.main;
 
 import org.apache.ftpserver.FtpServer;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  * This class is the starting point for the FtpServer when it is started using
@@ -129,24 +128,24 @@ public class CommandLine {
         } else if (args.length == 1) {
             System.out.println("Using XML configuration file " + args[0]
                     + "...");
-            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(
-                    args[0]));
-            if (bf.containsBean("server")) {
-                server = (FtpServer) bf.getBean("server");
+            FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext(
+                    args[0]);
+
+            if (ctx.containsBean("server")) {
+                server = (FtpServer) ctx.getBean("server");
             } else {
-                String[] beanNames = bf.getBeanNamesForType(FtpServer.class);
+                String[] beanNames = ctx.getBeanNamesForType(FtpServer.class);
                 if (beanNames.length == 1) {
-                    server = (FtpServer) bf.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else if (beanNames.length > 1) {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (FtpServer) bf.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");
                 }
-
             }
         } else {
             usage();

@@ -24,6 +24,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 
 /**
@@ -97,19 +98,20 @@ public class Daemon {
             server = new FtpServer();
         } else if (args.length == 2) {
             LOG.info("Using xml configuration file " + args[1] + "...");
-            XmlBeanFactory bf = new XmlBeanFactory(new FileSystemResource(
-                    args[1]));
-            if (bf.containsBean("server")) {
-                server = (FtpServer) bf.getBean("server");
+            FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext(
+                    args[1]);
+
+            if (ctx.containsBean("server")) {
+                server = (FtpServer) ctx.getBean("server");
             } else {
-                String[] beanNames = bf.getBeanNamesForType(FtpServer.class);
+                String[] beanNames = ctx.getBeanNamesForType(FtpServer.class);
                 if (beanNames.length == 1) {
-                    server = (FtpServer) bf.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else if (beanNames.length > 1) {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (FtpServer) bf.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");
