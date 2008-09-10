@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.config.spring;
 
+import java.io.File;
+
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
@@ -41,7 +43,7 @@ public class FileUserManagerConfigTest extends SpringConfigTestTemplate {
 
     public void testFile() throws Throwable {
         PropertiesUserManager um = createPropertiesUserManager("<file-user-manager file=\"/tmp/foo.users\" />");
-        assertEquals("/tmp/foo.users", um.getFile().getAbsolutePath());
+        assertEquals(new File("/tmp/foo.users"), um.getFile());
     }
 
     public void testMd5PasswordEncryptor() throws Throwable {
