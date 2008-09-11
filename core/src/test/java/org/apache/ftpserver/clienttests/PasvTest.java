@@ -20,6 +20,9 @@
 package org.apache.ftpserver.clienttests;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
+import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
@@ -34,6 +37,31 @@ public class PasvTest extends ClientTestTemplate {
         return false;
     }
 
+    @Override
+    protected FtpServer createServer() throws Exception {
+        FtpServer server = super.createServer();
+        
+        Listener l = server.getServerContext().getListener("default");
+        DataConnectionConfiguration dcc = l.getDataConnectionConfiguration();
+        
+        int passivePort = TestUtil.findFreePort(12444);
+        
+        dcc.setPassivePorts(passivePort + "-" + passivePort);
+        
+        return server;
+    }
+
+    public void testMultiplePasv() throws Exception {
+        for (int i = 0; i < 5; i++) {
+            client.connect("localhost", port);
+            client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+            client.pasv();
+
+            client.quit();
+            client.disconnect();
+        }
+    }
+    
     /**
      * This tests that the correct IP is returned, that is the IP that the
      * client has connected to.

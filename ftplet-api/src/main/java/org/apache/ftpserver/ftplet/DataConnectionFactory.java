@@ -44,7 +44,8 @@ public interface DataConnectionFactory {
     boolean isSecure();
 
     /**
-     * Close data socket.
+     * Close data socket. If no open data connection exists,
+     * this will silently ignore the call.
      */
     void closeDataConnection();
 

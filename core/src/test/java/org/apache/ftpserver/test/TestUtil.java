@@ -56,22 +56,34 @@ public class TestUtil {
     }
 
     /**
-     * Attempts to find a free port or fallback to a default
+     * Attempts to find a free port
      * 
      * @throws IOException
      * 
      * @throws IOException
      */
     public static int findFreePort() throws IOException {
+        return findFreePort(DEFAULT_PORT);
+    }
+    
+    /**
+     * Attempts to find a free port
+     * @param initPort The first port to try, before resolving to 
+     *   brute force searching
+     * @throws IOException
+     * 
+     * @throws IOException
+     */
+    public static int findFreePort(int initPort) throws IOException {
         int port = -1;
         ServerSocket tmpSocket = null;
         // first try the default port
         try {
-            tmpSocket = new ServerSocket(DEFAULT_PORT);
+            tmpSocket = new ServerSocket(initPort);
 
-            port = DEFAULT_PORT;
+            port = initPort;
         } catch (IOException e) {
-            System.out.println("Failed to use default port");
+            System.out.println("Failed to use specified port");
             // didn't work, try to find one dynamically
             try {
                 int attempts = 0;

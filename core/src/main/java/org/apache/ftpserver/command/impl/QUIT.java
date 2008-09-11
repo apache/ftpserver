@@ -50,6 +50,7 @@ public class QUIT extends AbstractCommand {
                 FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
 
         session.closeOnFlush().awaitUninterruptibly(10000);
+        session.getDataConnection().closeDataConnection();
     }
 
 }

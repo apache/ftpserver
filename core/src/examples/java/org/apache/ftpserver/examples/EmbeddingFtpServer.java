@@ -22,7 +22,7 @@ package org.apache.ftpserver.examples;
 import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.ssl.DefaultSslConfiguration;
+import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 
 public class EmbeddingFtpServer {
 
