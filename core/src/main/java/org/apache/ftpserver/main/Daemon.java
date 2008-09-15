@@ -23,9 +23,7 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
 
 /**
  * Invokes FtpServer as a daemon, running in the background. Used for example

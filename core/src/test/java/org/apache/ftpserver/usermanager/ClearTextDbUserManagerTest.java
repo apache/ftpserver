@@ -20,15 +20,10 @@
 package org.apache.ftpserver.usermanager;
 
 import java.io.File;
-import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.Statement;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.test.TestUtil;
-import org.apache.ftpserver.util.IoUtils;
-import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
 *

@@ -25,7 +25,6 @@ import java.net.SocketAddress;
 
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.interfaces.FtpIoSession;
