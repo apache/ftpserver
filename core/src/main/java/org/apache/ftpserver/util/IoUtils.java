@@ -37,6 +37,11 @@ import java.util.Random;
 /**
  * IO utility methods.
  *
+ * <b>Note: Why not use commons-io?</b>
+ * While many of these utility methods are also provided by the Apache
+ * commons-io library we prefer to our own implementation to, using a external
+ * library might cause additional constraints on users embedding FtpServer.
+ *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
