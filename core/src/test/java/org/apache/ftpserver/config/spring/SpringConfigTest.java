@@ -98,13 +98,13 @@ public class SpringConfigTest extends TestCase {
 
         listener = listeners.get("listener1");
         assertNotNull(listener);
-        assertTrue(listener instanceof NioListener);
-        assertEquals(2223, ((NioListener) listener).getPort());
+        assertTrue(listener instanceof MyCustomListener);
+        assertEquals(2223, listener.getPort());
 
         listener = listeners.get("listener2");
         assertNotNull(listener);
-        assertTrue(listener instanceof NioListener);
-        assertEquals(2224, ((NioListener) listener).getPort());
+        assertTrue(listener instanceof MyCustomListener);
+        assertEquals(2224, listener.getPort());
 
         DefaultCommandFactory cf = (DefaultCommandFactory) server
                 .getServerContext().getCommandFactory();

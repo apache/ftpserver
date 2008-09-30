@@ -30,6 +30,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
@@ -82,9 +83,10 @@ public abstract class ClientTestTemplate extends TestCase {
 
         DefaultFtpServerContext context = new DefaultFtpServerContext();
 
-        NioListener listener = new NioListener();
-        listener.setPort(port);
-        context.setListener("default", listener);
+        ListenerFactory factory = new ListenerFactory();
+        
+        factory.setPort(port);
+        context.setListener("default", factory.createListener());
 
         PropertiesUserManager userManager = new PropertiesUserManager();
         userManager.setAdminName("admin");

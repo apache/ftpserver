@@ -22,14 +22,19 @@ package org.apache.ftpserver.examples;
 import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
+import org.apache.ftpserver.usermanager.PropertiesUserManager;
 
 public class EmbeddingFtpServer {
 
     public static void main(String[] args) throws Exception {
         FtpServer server = new FtpServer();
-        // set the port of the default listener
-        server.getListener("default").setPort(2221);
+        
+        ListenerFactory factory = new ListenerFactory();
+        
+        // set the port of the listener
+        factory.setPort(2221);
 
         // define SSL configuration
         DefaultSslConfiguration ssl = new DefaultSslConfiguration();
@@ -37,9 +42,17 @@ public class EmbeddingFtpServer {
         ssl.setKeystorePassword("password");
 
         // set the SSL configuration for the listener
-        server.getListener("default").setSslConfiguration(ssl);
-        server.getListener("default").setImplicitSsl(true);
+        factory.setSslConfiguration(ssl);
+        factory.setImplicitSsl(true);
 
+        // replace the default listener
+        server.addListener("default", factory.createListener());
+        
+        PropertiesUserManager userManager = new PropertiesUserManager();
+        userManager.setFile(new File("myusers.properties"));
+        
+        server.setUserManager(userManager);
+        
         // start the server
         server.start();
     }

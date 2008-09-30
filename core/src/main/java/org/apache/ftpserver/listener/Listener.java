@@ -20,12 +20,14 @@
 package org.apache.ftpserver.listener;
 
 import java.net.InetAddress;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.ssl.SslConfiguration;
+import org.apache.mina.filter.firewall.Subnet;
 
 /**
  * Interface for the component responsible for waiting for incoming socket
@@ -98,29 +100,11 @@ public interface Listener {
     boolean isImplicitSsl();
 
     /**
-     * Should this listener be in SSL mode automatically or must the client
-     * explicitly request to use SSL
-     * 
-     * @param implicitSsl
-     *            true is the listener should automatically be in SSL mode,
-     *            false otherwise
-     */
-    void setImplicitSsl(boolean implicitSsl);
-
-    /**
      * Get the {@link SslConfiguration} used for this listener
      * 
      * @return The current {@link SslConfiguration}
      */
     SslConfiguration getSslConfiguration();
-
-    /**
-     * Set the {@link SslConfiguration} used for this listener
-     * 
-     * @param sslConfiguration
-     *            The {@link SslConfiguration}
-     */
-    void setSslConfiguration(SslConfiguration sslConfiguration);
 
     /**
      * Get the port on which this listener is waiting for requests. For
@@ -132,30 +116,12 @@ public interface Listener {
     int getPort();
 
     /**
-     * Set the port on which this listener will accept requests. Or set to 0
-     * (zero) is the port should be automatically assigned
-     * 
-     * @param port
-     *            The port to use.
-     */
-    void setPort(int port);
-
-    /**
      * Get the {@link InetAddress} used for binding the local socket. Defaults
      * to null, that is, the server binds to all available network interfaces
      * 
      * @return The local socket {@link InetAddress}, if set
      */
     InetAddress getServerAddress();
-
-    /**
-     * Set the {@link InetAddress} used for binding the local socket. Defaults
-     * to null, that is, the server binds to all available network interfaces
-     * 
-     * @param serverAddress
-     *            The local socket {@link InetAddress}
-     */
-    void setServerAddress(InetAddress serverAddress);
 
     /**
      * Get configuration for data connections made within this listener
@@ -165,11 +131,24 @@ public interface Listener {
     DataConnectionConfiguration getDataConnectionConfiguration();
 
     /**
-     * Set configuration for data connections made within this listener
-     * 
-     * @param dataConnectionConfig
-     *            The data connection configuration
+     * Get the number of seconds during which no network activity 
+     * is allowed before a session is closed due to inactivity.  
+     * @return The idle time out
      */
-    void setDataConnectionConfiguration(
-            DataConnectionConfiguration dataConnectionConfig);
+    int getIdleTimeout();
+
+    /**
+     * Retrieves the {@link InetAddress} for which this listener blocks
+     * connections
+     * 
+     * @return The list of {@link InetAddress}es
+     */
+    List<InetAddress> getBlockedAddresses();
+
+    /**
+     * Retrieves the {@link Subnet}s for this listener blocks connections
+     * 
+     * @return The list of {@link Subnet}s
+     */
+    List<Subnet> getBlockedSubnets();
 }

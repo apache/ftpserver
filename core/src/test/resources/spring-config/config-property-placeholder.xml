@@ -31,12 +31,12 @@
     <server id="server">
 		<listeners>
 			<listener name="listener0">
-                <beans:bean class="org.apache.ftpserver.listener.nio.NioListener">
+                <beans:bean class="org.apache.ftpserver.config.spring.MyCustomListener">
                     <beans:property name="port" value="${port1}"/>
                 </beans:bean>
 			</listener>
             <listener name="listener1">
-                <beans:bean class="org.apache.ftpserver.listener.nio.NioListener">
+                <beans:bean class="org.apache.ftpserver.config.spring.MyCustomListener">
                     <beans:property name="port" value="${port2}"/>
                 </beans:bean>
             </listener>

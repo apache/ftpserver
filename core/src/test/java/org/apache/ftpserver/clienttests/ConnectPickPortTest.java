@@ -19,13 +19,9 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.listener.nio.NioListener;
 
 /**
 *
@@ -33,32 +29,37 @@ import org.apache.ftpserver.listener.ListenerFactory;
 * @version $Rev$, $Date$
 *
 */
-public class InetAddressBlacklistTest extends ClientTestTemplate {
+public class ConnectPickPortTest extends ClientTestTemplate {
+
+    @Override
+    protected boolean isConnectClient() {
+        return false;
+    }
+
+    @Override
+    protected boolean isStartServer() {
+        return false;
+    }
+
+    @Override
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
-
-        ListenerFactory factory = new ListenerFactory(server.getListener("default"));
-
-        List<InetAddress> blockedAddresses = new ArrayList<InetAddress>();
-        blockedAddresses.add(InetAddress.getByName("localhost"));
-
-        factory.setBlockedAddresses(blockedAddresses);
-
+        
+        ListenerFactory factory = new ListenerFactory();
+        factory.setPort(0);
+        
         server.addListener("default", factory.createListener());
         
         return server;
     }
 
-    protected boolean isConnectClient() {
-        return false;
-    }
+    public void testPortWithZeroPort() throws Exception {
+        assertEquals(0, ((NioListener) server.getServerContext().getListener(
+                "default")).getPort());
 
-    public void testConnect() throws Exception {
-        try {
-            client.connect("localhost", port);
-            fail("Must throw");
-        } catch (FTPConnectionClosedException e) {
-            // OK
-        }
+        server.start();
+
+        assertTrue(((NioListener) server.getServerContext().getListener(
+                "default")).getPort() > 0);
     }
 }

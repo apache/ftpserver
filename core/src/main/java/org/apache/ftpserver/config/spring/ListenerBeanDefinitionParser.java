@@ -28,12 +28,14 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Active;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Passive;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -56,8 +58,8 @@ public class ListenerBeanDefinitionParser extends
      * {@inheritDoc}
      */
     @Override
-    protected Class<NioListener> getBeanClass(final Element element) {
-        return NioListener.class;
+    protected Class<?> getBeanClass(final Element element) {
+        return null;
     }
 
     /**
@@ -106,20 +108,36 @@ public class ListenerBeanDefinitionParser extends
     protected void doParse(final Element element,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
+
+        BeanDefinitionBuilder factoryBuilder = BeanDefinitionBuilder.genericBeanDefinition(ListenerFactory.class);
+
         if (StringUtils.hasText(element.getAttribute("port"))) {
-            builder.addPropertyValue("port", Integer.parseInt(element
+            factoryBuilder.addPropertyValue("port", Integer.parseInt(element
                     .getAttribute("port")));
         }
 
         SslConfiguration ssl = parseSsl(element);
         if (ssl != null) {
-            builder.addPropertyValue("sslConfiguration", ssl);
+            factoryBuilder.addPropertyValue("sslConfiguration", ssl);
         }
 
         Element dataConElm = SpringUtil.getChildElement(element,
                 FtpServerNamespaceHandler.FTPSERVER_NS, "data-connection");
         DataConnectionConfiguration dc = parseDataConnection(dataConElm, ssl);
-        builder.addPropertyValue("dataConnectionConfiguration", dc);
+        factoryBuilder.addPropertyValue("dataConnectionConfiguration", dc);
+
+        if (StringUtils.hasText(element.getAttribute("idle-timeout"))) {
+            factoryBuilder.addPropertyValue("idleTimeout", SpringUtil.parseInt(
+                    element, "idle-timeout", 300));
+        }
+
+        InetAddress localAddress = SpringUtil.parseInetAddress(element,
+                "local-address");
+        if (localAddress != null) {
+            factoryBuilder.addPropertyValue("serverAddress", localAddress);
+        }
+        factoryBuilder.addPropertyValue("implicitSsl", SpringUtil.parseBoolean(
+                element, "implicit-ssl", false));
 
         Element blacklistElm = SpringUtil.getChildElement(element,
                 FtpServerNamespaceHandler.FTPSERVER_NS, "blacklist");
@@ -132,24 +150,16 @@ public class ListenerBeanDefinitionParser extends
                 subnets.add(parseSubnet(block));
             }
 
-            builder.addPropertyValue("blockedSubnets", subnets);
+            factoryBuilder.addPropertyValue("blockedSubnets", subnets);
         }
+        
+        
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), "listener-factory");
+        registerBeanDefinition(factoryHolder, parserContext.getRegistry());
 
-        if (StringUtils.hasText(element.getAttribute("idle-timeout"))) {
-            builder.addPropertyValue("idleTimeout", SpringUtil.parseInt(
-                    element, "idle-timeout", 300));
-        }
-        if (StringUtils.hasText(element.getAttribute("port"))) {
-            builder.addPropertyValue("port", SpringUtil.parseInt(element,
-                    "port", 21));
-        }
-        InetAddress localAddress = SpringUtil.parseInetAddress(element,
-                "local-address");
-        if (localAddress != null) {
-            builder.addPropertyValue("serverAddress", localAddress);
-        }
-        builder.addPropertyValue("implicitSsl", SpringUtil.parseBoolean(
-                element, "implicit-ssl", false));
+        // set the factory on the listener bean
+        builder.getRawBeanDefinition().setFactoryBeanName("listener-factory");
+        builder.getRawBeanDefinition().setFactoryMethodName("createListener");
     }
 
     private SslConfiguration parseSsl(final Element parent) {

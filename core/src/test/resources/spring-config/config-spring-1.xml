@@ -45,13 +45,13 @@
 				<blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>				
 			</nio-listener>
 			<listener name="listener1">
-				    <beans:bean id="listener1" class="org.apache.ftpserver.listener.nio.NioListener">
+				    <beans:bean id="listener1" class="org.apache.ftpserver.config.spring.MyCustomListener">
         <beans:property name="port" value="2223"/>
     </beans:bean>
 
 			</listener>
 			<listener name="listener2">
-				<beans:bean class="org.apache.ftpserver.listener.nio.NioListener">
+				<beans:bean class="org.apache.ftpserver.config.spring.MyCustomListener">
 					<beans:property name="port" value="2224"/>
 				</beans:bean>
 			</listener>

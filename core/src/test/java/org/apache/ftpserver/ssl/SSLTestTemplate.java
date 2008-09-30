@@ -33,6 +33,7 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 import org.apache.ftpserver.test.TestUtil;
@@ -60,9 +61,9 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         FtpServer server = super.createServer();
         DefaultFtpServerContext context = (DefaultFtpServerContext) server
                 .getServerContext();
-        NioListener listener = (NioListener) context.getListener("default");
-
-        listener.setImplicitSsl(useImplicit());
+        ListenerFactory factory = new ListenerFactory(context.getListener("default"));
+        
+        factory.setImplicitSsl(useImplicit());
 
         DefaultSslConfiguration sslConfig = new DefaultSslConfiguration();
         sslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
@@ -71,7 +72,7 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         sslConfig.setClientAuthentication(getClientAuth());
         sslConfig.setKeyPassword(KEYSTORE_PASSWORD);
 
-        listener.setSslConfiguration(sslConfig);
+        factory.setSslConfiguration(sslConfig);
 
         DefaultSslConfiguration dataSslConfig = new DefaultSslConfiguration();
         dataSslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
@@ -83,8 +84,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         DefaultDataConnectionConfiguration dataConfig = new DefaultDataConnectionConfiguration();
         dataConfig.setSslConfiguration(dataSslConfig);
 
-        listener.setDataConnectionConfiguration(dataConfig);
+        factory.setDataConnectionConfiguration(dataConfig);
 
+        server.addListener("default", factory.createListener());
+        
         return server;
     }
 

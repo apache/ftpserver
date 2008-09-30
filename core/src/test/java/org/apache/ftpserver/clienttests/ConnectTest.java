@@ -39,18 +39,6 @@ public class ConnectTest extends ClientTestTemplate {
         return false;
     }
 
-    public void testPortWithZeroPort() throws Exception {
-        ((NioListener) server.getServerContext().getListener("default"))
-                .setPort(0);
-        assertEquals(0, ((NioListener) server.getServerContext().getListener(
-                "default")).getPort());
-
-        server.start();
-
-        assertTrue(((NioListener) server.getServerContext().getListener(
-                "default")).getPort() > 0);
-    }
-
     public void testPort() throws Exception {
         assertEquals(port, ((NioListener) server.getServerContext()
                 .getListener("default")).getPort());

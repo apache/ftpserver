@@ -33,9 +33,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.ftpserver.FtpHandler;
 import org.apache.ftpserver.filter.FtpLoggingFilter;
 import org.apache.ftpserver.impl.DefaultFtpHandler;
+import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.listener.AbstractListener;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -74,20 +74,17 @@ public class NioListener extends AbstractListener {
 
     private FtpHandler handler = new DefaultFtpHandler();
 
-    private int idleTimeout = 300;
-
-    private List<InetAddress> blockedAddresses;
-
-    private List<Subnet> blockedSubnets;
-
     private FtpServerContext context;
 
-    public int getIdleTimeout() {
-        return idleTimeout;
-    }
-
-    public void setIdleTimeout(int idleTimeout) {
-        this.idleTimeout = idleTimeout;
+    public NioListener(InetAddress serverAddress, int port,
+            boolean implicitSsl,
+            SslConfiguration sslConfiguration,
+            DataConnectionConfiguration dataConnectionConfig, 
+            int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
+        super(serverAddress, port, implicitSsl, sslConfiguration, dataConnectionConfig, 
+                idleTimeout, blockedAddresses, blockedSubnets);   
+        
+        updateBlacklistFilter();
     }
 
     private void updateBlacklistFilter() {
@@ -96,10 +93,10 @@ public class NioListener extends AbstractListener {
                     .getFilterChain().get("ipFilter");
 
             if (filter != null) {
-                if (blockedAddresses != null) {
-                    filter.setBlacklist(blockedAddresses);
-                } else if (blockedSubnets != null) {
-                    filter.setSubnetBlacklist(blockedSubnets);
+                if (getBlockedAddresses() != null) {
+                    filter.setBlacklist(getBlockedAddresses());
+                } else if (getBlockedSubnets() != null) {
+                    filter.setSubnetBlacklist(getBlockedSubnets());
                 } else {
                     // an empty list clears the blocked addresses
                     filter.setSubnetBlacklist(new ArrayList<Subnet>());
@@ -127,7 +124,7 @@ public class NioListener extends AbstractListener {
         acceptor.setReuseAddress(true);
         acceptor.getSessionConfig().setReadBufferSize(2048);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
-                idleTimeout);
+                getIdleTimeout());
         // Decrease the default receiver buffer size
         ((SocketSessionConfig) acceptor.getSessionConfig())
                 .setReceiveBufferSize(512);
@@ -231,82 +228,7 @@ public class NioListener extends AbstractListener {
             acceptor.unbind(address);
         }
     }
-
-    /**
-     * Get the {@link ExecutorService} used for processing requests. The default
-     * value is a cached thread pool.
-     * 
-     * @return The {@link ExecutorService}
-     */
-    public ExecutorService getFilterExecutor() {
-        return filterExecutor;
-    }
-
-    /**
-     * Set the {@link ExecutorService} used for processing requests
-     * 
-     * @param filterExecutor
-     *            The {@link ExecutorService}
-     */
-    public void setFilterExecutor(ExecutorService filterExecutor) {
-        this.filterExecutor = filterExecutor;
-    }
-
-    public FtpHandler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(FtpHandler handler) {
-        this.handler = handler;
-
-        if (acceptor != null) {
-            ((FtpHandlerAdapter) acceptor.getHandler()).setFtpHandler(handler);
-        }
-    }
-
-    /**
-     * Retrives the {@link InetAddress} for which this listener blocks
-     * connections
-     * 
-     * @return The list of {@link InetAddress}es
-     */
-    public synchronized List<InetAddress> getBlockedAddresses() {
-        return blockedAddresses;
-    }
-
-    /**
-     * Sets the {@link InetAddress} that this listener will block from
-     * connecting
-     * 
-     * @param blockedAddresses
-     *            The list of {@link InetAddress}es
-     */
-    public synchronized void setBlockedAddresses(
-            List<InetAddress> blockedAddresses) {
-        this.blockedAddresses = blockedAddresses;
-        updateBlacklistFilter();
-    }
-
-    /**
-     * Retrives the {@link Subnet}s for which this acceptor blocks connections
-     * 
-     * @return The list of {@link Subnet}s
-     */
-    public synchronized List<Subnet> getBlockedSubnets() {
-        return blockedSubnets;
-    }
-
-    /**
-     * Sets the {@link Subnet}s that this listener will block from connecting
-     * 
-     * @param blockedAddresses
-     *            The list of {@link Subnet}s
-     */
-    public synchronized void setBlockedSubnets(List<Subnet> blockedSubnets) {
-        this.blockedSubnets = blockedSubnets;
-        updateBlacklistFilter();
-    }
-
+    
     /**
      * @see Listener#getActiveSessions()
      */
