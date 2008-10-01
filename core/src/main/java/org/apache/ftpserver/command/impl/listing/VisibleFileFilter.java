@@ -16,25 +16,45 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
- * Interface for formating output based on a {@link FileObject}
+ * Selects files that are visible
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface FileFormater {
+public class VisibleFileFilter implements FileFilter {
+
+    private FileFilter wrappedFilter;
 
     /**
-     * Format the file
-     * 
-     * @param file
-     *            The {@link FileObject}
-     * @return The formated string based on the {@link FileObject}
+     * Default constructor
      */
-    String format(FileObject file);
+    public VisibleFileFilter() {
+        // default cstr
+    }
 
+    /**
+     * Constructor with a wrapped filter, allows for chaining filters
+     * 
+     * @param wrappedFilter
+     *            The {@link FileFilter} to wrap
+     */
+    public VisibleFileFilter(FileFilter wrappedFilter) {
+        this.wrappedFilter = wrappedFilter;
+    }
+
+    /**
+     * @see FileFilter#accept(FileObject)
+     */
+    public boolean accept(FileObject file) {
+        if (wrappedFilter != null && !wrappedFilter.accept(file)) {
+            return false;
+        }
+
+        return !file.isHidden();
+    }
 }

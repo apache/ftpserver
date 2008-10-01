@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 /**
  * Contains the parsed argument for a list command (e.g. LIST or NLST)

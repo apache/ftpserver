@@ -17,9 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.commands.impl.listing;
 
 import java.util.Arrays;
+
+import org.apache.ftpserver.command.impl.listing.ListArgument;
 
 import junit.framework.TestCase;
 

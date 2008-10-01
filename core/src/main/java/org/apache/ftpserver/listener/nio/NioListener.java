@@ -109,7 +109,7 @@ public class NioListener extends AbstractListener {
     /**
      * @see Listener#start(FtpServerContext)
      */
-    public void start(FtpServerContext context) throws Exception {
+    public synchronized void start(FtpServerContext context) throws Exception {
         this.context = context;
 
         acceptor = new NioSocketAcceptor(Runtime.getRuntime()
@@ -210,7 +210,7 @@ public class NioListener extends AbstractListener {
     /**
      * @see Listener#resume()
      */
-    public void resume() {
+    public synchronized void resume() {
         if (acceptor != null && suspended) {
             try {
                 acceptor.bind(address);
@@ -223,7 +223,7 @@ public class NioListener extends AbstractListener {
     /**
      * @see Listener#suspend()
      */
-    public void suspend() {
+    public synchronized void suspend() {
         if (acceptor != null && !suspended) {
             acceptor.unbind(address);
         }
@@ -232,7 +232,7 @@ public class NioListener extends AbstractListener {
     /**
      * @see Listener#getActiveSessions()
      */
-    public Set<FtpIoSession> getActiveSessions() {
+    public synchronized Set<FtpIoSession> getActiveSessions() {
         Map<Long, IoSession> sessions = acceptor.getManagedSessions();
 
         Set<FtpIoSession> ftpSessions = new HashSet<FtpIoSession>();

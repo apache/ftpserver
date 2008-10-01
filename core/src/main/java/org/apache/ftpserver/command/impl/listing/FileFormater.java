@@ -16,28 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
- * Formats files according to the NLST specification
+ * Interface for formating output based on a {@link FileObject}
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class NLSTFileFormater implements FileFormater {
-
-    private final static char[] NEWLINE = { '\r', '\n' };
+public interface FileFormater {
 
     /**
-     * @see FileFormater#format(FileObject)
+     * Format the file
+     * 
+     * @param file
+     *            The {@link FileObject}
+     * @return The formated string based on the {@link FileObject}
      */
-    public String format(FileObject file) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(file.getShortName());
-        sb.append(NEWLINE);
+    String format(FileObject file);
 
-        return sb.toString();
-    }
 }

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 import java.io.IOException;
 

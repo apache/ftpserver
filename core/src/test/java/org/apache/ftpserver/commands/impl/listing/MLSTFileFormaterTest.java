@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.commands.impl.listing;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +26,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.command.impl.listing.MLSTFileFormater;
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**

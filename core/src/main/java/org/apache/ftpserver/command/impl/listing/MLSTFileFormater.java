@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.util.DateUtils;

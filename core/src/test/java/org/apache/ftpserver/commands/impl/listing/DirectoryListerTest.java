@@ -17,12 +17,16 @@
  * under the License.
  */
 
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.commands.impl.listing;
 
 import java.io.File;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.command.impl.listing.DirectoryLister;
+import org.apache.ftpserver.command.impl.listing.FileFormater;
+import org.apache.ftpserver.command.impl.listing.ListArgument;
+import org.apache.ftpserver.command.impl.listing.NLSTFileFormater;
 import org.apache.ftpserver.filesystem.NativeFileSystemView;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.test.TestUtil;

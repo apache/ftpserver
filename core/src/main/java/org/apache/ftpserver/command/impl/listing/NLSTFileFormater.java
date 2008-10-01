@@ -16,45 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.command.impl.listing;
 
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
- * Selects files that are visible
+ * Formats files according to the NLST specification
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class VisibleFileFilter implements FileFilter {
+public class NLSTFileFormater implements FileFormater {
 
-    private FileFilter wrappedFilter;
-
-    /**
-     * Default constructor
-     */
-    public VisibleFileFilter() {
-        // default cstr
-    }
+    private final static char[] NEWLINE = { '\r', '\n' };
 
     /**
-     * Constructor with a wrapped filter, allows for chaining filters
-     * 
-     * @param wrappedFilter
-     *            The {@link FileFilter} to wrap
+     * @see FileFormater#format(FileObject)
      */
-    public VisibleFileFilter(FileFilter wrappedFilter) {
-        this.wrappedFilter = wrappedFilter;
-    }
+    public String format(FileObject file) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(file.getShortName());
+        sb.append(NEWLINE);
 
-    /**
-     * @see FileFilter#accept(FileObject)
-     */
-    public boolean accept(FileObject file) {
-        if (wrappedFilter != null && !wrappedFilter.accept(file)) {
-            return false;
-        }
-
-        return !file.isHidden();
+        return sb.toString();
     }
 }

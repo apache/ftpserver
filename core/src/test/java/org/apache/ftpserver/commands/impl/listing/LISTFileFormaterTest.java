@@ -17,14 +17,16 @@
  * under the License.
  */
 
-package org.apache.ftpserver.listing;
+package org.apache.ftpserver.commands.impl.listing;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.command.impl.listing.LISTFileFormater;
 import org.apache.ftpserver.ftplet.FileObject;
 
 /**
@@ -33,11 +35,18 @@ import org.apache.ftpserver.ftplet.FileObject;
 * @version $Rev$, $Date$
 *
 */
-public class NLSTFileFormaterTest extends TestCase {
+@SuppressWarnings("deprecation")
+public class LISTFileFormaterTest extends TestCase {
+
+    private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);
 
     private static final FileObject TEST_FILE = new MockFileObject();
 
-    public NLSTFileFormater formater = new NLSTFileFormater();
+    private static final String TEST_FILE_FORMAT = "-r--------   1 owner group           13 Feb  2  2005 short\r\n";
+
+    private static final String TEST_DIR_FORMAT = "dr--------   3 owner group            0 Feb  2  2005 short\r\n";
+
+    public LISTFileFormater formater = new LISTFileFormater();
 
     public static class MockFileObject implements FileObject {
         public InputStream createInputStream(long offset) throws IOException {
@@ -65,7 +74,7 @@ public class NLSTFileFormaterTest extends TestCase {
         }
 
         public long getLastModified() {
-            return 1;
+            return LAST_MODIFIED_IN_2005.getTime();
         }
 
         public int getLinkCount() {
@@ -122,11 +131,15 @@ public class NLSTFileFormaterTest extends TestCase {
     }
 
     public void testSingleFile() {
-        assertEquals("short\r\n", formater.format(TEST_FILE));
+        assertEquals(TEST_FILE_FORMAT, formater.format(TEST_FILE));
     }
 
     public void testSingleDir() {
         FileObject dir = new MockFileObject() {
+            public int getLinkCount() {
+                return 3;
+            }
+
             public boolean isDirectory() {
                 return true;
             }
@@ -137,7 +150,7 @@ public class NLSTFileFormaterTest extends TestCase {
 
         };
 
-        assertEquals("short\r\n", formater.format(dir));
+        assertEquals(TEST_DIR_FORMAT, formater.format(dir));
     }
 
 }
