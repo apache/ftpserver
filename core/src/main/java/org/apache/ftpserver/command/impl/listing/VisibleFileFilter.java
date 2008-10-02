@@ -18,7 +18,7 @@
  */
 package org.apache.ftpserver.command.impl.listing;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
  * Selects files that are visible
@@ -48,9 +48,9 @@ public class VisibleFileFilter implements FileFilter {
     }
 
     /**
-     * @see FileFilter#accept(FileObject)
+     * @see FileFilter#accept(FtpFile)
      */
-    public boolean accept(FileObject file) {
+    public boolean accept(FtpFile file) {
         if (wrappedFilter != null && !wrappedFilter.accept(file)) {
             return false;
         }

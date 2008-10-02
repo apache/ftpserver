@@ -31,7 +31,7 @@ import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -85,7 +85,7 @@ public class RETR extends AbstractCommand {
             }
 
             // get file object
-            FileObject file = null;
+            FtpFile file = null;
             try {
                 file = session.getFileSystemView().getFileObject(fileName);
             } catch (Exception ex) {
@@ -211,7 +211,7 @@ public class RETR extends AbstractCommand {
     /**
      * Skip length and open input stream.
      */
-    public InputStream openInputStream(FtpIoSession session, FileObject file,
+    public InputStream openInputStream(FtpIoSession session, FtpFile file,
             long skipLen) throws IOException {
         InputStream in;
         if (session.getDataType() == DataType.ASCII) {

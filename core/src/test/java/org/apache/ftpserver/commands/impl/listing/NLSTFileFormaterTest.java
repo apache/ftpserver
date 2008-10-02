@@ -26,7 +26,7 @@ import java.io.OutputStream;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.command.impl.listing.NLSTFileFormater;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
@@ -36,11 +36,11 @@ import org.apache.ftpserver.ftplet.FileObject;
 */
 public class NLSTFileFormaterTest extends TestCase {
 
-    private static final FileObject TEST_FILE = new MockFileObject();
+    private static final FtpFile TEST_FILE = new MockFileObject();
 
     public NLSTFileFormater formater = new NLSTFileFormater();
 
-    public static class MockFileObject implements FileObject {
+    public static class MockFileObject implements FtpFile {
         public InputStream createInputStream(long offset) throws IOException {
             return null;
         }
@@ -109,7 +109,7 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public FileObject[] listFiles() {
+        public FtpFile[] listFiles() {
             return null;
         }
 
@@ -117,7 +117,7 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public boolean move(FileObject destination) {
+        public boolean move(FtpFile destination) {
             return false;
         }
     }
@@ -127,7 +127,7 @@ public class NLSTFileFormaterTest extends TestCase {
     }
 
     public void testSingleDir() {
-        FileObject dir = new MockFileObject() {
+        FtpFile dir = new MockFileObject() {
             public boolean isDirectory() {
                 return true;
             }

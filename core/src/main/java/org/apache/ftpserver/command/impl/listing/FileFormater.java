@@ -18,10 +18,10 @@
  */
 package org.apache.ftpserver.command.impl.listing;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
- * Interface for formating output based on a {@link FileObject}
+ * Interface for formating output based on a {@link FtpFile}
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
@@ -32,9 +32,9 @@ public interface FileFormater {
      * Format the file
      * 
      * @param file
-     *            The {@link FileObject}
-     * @return The formated string based on the {@link FileObject}
+     *            The {@link FtpFile}
+     * @return The formated string based on the {@link FtpFile}
      */
-    String format(FileObject file);
+    String format(FtpFile file);
 
 }

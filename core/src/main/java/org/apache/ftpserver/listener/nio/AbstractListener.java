@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 
@@ -53,6 +54,9 @@ public abstract class AbstractListener implements Listener {
 
     private DataConnectionConfiguration dataConnectionConfig = new DefaultDataConnectionConfiguration();
 
+    /**
+     * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
+     */
     public AbstractListener(InetAddress serverAddress, int port, boolean implicitSsl, 
             SslConfiguration sslConfiguration, DataConnectionConfiguration dataConnectionConfig,
             int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {

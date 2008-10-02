@@ -30,12 +30,12 @@ public interface FileSystemView {
     /**
      * Get the user home directory.
      */
-    FileObject getHomeDirectory() throws FtpException;
+    FtpFile getHomeDirectory() throws FtpException;
 
     /**
      * Get user current directory.
      */
-    FileObject getCurrentDirectory() throws FtpException;
+    FtpFile getCurrentDirectory() throws FtpException;
 
     /**
      * Change directory.
@@ -45,7 +45,7 @@ public interface FileSystemView {
     /**
      * Get file object.
      */
-    FileObject getFileObject(String file) throws FtpException;
+    FtpFile getFileObject(String file) throws FtpException;
 
     /**
      * Does the file system support random file access?

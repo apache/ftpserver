@@ -17,14 +17,15 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.filesystem.nativefs.impl.NativeFtpFile;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -78,49 +79,49 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
         TEST_FILE3.createNewFile();
     }
 
-    protected FileObject createFileObject(String fileName, User user) {
-        return new NativeFileObject(fileName, FILE_MAPPINGS.get(fileName), user);
+    protected FtpFile createFileObject(String fileName, User user) {
+        return new NativeFtpFile(fileName, FILE_MAPPINGS.get(fileName), user);
     }
 
     public void testGetPhysicalName() {
 
-        assertEquals(FULL_PATH, NativeFileObject.getPhysicalName(ROOT_DIR_PATH
+        assertEquals(FULL_PATH, NativeFtpFile.getPhysicalName(ROOT_DIR_PATH
                 + "/", "/" + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
                 .getName()));
         assertEquals("No trailing slash on rootDir", FULL_PATH,
-                NativeFileObject.getPhysicalName(ROOT_DIR_PATH, "/"
+                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH, "/"
                         + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
                         .getName()));
         assertEquals("No leading slash on currDir", FULL_PATH,
-                NativeFileObject.getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1
+                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1
                         .getName()
                         + "/", TEST_FILE2_IN_DIR1.getName()));
         assertEquals("No trailing slash on currDir", FULL_PATH,
-                NativeFileObject.getPhysicalName(ROOT_DIR_PATH + "/", "/"
+                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH + "/", "/"
                         + TEST_DIR1.getName(), TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("No slashes on currDir", FULL_PATH, NativeFileObject
+        assertEquals("No slashes on currDir", FULL_PATH, NativeFtpFile
                 .getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1.getName(),
                         TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Backslashes in rootDir", FULL_PATH, NativeFileObject
+        assertEquals("Backslashes in rootDir", FULL_PATH, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "/"
                         + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
                         .getName()));
-        assertEquals("Null currDir", FULL_PATH_NO_CURRDIR, NativeFileObject
+        assertEquals("Null currDir", FULL_PATH_NO_CURRDIR, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null,
                         TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Empty currDir", FULL_PATH_NO_CURRDIR, NativeFileObject
+        assertEquals("Empty currDir", FULL_PATH_NO_CURRDIR, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "",
                         TEST_FILE2_IN_DIR1.getName()));
         assertEquals("Absolut fileName in root", FULL_PATH_NO_CURRDIR,
-                NativeFileObject.getPhysicalName(ROOT_DIR.getAbsolutePath()
+                NativeFtpFile.getPhysicalName(ROOT_DIR.getAbsolutePath()
                         + "/", TEST_DIR1.getName(), "/"
                         + TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Absolut fileName in dir1", FULL_PATH, NativeFileObject
+        assertEquals("Absolut fileName in dir1", FULL_PATH, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null, "/"
                         + TEST_DIR1.getName() + "/"
                         + TEST_FILE2_IN_DIR1.getName()));
 
-        assertEquals(". in currDir", FULL_PATH, NativeFileObject
+        assertEquals(". in currDir", FULL_PATH, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
                         .getName()
                         + "/./", "/" + TEST_DIR1.getName() + "/"
@@ -129,23 +130,23 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     }
 
     public void testGetPhysicalNameWithRelative() {
-        assertEquals(".. in fileName", FULL_PATH_NO_CURRDIR, NativeFileObject
+        assertEquals(".. in fileName", FULL_PATH_NO_CURRDIR, NativeFtpFile
                 .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
                         .getName(), "/../" + TEST_FILE2_IN_DIR1.getName()));
         assertEquals(".. beyond rootDir", FULL_PATH_NO_CURRDIR,
-                NativeFileObject.getPhysicalName(ROOT_DIR.getAbsolutePath(),
+                NativeFtpFile.getPhysicalName(ROOT_DIR.getAbsolutePath(),
                         TEST_DIR1.getName(), "/../../"
                                 + TEST_FILE2_IN_DIR1.getName()));
     }
 
     public void testGetPhysicalNameWithTilde() {
-        assertEquals(FULL_PATH_NO_CURRDIR, NativeFileObject.getPhysicalName(
+        assertEquals(FULL_PATH_NO_CURRDIR, NativeFtpFile.getPhysicalName(
                 ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName(), "/~/"
                         + TEST_FILE2_IN_DIR1.getName()));
     }
 
     public void testGetPhysicalNameCaseInsensitive() {
-        assertEquals(FULL_PATH, NativeFileObject.getPhysicalName(ROOT_DIR
+        assertEquals(FULL_PATH, NativeFtpFile.getPhysicalName(ROOT_DIR
                 .getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1
                 .getName().toUpperCase(), true));
 
@@ -153,7 +154,7 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
 
     public void testConstructorWithNullFile() {
         try {
-            new NativeFileObject("foo", null, USER);
+            new NativeFtpFile("foo", null, USER);
             fail("Must throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // OK
@@ -161,7 +162,7 @@ public class NativeFileObjectTest extends FileObjectTestTemplate {
     }
     public void testDeleteReadOnlyFiles(){
     	
-    	NativeFileObject fileObj=(NativeFileObject)createFileObject(FILE2_PATH, USER);
+    	NativeFtpFile fileObj=(NativeFtpFile)createFileObject(FILE2_PATH, USER);
     	File physicalFile=fileObj.getPhysicalFile();
     	// First check
     	assertTrue(fileObj.hasDeletePermission());

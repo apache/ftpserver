@@ -17,12 +17,12 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.usermanager.BaseUser;
 
@@ -52,7 +52,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
         }
     };
 
-    protected abstract FileObject createFileObject(String fileName, User user);
+    protected abstract FtpFile createFileObject(String fileName, User user);
 
     public void testNullFileName() {
         try {
@@ -91,7 +91,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
     }
 
     public void testFullName() {
-        FileObject fileObject = createFileObject(FILE2_PATH, USER);
+        FtpFile fileObject = createFileObject(FILE2_PATH, USER);
         assertEquals("/dir1/file2", fileObject.getFullName());
 
         fileObject = createFileObject("/dir1/", USER);
@@ -102,7 +102,7 @@ public abstract class FileObjectTestTemplate extends TestCase {
     }
 
     public void testShortName() {
-        FileObject fileObject = createFileObject("/dir1/file2", USER);
+        FtpFile fileObject = createFileObject("/dir1/file2", USER);
         assertEquals("file2", fileObject.getShortName());
 
         fileObject = createFileObject("/dir1/", USER);
@@ -113,9 +113,9 @@ public abstract class FileObjectTestTemplate extends TestCase {
     }
 
     public void testListFilesInOrder() {
-        FileObject root = createFileObject("/", USER);
+        FtpFile root = createFileObject("/", USER);
 
-        FileObject[] files = root.listFiles();
+        FtpFile[] files = root.listFiles();
         assertEquals(3, files.length);
         assertEquals("dir1", files[0].getShortName());
         assertEquals("file1", files[1].getShortName());

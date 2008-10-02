@@ -25,9 +25,9 @@ import java.util.Map;
 
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.command.impl.DefaultCommandFactory;
-import org.apache.ftpserver.filesystem.NativeFileSystemManager;
+import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
@@ -62,7 +62,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     private UserManager userManager = new PropertiesUserManager();
 
-    private FileSystemManager fileSystemManager = new NativeFileSystemManager();
+    private FileSystemFactory fileSystemManager = new NativeFileSystemFactory();
 
     private FtpletContainer ftpletContainer = new DefaultFtpletContainer();
 
@@ -134,7 +134,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
     /**
      * Get file system manager.
      */
-    public FileSystemManager getFileSystemManager() {
+    public FileSystemFactory getFileSystemManager() {
         return fileSystemManager;
     }
 
@@ -217,7 +217,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
         this.commandFactory = commandFactory;
     }
 
-    public void setFileSystemManager(FileSystemManager fileSystemManager) {
+    public void setFileSystemManager(FileSystemFactory fileSystemManager) {
         this.fileSystemManager = fileSystemManager;
     }
 

@@ -20,7 +20,7 @@ package org.apache.ftpserver.command.impl.listing;
 
 import java.util.Arrays;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -36,9 +36,9 @@ public class LISTFileFormater implements FileFormater {
     private final static char[] NEWLINE = { '\r', '\n' };
 
     /**
-     * @see FileFormater#format(FileObject)
+     * @see FileFormater#format(FtpFile)
      */
-    public String format(FileObject file) {
+    public String format(FtpFile file) {
         StringBuffer sb = new StringBuffer();
         sb.append(getPermission(file));
         sb.append(DELIM);
@@ -63,7 +63,7 @@ public class LISTFileFormater implements FileFormater {
     /**
      * Get size
      */
-    private String getLength(FileObject file) {
+    private String getLength(FtpFile file) {
         String initStr = "            ";
         long sz = 0;
         if (file.isFile()) {
@@ -79,14 +79,14 @@ public class LISTFileFormater implements FileFormater {
     /**
      * Get last modified date string.
      */
-    private String getLastModified(FileObject file) {
+    private String getLastModified(FtpFile file) {
         return DateUtils.getUnixDate(file.getLastModified());
     }
 
     /**
      * Get permission string.
      */
-    private char[] getPermission(FileObject file) {
+    private char[] getPermission(FtpFile file) {
         char permission[] = new char[10];
         Arrays.fill(permission, '-');
 

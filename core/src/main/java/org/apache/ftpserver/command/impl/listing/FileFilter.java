@@ -18,7 +18,7 @@
  */
 package org.apache.ftpserver.command.impl.listing;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
  * Interface for selecting files based on some critera.
@@ -31,12 +31,12 @@ import org.apache.ftpserver.ftplet.FileObject;
 public interface FileFilter {
 
     /**
-     * Decide if the {@link FileObject} should be selected
+     * Decide if the {@link FtpFile} should be selected
      * 
      * @param file
-     *            The {@link FileObject}
-     * @return true if the {@link FileObject} was selected
+     *            The {@link FtpFile}
+     * @return true if the {@link FtpFile} was selected
      */
-    boolean accept(FileObject file);
+    boolean accept(FtpFile file);
 
 }

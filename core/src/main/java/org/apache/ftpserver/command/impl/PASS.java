@@ -25,7 +25,7 @@ import java.net.InetSocketAddress;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
-import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -212,7 +212,7 @@ public class PASS extends AbstractCommand {
             }
 
             // update different objects
-            FileSystemManager fmanager = context.getFileSystemManager();
+            FileSystemFactory fmanager = context.getFileSystemManager();
             FileSystemView fsview = fmanager
                     .createFileSystemView(authenticatedUser);
             session.setLogin(fsview);

@@ -31,12 +31,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.FtpHandler;
-import org.apache.ftpserver.filter.FtpLoggingFilter;
 import org.apache.ftpserver.impl.DefaultFtpHandler;
 import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.interfaces.FtpIoSession;
 import org.apache.ftpserver.interfaces.FtpServerContext;
 import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.ClientAuth;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.core.session.IdleStatus;
@@ -76,6 +76,9 @@ public class NioListener extends AbstractListener {
 
     private FtpServerContext context;
 
+    /**
+     * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
+     */
     public NioListener(InetAddress serverAddress, int port,
             boolean implicitSsl,
             SslConfiguration sslConfiguration,

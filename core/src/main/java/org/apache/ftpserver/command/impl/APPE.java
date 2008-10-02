@@ -29,7 +29,7 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -98,7 +98,7 @@ public class APPE extends AbstractCommand {
             }
 
             // get filenames
-            FileObject file = null;
+            FtpFile file = null;
             try {
                 file = session.getFileSystemView().getFileObject(fileName);
             } catch (Exception e) {

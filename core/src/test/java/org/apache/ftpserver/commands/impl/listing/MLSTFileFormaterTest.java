@@ -27,7 +27,7 @@ import java.util.Date;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.command.impl.listing.MLSTFileFormater;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
@@ -40,11 +40,11 @@ public class MLSTFileFormaterTest extends TestCase {
 
     private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);
 
-    private static final FileObject TEST_FILE = new MockFileObject();
+    private static final FtpFile TEST_FILE = new MockFileObject();
 
     public MLSTFileFormater formater = new MLSTFileFormater(null);
 
-    public static class MockFileObject implements FileObject {
+    public static class MockFileObject implements FtpFile {
         public InputStream createInputStream(long offset) throws IOException {
             return null;
         }
@@ -113,7 +113,7 @@ public class MLSTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public FileObject[] listFiles() {
+        public FtpFile[] listFiles() {
             return null;
         }
 
@@ -121,7 +121,7 @@ public class MLSTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public boolean move(FileObject destination) {
+        public boolean move(FtpFile destination) {
             return false;
         }
     }
@@ -132,7 +132,7 @@ public class MLSTFileFormaterTest extends TestCase {
     }
 
     public void testSingleDir() {
-        FileObject dir = new MockFileObject() {
+        FtpFile dir = new MockFileObject() {
             public boolean isDirectory() {
                 return true;
             }

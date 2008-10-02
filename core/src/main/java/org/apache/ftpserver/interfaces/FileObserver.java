@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
  * This is the file related activity observer.
@@ -32,26 +32,26 @@ public interface FileObserver {
     /**
      * User file upload notification.
      */
-    void notifyUpload(FtpIoSession session, FileObject file, long size);
+    void notifyUpload(FtpIoSession session, FtpFile file, long size);
 
     /**
      * User file download notification.
      */
-    void notifyDownload(FtpIoSession session, FileObject file, long size);
+    void notifyDownload(FtpIoSession session, FtpFile file, long size);
 
     /**
      * User file delete notification.
      */
-    void notifyDelete(FtpIoSession session, FileObject file);
+    void notifyDelete(FtpIoSession session, FtpFile file);
 
     /**
      * User make directory notification.
      */
-    void notifyMkdir(FtpIoSession session, FileObject file);
+    void notifyMkdir(FtpIoSession session, FtpFile file);
 
     /**
      * User remove directory notification.
      */
-    void notifyRmdir(FtpIoSession session, FileObject file);
+    void notifyRmdir(FtpIoSession session, FtpFile file);
 
 }

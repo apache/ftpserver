@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import java.io.File;
 import java.io.FileFilter;

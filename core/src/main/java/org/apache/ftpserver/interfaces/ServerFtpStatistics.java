@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.interfaces;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 
 /**
@@ -44,27 +44,27 @@ public interface ServerFtpStatistics extends FtpStatistics {
     /**
      * Increment upload count.
      */
-    void setUpload(FtpIoSession session, FileObject file, long size);
+    void setUpload(FtpIoSession session, FtpFile file, long size);
 
     /**
      * Increment download count.
      */
-    void setDownload(FtpIoSession session, FileObject file, long size);
+    void setDownload(FtpIoSession session, FtpFile file, long size);
 
     /**
      * Increment make directory count.
      */
-    void setMkdir(FtpIoSession session, FileObject dir);
+    void setMkdir(FtpIoSession session, FtpFile dir);
 
     /**
      * Decrement remove directory count.
      */
-    void setRmdir(FtpIoSession session, FileObject dir);
+    void setRmdir(FtpIoSession session, FtpFile dir);
 
     /**
      * Increment delete count.
      */
-    void setDelete(FtpIoSession session, FileObject file);
+    void setDelete(FtpIoSession session, FtpFile file);
 
     /**
      * Increment current connection count.

@@ -120,7 +120,7 @@ public interface FtpSession {
     /**
      * Get rename from file object.
      */
-    FileObject getRenameFrom();
+    FtpFile getRenameFrom();
 
     /**
      * Get the data type.

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filter;
+package org.apache.ftpserver.listener.nio;
 
 import org.apache.mina.core.session.IoEventType;
 import org.apache.mina.core.session.IoSession;

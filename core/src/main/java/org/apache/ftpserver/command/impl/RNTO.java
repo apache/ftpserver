@@ -22,7 +22,7 @@ package org.apache.ftpserver.command.impl;
 import java.io.IOException;
 
 import org.apache.ftpserver.command.AbstractCommand;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -69,7 +69,7 @@ public class RNTO extends AbstractCommand {
             }
 
             // get the "rename from" file object
-            FileObject frFile = session.getRenameFrom();
+            FtpFile frFile = session.getRenameFrom();
             if (frFile == null) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "RNTO",
@@ -78,7 +78,7 @@ public class RNTO extends AbstractCommand {
             }
 
             // get target file
-            FileObject toFile = null;
+            FtpFile toFile = null;
             try {
                 toFile = session.getFileSystemView().getFileObject(toFileStr);
             } catch (Exception ex) {

@@ -37,7 +37,7 @@ public interface FtpletContext {
     /**
      * Get file system manager
      */
-    FileSystemManager getFileSystemManager();
+    FileSystemFactory getFileSystemManager();
 
     /**
      * Get ftp statistics.

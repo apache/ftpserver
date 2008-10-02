@@ -22,7 +22,7 @@ package org.apache.ftpserver.command.impl;
 import java.io.IOException;
 
 import org.apache.ftpserver.command.AbstractCommand;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -66,7 +66,7 @@ public class RNFR extends AbstractCommand {
         }
 
         // get filename
-        FileObject renFr = null;
+        FtpFile renFr = null;
         try {
             renFr = session.getFileSystemView().getFileObject(fileName);
         } catch (Exception ex) {

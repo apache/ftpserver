@@ -22,7 +22,7 @@ package org.apache.ftpserver;
 import java.util.Map;
 
 import org.apache.ftpserver.command.CommandFactory;
-import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.interfaces.FtpServerContext;
@@ -257,9 +257,9 @@ public class FtpServer {
     /**
      * Retrieve the file system used with this server
      * 
-     * @return The {@link FileSystemManager}
+     * @return The {@link FileSystemFactory}
      */
-    public FileSystemManager getFileSystem() {
+    public FileSystemFactory getFileSystem() {
         return getServerContext().getFileSystemManager();
     }
 
@@ -267,11 +267,11 @@ public class FtpServer {
      * Set the file system to be used for this server
      * 
      * @param fileSystem
-     *            The {@link FileSystemManager}
+     *            The {@link FileSystemFactory}
      * @throws IllegalStateException
      *             If a custom server context has been set
      */
-    public void setFileSystem(final FileSystemManager fileSystem) {
+    public void setFileSystem(final FileSystemFactory fileSystem) {
         checkAndGetContext().setFileSystemManager(fileSystem);
     }
 

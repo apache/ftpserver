@@ -26,7 +26,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.ftpserver.command.AbstractCommand;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
@@ -93,7 +93,7 @@ public class MD5 extends AbstractCommand {
             String fileName = fileNames[i].trim();
 
             // get file object
-            FileObject file = null;
+            FtpFile file = null;
 
             try {
                 file = session.getFileSystemView().getFileObject(fileName);

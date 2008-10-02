@@ -32,7 +32,7 @@ import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.IODataConnectionFactory;
 import org.apache.ftpserver.ServerDataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
@@ -658,13 +658,13 @@ public class FtpIoSession implements IoSession {
 
     }
 
-    public void setRenameFrom(FileObject renFr) {
+    public void setRenameFrom(FtpFile renFr) {
         setAttribute(ATTRIBUTE_RENAME_FROM, renFr);
 
     }
 
-    public FileObject getRenameFrom() {
-        return (FileObject) getAttribute(ATTRIBUTE_RENAME_FROM);
+    public FtpFile getRenameFrom() {
+        return (FtpFile) getAttribute(ATTRIBUTE_RENAME_FROM);
     }
 
     public long getFileOffset() {

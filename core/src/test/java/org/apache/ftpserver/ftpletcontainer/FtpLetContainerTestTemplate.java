@@ -26,7 +26,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
@@ -51,7 +51,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
     protected abstract FtpletContainer createFtpletContainer();
 
     private static class MockFtpletContext implements FtpletContext {
-        public FileSystemManager getFileSystemManager() {
+        public FileSystemFactory getFileSystemManager() {
             return null;
         }
 

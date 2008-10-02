@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.interfaces.FileObserver;
 import org.apache.ftpserver.interfaces.FtpIoSession;
@@ -268,7 +268,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Increment upload count.
      */
     public synchronized void setUpload(final FtpIoSession session,
-            final FileObject file, final long size) {
+            final FtpFile file, final long size) {
         uploadCount.incrementAndGet();
         bytesUpload.addAndGet(size);
         notifyUpload(session, file, size);
@@ -278,7 +278,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Increment download count.
      */
     public synchronized void setDownload(final FtpIoSession session,
-            final FileObject file, final long size) {
+            final FtpFile file, final long size) {
         downloadCount.incrementAndGet();
         bytesDownload.addAndGet(size);
         notifyDownload(session, file, size);
@@ -288,7 +288,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Increment delete count.
      */
     public synchronized void setDelete(final FtpIoSession session,
-            final FileObject file) {
+            final FtpFile file) {
         deleteCount.incrementAndGet();
         notifyDelete(session, file);
     }
@@ -297,7 +297,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Increment make directory count.
      */
     public synchronized void setMkdir(final FtpIoSession session,
-            final FileObject file) {
+            final FtpFile file) {
         mkdirCount.incrementAndGet();
         notifyMkdir(session, file);
     }
@@ -306,7 +306,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Increment remove directory count.
      */
     public synchronized void setRmdir(final FtpIoSession session,
-            final FileObject file) {
+            final FtpFile file) {
         rmdirCount.incrementAndGet();
         notifyRmdir(session, file);
     }
@@ -418,7 +418,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Observer upload notification.
      */
     private void notifyUpload(final FtpIoSession session,
-            final FileObject file, long size) {
+            final FtpFile file, long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyUpload();
@@ -434,7 +434,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
      * Observer download notification.
      */
     private void notifyDownload(final FtpIoSession session,
-            final FileObject file, final long size) {
+            final FtpFile file, final long size) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDownload();
@@ -449,7 +449,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer delete notification.
      */
-    private void notifyDelete(final FtpIoSession session, final FileObject file) {
+    private void notifyDelete(final FtpIoSession session, final FtpFile file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyDelete();
@@ -464,7 +464,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer make directory notification.
      */
-    private void notifyMkdir(final FtpIoSession session, final FileObject file) {
+    private void notifyMkdir(final FtpIoSession session, final FtpFile file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyMkdir();
@@ -479,7 +479,7 @@ public class FtpStatisticsImpl implements ServerFtpStatistics {
     /**
      * Observer remove directory notification.
      */
-    private void notifyRmdir(final FtpIoSession session, final FileObject file) {
+    private void notifyRmdir(final FtpIoSession session, final FtpFile file) {
         StatisticsObserver observer = this.observer;
         if (observer != null) {
             observer.notifyRmdir();

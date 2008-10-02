@@ -21,7 +21,7 @@ package org.apache.ftpserver.command.impl.listing;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 
@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  */
 public class DirectoryLister {
 
-    private String traverseFiles(final FileObject[] files,
+    private String traverseFiles(final FtpFile[] files,
             final FileFilter filter, final FileFormater formater) {
         StringBuffer sb = new StringBuffer();
 
@@ -43,7 +43,7 @@ public class DirectoryLister {
         return sb.toString();
     }
 
-    private String traverseFiles(final FileObject[] files,
+    private String traverseFiles(final FtpFile[] files,
             final FileFilter filter, final FileFormater formater,
             boolean matchDirs) {
         StringBuffer sb = new StringBuffer();
@@ -69,7 +69,7 @@ public class DirectoryLister {
         StringBuffer sb = new StringBuffer();
 
         // get all the file objects
-        FileObject[] files = listFiles(fileSystemView, argument.getFile());
+        FtpFile[] files = listFiles(fileSystemView, argument.getFile());
         if (files != null) {
             FileFilter filter = null;
             if ((argument.hasOption('a'))) {
@@ -88,12 +88,12 @@ public class DirectoryLister {
     /**
      * Get the file list. Files will be listed in alphabetlical order.
      */
-    private FileObject[] listFiles(FileSystemView fileSystemView, String file) {
-        FileObject[] files = null;
+    private FtpFile[] listFiles(FileSystemView fileSystemView, String file) {
+        FtpFile[] files = null;
         try {
-            FileObject virtualFile = fileSystemView.getFileObject(file);
+            FtpFile virtualFile = fileSystemView.getFileObject(file);
             if (virtualFile.isFile()) {
-                files = new FileObject[] { virtualFile };
+                files = new FtpFile[] { virtualFile };
             } else {
                 files = virtualFile.listFiles();
             }

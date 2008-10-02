@@ -20,12 +20,12 @@
 package org.apache.ftpserver.ftplet;
 
 /**
- * This is the file system manager - it returns the file system view for user.
+ * Factory for file system implementations - it returns the file system view for user.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface FileSystemManager {
+public interface FileSystemFactory {
 
     /**
      * Create user specific file system view.

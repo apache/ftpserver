@@ -19,8 +19,8 @@
 
 package org.apache.ftpserver.config.spring;
 
-import org.apache.ftpserver.filesystem.NativeFileSystemManager;
-import org.apache.ftpserver.ftplet.FileSystemManager;
+import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -40,9 +40,9 @@ public class FileSystemBeanDefinitionParser extends
      * {@inheritDoc}
      */
     @Override
-    protected Class<? extends FileSystemManager> getBeanClass(
+    protected Class<? extends FileSystemFactory> getBeanClass(
             final Element element) {
-        return NativeFileSystemManager.class;
+        return NativeFileSystemFactory.class;
     }
 
     /**

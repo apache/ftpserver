@@ -18,7 +18,7 @@
  */
 package org.apache.ftpserver.command.impl.listing;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
  * Formats files according to the NLST specification
@@ -31,9 +31,9 @@ public class NLSTFileFormater implements FileFormater {
     private final static char[] NEWLINE = { '\r', '\n' };
 
     /**
-     * @see FileFormater#format(FileObject)
+     * @see FileFormater#format(FtpFile)
      */
-    public String format(FileObject file) {
+    public String format(FtpFile file) {
         StringBuffer sb = new StringBuffer();
         sb.append(file.getShortName());
         sb.append(NEWLINE);

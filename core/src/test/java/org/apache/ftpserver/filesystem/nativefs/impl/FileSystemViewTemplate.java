@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.filesystem.nativefs.impl.NativeFileSystemView;
 import org.apache.ftpserver.usermanager.BaseUser;
 
 /**

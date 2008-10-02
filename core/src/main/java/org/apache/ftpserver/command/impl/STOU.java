@@ -29,7 +29,7 @@ import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -85,13 +85,13 @@ public class STOU extends AbstractCommand {
             String pathName = request.getArgument();
 
             // get filenames
-            FileObject file = null;
+            FtpFile file = null;
             try {
                 String filePrefix;
                 if (pathName == null) {
                     filePrefix = "ftp.dat";
                 } else {
-                    FileObject dir = session.getFileSystemView().getFileObject(
+                    FtpFile dir = session.getFileSystemView().getFileObject(
                             pathName);
                     if (dir.isDirectory()) {
                         filePrefix = pathName + "/ftp.dat";
@@ -198,9 +198,9 @@ public class STOU extends AbstractCommand {
     /**
      * Get unique file object.
      */
-    protected FileObject getUniqueFile(FtpIoSession session, FileObject oldFile)
+    protected FtpFile getUniqueFile(FtpIoSession session, FtpFile oldFile)
             throws FtpException {
-        FileObject newFile = oldFile;
+        FtpFile newFile = oldFile;
         FileSystemView fsView = session.getFileSystemView();
         String fileName = newFile.getFullName();
         while (newFile.doesExist()) {

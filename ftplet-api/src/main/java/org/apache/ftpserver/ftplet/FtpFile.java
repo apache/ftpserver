@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface FileObject {
+public interface FtpFile {
 
     /**
      * Get the fully qualified name.
@@ -114,13 +114,13 @@ public interface FileObject {
     /**
      * Move file.
      */
-    boolean move(FileObject destination);
+    boolean move(FtpFile destination);
 
     /**
      * List file objects. If not a directory or does not exist, null will be
      * returned. Files must be returned in alphabetical order.
      */
-    FileObject[] listFiles();
+    FtpFile[] listFiles();
 
     /**
      * Create output stream for writing. If the file is not random accessible,

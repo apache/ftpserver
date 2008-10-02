@@ -18,7 +18,7 @@
  */
 package org.apache.ftpserver.command.impl.listing;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
@@ -47,9 +47,9 @@ public class MLSTFileFormater implements FileFormater {
     }
 
     /**
-     * @see FileFormater#format(FileObject)
+     * @see FileFormater#format(FtpFile)
      */
-    public String format(FileObject file) {
+    public String format(FtpFile file) {
         StringBuffer sb = new StringBuffer();
 
         for (int i = 0; i < selectedTypes.length; ++i) {

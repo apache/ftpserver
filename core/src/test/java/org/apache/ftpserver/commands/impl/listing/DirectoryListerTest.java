@@ -27,7 +27,7 @@ import org.apache.ftpserver.command.impl.listing.DirectoryLister;
 import org.apache.ftpserver.command.impl.listing.FileFormater;
 import org.apache.ftpserver.command.impl.listing.ListArgument;
 import org.apache.ftpserver.command.impl.listing.NLSTFileFormater;
-import org.apache.ftpserver.filesystem.NativeFileSystemView;
+import org.apache.ftpserver.filesystem.nativefs.impl.NativeFileSystemView;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.BaseUser;

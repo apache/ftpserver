@@ -26,7 +26,7 @@ import org.apache.ftpserver.command.impl.listing.FileFormater;
 import org.apache.ftpserver.command.impl.listing.ListArgument;
 import org.apache.ftpserver.command.impl.listing.ListArgumentParser;
 import org.apache.ftpserver.command.impl.listing.MLSTFileFormater;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -62,7 +62,7 @@ public class MLST extends AbstractCommand {
         ListArgument parsedArg = ListArgumentParser
                 .parse(request.getArgument());
 
-        FileObject file = null;
+        FtpFile file = null;
         try {
             file = session.getFileSystemView().getFileObject(
                     parsedArg.getFile());

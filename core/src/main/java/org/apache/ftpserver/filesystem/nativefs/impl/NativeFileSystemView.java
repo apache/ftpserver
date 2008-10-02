@@ -17,11 +17,12 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import java.io.File;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
@@ -49,16 +50,16 @@ public class NativeFileSystemView implements FileSystemView {
     private boolean caseInsensitive = false;
 
     /**
-     * Constructor - set the user object.
+     * Constructor - internal do not use directly, use {@link NativeFileSystemFactory} instead
      */
     protected NativeFileSystemView(User user) throws FtpException {
         this(user, false);
     }
 
     /**
-     * Constructor - set the user object.
+     * Constructor - internal do not use directly, use {@link NativeFileSystemFactory} instead
      */
-    protected NativeFileSystemView(User user, boolean caseInsensitive)
+    public NativeFileSystemView(User user, boolean caseInsensitive)
             throws FtpException {
         if (user == null) {
             throw new IllegalArgumentException("user can not be null");
@@ -72,7 +73,7 @@ public class NativeFileSystemView implements FileSystemView {
 
         // add last '/' if necessary
         String rootDir = user.getHomeDirectory();
-        rootDir = NativeFileObject.normalizeSeparateChar(rootDir);
+        rootDir = NativeFtpFile.normalizeSeparateChar(rootDir);
         if (!rootDir.endsWith("/")) {
             rootDir += '/';
         }
@@ -87,20 +88,20 @@ public class NativeFileSystemView implements FileSystemView {
      * Get the user home directory. It would be the file system root for the
      * user.
      */
-    public FileObject getHomeDirectory() {
-        return new NativeFileObject("/", new File(rootDir), user);
+    public FtpFile getHomeDirectory() {
+        return new NativeFtpFile("/", new File(rootDir), user);
     }
 
     /**
      * Get the current directory.
      */
-    public FileObject getCurrentDirectory() {
-        FileObject fileObj = null;
+    public FtpFile getCurrentDirectory() {
+        FtpFile fileObj = null;
         if (currDir.equals("/")) {
-            fileObj = new NativeFileObject("/", new File(rootDir), user);
+            fileObj = new NativeFtpFile("/", new File(rootDir), user);
         } else {
             File file = new File(rootDir, currDir.substring(1));
-            fileObj = new NativeFileObject(currDir, file, user);
+            fileObj = new NativeFtpFile(currDir, file, user);
 
         }
         return fileObj;
@@ -109,16 +110,16 @@ public class NativeFileSystemView implements FileSystemView {
     /**
      * Get file object.
      */
-    public FileObject getFileObject(String file) {
+    public FtpFile getFileObject(String file) {
 
         // get actual file object
-        String physicalName = NativeFileObject.getPhysicalName(rootDir,
+        String physicalName = NativeFtpFile.getPhysicalName(rootDir,
                 currDir, file, caseInsensitive);
         File fileObj = new File(physicalName);
 
         // strip the root directory and return
         String userFileName = physicalName.substring(rootDir.length() - 1);
-        return new NativeFileObject(userFileName, fileObj, user);
+        return new NativeFtpFile(userFileName, fileObj, user);
     }
 
     /**
@@ -127,7 +128,7 @@ public class NativeFileSystemView implements FileSystemView {
     public boolean changeDirectory(String dir) {
 
         // not a directory - return false
-        dir = NativeFileObject.getPhysicalName(rootDir, currDir, dir,
+        dir = NativeFtpFile.getPhysicalName(rootDir, currDir, dir,
                 caseInsensitive);
         File dirObj = new File(dir);
         if (!dirObj.isDirectory()) {

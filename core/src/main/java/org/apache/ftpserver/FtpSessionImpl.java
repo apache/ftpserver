@@ -26,7 +26,7 @@ import java.util.Date;
 
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -104,7 +104,7 @@ public class FtpSessionImpl implements FtpSession {
     /**
      * Get rename from file object.
      */
-    public FileObject getRenameFrom() {
+    public FtpFile getRenameFrom() {
         return ioSession.getRenameFrom();
     }
 

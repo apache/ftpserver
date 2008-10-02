@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.filesystem;
+package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.usermanager.WriteRequest;
 import org.slf4j.Logger;
@@ -42,9 +42,9 @@ import org.slf4j.LoggerFactory;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class NativeFileObject implements FileObject {
+public class NativeFtpFile implements FtpFile {
 
-    private final Logger LOG = LoggerFactory.getLogger(NativeFileObject.class);
+    private final Logger LOG = LoggerFactory.getLogger(NativeFtpFile.class);
     
     // the file name with respect to the user root.
     // The path separator character will be '/' and
@@ -56,9 +56,9 @@ public class NativeFileObject implements FileObject {
     private User user;
 
     /**
-     * Constructor.
+     * Constructor, internal do not use directly.
      */
-    protected NativeFileObject(final String fileName, final File file,
+    protected NativeFtpFile(final String fileName, final File file,
             final User user) {
         if (fileName == null) {
             throw new IllegalArgumentException("fileName can not be null");
@@ -241,7 +241,7 @@ public class NativeFileObject implements FileObject {
         }
         
         // we check if the parent FileObject is writable.
-        NativeFileObject parentObject=new NativeFileObject(parentFullName,file.getAbsoluteFile().getParentFile(),user);
+        NativeFtpFile parentObject=new NativeFtpFile(parentFullName,file.getAbsoluteFile().getParentFile(),user);
         return parentObject.hasWritePermission(); 
     }
 
@@ -259,10 +259,10 @@ public class NativeFileObject implements FileObject {
     /**
      * Move file object.
      */
-    public boolean move(final FileObject dest) {
+    public boolean move(final FtpFile dest) {
         boolean retVal = false;
         if (dest.hasWritePermission() && hasReadPermission()) {
-            File destFile = ((NativeFileObject) dest).file;
+            File destFile = ((NativeFtpFile) dest).file;
 
             if (destFile.exists()) {
                 // renameTo behaves differently on different platforms
@@ -297,7 +297,7 @@ public class NativeFileObject implements FileObject {
     /**
      * List files. If not a directory or does not exist, null will be returned.
      */
-    public FileObject[] listFiles() {
+    public FtpFile[] listFiles() {
 
         // is a directory
         if (!file.isDirectory()) {
@@ -324,11 +324,11 @@ public class NativeFileObject implements FileObject {
         }
 
         // now return all the files under the directory
-        FileObject[] virtualFiles = new FileObject[files.length];
+        FtpFile[] virtualFiles = new FtpFile[files.length];
         for (int i = 0; i < files.length; ++i) {
             File fileObj = files[i];
             String fileName = virtualFileStr + fileObj.getName();
-            virtualFiles[i] = new NativeFileObject(fileName, fileObj, user);
+            virtualFiles[i] = new NativeFtpFile(fileName, fileObj, user);
         }
 
         return virtualFiles;

@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.ftpserver.command.AbstractCommand;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -68,7 +68,7 @@ public class MKD extends AbstractCommand {
         }
 
         // get file object
-        FileObject file = null;
+        FtpFile file = null;
         try {
             file = session.getFileSystemView().getFileObject(fileName);
         } catch (Exception ex) {
