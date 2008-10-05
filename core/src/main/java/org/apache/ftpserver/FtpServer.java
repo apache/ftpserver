@@ -25,6 +25,7 @@ import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.ftpletcontainer.impl.DefaultFtpletContainer;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.message.MessageResource;
 import org.slf4j.Logger;
@@ -229,7 +230,7 @@ public class FtpServer {
      *             If a custom server context has been set
      */
     public void setFtplets(final Map<String, Ftplet> ftplets) {
-        getServerContext().getFtpletContainer().setFtplets(ftplets);
+        checkAndGetContext().setFtpletContainer(new DefaultFtpletContainer(ftplets));
     }
 
     /**

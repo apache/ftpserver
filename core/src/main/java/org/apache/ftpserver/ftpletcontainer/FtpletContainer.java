@@ -21,7 +21,6 @@ package org.apache.ftpserver.ftpletcontainer;
 
 import java.util.Map;
 
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 
 /**
@@ -33,31 +32,6 @@ import org.apache.ftpserver.ftplet.Ftplet;
  * @version $Rev$, $Date$
  */
 public interface FtpletContainer extends Ftplet {
-
-    /**
-     * Add an {@link Ftplet} to the container.
-     * 
-     * @param name
-     *            The name of the Ftplet to be added
-     * @param ftplet
-     *            The Ftplet
-     * @throws FtpException 
-     * @throws IllegalArgumentException
-     *             If an Ftplet with the same name already exist within the
-     *             container
-     */
-    void addFtplet(String name, Ftplet ftplet) throws FtpException;
-
-    /**
-     * Remove the {@link Ftplet} identified by the name (as provided in the
-     * {@link #addFtplet(String, Ftplet)} method.
-     * 
-     * @param name
-     *            The name of the Ftplet to be removed
-     * @return The removed Ftplet if found, or null if the name is unknown to
-     *         the container.
-     */
-    Ftplet removeFtplet(String name);
 
     /**
      * Retrive the {@link Ftplet} identified by the name (as provided in the
@@ -76,13 +50,4 @@ public interface FtpletContainer extends Ftplet {
      * @return A map of all Ftplets with their name as the key
      */
     Map<String, Ftplet> getFtplets();
-
-    /**
-     * Set the Ftplets for this container. Will remove all previously registred
-     * Ftplets in this container
-     * 
-     * @param ftplets
-     *            A map of all Ftplets with their name as the key
-     */
-    void setFtplets(Map<String, Ftplet> ftplets);
 }

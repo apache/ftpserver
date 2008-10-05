@@ -20,7 +20,6 @@
 package org.apache.ftpserver.ssl.impl;
 
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;

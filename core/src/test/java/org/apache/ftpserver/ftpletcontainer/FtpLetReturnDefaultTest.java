@@ -23,6 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.FtpServer;
@@ -30,6 +32,7 @@ import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
+import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.test.TestUtil;
 
@@ -70,8 +73,11 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
 
-        server.getServerContext().getFtpletContainer().addFtplet("f1",
-                new MockFtplet());
+        Map<String, Ftplet> ftplets = new HashMap<String, Ftplet>();
+        ftplets.put("f1", new MockFtplet());
+        
+        server.setFtplets(ftplets);
+        
         return server;
     }
 

@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This ftplet calls other ftplet methods and returns appropriate return value.
  *
+ * <strong>Internal class, do not use directly</strong>
+ *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
@@ -45,44 +47,13 @@ public class DefaultFtpletContainer implements FtpletContainer {
     private final Logger LOG = LoggerFactory
             .getLogger(DefaultFtpletContainer.class);
 
-    private FtpletContext ftpletContext;
-    
     private Map<String, Ftplet> ftplets = new ConcurrentHashMap<String, Ftplet>();
 
-    public synchronized void dispose() {
-
-        for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
-            try {
-                entry.getValue().destroy();
-            } catch (Exception ex) {
-                LOG.error(entry.getKey() + " :: FtpletHandler.destroy()", ex);
-            }
-        }
-        ftplets.clear();
+    public DefaultFtpletContainer() {
     }
-
-    public synchronized void addFtplet(String name, Ftplet ftplet) throws FtpException {
-        if (getFtplet(name) != null) {
-            throw new IllegalArgumentException("Ftplet with name \"" + name
-                    + "\" already registred with container");
-        }
-
-        ftplets.put(name, ftplet);
-        
-        if(ftpletContext != null) {
-            ftplet.init(ftpletContext);
-        }
-    }
-
-    public synchronized Ftplet removeFtplet(String name) {
-        Ftplet ftplet = ftplets.get(name);
-
-        if (ftplet != null) {
-            ftplets.remove(name);
-            return ftplet;
-        } else {
-            return null;
-        }
+    
+    public DefaultFtpletContainer(Map<String, Ftplet> ftplets) {
+        this.ftplets = ftplets;
     }
 
     /**
@@ -97,10 +68,6 @@ public class DefaultFtpletContainer implements FtpletContainer {
     }
 
     public synchronized void init(FtpletContext ftpletContext) throws FtpException {
-        this.ftpletContext = ftpletContext;
-        
-        // initialize Ftplets already added
-
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
             entry.getValue().init(ftpletContext);
         }
@@ -114,17 +81,17 @@ public class DefaultFtpletContainer implements FtpletContainer {
     }
 
     /**
-     * @see FtpletContainer#setFtplets(Map)
-     */
-    public synchronized void setFtplets(Map<String, Ftplet> ftplets) {
-        this.ftplets = ftplets;
-    }
-
-    /**
      * Destroy all ftplets.
      */
     public void destroy() {
-        dispose();
+        for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
+            try {
+                entry.getValue().destroy();
+            } catch (Exception ex) {
+                LOG.error(entry.getKey() + " :: FtpletHandler.destroy()", ex);
+            }
+        }
+        ftplets.clear();
     }
 
     /**

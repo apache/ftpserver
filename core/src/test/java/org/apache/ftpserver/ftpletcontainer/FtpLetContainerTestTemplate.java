@@ -21,7 +21,9 @@ package org.apache.ftpserver.ftpletcontainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -39,8 +41,6 @@ import org.apache.ftpserver.impl.FtpSessionImpl;
 
 public abstract class FtpLetContainerTestTemplate extends TestCase {
 
-    private FtpletContainer container = createFtpletContainer();
-
     private final List<String> calls = new ArrayList<String>();
 
     protected void setUp() throws Exception {
@@ -48,7 +48,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
     }
 
-    protected abstract FtpletContainer createFtpletContainer();
+    protected abstract FtpletContainer createFtpletContainer(Map<String, Ftplet> ftplets);
 
     private static class MockFtpletContext implements FtpletContext {
         public FileSystemFactory getFileSystemManager() {
@@ -72,11 +72,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         MockFtplet ftplet1 = new MockFtplet();
         MockFtplet ftplet2 = new MockFtplet();
 
-        assertNull(container.getFtplet("ftplet1"));
-        assertNull(container.getFtplet("ftplet2"));
-
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+        
+        FtpletContainer container = createFtpletContainer(ftplets);
         
         assertSame(ftplet1, container.getFtplet("ftplet1"));
         assertSame(ftplet2, container.getFtplet("ftplet2"));
@@ -85,8 +85,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
     public void testFtpletLifecyclePreContainerInit() throws FtpException {
         MockFtplet ftplet = new MockFtplet();
 
-        container.addFtplet("ftplet1", ftplet);
-        
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
+
         // ftplet should be initialized before the container is
         assertNull(ftplet.context);
         container.init(new MockFtpletContext());
@@ -100,63 +103,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         assertTrue(ftplet.destroyed);
         
     }
-
-    public void testFtpletLifecyclePostContainerInit() throws FtpException {
-        MockFtplet ftplet = new MockFtplet();
-
-        assertNull(ftplet.context);
-        container.init(new MockFtpletContext());
-
-        container.addFtplet("ftplet1", ftplet);
-        
-        assertNotNull(ftplet.context);
-        
-        // make sure ftplets get's destroyed
-        assertFalse(ftplet.destroyed);
-        
-        container.destroy();
-
-        assertTrue(ftplet.destroyed);
-        
-    }
-
     
-    public void testAddFtpletWithDuplicateName() throws FtpException {
-        MockFtplet ftplet1 = new MockFtplet();
-        MockFtplet ftplet2 = new MockFtplet();
-
-        assertNull(container.getFtplet("ftplet1"));
-
-        container.addFtplet("ftplet1", ftplet1);
-
-        try {
-            container.addFtplet("ftplet1", ftplet2);
-            fail("IllegalArgumentException must be thrown");
-        } catch (IllegalArgumentException e) {
-            // ok
-        }
-
-        assertSame(ftplet1, container.getFtplet("ftplet1"));
-    }
-
-    public void testRemoveFtplet() throws FtpException {
-        MockFtplet ftplet1 = new MockFtplet();
-        MockFtplet ftplet2 = new MockFtplet();
-
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
-
-        assertSame(ftplet1, container.getFtplet("ftplet1"));
-        assertSame(ftplet2, container.getFtplet("ftplet2"));
-
-        assertSame(ftplet1, container.removeFtplet("ftplet1"));
-
-        assertNull(container.getFtplet("ftplet1"));
-        assertSame(ftplet2, container.getFtplet("ftplet2"));
-
-        assertNull(container.removeFtplet("ftplet1"));
-    }
-
     public void testOnConnect() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
             public FtpletResult onConnect(FtpSession session)
@@ -173,8 +120,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.onConnect(new FtpSessionImpl(null));
 
@@ -199,9 +149,12 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
 
+        FtpletContainer container = createFtpletContainer(ftplets);
+        
         container.onDisconnect(new FtpSessionImpl(null));
 
         assertEquals(2, calls.size());
@@ -225,8 +178,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "PASS"));
@@ -252,8 +208,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "DELE"));
@@ -279,8 +238,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "DELE"));
@@ -306,8 +268,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "STOR"));
@@ -333,8 +298,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "STOR"));
@@ -360,8 +328,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RETR"));
@@ -387,8 +358,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RETR"));
@@ -414,8 +388,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RMD"));
@@ -441,8 +418,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RMD"));
@@ -468,8 +448,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "MKD"));
@@ -495,8 +478,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "MKD"));
@@ -522,8 +508,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "APPE"));
@@ -549,8 +538,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "APPE"));
@@ -576,8 +568,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "STOU"));
@@ -603,8 +598,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "STOU"));
@@ -630,8 +628,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RNTO"));
@@ -657,8 +658,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "RNTO"));
@@ -684,8 +688,11 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
 
-        container.addFtplet("ftplet1", ftplet1);
-        container.addFtplet("ftplet2", ftplet2);
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
 
         container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
                 "SITE"));
