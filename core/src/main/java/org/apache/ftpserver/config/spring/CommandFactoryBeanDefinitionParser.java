@@ -22,7 +22,9 @@ package org.apache.ftpserver.config.spring;
 import java.util.List;
 
 import org.apache.ftpserver.command.CommandFactory;
-import org.apache.ftpserver.command.impl.DefaultCommandFactory;
+import org.apache.ftpserver.command.CommandFactoryFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -44,7 +46,7 @@ public class CommandFactoryBeanDefinitionParser extends
      */
     @Override
     protected Class<? extends CommandFactory> getBeanClass(final Element element) {
-        return DefaultCommandFactory.class;
+        return null;
     }
 
     /**
@@ -54,6 +56,9 @@ public class CommandFactoryBeanDefinitionParser extends
     protected void doParse(final Element element,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
+        
+        BeanDefinitionBuilder factoryBuilder = BeanDefinitionBuilder.genericBeanDefinition(CommandFactoryFactory.class);
+        
         ManagedMap commands = new ManagedMap();
 
         List<Element> childs = SpringUtil.getChildElements(element);
@@ -65,11 +70,22 @@ public class CommandFactoryBeanDefinitionParser extends
             commands.put(name, bean);
         }
 
-        builder.addPropertyValue("commandMap", commands);
+        factoryBuilder.addPropertyValue("commandMap", commands);
 
         if (StringUtils.hasText(element.getAttribute("use-default"))) {
-            builder.addPropertyValue("useDefaultCommands", Boolean
+            factoryBuilder.addPropertyValue("useDefaultCommands", Boolean
                     .parseBoolean(element.getAttribute("use-default")));
         }
+        
+        BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();
+        String factoryId = parserContext.getReaderContext().generateBeanName(factoryDefinition);
+        
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), factoryId);
+        registerBeanDefinition(factoryHolder, parserContext.getRegistry());
+
+        // set the factory on the listener bean
+        builder.getRawBeanDefinition().setFactoryBeanName(factoryId);
+        builder.getRawBeanDefinition().setFactoryMethodName("createCommandFactory");
+
     }
 }

@@ -152,12 +152,15 @@ public class ListenerBeanDefinitionParser extends
             factoryBuilder.addPropertyValue("blockedSubnets", subnets);
         }
         
+        String listenerName = element.getAttribute("name");
+        // TODO Investigate how to make unique
+        String listenerFactoryName = listenerName + "-factory";
         
-        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), "listener-factory");
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), listenerFactoryName);
         registerBeanDefinition(factoryHolder, parserContext.getRegistry());
 
         // set the factory on the listener bean
-        builder.getRawBeanDefinition().setFactoryBeanName("listener-factory");
+        builder.getRawBeanDefinition().setFactoryBeanName(listenerFactoryName);
         builder.getRawBeanDefinition().setFactoryMethodName("createListener");
     }
 

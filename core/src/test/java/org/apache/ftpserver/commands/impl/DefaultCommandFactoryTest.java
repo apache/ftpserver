@@ -19,13 +19,11 @@
 
 package org.apache.ftpserver.commands.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.command.Command;
-import org.apache.ftpserver.command.impl.DefaultCommandFactory;
+import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.command.CommandFactoryFactory;
 import org.apache.ftpserver.command.impl.NOOP;
 import org.apache.ftpserver.command.impl.STOR;
 
@@ -39,7 +37,7 @@ import org.apache.ftpserver.command.impl.STOR;
 public class DefaultCommandFactoryTest extends TestCase {
 
     public void testReturnFromDefaultUpper() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
+        CommandFactory factory = new CommandFactoryFactory().createCommandFactory();
         Command command = factory.getCommand("STOR");
 
         assertNotNull(command);
@@ -47,7 +45,7 @@ public class DefaultCommandFactoryTest extends TestCase {
     }
 
     public void testReturnFromDefaultLower() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
+        CommandFactory factory = new CommandFactoryFactory().createCommandFactory();
         Command command = factory.getCommand("stor");
 
         assertNotNull(command);
@@ -55,17 +53,17 @@ public class DefaultCommandFactoryTest extends TestCase {
     }
 
     public void testReturnFromDefaultUnknown() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
+        CommandFactory factory = new CommandFactoryFactory().createCommandFactory();
         Command command = factory.getCommand("dummy");
 
         assertNull(command);
     }
 
     public void testOverride() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
-        Map<String, Command> commands = new HashMap<String, Command>();
-        commands.put("stor", new NOOP());
-        factory.setCommandMap(commands);
+        CommandFactoryFactory factoryFactory = new CommandFactoryFactory();
+        factoryFactory.addCommand("stor", new NOOP());
+
+        CommandFactory factory = factoryFactory.createCommandFactory();
 
         Command command = factory.getCommand("Stor");
 
@@ -73,22 +71,22 @@ public class DefaultCommandFactoryTest extends TestCase {
     }
 
     public void testAppend() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
-        Map<String, Command> commands = new HashMap<String, Command>();
-        commands.put("foo", new NOOP());
-        factory.setCommandMap(commands);
+        CommandFactoryFactory factoryFactory = new CommandFactoryFactory();
+        factoryFactory.addCommand("foo", new NOOP());
+
+        CommandFactory factory = factoryFactory.createCommandFactory();
 
         assertTrue(factory.getCommand("FOO") instanceof NOOP);
         assertTrue(factory.getCommand("stor") instanceof STOR);
     }
 
     public void testAppendWithoutDefault() {
-        DefaultCommandFactory factory = new DefaultCommandFactory();
-        factory.setUseDefaultCommands(false);
-        Map<String, Command> commands = new HashMap<String, Command>();
-        commands.put("foo", new NOOP());
-        factory.setCommandMap(commands);
+        CommandFactoryFactory factoryFactory = new CommandFactoryFactory();
+        factoryFactory.addCommand("foo", new NOOP());
+        factoryFactory.setUseDefaultCommands(false);
 
+        CommandFactory factory = factoryFactory.createCommandFactory();
+        
         assertTrue(factory.getCommand("FOO") instanceof NOOP);
         assertNull(factory.getCommand("stor"));
     }

@@ -26,7 +26,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.command.impl.DefaultCommandFactory;
+import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.command.impl.HELP;
 import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
@@ -93,9 +93,7 @@ public class SpringConfigTest extends TestCase {
         assertTrue(listener instanceof MyCustomListener);
         assertEquals(2224, listener.getPort());
 
-        DefaultCommandFactory cf = (DefaultCommandFactory) server
-                .getServerContext().getCommandFactory();
-        assertEquals(2, cf.getCommandMap().size());
+        CommandFactory cf = server.getCommandFactory();
         assertTrue(cf.getCommand("FOO") instanceof HELP);
         assertTrue(cf.getCommand("FOO2") instanceof STAT);
 
