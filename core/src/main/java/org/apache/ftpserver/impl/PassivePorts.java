@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;

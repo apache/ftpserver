@@ -30,11 +30,11 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.FtpHandler;
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.impl.DefaultFtpHandler;
-import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.ClientAuth;

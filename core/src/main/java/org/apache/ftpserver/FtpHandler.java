@@ -23,8 +23,7 @@ import java.io.IOException;
 
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;

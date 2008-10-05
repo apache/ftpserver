@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.impl;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -28,9 +28,7 @@ import java.util.Set;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 
-import org.apache.ftpserver.FtpSessionImpl;
-import org.apache.ftpserver.IODataConnectionFactory;
-import org.apache.ftpserver.ServerDataConnectionFactory;
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -29,10 +29,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.FileObserver;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.ServerFtpStatistics;
-import org.apache.ftpserver.interfaces.StatisticsObserver;
 
 /**
  * This is FTP statistics implementation.

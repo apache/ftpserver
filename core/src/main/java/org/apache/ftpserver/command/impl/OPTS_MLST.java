@@ -22,13 +22,13 @@ package org.apache.ftpserver.command.impl;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * Client-Server listing negotation. Instruct the server what listing types to

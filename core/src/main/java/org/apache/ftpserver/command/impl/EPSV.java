@@ -23,13 +23,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.DataConnectionException;
-import org.apache.ftpserver.ServerDataConnectionFactory;
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.impl.ServerDataConnectionFactory;
 
 /**
  * The EPSV command requests that a server listen on a data port and wait for a

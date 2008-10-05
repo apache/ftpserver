@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

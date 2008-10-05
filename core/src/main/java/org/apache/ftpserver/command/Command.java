@@ -21,10 +21,10 @@ package org.apache.ftpserver.command;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.impl.FtpIoSession;
 
 /**
  * This interface encapsulates all the FTP commands.

@@ -24,10 +24,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Active;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Passive;
-import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;

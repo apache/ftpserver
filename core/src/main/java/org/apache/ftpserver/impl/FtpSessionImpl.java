@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -33,7 +33,6 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.interfaces.FtpIoSession;
 
 /**
  * FTP session

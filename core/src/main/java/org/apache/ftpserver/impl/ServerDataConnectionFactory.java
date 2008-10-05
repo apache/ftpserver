@@ -17,11 +17,12 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
+import org.apache.ftpserver.DataConnectionException;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 
 /**

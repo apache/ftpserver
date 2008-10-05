@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.impl.FtpStatisticsImpl;
 import org.apache.ftpserver.interfaces.ServerFtpStatisticsTestTemplate;
 
 /**

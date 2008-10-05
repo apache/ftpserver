@@ -20,8 +20,8 @@
 package org.apache.ftpserver.clienttests;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.test.TestUtil;
 

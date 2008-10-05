@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.apache.ftpserver.ftpletcontainer.impl.DefaultFtpletContainer;
-import org.apache.ftpserver.interfaces.FtpServerContext;
+import org.apache.ftpserver.impl.FtpStatisticsImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;

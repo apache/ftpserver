@@ -17,49 +17,41 @@
  * under the License.
  */
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.impl;
 
-import java.util.Map;
-
-import org.apache.ftpserver.ConnectionConfig;
-import org.apache.ftpserver.command.CommandFactory;
-import org.apache.ftpserver.ftplet.FtpletContext;
-import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
-import org.apache.ftpserver.listener.Listener;
-import org.apache.ftpserver.message.MessageResource;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
- * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with
- * added connection manager, message resource functionalities.
+ * This is the file related activity observer.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface FtpServerContext extends FtpletContext {
-
-    ConnectionConfig getConnectionConfig();
+public interface FileObserver {
 
     /**
-     * Get message resource.
+     * User file upload notification.
      */
-    MessageResource getMessageResource();
+    void notifyUpload(FtpIoSession session, FtpFile file, long size);
 
     /**
-     * Get ftplet container.
+     * User file download notification.
      */
-    FtpletContainer getFtpletContainer();
-
-    Listener getListener(String name);
-
-    Map<String, Listener> getListeners();
+    void notifyDownload(FtpIoSession session, FtpFile file, long size);
 
     /**
-     * Get the command factory.
+     * User file delete notification.
      */
-    CommandFactory getCommandFactory();
+    void notifyDelete(FtpIoSession session, FtpFile file);
 
     /**
-     * Release all components.
+     * User make directory notification.
      */
-    void dispose();
+    void notifyMkdir(FtpIoSession session, FtpFile file);
+
+    /**
+     * User remove directory notification.
+     */
+    void notifyRmdir(FtpIoSession session, FtpFile file);
+
 }

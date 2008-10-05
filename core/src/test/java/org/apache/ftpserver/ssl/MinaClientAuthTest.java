@@ -27,7 +27,7 @@ import javax.net.ssl.KeyManagerFactory;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.interfaces.FtpIoSession;
+import org.apache.ftpserver.impl.FtpIoSession;
 
 /**
 *

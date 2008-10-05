@@ -23,7 +23,9 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.FtpStatisticsImpl;
+import org.apache.ftpserver.impl.FtpIoSession;
+import org.apache.ftpserver.impl.FtpStatisticsImpl;
+import org.apache.ftpserver.impl.ServerFtpStatistics;
 
 /**
 *

@@ -17,41 +17,69 @@
  * under the License.
  */
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver.impl;
 
-import org.apache.ftpserver.ftplet.FtpFile;
+import java.net.InetAddress;
 
 /**
- * This is the file related activity observer.
+ * Ftp statistics observer interface.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface FileObserver {
+public interface StatisticsObserver {
 
     /**
      * User file upload notification.
      */
-    void notifyUpload(FtpIoSession session, FtpFile file, long size);
+    void notifyUpload();
 
     /**
      * User file download notification.
      */
-    void notifyDownload(FtpIoSession session, FtpFile file, long size);
+    void notifyDownload();
 
     /**
      * User file delete notification.
      */
-    void notifyDelete(FtpIoSession session, FtpFile file);
+    void notifyDelete();
 
     /**
      * User make directory notification.
      */
-    void notifyMkdir(FtpIoSession session, FtpFile file);
+    void notifyMkdir();
 
     /**
      * User remove directory notification.
      */
-    void notifyRmdir(FtpIoSession session, FtpFile file);
+    void notifyRmdir();
+
+    /**
+     * New user login notification.
+     */
+    void notifyLogin(boolean anonymous);
+
+    /**
+     * Failed user login notification.
+     * 
+     * @param address
+     *            Remote address that the failure came from
+     */
+    void notifyLoginFail(InetAddress address);
+
+    /**
+     * User logout notification.
+     */
+    void notifyLogout(boolean anonymous);
+
+    /**
+     * Connection open notification
+     */
+    void notifyOpenConnection();
+
+    /**
+     * Connection close notification
+     */
+    void notifyCloseConnection();
 
 }

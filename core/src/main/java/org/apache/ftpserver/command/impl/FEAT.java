@@ -21,13 +21,13 @@ package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
 
 /**
  * The FEAT command (introduced in [RFC-2389]) allows servers with additional

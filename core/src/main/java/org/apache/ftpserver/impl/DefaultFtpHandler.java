@@ -22,15 +22,13 @@ package org.apache.ftpserver.impl;
 import java.io.IOException;
 
 import org.apache.ftpserver.FtpHandler;
+import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
-import org.apache.ftpserver.interfaces.FtpIoSession;
-import org.apache.ftpserver.interfaces.FtpServerContext;
-import org.apache.ftpserver.interfaces.ServerFtpStatistics;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.mina.core.session.IdleStatus;
 import org.slf4j.Logger;

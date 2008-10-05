@@ -25,7 +25,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.FtpSessionImpl;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -36,6 +35,7 @@ import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.impl.FtpRequestImpl;
+import org.apache.ftpserver.impl.FtpSessionImpl;
 
 public abstract class FtpLetContainerTestTemplate extends TestCase {
 

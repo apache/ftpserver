@@ -22,7 +22,7 @@ package org.apache.ftpserver;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
+import org.apache.ftpserver.impl.PassivePorts;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**

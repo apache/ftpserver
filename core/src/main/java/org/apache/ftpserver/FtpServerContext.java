@@ -17,42 +17,48 @@
  * under the License.
  */
 
-package org.apache.ftpserver.interfaces;
+package org.apache.ftpserver;
 
-import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.util.Map;
 
-import org.apache.ftpserver.ssl.SslConfiguration;
+import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.ftplet.FtpletContext;
+import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
+import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.message.MessageResource;
 
 /**
- * This interface is responsible to create appropriate server socket.
+ * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with
+ * added connection manager, message resource functionalities.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public interface SocketFactory {
+public interface FtpServerContext extends FtpletContext {
+
+    ConnectionConfig getConnectionConfig();
 
     /**
-     * Create the server socket.
+     * Get message resource.
      */
-    ServerSocket createServerSocket() throws Exception;
+    MessageResource getMessageResource();
 
     /**
-     * Get server address.
-     * 
-     * @return {@link InetAddress} obtained from host address from
-     *         {@link SocketFactory} configuration, or <code>null</code> if not
-     *         specified.
+     * Get ftplet container.
      */
-    InetAddress getServerAddress();
+    FtpletContainer getFtpletContainer();
+
+    Listener getListener(String name);
+
+    Map<String, Listener> getListeners();
 
     /**
-     * Get server port.
+     * Get the command factory.
      */
-    int getPort();
+    CommandFactory getCommandFactory();
 
     /**
-     * Get SSL component.
+     * Release all components.
      */
-    SslConfiguration getSSL();
+    void dispose();
 }
