@@ -27,7 +27,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class FtpRequestImpl implements FtpRequest {
+public class DefaultFtpRequest implements FtpRequest {
 
     private String line;
 
@@ -38,7 +38,7 @@ public class FtpRequestImpl implements FtpRequest {
     /**
      * Default constructor.
      */
-    public FtpRequestImpl(final String requestLine) {
+    public DefaultFtpRequest(final String requestLine) {
         parse(requestLine);
     }
 

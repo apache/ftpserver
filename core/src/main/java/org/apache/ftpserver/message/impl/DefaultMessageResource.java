@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class to get ftp server reply messages. This supports i18n. Basic message
+ * Class to get FtpServer reply messages. This supports i18n. Basic message
  * search path is:
  * 
  * <strong>Internal class, do not use directly</strong>
@@ -57,14 +57,11 @@ public class DefaultMessageResource implements MessageResource {
 
     private Map<String, PropertiesPair> messages;
 
-    private File customMessageDirectory;
-
     /**
      * Internal constructor, do not use directly. Use {@link MessageResourceFactory} instead.
      */
     public DefaultMessageResource(String[] languages,
             File customMessageDirectory) {
-        this.customMessageDirectory = customMessageDirectory;
         if(languages != null) {
             this.languages = languages.clone();
         }
@@ -73,11 +70,11 @@ public class DefaultMessageResource implements MessageResource {
         messages = new HashMap<String, PropertiesPair>();
         if (languages != null) {
             for (String language : languages) {
-                PropertiesPair pair = createPropertiesPair(language);
+                PropertiesPair pair = createPropertiesPair(language, customMessageDirectory);
                 messages.put(language, pair);
             }
         }
-        PropertiesPair pair = createPropertiesPair(null);
+        PropertiesPair pair = createPropertiesPair(null, customMessageDirectory);
         messages.put(null, pair);
 
     }
@@ -92,7 +89,7 @@ public class DefaultMessageResource implements MessageResource {
      * Create Properties pair object. It stores the default and the custom
      * messages.
      */
-    private PropertiesPair createPropertiesPair(String lang) {
+    private PropertiesPair createPropertiesPair(String lang, File customMessageDirectory) {
         PropertiesPair pair = new PropertiesPair();
 
         // load default resource

@@ -40,14 +40,14 @@ import org.apache.ftpserver.ftplet.User;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class FtpSessionImpl implements FtpSession {
+public class DefaultFtpSession implements FtpSession {
 
     private FtpIoSession ioSession;
 
     /**
      * Default constructor.
      */
-    public FtpSessionImpl(final FtpIoSession ioSession) {
+    public DefaultFtpSession(final FtpIoSession ioSession) {
         this.ioSession = ioSession;
     }
 

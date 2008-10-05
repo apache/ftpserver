@@ -39,7 +39,7 @@ import org.apache.ftpserver.ftplet.User;
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class FtpStatisticsImpl implements ServerFtpStatistics {
+public class DefaultFtpStatistics implements ServerFtpStatistics {
 
     private StatisticsObserver observer = null;
 

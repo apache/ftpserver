@@ -28,8 +28,8 @@ package org.apache.ftpserver.impl;
 */
 public class FtpStatisticsImplTest extends ServerFtpStatisticsTestTemplate {
 
-    protected FtpStatisticsImpl createStatistics() {
-        return new FtpStatisticsImpl();
+    protected DefaultFtpStatistics createStatistics() {
+        return new DefaultFtpStatistics();
     }
 
 }

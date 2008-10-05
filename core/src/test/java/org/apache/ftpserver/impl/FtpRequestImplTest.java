@@ -30,7 +30,7 @@ import junit.framework.TestCase;
 public class FtpRequestImplTest extends TestCase {
 
     public void testCommandOnly() {
-        FtpRequestImpl request = new FtpRequestImpl("foo");
+        DefaultFtpRequest request = new DefaultFtpRequest("foo");
 
         assertEquals("foo", request.getRequestLine());
         assertEquals("FOO", request.getCommand());
@@ -39,7 +39,7 @@ public class FtpRequestImplTest extends TestCase {
     }
 
     public void testCommandWithLeadingWhitespace() {
-        FtpRequestImpl request = new FtpRequestImpl("\rfoo");
+        DefaultFtpRequest request = new DefaultFtpRequest("\rfoo");
 
         assertEquals("foo", request.getRequestLine());
         assertEquals("FOO", request.getCommand());
@@ -48,7 +48,7 @@ public class FtpRequestImplTest extends TestCase {
     }
 
     public void testCommandWithTrailingWhitespace() {
-        FtpRequestImpl request = new FtpRequestImpl("foo\r");
+        DefaultFtpRequest request = new DefaultFtpRequest("foo\r");
 
         assertEquals("foo", request.getRequestLine());
         assertEquals("FOO", request.getCommand());
@@ -57,7 +57,7 @@ public class FtpRequestImplTest extends TestCase {
     }
 
     public void testCommandAndSingleArgument() {
-        FtpRequestImpl request = new FtpRequestImpl("foo bar");
+        DefaultFtpRequest request = new DefaultFtpRequest("foo bar");
 
         assertEquals("foo bar", request.getRequestLine());
         assertEquals("FOO", request.getCommand());
@@ -66,7 +66,7 @@ public class FtpRequestImplTest extends TestCase {
     }
 
     public void testCommandAndMultipleArguments() {
-        FtpRequestImpl request = new FtpRequestImpl("foo bar baz");
+        DefaultFtpRequest request = new DefaultFtpRequest("foo bar baz");
 
         assertEquals("foo bar baz", request.getRequestLine());
         assertEquals("FOO", request.getCommand());

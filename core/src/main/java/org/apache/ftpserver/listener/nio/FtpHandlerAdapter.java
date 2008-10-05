@@ -24,7 +24,7 @@ import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
-import org.apache.ftpserver.impl.FtpRequestImpl;
+import org.apache.ftpserver.impl.DefaultFtpRequest;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
@@ -55,7 +55,7 @@ public class FtpHandlerAdapter implements IoHandler {
     public void messageReceived(IoSession session, Object message)
             throws Exception {
         FtpIoSession ftpSession = new FtpIoSession(session, context);
-        FtpRequest request = new FtpRequestImpl(message.toString());
+        FtpRequest request = new DefaultFtpRequest(message.toString());
 
         ftpHandler.messageReceived(ftpSession, request);
     }

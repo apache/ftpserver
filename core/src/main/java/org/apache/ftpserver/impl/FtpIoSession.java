@@ -592,7 +592,7 @@ public class FtpIoSession implements IoSession {
     }
 
     public FtpSession getFtpletSession() {
-        return new FtpSessionImpl(this);
+        return new DefaultFtpSession(this);
     }
 
     public String getLanguage() {

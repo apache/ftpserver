@@ -71,6 +71,6 @@ public abstract class ServerFtpStatisticsTestTemplate extends TestCase {
 
     }
 
-    protected abstract FtpStatisticsImpl createStatistics();
+    protected abstract DefaultFtpStatistics createStatistics();
 
 }

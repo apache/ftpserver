@@ -36,8 +36,8 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.impl.FtpRequestImpl;
-import org.apache.ftpserver.impl.FtpSessionImpl;
+import org.apache.ftpserver.impl.DefaultFtpRequest;
+import org.apache.ftpserver.impl.DefaultFtpSession;
 
 public abstract class FtpLetContainerTestTemplate extends TestCase {
 
@@ -126,7 +126,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.onConnect(new FtpSessionImpl(null));
+        container.onConnect(new DefaultFtpSession(null));
 
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -155,7 +155,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
         
-        container.onDisconnect(new FtpSessionImpl(null));
+        container.onDisconnect(new DefaultFtpSession(null));
 
         assertEquals(2, calls.size());
         assertEquals("ftplet1", calls.get(0));
@@ -184,7 +184,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "PASS"));
 
         assertEquals(2, calls.size());
@@ -214,7 +214,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "DELE"));
 
         assertEquals(2, calls.size());
@@ -244,7 +244,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "DELE"));
 
         assertEquals(2, calls.size());
@@ -274,7 +274,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "STOR"));
 
         assertEquals(2, calls.size());
@@ -304,7 +304,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "STOR"));
 
         assertEquals(2, calls.size());
@@ -334,7 +334,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RETR"));
 
         assertEquals(2, calls.size());
@@ -364,7 +364,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RETR"));
 
         assertEquals(2, calls.size());
@@ -394,7 +394,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RMD"));
 
         assertEquals(2, calls.size());
@@ -424,7 +424,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RMD"));
 
         assertEquals(2, calls.size());
@@ -454,7 +454,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "MKD"));
 
         assertEquals(2, calls.size());
@@ -484,7 +484,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "MKD"));
 
         assertEquals(2, calls.size());
@@ -514,7 +514,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "APPE"));
 
         assertEquals(2, calls.size());
@@ -544,7 +544,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "APPE"));
 
         assertEquals(2, calls.size());
@@ -574,7 +574,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "STOU"));
 
         assertEquals(2, calls.size());
@@ -604,7 +604,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "STOU"));
 
         assertEquals(2, calls.size());
@@ -634,7 +634,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.beforeCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RNTO"));
 
         assertEquals(2, calls.size());
@@ -664,7 +664,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "RNTO"));
 
         assertEquals(2, calls.size());
@@ -694,7 +694,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new FtpSessionImpl(null), new FtpRequestImpl(
+        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "SITE"));
 
         assertEquals(2, calls.size());
