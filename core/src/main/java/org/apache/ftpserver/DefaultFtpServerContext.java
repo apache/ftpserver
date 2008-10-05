@@ -37,7 +37,7 @@ import org.apache.ftpserver.impl.FtpStatisticsImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.message.MessageResource;
-import org.apache.ftpserver.message.impl.DefaultMessageResource;
+import org.apache.ftpserver.message.MessageResourceFactory;
 import org.apache.ftpserver.usermanager.BaseUser;
 import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
@@ -57,7 +57,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
     private final Logger LOG = LoggerFactory
             .getLogger(DefaultFtpServerContext.class);
 
-    private MessageResource messageResource = new DefaultMessageResource();
+    private MessageResource messageResource = new MessageResourceFactory().createMessageResource();
 
     private UserManager userManager = new PropertiesUserManager();
 

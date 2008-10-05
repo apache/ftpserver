@@ -27,7 +27,7 @@ import org.apache.ftpserver.DefaultConnectionConfig;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.message.MessageResource;
-import org.apache.ftpserver.message.impl.DefaultMessageResource;
+import org.apache.ftpserver.message.MessageResourceFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -140,7 +140,7 @@ public class ServerBeanDefinitionParser extends
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
 
-        DefaultMessageResource mr = new DefaultMessageResource();
+        MessageResourceFactory mr = new MessageResourceFactory();
 
         if (StringUtils.hasText(childElm.getAttribute("languages"))) {
             String langString = childElm.getAttribute("languages");
@@ -156,7 +156,7 @@ public class ServerBeanDefinitionParser extends
 
         }
 
-        return mr;
+        return mr.createMessageResource();
     }
 
     /**

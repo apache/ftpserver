@@ -19,29 +19,39 @@
 
 package org.apache.ftpserver.message;
 
-import java.util.Properties;
+import java.io.File;
+
+import org.apache.ftpserver.message.impl.DefaultMessageResource;
 
 /**
- * This is message resource interface.
+ * Factory for creating message resource implementation
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
+ * @version $Rev: 693604 $, $Date: 2008-09-09 22:55:19 +0200 (Tue, 09 Sep 2008) $
  */
-public interface MessageResource {
+public class MessageResourceFactory {
 
-    /**
-     * Get all the available languages.
-     */
-    String[] getAvailableLanguages();
+    private String[] languages;
 
-    /**
-     * Get the message for the corresponding code and sub id. If not found it
-     * will return null.
-     */
-    String getMessage(int code, String subId, String language);
+    private File customMessageDirectory;
 
-    /**
-     * Get all the messages.
-     */
-    Properties getMessages(String language);
+    public MessageResource createMessageResource() {
+        return new DefaultMessageResource(languages, customMessageDirectory);
+    }
+    
+    public String[] getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String[] languages) {
+        this.languages = languages;
+    }
+
+    public File getCustomMessageDirectory() {
+        return customMessageDirectory;
+    }
+
+    public void setCustomMessageDirectory(File customMessageDirectory) {
+        this.customMessageDirectory = customMessageDirectory;
+    }
 }

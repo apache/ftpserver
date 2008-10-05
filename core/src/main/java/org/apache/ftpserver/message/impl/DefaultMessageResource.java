@@ -21,18 +21,15 @@ package org.apache.ftpserver.message.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.message.MessageResource;
+import org.apache.ftpserver.message.MessageResourceFactory;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +37,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to get ftp server reply messages. This supports i18n. Basic message
  * search path is:
+ * 
+ * <strong>Internal class, do not use directly</strong>
  * 
  * Custom Language Specific Messages -> Default Language Specific Messages ->
  * Custom Common Messages -> Default Common Messages -> null (not found)
@@ -60,42 +59,16 @@ public class DefaultMessageResource implements MessageResource {
 
     private File customMessageDirectory;
 
-    private boolean isConfigured = false;
-
-    private static class PropertiesPair {
-        public Properties defaultProperties = new Properties();
-
-        public Properties customProperties = new Properties();
-    }
-
-    public String[] getLanguages() {
-        if (languages != null) {
-            return languages.clone();
-        } else {
-            return null;
-        }
-    }
-
-    public void setLanguages(String[] languages) {
-        if (languages != null) {
-            this.languages = languages.clone();
-        } else {
-            this.languages = null;
-        }
-    }
-
-    public File getCustomMessageDirectory() {
-        return customMessageDirectory;
-    }
-
-    public void setCustomMessageDirectory(File customMessageDirectory) {
-        this.customMessageDirectory = customMessageDirectory;
-    }
-
     /**
-     * Configure - load properties file.
+     * Internal constructor, do not use directly. Use {@link MessageResourceFactory} instead.
      */
-    public void configure() {
+    public DefaultMessageResource(String[] languages,
+            File customMessageDirectory) {
+        this.customMessageDirectory = customMessageDirectory;
+        if(languages != null) {
+            this.languages = languages.clone();
+        }
+
         // populate different properties
         messages = new HashMap<String, PropertiesPair>();
         if (languages != null) {
@@ -106,15 +79,13 @@ public class DefaultMessageResource implements MessageResource {
         }
         PropertiesPair pair = createPropertiesPair(null);
         messages.put(null, pair);
+
     }
 
-    /**
-     * Lazy init the user manager
-     */
-    private void lazyInit() {
-        if (!isConfigured) {
-            configure();
-        }
+    private static class PropertiesPair {
+        public Properties defaultProperties = new Properties();
+
+        public Properties customProperties = new Properties();
     }
 
     /**
@@ -187,8 +158,6 @@ public class DefaultMessageResource implements MessageResource {
      * Get the message. If the message not found, it will return null.
      */
     public String getMessage(int code, String subId, String language) {
-        lazyInit();
-
         // find the message key
         String key = String.valueOf(code);
         if (subId != null) {
@@ -227,8 +196,6 @@ public class DefaultMessageResource implements MessageResource {
      * Get all messages.
      */
     public Properties getMessages(String language) {
-        lazyInit();
-
         Properties messages = new Properties();
 
         // load properties sequentially
@@ -247,53 +214,6 @@ public class DefaultMessageResource implements MessageResource {
             }
         }
         return messages;
-    }
-
-    /**
-     * Save properties in file.
-     */
-    public void save(Properties prop, String language) throws FtpException {
-        lazyInit();
-
-        // null properties - nothing to save
-        if (prop == null) {
-            return;
-        }
-
-        // empty properties - nothing to save
-        if (prop.isEmpty()) {
-            return;
-        }
-
-        // get custom resource file name
-        File resourceFile = null;
-        if (language == null) {
-            resourceFile = new File(customMessageDirectory, "FtpStatus.gen");
-        } else {
-            language = language.toLowerCase();
-            resourceFile = new File(customMessageDirectory, "FtpStatus_"
-                    + language + ".gen");
-        }
-
-        // save resource file
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(resourceFile);
-            prop.store(out, "Custom Messages");
-        } catch (IOException ex) {
-            LOG.error("MessageResourceImpl.save()", ex);
-            throw new FtpException("MessageResourceImpl.save()", ex);
-        } finally {
-            IoUtils.close(out);
-        }
-
-        // assign new messages
-        PropertiesPair pair = messages.get(language);
-        if (pair == null) {
-            pair = new PropertiesPair();
-            messages.put(language, pair);
-        }
-        pair.customProperties = prop;
     }
 
     /**

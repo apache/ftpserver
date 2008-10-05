@@ -19,9 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.message.impl.DefaultMessageResource;
+import org.apache.ftpserver.message.MessageResourceFactory;
 
 /**
 *
@@ -39,12 +38,10 @@ public class LangTest extends ClientTestTemplate {
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
 
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-
-        DefaultMessageResource resource = (DefaultMessageResource) context
-                .getMessageResource();
-        resource.setLanguages(new String[] { "en", "zh-tw" });
+        MessageResourceFactory factory = new MessageResourceFactory();
+        factory.setLanguages(new String[] { "en", "zh-tw" });
+        server.setMessageResource(factory.createMessageResource());
+        
         return server;
     }
 
