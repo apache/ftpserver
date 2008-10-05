@@ -22,7 +22,6 @@ package org.apache.ftpserver.filesystem.nativefs.impl;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.ftpserver.filesystem.nativefs.impl.NativeFileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.util.IoUtils;
 

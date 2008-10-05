@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
+import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManager;
 
 public class EmbeddingFtpServer {
@@ -37,12 +37,12 @@ public class EmbeddingFtpServer {
         factory.setPort(2221);
 
         // define SSL configuration
-        DefaultSslConfiguration ssl = new DefaultSslConfiguration();
+        SslConfigurationFactory ssl = new SslConfigurationFactory();
         ssl.setKeystoreFile(new File("src/test/resources/ftpserver.jks"));
         ssl.setKeystorePassword("password");
 
         // set the SSL configuration for the listener
-        factory.setSslConfiguration(ssl);
+        factory.setSslConfiguration(ssl.createSslConfiguration());
         factory.setImplicitSsl(true);
 
         // replace the default listener

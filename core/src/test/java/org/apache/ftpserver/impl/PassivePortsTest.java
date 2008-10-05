@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.impl;
 
-import org.apache.ftpserver.impl.PassivePorts;
-
 import junit.framework.TestCase;
 
 /**

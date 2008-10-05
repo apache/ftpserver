@@ -25,8 +25,6 @@ import java.security.KeyStore;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 
-import org.apache.ftpserver.ssl.impl.AliasKeyManager;
-
 import junit.framework.TestCase;
 
 /**

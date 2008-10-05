@@ -29,9 +29,8 @@ import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Active;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration.Passive;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;
-import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
+import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.mina.filter.firewall.Subnet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,7 +166,7 @@ public class ListenerBeanDefinitionParser extends
                 FtpServerNamespaceHandler.FTPSERVER_NS, "ssl");
 
         if (sslElm != null) {
-            DefaultSslConfiguration ssl = new DefaultSslConfiguration();
+            SslConfigurationFactory ssl = new SslConfigurationFactory();
 
             Element keyStoreElm = SpringUtil.getChildElement(sslElm,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "keystore");
@@ -237,7 +236,7 @@ public class ListenerBeanDefinitionParser extends
                 ssl.setSslProtocol(protocol);
             }
 
-            return ssl;
+            return ssl.createSslConfiguration();
         } else {
             return null;
         }

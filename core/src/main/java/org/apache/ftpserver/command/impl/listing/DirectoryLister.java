@@ -21,9 +21,9 @@ package org.apache.ftpserver.command.impl.listing;
 
 import java.io.IOException;
 
-import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
  * This class prints file listing.

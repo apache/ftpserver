@@ -30,8 +30,8 @@ import javax.net.ssl.SSLSession;
 
 import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;

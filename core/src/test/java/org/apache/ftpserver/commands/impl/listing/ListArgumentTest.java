@@ -21,9 +21,9 @@ package org.apache.ftpserver.commands.impl.listing;
 
 import java.util.Arrays;
 
-import org.apache.ftpserver.command.impl.listing.ListArgument;
-
 import junit.framework.TestCase;
+
+import org.apache.ftpserver.command.impl.listing.ListArgument;
 
 /**
 *

@@ -26,9 +26,9 @@ import java.util.Date;
 
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;

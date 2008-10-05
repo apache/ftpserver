@@ -43,6 +43,15 @@ public class MinaCipherSuitesTest extends SSLTestTemplate {
         return true;
     }
 
+    protected SslConfigurationFactory createSslConfiguration() {
+        SslConfigurationFactory sslConfigFactory = super.createSslConfiguration();
+
+        sslConfigFactory
+        .setEnabledCipherSuites(new String[] { "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA" });
+
+        return sslConfigFactory;
+    }
+    
     protected FtpServer createServer() throws Exception {
         FtpServer server = super.createServer();
         DefaultFtpServerContext context = (DefaultFtpServerContext) server
@@ -51,8 +60,6 @@ public class MinaCipherSuitesTest extends SSLTestTemplate {
 
         DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener
                 .getSslConfiguration();
-        sslConfig
-                .setEnabledCipherSuites(new String[] { "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA" });
 
         return server;
     }

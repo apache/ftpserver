@@ -34,8 +34,6 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.listener.nio.NioListener;
-import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -55,6 +53,17 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
     private static final File FTPSERVER_KEYSTORE = new File(TestUtil
             .getBaseDir(), "src/test/resources/ftpserver.jks");
 
+    protected SslConfigurationFactory createSslConfiguration() {
+        SslConfigurationFactory sslConfigFactory = new SslConfigurationFactory();
+        sslConfigFactory.setKeystoreFile(FTPSERVER_KEYSTORE);
+        sslConfigFactory.setKeystorePassword(KEYSTORE_PASSWORD);
+        sslConfigFactory.setSslProtocol(getAuthValue());
+        sslConfigFactory.setClientAuthentication(getClientAuth());
+        sslConfigFactory.setKeyPassword(KEYSTORE_PASSWORD);
+
+        return sslConfigFactory;
+    }
+    
     protected FtpServer createServer() throws Exception {
         assertTrue(FTPSERVER_KEYSTORE.exists());
 
@@ -65,24 +74,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         
         factory.setImplicitSsl(useImplicit());
 
-        DefaultSslConfiguration sslConfig = new DefaultSslConfiguration();
-        sslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
-        sslConfig.setKeystorePassword(KEYSTORE_PASSWORD);
-        sslConfig.setSslProtocol(getAuthValue());
-        sslConfig.setClientAuthentication(getClientAuth());
-        sslConfig.setKeyPassword(KEYSTORE_PASSWORD);
-
-        factory.setSslConfiguration(sslConfig);
-
-        DefaultSslConfiguration dataSslConfig = new DefaultSslConfiguration();
-        dataSslConfig.setKeystoreFile(FTPSERVER_KEYSTORE);
-        dataSslConfig.setKeystorePassword(KEYSTORE_PASSWORD);
-        dataSslConfig.setSslProtocol(getAuthValue());
-        dataSslConfig.setClientAuthentication(getClientAuth());
-        dataSslConfig.setKeyPassword(KEYSTORE_PASSWORD);
+        factory.setSslConfiguration(createSslConfiguration().createSslConfiguration());
 
         DefaultDataConnectionConfiguration dataConfig = new DefaultDataConnectionConfiguration();
-        dataConfig.setSslConfiguration(dataSslConfig);
+        dataConfig.setSslConfiguration(createSslConfiguration().createSslConfiguration());
 
         factory.setDataConnectionConfiguration(dataConfig);
 

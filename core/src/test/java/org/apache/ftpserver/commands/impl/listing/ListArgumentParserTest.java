@@ -19,10 +19,10 @@
 
 package org.apache.ftpserver.commands.impl.listing;
 
+import junit.framework.TestCase;
+
 import org.apache.ftpserver.command.impl.listing.ListArgument;
 import org.apache.ftpserver.command.impl.listing.ListArgumentParser;
-
-import junit.framework.TestCase;
 
 /**
 *

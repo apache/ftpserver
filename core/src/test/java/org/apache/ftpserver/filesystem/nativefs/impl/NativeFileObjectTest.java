@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.ftpserver.filesystem.nativefs.impl.NativeFtpFile;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.util.IoUtils;

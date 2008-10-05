@@ -36,7 +36,6 @@ import org.apache.ftpserver.ftpletcontainer.impl.DefaultFtpletContainer;
 import org.apache.ftpserver.impl.FtpStatisticsImpl;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.message.impl.DefaultMessageResource;
 import org.apache.ftpserver.usermanager.BaseUser;
