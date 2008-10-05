@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import org.apache.ftpserver.impl.PassivePorts;
 
