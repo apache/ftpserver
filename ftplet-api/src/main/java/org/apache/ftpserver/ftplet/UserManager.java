@@ -29,48 +29,69 @@ public interface UserManager {
 
     /**
      * Get user by name.
+     *
+     * @param username the name to search for.
+     * @throws FtpException when the UserManager can't fulfill the request.
+     * @return the user with the specified name, or null if a such user does
+     *         not exist.
      */
-    User getUserByName(String login) throws FtpException;
+    User getUserByName(String username) throws FtpException;
 
     /**
      * Get all user names in the system.
+     *
+     * @throws FtpException when the UserManager can't fulfill the request.
+     * @return an array of username strings, note that the result should never
+     *         be null, if there is no users the result is an empty array.
      */
     String[] getAllUserNames() throws FtpException;
 
     /**
      * Delete the user from the system.
-     * 
+     *
+     * @throws FtpException when the UserManager can't fulfill the request.
      * @throws UnsupportedOperationException
      *             if UserManager in read-only mode
      */
-    void delete(String login) throws FtpException;
+    void delete(String username) throws FtpException;
 
     /**
      * Save user. If a new user, create it else update the existing user.
-     * 
+     *
+     * @param user the Uset to save
+     * @throws FtpException when the UserManager can't fulfill the request.
      * @throws UnsupportedOperationException
      *             if UserManager in read-only mode
      */
     void save(User user) throws FtpException;
 
     /**
-     * User existance check.
+     * Check if the user exists.
+     * @param username the name of the user to check.
+     * @return true if the user exist, false otherwise.
      */
-    boolean doesExist(String login) throws FtpException;
+    boolean doesExist(String username) throws FtpException;
 
     /**
      * Authenticate user
+     * @throws FtpException when the UserManager can't fulfill the request.
+     * @param authentication
+     * @return the autheticated account.
      */
     User authenticate(Authentication authentication)
             throws AuthenticationFailedException;
 
     /**
      * Get admin user name
+     * @return the admin user name
+     * @throws FtpException when the UserManager can't fulfill the request.
      */
     String getAdminName() throws FtpException;
 
     /**
+     * Check if the user is admin.
      * @return true if user with this login is administrator
+     * @throws FtpException when the UserManager can't fulfill the request.
      */
-    boolean isAdmin(String login) throws FtpException;
+    boolean isAdmin(String username) throws FtpException;
 }
