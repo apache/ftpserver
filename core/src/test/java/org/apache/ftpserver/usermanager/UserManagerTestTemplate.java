@@ -29,6 +29,13 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
+import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
+import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
+import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
+import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
+import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
 
 /**
 *
@@ -40,7 +47,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
     protected UserManager userManager;
 
-    protected abstract UserManager createUserManager() throws Exception;
+    protected abstract UserManagerFactory createUserManagerFactory() throws Exception;
 
     /*
      * (non-Javadoc)
@@ -49,7 +56,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
      */
     @Override
     protected void setUp() throws Exception {
-        userManager = createUserManager();
+        userManager = createUserManagerFactory().createUserManager();
     }
 
     public void testAuthenticate() throws Exception {
@@ -241,7 +248,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
 
         userManager.save(user);
 
-        UserManager newUserManager = createUserManager();
+        UserManager newUserManager = createUserManagerFactory().createUserManager();
 
         User actualUser = newUserManager.getUserByName("newuser");
 
@@ -283,7 +290,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         user.setPassword("newpw");
         userManager.save(user);
 
-        UserManager newUserManager = createUserManager();
+        UserManager newUserManager = createUserManagerFactory().createUserManager();
 
         User actualUser = newUserManager.getUserByName("newuser");
 

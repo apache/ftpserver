@@ -80,7 +80,7 @@ public class CommandFactoryBeanDefinitionParser extends
         BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();
         String factoryId = parserContext.getReaderContext().generateBeanName(factoryDefinition);
         
-        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), factoryId);
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryDefinition, factoryId);
         registerBeanDefinition(factoryHolder, parserContext.getRegistry());
 
         // set the factory on the listener bean

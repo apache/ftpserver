@@ -17,45 +17,40 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import org.apache.ftpserver.ftplet.AuthorizationRequest;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
+
+
 
 /**
- * Class representing a write request
+ * Password encryptor that does no encryption, that is, keps the
+ * password in clear text
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class WriteRequest implements AuthorizationRequest {
-
-    private String file;
+public class ClearTextPasswordEncryptor implements PasswordEncryptor {
 
     /**
-     * Request write access to the user home directory (/)
-     * 
+     * Returns the clear text password
      */
-    public WriteRequest() {
-        this("/");
+    public String encrypt(String password) {
+        return password;
     }
 
     /**
-     * Request write access to a file or directory relative to the user home
-     * directory
-     * 
-     * @param file
+     * {@inheritDoc}
      */
-    public WriteRequest(final String file) {
-        this.file = file;
-    }
-
-    /**
-     * Get the file or directory to which write access is requested
-     * 
-     * @return the file The file or directory
-     */
-    public String getFile() {
-        return file;
+    public boolean matches(String passwordToCheck, String storedPassword) {
+        if(storedPassword == null) {
+            throw new NullPointerException("storedPassword can not be null");
+        }
+        if(passwordToCheck == null) {
+            throw new NullPointerException("passwordToCheck can not be null");
+        }
+        
+        return passwordToCheck.equals(storedPassword);
     }
 
 }

@@ -20,8 +20,8 @@
 package org.apache.ftpserver.config.spring;
 
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.usermanager.DbUserManager;
-import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.DbUserManager;
+import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
 import org.hsqldb.jdbc.jdbcDataSource;
 
 /**

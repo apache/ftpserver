@@ -21,6 +21,8 @@ package org.apache.ftpserver.usermanager;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
+
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)

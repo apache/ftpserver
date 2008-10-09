@@ -17,45 +17,40 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import org.apache.ftpserver.ftplet.Authentication;
-import org.apache.ftpserver.usermanager.impl.UserMetadata;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
+import org.apache.ftpserver.util.EncryptUtils;
+
 
 /**
- * Class representing an anonymous authentication attempt
- *
+ * Password encryptor that hashes the password using MD5. Please note that this form 
+ * of encryption is sensitive to lookup attacks.
+ * 
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class AnonymousAuthentication implements Authentication {
-
-    private UserMetadata userMetadata;
+public class Md5PasswordEncryptor implements PasswordEncryptor {
 
     /**
-     * Default constructor
+     * Hashes the password using MD5
      */
-    public AnonymousAuthentication() {
-        // empty
+    public String encrypt(String password) {
+        return EncryptUtils.encryptMD5(password);
     }
 
     /**
-     * Constructor with an additional user metadata parameter
-     * 
-     * @param userMetadata
-     *            User metadata
+     * {@inheritDoc}
      */
-    public AnonymousAuthentication(UserMetadata userMetadata) {
-        this.userMetadata = userMetadata;
-    }
-
-    /**
-     * Retrive the user metadata
-     * 
-     * @return The user metadata
-     */
-    public UserMetadata getUserMetadata() {
-        return userMetadata;
+    public boolean matches(String passwordToCheck, String storedPassword) {
+        if(storedPassword == null) {
+            throw new NullPointerException("storedPassword can not be null");
+        }
+        if(passwordToCheck == null) {
+            throw new NullPointerException("passwordToCheck can not be null");
+        }
+        
+        return encrypt(passwordToCheck).equalsIgnoreCase(storedPassword);
     }
 
 }

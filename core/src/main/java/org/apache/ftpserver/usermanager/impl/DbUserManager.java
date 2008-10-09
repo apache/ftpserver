@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,6 +35,10 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
+import org.apache.ftpserver.usermanager.DbUserManagerFactory;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
+import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,14 +73,36 @@ public class DbUserManager extends AbstractUserManager {
 
     private DataSource dataSource;
 
-    private Connection cachedConnection;
-
-    // Set to true when the user manager has been configured,
-    // used for lazy init.
-    private boolean configured = false;
-
-    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
+    /**
+     * Internal constructor, do not use directly. Use {@link DbUserManagerFactory} instead.
+     */
+    public DbUserManager(DataSource dataSource, String selectAllStmt,
+            String selectUserStmt, String insertUserStmt,
+            String updateUserStmt, String deleteUserStmt,
+            String authenticateStmt, String isAdminStmt,
+            PasswordEncryptor passwordEncryptor, String adminName) {
+        super(adminName, passwordEncryptor);
+        this.dataSource = dataSource;
+        this.selectAllStmt = selectAllStmt;
+        this.selectUserStmt = selectUserStmt;
+        this.insertUserStmt = insertUserStmt;
+        this.updateUserStmt = updateUserStmt;
+        this.deleteUserStmt = deleteUserStmt;
+        this.authenticateStmt = authenticateStmt;
+        this.isAdminStmt = isAdminStmt;
     
+        try {
+            // test the connection
+            createConnection();
+
+            LOG.info("Database connection opened.");
+        } catch (SQLException ex) {
+            LOG.error("Failed to open connection to user database", ex);
+            throw new FtpServerConfigurationException(
+                    "Failed to open connection to user database", ex);
+        }
+    }
+
     /**
      * Retrive the data source used by the user manager
      * 
@@ -236,67 +262,7 @@ public class DbUserManager extends AbstractUserManager {
     public void setSqlUserAdmin(String sql) {
         isAdminStmt = sql;
     }
-
-    /**
-     * Lazy init the user manager
-     */
-    private void lazyInit() {
-        if (!configured) {
-            configure();
-        }
-    }
-
-    /**
-     * Configure user manager.
-     */
-    public void configure() {
-        configured = true;
-
-        if (dataSource == null) {
-            throw new FtpServerConfigurationException(
-                    "Required data source not provided");
-        }
-        if (insertUserStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required insert user SQL statement not provided");
-        }
-        if (updateUserStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required update user SQL statement not provided");
-        }
-        if (deleteUserStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required delete user SQL statement not provided");
-        }
-        if (selectUserStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required select user SQL statement not provided");
-        }
-        if (selectAllStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required select all users SQL statement not provided");
-        }
-        if (isAdminStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required is admin user SQL statement not provided");
-        }
-        if (authenticateStmt == null) {
-            throw new FtpServerConfigurationException(
-                    "Required authenticate user SQL statement not provided");
-        }
-
-        try {
-            // test the connection
-            createConnection();
-
-            LOG.info("Database connection opened.");
-        } catch (SQLException ex) {
-            LOG.error("DbUserManager.configure()", ex);
-            throw new FtpServerConfigurationException(
-                    "DbUserManager.configure()", ex);
-        }
-    }
-
+    
     /**
      * @return true if user with this login is administrator
      */
@@ -345,49 +311,18 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Open connection to database.
      */
-    protected synchronized Connection createConnection() throws SQLException {
-        boolean isClosed = false;
-        try {
-            if ((cachedConnection == null) || cachedConnection.isClosed()) {
-                isClosed = true;
-            }
-        } catch (SQLException ex) {
-            LOG.error("DbUserManager.prepareConnection()", ex);
-            isClosed = true;
-        }
+    protected Connection createConnection() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        connection.setAutoCommit(true);
 
-        if (isClosed) {
-            closeConnection();
-
-            cachedConnection = dataSource.getConnection();
-            cachedConnection.setAutoCommit(true);
-        }
-
-        return cachedConnection;
+        return connection;
     }
 
-    /**
-     * Close connection to database.
-     */
-    private void closeConnection() {
-        if (cachedConnection != null) {
-            try {
-                cachedConnection.close();
-            } catch (SQLException ex) {
-                LOG.error("DbUserManager.closeConnection()", ex);
-            }
-            cachedConnection = null;
-        }
-
-        LOG.info("Database connection closed.");
-    }
 
     /**
      * Delete user. Delete the row from the table.
      */
-    public synchronized void delete(String name) throws FtpException {
-        lazyInit();
-
+    public void delete(String name) throws FtpException {
         // create sql query
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(ATTR_LOGIN, escapeString(name));
@@ -416,9 +351,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Save user. If new insert a new row, else update the existing row.
      */
-    public synchronized void save(User user) throws FtpException {
-        lazyInit();
-
+    public void save(User user) throws FtpException {
         // null value check
         if (user.getName() == null) {
             throw new NullPointerException("User name is null.");
@@ -430,7 +363,8 @@ public class DbUserManager extends AbstractUserManager {
             // create sql query
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(ATTR_LOGIN, escapeString(user.getName()));
-            map.put(ATTR_PASSWORD, escapeString(passwordEncryptor.encrypt(user.getPassword())));
+            map.put(ATTR_PASSWORD, escapeString(getPasswordEncryptor().encrypt(user
+                    .getPassword())));
 
             String home = user.getHomeDirectory();
             if (home == null) {
@@ -497,13 +431,11 @@ public class DbUserManager extends AbstractUserManager {
             }
         }
     }
-    
+
     /**
      * Get the user object. Fetch the row from the table.
      */
-    public synchronized User getUserByName(String name) throws FtpException {
-        lazyInit();
-
+    public User getUserByName(String name) throws FtpException {
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -566,9 +498,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * User existance check.
      */
-    public synchronized boolean doesExist(String name) throws FtpException {
-        lazyInit();
-
+    public boolean doesExist(String name) throws FtpException {
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -607,9 +537,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Get all user names from the database.
      */
-    public synchronized String[] getAllUserNames() throws FtpException {
-
-        lazyInit();
+    public String[] getAllUserNames() throws FtpException {
 
         Statement stmt = null;
         ResultSet rs = null;
@@ -653,10 +581,8 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * User authentication.
      */
-    public synchronized User authenticate(Authentication authentication)
+    public User authenticate(Authentication authentication)
             throws AuthenticationFailedException {
-        lazyInit();
-
         if (authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
 
@@ -687,7 +613,7 @@ public class DbUserManager extends AbstractUserManager {
                 if (rs.next()) {
                     try {
                         String storedPassword = rs.getString(ATTR_PASSWORD);
-                        if(passwordEncryptor.matches(password, storedPassword)) {
+                        if (getPasswordEncryptor().matches(password, storedPassword)) {
                             return getUserByName(user);
                         } else {
                             throw new AuthenticationFailedException(
@@ -742,13 +668,6 @@ public class DbUserManager extends AbstractUserManager {
     }
 
     /**
-     * Close this user manager. Close the database statements and connection.
-     */
-    public synchronized void dispose() {
-        closeConnection();
-    }
-
-    /**
      * Escape string to be embedded in SQL statement.
      */
     private String escapeString(String input) {
@@ -767,25 +686,5 @@ public class DbUserManager extends AbstractUserManager {
             }
         }
         return valBuf.toString();
-    }
-    
-
-    
-    /**
-     * Retrieve the password encryptor used for this user manager
-     * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
-     *  if no other has been provided
-     */    
-    public PasswordEncryptor getPasswordEncryptor() {
-        return passwordEncryptor;
-    }
-
-
-    /**
-     * Set the password encryptor to use for this user manager
-     * @param passwordEncryptor The password encryptor
-     */
-    public void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
-        this.passwordEncryptor = passwordEncryptor;
     }
 }

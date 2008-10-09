@@ -17,39 +17,50 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import org.apache.ftpserver.util.EncryptUtils;
-
+import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
- * Password encryptor that hashes the password using MD5. Please note that this form 
- * of encryption is sensitive to lookup attacks.
- * 
+ * Request for getting the maximum allowed transfer rates for a user
+ *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class Md5PasswordEncryptor implements PasswordEncryptor {
+public class TransferRateRequest implements AuthorizationRequest {
+
+    private int maxDownloadRate = 0;
+
+    private int maxUploadRate = 0;
 
     /**
-     * Hashes the password using MD5
+     * @return the maxDownloadRate
      */
-    public String encrypt(String password) {
-        return EncryptUtils.encryptMD5(password);
+    public int getMaxDownloadRate() {
+        return maxDownloadRate;
     }
 
     /**
-     * {@inheritDoc}
+     * @param maxDownloadRate
+     *            the maxDownloadRate to set
      */
-    public boolean matches(String passwordToCheck, String storedPassword) {
-        if(storedPassword == null) {
-            throw new NullPointerException("storedPassword can not be null");
-        }
-        if(passwordToCheck == null) {
-            throw new NullPointerException("passwordToCheck can not be null");
-        }
-        
-        return encrypt(passwordToCheck).equalsIgnoreCase(storedPassword);
+    public void setMaxDownloadRate(int maxDownloadRate) {
+        this.maxDownloadRate = maxDownloadRate;
+    }
+
+    /**
+     * @return the maxUploadRate
+     */
+    public int getMaxUploadRate() {
+        return maxUploadRate;
+    }
+
+    /**
+     * @param maxUploadRate
+     *            the maxUploadRate to set
+     */
+    public void setMaxUploadRate(int maxUploadRate) {
+        this.maxUploadRate = maxUploadRate;
     }
 
 }

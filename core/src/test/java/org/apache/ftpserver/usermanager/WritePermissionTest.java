@@ -21,6 +21,9 @@ package org.apache.ftpserver.usermanager;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
+
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)

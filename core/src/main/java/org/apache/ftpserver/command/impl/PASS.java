@@ -37,8 +37,8 @@ import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
-import org.apache.ftpserver.usermanager.UserMetadata;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
+import org.apache.ftpserver.usermanager.impl.UserMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

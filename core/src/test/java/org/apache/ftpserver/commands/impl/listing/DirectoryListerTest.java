@@ -30,7 +30,7 @@ import org.apache.ftpserver.command.impl.listing.NLSTFileFormater;
 import org.apache.ftpserver.filesystem.nativefs.impl.NativeFileSystemView;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.test.TestUtil;
-import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

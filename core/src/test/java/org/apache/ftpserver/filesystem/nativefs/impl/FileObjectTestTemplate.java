@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
 *

@@ -22,10 +22,10 @@ package org.apache.ftpserver.config.spring;
 import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
-import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
-import org.apache.ftpserver.usermanager.PropertiesUserManager;
-import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
 
 /**
 *

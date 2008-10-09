@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.usermanager;
 
+import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
+
 
 /**
 *

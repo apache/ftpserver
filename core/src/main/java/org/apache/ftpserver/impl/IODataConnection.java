@@ -32,7 +32,7 @@ import java.util.zip.InflaterInputStream;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataType;
-import org.apache.ftpserver.usermanager.TransferRateRequest;
+import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

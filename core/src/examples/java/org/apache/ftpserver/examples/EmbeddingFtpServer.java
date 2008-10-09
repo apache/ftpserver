@@ -24,7 +24,7 @@ import java.io.File;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
-import org.apache.ftpserver.usermanager.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 
 public class EmbeddingFtpServer {
 
@@ -48,10 +48,10 @@ public class EmbeddingFtpServer {
         // replace the default listener
         server.addListener("default", factory.createListener());
         
-        PropertiesUserManager userManager = new PropertiesUserManager();
-        userManager.setFile(new File("myusers.properties"));
+        PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+        userManagerFactory.setFile(new File("myusers.properties"));
         
-        server.setUserManager(userManager);
+        server.setUserManager(userManagerFactory.createUserManager());
         
         // start the server
         server.start();

@@ -17,50 +17,45 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
- * Request for getting the maximum allowed transfer rates for a user
+ * Class representing a write request
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class TransferRateRequest implements AuthorizationRequest {
+public class WriteRequest implements AuthorizationRequest {
 
-    private int maxDownloadRate = 0;
-
-    private int maxUploadRate = 0;
+    private String file;
 
     /**
-     * @return the maxDownloadRate
+     * Request write access to the user home directory (/)
+     * 
      */
-    public int getMaxDownloadRate() {
-        return maxDownloadRate;
+    public WriteRequest() {
+        this("/");
     }
 
     /**
-     * @param maxDownloadRate
-     *            the maxDownloadRate to set
+     * Request write access to a file or directory relative to the user home
+     * directory
+     * 
+     * @param file
      */
-    public void setMaxDownloadRate(int maxDownloadRate) {
-        this.maxDownloadRate = maxDownloadRate;
+    public WriteRequest(final String file) {
+        this.file = file;
     }
 
     /**
-     * @return the maxUploadRate
+     * Get the file or directory to which write access is requested
+     * 
+     * @return the file The file or directory
      */
-    public int getMaxUploadRate() {
-        return maxUploadRate;
-    }
-
-    /**
-     * @param maxUploadRate
-     *            the maxUploadRate to set
-     */
-    public void setMaxUploadRate(int maxUploadRate) {
-        this.maxUploadRate = maxUploadRate;
+    public String getFile() {
+        return file;
     }
 
 }

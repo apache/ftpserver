@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -42,21 +42,21 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
 
     private void createUserFile() throws IOException {
         Properties users = new Properties();
-        users.setProperty("FtpServer.user.user1.userpassword", "pw1");
-        users.setProperty("FtpServer.user.user1.homedirectory", "home");
+        users.setProperty("ftpserver.user.user1.userpassword", "pw1");
+        users.setProperty("ftpserver.user.user1.homedirectory", "home");
 
-        users.setProperty("FtpServer.user.user2.userpassword", "pw2");
-        users.setProperty("FtpServer.user.user2.homedirectory", "home");
-        users.setProperty("FtpServer.user.user2.writepermission", "true");
-        users.setProperty("FtpServer.user.user2.enableflag", "false");
-        users.setProperty("FtpServer.user.user2.idletime", "2");
-        users.setProperty("FtpServer.user.user2.uploadrate", "5");
-        users.setProperty("FtpServer.user.user2.downloadrate", "1");
-        users.setProperty("FtpServer.user.user2.maxloginnumber", "3");
-        users.setProperty("FtpServer.user.user2.maxloginperip", "4");
+        users.setProperty("ftpserver.user.user2.userpassword", "pw2");
+        users.setProperty("ftpserver.user.user2.homedirectory", "home");
+        users.setProperty("ftpserver.user.user2.writepermission", "true");
+        users.setProperty("ftpserver.user.user2.enableflag", "false");
+        users.setProperty("ftpserver.user.user2.idletime", "2");
+        users.setProperty("ftpserver.user.user2.uploadrate", "5");
+        users.setProperty("ftpserver.user.user2.downloadrate", "1");
+        users.setProperty("ftpserver.user.user2.maxloginnumber", "3");
+        users.setProperty("ftpserver.user.user2.maxloginperip", "4");
 
-        users.setProperty("FtpServer.user.user3.userpassword", "");
-        users.setProperty("FtpServer.user.user3.homedirectory", "home");
+        users.setProperty("ftpserver.user.user3.userpassword", "");
+        users.setProperty("ftpserver.user.user3.homedirectory", "home");
 
         FileOutputStream fos = new FileOutputStream(USERS_FILE);
         users.store(fos, null);
@@ -64,11 +64,10 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         fos.close();
     }
 
-    protected UserManager createUserManager() throws FtpException {
-        PropertiesUserManager um = new PropertiesUserManager();
+    protected UserManagerFactory createUserManagerFactory() throws FtpException {
+        PropertiesUserManagerFactory um = new PropertiesUserManagerFactory();
         um.setFile(USERS_FILE);
         um.setPasswordEncryptor(new ClearTextPasswordEncryptor());
-        um.configure();
 
         return um;
 

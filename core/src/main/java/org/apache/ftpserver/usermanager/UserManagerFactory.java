@@ -19,36 +19,19 @@
 
 package org.apache.ftpserver.usermanager;
 
-
+import org.apache.ftpserver.ftplet.UserManager;
 
 /**
- * Password encryptor that does no encryption, that is, keps the
- * password in clear text
- *
+ * Interface for user manager factories
+ * 
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
+ * @version $Rev: 689495 $, $Date: 2008-08-27 16:58:52 +0200 (Wed, 27 Aug 2008) $
  */
-public class ClearTextPasswordEncryptor implements PasswordEncryptor {
-
+public interface UserManagerFactory {
+    
     /**
-     * Returns the clear text password
+     * Create an {@link UserManager} instance based on the configuration on the factory
+     * @return The {@link UserManager}
      */
-    public String encrypt(String password) {
-        return password;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean matches(String passwordToCheck, String storedPassword) {
-        if(storedPassword == null) {
-            throw new NullPointerException("storedPassword can not be null");
-        }
-        if(passwordToCheck == null) {
-            throw new NullPointerException("passwordToCheck can not be null");
-        }
-        
-        return passwordToCheck.equals(storedPassword);
-    }
-
+    UserManager createUserManager();
 }

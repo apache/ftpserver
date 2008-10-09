@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +35,10 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.BaseProperties;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -52,77 +56,22 @@ public class PropertiesUserManager extends AbstractUserManager {
     private final Logger LOG = LoggerFactory
             .getLogger(PropertiesUserManager.class);
 
-    private final static String DEPRECATED_PREFIX = "FtpServer.user.";
-
     private final static String PREFIX = "ftpserver.user.";
 
     private BaseProperties userDataProp;
 
     private File userDataFile = new File("./res/user.gen");
 
-    private boolean isConfigured = false;
-    
-    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
 
     
     /**
-     * Retrieve the file used to load and store users
-     * @return The file
+     * Internal constructor, do not use directly. Use {@link PropertiesUserManagerFactory} instead.
      */
-    public File getFile() {
-        return userDataFile;
-    }
+    public PropertiesUserManager(PasswordEncryptor passwordEncryptor,
+            File userDataFile, String adminName) {
+        super(adminName, passwordEncryptor);
+        this.userDataFile = userDataFile;
 
-    /**
-     * Set the file used to store and read users. Must be set before
-     * {@link #configure()} is called.
-     * 
-     * @param propFile
-     *            A file containing users
-     */
-    public void setFile(File propFile) {
-        if (isConfigured) {
-            throw new IllegalStateException("Must be called before configure()");
-        }
-
-        this.userDataFile = propFile;
-    }
-
-    
-    /**
-     * Retrieve the password encryptor used for this user manager
-     * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
-     *  if no other has been provided
-     */    
-    public PasswordEncryptor getPasswordEncryptor() {
-        return passwordEncryptor;
-    }
-
-
-    /**
-     * Set the password encryptor to use for this user manager
-     * @param passwordEncryptor The password encryptor
-     */
-    public void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
-        this.passwordEncryptor = passwordEncryptor;
-    }
-
-
-
-    /**
-     * Lazy init the user manager
-     */
-    private void lazyInit() {
-        if (!isConfigured) {
-            configure();
-        }
-    }
-
-    /**
-     * Configure user manager.
-     */
-    public void configure() {
-        isConfigured = true;
         try {
             userDataProp = new BaseProperties();
 
@@ -140,44 +89,21 @@ public class PropertiesUserManager extends AbstractUserManager {
                     "Error loading user data file : "
                             + userDataFile.getAbsolutePath(), e);
         }
-
-        convertDeprecatedPropertyNames();
     }
 
-    private void convertDeprecatedPropertyNames() {
-        Enumeration<?> keys = userDataProp.propertyNames();
-
-        boolean doSave = false;
-
-        while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
-
-            if (key.startsWith(DEPRECATED_PREFIX)) {
-                String newKey = PREFIX
-                        + key.substring(DEPRECATED_PREFIX.length());
-                userDataProp.setProperty(newKey, userDataProp.getProperty(key));
-                userDataProp.remove(key);
-
-                doSave = true;
-            }
-        }
-
-        if (doSave) {
-            try {
-                saveUserData();
-            } catch (FtpException e) {
-                throw new FtpServerConfigurationException(
-                        "Failed to save updated user data", e);
-            }
-        }
+    /**
+     * Retrive the file backing this user manager
+     * @return The file
+     */
+    public File getFile() {
+        return userDataFile;
     }
 
+    
     /**
      * Save user data. Store the properties.
      */
     public synchronized void save(User usr) throws FtpException {
-        lazyInit();
-
         // null value check
         if (usr.getName() == null) {
             throw new NullPointerException("User name is null.");
@@ -259,9 +185,7 @@ public class PropertiesUserManager extends AbstractUserManager {
      * Delete an user. Removes all this user entries from the properties. After
      * removing the corresponding from the properties, save the data.
      */
-    public synchronized void delete(String usrName) throws FtpException {
-        lazyInit();
-
+    public void delete(String usrName) throws FtpException {
         // remove entries from properties
         String thisPrefix = PREFIX + usrName + '.';
         Enumeration<?> propNames = userDataProp.propertyNames();
@@ -298,9 +222,9 @@ public class PropertiesUserManager extends AbstractUserManager {
         String password = usr.getPassword();
 
         if (password != null) {
-            password = passwordEncryptor.encrypt(password);
+            password = getPasswordEncryptor().encrypt(password);
         } else {
-            String blankPassword = passwordEncryptor.encrypt("");
+            String blankPassword = getPasswordEncryptor().encrypt("");
 
             if (doesExist(name)) {
                 String key = PREFIX + name + '.' + ATTR_PASSWORD;
@@ -315,9 +239,7 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * Get all user names.
      */
-    public synchronized String[] getAllUserNames() {
-        lazyInit();
-
+    public String[] getAllUserNames() {
         // get all user names
         String suffix = '.' + ATTR_HOME;
         ArrayList<String> ulst = new ArrayList<String>();
@@ -341,9 +263,7 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * Load user data.
      */
-    public synchronized User getUserByName(String userName) {
-        lazyInit();
-
+    public User getUserByName(String userName) {
         if (!doesExist(userName)) {
             return null;
         }
@@ -386,9 +306,7 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * User existance check
      */
-    public synchronized boolean doesExist(String name) {
-        lazyInit();
-
+    public boolean doesExist(String name) {
         String key = PREFIX + name + '.' + ATTR_HOME;
         return userDataProp.containsKey(key);
     }
@@ -396,10 +314,8 @@ public class PropertiesUserManager extends AbstractUserManager {
     /**
      * User authenticate method
      */
-    public synchronized User authenticate(Authentication authentication)
+    public User authenticate(Authentication authentication)
             throws AuthenticationFailedException {
-        lazyInit();
-
         if (authentication instanceof UsernamePasswordAuthentication) {
             UsernamePasswordAuthentication upauth = (UsernamePasswordAuthentication) authentication;
 
@@ -422,7 +338,7 @@ public class PropertiesUserManager extends AbstractUserManager {
                 throw new AuthenticationFailedException("Authentication failed");
             }
 
-            if (passwordEncryptor.matches(password, storedPassword)) {
+            if (getPasswordEncryptor().matches(password, storedPassword)) {
                 return getUserByName(user);
             } else {
                 throw new AuthenticationFailedException("Authentication failed");

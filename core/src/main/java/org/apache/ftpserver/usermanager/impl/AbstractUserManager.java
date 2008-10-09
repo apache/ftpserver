@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
 
 /**
  * Abstract common base type for {@link UserManager} implementations
@@ -50,7 +51,18 @@ public abstract class AbstractUserManager implements UserManager {
 
     public static final String ATTR_MAX_LOGIN_PER_IP = "maxloginperip";
 
-    private String adminName = "admin";
+    private String adminName;
+    
+    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
+
+
+    /**
+     * Internal constructor, do not use directly
+     */
+    public AbstractUserManager(String adminName, PasswordEncryptor passwordEncryptor) {
+        this.adminName = adminName;
+        this.passwordEncryptor = passwordEncryptor;
+    }
 
     /**
      * Get the admin name.
@@ -60,31 +72,19 @@ public abstract class AbstractUserManager implements UserManager {
     }
 
     /**
-     * Set the name to use as the administrator of the server. The default value
-     * is "admin".
-     * 
-     * @param adminName
-     *            The administrator user name
-     */
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
-
-    /**
-     * Set the name to use as the administrator of the server
-     * 
-     * @param adminName
-     *            The administrator user name
-     * @deprecated Use {@link #setAdminName(String)} instead
-     */
-    public void setAdmin(String adminName) {
-        this.adminName = adminName;
-    }
-
-    /**
      * @return true if user with this login is administrator
      */
     public boolean isAdmin(String login) throws FtpException {
         return adminName.equals(login);
+    }
+    
+    
+    /**
+     * Retrieve the password encryptor used for this user manager
+     * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
+     *  if no other has been provided
+     */
+    public PasswordEncryptor getPasswordEncryptor() {
+        return passwordEncryptor;
     }
 }

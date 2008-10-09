@@ -38,11 +38,11 @@ import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.message.MessageResourceFactory;
-import org.apache.ftpserver.usermanager.BaseUser;
-import org.apache.ftpserver.usermanager.ConcurrentLoginPermission;
-import org.apache.ftpserver.usermanager.PropertiesUserManager;
-import org.apache.ftpserver.usermanager.TransferRatePermission;
-import org.apache.ftpserver.usermanager.WritePermission;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
+import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
+import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
+import org.apache.ftpserver.usermanager.impl.WritePermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     private MessageResource messageResource = new MessageResourceFactory().createMessageResource();
 
-    private UserManager userManager = new PropertiesUserManager();
+    private UserManager userManager = new PropertiesUserManagerFactory().createUserManager();
 
     private FileSystemFactory fileSystemManager = new NativeFileSystemFactory();
 

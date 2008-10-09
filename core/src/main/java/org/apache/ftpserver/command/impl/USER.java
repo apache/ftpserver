@@ -32,7 +32,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
-import org.apache.ftpserver.usermanager.ConcurrentLoginRequest;
+import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**

@@ -21,7 +21,7 @@ package org.apache.ftpserver.filesystem.nativefs.impl;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.usermanager.BaseUser;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
 *

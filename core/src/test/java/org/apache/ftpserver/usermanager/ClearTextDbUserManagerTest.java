@@ -22,8 +22,8 @@ package org.apache.ftpserver.usermanager;
 import java.io.File;
 
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 
 /**
 *
@@ -39,8 +39,8 @@ public class ClearTextDbUserManagerTest extends DbUserManagerTest {
     }
 
 
-    protected UserManager createUserManager() throws FtpException {
-        DbUserManager manager = (DbUserManager) super.createUserManager();
+    protected UserManagerFactory createUserManagerFactory() throws FtpException {
+        DbUserManagerFactory manager = (DbUserManagerFactory) super.createUserManagerFactory();
         manager.setPasswordEncryptor(new ClearTextPasswordEncryptor());
         return manager;
 

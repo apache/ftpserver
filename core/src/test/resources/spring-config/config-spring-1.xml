@@ -66,7 +66,7 @@
 		</ftplets>
 		<!--<file-user-manager file="/tmp/foo.users" encrypt-passwords="true" />-->
 		<user-manager>
-			<beans:bean class="org.apache.ftpserver.usermanager.PropertiesUserManager"/>
+			<beans:bean class="org.apache.ftpserver.config.spring.MockUserManager"/>
 		</user-manager>
 		<native-filesystem case-insensitive="true" create-home="true" />
 		<commands use-default="false">

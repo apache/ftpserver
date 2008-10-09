@@ -25,7 +25,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 import org.hsqldb.jdbc.jdbcDataSource;
@@ -57,8 +56,8 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
         stm.execute(ddl);
     }
 
-    protected UserManager createUserManager() throws FtpException {
-        DbUserManager manager = new DbUserManager();
+    protected UserManagerFactory createUserManagerFactory() throws FtpException {
+        DbUserManagerFactory manager = new DbUserManagerFactory();
 
         manager.setDataSource(ds);
         manager

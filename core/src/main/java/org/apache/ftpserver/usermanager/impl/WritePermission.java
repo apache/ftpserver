@@ -17,39 +17,53 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
- * The max upload rate permission
+ * Class representing a write permission
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
-public class TransferRatePermission implements Authority {
+public class WritePermission implements Authority {
 
-    private int maxDownloadRate;
+    private String permissionRoot;
 
-    private int maxUploadRate;
+    /**
+     * Construct a write permission for the user home directory (/)
+     */
+    public WritePermission() {
+        this.permissionRoot = "/";
+    }
 
-    public TransferRatePermission(int maxDownloadRate, int maxUploadRate) {
-        this.maxDownloadRate = maxDownloadRate;
-        this.maxUploadRate = maxUploadRate;
+    /**
+     * Construct a write permission for a file or directory relative to the user
+     * home directory
+     * 
+     * @param permissionRoot
+     *            The file or directory
+     */
+    public WritePermission(final String permissionRoot) {
+        this.permissionRoot = permissionRoot;
     }
 
     /**
      * @see Authority#authorize(AuthorizationRequest)
      */
-    public AuthorizationRequest authorize(AuthorizationRequest request) {
-        if (request instanceof TransferRateRequest) {
-            TransferRateRequest transferRateRequest = (TransferRateRequest) request;
+    public AuthorizationRequest authorize(final AuthorizationRequest request) {
+        if (request instanceof WriteRequest) {
+            WriteRequest writeRequest = (WriteRequest) request;
 
-            transferRateRequest.setMaxDownloadRate(maxDownloadRate);
-            transferRateRequest.setMaxUploadRate(maxUploadRate);
+            String requestFile = writeRequest.getFile();
 
-            return transferRateRequest;
+            if (requestFile.startsWith(permissionRoot)) {
+                return writeRequest;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
@@ -58,7 +72,8 @@ public class TransferRatePermission implements Authority {
     /**
      * @see Authority#canAuthorize(AuthorizationRequest)
      */
-    public boolean canAuthorize(AuthorizationRequest request) {
-        return request instanceof TransferRateRequest;
+    public boolean canAuthorize(final AuthorizationRequest request) {
+        return request instanceof WriteRequest;
     }
+
 }

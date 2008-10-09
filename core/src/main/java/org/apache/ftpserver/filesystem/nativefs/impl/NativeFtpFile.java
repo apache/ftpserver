@@ -32,7 +32,7 @@ import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.usermanager.WriteRequest;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

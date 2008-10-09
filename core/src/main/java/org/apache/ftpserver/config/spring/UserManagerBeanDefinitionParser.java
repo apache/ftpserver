@@ -19,12 +19,13 @@
 
 package org.apache.ftpserver.config.spring;
 
-import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
-import org.apache.ftpserver.usermanager.DbUserManager;
-import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
-import org.apache.ftpserver.usermanager.PropertiesUserManager;
-import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.DbUserManagerFactory;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -42,35 +43,40 @@ public class UserManagerBeanDefinitionParser extends
         AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class<? extends UserManager> getBeanClass(final Element element) {
-        if (element.getLocalName().equals("file-user-manager")) {
-            return PropertiesUserManager.class;
-        } else {
-            return DbUserManager.class;
-        }
+    protected Class<?> getBeanClass(final Element element) {
+        return null;
     }
 
     @Override
     protected void doParse(final Element element,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
+
+
+        Class factoryClass;
+        if (element.getLocalName().equals("file-user-manager")) {
+            factoryClass = PropertiesUserManagerFactory.class;
+        } else {
+            factoryClass = DbUserManagerFactory.class;
+        }
+        BeanDefinitionBuilder factoryBuilder = BeanDefinitionBuilder.genericBeanDefinition(factoryClass);
+
         
         // common for both user managers
         if (StringUtils.hasText(element.getAttribute("encrypt-passwords"))) {
             String encryptionStrategy = element.getAttribute("encrypt-passwords"); 
             
             if(encryptionStrategy.equals("true") || encryptionStrategy.equals("md5")) {
-                builder.addPropertyValue("passwordEncryptor", new Md5PasswordEncryptor());
+                factoryBuilder.addPropertyValue("passwordEncryptor", new Md5PasswordEncryptor());
             } else if(encryptionStrategy.equals("salted")) {
-                builder.addPropertyValue("passwordEncryptor", new SaltedPasswordEncryptor());
+                factoryBuilder.addPropertyValue("passwordEncryptor", new SaltedPasswordEncryptor());
             } else {
-                builder.addPropertyValue("passwordEncryptor", new ClearTextPasswordEncryptor());
+                factoryBuilder.addPropertyValue("passwordEncryptor", new ClearTextPasswordEncryptor());
             }
         }
         
-        if (getBeanClass(element) == PropertiesUserManager.class) {
-            builder.addPropertyValue("file", element.getAttribute("file"));
-            builder.setInitMethodName("configure");
+        if (factoryClass == PropertiesUserManagerFactory.class) {
+            factoryBuilder.addPropertyValue("file", element.getAttribute("file"));
         } else {
             Element dsElm = SpringUtil.getChildElement(element,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "data-source");
@@ -87,25 +93,34 @@ public class UserManagerBeanDefinitionParser extends
                         springElm, builder.getBeanDefinition());
 
             }
-            builder.addPropertyValue("dataSource", o);
+            factoryBuilder.addPropertyValue("dataSource", o);
 
-            builder.addPropertyValue("sqlUserInsert", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserInsert", getSql(element,
                     "insert-user"));
-            builder.addPropertyValue("sqlUserUpdate", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserUpdate", getSql(element,
                     "update-user"));
-            builder.addPropertyValue("sqlUserDelete", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserDelete", getSql(element,
                     "delete-user"));
-            builder.addPropertyValue("sqlUserSelect", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserSelect", getSql(element,
                     "select-user"));
-            builder.addPropertyValue("sqlUserSelectAll", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserSelectAll", getSql(element,
                     "select-all-users"));
-            builder.addPropertyValue("sqlUserAdmin",
+            factoryBuilder.addPropertyValue("sqlUserAdmin",
                     getSql(element, "is-admin"));
-            builder.addPropertyValue("sqlUserAuthenticate", getSql(element,
+            factoryBuilder.addPropertyValue("sqlUserAuthenticate", getSql(element,
                     "authenticate"));
-
-            builder.setInitMethodName("configure");
         }
+
+        BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();
+        String factoryId = parserContext.getReaderContext().generateBeanName(factoryDefinition);
+        
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryDefinition, factoryId);
+        registerBeanDefinition(factoryHolder, parserContext.getRegistry());
+
+        // set the factory on the listener bean
+        builder.getRawBeanDefinition().setFactoryBeanName(factoryId);
+        builder.getRawBeanDefinition().setFactoryMethodName("createUserManager");
+
     }
 
     private String getSql(final Element element, final String elmName) {

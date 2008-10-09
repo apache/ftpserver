@@ -32,8 +32,8 @@ import org.apache.ftpserver.DefaultFtpServerContext;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
-import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
-import org.apache.ftpserver.usermanager.PropertiesUserManager;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,13 +87,12 @@ public abstract class ClientTestTemplate extends TestCase {
         factory.setPort(port);
         context.setListener("default", factory.createListener());
 
-        PropertiesUserManager userManager = new PropertiesUserManager();
-        userManager.setAdminName("admin");
-        userManager.setPasswordEncryptor(new ClearTextPasswordEncryptor());
-        userManager.setFile(USERS_FILE);
-        userManager.configure();
+        PropertiesUserManagerFactory umFactory = new PropertiesUserManagerFactory();
+        umFactory.setAdminName("admin");
+        umFactory.setPasswordEncryptor(new ClearTextPasswordEncryptor());
+        umFactory.setFile(USERS_FILE);
 
-        context.setUserManager(userManager);
+        context.setUserManager(umFactory.createUserManager());
 
         return new FtpServer(context);
     }
