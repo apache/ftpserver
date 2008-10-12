@@ -34,7 +34,7 @@ import org.apache.ftpserver.util.IoUtils;
 * @version $Rev$, $Date$
 *
 */
-public class NativeFileObjectTest extends FileObjectTestTemplate {
+public class NativeFileObjectTest extends FtpFileTestTemplate {
 
     private static final File TEST_TMP_DIR = new File("test-tmp");
 

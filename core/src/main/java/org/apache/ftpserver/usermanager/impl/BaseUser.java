@@ -20,6 +20,7 @@
 package org.apache.ftpserver.usermanager.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.ftpserver.ftplet.Authority;
@@ -55,7 +56,7 @@ public class BaseUser implements User {
 
     private boolean isEnabled = true;
 
-    private Authority[] authorities = new Authority[0];
+    private List<Authority> authorities = new ArrayList<Authority>();
 
     /**
      * Default constructor.
@@ -103,17 +104,17 @@ public class BaseUser implements User {
         password = pass;
     }
 
-    public Authority[] getAuthorities() {
+    public List<Authority> getAuthorities() {
         if (authorities != null) {
-            return authorities.clone();
+            return Collections.unmodifiableList(authorities);
         } else {
             return null;
         }
     }
 
-    public void setAuthorities(Authority[] authorities) {
+    public void setAuthorities(List<Authority> authorities) {
         if (authorities != null) {
-            this.authorities = authorities.clone();
+            this.authorities = Collections.unmodifiableList(authorities);
         } else {
             this.authorities = null;
         }
@@ -175,17 +176,13 @@ public class BaseUser implements User {
      * {@inheritDoc}
      */
     public AuthorizationRequest authorize(AuthorizationRequest request) {
-        Authority[] authorities = getAuthorities();
-
         // check for no authorities at all
         if(authorities == null) {
             return null;
         }
         
         boolean someoneCouldAuthorize = false;
-        for (int i = 0; i < authorities.length; i++) {
-            Authority authority = authorities[i];
-
+        for (Authority authority : authorities) {
             if (authority.canAuthorize(request)) {
                 someoneCouldAuthorize = true;
 
@@ -209,15 +206,15 @@ public class BaseUser implements User {
     /**
      * {@inheritDoc}
      */
-    public Authority[] getAuthorities(Class<? extends Authority> clazz) {
+    public List<Authority> getAuthorities(Class<? extends Authority> clazz) {
         List<Authority> selected = new ArrayList<Authority>();
 
-        for (int i = 0; i < authorities.length; i++) {
-            if (authorities[i].getClass().equals(clazz)) {
-                selected.add(authorities[i]);
+        for (Authority authority : authorities) {
+            if (authority.getClass().equals(clazz)) {
+                selected.add(authority);
             }
         }
 
-        return selected.toArray(new Authority[0]);
+        return selected;
     }
 }

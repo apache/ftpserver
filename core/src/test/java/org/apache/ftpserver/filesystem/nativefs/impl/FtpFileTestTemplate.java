@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.filesystem.nativefs.impl;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
@@ -32,7 +34,7 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 * @version $Rev$, $Date$
 *
 */
-public abstract class FileObjectTestTemplate extends TestCase {
+public abstract class FtpFileTestTemplate extends TestCase {
 
     protected static final String FILE2_PATH = "/dir1/file2";
 
@@ -115,11 +117,11 @@ public abstract class FileObjectTestTemplate extends TestCase {
     public void testListFilesInOrder() {
         FtpFile root = createFileObject("/", USER);
 
-        FtpFile[] files = root.listFiles();
-        assertEquals(3, files.length);
-        assertEquals("dir1", files[0].getShortName());
-        assertEquals("file1", files[1].getShortName());
-        assertEquals("file3", files[2].getShortName());
+        List<FtpFile> files = root.listFiles();
+        assertEquals(3, files.size());
+        assertEquals("dir1", files.get(0).getShortName());
+        assertEquals("file1", files.get(1).getShortName());
+        assertEquals("file3", files.get(2).getShortName());
     }
 
 }

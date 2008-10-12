@@ -27,7 +27,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FtpFile;
@@ -297,7 +299,7 @@ public class NativeFtpFile implements FtpFile {
     /**
      * List files. If not a directory or does not exist, null will be returned.
      */
-    public FtpFile[] listFiles() {
+    public List<FtpFile> listFiles() {
 
         // is a directory
         if (!file.isDirectory()) {
@@ -331,7 +333,7 @@ public class NativeFtpFile implements FtpFile {
             virtualFiles[i] = new NativeFtpFile(fileName, fileObj, user);
         }
 
-        return virtualFiles;
+        return Collections.unmodifiableList(Arrays.asList(virtualFiles));
     }
 
     /**

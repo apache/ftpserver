@@ -19,8 +19,10 @@
 
 package org.apache.ftpserver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ftpserver.command.CommandFactory;
@@ -73,11 +75,15 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     private Map<String, Listener> listeners = new HashMap<String, Listener>();
 
-    private static final Authority[] ADMIN_AUTHORITIES = new Authority[] { new WritePermission() };
-
-    private static final Authority[] ANON_AUTHORITIES = new Authority[] {
-            new ConcurrentLoginPermission(20, 2),
-            new TransferRatePermission(4800, 4800) };
+    private static final List<Authority> ADMIN_AUTHORITIES = new ArrayList<Authority>();
+    private static final List<Authority> ANON_AUTHORITIES = new ArrayList<Authority>();
+    static {
+        ADMIN_AUTHORITIES.add(new WritePermission());
+        
+        ANON_AUTHORITIES.add(new ConcurrentLoginPermission(20, 2));
+        ANON_AUTHORITIES.add(new TransferRatePermission(4800, 4800));
+    }
+    
 
     public DefaultFtpServerContext() throws Exception {
         // create the default listener

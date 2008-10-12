@@ -295,7 +295,7 @@ public class PropertiesUserManager extends AbstractUserManager {
 
         authorities.add(new TransferRatePermission(downloadRate, uploadRate));
 
-        user.setAuthorities(authorities.toArray(new Authority[0]));
+        user.setAuthorities(authorities);
 
         user.setMaxIdleTime(userDataProp.getInteger(baseKey
                 + ATTR_MAX_IDLE_TIME, 0));

@@ -471,7 +471,7 @@ public class DbUserManager extends AbstractUserManager {
                         .getInt(ATTR_MAX_DOWNLOAD_RATE), rs
                         .getInt(ATTR_MAX_UPLOAD_RATE)));
 
-                thisUser.setAuthorities(authorities.toArray(new Authority[0]));
+                thisUser.setAuthorities(authorities);
             }
             return thisUser;
         } catch (SQLException ex) {

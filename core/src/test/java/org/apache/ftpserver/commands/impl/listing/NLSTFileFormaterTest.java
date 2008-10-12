@@ -22,6 +22,7 @@ package org.apache.ftpserver.commands.impl.listing;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -109,7 +110,7 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public FtpFile[] listFiles() {
+        public List<FtpFile> listFiles() {
             return null;
         }
 

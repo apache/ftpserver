@@ -20,6 +20,8 @@
 package org.apache.ftpserver.command.impl.listing;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -33,7 +35,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
  */
 public class DirectoryLister {
 
-    private String traverseFiles(final FtpFile[] files,
+    private String traverseFiles(final List<FtpFile> files,
             final FileFilter filter, final FileFormater formater) {
         StringBuffer sb = new StringBuffer();
 
@@ -43,18 +45,18 @@ public class DirectoryLister {
         return sb.toString();
     }
 
-    private String traverseFiles(final FtpFile[] files,
+    private String traverseFiles(final List<FtpFile> files,
             final FileFilter filter, final FileFormater formater,
             boolean matchDirs) {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i] == null) {
+        for (FtpFile file : files) {
+            if (file == null) {
                 continue;
             }
 
-            if (filter == null || filter.accept(files[i])) {
-                if (files[i].isDirectory() == matchDirs) {
-                    sb.append(formater.format(files[i]));
+            if (filter == null || filter.accept(file)) {
+                if (file.isDirectory() == matchDirs) {
+                    sb.append(formater.format(file));
                 }
             }
         }
@@ -69,7 +71,7 @@ public class DirectoryLister {
         StringBuffer sb = new StringBuffer();
 
         // get all the file objects
-        FtpFile[] files = listFiles(fileSystemView, argument.getFile());
+        List<FtpFile> files = listFiles(fileSystemView, argument.getFile());
         if (files != null) {
             FileFilter filter = null;
             if ((argument.hasOption('a'))) {
@@ -88,12 +90,13 @@ public class DirectoryLister {
     /**
      * Get the file list. Files will be listed in alphabetlical order.
      */
-    private FtpFile[] listFiles(FileSystemView fileSystemView, String file) {
-        FtpFile[] files = null;
+    private List<FtpFile> listFiles(FileSystemView fileSystemView, String file) {
+        List<FtpFile> files = null;
         try {
             FtpFile virtualFile = fileSystemView.getFileObject(file);
             if (virtualFile.isFile()) {
-                files = new FtpFile[] { virtualFile };
+                files = new ArrayList<FtpFile>();
+                files.add(virtualFile);
             } else {
                 files = virtualFile.listFiles();
             }

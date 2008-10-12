@@ -22,6 +22,7 @@ package org.apache.ftpserver.ftplet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * This is the file abstraction used by the server.
@@ -119,8 +120,9 @@ public interface FtpFile {
     /**
      * List file objects. If not a directory or does not exist, null will be
      * returned. Files must be returned in alphabetical order.
+     * List must be immutable.
      */
-    FtpFile[] listFiles();
+    List<FtpFile> listFiles();
 
     /**
      * Create output stream for writing. If the file is not random accessible,

@@ -244,7 +244,7 @@ public abstract class UserManagerTestTemplate extends TestCase {
         authorities.add(new WritePermission());
         authorities.add(new ConcurrentLoginPermission(3, 4));
         authorities.add(new TransferRatePermission(1, 5));
-        user.setAuthorities(authorities.toArray(new Authority[0]));
+        user.setAuthorities(authorities);
 
         userManager.save(user);
 

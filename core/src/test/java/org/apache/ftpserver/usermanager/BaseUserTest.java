@@ -19,6 +19,9 @@
 
 package org.apache.ftpserver.usermanager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.Authority;
@@ -69,7 +72,8 @@ public class BaseUserTest extends TestCase {
     private BaseUser user = new BaseUser();
 
     public void testAllow() {
-        Authority[] authorities = new Authority[] { ALWAYS_ALLOW_AUTHORITY };
+        List<Authority> authorities = new ArrayList<Authority>();
+        authorities.add(ALWAYS_ALLOW_AUTHORITY);
 
         user.setAuthorities(authorities);
 
@@ -77,7 +81,8 @@ public class BaseUserTest extends TestCase {
     }
 
     public void testDisallow() {
-        Authority[] authorities = new Authority[] { NEVER_ALLOW_AUTHORITY };
+        List<Authority> authorities = new ArrayList<Authority>();
+        authorities.add(NEVER_ALLOW_AUTHORITY);
 
         user.setAuthorities(authorities);
 
@@ -85,17 +90,19 @@ public class BaseUserTest extends TestCase {
     }
 
     public void testMultipleDisallowLast() {
-        Authority[] authorities = new Authority[] { ALWAYS_ALLOW_AUTHORITY,
-                NEVER_ALLOW_AUTHORITY };
-
+        List<Authority> authorities = new ArrayList<Authority>();
+        authorities.add(ALWAYS_ALLOW_AUTHORITY);
+        authorities.add(NEVER_ALLOW_AUTHORITY);
+        
         user.setAuthorities(authorities);
 
         assertNull(user.authorize(REQUEST));
     }
 
     public void testMultipleAllowLast() {
-        Authority[] authorities = new Authority[] { NEVER_ALLOW_AUTHORITY,
-                ALWAYS_ALLOW_AUTHORITY };
+        List<Authority> authorities = new ArrayList<Authority>();
+        authorities.add(NEVER_ALLOW_AUTHORITY);
+        authorities.add(ALWAYS_ALLOW_AUTHORITY);
 
         user.setAuthorities(authorities);
 
@@ -103,7 +110,8 @@ public class BaseUserTest extends TestCase {
     }
 
     public void testNonCanAuthorize() {
-        Authority[] authorities = new Authority[] { CANT_AUTHORITY };
+        List<Authority> authorities = new ArrayList<Authority>();
+        authorities.add(CANT_AUTHORITY);
 
         user.setAuthorities(authorities);
 

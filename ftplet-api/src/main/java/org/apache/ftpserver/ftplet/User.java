@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.ftplet;
 
+import java.util.List;
+
 /**
  * Basic user interface.
  *
@@ -42,9 +44,14 @@ public interface User {
      * 
      * @return All authorities
      */
-    Authority[] getAuthorities();
+    List<Authority> getAuthorities();
 
-    Authority[] getAuthorities(Class<? extends Authority> clazz);
+    /**
+     * Get authorities of the specified type granted to this user
+     * @param clazz The type of {@link Authority}
+     * @return Authorities of the specified class
+     */
+    List<Authority> getAuthorities(Class<? extends Authority> clazz);
 
     /**
      * Authorize a {@link AuthorizationRequest} for this user
