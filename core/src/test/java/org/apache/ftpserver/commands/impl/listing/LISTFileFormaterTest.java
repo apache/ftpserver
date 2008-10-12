@@ -66,7 +66,7 @@ public class LISTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public String getFullName() {
+        public String getAbsolutePath() {
             return "fullname";
         }
 
@@ -86,7 +86,7 @@ public class LISTFileFormaterTest extends TestCase {
             return "owner";
         }
 
-        public String getShortName() {
+        public String getName() {
             return "short";
         }
 

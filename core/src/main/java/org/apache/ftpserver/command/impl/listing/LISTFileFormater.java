@@ -54,7 +54,7 @@ public class LISTFileFormater implements FileFormater {
         sb.append(DELIM);
         sb.append(getLastModified(file));
         sb.append(DELIM);
-        sb.append(file.getShortName());
+        sb.append(file.getName());
         sb.append(NEWLINE);
 
         return sb.toString();

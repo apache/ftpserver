@@ -81,7 +81,7 @@ public class DELE extends AbstractCommand {
         }
 
         // check file
-        fileName = file.getFullName();
+        fileName = file.getAbsolutePath();
 
         if (!file.hasDeletePermission()) {
             session.write(LocalizedFtpReply.translate(session, request, context,

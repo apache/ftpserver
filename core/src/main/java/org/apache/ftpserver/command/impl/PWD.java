@@ -49,7 +49,7 @@ public class PWD extends AbstractCommand {
             throws IOException, FtpException {
         session.resetState();
         FileSystemView fsview = session.getFileSystemView();
-        String currDir = fsview.getWorkingDirectory().getFullName();
+        String currDir = fsview.getWorkingDirectory().getAbsolutePath();
         session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_257_PATHNAME_CREATED, "PWD", currDir));
     }

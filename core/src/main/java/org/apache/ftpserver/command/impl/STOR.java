@@ -110,7 +110,7 @@ public class STOR extends AbstractCommand {
                         "STOR.invalid", fileName));
                 return;
             }
-            fileName = file.getFullName();
+            fileName = file.getAbsolutePath();
 
             // get permission
             if (!file.hasWritePermission()) {

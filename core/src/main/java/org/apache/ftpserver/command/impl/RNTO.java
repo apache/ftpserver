@@ -95,7 +95,7 @@ public class RNTO extends AbstractCommand {
                                         "RNTO.invalid", null));
                 return;
             }
-            toFileStr = toFile.getFullName();
+            toFileStr = toFile.getAbsolutePath();
 
             // check permission
             if (!toFile.hasWritePermission()) {
@@ -130,7 +130,7 @@ public class RNTO extends AbstractCommand {
                         toFileStr));
 
                 LOG.info("File rename (" + session.getUser().getName() + ") "
-                        + frFile.getFullName() + " -> " + toFile.getFullName());
+                        + frFile.getAbsolutePath() + " -> " + toFile.getAbsolutePath());
 
             } else {
                 session

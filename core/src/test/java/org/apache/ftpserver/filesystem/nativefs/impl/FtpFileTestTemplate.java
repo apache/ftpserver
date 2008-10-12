@@ -94,24 +94,24 @@ public abstract class FtpFileTestTemplate extends TestCase {
 
     public void testFullName() {
         FtpFile fileObject = createFileObject(FILE2_PATH, USER);
-        assertEquals("/dir1/file2", fileObject.getFullName());
+        assertEquals("/dir1/file2", fileObject.getAbsolutePath());
 
         fileObject = createFileObject("/dir1/", USER);
-        assertEquals("/dir1", fileObject.getFullName());
+        assertEquals("/dir1", fileObject.getAbsolutePath());
 
         fileObject = createFileObject("/dir1", USER);
-        assertEquals("/dir1", fileObject.getFullName());
+        assertEquals("/dir1", fileObject.getAbsolutePath());
     }
 
     public void testShortName() {
         FtpFile fileObject = createFileObject("/dir1/file2", USER);
-        assertEquals("file2", fileObject.getShortName());
+        assertEquals("file2", fileObject.getName());
 
         fileObject = createFileObject("/dir1/", USER);
-        assertEquals("dir1", fileObject.getShortName());
+        assertEquals("dir1", fileObject.getName());
 
         fileObject = createFileObject("/dir1", USER);
-        assertEquals("dir1", fileObject.getShortName());
+        assertEquals("dir1", fileObject.getName());
     }
 
     public void testListFilesInOrder() {
@@ -119,9 +119,9 @@ public abstract class FtpFileTestTemplate extends TestCase {
 
         List<FtpFile> files = root.listFiles();
         assertEquals(3, files.size());
-        assertEquals("dir1", files.get(0).getShortName());
-        assertEquals("file1", files.get(1).getShortName());
-        assertEquals("file3", files.get(2).getShortName());
+        assertEquals("dir1", files.get(0).getName());
+        assertEquals("file1", files.get(1).getName());
+        assertEquals("file3", files.get(2).getName());
     }
 
 }

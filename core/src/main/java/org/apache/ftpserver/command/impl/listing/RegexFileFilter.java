@@ -65,7 +65,7 @@ public class RegexFileFilter implements FileFilter {
             return false;
         }
 
-        return regex.isMatch(file.getShortName());
+        return regex.isMatch(file.getName());
     }
 
 }

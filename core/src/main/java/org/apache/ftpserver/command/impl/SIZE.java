@@ -78,7 +78,7 @@ public class SIZE extends AbstractCommand {
         }
 
         // print file size
-        fileName = file.getFullName();
+        fileName = file.getAbsolutePath();
         if (!file.doesExist()) {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,

@@ -96,7 +96,7 @@ public class MLSTFileFormater implements FileFormater {
             }
         }
         sb.append(' ');
-        sb.append(file.getShortName());
+        sb.append(file.getName());
 
         sb.append(NEWLINE);
 

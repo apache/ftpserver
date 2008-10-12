@@ -97,7 +97,7 @@ public class RETR extends AbstractCommand {
                         "RETR.missing", fileName));
                 return;
             }
-            fileName = file.getFullName();
+            fileName = file.getAbsolutePath();
 
             // check file existance
             if (!file.doesExist()) {

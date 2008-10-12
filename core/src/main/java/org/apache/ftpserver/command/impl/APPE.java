@@ -110,7 +110,7 @@ public class APPE extends AbstractCommand {
                         "APPE.invalid", fileName));
                 return;
             }
-            fileName = file.getFullName();
+            fileName = file.getAbsolutePath();
 
             // check file existance
             if (file.doesExist() && !file.isFile()) {

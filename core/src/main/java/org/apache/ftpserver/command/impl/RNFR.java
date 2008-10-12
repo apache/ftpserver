@@ -80,7 +80,7 @@ public class RNFR extends AbstractCommand {
                     fileName));
         } else {
             session.setRenameFrom(renFr);
-            fileName = renFr.getFullName();
+            fileName = renFr.getAbsolutePath();
             session
                     .write(LocalizedFtpReply
                             .translate(

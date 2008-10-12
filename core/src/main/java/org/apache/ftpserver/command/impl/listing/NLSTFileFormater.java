@@ -35,7 +35,7 @@ public class NLSTFileFormater implements FileFormater {
      */
     public String format(FtpFile file) {
         StringBuffer sb = new StringBuffer();
-        sb.append(file.getShortName());
+        sb.append(file.getName());
         sb.append(NEWLINE);
 
         return sb.toString();

@@ -33,17 +33,20 @@ import java.util.List;
 public interface FtpFile {
 
     /**
-     * Get the fully qualified name.
+     * Get the full path from the base directory of the FileSystemView.
+     * @return a path where the path separator is '/' (even if the operating system
+     *     uses another character as path separator).
      */
-    String getFullName();
+    String getAbsolutePath();
 
     /**
-     * Get the file short name.
+     * Get the file name of the file
+     * @return the last part of the file path (the part after the last '/').
      */
-    String getShortName();
+    String getName();
 
     /**
-     * Is a hidden file?
+     * Is the file hidden?
      */
     boolean isHidden();
 

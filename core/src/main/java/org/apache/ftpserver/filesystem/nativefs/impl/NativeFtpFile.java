@@ -84,7 +84,7 @@ public class NativeFtpFile implements FtpFile {
     /**
      * Get full name.
      */
-    public String getFullName() {
+    public String getAbsolutePath() {
 
         // strip the last '/' if necessary
         String fullName = fileName;
@@ -99,7 +99,7 @@ public class NativeFtpFile implements FtpFile {
     /**
      * Get short name.
      */
-    public String getShortName() {
+    public String getName() {
 
         // root - the short name will be '/'
         if (fileName.equals("/")) {
@@ -195,8 +195,8 @@ public class NativeFtpFile implements FtpFile {
      * Check file write permission.
      */
     public boolean hasWritePermission() {
-        LOG.debug("Checking authorization for " + getFullName());
-        if (user.authorize(new WriteRequest(getFullName())) == null) {
+        LOG.debug("Checking authorization for " + getAbsolutePath());
+        if (user.authorize(new WriteRequest(getAbsolutePath())) == null) {
             LOG.debug("Not authorized");
             return false;
         }
@@ -226,7 +226,7 @@ public class NativeFtpFile implements FtpFile {
          * we will check if the parent file has write permission as most systems consider that a file can
          * be deleted when their parent directory is writable.
         */
-        String fullName=getFullName();
+        String fullName=getAbsolutePath();
         
         // we check FTPServer's write permission for this file.
         if (user.authorize(new WriteRequest(fullName)) == null) {
@@ -320,7 +320,7 @@ public class NativeFtpFile implements FtpFile {
         });
 
         // get the virtual name of the base directory
-        String virtualFileStr = getFullName();
+        String virtualFileStr = getAbsolutePath();
         if (virtualFileStr.charAt(virtualFileStr.length() - 1) != '/') {
             virtualFileStr += '/';
         }

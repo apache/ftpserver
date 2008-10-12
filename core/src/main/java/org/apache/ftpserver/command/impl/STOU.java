@@ -114,7 +114,7 @@ public class STOU extends AbstractCommand {
                         null));
                 return;
             }
-            String fileName = file.getFullName();
+            String fileName = file.getAbsolutePath();
 
             // check permission
             if (!file.hasWritePermission()) {
@@ -202,7 +202,7 @@ public class STOU extends AbstractCommand {
             throws FtpException {
         FtpFile newFile = oldFile;
         FileSystemView fsView = session.getFileSystemView();
-        String fileName = newFile.getFullName();
+        String fileName = newFile.getAbsolutePath();
         while (newFile.doesExist()) {
             newFile = fsView.getFile(fileName + '.'
                     + System.currentTimeMillis());
