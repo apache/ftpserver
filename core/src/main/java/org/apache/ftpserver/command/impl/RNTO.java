@@ -80,7 +80,7 @@ public class RNTO extends AbstractCommand {
             // get target file
             FtpFile toFile = null;
             try {
-                toFile = session.getFileSystemView().getFileObject(toFileStr);
+                toFile = session.getFileSystemView().getFile(toFileStr);
             } catch (Exception ex) {
                 LOG.debug("Exception getting file object", ex);
             }

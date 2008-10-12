@@ -67,12 +67,12 @@ public class CWD extends AbstractCommand {
         FileSystemView fsview = session.getFileSystemView();
         boolean success = false;
         try {
-            success = fsview.changeDirectory(dirName);
+            success = fsview.changeWorkingDirectory(dirName);
         } catch (Exception ex) {
             LOG.debug("Failed to change directory in file system", ex);
         }
         if (success) {
-            dirName = fsview.getCurrentDirectory().getFullName();
+            dirName = fsview.getWorkingDirectory().getFullName();
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CWD",
                     dirName));

@@ -35,17 +35,17 @@ public interface FileSystemView {
     /**
      * Get user current directory.
      */
-    FtpFile getCurrentDirectory() throws FtpException;
+    FtpFile getWorkingDirectory() throws FtpException;
 
     /**
      * Change directory.
      */
-    boolean changeDirectory(String dir) throws FtpException;
+    boolean changeWorkingDirectory(String dir) throws FtpException;
 
     /**
      * Get file object.
      */
-    FtpFile getFileObject(String file) throws FtpException;
+    FtpFile getFile(String file) throws FtpException;
 
     /**
      * Does the file system support random file access?

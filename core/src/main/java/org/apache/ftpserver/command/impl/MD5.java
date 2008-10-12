@@ -96,7 +96,7 @@ public class MD5 extends AbstractCommand {
             FtpFile file = null;
 
             try {
-                file = session.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFile(fileName);
             } catch (Exception ex) {
                 LOG.debug("Exception getting the file object: " + fileName, ex);
             }

@@ -61,12 +61,12 @@ public class CDUP extends AbstractCommand {
         FileSystemView fsview = session.getFileSystemView();
         boolean success = false;
         try {
-            success = fsview.changeDirectory("..");
+            success = fsview.changeWorkingDirectory("..");
         } catch (Exception ex) {
             LOG.debug("Failed to change directory in file system", ex);
         }
         if (success) {
-            String dirName = fsview.getCurrentDirectory().getFullName();
+            String dirName = fsview.getWorkingDirectory().getFullName();
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "CDUP",
                     dirName));

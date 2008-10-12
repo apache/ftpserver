@@ -70,7 +70,7 @@ public class MKD extends AbstractCommand {
         // get file object
         FtpFile file = null;
         try {
-            file = session.getFileSystemView().getFileObject(fileName);
+            file = session.getFileSystemView().getFile(fileName);
         } catch (Exception ex) {
             LOG.debug("Exception getting file object", ex);
         }

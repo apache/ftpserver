@@ -49,7 +49,7 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
 
     public void testConstructor() throws FtpException {
         NativeFileSystemView view = new NativeFileSystemView(user);
-        assertEquals("/", view.getCurrentDirectory().getFullName());
+        assertEquals("/", view.getWorkingDirectory().getFullName());
     }
 
     public void testConstructorWithNullUser() throws FtpException {

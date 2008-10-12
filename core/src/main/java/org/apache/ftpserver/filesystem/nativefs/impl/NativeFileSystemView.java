@@ -95,7 +95,7 @@ public class NativeFileSystemView implements FileSystemView {
     /**
      * Get the current directory.
      */
-    public FtpFile getCurrentDirectory() {
+    public FtpFile getWorkingDirectory() {
         FtpFile fileObj = null;
         if (currDir.equals("/")) {
             fileObj = new NativeFtpFile("/", new File(rootDir), user);
@@ -110,7 +110,7 @@ public class NativeFileSystemView implements FileSystemView {
     /**
      * Get file object.
      */
-    public FtpFile getFileObject(String file) {
+    public FtpFile getFile(String file) {
 
         // get actual file object
         String physicalName = NativeFtpFile.getPhysicalName(rootDir,
@@ -125,7 +125,7 @@ public class NativeFileSystemView implements FileSystemView {
     /**
      * Change directory.
      */
-    public boolean changeDirectory(String dir) {
+    public boolean changeWorkingDirectory(String dir) {
 
         // not a directory - return false
         dir = NativeFtpFile.getPhysicalName(rootDir, currDir, dir,

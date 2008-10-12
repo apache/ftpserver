@@ -68,7 +68,7 @@ public class RNFR extends AbstractCommand {
         // get filename
         FtpFile renFr = null;
         try {
-            renFr = session.getFileSystemView().getFileObject(fileName);
+            renFr = session.getFileSystemView().getFile(fileName);
         } catch (Exception ex) {
             LOG.debug("Exception getting file object", ex);
         }

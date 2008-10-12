@@ -255,7 +255,7 @@ public class LocalizedFtpReply extends DefaultFtpReply {
             FileSystemView fsView = session.getFileSystemView();
             if (fsView != null) {
                 try {
-                    varVal = fsView.getCurrentDirectory().getFullName();
+                    varVal = fsView.getWorkingDirectory().getFullName();
                 } catch (Exception ex) {
                     varVal = "";
                 }

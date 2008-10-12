@@ -69,7 +69,7 @@ public class DELE extends AbstractCommand {
         FtpFile file = null;
 
         try {
-            file = session.getFileSystemView().getFileObject(fileName);
+            file = session.getFileSystemView().getFile(fileName);
         } catch (Exception ex) {
             LOG.debug("Could not get file " + fileName, ex);
         }

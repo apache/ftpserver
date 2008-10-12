@@ -93,7 +93,7 @@ public class DirectoryLister {
     private List<FtpFile> listFiles(FileSystemView fileSystemView, String file) {
         List<FtpFile> files = null;
         try {
-            FtpFile virtualFile = fileSystemView.getFileObject(file);
+            FtpFile virtualFile = fileSystemView.getFile(file);
             if (virtualFile.isFile()) {
                 files = new ArrayList<FtpFile>();
                 files.add(virtualFile);

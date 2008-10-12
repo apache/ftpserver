@@ -100,7 +100,7 @@ public class APPE extends AbstractCommand {
             // get filenames
             FtpFile file = null;
             try {
-                file = session.getFileSystemView().getFileObject(fileName);
+                file = session.getFileSystemView().getFile(fileName);
             } catch (Exception e) {
                 LOG.debug("File system threw exception", e);
             }

@@ -91,7 +91,7 @@ public class STOU extends AbstractCommand {
                 if (pathName == null) {
                     filePrefix = "ftp.dat";
                 } else {
-                    FtpFile dir = session.getFileSystemView().getFileObject(
+                    FtpFile dir = session.getFileSystemView().getFile(
                             pathName);
                     if (dir.isDirectory()) {
                         filePrefix = pathName + "/ftp.dat";
@@ -100,7 +100,7 @@ public class STOU extends AbstractCommand {
                     }
                 }
 
-                file = session.getFileSystemView().getFileObject(filePrefix);
+                file = session.getFileSystemView().getFile(filePrefix);
                 if (file != null) {
                     file = getUniqueFile(session, file);
                 }
@@ -204,7 +204,7 @@ public class STOU extends AbstractCommand {
         FileSystemView fsView = session.getFileSystemView();
         String fileName = newFile.getFullName();
         while (newFile.doesExist()) {
-            newFile = fsView.getFileObject(fileName + '.'
+            newFile = fsView.getFile(fileName + '.'
                     + System.currentTimeMillis());
             if (newFile == null) {
                 break;

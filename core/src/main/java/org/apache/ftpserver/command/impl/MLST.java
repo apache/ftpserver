@@ -64,7 +64,7 @@ public class MLST extends AbstractCommand {
 
         FtpFile file = null;
         try {
-            file = session.getFileSystemView().getFileObject(
+            file = session.getFileSystemView().getFile(
                     parsedArg.getFile());
             if (file != null && file.doesExist()) {
                 FileFormater formater = new MLSTFileFormater((String[]) session
