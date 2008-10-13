@@ -23,10 +23,11 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultConnectionConfig;
 import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.message.MessageResource;
@@ -115,7 +116,7 @@ public class ServerBeanDefinitionParser extends
         }
 
         // Configure login limits
-        DefaultConnectionConfig connectionConfig = new DefaultConnectionConfig();
+        ConnectionConfigFactory connectionConfig = new ConnectionConfigFactory();
         if (StringUtils.hasText(element.getAttribute("max-logins"))) {
             connectionConfig.setMaxLogins(SpringUtil.parseInt(element,
                     "max-logins"));
@@ -137,7 +138,7 @@ public class ServerBeanDefinitionParser extends
                     "login-failure-delay"));
         }
 
-        factoryBuilder.addPropertyValue("connectionConfig", connectionConfig);
+        factoryBuilder.addPropertyValue("connectionConfig", connectionConfig.createConnectionConfig());
 
        
         BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();

@@ -23,7 +23,8 @@ import java.net.InetAddress;
 import java.util.List;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
-import org.apache.ftpserver.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
@@ -45,10 +46,11 @@ public class ListenerFactory {
 
     private boolean implicitSsl = false;
 
-    private DataConnectionConfiguration dataConnectionConfig = new DefaultDataConnectionConfiguration();
+    private DataConnectionConfiguration dataConnectionConfig = new DataConnectionConfigurationFactory()
+            .createDataConnectionConfiguration();
 
     private int idleTimeout = 300;
-    
+
     private List<InetAddress> blockedAddresses;
 
     private List<Subnet> blockedSubnets;
@@ -75,14 +77,14 @@ public class ListenerFactory {
         blockedSubnets = listener.getBlockedSubnets();
     }
 
-    
     /**
      * Create a listener based on the settings of this factory. The listener is immutable.
      * @return The created listener
      */
     public Listener createListener() {
         return new NioListener(serverAddress, port, implicitSsl, ssl,
-                dataConnectionConfig, idleTimeout, blockedAddresses, blockedSubnets);
+                dataConnectionConfig, idleTimeout, blockedAddresses,
+                blockedSubnets);
     }
 
     /**
@@ -222,8 +224,7 @@ public class ListenerFactory {
      * @param blockedAddresses
      *            The list of {@link InetAddress}es
      */
-    public void setBlockedAddresses(
-            List<InetAddress> blockedAddresses) {
+    public void setBlockedAddresses(List<InetAddress> blockedAddresses) {
         this.blockedAddresses = blockedAddresses;
     }
 

@@ -19,14 +19,16 @@
 
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.impl.DefaultConnectionConfig;
+
 /**
- * 
+ * Factory for creating connection configurations
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  *
  */
-public class DefaultConnectionConfig implements ConnectionConfig {
+public class ConnectionConfigFactory implements ConnectionConfig {
 
     private int maxLogins = 10;
 
@@ -38,6 +40,12 @@ public class DefaultConnectionConfig implements ConnectionConfig {
 
     private int loginFailureDelay = 500;
 
+    public ConnectionConfig createConnectionConfig() {
+        return new DefaultConnectionConfig(anonymousLoginEnabled,
+                loginFailureDelay, maxLogins, maxAnonymousLogins,
+                maxLoginFailures);
+    }
+    
     public int getLoginFailureDelay() {
         return loginFailureDelay;
     }

@@ -88,17 +88,6 @@ public interface DataConnectionConfiguration {
     String getPassivePorts();
 
     /**
-     * Set the allowed passive ports.
-     * 
-     * @see DataConnectionConfiguration#getPassivePorts() for details on the
-     *      allowed format. If set to null, the passive port with be assigned
-     *      from any available port
-     * @param passivePorts
-     *            The passive ports to use for this data connection
-     */
-    void setPassivePorts(String passivePorts);
-
-    /**
      * Request a passive port
      */
     int requestPassivePort();

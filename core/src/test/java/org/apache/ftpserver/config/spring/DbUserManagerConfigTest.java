@@ -49,8 +49,7 @@ public class DbUserManagerConfigTest extends SpringConfigTestTemplate {
                 + "<authenticate>AUTHENTICATE</authenticate>"
                 + "</db-user-manager>");
 
-        DbUserManager um = (DbUserManager) server.getServerContext()
-                .getUserManager();
+        DbUserManager um = (DbUserManager) server.getUserManager();
         assertTrue(um.getDataSource() instanceof jdbcDataSource);
         assertTrue(um.getPasswordEncryptor() instanceof SaltedPasswordEncryptor);
 

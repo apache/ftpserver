@@ -134,16 +134,16 @@ public class CommandLine {
                     args[0]);
 
             if (ctx.containsBean("server")) {
-                server = (DefaultFtpServer) ctx.getBean("server");
+                server = (FtpServer) ctx.getBean("server");
             } else {
-                String[] beanNames = ctx.getBeanNamesForType(DefaultFtpServer.class);
+                String[] beanNames = ctx.getBeanNamesForType(FtpServer.class);
                 if (beanNames.length == 1) {
-                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else if (beanNames.length > 1) {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");

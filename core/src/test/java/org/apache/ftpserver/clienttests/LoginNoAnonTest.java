@@ -19,8 +19,9 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultConnectionConfig;
 
 /**
 *
@@ -38,9 +39,11 @@ public class LoginNoAnonTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
-        DefaultConnectionConfig cc = (DefaultConnectionConfig) server
-                .getConnectionConfig();
-        cc.setAnonymousLoginEnabled(false);
+        ConnectionConfigFactory ccFactory = new ConnectionConfigFactory();
+
+        ccFactory.setAnonymousLoginEnabled(false);
+
+        server.setConnectionConfig(ccFactory.createConnectionConfig());
 
         return server;
     }

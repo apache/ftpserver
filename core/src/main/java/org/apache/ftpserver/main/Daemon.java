@@ -111,7 +111,7 @@ public class Daemon {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
+                    server = (FtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");

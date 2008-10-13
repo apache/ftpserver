@@ -22,8 +22,9 @@ package org.apache.ftpserver.clienttests;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import org.apache.ftpserver.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
 
@@ -40,14 +41,18 @@ public class PasvAddressTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
-        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server
-                .getListener("default")
-                .getDataConnectionConfiguration();
-
+        ListenerFactory listenerFactory = new ListenerFactory(server.getListener("default"));
+        
+        DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
+        
         passiveAddress = TestUtil.findNonLocalhostIp();
-        ddcc.setPassiveAddress(passiveAddress);
-        ddcc.setPassivePorts("12347");
+        dccFactory.setPassiveAddress(passiveAddress);
+        dccFactory.setPassivePorts("12347");
+        
+        listenerFactory.setDataConnectionConfiguration(dccFactory.createDataConnectionConfiguration());
 
+        server.addListener("default", listenerFactory.createListener());
+        
         return server;
     }
 

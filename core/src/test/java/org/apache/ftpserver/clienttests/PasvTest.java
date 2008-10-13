@@ -20,9 +20,9 @@
 package org.apache.ftpserver.clienttests;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
-import org.apache.ftpserver.DataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.listener.Listener;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
@@ -41,12 +41,17 @@ public class PasvTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
         
-        Listener l = server.getListener("default");
-        DataConnectionConfiguration dcc = l.getDataConnectionConfiguration();
+        ListenerFactory listenerFactory = new ListenerFactory(server.getListener("default"));
         
+        DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
+
         int passivePort = TestUtil.findFreePort(12444);
         
-        dcc.setPassivePorts(passivePort + "-" + passivePort);
+        dccFactory.setPassivePorts(passivePort + "-" + passivePort);
+        
+        listenerFactory.setDataConnectionConfiguration(dccFactory.createDataConnectionConfiguration());
+
+        server.addListener("default", listenerFactory.createListener());
         
         return server;
     }

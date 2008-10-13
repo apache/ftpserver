@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ftpserver.ConnectionConfig;
-import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.command.CommandFactoryFactory;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
@@ -72,7 +72,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     private CommandFactory commandFactory = new CommandFactoryFactory().createCommandFactory();
 
-    private ConnectionConfig connectionConfig = new DefaultConnectionConfig();
+    private ConnectionConfig connectionConfig = new ConnectionConfigFactory().createConnectionConfig();
 
     private Map<String, Listener> listeners = new HashMap<String, Listener>();
 

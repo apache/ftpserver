@@ -19,10 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.DefaultConnectionConfig;
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultFtpServerContext;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 
 /**
 *
@@ -38,9 +36,11 @@ public class UnlimitedMaxLoginTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
-        DefaultConnectionConfig cc = (DefaultConnectionConfig) server
-                .getConnectionConfig();
-        cc.setMaxLoginFailures(0);
+        ConnectionConfigFactory ccFactory = new ConnectionConfigFactory();
+
+        ccFactory.setMaxLoginFailures(0);
+
+        server.setConnectionConfig(ccFactory.createConnectionConfig());
         return server;
     }
 

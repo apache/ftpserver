@@ -29,9 +29,10 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
+import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.impl.DefaultFtpServerContext;
 import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
@@ -75,10 +76,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         factory.setSslConfiguration(createSslConfiguration().createSslConfiguration());
 
-        DefaultDataConnectionConfiguration dataConfig = new DefaultDataConnectionConfiguration();
+        DataConnectionConfigurationFactory dataConfig = new DataConnectionConfigurationFactory();
         dataConfig.setSslConfiguration(createSslConfiguration().createSslConfiguration());
 
-        factory.setDataConnectionConfiguration(dataConfig);
+        factory.setDataConnectionConfiguration(dataConfig.createDataConnectionConfiguration());
 
         server.addListener("default", factory.createListener());
         
