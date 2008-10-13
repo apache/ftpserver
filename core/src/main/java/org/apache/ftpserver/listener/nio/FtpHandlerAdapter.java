@@ -19,12 +19,12 @@
  */
 package org.apache.ftpserver.listener.nio;
 
-import org.apache.ftpserver.FtpHandler;
-import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.DefaultFtpRequest;
+import org.apache.ftpserver.impl.FtpHandler;
 import org.apache.ftpserver.impl.FtpIoSession;
+import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;

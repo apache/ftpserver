@@ -26,8 +26,13 @@ import java.util.Map;
 import org.apache.ftpserver.DefaultConnectionConfig;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServer;
+import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.message.MessageResourceFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -48,7 +53,7 @@ public class ServerBeanDefinitionParser extends
      * {@inheritDoc}
      */
     protected Class<? extends FtpServer> getBeanClass(final Element element) {
-        return FtpServer.class;
+        return null;
     }
 
     /**
@@ -58,6 +63,9 @@ public class ServerBeanDefinitionParser extends
     protected void doParse(final Element element,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
+        
+        BeanDefinitionBuilder factoryBuilder = BeanDefinitionBuilder.genericBeanDefinition(FtpServerFactory.class);
+        
         List<Element> childs = SpringUtil.getChildElements(element);
         for (Element childElm : childs) {
             String childName = childElm.getLocalName();
@@ -66,39 +74,39 @@ public class ServerBeanDefinitionParser extends
                 Map listeners = parseListeners(childElm, parserContext, builder);
 
                 if (listeners.size() > 0) {
-                    builder.addPropertyValue("listeners", listeners);
+                    factoryBuilder.addPropertyValue("listeners", listeners);
                 }
             } else if ("ftplets".equals(childName)) {
                 Map ftplets = parseFtplets(childElm, parserContext, builder);
-                builder.addPropertyValue("ftplets", ftplets);
+                factoryBuilder.addPropertyValue("ftplets", ftplets);
             } else if ("file-user-manager".equals(childName)
                     || "db-user-manager".equals(childName)) {
                 Object userManager = parserContext.getDelegate()
                         .parseCustomElement(childElm,
                                 builder.getBeanDefinition());
-                builder.addPropertyValue("userManager", userManager);
+                factoryBuilder.addPropertyValue("userManager", userManager);
             } else if ("user-manager".equals(childName)) {
-                builder.addPropertyValue("userManager", SpringUtil
+                factoryBuilder.addPropertyValue("userManager", SpringUtil
                         .parseSpringChildElement(childElm, parserContext,
                                 builder));
             } else if ("native-filesystem".equals(childName)) {
                 Object fileSystem = parserContext.getDelegate()
                         .parseCustomElement(childElm,
                                 builder.getBeanDefinition());
-                builder.addPropertyValue("fileSystem", fileSystem);
+                factoryBuilder.addPropertyValue("fileSystem", fileSystem);
             } else if ("filesystem".equals(childName)) {
-                builder.addPropertyValue("fileSystem", SpringUtil
+                factoryBuilder.addPropertyValue("fileSystem", SpringUtil
                         .parseSpringChildElement(childElm, parserContext,
                                 builder));
             } else if ("commands".equals(childName)) {
                 Object commandFactory = parserContext.getDelegate()
                         .parseCustomElement(childElm,
                                 builder.getBeanDefinition());
-                builder.addPropertyValue("commandFactory", commandFactory);
+                factoryBuilder.addPropertyValue("commandFactory", commandFactory);
             } else if ("messages".equals(childName)) {
                 MessageResource mr = parseMessageResource(childElm,
                         parserContext, builder);
-                builder.addPropertyValue("messageResource", mr);
+                factoryBuilder.addPropertyValue("messageResource", mr);
 
             } else {
                 throw new FtpServerConfigurationException(
@@ -129,7 +137,19 @@ public class ServerBeanDefinitionParser extends
                     "login-failure-delay"));
         }
 
-        builder.addPropertyValue("connectionConfig", connectionConfig);
+        factoryBuilder.addPropertyValue("connectionConfig", connectionConfig);
+
+       
+        BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();
+
+        String factoryName = parserContext.getReaderContext().generateBeanName(factoryDefinition);
+        
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryDefinition, factoryName);
+        registerBeanDefinition(factoryHolder, parserContext.getRegistry());
+
+        // set the factory on the listener bean
+        builder.getRawBeanDefinition().setFactoryBeanName(factoryName);
+        builder.getRawBeanDefinition().setFactoryMethodName("createServer");
 
     }
 

@@ -19,7 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 
@@ -42,8 +43,8 @@ public class ConnectPickPortTest extends ClientTestTemplate {
     }
 
     @Override
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
         
         ListenerFactory factory = new ListenerFactory();
         factory.setPort(0);

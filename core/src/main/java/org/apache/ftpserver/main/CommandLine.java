@@ -20,6 +20,8 @@
 package org.apache.ftpserver.main;
 
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
@@ -111,16 +113,16 @@ public class CommandLine {
         FtpServer server = null;
         if (args.length == 0) {
             System.out.println("Using default configuration");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if ((args.length == 1) && args[0].equals("-default")) {
             // supported for backwards compatibility, but not documented
             System.out
                     .println("The -default switch is deprecated, please use --default instead");
             System.out.println("Using default configuration");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if ((args.length == 1) && args[0].equals("--default")) {
             System.out.println("Using default configuration");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if ((args.length == 1) && args[0].equals("--help")) {
             usage();
         } else if ((args.length == 1) && args[0].equals("-?")) {
@@ -132,16 +134,16 @@ public class CommandLine {
                     args[0]);
 
             if (ctx.containsBean("server")) {
-                server = (FtpServer) ctx.getBean("server");
+                server = (DefaultFtpServer) ctx.getBean("server");
             } else {
-                String[] beanNames = ctx.getBeanNamesForType(FtpServer.class);
+                String[] beanNames = ctx.getBeanNamesForType(DefaultFtpServer.class);
                 if (beanNames.length == 1) {
-                    server = (FtpServer) ctx.getBean(beanNames[0]);
+                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
                 } else if (beanNames.length > 1) {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (FtpServer) ctx.getBean(beanNames[0]);
+                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");

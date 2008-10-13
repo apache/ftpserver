@@ -20,8 +20,7 @@
 package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.DefaultConnectionConfig;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 
 /**
 *
@@ -36,13 +35,10 @@ public class LoginNoAnonTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-
-        DefaultConnectionConfig cc = (DefaultConnectionConfig) context
+        DefaultConnectionConfig cc = (DefaultConnectionConfig) server
                 .getConnectionConfig();
         cc.setAnonymousLoginEnabled(false);
 

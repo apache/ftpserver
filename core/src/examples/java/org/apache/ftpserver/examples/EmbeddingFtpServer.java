@@ -22,6 +22,7 @@ package org.apache.ftpserver.examples;
 import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
@@ -29,7 +30,7 @@ import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 public class EmbeddingFtpServer {
 
     public static void main(String[] args) throws Exception {
-        FtpServer server = new FtpServer();
+        FtpServerFactory serverFactory = new FtpServerFactory();
         
         ListenerFactory factory = new ListenerFactory();
         
@@ -46,14 +47,16 @@ public class EmbeddingFtpServer {
         factory.setImplicitSsl(true);
 
         // replace the default listener
-        server.addListener("default", factory.createListener());
+        serverFactory.addListener("default", factory.createListener());
         
         PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         userManagerFactory.setFile(new File("myusers.properties"));
         
-        server.setUserManager(userManagerFactory.createUserManager());
+        serverFactory.setUserManager(userManagerFactory.createUserManager());
         
         // start the server
+        FtpServer server = serverFactory.createServer(); 
+        
         server.start();
     }
 }

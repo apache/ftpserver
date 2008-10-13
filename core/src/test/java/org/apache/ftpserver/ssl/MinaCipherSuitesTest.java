@@ -22,8 +22,9 @@ package org.apache.ftpserver.ssl;
 import javax.net.ssl.SSLHandshakeException;
 
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServerContext;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 
@@ -52,18 +53,6 @@ public class MinaCipherSuitesTest extends SSLTestTemplate {
         return sslConfigFactory;
     }
     
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-        NioListener listener = (NioListener) context.getListener("default");
-
-        DefaultSslConfiguration sslConfig = (DefaultSslConfiguration) listener
-                .getSslConfiguration();
-
-        return server;
-    }
-
     protected FTPSClient createFTPClient() throws Exception {
         return new FTPSClient(true);
     }

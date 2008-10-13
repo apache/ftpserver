@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 
 /**
@@ -29,11 +29,11 @@ import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 *
 */
 public class CdCaseInsensitiveTest extends CdTest {
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
         NativeFileSystemFactory fs = (NativeFileSystemFactory) server
-                .getServerContext().getFileSystemManager();
+                .getFileSystem();
         fs.setCaseInsensitive(true);
 
         return server;

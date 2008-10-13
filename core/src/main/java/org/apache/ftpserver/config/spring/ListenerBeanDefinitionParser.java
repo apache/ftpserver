@@ -34,6 +34,7 @@ import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.mina.filter.firewall.Subnet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -152,11 +153,11 @@ public class ListenerBeanDefinitionParser extends
             factoryBuilder.addPropertyValue("blockedSubnets", subnets);
         }
         
-        String listenerName = element.getAttribute("name");
-        // TODO Investigate how to make unique
-        String listenerFactoryName = listenerName + "-factory";
+        BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();
+
+        String listenerFactoryName = parserContext.getReaderContext().generateBeanName(factoryDefinition);
         
-        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryBuilder.getBeanDefinition(), listenerFactoryName);
+        BeanDefinitionHolder factoryHolder = new BeanDefinitionHolder(factoryDefinition, listenerFactoryName);
         registerBeanDefinition(factoryHolder, parserContext.getRegistry());
 
         // set the factory on the listener bean

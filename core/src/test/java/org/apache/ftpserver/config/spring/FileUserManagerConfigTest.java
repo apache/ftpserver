@@ -21,7 +21,7 @@ package org.apache.ftpserver.config.spring;
 
 import java.io.File;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
@@ -36,7 +36,7 @@ import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
 public class FileUserManagerConfigTest extends SpringConfigTestTemplate {
 
     private PropertiesUserManager createPropertiesUserManager(String config) {
-        FtpServer server = createServer(config);
+        DefaultFtpServer server = createServer(config);
 
         return (PropertiesUserManager) server.getUserManager();
     }

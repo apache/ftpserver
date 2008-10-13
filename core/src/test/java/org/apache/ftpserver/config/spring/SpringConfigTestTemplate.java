@@ -21,7 +21,7 @@ package org.apache.ftpserver.config.spring;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -33,7 +33,7 @@ import org.springframework.core.io.ByteArrayResource;
 */
 public abstract class SpringConfigTestTemplate extends TestCase {
 
-    protected FtpServer createServer(String config) {
+    protected DefaultFtpServer createServer(String config) {
         String completeConfig = "<server id=\"server\" xmlns=\"http://mina.apache.org/ftpserver/spring/v1\" "
             + "xmlns:beans=\"http://www.springframework.org/schema/beans\" " 
             + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
@@ -47,7 +47,7 @@ public abstract class SpringConfigTestTemplate extends TestCase {
         XmlBeanFactory factory = new XmlBeanFactory(
                 new ByteArrayResource(completeConfig.getBytes()));
         
-        return (FtpServer) factory.getBean("server");
+        return (DefaultFtpServer) factory.getBean("server");
 
     }
 }

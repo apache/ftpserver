@@ -19,7 +19,7 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.message.MessageResourceFactory;
 
 /**
@@ -35,8 +35,8 @@ public class LangTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
         MessageResourceFactory factory = new MessageResourceFactory();
         factory.setLanguages(new String[] { "en", "zh-tw" });

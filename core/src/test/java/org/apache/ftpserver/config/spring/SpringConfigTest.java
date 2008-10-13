@@ -25,11 +25,11 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.command.impl.HELP;
 import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
@@ -48,7 +48,7 @@ public class SpringConfigTest extends TestCase {
         XmlBeanFactory factory = new XmlBeanFactory(new FileSystemResource(
                 "src/test/resources/spring-config/config-spring-1.xml"));
 
-        FtpServer server = (FtpServer) factory.getBean("server");
+        DefaultFtpServer server = (DefaultFtpServer) factory.getBean("server");
 
         assertEquals(500, server.getConnectionConfig().getMaxLogins());
         assertEquals(false, server.getConnectionConfig()

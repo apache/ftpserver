@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.mina.filter.firewall.Subnet;
 
@@ -35,8 +35,8 @@ import org.apache.mina.filter.firewall.Subnet;
 *
 */
 public class SubnetBlacklistTest extends ClientTestTemplate {
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
         ListenerFactory factory = new ListenerFactory(server.getListener("default"));
 

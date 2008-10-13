@@ -30,9 +30,10 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
+import org.apache.ftpserver.impl.DefaultFtpServerContext;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
@@ -64,13 +65,11 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return sslConfigFactory;
     }
     
-    protected FtpServer createServer() throws Exception {
+    protected FtpServerFactory createServer() throws Exception {
         assertTrue(FTPSERVER_KEYSTORE.exists());
 
-        FtpServer server = super.createServer();
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-        ListenerFactory factory = new ListenerFactory(context.getListener("default"));
+        FtpServerFactory server = super.createServer();
+        ListenerFactory factory = new ListenerFactory(server.getListener("default"));
         
         factory.setImplicitSsl(useImplicit());
 

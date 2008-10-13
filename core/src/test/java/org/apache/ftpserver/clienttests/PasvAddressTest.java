@@ -23,7 +23,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
 
@@ -37,11 +37,11 @@ public class PasvAddressTest extends ClientTestTemplate {
 
     private InetAddress passiveAddress;
 
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
         DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server
-                .getServerContext().getListener("default")
+                .getListener("default")
                 .getDataConnectionConfiguration();
 
         passiveAddress = TestUtil.findNonLocalhostIp();

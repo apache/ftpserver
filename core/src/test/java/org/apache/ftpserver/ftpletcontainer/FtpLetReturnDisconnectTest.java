@@ -28,13 +28,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletResult;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
@@ -71,8 +72,8 @@ public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
         connectClient();
     }
 
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
         Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
         ftplets.put("f1", new MockFtplet());

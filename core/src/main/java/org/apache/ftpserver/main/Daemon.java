@@ -20,7 +20,9 @@
 package org.apache.ftpserver.main;
 
 import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -84,16 +86,16 @@ public class Daemon {
         FtpServer server = null;
         if (args == null || args.length < 2) {
             LOG.info("Using default configuration....");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if ((args.length == 2) && args[1].equals("-default")) {
             // supported for backwards compatibility, but not documented
             System.out
                     .println("The -default switch is deprecated, please use --default instead");
             LOG.info("Using default configuration....");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if ((args.length == 2) && args[1].equals("--default")) {
             LOG.info("Using default configuration....");
-            server = new FtpServer();
+            server = new FtpServerFactory().createServer();
         } else if (args.length == 2) {
             LOG.info("Using xml configuration file " + args[1] + "...");
             FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext(
@@ -109,7 +111,7 @@ public class Daemon {
                     System.out
                             .println("Using the first server defined in the configuration, named "
                                     + beanNames[0]);
-                    server = (FtpServer) ctx.getBean(beanNames[0]);
+                    server = (DefaultFtpServer) ctx.getBean(beanNames[0]);
                 } else {
                     System.err
                             .println("XML configuration does not contain a server configuration");

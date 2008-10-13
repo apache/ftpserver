@@ -28,8 +28,8 @@ import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
@@ -63,7 +63,7 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected static final String TESTUSER_PASSWORD = "password";
 
-    protected FtpServer server;
+    protected DefaultFtpServer server;
 
     protected int port = -1;
 
@@ -76,25 +76,25 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected static final File ROOT_DIR = new File(TEST_TMP_DIR, "ftproot");
 
-    protected FtpServer createServer() throws Exception {
+    protected FtpServerFactory createServer() throws Exception {
         assertTrue(USERS_FILE.getAbsolutePath() + " must exist", USERS_FILE
                 .exists());
 
-        DefaultFtpServerContext context = new DefaultFtpServerContext();
+        FtpServerFactory serverFactory = new FtpServerFactory();
 
         ListenerFactory factory = new ListenerFactory();
         
         factory.setPort(port);
-        context.setListener("default", factory.createListener());
+        serverFactory.addListener("default", factory.createListener());
 
         PropertiesUserManagerFactory umFactory = new PropertiesUserManagerFactory();
         umFactory.setAdminName("admin");
         umFactory.setPasswordEncryptor(new ClearTextPasswordEncryptor());
         umFactory.setFile(USERS_FILE);
 
-        context.setUserManager(umFactory.createUserManager());
+        serverFactory.setUserManager(umFactory.createUserManager());
 
-        return new FtpServer(context);
+        return serverFactory;
     }
 
     /*
@@ -127,7 +127,8 @@ public abstract class ClientTestTemplate extends TestCase {
     protected void initServer() throws IOException, Exception {
         initPort();
 
-        server = createServer();
+        // cast to internal class to get access to getters
+        server = (DefaultFtpServer) createServer().createServer();
 
         if (isStartServer()) {
             server.start();

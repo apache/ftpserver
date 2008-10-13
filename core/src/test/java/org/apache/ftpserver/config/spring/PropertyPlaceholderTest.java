@@ -21,7 +21,7 @@ package org.apache.ftpserver.config.spring;
 
 import junit.framework.TestCase;
 
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
@@ -38,7 +38,7 @@ public class PropertyPlaceholderTest extends TestCase {
         FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext(
                 "src/test/resources/spring-config/config-property-placeholder.xml");
 
-        FtpServer server = (FtpServer) ctx.getBean("server");
+        DefaultFtpServer server = (DefaultFtpServer) ctx.getBean("server");
 
         assertEquals(2222, server.getListener("listener0").getPort());
         assertEquals(3333, server.getListener("listener1").getPort());

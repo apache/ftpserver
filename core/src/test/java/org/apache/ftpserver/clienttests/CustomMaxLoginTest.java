@@ -23,8 +23,9 @@ import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DefaultConnectionConfig;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.DefaultFtpServerContext;
+import org.apache.ftpserver.impl.DefaultFtpServer;
 
 /**
 *
@@ -37,12 +38,10 @@ public class CustomMaxLoginTest extends ClientTestTemplate {
 
     private static final String UNKNOWN_PASSWORD = "bar";
 
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-        DefaultConnectionConfig cc = (DefaultConnectionConfig) context
+        DefaultConnectionConfig cc = (DefaultConnectionConfig) server
                 .getConnectionConfig();
 
         cc.setMaxLoginFailures(2);

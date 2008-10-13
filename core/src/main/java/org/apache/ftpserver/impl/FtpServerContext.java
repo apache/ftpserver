@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver;
+package org.apache.ftpserver.impl;
 
 import java.util.Map;
 
+import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FtpletContext;
 import org.apache.ftpserver.ftpletcontainer.FtpletContainer;

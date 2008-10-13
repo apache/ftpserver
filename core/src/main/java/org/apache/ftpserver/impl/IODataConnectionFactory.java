@@ -34,7 +34,6 @@ import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionException;
-import org.apache.ftpserver.FtpServerContext;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ssl.ClientAuth;

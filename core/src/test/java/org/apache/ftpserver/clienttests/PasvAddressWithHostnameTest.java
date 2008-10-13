@@ -22,8 +22,7 @@ package org.apache.ftpserver.clienttests;
 import java.net.InetAddress;
 
 import org.apache.ftpserver.DefaultDataConnectionConfiguration;
-import org.apache.ftpserver.DefaultFtpServerContext;
-import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
 
 /**
  * Test for external passive address configured as hostname rather than IP
@@ -35,13 +34,10 @@ import org.apache.ftpserver.FtpServer;
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {
 
-    protected FtpServer createServer() throws Exception {
-        FtpServer server = super.createServer();
+    protected FtpServerFactory createServer() throws Exception {
+        FtpServerFactory server = super.createServer();
 
-        DefaultFtpServerContext context = (DefaultFtpServerContext) server
-                .getServerContext();
-
-        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) context
+        DefaultDataConnectionConfiguration ddcc = (DefaultDataConnectionConfiguration) server
                 .getListener("default").getDataConnectionConfiguration();
         ddcc.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
 
