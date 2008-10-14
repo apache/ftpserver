@@ -17,10 +17,12 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
+import junit.framework.TestCase;
 
+import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
 
 /**
 *
@@ -28,21 +30,21 @@ import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
 * @version $Rev$, $Date$
 *
 */
-public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
+public class WritePermissionTest extends TestCase {
 
-    @Override
-    protected PasswordEncryptor createPasswordEncryptor() {
-        return new Md5PasswordEncryptor();
+    public void testRootDir() throws Exception {
+        WritePermission permission = new WritePermission("/");
+
+        assertNotNull(permission.authorize(new WriteRequest("/")));
     }
 
-    public void testMatches() {
-        PasswordEncryptor encryptor = createPasswordEncryptor();
-        
-        assertTrue(encryptor.matches("foo", "ACBD18DB4CC2F85CEDEF654FCCC4A4D8"));
-        
-        // check lower case
-        assertTrue(encryptor.matches("foo", "acbd18DB4CC2F85CEDEF654FCCC4A4D8"));
-        
-        assertFalse(encryptor.matches("foo", "bar"));
+    public void testDirs() throws Exception {
+        WritePermission permission = new WritePermission("/bar");
+
+        assertNull(permission.authorize(new WriteRequest("/foo")));
+        assertNull(permission.authorize(new WriteRequest("/foo/bar")));
+        assertNotNull(permission.authorize(new WriteRequest("/bar")));
+        assertNotNull(permission.authorize(new WriteRequest("/bar/foo")));
     }
+
 }

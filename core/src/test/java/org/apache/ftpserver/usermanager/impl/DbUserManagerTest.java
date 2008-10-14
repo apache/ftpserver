@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,6 +26,8 @@ import java.sql.Statement;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.usermanager.DbUserManagerFactory;
+import org.apache.ftpserver.usermanager.UserManagerFactory;
 import org.apache.ftpserver.util.IoUtils;
 import org.hsqldb.jdbc.jdbcDataSource;
 

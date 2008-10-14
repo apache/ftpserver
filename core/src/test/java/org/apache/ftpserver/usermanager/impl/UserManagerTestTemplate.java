@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,8 @@ import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.UserManagerFactory;
+import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;

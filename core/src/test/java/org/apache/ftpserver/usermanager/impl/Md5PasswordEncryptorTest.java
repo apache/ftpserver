@@ -17,11 +17,11 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import junit.framework.TestCase;
+import org.apache.ftpserver.usermanager.PasswordEncryptor;
+import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
 
-import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 
 /**
 *
@@ -29,40 +29,21 @@ import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 * @version $Rev$, $Date$
 *
 */
-public class ClearTextPasswordEncryptorTest extends TestCase {
+public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
 
+    @Override
     protected PasswordEncryptor createPasswordEncryptor() {
-        return new ClearTextPasswordEncryptor();
+        return new Md5PasswordEncryptor();
     }
-    
+
     public void testMatches() {
         PasswordEncryptor encryptor = createPasswordEncryptor();
-
-        assertTrue(encryptor.matches("foo", "foo"));
+        
+        assertTrue(encryptor.matches("foo", "ACBD18DB4CC2F85CEDEF654FCCC4A4D8"));
+        
+        // check lower case
+        assertTrue(encryptor.matches("foo", "acbd18DB4CC2F85CEDEF654FCCC4A4D8"));
         
         assertFalse(encryptor.matches("foo", "bar"));
     }
-    
-    public void testMatchesNullPasswordToCheck() {
-        PasswordEncryptor encryptor = createPasswordEncryptor();
-        
-        try {
-            encryptor.matches(null, "bar");
-            fail("Must throw NullPointerException");
-        } catch (NullPointerException e) {
-            // OK
-        }
-    }
-    
-    public void testMatchesNullStoredPassword() {
-        PasswordEncryptor encryptor = createPasswordEncryptor();
-        
-        try {
-            encryptor.matches("foo", null);
-            fail("Must throw NullPointerException");
-        } catch (NullPointerException e) {
-            // OK
-        }
-    }
-
 }

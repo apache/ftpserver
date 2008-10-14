@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import junit.framework.TestCase;
 

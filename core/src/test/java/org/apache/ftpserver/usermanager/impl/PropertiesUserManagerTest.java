@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.UserManagerFactory;
 import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -70,14 +72,8 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         um.setPasswordEncryptor(new ClearTextPasswordEncryptor());
 
         return um;
-
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
     protected void setUp() throws Exception {
 
         TEST_DIR.mkdirs();

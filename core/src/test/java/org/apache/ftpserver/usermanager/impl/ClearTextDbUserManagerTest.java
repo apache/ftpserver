@@ -17,12 +17,15 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager;
+package org.apache.ftpserver.usermanager.impl;
 
-import junit.framework.TestCase;
+import java.io.File;
 
-import org.apache.ftpserver.usermanager.impl.WritePermission;
-import org.apache.ftpserver.usermanager.impl.WriteRequest;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.test.TestUtil;
+import org.apache.ftpserver.usermanager.DbUserManagerFactory;
+import org.apache.ftpserver.usermanager.UserManagerFactory;
+import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 
 /**
 *
@@ -30,21 +33,18 @@ import org.apache.ftpserver.usermanager.impl.WriteRequest;
 * @version $Rev$, $Date$
 *
 */
-public class WritePermissionTest extends TestCase {
+public class ClearTextDbUserManagerTest extends DbUserManagerTest {
 
-    public void testRootDir() throws Exception {
-        WritePermission permission = new WritePermission("/");
-
-        assertNotNull(permission.authorize(new WriteRequest("/")));
+    protected File getInitSqlScript() {
+        return new File(TestUtil.getBaseDir(),
+            "src/test/resources/dbusermanagertest-cleartext-hsql.sql");  
     }
 
-    public void testDirs() throws Exception {
-        WritePermission permission = new WritePermission("/bar");
 
-        assertNull(permission.authorize(new WriteRequest("/foo")));
-        assertNull(permission.authorize(new WriteRequest("/foo/bar")));
-        assertNotNull(permission.authorize(new WriteRequest("/bar")));
-        assertNotNull(permission.authorize(new WriteRequest("/bar/foo")));
+    protected UserManagerFactory createUserManagerFactory() throws FtpException {
+        DbUserManagerFactory manager = (DbUserManagerFactory) super.createUserManagerFactory();
+        manager.setPasswordEncryptor(new ClearTextPasswordEncryptor());
+        return manager;
+
     }
-
 }
