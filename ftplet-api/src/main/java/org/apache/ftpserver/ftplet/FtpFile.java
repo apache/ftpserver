@@ -68,17 +68,17 @@ public interface FtpFile {
     /**
      * Has read permission?
      */
-    boolean hasReadPermission();
+    boolean isReadable();
 
     /**
      * Has write permission?
      */
-    boolean hasWritePermission();
+    boolean isWritable();
 
     /**
      * Has delete permission?
      */
-    boolean hasDeletePermission();
+    boolean isRemovable();
 
     /**
      * Get the owner name.

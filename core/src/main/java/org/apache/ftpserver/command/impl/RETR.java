@@ -116,7 +116,7 @@ public class RETR extends AbstractCommand {
             }
 
             // check permission
-            if (!file.hasReadPermission()) {
+            if (!file.isReadable()) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                         "RETR.permission", fileName));

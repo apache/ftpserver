@@ -164,14 +164,14 @@ public class NativeFileObjectTest extends FtpFileTestTemplate {
     	NativeFtpFile fileObj=(NativeFtpFile)createFileObject(FILE2_PATH, USER);
     	File physicalFile=fileObj.getPhysicalFile();
     	// First check
-    	assertTrue(fileObj.hasDeletePermission());
+    	assertTrue(fileObj.isRemovable());
     	
     	// Now file is read only.
     	if (!physicalFile.setReadOnly() ){
     		fail("Test cannot be setup properly");   		
     	}
     
-    	assertTrue(fileObj.hasDeletePermission());
+    	assertTrue(fileObj.isRemovable());
     	//can we actually delete this file?
     	assertTrue(physicalFile.delete());
     }

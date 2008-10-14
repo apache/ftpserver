@@ -86,15 +86,15 @@ public class NLSTFileFormaterTest extends TestCase {
             return 13;
         }
 
-        public boolean hasDeletePermission() {
+        public boolean isRemovable() {
             return false;
         }
 
-        public boolean hasReadPermission() {
+        public boolean isReadable() {
             return true;
         }
 
-        public boolean hasWritePermission() {
+        public boolean isWritable() {
             return false;
         }
 

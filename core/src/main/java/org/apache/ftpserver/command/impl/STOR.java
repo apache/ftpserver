@@ -113,7 +113,7 @@ public class STOR extends AbstractCommand {
             fileName = file.getAbsolutePath();
 
             // get permission
-            if (!file.hasWritePermission()) {
+            if (!file.isWritable()) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                         "STOR.permission", fileName));

@@ -117,7 +117,7 @@ public class STOU extends AbstractCommand {
             String fileName = file.getAbsolutePath();
 
             // check permission
-            if (!file.hasWritePermission()) {
+            if (!file.isWritable()) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                         "STOU.permission", fileName));

@@ -71,7 +71,7 @@ public class MLSTFileFormater implements FileFormater {
                 }
             } else if (type.equalsIgnoreCase("perm")) {
                 sb.append("Perm=");
-                if (file.hasReadPermission()) {
+                if (file.isReadable()) {
                     if (file.isFile()) {
                         sb.append('r');
                     } else if (file.isDirectory()) {
@@ -79,7 +79,7 @@ public class MLSTFileFormater implements FileFormater {
                         sb.append('l');
                     }
                 }
-                if (file.hasWritePermission()) {
+                if (file.isWritable()) {
                     if (file.isFile()) {
                         sb.append('a');
                         sb.append('d');

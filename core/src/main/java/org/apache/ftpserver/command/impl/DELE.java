@@ -83,7 +83,7 @@ public class DELE extends AbstractCommand {
         // check file
         fileName = file.getAbsolutePath();
 
-        if (!file.hasDeletePermission()) {
+        if (!file.isRemovable()) {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
                     "DELE.permission", fileName));

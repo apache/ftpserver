@@ -98,7 +98,7 @@ public class RNTO extends AbstractCommand {
             toFileStr = toFile.getAbsolutePath();
 
             // check permission
-            if (!toFile.hasWritePermission()) {
+            if (!toFile.isWritable()) {
                 session
                         .write(LocalizedFtpReply
                                 .translate(

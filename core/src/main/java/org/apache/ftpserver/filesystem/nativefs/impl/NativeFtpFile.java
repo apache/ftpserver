@@ -187,14 +187,14 @@ public class NativeFtpFile implements FtpFile {
     /**
      * Check read permission.
      */
-    public boolean hasReadPermission() {
+    public boolean isReadable() {
         return file.canRead();
     }
 
     /**
      * Check file write permission.
      */
-    public boolean hasWritePermission() {
+    public boolean isWritable() {
         LOG.debug("Checking authorization for " + getAbsolutePath());
         if (user.authorize(new WriteRequest(getAbsolutePath())) == null) {
             LOG.debug("Not authorized");
@@ -214,7 +214,7 @@ public class NativeFtpFile implements FtpFile {
     /**
      * Has delete permission.
      */
-    public boolean hasDeletePermission() {
+    public boolean isRemovable() {
 
 
         // root cannot be deleted
@@ -244,7 +244,7 @@ public class NativeFtpFile implements FtpFile {
         
         // we check if the parent FileObject is writable.
         NativeFtpFile parentObject=new NativeFtpFile(parentFullName,file.getAbsoluteFile().getParentFile(),user);
-        return parentObject.hasWritePermission(); 
+        return parentObject.isWritable(); 
     }
 
     /**
@@ -252,7 +252,7 @@ public class NativeFtpFile implements FtpFile {
      */
     public boolean delete() {
         boolean retVal = false;
-        if (hasDeletePermission()) {
+        if (isRemovable()) {
             retVal = file.delete();
         }
         return retVal;
@@ -263,7 +263,7 @@ public class NativeFtpFile implements FtpFile {
      */
     public boolean move(final FtpFile dest) {
         boolean retVal = false;
-        if (dest.hasWritePermission() && hasReadPermission()) {
+        if (dest.isWritable() && isReadable()) {
             File destFile = ((NativeFtpFile) dest).file;
 
             if (destFile.exists()) {
@@ -283,7 +283,7 @@ public class NativeFtpFile implements FtpFile {
      */
     public boolean mkdir() {
         boolean retVal = false;
-        if (hasWritePermission()) {
+        if (isWritable()) {
             retVal = file.mkdirs();
         }
         return retVal;
@@ -343,7 +343,7 @@ public class NativeFtpFile implements FtpFile {
             throws IOException {
 
         // permission check
-        if (!hasWritePermission()) {
+        if (!isWritable()) {
             throw new IOException("No write permission : " + file.getName());
         }
 
@@ -368,7 +368,7 @@ public class NativeFtpFile implements FtpFile {
     public InputStream createInputStream(final long offset) throws IOException {
 
         // permission check
-        if (!hasReadPermission()) {
+        if (!isReadable()) {
             throw new IOException("No read permission : " + file.getName());
         }
 
