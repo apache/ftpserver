@@ -377,6 +377,9 @@
                 </goals>
                 <configuration>
                   <source>${maven.compile.source}</source>
+		  <excludePackageNames>
+		    *.impl:org.apache.ftpserver.config.spring:org.apache.ftpserver.command.impl.listing:org.apache.ftpserver.listener.nio:org.apache.ftpserver.util
+		  </excludePackageNames>
                 </configuration>
               </execution>
             </executions>
