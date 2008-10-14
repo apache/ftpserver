@@ -65,28 +65,28 @@
 					<instructions>
 						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
-						<Export-Package>
-						  org.apache.ftpserver,
-						  org.apache.ftpserver.command,
-						  org.apache.ftpserver.filesystem.nativefs,
-						  org.apache.ftpserver.ftpletcontainer,
-						  org.apache.ftpserver.listener,
-						  org.apache.ftpserver.main,
-						  org.apache.ftpserver.message,
-						  org.apache.ftpserver.ssl
+						<Export-Package> org.apache.ftpserver,
+							org.apache.ftpserver.command,
+							org.apache.ftpserver.filesystem.nativefs,
+							org.apache.ftpserver.ftpletcontainer,
+							org.apache.ftpserver.listener, org.apache.ftpserver.main,
+							org.apache.ftpserver.message, org.apache.ftpserver.ssl
 						</Export-Package>
-						<Private-Package>
-						  org.apache.ftpserver.command.impl,
-						  org.apache.ftpserver.config.spring,
-						  org.apache.ftpserver.filesystem.nativefs.impl,
-						  org.apache.ftpserver.ftpletcontainer.impl,
-						  org.apache.ftpserver.impl,
-						  org.apache.ftpserver.listener.nio,
-						  org.apache.ftpserver.message.impl,
-						  org.apache.ftpserver.ssl.impl,
-						  org.apache.ftpserver.util,
-						  *
-						</Private-Package>
+						<Private-Package> org.apache.ftpserver.command.impl,
+							org.apache.ftpserver.config.spring,
+							org.apache.ftpserver.filesystem.nativefs.impl,
+							org.apache.ftpserver.ftpletcontainer.impl,
+							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
+							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
+							org.apache.ftpserver.util</Private-Package>
+						<Import-Package>
+							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
+							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
+							org.springframework.beans.factory.xml;resolution:=optional;version="2.5",
+							org.springframework.context.support;resolution:=optional;version="2.5",
+							org.springframework.util;resolution:=optional;version="2.5",
+							org.springframework.util.xml;resolution:=optional;version="2.5",
+							*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
