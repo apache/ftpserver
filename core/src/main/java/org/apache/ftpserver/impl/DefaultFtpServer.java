@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ftpserver.ConnectionConfig;
@@ -26,6 +28,7 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
+import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.listener.Listener;
@@ -60,28 +63,45 @@ public class DefaultFtpServer implements FtpServer {
 
     /**
      * Start the server. Open a new listener thread.
+     * @throws FtpException 
      */
-    public void start() throws Exception {
+    public void start() throws FtpException {
 
-        Map<String, Listener> listeners = serverContext.getListeners();
-        for (Listener listener : listeners.values()) {
-            listener.start(serverContext);
-        }
-
-        // init the Ftplet container
-        serverContext.getFtpletContainer().init(serverContext);
+        List<Listener> startedListeners = new ArrayList<Listener>();
         
-        started = true;
+        try {
+            Map<String, Listener> listeners = serverContext.getListeners();
+            for (Listener listener : listeners.values()) {
+                listener.start(serverContext);
+                startedListeners.add(listener);
+            }
+    
+            // init the Ftplet container
+            serverContext.getFtpletContainer().init(serverContext);
+        
+            started = true;
 
-        LOG.info("FTP server started");
-
+            LOG.info("FTP server started");
+        } catch(Exception e) {
+            // must close listeners that we were able to start
+            for(Listener listener : startedListeners) {
+                listener.stop();
+            }
+            
+            if(e instanceof FtpException) {
+                throw (FtpException)e;
+            } else {
+                throw (RuntimeException)e;
+            }
+            
+        }
     }
 
     /**
      * Stop the server. Stop the listener thread.
      */
     public void stop() {
-        if (!started || serverContext == null) {
+        if (serverContext == null) {
             // we have already been stopped, ignore
             return;
         }

@@ -22,6 +22,7 @@ package org.apache.ftpserver.listener.nio;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.impl.DefaultFtpHandler;
 import org.apache.ftpserver.impl.FtpHandler;
 import org.apache.ftpserver.impl.FtpIoSession;
@@ -112,65 +114,82 @@ public class NioListener extends AbstractListener {
     /**
      * @see Listener#start(FtpServerContext)
      */
-    public synchronized void start(FtpServerContext context) throws Exception {
-        this.context = context;
-
-        acceptor = new NioSocketAcceptor(Runtime.getRuntime()
-                .availableProcessors());
-
-        if (getServerAddress() != null) {
-            address = new InetSocketAddress(getServerAddress(), getPort());
-        } else {
-            address = new InetSocketAddress(getPort());
-        }
-
-        acceptor.setReuseAddress(true);
-        acceptor.getSessionConfig().setReadBufferSize(2048);
-        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
-                getIdleTimeout());
-        // Decrease the default receiver buffer size
-        ((SocketSessionConfig) acceptor.getSessionConfig())
-                .setReceiveBufferSize(512);
-
-        MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
-
-        acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
-
-        // add and update the blacklist filter
-        acceptor.getFilterChain().addLast("ipFilter", new BlacklistFilter());
-        updateBlacklistFilter();
-
-        acceptor.getFilterChain().addLast("threadPool",
-                new ExecutorFilter(filterExecutor));
-        acceptor.getFilterChain().addLast("codec",
-                new ProtocolCodecFilter(new FtpServerProtocolCodecFactory()));
-        acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
-        acceptor.getFilterChain().addLast("logger", new FtpLoggingFilter());
-
-        if (isImplicitSsl()) {
-            SslConfiguration ssl = getSslConfiguration();
-            SslFilter sslFilter = new SslFilter(ssl.getSSLContext());
-
-            if (ssl.getClientAuth() == ClientAuth.NEED) {
-                sslFilter.setNeedClientAuth(true);
-            } else if (ssl.getClientAuth() == ClientAuth.WANT) {
-                sslFilter.setWantClientAuth(true);
+    public synchronized void start(FtpServerContext context) {
+        try {
+            
+            this.context = context;
+    
+            acceptor = new NioSocketAcceptor(Runtime.getRuntime()
+                    .availableProcessors());
+    
+            if (getServerAddress() != null) {
+                address = new InetSocketAddress(getServerAddress(), getPort());
+            } else {
+                address = new InetSocketAddress(getPort());
             }
-
-            if (ssl.getEnabledCipherSuites() != null) {
-                sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+    
+            acceptor.setReuseAddress(true);
+            acceptor.getSessionConfig().setReadBufferSize(2048);
+            acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
+                    getIdleTimeout());
+            // Decrease the default receiver buffer size
+            ((SocketSessionConfig) acceptor.getSessionConfig())
+                    .setReceiveBufferSize(512);
+    
+            MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
+    
+            acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
+    
+            // add and update the blacklist filter
+            acceptor.getFilterChain().addLast("ipFilter", new BlacklistFilter());
+            updateBlacklistFilter();
+    
+            acceptor.getFilterChain().addLast("threadPool",
+                    new ExecutorFilter(filterExecutor));
+            acceptor.getFilterChain().addLast("codec",
+                    new ProtocolCodecFilter(new FtpServerProtocolCodecFactory()));
+            acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
+            acceptor.getFilterChain().addLast("logger", new FtpLoggingFilter());
+    
+            if (isImplicitSsl()) {
+                SslConfiguration ssl = getSslConfiguration();
+                SslFilter sslFilter;
+                try {
+                    sslFilter = new SslFilter(ssl.getSSLContext());
+                } catch (GeneralSecurityException e) {
+                    throw new FtpServerConfigurationException("SSL could not be initialized, check configuration");
+                }
+    
+                if (ssl.getClientAuth() == ClientAuth.NEED) {
+                    sslFilter.setNeedClientAuth(true);
+                } else if (ssl.getClientAuth() == ClientAuth.WANT) {
+                    sslFilter.setWantClientAuth(true);
+                }
+    
+                if (ssl.getEnabledCipherSuites() != null) {
+                    sslFilter.setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+                }
+    
+                acceptor.getFilterChain().addFirst("sslFilter", sslFilter);
             }
-
-            acceptor.getFilterChain().addFirst("sslFilter", sslFilter);
+    
+            handler.init(context, this);
+            acceptor.setHandler(new FtpHandlerAdapter(context, handler));
+    
+            try {
+                acceptor.bind(address);
+            } catch (IOException e) {
+                throw new FtpServerConfigurationException("Failed to bind to address " + address + ", check configuration", e);
+            }
+    
+            // update the port to the real port bound by the listener
+            setPort(acceptor.getLocalAddress().getPort());
+        } catch(RuntimeException e) {
+            // clean up if we fail to start
+            stop();
+            
+            throw e;
         }
-
-        handler.init(context, this);
-        acceptor.setHandler(new FtpHandlerAdapter(context, handler));
-
-        acceptor.bind(address);
-
-        // update the port to the real port bound by the listener
-        setPort(acceptor.getLocalAddress().getPort());
     }
 
     /**
@@ -193,6 +212,8 @@ public class NioListener extends AbstractListener {
                 // TODO: how to handle?
             }
         }
+        
+        context = null;
     }
 
     /**
