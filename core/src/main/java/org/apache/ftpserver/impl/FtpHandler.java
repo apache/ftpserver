@@ -37,7 +37,7 @@ import org.apache.mina.core.session.IoSession;
  */
 public interface FtpHandler {
 
-    void init(FtpServerContext context, Listener listener) throws Exception;
+    void init(FtpServerContext context, Listener listener);
 
     /**
      * Invoked from an I/O processor thread when a new connection has been

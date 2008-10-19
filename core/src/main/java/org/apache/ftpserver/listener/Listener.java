@@ -46,7 +46,7 @@ public interface Listener {
      * @throws Exception
      *             On error during start up
      */
-    void start(FtpServerContext serverContext) throws Exception;
+    void start(FtpServerContext serverContext);
 
     /**
      * Stop the listener, it should no longer except socket requests. The method
