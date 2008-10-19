@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver;
 
+import org.apache.ftpserver.ftplet.FtpException;
+
 
 /**
  * This is the starting point of all the servers. It invokes a new listener
@@ -33,7 +35,7 @@ public interface FtpServer {
     /**
      * Start the server. Open a new listener thread.
      */
-    void start() throws Exception;
+    void start() throws FtpException;
     
     /**
      * Stop the server. Stop the listener thread.

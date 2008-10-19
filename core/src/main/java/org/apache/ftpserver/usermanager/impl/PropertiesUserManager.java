@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -60,7 +61,7 @@ public class PropertiesUserManager extends AbstractUserManager {
 
     private BaseProperties userDataProp;
 
-    private File userDataFile = new File("./res/user.gen");
+    private File userDataFile;
 
 
     
@@ -75,15 +76,38 @@ public class PropertiesUserManager extends AbstractUserManager {
         try {
             userDataProp = new BaseProperties();
 
-            if (userDataFile != null && userDataFile.exists()) {
-                FileInputStream fis = null;
-                try {
-                    fis = new FileInputStream(userDataFile);
-                    userDataProp.load(fis);
-                } finally {
-                    IoUtils.close(fis);
+            if (userDataFile != null) {
+                LOG.debug("File configured, will try loading");
+                
+                if(userDataFile.exists()) {
+                    LOG.debug("File found on file system");
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(userDataFile);
+                        userDataProp.load(fis);
+                    } finally {
+                        IoUtils.close(fis);
+                    }
+                } else {
+                    // try loading it from the classpath
+                    LOG.debug("File not found on file system, try loading from classpath");
+                    
+                    InputStream is = getClass().getClassLoader().getResourceAsStream(userDataFile.getPath());
+                    
+                    if(is != null) {
+                        try {
+                            userDataProp.load(is);
+                        } finally {
+                            IoUtils.close(is);
+                        }
+                    } else {
+                        throw new FtpServerConfigurationException(
+                                "User data file specified but could not be located, " +
+                                "neither on the file system or in the classpath: "
+                                        + userDataFile.getPath());                    
+                    }
                 }
-            }
+            } 
         } catch (IOException e) {
             throw new FtpServerConfigurationException(
                     "Error loading user data file : "

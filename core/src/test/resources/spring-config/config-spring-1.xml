@@ -64,7 +64,7 @@
 				
 			</ftplet>
 		</ftplets>
-		<!--<file-user-manager file="/tmp/foo.users" encrypt-passwords="true" />-->
+		<!--<file-user-manager file="src/test/resources/users.properties" encrypt-passwords="true" />-->
 		<user-manager>
 			<beans:bean class="org.apache.ftpserver.config.spring.MockUserManager"/>
 		</user-manager>
@@ -77,6 +77,6 @@
               <beans:bean class="org.apache.ftpserver.command.impl.STAT" />
           </command>
 		</commands>
-		<messages languages="se no ,da" />
+		<messages languages="en zh-tw" />
 	</server>
 

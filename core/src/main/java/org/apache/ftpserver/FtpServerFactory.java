@@ -47,7 +47,7 @@ public class FtpServerFactory {
      * 
      * @throws Exception
      */
-    public FtpServerFactory() throws Exception {
+    public FtpServerFactory() {
         serverContext = new DefaultFtpServerContext();
     }
 

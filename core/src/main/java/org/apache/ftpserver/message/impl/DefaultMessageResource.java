@@ -21,7 +21,10 @@ package org.apache.ftpserver.message.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -105,12 +108,16 @@ public class DefaultMessageResource implements MessageResource {
             in = getClass().getClassLoader().getResourceAsStream(
                     defaultResourceName);
             if (in != null) {
-                pair.defaultProperties.load(in);
+                try {
+                    pair.defaultProperties.load(in);
+                } catch (IOException e) {
+                    throw new FtpServerConfigurationException(
+                            "Failed to load messages from \"" + defaultResourceName + "\", file not found in classpath");
+                }
+            } else {
+                throw new FtpServerConfigurationException(
+                        "Failed to load messages from \"" + defaultResourceName + "\", file not found in classpath");
             }
-        } catch (Exception ex) {
-            LOG.warn("MessageResourceImpl.createPropertiesPair()", ex);
-            throw new FtpServerConfigurationException(
-                    "MessageResourceImpl.createPropertiesPair()", ex);
         } finally {
             IoUtils.close(in);
         }

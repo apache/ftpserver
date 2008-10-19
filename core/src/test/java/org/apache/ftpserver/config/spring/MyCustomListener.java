@@ -85,7 +85,7 @@ public class MyCustomListener implements Listener {
         
     }
 
-    public void start(FtpServerContext serverContext) throws Exception {
+    public void start(FtpServerContext serverContext) {
         
     }
 

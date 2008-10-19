@@ -86,7 +86,7 @@ public class DefaultFtpServerContext implements FtpServerContext {
     }
     
 
-    public DefaultFtpServerContext() throws Exception {
+    public DefaultFtpServerContext() {
         // create the default listener
         listeners.put("default", new ListenerFactory().createListener());
     }

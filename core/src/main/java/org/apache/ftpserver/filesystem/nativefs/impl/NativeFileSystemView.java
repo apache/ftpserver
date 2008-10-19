@@ -26,6 +26,9 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * File system view based on native file system. Here the root directory will be
@@ -35,6 +38,10 @@ import org.apache.ftpserver.ftplet.User;
  * @version $Rev$, $Date$
  */
 public class NativeFileSystemView implements FileSystemView {
+
+    private final Logger LOG = LoggerFactory
+    .getLogger(NativeFileSystemView.class);
+
 
     // the root directory will always end with '/'.
     private String rootDir;
@@ -77,6 +84,9 @@ public class NativeFileSystemView implements FileSystemView {
         if (!rootDir.endsWith("/")) {
             rootDir += '/';
         }
+        
+        LOG.debug("Native filesystem view created for user \"{}\" with root \"{}\"", user.getName(), rootDir);
+        
         this.rootDir = rootDir;
 
         this.user = user;
