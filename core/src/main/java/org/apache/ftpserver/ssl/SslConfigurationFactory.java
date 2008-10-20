@@ -22,6 +22,7 @@ package org.apache.ftpserver.ssl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 
@@ -283,9 +284,20 @@ public class SslConfigurationFactory {
 
     private KeyStore loadStore(File storeFile, String storeType,
             String storePass) throws IOException, GeneralSecurityException {
-        FileInputStream fin = null;
+        InputStream fin = null;
         try {
-            fin = new FileInputStream(storeFile);
+            if(storeFile.exists()) {
+                LOG.debug("Trying to load store from file");
+                fin = new FileInputStream(storeFile);
+            } else {
+                LOG.debug("Trying to load store from classpath");
+                fin = getClass().getClassLoader().getResourceAsStream(storeFile.getPath());
+                
+                if(fin == null) {
+                    throw new FtpServerConfigurationException("Key store could not be loaded from " + storeFile.getPath());
+                }
+            }
+            
             KeyStore store = KeyStore.getInstance(storeType);
             store.load(fin, storePass.toCharArray());
 
