@@ -46,9 +46,69 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Properties file based <code>UserManager</code> implementation. We use
- * <code>user.properties</code> file to store user data.
+ * <p>Properties file based <code>UserManager</code> implementation. We use
+ * <code>user.properties</code> file to store user data.</p>
  *
+ * </p>The file will use the following properties for storing users:</p>
+ * <table>
+ * <tr>
+ *      <th>Property</th>
+ *      <th>Documentation</th>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.homedirectory</td>
+ *      <td>Path to the home directory for the user, based on the file system implementation used</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.userpassword</td>
+ *      <td>The password for the user. Can be in clear text, MD5 hash or salted SHA hash based on the 
+ *              configuration on the user manager
+ *      </td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.enableflag</td>
+ *      <td>true if the user is enabled, false otherwise</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.writepermission</td>
+ *      <td>true if the user is allowed to upload files and create directories, false otherwise</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.idletime</td>
+ *      <td>The number of seconds the user is allowed to be idle before disconnected. 
+ *              0 disables the idle timeout
+ *      </td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.maxloginnumber</td>
+ *      <td>The maximum number of concurrent logins by the user. 0 disables the check.</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.maxloginperip</td>
+ *      <td>The maximum number of concurrent logins from the same IP address by the user. 0 disables the check.</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.uploadrate</td>
+ *      <td>The maximum number of bytes per second the user is allowed to upload files. 0 disables the check.</td>
+ * </tr>
+ * <tr>
+ *      <td>ftpserver.user.{username}.downloadrate</td>
+ *      <td>The maximum number of bytes per second the user is allowed to download files. 0 disables the check.</td>
+ * </tr>
+ * </table>
+ * 
+ * <p>Example:</p>
+ * <pre>
+ * ftpserver.user.admin.homedirectory=/ftproot
+ * ftpserver.user.admin.userpassword=admin
+ * ftpserver.user.admin.enableflag=true
+ * ftpserver.user.admin.writepermission=true
+ * ftpserver.user.admin.idletime=0
+ * ftpserver.user.admin.maxloginnumber=0
+ * ftpserver.user.admin.maxloginperip=0
+ * ftpserver.user.admin.uploadrate=0
+ * ftpserver.user.admin.downloadrate=0
+ * </pre>
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$
  */
