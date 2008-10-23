@@ -82,13 +82,15 @@ public class TestUtil {
             tmpSocket = new ServerSocket(initPort);
 
             port = initPort;
+            
+            System.out.println("Using default port: " + port);
         } catch (IOException e) {
             System.out.println("Failed to use specified port");
             // didn't work, try to find one dynamically
             try {
                 int attempts = 0;
 
-                while (port < 1024 && attempts < 1000) {
+                while (port < 1024 && attempts < 2000) {
                     attempts++;
 
                     tmpSocket = new ServerSocket(0);
