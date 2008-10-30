@@ -42,10 +42,11 @@ public interface Authority {
      * 
      * @param request
      *            The {@link AuthorizationRequest}
-     * @return True if the request is authorized, false otherwise If the request
-     *         can not be authorized (as checked by
-     *         {@link #canAuthorize(AuthorizationRequest)} by this Authority,
-     *         false is returned.
+     * @return Returns a populated AuthorizationRequest as long as If
+     *         {@link #canAuthorize(AuthorizationRequest)} returns true for the 
+     *         AuthorizationRequest, otherwise returns null. 
+     *         {@link #canAuthorize(AuthorizationRequest)} should always be checked before 
+     *         calling this method.
      */
     AuthorizationRequest authorize(AuthorizationRequest request);
 }
