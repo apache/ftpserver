@@ -42,6 +42,7 @@ import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.service.IoService;
 import org.apache.mina.core.service.TransportMetadata;
+import org.apache.mina.core.session.AbstractIoSession;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.core.session.IoSessionConfig;
@@ -770,4 +771,24 @@ public class FtpIoSession implements IoSession {
         return getFilterChain().contains(SslFilter.class);
     }
 
+    /**
+     * Increase the number of bytes written on the data connection
+     * @param increment The number of bytes written
+     */
+    public void increaseWrittenDataBytes(int increment) {
+        if(wrappedSession instanceof AbstractIoSession ) {
+            ((AbstractIoSession)wrappedSession).increaseScheduledWriteBytes(increment);
+            ((AbstractIoSession)wrappedSession).increaseWrittenBytes(increment, System.currentTimeMillis());
+        }
+    }
+
+    /**
+     * Increase the number of bytes read on the data connection
+     * @param increment The number of bytes written
+     */
+    public void increaseReadDataBytes(int increment) {
+        if(wrappedSession instanceof AbstractIoSession ) {
+            ((AbstractIoSession)wrappedSession).increaseReadBytes(increment, System.currentTimeMillis());
+        }
+    }
 }

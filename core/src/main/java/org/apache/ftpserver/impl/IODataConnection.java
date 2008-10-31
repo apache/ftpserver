@@ -32,6 +32,7 @@ import java.util.zip.InflaterInputStream;
 
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataType;
+import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
@@ -111,8 +112,8 @@ public class IODataConnection implements DataConnection {
      * @seeorg.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.
      * OutputStream)
      */
-    public final long transferFromClient(final OutputStream out)
-            throws IOException {
+    public final long transferFromClient(FtpSession session,
+            final OutputStream out) throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
         transferRateRequest = (TransferRateRequest) session.getUser()
                 .authorize(transferRateRequest);
@@ -123,7 +124,7 @@ public class IODataConnection implements DataConnection {
 
         InputStream is = getDataInputStream();
         try {
-            return transfer(is, out, maxRate);
+            return transfer(session, false, is, out, maxRate);
         } finally {
             IoUtils.close(is);
         }
@@ -136,7 +137,8 @@ public class IODataConnection implements DataConnection {
      * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream
      * )
      */
-    public final long transferToClient(final InputStream in) throws IOException {
+    public final long transferToClient(FtpSession session, final InputStream in)
+            throws IOException {
         TransferRateRequest transferRateRequest = new TransferRateRequest();
         transferRateRequest = (TransferRateRequest) session.getUser()
                 .authorize(transferRateRequest);
@@ -147,7 +149,7 @@ public class IODataConnection implements DataConnection {
 
         OutputStream out = getDataOutputStream();
         try {
-            return transfer(in, out, maxRate);
+            return transfer(session, true, in, out, maxRate);
         } finally {
             IoUtils.close(out);
         }
@@ -160,12 +162,19 @@ public class IODataConnection implements DataConnection {
      * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String
      * )
      */
-    public final void transferToClient(final String str) throws IOException {
+    public final void transferToClient(FtpSession session, final String str)
+            throws IOException {
         OutputStream out = getDataOutputStream();
         Writer writer = null;
         try {
             writer = new OutputStreamWriter(out, "UTF-8");
             writer.write(str);
+
+            // update session
+            if (session instanceof DefaultFtpSession) {
+                ((DefaultFtpSession) session).increaseWrittenDataBytes(str
+                        .getBytes("UTF-8").length);
+            }
         } finally {
             if (writer != null) {
                 writer.flush();
@@ -175,8 +184,9 @@ public class IODataConnection implements DataConnection {
 
     }
 
-    private final long transfer(final InputStream in, final OutputStream out,
-            final int maxRate) throws IOException {
+    private final long transfer(FtpSession session, boolean isWrite,
+            final InputStream in, final OutputStream out, final int maxRate)
+            throws IOException {
         long transferredSize = 0L;
 
         boolean isAscii = session.getDataType() == DataType.ASCII;
@@ -189,6 +199,11 @@ public class IODataConnection implements DataConnection {
             bis = IoUtils.getBufferedInputStream(in);
 
             bos = IoUtils.getBufferedOutputStream(out);
+
+            DefaultFtpSession defaultFtpSession = null;
+            if (session instanceof DefaultFtpSession) {
+                defaultFtpSession = (DefaultFtpSession) session;
+            }
 
             boolean lastWasCR = false;
             while (true) {
@@ -220,6 +235,15 @@ public class IODataConnection implements DataConnection {
 
                 if (count == -1) {
                     break;
+                }
+
+                // update MINA session
+                if (defaultFtpSession != null) {
+                    if (isWrite) {
+                        defaultFtpSession.increaseWrittenDataBytes(count);
+                    } else {
+                        defaultFtpSession.increaseReadDataBytes(count);
+                    }
                 }
 
                 // write data

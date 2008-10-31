@@ -162,7 +162,7 @@ public class RETR extends AbstractCommand {
                 is = openInputStream(session, file, skipLen);
 
                 // transfer data
-                long transSz = dataConnection.transferToClient(is);
+                long transSz = dataConnection.transferToClient(session.getFtpletSession(), is);
 
                 // log message
                 String userName = session.getUser().getName();

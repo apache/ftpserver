@@ -111,7 +111,7 @@ public class LIST extends AbstractCommand {
                 ListArgument parsedArg = ListArgumentParser.parse(request
                         .getArgument());
 
-                dataConnection.transferToClient(directoryLister.listFiles(
+                dataConnection.transferToClient(session.getFtpletSession(), directoryLister.listFiles(
                         parsedArg, session.getFileSystemView(),
                         LIST_FILE_FORMATER));
             } catch (SocketException ex) {

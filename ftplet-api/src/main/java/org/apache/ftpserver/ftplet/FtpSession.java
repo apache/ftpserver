@@ -165,5 +165,4 @@ public interface FtpSession {
      * @return true if the control socket is secured
      */
     boolean isSecure();
-
 }

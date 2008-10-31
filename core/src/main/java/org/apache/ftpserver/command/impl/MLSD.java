@@ -110,7 +110,7 @@ public class MLSD extends AbstractCommand {
                 FileFormater formater = new MLSTFileFormater((String[]) session
                         .getAttribute("MLST.types"));
 
-                dataConnection.transferToClient(directoryLister.listFiles(
+                dataConnection.transferToClient(session.getFtpletSession(), directoryLister.listFiles(
                         parsedArg, session.getFileSystemView(), formater));
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);

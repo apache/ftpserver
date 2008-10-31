@@ -142,7 +142,7 @@ public class STOR extends AbstractCommand {
             OutputStream outStream = null;
             try {
                 outStream = file.createOutputStream(skipLen);
-                long transSz = dataConnection.transferFromClient(outStream);
+                long transSz = dataConnection.transferFromClient(session.getFtpletSession(), outStream);
 
                 // log message
                 String userName = session.getUser().getName();

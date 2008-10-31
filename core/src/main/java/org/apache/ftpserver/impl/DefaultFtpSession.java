@@ -231,4 +231,21 @@ public class DefaultFtpSession implements FtpSession {
         return ioSession.isSecure();
     }
 
+    /**
+     * Increase the number of bytes written on the data connection
+     * @param increment The number of bytes written
+     */
+    public void increaseWrittenDataBytes(int increment) {
+        ioSession.increaseWrittenDataBytes(increment);
+    }
+
+    /**
+     * Increase the number of bytes read on the data connection
+     * @param increment The number of bytes written
+     */
+    public void increaseReadDataBytes(int increment) {
+        ioSession.increaseReadDataBytes(increment);
+    }
+
+    
 }

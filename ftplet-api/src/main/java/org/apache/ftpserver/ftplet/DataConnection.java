@@ -39,7 +39,7 @@ public interface DataConnection {
      * @return The length of the transferred data
      * @throws IOException
      */
-    long transferFromClient(OutputStream out) throws IOException;
+    long transferFromClient(FtpSession session, OutputStream out) throws IOException;
 
     /**
      * Transfer data to the client (e.g. RETR).
@@ -49,7 +49,7 @@ public interface DataConnection {
      * @return The length of the transferred data
      * @throws IOException
      */
-    long transferToClient(InputStream in) throws IOException;
+    long transferToClient(FtpSession session, InputStream in) throws IOException;
 
     /**
      * Transfer a string to the client, e.g. during LIST
@@ -58,6 +58,6 @@ public interface DataConnection {
      *            The string to transfer
      * @throws IOException
      */
-    void transferToClient(String str) throws IOException;
+    void transferToClient(FtpSession session, String str) throws IOException;
 
 }

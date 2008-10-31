@@ -149,7 +149,7 @@ public class STOU extends AbstractCommand {
                 os = file.createOutputStream(0L);
 
                 // transfer data
-                long transSz = dataConnection.transferFromClient(os);
+                long transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
 
                 // log message
                 String userName = session.getUser().getName();

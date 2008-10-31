@@ -119,7 +119,7 @@ public class NLST extends AbstractCommand {
                     formater = NLST_FILE_FORMATER;
                 }
 
-                dataConnection.transferToClient(directoryLister.listFiles(
+                dataConnection.transferToClient(session.getFtpletSession(), directoryLister.listFiles(
                         parsedArg, session.getFileSystemView(), formater));
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
