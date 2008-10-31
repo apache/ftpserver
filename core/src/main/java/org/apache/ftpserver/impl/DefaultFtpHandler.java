@@ -138,19 +138,20 @@ public class DefaultFtpHandler implements FtpHandler {
                             FtpReply.REPLY_502_COMMAND_NOT_IMPLEMENTED,
                             "not.implemented", null));
                 }
+
+                try {
+                    ftpletRet = ftplets.afterCommand(session.getFtpletSession(),
+                            request);
+                } catch (Exception e) {
+                    LOG.debug("Ftplet container threw exception", e);
+                    ftpletRet = FtpletResult.DISCONNECT;
+                }
+                if (ftpletRet == FtpletResult.DISCONNECT) {
+                    session.closeOnFlush().awaitUninterruptibly(10000);
+                    return;
+                }
             }
 
-            try {
-                ftpletRet = ftplets.afterCommand(session.getFtpletSession(),
-                        request);
-            } catch (Exception e) {
-                LOG.debug("Ftplet container threw exception", e);
-                ftpletRet = FtpletResult.DISCONNECT;
-            }
-            if (ftpletRet == FtpletResult.DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
-                return;
-            }
 
         } catch (Exception ex) {
 
