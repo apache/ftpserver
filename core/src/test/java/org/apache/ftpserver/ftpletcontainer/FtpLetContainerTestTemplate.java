@@ -694,7 +694,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
         FtpletContainer container = createFtpletContainer(ftplets);
 
-        container.afterCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
+        container.beforeCommand(new DefaultFtpSession(null), new DefaultFtpRequest(
                 "SITE"));
 
         assertEquals(2, calls.size());

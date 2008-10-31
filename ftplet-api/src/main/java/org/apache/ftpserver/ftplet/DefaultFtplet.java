@@ -67,6 +67,8 @@ public class DefaultFtplet implements Ftplet {
             return onUploadUniqueStart(session, request);
         } else if ("RNTO".equals(command)) {
             return onRenameStart(session, request);
+        } else if ("SITE".equals(command)) {
+            return onSite(session, request);
         } else {
             // TODO should we call a catch all?
             return null;
@@ -96,8 +98,6 @@ public class DefaultFtplet implements Ftplet {
             return onUploadUniqueEnd(session, request);
         } else if ("RNTO".equals(command)) {
             return onRenameEnd(session, request);
-        } else if ("SITE".equals(command)) {
-            return onSite(session, request);
         } else {
             // TODO should we call a catch all?
             return null;

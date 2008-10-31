@@ -211,6 +211,11 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         MockFtplet.callback = new MockFtpletCallback() {
             public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
+                session
+                .write(new DefaultFtpReply(
+                        FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
+                        "foo"));
+                
                 throwException();
                 return mockReturnValue;
             }
