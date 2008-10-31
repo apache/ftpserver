@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.UserManagerFactory;
-import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.util.IoUtils;
 
 /**

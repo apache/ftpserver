@@ -21,10 +21,8 @@ package org.apache.ftpserver.usermanager;
 
 import java.io.File;
 
-import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
+import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Factory for the properties file based <code>UserManager</code> implementation.
@@ -45,7 +43,7 @@ public class PropertiesUserManagerFactory implements UserManagerFactory {
     /**
      * Creates a {@link PropertiesUserManager} instance based on the provided configuration
      */
-    public PropertiesUserManager createUserManager() {
+    public UserManager createUserManager() {
         return new PropertiesUserManager(passwordEncryptor, userDataFile, adminName);
     }
     

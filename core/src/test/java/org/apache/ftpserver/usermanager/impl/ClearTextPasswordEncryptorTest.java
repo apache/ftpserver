@@ -21,8 +21,8 @@ package org.apache.ftpserver.usermanager.impl;
 
 import junit.framework.TestCase;
 
+import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
 
 /**
 *

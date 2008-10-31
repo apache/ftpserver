@@ -21,6 +21,7 @@ package org.apache.ftpserver.usermanager.impl;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
 
 /**

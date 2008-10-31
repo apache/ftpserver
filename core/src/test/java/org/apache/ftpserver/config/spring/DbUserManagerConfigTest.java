@@ -19,9 +19,10 @@
 
 package org.apache.ftpserver.config.spring;
 
+import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.impl.DefaultFtpServer;
+import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.apache.ftpserver.usermanager.impl.DbUserManager;
-import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
 import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
@@ -33,7 +34,7 @@ import org.hsqldb.jdbc.jdbcDataSource;
 public class DbUserManagerConfigTest extends SpringConfigTestTemplate {
 
     public void test() throws Throwable {
-        DefaultFtpServer server = createServer("<db-user-manager  encrypt-passwords=\"salted\">"
+        DefaultFtpServer server = (DefaultFtpServer) createServer("<db-user-manager  encrypt-passwords=\"salted\">"
                 + "<data-source>"
                 + "    <beans:bean class=\"org.hsqldb.jdbc.jdbcDataSource\">"
                 + "        <beans:property name=\"database\" value=\"jdbc:hsqldb:mem:foo\" />"

@@ -19,11 +19,11 @@
 
 package org.apache.ftpserver.config.spring;
 
+import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.DbUserManagerFactory;
+import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-import org.apache.ftpserver.usermanager.impl.ClearTextPasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

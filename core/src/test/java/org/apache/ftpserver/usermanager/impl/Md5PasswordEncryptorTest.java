@@ -19,8 +19,8 @@
 
 package org.apache.ftpserver.usermanager.impl;
 
+import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
 
 
 /**

@@ -24,7 +24,6 @@ import javax.sql.DataSource;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.impl.DbUserManager;
-import org.apache.ftpserver.usermanager.impl.Md5PasswordEncryptor;
 
 /**
  * Factory for database backed {@link UserManager} instances.
@@ -54,7 +53,7 @@ public class DbUserManagerFactory implements UserManagerFactory {
 
     private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
     
-    public DbUserManager createUserManager() {
+    public UserManager createUserManager() {
         if (dataSource == null) {
             throw new FtpServerConfigurationException(
                     "Required data source not provided");

@@ -20,7 +20,7 @@
 package org.apache.ftpserver.usermanager.impl;
 
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 
 
 /**

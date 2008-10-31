@@ -17,11 +17,10 @@
  * under the License.
  */
 
-package org.apache.ftpserver.usermanager.impl;
+package org.apache.ftpserver.usermanager;
 
 import java.security.SecureRandom;
 
-import org.apache.ftpserver.usermanager.PasswordEncryptor;
 import org.apache.ftpserver.util.EncryptUtils;
 
 /**

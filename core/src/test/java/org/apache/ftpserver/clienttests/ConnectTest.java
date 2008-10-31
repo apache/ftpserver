@@ -48,4 +48,5 @@ public class ConnectTest extends ClientTestTemplate {
         assertEquals(port, ((NioListener) server.getServerContext()
                 .getListener("default")).getPort());
     }
+
 }

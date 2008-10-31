@@ -67,6 +67,7 @@
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
 						<Export-Package> org.apache.ftpserver,
 							org.apache.ftpserver.command,
+							org.apache.ftpserver.config.spring,
 							org.apache.ftpserver.filesystem.nativefs,
 							org.apache.ftpserver.ftpletcontainer,
 							org.apache.ftpserver.listener, org.apache.ftpserver.main,
@@ -75,7 +76,6 @@
 						</Export-Package>
 						<Private-Package> org.apache.ftpserver.command.impl,
 						    org.apache.ftpserver.command.impl.listing,
-							org.apache.ftpserver.config.spring,
 							org.apache.ftpserver.filesystem.nativefs.impl,
 							org.apache.ftpserver.ftpletcontainer.impl,
 							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
