@@ -237,7 +237,9 @@ public class NioListener extends AbstractListener {
     public synchronized void resume() {
         if (acceptor != null && suspended) {
             try {
+                LOG.debug("Resuming listener");
                 acceptor.bind(address);
+                LOG.debug("Listener resumed");
             } catch (IOException e) {
                 LOG.error("Failed to resume listener", e);
             }
@@ -249,7 +251,11 @@ public class NioListener extends AbstractListener {
      */
     public synchronized void suspend() {
         if (acceptor != null && !suspended) {
-            acceptor.unbind(address);
+            LOG.debug("Suspending listener");
+            acceptor.unbind();
+            
+            suspended = true;
+            LOG.debug("Listener suspended");
         }
     }
     

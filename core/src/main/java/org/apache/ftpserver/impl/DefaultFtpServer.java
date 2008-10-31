@@ -136,6 +136,7 @@ public class DefaultFtpServer implements FtpServer {
             return;
         }
 
+        LOG.debug("Suspending server");
         // stop all listeners
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
@@ -143,6 +144,7 @@ public class DefaultFtpServer implements FtpServer {
         }
 
         suspended = true;
+        LOG.debug("Server suspended");
     }
 
     /**
@@ -153,12 +155,14 @@ public class DefaultFtpServer implements FtpServer {
             return;
         }
 
+        LOG.debug("Resuming server");
         Map<String, Listener> listeners = serverContext.getListeners();
         for (Listener listener : listeners.values()) {
             listener.resume();
         }
 
         suspended = false;
+        LOG.debug("Server resumed");
     }
 
     /**
