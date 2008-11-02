@@ -18,8 +18,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.ftpserver.examples</groupId>
 	<artifactId>ftpserver-spring-war</artifactId>
+	<name>FtpServer Spring web project example</name>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-M4-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
