@@ -291,20 +291,8 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.isAdmin()", ex);
             throw new FtpException("DbUserManager.isAdmin()", ex);
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.isAdmin()", ex);
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.isAdmin()", ex);
-                }
-            }
+            closeQuitely(rs);
+            closeQuitely(stmt);
         }
     }
 
@@ -338,13 +326,7 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.delete()", ex);
             throw new FtpException("DbUserManager.delete()", ex);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.delete()", ex);
-                }
-            }
+            closeQuitely(stmt);
         }
     }
 
@@ -363,9 +345,30 @@ public class DbUserManager extends AbstractUserManager {
             // create sql query
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(ATTR_LOGIN, escapeString(user.getName()));
-            map.put(ATTR_PASSWORD, escapeString(getPasswordEncryptor().encrypt(user
-                    .getPassword())));
+            
+            String password = null;
+            if(user.getPassword() != null) {
+                // password provided, encrypt it and store the encrypted value
+                password= getPasswordEncryptor().encrypt(user.getPassword());
+            } else {
+                // password was not provided, either load from the existing user and store that again
+                // or store as null
+                ResultSet rs = null;
+                
+                try {
+                    rs = selectUserByName(user.getName());
+                    
+                    if(rs.next()) {
+                        // user exists, reuse password
+                        password = rs.getString(ATTR_PASSWORD);
+                    }
+                } finally {
+                    closeQuitely(rs);
+                }
+            }
+            map.put(ATTR_PASSWORD, escapeString(password));
 
+            
             String home = user.getHomeDirectory();
             if (home == null) {
                 home = "/";
@@ -422,16 +425,48 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.save()", ex);
             throw new FtpException("DbUserManager.save()", ex);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUsermanager.error()", ex);
-                }
+            closeQuitely(stmt);
+        }
+    }
+
+    private void closeQuitely(Statement stmt) {
+        if(stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                // ignore
             }
         }
     }
 
+    private void closeQuitely(ResultSet rs) {
+        if(rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                // ignore
+            }
+        }
+    }
+
+    
+    private ResultSet selectUserByName(String name) throws SQLException {
+        // create sql query
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(ATTR_LOGIN, escapeString(name));
+        String sql = StringUtils.replaceString(selectUserStmt, map);
+        LOG.info(sql);
+
+        Statement stmt = null;
+        try {
+            // execute query
+            stmt = createConnection().createStatement();
+            return stmt.executeQuery(sql);
+        } finally {
+            closeQuitely(stmt);
+        }
+    }
+    
     /**
      * Get the user object. Fetch the row from the table.
      */
@@ -439,16 +474,8 @@ public class DbUserManager extends AbstractUserManager {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-
-            // create sql query
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put(ATTR_LOGIN, escapeString(name));
-            String sql = StringUtils.replaceString(selectUserStmt, map);
-            LOG.info(sql);
-
-            // execute query
-            stmt = createConnection().createStatement();
-            rs = stmt.executeQuery(sql);
+            
+            rs = selectUserByName(name);
 
             // populate user object
             BaseUser thisUser = null;
@@ -478,20 +505,8 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.getUserByName()", ex);
             throw new FtpException("DbUserManager.getUserByName()", ex);
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getUserByName()", ex);
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getUserByName()", ex);
-                }
-            }
+            closeQuitely(rs);
+            closeQuitely(stmt);
         }
     }
 
@@ -517,20 +532,8 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.doesExist()", ex);
             throw new FtpException("DbUserManager.doesExist()", ex);
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.doesExist()", ex);
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.doesExist()", ex);
-                }
-            }
+            closeQuitely(rs);
+            closeQuitely(stmt);
         }
     }
 
@@ -561,20 +564,8 @@ public class DbUserManager extends AbstractUserManager {
             LOG.error("DbUserManager.getAllUserNames()", ex);
             throw new FtpException("DbUserManager.getAllUserNames()", ex);
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getAllUserNames()", ex);
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Exception ex) {
-                    LOG.error("DbUserManager.getAllUserNames()", ex);
-                }
-            }
+            closeQuitely(rs);
+            closeQuitely(stmt);
         }
     }
 
@@ -632,20 +623,8 @@ public class DbUserManager extends AbstractUserManager {
                 throw new AuthenticationFailedException(
                         "Authentication failed", ex);
             } finally {
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (Exception ex) {
-                        LOG.error("DbUserManager.authenticate()", ex);
-                    }
-                }
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (Exception ex) {
-                        LOG.error("DbUserManager.authenticate()", ex);
-                    }
-                }
+                closeQuitely(rs);
+                closeQuitely(stmt);
             }
         } else if (authentication instanceof AnonymousAuthentication) {
             try {

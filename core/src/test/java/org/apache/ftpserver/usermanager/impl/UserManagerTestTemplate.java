@@ -264,6 +264,44 @@ public abstract class UserManagerTestTemplate extends TestCase {
         assertEquals(getMaxLoginNumber(user), getMaxLoginNumber(actualUser));
         assertEquals(getMaxLoginPerIP(user), getMaxLoginPerIP(actualUser));
         assertEquals(getMaxUploadRate(user), getMaxUploadRate(actualUser));
+        
+        // verify the password
+        assertNotNull(newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "newpw")));
+
+        try {
+            newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "dummy"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
+
+        // save without updating the users password (password==null)
+        userManager.save(user);
+
+        newUserManager = createUserManagerFactory().createUserManager();
+        assertNotNull(newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "newpw")));
+        try {
+            newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "dummy"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
+
+               
+        // save and update the users password
+        user.setPassword("newerpw");
+        userManager.save(user);
+        
+        newUserManager = createUserManagerFactory().createUserManager();
+        assertNotNull(newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "newerpw")));
+
+        try {
+            newUserManager.authenticate(new UsernamePasswordAuthentication("newuser", "newpw"));
+            fail("Must throw AuthenticationFailedException");
+        } catch(AuthenticationFailedException e) {
+            // ok
+        }
+
     }
 
     public void testSaveWithExistingUser() throws Exception {
