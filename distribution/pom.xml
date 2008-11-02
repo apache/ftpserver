@@ -135,51 +135,25 @@
               </tasks>
             </configuration>
           </execution>
+          <execution>
+            <id>copy-javadocs-docs</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>Copying Javadocs</echo>
+                <mkdir dir="${project.build.directory}/api"></mkdir>
+		<copy todir="${project.build.directory}/api">
+		    <fileset dir="../target/site/apidocs" />
+		</copy>
+              </tasks>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
-
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.0</version>
-            <executions>
-              <execution>
-                <id>unpack-ftplet-javadoc</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/api/ftplet-api</outputDirectory>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>${pom.groupId}</groupId>
-                      <artifactId>ftplet-api</artifactId>
-                      <classifier>javadoc</classifier>
-                      <version>${pom.version}</version>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-core-javadoc</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/api/core</outputDirectory>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>${pom.groupId}</groupId>
-                      <artifactId>ftpserver-core</artifactId>
-                      <classifier>javadoc</classifier>
-                      <version>${pom.version}</version>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
         </plugins>
       </build>
     </profile>

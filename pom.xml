@@ -376,10 +376,24 @@
                   <goal>jar</goal>
                 </goals>
                 <configuration>
-		  <aggregate>true</aggregate>
                   <source>${maven.compile.source}</source>
 		  <excludePackageNames>
-		    *.impl:org.apache.ftpserver.config.spring:org.apache.ftpserver.command.impl.listing:org.apache.ftpserver.listener.nio:org.apache.ftpserver.util
+		    *.impl:org.apache.ftpserver.example.*:org.apache.ftpserver.config.spring:org.apache.ftpserver.command.impl.listing:org.apache.ftpserver.listener.nio:org.apache.ftpserver.util
+		  </excludePackageNames>
+                </configuration>
+              </execution>
+              <execution>
+                <id>create-site-javadoc</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+                <configuration>
+		  <doctitle>Apache FtpServer ${project.version} Public API</doctitle>
+		  <windowtitle>Apache FtpServer ${project.version} Public API</windowtitle>
+                  <source>${maven.compile.source}</source>
+		  <excludePackageNames>
+		    *.impl:org.apache.ftpserver.example.*:org.apache.ftpserver.config.spring:org.apache.ftpserver.command.impl.listing:org.apache.ftpserver.listener.nio:org.apache.ftpserver.util
 		  </excludePackageNames>
                 </configuration>
               </execution>
