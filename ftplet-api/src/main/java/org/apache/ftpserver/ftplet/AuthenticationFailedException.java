@@ -40,7 +40,7 @@ public class AuthenticationFailedException extends FtpException {
      * message.
      * 
      * @param msg
-     *            a description of the exception
+     *            A description of the exception
      */
     public AuthenticationFailedException(String msg) {
         super(msg);
@@ -51,7 +51,7 @@ public class AuthenticationFailedException extends FtpException {
      * <code>Throwable</code> cause.
      * 
      * @param th
-     *            the original cause
+     *            The original cause
      */
     public AuthenticationFailedException(Throwable th) {
         super(th);
@@ -60,9 +60,10 @@ public class AuthenticationFailedException extends FtpException {
     /**
      * Constructs a <code>AuthenticationFailedException</code> object with a
      * <code>Throwable</code> cause.
+     * @param msg A description of the exception
      * 
      * @param th
-     *            the original cause
+     *            The original cause
      */
     public AuthenticationFailedException(String msg, Throwable th) {
         super(msg);

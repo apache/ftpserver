@@ -31,15 +31,17 @@ public interface User {
 
     /**
      * Get the user name.
+     * @return The user name, the same used for login
      */
     String getName();
 
     /**
-     * Get password. Might return null if the user manager can not provide the password
+     * Get password.
+     * @return The users password or null if the user manager can not provide the password 
      */
     String getPassword();
 
-    /**
+    /** 
      * Get all authorities granted to this user
      * 
      * @return All authorities
@@ -55,7 +57,7 @@ public interface User {
 
     /**
      * Authorize a {@link AuthorizationRequest} for this user
-     * 
+     *
      * @param request
      *            The {@link AuthorizationRequest} to authorize
      * @return A populated AuthorizationRequest if the user was authorized, null
@@ -66,33 +68,19 @@ public interface User {
     /**
      * Get the maximum idle time in seconds. Zero or less idle time means no
      * limit.
+     * @return The idle time in seconds
      */
     int getMaxIdleTime();
 
     /**
      * Get the user enable status.
+     * @return true if the user is enabled
      */
     boolean getEnabled();
 
     /**
-     * Get maximum user upload rate in bytes/sec. Zero or less means no limit.
-     */
-    // int getMaxUploadRate();
-    /**
-     * Get maximum user download rate in bytes/sec. Zero or less means no limit.
-     */
-    // int getMaxDownloadRate();
-    /**
-     * Get maximum login number allowed for this user account
-     */
-    // int getMaxLoginNumber();
-    /**
-     * Get maximum login number allowed from the same IP address when using this
-     * user account
-     */
-    // int getMaxLoginPerIP();
-    /**
-     * get user home directory
+     * gGet the user home directory
+     * @return The path to the home directory for the user
      */
     String getHomeDirectory();
 }

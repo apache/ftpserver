@@ -66,9 +66,10 @@ public class FtpException extends Exception {
     /**
      * Constructs a <code>BaseException</code> object with a
      * <code>Throwable</code> cause.
+     * @param msg A description of the exception
      * 
      * @param th
-     *            the original cause
+     *            The original cause
      */
     public FtpException(String msg, Throwable th) {
         super(msg);
@@ -77,6 +78,7 @@ public class FtpException extends Exception {
 
     /**
      * Get the root cause.
+     * @return The root cause
      */
     public Throwable getRootCause() {
         return throwable;

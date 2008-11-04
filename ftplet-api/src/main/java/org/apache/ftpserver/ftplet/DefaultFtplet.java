@@ -104,91 +104,235 @@ public class DefaultFtplet implements Ftplet {
         }
     }
 
+    /**
+     * Override this method to intercept user logins
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onLogin(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept deletions
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onDeleteStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle deletions after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept uploads
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onUploadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle uploads after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept downloads
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onDownloadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle downloads after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onDownloadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept deletion of directories
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onRmdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle deletion of directories after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept creation of directories
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onMkdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle creation of directories after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept file appends
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onAppendStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept file appends after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
-    public FtpletResult onUploadUniqueStart(FtpSession session, FtpRequest request)
-            throws FtpException, IOException {
+    /**
+     * Override this method to intercept unique uploads
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
+    public FtpletResult onUploadUniqueStart(FtpSession session,
+            FtpRequest request) throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle unique uploads after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onUploadUniqueEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept renames
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onRenameStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to handle renames after completion
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;
     }
 
+    /**
+     * Override this method to intercept SITE commands
+     * @param session The current {@link FtpSession}
+     * @param request The current {@link FtpRequest}
+     * @return The action for the container to take
+     * @throws FtpException
+     * @throws IOException
+     */
     public FtpletResult onSite(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return null;

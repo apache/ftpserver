@@ -54,6 +54,8 @@ public interface Ftplet {
      * being placed into service. The ftplet container calls the init method
      * exactly once after instantiating the ftplet. The init method must
      * complete successfully before the ftplet can receive any requests.
+     * @param ftpletContext The current {@link FtpletContext}
+     * @throws FtpException 
      */
     void init(FtpletContext ftpletContext) throws FtpException;
 
@@ -122,11 +124,19 @@ public interface Ftplet {
 
     /**
      * Client connect notification method.
+     * @param session The current {@link FtpSession}
+     * @return The desired action to be performed by the server
+     * @throws FtpException 
+     * @throws IOException 
      */
     FtpletResult onConnect(FtpSession session) throws FtpException, IOException;
 
     /**
      * Client disconnect notification method. This is the last callback method.
+     * @param session The current {@link FtpSession}
+     * @return The desired action to be performed by the server
+     * @throws FtpException 
+     * @throws IOException 
      */
     FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException;

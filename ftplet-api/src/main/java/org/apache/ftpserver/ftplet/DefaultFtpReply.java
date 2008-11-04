@@ -31,17 +31,23 @@ public class DefaultFtpReply implements FtpReply {
 
     private String message;
 
-    private final static String CRLF = "\r\n";
+    private static final String CRLF = "\r\n";
 
     /**
-     * @param code
-     * @param message
+     * Constructor for single-line messages
+     * @param code The reply code
+     * @param message The reply message
      */
     public DefaultFtpReply(final int code, final String message) {
         this.code = code;
         this.message = message;
     }
 
+    /**
+     * Constructor for multi-line replies
+     * @param code The reply code
+     * @param message The reply message, one line per String
+     */
     public DefaultFtpReply(final int code, final String[] message) {
         this.code = code;
 

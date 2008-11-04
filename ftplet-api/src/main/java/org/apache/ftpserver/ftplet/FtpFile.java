@@ -47,76 +47,92 @@ public interface FtpFile {
 
     /**
      * Is the file hidden?
+     * @return true if the {@link FtpFile} is hidden
      */
     boolean isHidden();
 
     /**
      * Is it a directory?
+     * @return true if the {@link FtpFile} is a directory
      */
     boolean isDirectory();
 
     /**
      * Is it a file?
+     * @return true if the {@link FtpFile} is a file, false if it is a directory
      */
     boolean isFile();
 
     /**
      * Does this file exists?
+     * @return true if the {@link FtpFile} exists
      */
     boolean doesExist();
 
     /**
      * Has read permission?
+     * @return true if the {@link FtpFile} is readable by the user
      */
     boolean isReadable();
 
     /**
      * Has write permission?
+     * @return true if the {@link FtpFile} is writable by the user
      */
     boolean isWritable();
 
     /**
      * Has delete permission?
+     * @return true if the {@link FtpFile} is removable by the user
      */
     boolean isRemovable();
 
     /**
      * Get the owner name.
+     * @return The name of the owner of the {@link FtpFile}
      */
     String getOwnerName();
 
     /**
      * Get owner group name.
+     * @return The name of the group that owns the {@link FtpFile}
      */
     String getGroupName();
 
     /**
      * Get link count.
+     * @return The number of links for the {@link FtpFile}
      */
     int getLinkCount();
 
     /**
      * Get last modified time.
+     * @return The timestamp of the last modified time for the {@link FtpFile}
      */
     long getLastModified();
 
     /**
      * Get file size.
+     * @return The size of the {@link FtpFile} in bytes
      */
     long getSize();
 
     /**
      * Create directory.
+     * @return true if the operation was successful
      */
     boolean mkdir();
 
     /**
      * Delete file.
+     * @return true if the operation was successful
      */
     boolean delete();
 
     /**
      * Move file.
+     * @param destination The target {@link FtpFile} to move the current {@link FtpFile} to
+     * @return true if the operation was successful
      */
     boolean move(FtpFile destination);
 
@@ -124,18 +140,27 @@ public interface FtpFile {
      * List file objects. If not a directory or does not exist, null will be
      * returned. Files must be returned in alphabetical order.
      * List must be immutable.
+     * @return The {@link List} of {@link FtpFile}s
      */
     List<FtpFile> listFiles();
 
     /**
-     * Create output stream for writing. If the file is not random accessible,
-     * any offset other than zero will throw an exception.
+     * Create output stream for writing. 
+     * @param offset The number of bytes at where to start writing.
+     *      If the file is not random accessible,
+     *      any offset other than zero will throw an exception.
+     * @return An {@link OutputStream} used to write to the {@link FtpFile}
+     * @throws IOException 
      */
     OutputStream createOutputStream(long offset) throws IOException;
 
     /**
-     * Create input stream for reading. If the file is not random accessible,
-     * any offset other than zero will throw an exception.
+     * Create input stream for reading. 
+     * @param offset The number of bytes of where to start reading. 
+     *          If the file is not random accessible,
+     *          any offset other than zero will throw an exception.
+     * @return An {@link InputStream} used to read the {@link FtpFile}
+     * @throws IOException 
      */
     InputStream createInputStream(long offset) throws IOException;
 }

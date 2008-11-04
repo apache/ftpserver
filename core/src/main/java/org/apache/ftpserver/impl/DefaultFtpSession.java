@@ -133,10 +133,9 @@ public class DefaultFtpSession implements FtpSession {
     /**
      * Get remote address
      */
-    public InetAddress getClientAddress() {
+    public InetSocketAddress getClientAddress() {
         if (ioSession.getRemoteAddress() instanceof InetSocketAddress) {
-            return ((InetSocketAddress) ioSession.getRemoteAddress())
-                    .getAddress();
+            return ((InetSocketAddress) ioSession.getRemoteAddress());
         } else {
             return null;
         }
@@ -192,20 +191,11 @@ public class DefaultFtpSession implements FtpSession {
         return ioSession.getClientCertificates();
     }
 
-    public InetAddress getServerAddress() {
+    public InetSocketAddress getServerAddress() {
         if (ioSession.getLocalAddress() instanceof InetSocketAddress) {
-            return ((InetSocketAddress) ioSession.getLocalAddress())
-                    .getAddress();
+            return ((InetSocketAddress) ioSession.getLocalAddress());
         } else {
             return null;
-        }
-    }
-
-    public int getServerPort() {
-        if (ioSession.getLocalAddress() instanceof InetSocketAddress) {
-            return ((InetSocketAddress) ioSession.getLocalAddress()).getPort();
-        } else {
-            return 0;
         }
     }
 

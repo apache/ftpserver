@@ -20,6 +20,7 @@
 package org.apache.ftpserver.ftplet;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
 
@@ -37,37 +38,49 @@ public interface FtpSession {
 
     /**
      * Returns the IP address of the client that sent the request.
+     * @return The client {@link InetAddress}
      */
-    InetAddress getClientAddress();
-
-    InetAddress getServerAddress();
-
-    int getServerPort();
+    InetSocketAddress getClientAddress();
 
     /**
-     * Get FTP data connection.
+     * Returns the IP address of the server
+     * @return The server {@link InetAddress}
+     */
+    InetSocketAddress getServerAddress();
+
+    /**
+     * Get FTP data connection factory, used to transfer data to and from the client.
+     * @return The {@link DataConnectionFactory}
      */
     DataConnectionFactory getDataConnection();
 
+    /**
+     * Retrieve the certificates for the client, if running over SSL and with client authentication
+     * @return The Certificate chain, or null if the certificates are not avialble
+     */
     Certificate[] getClientCertificates();
 
     /**
      * Get connection time.
+     * @return Time when the client connected to the server
      */
     Date getConnectionTime();
 
     /**
      * Get the login time.
+     * @return Time when the client logged into the server
      */
     Date getLoginTime();
 
     /**
-     * Get the number of failed logins. When login succeeds, this will return 0.
+     * Get the number of failed logins. 
+     * @return The number of failed logins. When login succeeds, this will return 0.
      */
     int getFailedLogins();
 
     /**
      * Get last access time.
+     * @return The last time the session performed any action
      */
     Date getLastAccessTime();
 
@@ -75,6 +88,7 @@ public interface FtpSession {
      * Returns maximum idle time. This time equals to
      * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
      * {@link User#getMaxIdleTime()} after user login.
+     * @return The number of seconds the client is allowed to be idle before disconnected.
      */
     int getMaxIdleTime();
 
@@ -82,11 +96,13 @@ public interface FtpSession {
      * Set maximum idle time in seconds. This time equals to
      * {@link ConnectionManagerImpl#getDefaultIdleSec()} until user login, and
      * {@link User#getMaxIdleTime()} after user login.
+     * @param maxIdleTimeSec The number of seconds the client is allowed to be idle before disconnected.
      */
     void setMaxIdleTime(int maxIdleTimeSec);
 
     /**
      * Get user object.
+     * @return The current {@link User}
      */
     User getUser();
 
@@ -99,41 +115,50 @@ public interface FtpSession {
 
     /**
      * Get the requested language.
+     * @return The language requested by the client
      */
     String getLanguage();
 
     /**
      * Is the user logged in?
+     * @return true if the user is logged in
      */
     boolean isLoggedIn();
 
     /**
      * Get user file system view.
+     * @return The {@link FileSystemView} for this session/user
      */
     FileSystemView getFileSystemView();
 
     /**
      * Get file upload/download offset.
+     * @return The current file transfer offset, or 0 if non is set
      */
     long getFileOffset();
 
     /**
      * Get rename from file object.
+     * @return The current rename from, or null if non is set
      */
     FtpFile getRenameFrom();
 
     /**
      * Get the data type.
+     * @return The current {@link DataType} for this session
      */
     DataType getDataType();
 
     /**
      * Get structure.
+     * @return The current {@link Structure} for this session
      */
     Structure getStructure();
 
     /**
-     * Returns the value of the named attribute as an Object, or null if no
+     * Returns the value of the named attribute as an Object.
+     * @param name The attribute name
+     * @return The attribute value, or null if no
      * attribute of the given name exists.
      */
     Object getAttribute(String name);
@@ -141,11 +166,14 @@ public interface FtpSession {
     /**
      * Stores an attribute in this request. It will be available until it was
      * removed or when the connection ends.
+     * @param name The attribute name
+     * @param value The attribute value
      */
     void setAttribute(String name, Object value);
 
     /**
      * Removes an attribute from this request.
+     * @param name The attribute name
      */
     void removeAttribute(String name);
 

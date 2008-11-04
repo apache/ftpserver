@@ -48,6 +48,7 @@ public interface UserManager {
 
     /**
      * Delete the user from the system.
+     * @param username The name of the {@link User} to delete
      *
      * @throws FtpException when the UserManager can't fulfill the request.
      * @throws UnsupportedOperationException
@@ -69,14 +70,16 @@ public interface UserManager {
      * Check if the user exists.
      * @param username the name of the user to check.
      * @return true if the user exist, false otherwise.
+     * @throws FtpException 
      */
     boolean doesExist(String username) throws FtpException;
 
     /**
      * Authenticate user
+     * @param authentication The {@link Authentication} that proves the users identity
+     * @return the authenticated account.
+     * @throws AuthenticationFailedException 
      * @throws FtpException when the UserManager can't fulfill the request.
-     * @param authentication
-     * @return the autheticated account.
      */
     User authenticate(Authentication authentication)
             throws AuthenticationFailedException;
@@ -90,6 +93,7 @@ public interface UserManager {
 
     /**
      * Check if the user is admin.
+     * @param username The name of the {@link User} to check
      * @return true if user with this login is administrator
      * @throws FtpException when the UserManager can't fulfill the request.
      */
