@@ -50,6 +50,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * FTP server configuration implementation. It holds all the components used.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

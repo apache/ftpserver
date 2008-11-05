@@ -51,7 +51,7 @@ import org.apache.mina.core.write.WriteRequest;
 import org.apache.mina.filter.ssl.SslFilter;
 
 /**
- * 
+ * <strong>Internal class, do not use directly.</strong>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$

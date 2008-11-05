@@ -38,9 +38,12 @@ public interface Command {
      * Execute command.
      * 
      * @param session
-     *            TODO
+     *            The current {@link FtpIoSession}
      * @param context
-     *            TODO
+     *            The current {@link FtpServerContext}
+     * @param request The current {@link FtpRequest}
+     * @throws IOException 
+     * @throws FtpException 
      */
     void execute(FtpIoSession session, FtpServerContext context,
             FtpRequest request) throws IOException, FtpException;

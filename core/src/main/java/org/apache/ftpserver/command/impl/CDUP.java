@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>CDUP &lt;CRLF&gt;</code><br>
  * 
  * This command is a special case of CWD, and is included to simplify the

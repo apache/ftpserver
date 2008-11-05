@@ -21,6 +21,8 @@ package org.apache.ftpserver.command.impl.listing;
 import java.util.StringTokenizer;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Parses a list argument (e.g. for LIST or NLST) into a {@link ListArgument}
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

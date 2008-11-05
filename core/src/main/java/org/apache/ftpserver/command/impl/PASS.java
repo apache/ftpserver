@@ -43,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>PASS &lt;SP&gt; <password> &lt;CRLF&gt;</code><br>
  * 
  * The argument field is a Telnet string specifying the user's password. This

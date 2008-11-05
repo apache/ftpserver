@@ -34,6 +34,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Show all statistics information.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

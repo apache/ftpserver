@@ -61,7 +61,7 @@ public class FtpServerFactory {
     }
     
     /**
-     * Get all listeners available one this server
+     * Get all listeners available on servers created by this factory
      * 
      * @return The current listeners
      */
@@ -90,7 +90,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the listeners for this server, replaces existing listeners
+     * Set the listeners for servers created by this factory, replaces existing listeners
      * 
      * @param listeners
      *            The listeners to use for this server with the name as the key
@@ -103,7 +103,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Get all {@link Ftplet}s registered at this server
+     * Get all {@link Ftplet}s registered by servers created by this factory
      * 
      * @return All {@link Ftplet}s
      */
@@ -112,7 +112,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the {@link Ftplet}s to be active for this server. Replaces existing
+     * Set the {@link Ftplet}s to be active by servers created by this factory. Replaces existing
      * {@link Ftplet}s
      * 
      * @param ftplets
@@ -126,7 +126,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Retrieve the user manager used with this server
+     * Retrieve the user manager used by servers created by this factory
      * 
      * @return The user manager
      */
@@ -135,7 +135,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the user manager to be used for this server
+     * Set the user manager to be used by servers created by this factory
      * 
      * @param userManager
      *            The {@link UserManager}
@@ -147,7 +147,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Retrieve the file system used with this server
+     * Retrieve the file system used by servers created by this factory
      * 
      * @return The {@link FileSystemFactory}
      */
@@ -156,7 +156,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the file system to be used for this server
+     * Set the file system to be used by servers created by this factory
      * 
      * @param fileSystem
      *            The {@link FileSystemFactory}
@@ -168,7 +168,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Retrieve the command factory used with this server
+     * Retrieve the command factory used by servers created by this factory
      * 
      * @return The {@link CommandFactory}
      */
@@ -177,7 +177,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the command factory to be used for this server
+     * Set the command factory to be used by servers created by this factory
      * 
      * @param commandFactory
      *            The {@link CommandFactory}
@@ -189,7 +189,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Retrieve the message resource used with this server
+     * Retrieve the message resource used by servers created by this factory
      * 
      * @return The {@link MessageResource}
      */
@@ -198,7 +198,7 @@ public class FtpServerFactory {
     }
 
     /**
-     * Set the message resource to be used with this server
+     * Set the message resource to be used with by servers created by this factory
      * 
      * @param messageResource
      *            The {@link MessageResource}
@@ -220,6 +220,8 @@ public class FtpServerFactory {
 
     /**
      * Set the message resource to be used with this server
+     * @param connectionConfig The {@link ConnectionConfig} to be used
+     *  by servers created by this factory
      * 
      * @param messageResource
      *            The {@link MessageResource}

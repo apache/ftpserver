@@ -22,6 +22,8 @@ package org.apache.ftpserver.util;
 import java.util.Map;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * String utility methods.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

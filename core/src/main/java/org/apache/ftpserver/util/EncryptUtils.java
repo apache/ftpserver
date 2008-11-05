@@ -23,6 +23,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * String encryption utility methods.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

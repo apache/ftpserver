@@ -19,6 +19,8 @@
 package org.apache.ftpserver.command.impl.listing;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Contains the parsed argument for a list command (e.g. LIST or NLST)
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

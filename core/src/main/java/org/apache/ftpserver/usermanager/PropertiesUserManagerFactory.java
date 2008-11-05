@@ -49,6 +49,7 @@ public class PropertiesUserManagerFactory implements UserManagerFactory {
     
     /**
      * Get the admin name.
+     * @return The admin user name
      */
     public String getAdminName() {
         return adminName;

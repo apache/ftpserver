@@ -20,6 +20,8 @@
 package org.apache.ftpserver.util;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is a simplified regular character mattching class. Supports *?^[]-
  * pattern characters.
  *

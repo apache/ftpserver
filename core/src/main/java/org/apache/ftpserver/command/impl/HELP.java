@@ -30,6 +30,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.message.MessageResource;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>HELP [&lt;SP&gt; <string>] &lt;CRLF&gt;</code><br>
  * 
  * This command shall cause the server to send helpful information regarding its

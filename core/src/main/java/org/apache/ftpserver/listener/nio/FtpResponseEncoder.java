@@ -30,6 +30,8 @@ import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * A {@link MessageEncoder} that encodes {@link FtpReply}.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

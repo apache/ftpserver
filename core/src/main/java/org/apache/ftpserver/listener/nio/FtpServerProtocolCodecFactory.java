@@ -28,6 +28,8 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.textline.TextLineDecoder;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Factory for creating decoders and encoders
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

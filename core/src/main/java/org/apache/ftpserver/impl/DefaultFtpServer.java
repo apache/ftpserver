@@ -37,6 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is the starting point of all the servers. It invokes a new listener
  * thread. <code>Server</code> implementation is used to create the server
  * socket and handle client connection.

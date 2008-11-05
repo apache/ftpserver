@@ -26,6 +26,8 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Data connection configuration.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

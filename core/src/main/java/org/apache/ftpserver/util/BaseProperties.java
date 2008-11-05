@@ -32,6 +32,8 @@ import java.util.TimeZone;
 import org.apache.ftpserver.ftplet.FtpException;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This class encapsulates <code>java.util.Properties</code> to add java
  * primitives and some other java classes.
  *

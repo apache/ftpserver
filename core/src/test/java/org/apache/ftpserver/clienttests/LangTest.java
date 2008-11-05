@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
+import java.util.Arrays;
+
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.message.MessageResourceFactory;
 
@@ -39,7 +41,7 @@ public class LangTest extends ClientTestTemplate {
         FtpServerFactory server = super.createServer();
 
         MessageResourceFactory factory = new MessageResourceFactory();
-        factory.setLanguages(new String[] { "en", "zh-tw" });
+        factory.setLanguages(Arrays.asList(new String[] { "en", "zh-tw" }));
         server.setMessageResource(factory.createMessageResource());
         
         return server;

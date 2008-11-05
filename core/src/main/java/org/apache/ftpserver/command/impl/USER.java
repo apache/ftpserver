@@ -36,6 +36,8 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>USER &lt;SP&gt; &lt;username&gt; &lt;CRLF&gt;</code><br>
  * 
  * The argument field is a Telnet string identifying the user. The user

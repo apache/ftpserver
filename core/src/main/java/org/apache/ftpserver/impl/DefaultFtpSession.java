@@ -35,6 +35,8 @@ import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * FTP session
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

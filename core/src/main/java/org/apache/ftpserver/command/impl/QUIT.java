@@ -29,6 +29,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>QUIT &lt;CRLF&gt;</code><br>
  * 
  * This command terminates a USER and if file transfer is not in progress, the

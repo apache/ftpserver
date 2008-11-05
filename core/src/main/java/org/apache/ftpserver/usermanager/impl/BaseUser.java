@@ -28,6 +28,8 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.User;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Generic user class. The user attributes are:
  * <ul>
  * <li>userid</li>

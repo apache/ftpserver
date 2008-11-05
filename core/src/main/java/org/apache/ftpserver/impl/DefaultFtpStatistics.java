@@ -31,6 +31,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is FTP statistics implementation.
  * 
  * TODO revisit concurrency, right now we're a bit over zealous with both Atomic*

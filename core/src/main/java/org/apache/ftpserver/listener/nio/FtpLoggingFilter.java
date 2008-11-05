@@ -24,6 +24,8 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.logging.LoggingFilter;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Specialized @see {@link LoggingFilter} that optionally masks FTP passwords.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

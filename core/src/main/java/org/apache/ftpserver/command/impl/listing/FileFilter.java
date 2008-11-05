@@ -21,6 +21,8 @@ package org.apache.ftpserver.command.impl.listing;
 import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Interface for selecting files based on some critera.
  * 
  * @see java.io.FileFilter

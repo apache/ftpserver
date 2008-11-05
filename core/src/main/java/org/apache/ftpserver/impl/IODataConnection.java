@@ -37,6 +37,8 @@ import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * An active open data connection, used for transfering data over the data
  * connection.
  *

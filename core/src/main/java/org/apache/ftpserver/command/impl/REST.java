@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>REST &lt;SP&gt; <marker> &lt;CRLF&gt;</code><br>
  * 
  * The argument field represents the server marker at which file transfer is to

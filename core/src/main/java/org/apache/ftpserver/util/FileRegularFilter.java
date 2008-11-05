@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is regular expression filename filter.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

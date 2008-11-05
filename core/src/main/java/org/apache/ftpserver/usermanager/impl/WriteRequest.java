@@ -22,6 +22,8 @@ package org.apache.ftpserver.usermanager.impl;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Class representing a write request
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

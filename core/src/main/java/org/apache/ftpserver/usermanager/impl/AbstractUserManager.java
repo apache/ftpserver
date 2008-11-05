@@ -25,6 +25,8 @@ import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Abstract common base type for {@link UserManager} implementations
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

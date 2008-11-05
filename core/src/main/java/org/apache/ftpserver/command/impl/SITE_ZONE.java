@@ -32,6 +32,8 @@ import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Displays the FTP server timezone in RFC 822 format.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

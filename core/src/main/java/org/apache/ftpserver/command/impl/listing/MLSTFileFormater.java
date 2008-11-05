@@ -22,6 +22,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Formats files according to the MLST specification
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

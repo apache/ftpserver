@@ -239,9 +239,9 @@ public class ListenerFactory {
 
     /**
      * Sets the {@link Subnet}s that listeners created by this factory will block from connecting
-     * 
+     * @param blockedSubnets 
+     *  The list of {@link Subnet}s
      * @param blockedAddresses
-     *            The list of {@link Subnet}s
      */
     public void setBlockedSubnets(List<Subnet> blockedSubnets) {
         this.blockedSubnets = blockedSubnets;

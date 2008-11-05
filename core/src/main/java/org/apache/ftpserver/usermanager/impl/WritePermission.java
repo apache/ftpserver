@@ -23,6 +23,8 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Class representing a write permission
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

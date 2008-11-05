@@ -22,6 +22,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.util.RegularExpr;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Selects files which short name matches a regular expression
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

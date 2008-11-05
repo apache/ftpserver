@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileFilter;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * FileFilter used for simple file name matching
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

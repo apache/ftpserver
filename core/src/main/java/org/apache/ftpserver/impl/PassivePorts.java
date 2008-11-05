@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Provides support for parsing a passive ports string as well as keeping track
  * of reserved passive ports.
  *

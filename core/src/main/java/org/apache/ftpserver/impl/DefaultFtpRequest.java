@@ -22,6 +22,8 @@ package org.apache.ftpserver.impl;
 import org.apache.ftpserver.ftplet.FtpRequest;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * FTP request object.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

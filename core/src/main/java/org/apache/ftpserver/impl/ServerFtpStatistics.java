@@ -23,6 +23,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpStatistics;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is same as <code>org.apache.ftpserver.ftplet.FtpStatistics</code> with
  * added observer and setting values functionalities.
  *

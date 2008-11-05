@@ -42,6 +42,11 @@ public class Daemon {
 
     private static Object lock = new Object();
 
+    /**
+     * Main entry point for the daemon
+     * @param args The arguments
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         try {
             if (server == null) {

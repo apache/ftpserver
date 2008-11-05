@@ -38,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>PORT &lt;SP&gt; <host-port> &lt;CRLF&gt;</code><br>
  * 
  * The argument is a HOST-PORT specification for the data port to be used in

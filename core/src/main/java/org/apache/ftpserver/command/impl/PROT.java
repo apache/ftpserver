@@ -31,6 +31,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Data channel protection level.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

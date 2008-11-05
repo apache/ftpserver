@@ -35,6 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * The EPRT command allows for the specification of an extended address for the
  * data connection. The extended address MUST consist of the network protocol as
  * well as the network and transport addresses. The format of EPRT is:

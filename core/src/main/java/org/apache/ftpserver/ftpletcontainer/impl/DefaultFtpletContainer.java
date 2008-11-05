@@ -35,9 +35,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This ftplet calls other ftplet methods and returns appropriate return value.
  *
- * <strong>Internal class, do not use directly</strong>
+ * <strong><strong>Internal class, do not use directly.</strong></strong>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$

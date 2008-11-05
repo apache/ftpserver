@@ -29,6 +29,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>ACCT &lt;CRLF&gt;</code><br>
  * 
  * Acknowledges the ACCT (account) command with a 202 reply. The command however

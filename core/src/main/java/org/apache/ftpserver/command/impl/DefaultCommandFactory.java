@@ -27,10 +27,12 @@ import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.command.CommandFactoryFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Command factory to return appropriate command implementation depending on the
  * FTP request command string.
  *
- * <strong>Internal class, do not use directly</strong>
+ * <strong><strong>Internal class, do not use directly.</strong></strong>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$

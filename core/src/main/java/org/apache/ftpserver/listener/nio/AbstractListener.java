@@ -31,6 +31,8 @@ import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Common base class for listener implementations
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

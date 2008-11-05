@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Standard date related utility methods.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

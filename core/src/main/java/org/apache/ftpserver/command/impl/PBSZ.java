@@ -30,6 +30,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Protection buffer size.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

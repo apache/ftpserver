@@ -22,6 +22,8 @@ package org.apache.ftpserver.usermanager.impl;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Request for getting the maximum allowed transfer rates for a user
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

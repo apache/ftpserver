@@ -31,6 +31,8 @@ import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.util.DateUtils;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * FTP reply translator.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

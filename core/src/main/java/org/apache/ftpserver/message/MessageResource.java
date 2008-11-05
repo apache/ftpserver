@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.message;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -31,17 +33,24 @@ public interface MessageResource {
 
     /**
      * Get all the available languages.
+     * @return A list of available languages
      */
-    String[] getAvailableLanguages();
+    List<String> getAvailableLanguages();
 
     /**
      * Get the message for the corresponding code and sub id. If not found it
      * will return null.
+     * @param code The reply code
+     * @param subId The sub ID
+     * @param language The language
+     * @return The message matching the provided inputs, or null if not found
      */
     String getMessage(int code, String subId, String language);
 
     /**
      * Get all the messages.
+     * @param language The language
+     * @return All messages for the provided language
      */
-    Properties getMessages(String language);
+    Map<String, String> getMessages(String language);
 }

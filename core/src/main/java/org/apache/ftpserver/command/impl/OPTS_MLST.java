@@ -31,6 +31,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Client-Server listing negotation. Instruct the server what listing types to
  * include in machine directory/file listings.
  *

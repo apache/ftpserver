@@ -23,6 +23,8 @@ import java.net.InetAddress;
 import java.security.cert.Certificate;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * User metadata used during authentication
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

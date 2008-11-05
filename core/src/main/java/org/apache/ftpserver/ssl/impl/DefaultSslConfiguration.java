@@ -33,10 +33,12 @@ import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.util.ClassUtils;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Used to configure the SSL settings for the control channel or the data
  * channel.
  * 
- * <strong>Internal class, do not use directly</strong>
+ * <strong><strong>Internal class, do not use directly.</strong></strong>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$

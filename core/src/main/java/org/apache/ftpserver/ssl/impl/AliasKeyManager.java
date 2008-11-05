@@ -25,6 +25,8 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.X509KeyManager;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * X509KeyManager which allows selection of a specific keypair and certificate
  * chain (identified by their keystore alias name) to be used by the server to
  * authenticate itself to SSL clients.

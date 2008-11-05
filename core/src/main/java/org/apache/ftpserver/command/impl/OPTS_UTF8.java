@@ -30,6 +30,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Client-Server encoding negotiation. Force server from default encoding to
  * UTF-8 and back. Note that the servers default encoding is UTF-8. So this
  * command has no effect.

@@ -22,7 +22,9 @@ package org.apache.ftpserver.impl;
 import java.net.InetAddress;
 
 /**
- * Ftp statistics observer interface.
+ * <strong>Internal class, do not use directly.</strong>
+ * 
+ * FTP statistics observer interface.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
  * @version $Rev$, $Date$

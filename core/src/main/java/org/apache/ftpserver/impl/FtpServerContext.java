@@ -29,6 +29,8 @@ import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.message.MessageResource;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with
  * added connection manager, message resource functionalities.
  *

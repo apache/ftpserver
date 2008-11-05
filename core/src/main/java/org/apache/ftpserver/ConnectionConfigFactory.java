@@ -40,6 +40,10 @@ public class ConnectionConfigFactory implements ConnectionConfig {
 
     private int loginFailureDelay = 500;
 
+    /**
+     * 
+     * @return
+     */
     public ConnectionConfig createConnectionConfig() {
         return new DefaultConnectionConfig(anonymousLoginEnabled,
                 loginFailureDelay, maxLogins, maxAnonymousLogins,

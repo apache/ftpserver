@@ -24,9 +24,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,10 +40,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Class to get FtpServer reply messages. This supports i18n. Basic message
  * search path is:
  * 
- * <strong>Internal class, do not use directly</strong>
+ * <strong><strong>Internal class, do not use directly.</strong></strong>
  * 
  * Custom Language Specific Messages -> Default Language Specific Messages ->
  * Custom Common Messages -> Default Common Messages -> null (not found)
@@ -56,17 +60,17 @@ public class DefaultMessageResource implements MessageResource {
 
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
 
-    private String[] languages;
+    private List<String> languages;
 
     private Map<String, PropertiesPair> messages;
 
     /**
      * Internal constructor, do not use directly. Use {@link MessageResourceFactory} instead.
      */
-    public DefaultMessageResource(String[] languages,
+    public DefaultMessageResource(List<String> languages,
             File customMessageDirectory) {
         if(languages != null) {
-            this.languages = languages.clone();
+            this.languages = Collections.unmodifiableList(languages);
         }
 
         // populate different properties
@@ -150,11 +154,11 @@ public class DefaultMessageResource implements MessageResource {
     /**
      * Get all the available languages.
      */
-    public String[] getAvailableLanguages() {
+    public List<String> getAvailableLanguages() {
         if (languages == null) {
             return null;
         } else {
-            return (String[]) languages.clone();
+            return Collections.unmodifiableList(languages);
         }
     }
 
@@ -199,7 +203,7 @@ public class DefaultMessageResource implements MessageResource {
     /**
      * Get all messages.
      */
-    public Properties getMessages(String language) {
+    public Map<String, String> getMessages(String language) {
         Properties messages = new Properties();
 
         // load properties sequentially
@@ -217,7 +221,13 @@ public class DefaultMessageResource implements MessageResource {
                 messages.putAll(pair.customProperties);
             }
         }
-        return messages;
+        
+        Map<String, String> result = new HashMap<String, String>();
+        for(Object key : messages.keySet()) {
+            result.put(key.toString(), messages.getProperty(key.toString()));
+        }
+        
+        return Collections.unmodifiableMap(result);
     }
 
     /**

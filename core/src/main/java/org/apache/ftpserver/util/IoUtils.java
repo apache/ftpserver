@@ -35,6 +35,8 @@ import java.io.Writer;
 import java.util.Random;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * IO utility methods.
  *
  * <b>Note: Why not use commons-io?</b>

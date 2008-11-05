@@ -21,6 +21,8 @@ package org.apache.ftpserver.command.impl.listing;
 import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Interface for formating output based on a {@link FtpFile}
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

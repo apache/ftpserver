@@ -29,6 +29,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>ABOR &lt;CRLF&gt;</code><br>
  * 
  * This command tells the server to abort the previous FTP service command and

@@ -37,6 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>PASV &lt;CRLF&gt;</code><br>
  * 
  * This command requests the server-DTP to "listen" on a data port (which is not

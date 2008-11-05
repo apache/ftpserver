@@ -28,6 +28,8 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This class prints file listing.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

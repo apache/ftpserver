@@ -29,6 +29,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>REIN &lt;CRLF&gt;</code><br>
  * 
  * This command flushes a USER, without affecting transfers in progress. The

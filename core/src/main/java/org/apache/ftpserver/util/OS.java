@@ -20,6 +20,8 @@ package org.apache.ftpserver.util;
 import java.util.Locale;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Condition that tests the OS type.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

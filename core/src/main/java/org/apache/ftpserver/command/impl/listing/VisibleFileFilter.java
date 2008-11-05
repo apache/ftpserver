@@ -21,6 +21,8 @@ package org.apache.ftpserver.command.impl.listing;
 import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Selects files that are visible
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

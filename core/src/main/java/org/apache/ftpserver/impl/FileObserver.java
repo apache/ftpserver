@@ -22,6 +22,8 @@ package org.apache.ftpserver.impl;
 import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * This is the file related activity observer.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

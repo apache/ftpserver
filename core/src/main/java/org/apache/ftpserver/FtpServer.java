@@ -34,6 +34,7 @@ public interface FtpServer {
 
     /**
      * Start the server. Open a new listener thread.
+     * @throws FtpException 
      */
     void start() throws FtpException;
     
@@ -44,6 +45,7 @@ public interface FtpServer {
     
     /**
      * Get the server status.
+     * @return true if the server is stopped
      */
     boolean isStopped();
     
@@ -59,6 +61,7 @@ public interface FtpServer {
     
     /**
      * Is the server suspended
+     * @return true if the server is suspended
      */
     boolean isSuspended();
     

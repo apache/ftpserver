@@ -22,6 +22,8 @@ package org.apache.ftpserver.usermanager.impl;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * Class representing a request to log in a number of concurrent times
  *
  * @author The Apache MINA Project (dev@mina.apache.org)

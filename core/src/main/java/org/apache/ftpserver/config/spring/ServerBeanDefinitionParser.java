@@ -20,6 +20,7 @@
 package org.apache.ftpserver.config.spring;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,6 @@ import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultConnectionConfig;
-import org.apache.ftpserver.impl.DefaultFtpServer;
-import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.message.MessageResource;
 import org.apache.ftpserver.message.MessageResourceFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -168,7 +166,7 @@ public class ServerBeanDefinitionParser extends
 
             String[] languages = langString.split("[\\s,]+");
 
-            mr.setLanguages(languages);
+            mr.setLanguages(Arrays.asList(languages));
         }
 
         if (StringUtils.hasText(childElm.getAttribute("directory"))) {

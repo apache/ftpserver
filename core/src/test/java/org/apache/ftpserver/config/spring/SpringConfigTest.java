@@ -97,12 +97,12 @@ public class SpringConfigTest extends TestCase {
         assertTrue(cf.getCommand("FOO") instanceof HELP);
         assertTrue(cf.getCommand("FOO2") instanceof STAT);
 
-        String[] languages = server.getServerContext().getMessageResource()
+        List<String> languages = server.getServerContext().getMessageResource()
                 .getAvailableLanguages();
 
-        assertEquals(2, languages.length);
-        assertEquals("en", languages[0]);
-        assertEquals("zh-tw", languages[1]);
+        assertEquals(2, languages.size());
+        assertEquals("en", languages.get(0));
+        assertEquals("zh-tw", languages.get(1));
         
         NativeFileSystemFactory fs = (NativeFileSystemFactory) server.getFileSystem();
         assertTrue(fs.isCreateHome());

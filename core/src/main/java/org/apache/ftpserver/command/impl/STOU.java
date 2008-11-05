@@ -43,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <strong>Internal class, do not use directly.</strong>
+ * 
  * <code>STOU &lt;CRLF&gt;</code><br>
  * 
  * This command behaves like STOR except that the resultant file is to be
