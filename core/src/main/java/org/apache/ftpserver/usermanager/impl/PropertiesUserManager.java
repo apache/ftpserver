@@ -247,6 +247,10 @@ public class PropertiesUserManager extends AbstractUserManager {
      * @throws FtpException
      */
     private void saveUserData() throws FtpException {
+        if(userDataFile == null) {
+            return;
+        }
+        
         File dir = userDataFile.getAbsoluteFile().getParentFile();
         if (dir != null && !dir.exists() && !dir.mkdirs()) {
             String dirName = dir.getAbsolutePath();
