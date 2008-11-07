@@ -37,19 +37,10 @@ import org.apache.ftpserver.test.TestUtil;
 *
 */
 public class DataTransferTimeoutTest extends ClientTestTemplate {
-    private static final String TESTDATA = "TESTDATA\r\nline2\r\n";
-
-    private static final String ENCODING = "UTF-8";
-
     private static final String TEST_FILENAME = "test.txt";
     
     private static final File TEST_FILE = new File(ROOT_DIR, TEST_FILENAME);
 
-
-    private static byte[] testData = null;
-
-    
-    
     @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory serverFactory = super.createServer();
@@ -70,8 +61,6 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
      */
     protected void setUp() throws Exception {
         super.setUp();
-
-        testData = TESTDATA.getBytes(ENCODING);
 
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
@@ -98,7 +87,7 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
 
     public void testTimeoutForRetreive() throws Exception {
         // as used by IODataConnection
-        int bufferSize = 4096;
+        int bufferSize = 4096 * 10;
         byte[] buffer = new byte[bufferSize];
         
         byte[] testData = new byte[200 * bufferSize];
