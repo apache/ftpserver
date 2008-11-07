@@ -107,5 +107,9 @@ public class SpringConfigTest extends TestCase {
         NativeFileSystemFactory fs = (NativeFileSystemFactory) server.getFileSystem();
         assertTrue(fs.isCreateHome());
         assertTrue(fs.isCaseInsensitive());
+        
+        assertEquals(2, server.getFtplets().size());
+        assertEquals(123, ((TestFtplet)server.getFtplets().get("ftplet1")).getFoo());
+        assertEquals(223, ((TestFtplet)server.getFtplets().get("ftplet2")).getFoo());
     }
 }

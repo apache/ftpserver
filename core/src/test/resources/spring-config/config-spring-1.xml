@@ -61,8 +61,12 @@
 				<beans:bean class="org.apache.ftpserver.config.spring.TestFtplet">
 					<beans:property name="foo" value="123"/>
 				</beans:bean>
-				
 			</ftplet>
+            <ftplet name="ftplet2">
+                <beans:bean class="org.apache.ftpserver.config.spring.TestFtplet">
+                    <beans:property name="foo" value="223"/>
+                </beans:bean>
+            </ftplet>
 		</ftplets>
 		<!--<file-user-manager file="src/test/resources/users.properties" encrypt-passwords="true" />-->
 		<user-manager>

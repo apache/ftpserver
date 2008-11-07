@@ -144,10 +144,10 @@
 	<xs:element name="ftplets">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="ftplet">
+				<xs:element name="ftplet" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:choice maxOccurs="unbounded">
+							<xs:choice>
 								<xs:element ref="beans:bean" />
 								<xs:element ref="beans:ref" />
 							</xs:choice>
