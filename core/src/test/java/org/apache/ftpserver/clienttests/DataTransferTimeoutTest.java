@@ -96,11 +96,16 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
         TestUtil.writeDataToFile(TEST_FILE, testData);
         InputStream is = client.retrieveFileStream(TEST_FILENAME);
 
-        // read one buffer size at a time, trying to trigger IODataConnection to update
+        // read ten buffer sizes at a time, trying to trigger IODataConnection to update
         // the session timeout for each read
         for(int i = 0; i<100; i++) {
+            long startTime = System.currentTimeMillis();
             Thread.sleep(20);
-            is.read(buffer);   
+            is.read(buffer);
+            
+            if((System.currentTimeMillis() - startTime) > 500 ) {
+                fail("Read took to long, test not safe");
+            }
         }
         
         is.close();
