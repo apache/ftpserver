@@ -15,12 +15,19 @@
     -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>ftpserver-parent</artifactId>
+        <groupId>org.apache.ftpserver</groupId>
+        <version>1.0.0-M4-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.ftpserver.examples</groupId>
 	<artifactId>ftpserver-spring-war</artifactId>
 	<name>FtpServer Spring web project example</name>
 	<packaging>war</packaging>
-	<version>1.0-M4-SNAPSHOT</version>
+	<version>1.0.0-M4-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -30,10 +37,8 @@
         <dependency>
             <groupId>org.apache.ftpserver</groupId>
             <artifactId>ftpserver-core</artifactId>
-            <version>1.0.0-M4-SNAPSHOT</version>
+            <version>${pom.version}</version>
         </dependency>
-
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -43,18 +48,10 @@
 		<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.0</version>
         </dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
-			<exclusions>
-			 <exclusion>
-			     <groupId>javax.jms</groupId>
-			     <artifactId>jms</artifactId>
-			 </exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
