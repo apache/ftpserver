@@ -85,6 +85,9 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
         client.noop();
     }
 
+    /*
+     * Disabled for now, test is not stable on Solaris
+    
     public void testTimeoutForRetreive() throws Exception {
         // as used by IODataConnection
         int bufferSize = 4096 * 10;
@@ -115,4 +118,5 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
         // we should not have been disconnected
         client.noop();
     }
+*/
 }
