@@ -20,6 +20,7 @@
 package org.apache.ftpserver.usermanager;
 
 import java.io.File;
+import java.net.URL;
 
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
@@ -32,21 +33,28 @@ import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
  */
 public class PropertiesUserManagerFactory implements UserManagerFactory {
 
-
-    
     private String adminName = "admin";
-    
+
     private File userDataFile;
-    
+
+    private URL userDataURL;
+
     private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
 
     /**
      * Creates a {@link PropertiesUserManager} instance based on the provided configuration
      */
     public UserManager createUserManager() {
-        return new PropertiesUserManager(passwordEncryptor, userDataFile, adminName);
+        if (userDataURL != null) {
+            return new PropertiesUserManager(passwordEncryptor, userDataURL,
+                    adminName);
+        } else {
+
+            return new PropertiesUserManager(passwordEncryptor, userDataFile,
+                    adminName);
+        }
     }
-    
+
     /**
      * Get the admin name.
      * @return The admin user name
@@ -65,7 +73,7 @@ public class PropertiesUserManagerFactory implements UserManagerFactory {
     public void setAdminName(String adminName) {
         this.adminName = adminName;
     }
-    
+
     /**
      * Retrieve the file used to load and store users
      * @return The file
@@ -84,16 +92,32 @@ public class PropertiesUserManagerFactory implements UserManagerFactory {
         this.userDataFile = propFile;
     }
 
+    /**
+     * Retrieve the URL used to load and store users
+     * @return The {@link URL}
+     */
+    public URL getUrl() {
+        return userDataURL;
+    }
+
+    /**
+     * Set the URL used to store and read users. 
+     * 
+     * @param userDataURL
+     *            A {@link URL} containing users
+     */
+    public void setUrl(URL userDataURL) {
+        this.userDataURL = userDataURL;
+    }
     
     /**
      * Retrieve the password encryptor used by user managers created by this factory
      * @return The password encryptor. Default to {@link Md5PasswordEncryptor}
      *  if no other has been provided
-     */    
+     */
     public PasswordEncryptor getPasswordEncryptor() {
         return passwordEncryptor;
     }
-
 
     /**
      * Set the password encryptor to use by user managers created by this factory

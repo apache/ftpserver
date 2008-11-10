@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -133,7 +134,6 @@ public class PropertiesUserManager extends AbstractUserManager {
     public PropertiesUserManager(PasswordEncryptor passwordEncryptor,
             File userDataFile, String adminName) {
         super(adminName, passwordEncryptor);
-        this.userDataFile = userDataFile;
 
         try {
             userDataProp = new BaseProperties();
@@ -142,6 +142,8 @@ public class PropertiesUserManager extends AbstractUserManager {
                 LOG.debug("File configured, will try loading");
                 
                 if(userDataFile.exists()) {
+                    this.userDataFile = userDataFile;
+                    
                     LOG.debug("File found on file system");
                     FileInputStream fis = null;
                     try {
@@ -173,10 +175,40 @@ public class PropertiesUserManager extends AbstractUserManager {
         } catch (IOException e) {
             throw new FtpServerConfigurationException(
                     "Error loading user data file : "
-                            + userDataFile.getAbsolutePath(), e);
+                            + userDataFile, e);
         }
     }
 
+    /**
+     * Internal constructor, do not use directly. Use {@link PropertiesUserManagerFactory} instead.
+     */
+    public PropertiesUserManager(PasswordEncryptor passwordEncryptor,
+            URL userDataPath, String adminName) {
+        super(adminName, passwordEncryptor);
+
+        try {
+            userDataProp = new BaseProperties();
+
+            if (userDataPath != null) {
+                LOG.debug("URL configured, will try loading");
+                
+                InputStream is = null;
+                
+                is = userDataPath.openStream();
+                    
+                try {
+                    userDataProp.load(is);
+                } finally {
+                    IoUtils.close(is);
+                }
+            } 
+        } catch (IOException e) {
+            throw new FtpServerConfigurationException(
+                    "Error loading user data resource : "
+                            + userDataPath, e);
+        }
+    }
+    
     /**
      * Retrive the file backing this user manager
      * @return The file

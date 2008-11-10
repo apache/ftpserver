@@ -56,7 +56,6 @@
 		</testResources>
 		<plugins>
 			<plugin>
-			    <!-- This is still very much work in progress -->
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>1.4.1</version>
@@ -82,7 +81,7 @@
 							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
 							org.apache.ftpserver.usermanager.impl,
 							org.apache.ftpserver.util</Private-Package>
-						<Import-Package>
+ 						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.xml;resolution:=optional;version="2.5",

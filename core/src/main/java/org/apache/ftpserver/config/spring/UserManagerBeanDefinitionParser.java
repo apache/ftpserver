@@ -76,7 +76,12 @@ public class UserManagerBeanDefinitionParser extends
         }
         
         if (factoryClass == PropertiesUserManagerFactory.class) {
-            factoryBuilder.addPropertyValue("file", element.getAttribute("file"));
+            if (StringUtils.hasText(element.getAttribute("file"))) {
+                factoryBuilder.addPropertyValue("file", element.getAttribute("file"));
+            }
+            if (StringUtils.hasText(element.getAttribute("url"))) {
+                factoryBuilder.addPropertyValue("url", element.getAttribute("url"));
+            }
         } else {
             Element dsElm = SpringUtil.getChildElement(element,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "data-source");

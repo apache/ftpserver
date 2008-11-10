@@ -162,7 +162,8 @@
 	<!-- Element used to configure a file based user manager -->
 	<xs:element name="file-user-manager">
 		<xs:complexType>
-			<xs:attribute name="file" use="required" type="xs:string" />
+			<xs:attribute name="file" type="xs:string" />
+			<xs:attribute name="url" type="xs:string" />
 			<xs:attribute name="encrypt-passwords">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
