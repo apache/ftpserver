@@ -318,7 +318,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             LOG.warn("FtpDataConnection.getDataSocket()", ex);
             throw ex;
         }
-
+        dataSoc.setSoTimeout(dataConfig.getIdleTime()*1000);
         // Make sure we initate the SSL handshake, or we'll
         // get an error if we turn out not to send any data
         // e.g. during the listing of an empty dir
