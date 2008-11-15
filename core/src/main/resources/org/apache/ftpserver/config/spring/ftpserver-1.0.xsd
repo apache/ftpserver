@@ -143,7 +143,7 @@
 	<!-- Element used to configure Ftplets for used with the server -->
 	<xs:element name="ftplets">
 		<xs:complexType>
-			<xs:sequence>
+			<xs:choice>
 				<xs:element name="ftplet" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
@@ -155,7 +155,8 @@
 						<xs:attribute name="name" use="required" type="xs:string" />
 					</xs:complexType>
 				</xs:element>
-			</xs:sequence>
+				<xs:element ref="beans:map" />
+			</xs:choice>
 		</xs:complexType>
 	</xs:element>
 

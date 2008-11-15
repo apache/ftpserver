@@ -184,18 +184,25 @@ public class ServerBeanDefinitionParser extends
     private Map parseFtplets(final Element childElm,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
-        ManagedMap ftplets = new ManagedMap();
 
         List<Element> childs = SpringUtil.getChildElements(childElm);
 
-        for (Element ftpletElm : childs) {
-            ftplets
-                    .put(ftpletElm.getAttribute("name"), SpringUtil
-                            .parseSpringChildElement(ftpletElm, parserContext,
-                                    builder));
+        if(childs.size() > 0 && childs.get(0).getLocalName().equals("map")) {
+            // using a beans:map element
+            return (Map) parserContext.getDelegate().parseMapElement(
+                    childs.get(0),
+                    builder.getBeanDefinition());
+        } else {
+            ManagedMap ftplets = new ManagedMap();
+            for (Element ftpletElm : childs) {
+                ftplets
+                        .put(ftpletElm.getAttribute("name"), SpringUtil
+                                .parseSpringChildElement(ftpletElm, parserContext,
+                                        builder));
+            }
+    
+            return ftplets;
         }
-
-        return ftplets;
     }
 
     /**
