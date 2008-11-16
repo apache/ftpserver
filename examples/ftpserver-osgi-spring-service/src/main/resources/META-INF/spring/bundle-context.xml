@@ -43,9 +43,7 @@
 	<osgi:reference id="ftplet" interface="org.apache.ftpserver.ftplet.Ftplet" />
 	
 	<!-- Starts and stops the bean as the context is started and stopped -->
-	<bean class="org.apache.ftpserver.example.osgiservice.impl.FtpServerLifecycle"
-	   init-method="init" destroy-method="destroy"
-	>
+	<bean class="org.apache.ftpserver.example.osgiservice.impl.FtpServerLifecycle">
 	   <property name="server" ref="server" />
 	</bean>
 </beans>

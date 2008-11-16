@@ -29,6 +29,11 @@
 	<packaging>bundle</packaging>
 	<version>1.0.0-M4-SNAPSHOT</version>
 	<dependencies>
+	   <dependency>
+	       <groupId>org.springframework</groupId>
+	       <artifactId>spring-beans</artifactId>
+	       <version>2.5.5</version>
+	   </dependency>
 		<dependency>
 			<groupId>org.apache.ftpserver</groupId>
 			<artifactId>ftpserver-core</artifactId>
@@ -49,6 +54,7 @@
 						<Export-Package> org.apache.ftpserver.example.osgiservice</Export-Package>
 						<Private-Package>org.apache.ftpserver.example.osgiservice.impl</Private-Package>
 						<Import-Package>
+						  org.springframework.beans.factory,
 						  org.apache.ftpserver,
 						  org.apache.ftpserver.ftplet
 						</Import-Package>
