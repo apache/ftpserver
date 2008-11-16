@@ -57,9 +57,14 @@ public class LoginTest extends ClientTestTemplate {
 
     public void testLoginWithEmptyPassword() throws Exception {
         assertTrue(FTPReply.isPositiveIntermediate(client.user(ADMIN_USERNAME)));
-        assertEquals(501, client.sendCommand("PASS"));
+        assertEquals(530, client.sendCommand("PASS"));
     }
 
+    public void testLoginWithEmptyCorrectPassword() throws Exception {
+        assertTrue(FTPReply.isPositiveIntermediate(client.user("testuser3")));
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("PASS")));
+    }
+    
     public void testLoginIncorrectPassword() throws Exception {
         assertFalse(client.login(ADMIN_USERNAME, UNKNOWN_PASSWORD));
     }

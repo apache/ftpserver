@@ -75,17 +75,7 @@ public class PASS extends AbstractCommand {
 
             // argument check
             String password = request.getArgument();
-            if (password == null) {
-                session
-                        .write(LocalizedFtpReply
-                                .translate(
-                                        session,
-                                        request,
-                                        context,
-                                        FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                                        "PASS", null));
-                return;
-            }
+
 
             // check user name
             String userName = session.getUserArgument();
