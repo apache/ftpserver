@@ -21,10 +21,8 @@
 package org.apache.ftpserver.example.osgiservice.impl;
 
 import org.apache.ftpserver.FtpServer;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 
-public class FtpServerLifecycle implements InitializingBean, DisposableBean {
+public class FtpServerLifecycle {
 
     private FtpServer server;
     
@@ -36,7 +34,7 @@ public class FtpServerLifecycle implements InitializingBean, DisposableBean {
         this.server = server;
     }
 
-    public void afterPropertiesSet() throws Exception {
+    public void init() throws Exception {
         server.start();
         System.out.println("Server started");
     }
