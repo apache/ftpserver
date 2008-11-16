@@ -95,6 +95,7 @@ public class LISTFileFormater implements FileFormater {
         permission[0] = file.isDirectory() ? 'd' : '-';
         permission[1] = file.isReadable() ? 'r' : '-';
         permission[2] = file.isWritable() ? 'w' : '-';
+        permission[3] = file.isDirectory() ? 'x' : '-'; 
         return permission;
     }
 

@@ -45,7 +45,7 @@ public class LISTFileFormaterTest extends TestCase {
 
     private static final String TEST_FILE_FORMAT = "-r--------   1 owner group           13 Feb  2  2005 short\r\n";
 
-    private static final String TEST_DIR_FORMAT = "dr--------   3 owner group            0 Feb  2  2005 short\r\n";
+    private static final String TEST_DIR_FORMAT = "dr-x------   3 owner group            0 Feb  2  2005 short\r\n";
 
     public LISTFileFormater formater = new LISTFileFormater();
 
