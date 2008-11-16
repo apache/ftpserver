@@ -126,8 +126,8 @@ public class PropertiesUserManager extends AbstractUserManager {
 
     private File userDataFile;
 
+    private URL userUrl;
 
-    
     /**
      * Internal constructor, do not use directly. Use {@link PropertiesUserManagerFactory} instead.
      */
@@ -135,15 +135,29 @@ public class PropertiesUserManager extends AbstractUserManager {
             File userDataFile, String adminName) {
         super(adminName, passwordEncryptor);
 
+        loadFromFile(userDataFile);
+    }
+
+    /**
+     * Internal constructor, do not use directly. Use {@link PropertiesUserManagerFactory} instead.
+     */
+    public PropertiesUserManager(PasswordEncryptor passwordEncryptor,
+            URL userDataPath, String adminName) {
+        super(adminName, passwordEncryptor);
+
+        loadFromUrl(userDataPath);
+    }
+
+    private void loadFromFile(File userDataFile) {
         try {
             userDataProp = new BaseProperties();
 
             if (userDataFile != null) {
                 LOG.debug("File configured, will try loading");
-                
-                if(userDataFile.exists()) {
+
+                if (userDataFile.exists()) {
                     this.userDataFile = userDataFile;
-                    
+
                     LOG.debug("File found on file system");
                     FileInputStream fis = null;
                     try {
@@ -154,11 +168,13 @@ public class PropertiesUserManager extends AbstractUserManager {
                     }
                 } else {
                     // try loading it from the classpath
-                    LOG.debug("File not found on file system, try loading from classpath");
-                    
-                    InputStream is = getClass().getClassLoader().getResourceAsStream(userDataFile.getPath());
-                    
-                    if(is != null) {
+                    LOG
+                            .debug("File not found on file system, try loading from classpath");
+
+                    InputStream is = getClass().getClassLoader()
+                            .getResourceAsStream(userDataFile.getPath());
+
+                    if (is != null) {
                         try {
                             userDataProp.load(is);
                         } finally {
@@ -166,49 +182,61 @@ public class PropertiesUserManager extends AbstractUserManager {
                         }
                     } else {
                         throw new FtpServerConfigurationException(
-                                "User data file specified but could not be located, " +
-                                "neither on the file system or in the classpath: "
-                                        + userDataFile.getPath());                    
+                                "User data file specified but could not be located, "
+                                        + "neither on the file system or in the classpath: "
+                                        + userDataFile.getPath());
                     }
                 }
-            } 
+            }
         } catch (IOException e) {
             throw new FtpServerConfigurationException(
-                    "Error loading user data file : "
-                            + userDataFile, e);
+                    "Error loading user data file : " + userDataFile, e);
         }
     }
 
-    /**
-     * Internal constructor, do not use directly. Use {@link PropertiesUserManagerFactory} instead.
-     */
-    public PropertiesUserManager(PasswordEncryptor passwordEncryptor,
-            URL userDataPath, String adminName) {
-        super(adminName, passwordEncryptor);
-
+    private void loadFromUrl(URL userDataPath) {
         try {
             userDataProp = new BaseProperties();
 
             if (userDataPath != null) {
                 LOG.debug("URL configured, will try loading");
-                
+
+                userUrl = userDataPath;
                 InputStream is = null;
-                
+
                 is = userDataPath.openStream();
-                    
+
                 try {
                     userDataProp.load(is);
                 } finally {
                     IoUtils.close(is);
                 }
-            } 
+            }
         } catch (IOException e) {
             throw new FtpServerConfigurationException(
-                    "Error loading user data resource : "
-                            + userDataPath, e);
+                    "Error loading user data resource : " + userDataPath, e);
         }
     }
+
+    /**
+     * Reloads the contents of the user.properties file. This allows any manual modifications to the file to be recognised by the running server.
+     */
+    public void refresh() {
+        synchronized (userDataProp) {
+            if (userDataFile != null) {
+                LOG.debug("Refreshing user manager using file: "
+                        + userDataFile.getAbsolutePath());
+                loadFromFile(userDataFile);
     
+            } else {
+                //file is null, must have been created using URL
+                LOG.debug("Refreshing user manager using URL: "
+                        + userUrl.toString());
+                loadFromUrl(userUrl);
+            }
+        }
+    }
+
     /**
      * Retrive the file backing this user manager
      * @return The file
@@ -217,7 +245,6 @@ public class PropertiesUserManager extends AbstractUserManager {
         return userDataFile;
     }
 
-    
     /**
      * Save user data. Store the properties.
      */
@@ -279,10 +306,10 @@ public class PropertiesUserManager extends AbstractUserManager {
      * @throws FtpException
      */
     private void saveUserData() throws FtpException {
-        if(userDataFile == null) {
+        if (userDataFile == null) {
             return;
         }
-        
+
         File dir = userDataFile.getAbsoluteFile().getParentFile();
         if (dir != null && !dir.exists() && !dir.mkdirs()) {
             String dirName = dir.getAbsolutePath();
@@ -452,10 +479,10 @@ public class PropertiesUserManager extends AbstractUserManager {
                 password = "";
             }
 
-            String storedPassword = userDataProp.getProperty(PREFIX + user + '.'
-                    + ATTR_PASSWORD);
-            
-            if(storedPassword == null) {
+            String storedPassword = userDataProp.getProperty(PREFIX + user
+                    + '.' + ATTR_PASSWORD);
+
+            if (storedPassword == null) {
                 // user does not exist
                 throw new AuthenticationFailedException("Authentication failed");
             }
@@ -487,4 +514,5 @@ public class PropertiesUserManager extends AbstractUserManager {
             userDataProp = null;
         }
     }
+
 }

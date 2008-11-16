@@ -20,11 +20,14 @@
 package org.apache.ftpserver.usermanager.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.UserManagerFactory;
@@ -89,4 +92,25 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         IoUtils.delete(TEST_DIR);
     }
 
+    public void testRefresh() throws FileNotFoundException, IOException {
+    	Properties users = new Properties();
+    	users.load(new FileInputStream(USERS_FILE));
+    	String originalSetting = users.getProperty("ftpserver.user.user1.homedirectory");
+    	users.setProperty("ftpserver.user.user1.homedirectory", "refresh_test");
+    	users.store(new FileOutputStream(USERS_FILE), null);
+    	
+    	PropertiesUserManager pum = (PropertiesUserManager) userManager;
+    	pum.refresh();
+    	User modifiedUser = pum.getUserByName("user1");
+    	assertEquals("Home directory should have been \"refresh_test\" after call to refresh().","refresh_test",modifiedUser.getHomeDirectory());
+    	// set everything back again
+    	users.load(new FileInputStream(USERS_FILE));
+    	users.setProperty("ftpserver.user.user1.homedirectory", originalSetting);
+    	users.store(new FileOutputStream(USERS_FILE), null);
+    	
+    	pum.refresh();
+    	//check everything is back again
+    	modifiedUser = pum.getUserByName("user1");
+    	assertEquals("Home directory should have reset back to \""+originalSetting+"\" after second call to refresh().",originalSetting,modifiedUser.getHomeDirectory());
+    }
 }
