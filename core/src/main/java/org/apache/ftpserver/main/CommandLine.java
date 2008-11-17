@@ -38,7 +38,7 @@ public class CommandLine {
      * FtpServer application. Because of that it has only <code>static</code>
      * methods and cannot be instanced.
      */
-    private CommandLine() {
+    protected CommandLine() {
     }
 
     /**
@@ -51,10 +51,11 @@ public class CommandLine {
      */
     public static void main(String args[]) {
 
+        CommandLine cli = new CommandLine();
         try {
 
             // get configuration
-            FtpServer server = getConfiguration(args);
+            FtpServer server = cli.getConfiguration(args);
             if (server == null) {
                 return;
             }
@@ -64,7 +65,7 @@ public class CommandLine {
             System.out.println("FtpServer started");
 
             // add shutdown hook if possible
-            addShutdownHook(server);
+            cli.addShutdownHook(server);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -73,7 +74,7 @@ public class CommandLine {
     /**
      * Add shutdown hook.
      */
-    private static void addShutdownHook(final FtpServer engine) {
+    private void addShutdownHook(final FtpServer engine) {
 
         // create shutdown hook
         Runnable shutdownHook = new Runnable() {
@@ -91,7 +92,7 @@ public class CommandLine {
     /**
      * Print the usage message.
      */
-    private static void usage() {
+    protected void usage() {
         System.err
                 .println("Usage: java org.apache.ftpserver.main.CommandLine [OPTION] [CONFIGFILE]");
         System.err
@@ -108,7 +109,7 @@ public class CommandLine {
     /**
      * Get the configuration object.
      */
-    private static FtpServer getConfiguration(String[] args) throws Exception {
+    protected FtpServer getConfiguration(String[] args) throws Exception {
 
         FtpServer server = null;
         if (args.length == 0) {
