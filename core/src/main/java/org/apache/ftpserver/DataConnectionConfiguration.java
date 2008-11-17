@@ -33,31 +33,37 @@ public interface DataConnectionConfiguration {
 
     /**
      * Get the maximum idle time in seconds.
+     * @return The maximum idle time
      */
     int getIdleTime();
 
     /**
      * Is active data connection enabled?
+     * @return true if active data connections are enabled
      */
     boolean isActiveEnabled();
 
     /**
      * Check the PORT IP with the client IP?
+     * @return true if the PORT IP is verified
      */
     boolean isActiveIpCheck();
 
     /**
      * Get the active data connection local host.
+     * @return The {@link InetAddress} for active connections
      */
     InetAddress getActiveLocalAddress();
 
     /**
      * Get the active data connection local port.
+     * @return The active data connection local port
      */
     int getActiveLocalPort();
 
     /**
      * Get passive server address. null, if not set in the configuration.
+     * @return The {@link InetAddress} used for passive connections
      */
     InetAddress getPassiveAddress();
 
@@ -71,7 +77,7 @@ public interface DataConnectionConfiguration {
     InetAddress getPassiveExernalAddress();
 
     /**
-     * Set the passive ports to be used for data connections. Ports can be
+     * Get the passive ports to be used for data connections. Ports can be
      * defined as single ports, closed or open ranges. Multiple definitions can
      * be separated by commas, for example:
      * <ul>
@@ -88,17 +94,20 @@ public interface DataConnectionConfiguration {
     String getPassivePorts();
 
     /**
-     * Request a passive port
+     * Request a passive port. Will block until a port is available
+     * @return A free passive part
      */
     int requestPassivePort();
 
     /**
      * Release passive port.
+     * @param port The port to be released
      */
     void releasePassivePort(int port);
 
     /**
      * Get SSL configuration for this data connection.
+     * @return The {@link SslConfiguration}
      */
     SslConfiguration getSslConfiguration();
 }

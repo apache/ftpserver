@@ -28,7 +28,7 @@ import org.apache.ftpserver.impl.DefaultConnectionConfig;
  * @version $Rev$, $Date$
  *
  */
-public class ConnectionConfigFactory implements ConnectionConfig {
+public class ConnectionConfigFactory {
 
     private int maxLogins = 10;
 
@@ -41,8 +41,8 @@ public class ConnectionConfigFactory implements ConnectionConfig {
     private int loginFailureDelay = 500;
 
     /**
-     * 
-     * @return
+     * Create a connection configuration instances based on the configuration on this factory
+     * @return The {@link ConnectionConfig} instance
      */
     public ConnectionConfig createConnectionConfig() {
         return new DefaultConnectionConfig(anonymousLoginEnabled,
@@ -50,42 +50,87 @@ public class ConnectionConfigFactory implements ConnectionConfig {
                 maxLoginFailures);
     }
     
+    /**
+     * The delay in number of milliseconds between login failures. Important to 
+     * make brute force attacks harder.
+     * 
+     * @return The delay time in milliseconds
+     */
     public int getLoginFailureDelay() {
         return loginFailureDelay;
     }
 
+    /**
+     * The maximum number of time an anonymous user can fail to login before getting disconnected
+     * @return The maximum number of failer login attempts
+     */
     public int getMaxAnonymousLogins() {
         return maxAnonymousLogins;
     }
 
+    /**
+     * The maximum number of time an user can fail to login before getting disconnected
+     * @return The maximum number of failure login attempts
+     */
     public int getMaxLoginFailures() {
         return maxLoginFailures;
     }
 
+    /**
+     * The maximum number of concurrently logged in users
+     * @return The maximum number of users
+     */
     public int getMaxLogins() {
         return maxLogins;
     }
 
+    /**
+     * Is anonymous logins allowed at the server?
+     * @return true if anonymous logins are enabled
+     */
     public boolean isAnonymousLoginEnabled() {
         return anonymousLoginEnabled;
     }
+
+    /**
+     * Set she maximum number of concurrently logged in users
+     * @param maxLogins The maximum number of users
+     */
 
     public void setMaxLogins(final int maxLogins) {
         this.maxLogins = maxLogins;
     }
 
+    /**
+     * Set if anonymous logins are allowed at the server
+     * @param anonymousLoginEnabled true if anonymous logins should be enabled
+     */
     public void setAnonymousLoginEnabled(final boolean anonymousLoginEnabled) {
         this.anonymousLoginEnabled = anonymousLoginEnabled;
     }
 
+    /**
+     * Sets the maximum number of time an anonymous user can fail to login before getting disconnected
+     * @param maxAnonymousLogins The maximum number of failer login attempts
+     */
     public void setMaxAnonymousLogins(final int maxAnonymousLogins) {
         this.maxAnonymousLogins = maxAnonymousLogins;
     }
 
+    /**
+     * Set the maximum number of time an user can fail to login before getting disconnected
+     * @param maxLoginFailures The maximum number of failure login attempts
+     */
     public void setMaxLoginFailures(final int maxLoginFailures) {
         this.maxLoginFailures = maxLoginFailures;
     }
 
+    /**
+     * Set the delay in number of milliseconds between login failures. Important to 
+     * make brute force attacks harder.
+     * 
+     * @param loginFailureDelay The delay time in milliseconds
+     */
     public void setLoginFailureDelay(final int loginFailureDelay) {
         this.loginFailureDelay = loginFailureDelay;
     }

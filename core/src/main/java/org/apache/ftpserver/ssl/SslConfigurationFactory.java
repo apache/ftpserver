@@ -210,6 +210,10 @@ public class SslConfigurationFactory {
         this.keyPass = keyPass;
     }
 
+    /**
+     * Get the file used to load the truststore
+     * @return The {@link File} containing the truststore
+     */
     public File getTruststoreFile() {
         return trustStoreFile;
     }
@@ -255,7 +259,7 @@ public class SslConfigurationFactory {
     /**
      * Set the trust store type
      * 
-     * @param keystoreType
+     * @param trustStoreType
      *            The trust store type
      */
     public void setTruststoreType(String trustStoreType) {
@@ -308,7 +312,9 @@ public class SslConfigurationFactory {
     }
 
     /**
-     * Configure secure server related properties.
+     * Create an instance of {@link SslConfiguration} based on the configuration
+     * of this factory.
+     * @return The {@link SslConfiguration} instance
      */
     public SslConfiguration createSslConfiguration() {
 
@@ -362,14 +368,23 @@ public class SslConfigurationFactory {
     }
 
     /**
-     * @see SslConfiguration#getClientAuth()
+     * Return the required client authentication setting
+     * 
+     * @return {@link ClientAuth#NEED} if client authentication is required,
+     *         {@link ClientAuth#WANT} is client authentication is wanted or
+     *         {@link ClientAuth#NONE} if no client authentication is the be
+     *         performed
      */
     public ClientAuth getClientAuth() {
         return clientAuth;
     }
 
     /**
-     * @see SslConfiguration#getEnabledCipherSuites()
+     * Returns the cipher suites that should be enabled for this connection.
+     * Must return null if the default (as decided by the JVM) cipher suites
+     * should be used.
+     * 
+     * @return An array of cipher suites, or null.
      */
     public String[] getEnabledCipherSuites() {
         if (enabledCipherSuites != null) {

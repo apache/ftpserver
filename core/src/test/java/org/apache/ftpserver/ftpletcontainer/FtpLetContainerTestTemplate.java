@@ -701,4 +701,69 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         assertEquals("ftplet1", calls.get(0));
         assertEquals("ftplet2", calls.get(1));
     }
+
+    /**
+     * First test checking the call order of Ftplets
+     */
+    public void testFtpletCallOrder1() throws FtpException, IOException {
+        MockFtplet ftplet1 = new MockFtplet() {
+            public FtpletResult onConnect(FtpSession session)
+                    throws FtpException, IOException {
+                calls.add("ftplet1");
+                return super.onConnect(session);
+            }
+        };
+        MockFtplet ftplet2 = new MockFtplet() {
+            public FtpletResult onConnect(FtpSession session)
+                    throws FtpException, IOException {
+                calls.add("ftplet2");
+                return super.onConnect(session);
+            }
+        };
+
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet1", ftplet1);
+        ftplets.put("ftplet2", ftplet2);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
+
+        container.onConnect(new DefaultFtpSession(null));
+
+        assertEquals(2, calls.size());
+        assertEquals("ftplet1", calls.get(0));
+        assertEquals("ftplet2", calls.get(1));
+    }
+
+    /**
+     * First test checking the call order of Ftplets
+     */
+    public void testFtpletCallOrder2() throws FtpException, IOException {
+        MockFtplet ftplet1 = new MockFtplet() {
+            public FtpletResult onConnect(FtpSession session)
+                    throws FtpException, IOException {
+                calls.add("ftplet1");
+                return super.onConnect(session);
+            }
+        };
+        MockFtplet ftplet2 = new MockFtplet() {
+            public FtpletResult onConnect(FtpSession session)
+                    throws FtpException, IOException {
+                calls.add("ftplet2");
+                return super.onConnect(session);
+            }
+        };
+
+        Map<String, Ftplet> ftplets = new LinkedHashMap<String, Ftplet>();
+        ftplets.put("ftplet2", ftplet2);
+        ftplets.put("ftplet1", ftplet1);
+
+        FtpletContainer container = createFtpletContainer(ftplets);
+
+        container.onConnect(new DefaultFtpSession(null));
+
+        assertEquals(2, calls.size());
+        assertEquals("ftplet2", calls.get(0));
+        assertEquals("ftplet1", calls.get(1));
+    }
+
 }
