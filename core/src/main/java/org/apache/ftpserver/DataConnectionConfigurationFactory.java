@@ -39,12 +39,12 @@ public class DataConnectionConfigurationFactory {
     private SslConfiguration ssl;
 
     private boolean activeEnabled = true;
-    private InetAddress activeLocalAddress;
+    private String activeLocalAddress;
     private int activeLocalPort = 0;
     private boolean activeIpCheck = false;
     
-    private InetAddress passiveAddress;
-    private InetAddress passiveExternalAddress;
+    private String passiveAddress;
+    private String passiveExternalAddress;
     private PassivePorts passivePorts = new PassivePorts(new int[] { 0 });
 
     /**
@@ -52,7 +52,7 @@ public class DataConnectionConfigurationFactory {
      */
     public DataConnectionConfigurationFactory() {
         try {
-            activeLocalAddress = InetAddress.getLocalHost();
+            activeLocalAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             throw new FtpServerConfigurationException(
                     "Failed to resolve localhost", e);
@@ -65,11 +65,25 @@ public class DataConnectionConfigurationFactory {
      * @return The {@link DataConnectionConfiguration} instance
      */
     public DataConnectionConfiguration createDataConnectionConfiguration() {
+    	checkValidAddresses();
         return new DefaultDataConnectionConfiguration(idleTime,
                 ssl, activeEnabled, activeIpCheck,
                 activeLocalAddress, activeLocalPort,
                 passiveAddress, passivePorts,
                 passiveExternalAddress);
+    }
+    /*
+     * (Non-Javadoc)
+     *  Checks if the configured addresses to be used in further data connections 
+     *  are valid.
+     */
+    private void checkValidAddresses(){
+    	try{
+    		InetAddress.getByName(passiveAddress);
+    		InetAddress.getByName(passiveExternalAddress);
+    	}catch(UnknownHostException ex){
+    		throw new FtpServerConfigurationException("Unknown host", ex);
+    	}
     }
     
     /**
@@ -123,17 +137,17 @@ public class DataConnectionConfigurationFactory {
 
     /**
      * Get the local address for active mode data transfer.
-     * @return The {@link InetAddress} used for active data connections
+     * @return The address used for active data connections
      */
-    public InetAddress getActiveLocalAddress() {
+    public String getActiveLocalAddress() {
         return activeLocalAddress;
     }
 
     /**
      * Set the active data connection local host.
-     * @param activeLocalAddress The {@link InetAddress} for active connections
+     * @param activeLocalAddress The address for active connections
      */
-    public void setActiveLocalAddress(InetAddress activeLocalAddress) {
+    public void setActiveLocalAddress(String activeLocalAddress) {
         this.activeLocalAddress = activeLocalAddress;
     }
 
@@ -155,17 +169,17 @@ public class DataConnectionConfigurationFactory {
 
     /**
      * Get passive host.
-     * @return The {@link InetAddress} used for passive data connections
+     * @return The address used for passive data connections
      */
-    public InetAddress getPassiveAddress() {
+    public String getPassiveAddress() {
         return passiveAddress;
     }
 
     /**
      * Set the passive server address. 
-     * @param passiveAddress The {@link InetAddress} used for passive connections
+     * @param passiveAddress The address used for passive connections
      */
-    public void setPassiveAddress(InetAddress passiveAddress) {
+    public void setPassiveAddress(String passiveAddress) {
         this.passiveAddress = passiveAddress;
     }
 
@@ -176,7 +190,7 @@ public class DataConnectionConfigurationFactory {
      * @return The passive address to be returned to clients, null if not
      *         configured.
      */
-    public InetAddress getPassiveExernalAddress() {
+    public String getPassiveExernalAddress() {
         return passiveExternalAddress;
     }
 
@@ -186,7 +200,7 @@ public class DataConnectionConfigurationFactory {
      * 
      * @param passiveExternalAddress The passive address to be returned to clients
      */
-    public void setPassiveExernalAddress(InetAddress passiveExternalAddress) {
+    public void setPassiveExernalAddress(String passiveExternalAddress) {
         this.passiveExternalAddress = passiveExternalAddress;
     }
     

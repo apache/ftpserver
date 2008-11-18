@@ -61,7 +61,7 @@ public class MyCustomListener implements Listener {
         return port;
     }
 
-    public InetAddress getServerAddress() {
+    public String getServerAddress() {
         return null;
     }
 

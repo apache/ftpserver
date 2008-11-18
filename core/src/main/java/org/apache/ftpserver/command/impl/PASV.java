@@ -22,6 +22,7 @@ package org.apache.ftpserver.command.impl;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import org.apache.ftpserver.DataConnectionException;
 import org.apache.ftpserver.command.AbstractCommand;
@@ -64,18 +65,19 @@ public class PASV extends AbstractCommand {
         session.resetState();
 
         // set data connection
-        ServerDataConnectionFactory dataCon = session.getDataConnection();
-        InetAddress externalPassiveAddress = session.getListener()
-                .getDataConnectionConfiguration().getPassiveExernalAddress();
-
+         ServerDataConnectionFactory dataCon = session.getDataConnection();
+         String externalPassiveAddress = session.getListener()
+         .getDataConnectionConfiguration().getPassiveExernalAddress(); 
+        
         try {
-            InetSocketAddress dataConAddress = dataCon
+        	
+        	InetSocketAddress dataConAddress = dataCon
                     .initPassiveDataConnection();
 
             // get connection info
             InetAddress servAddr;
             if (externalPassiveAddress != null) {
-                servAddr = externalPassiveAddress;
+                servAddr = resolveAddress(externalPassiveAddress);
             } else {
                 servAddr = dataConAddress.getAddress();
             }
@@ -97,5 +99,16 @@ public class PASV extends AbstractCommand {
             return;
         }
 
+    }
+    /*
+     *  (non-Javadoc)
+     *   Returns an InetAddress object from a hostname or IP address.
+     */
+    private InetAddress resolveAddress(String host) throws DataConnectionException{
+    	try{
+    		return InetAddress.getByName(host);
+    	}catch(UnknownHostException ex){
+    		throw new DataConnectionException(ex.getLocalizedMessage(),ex);
+    	}
     }
 }

@@ -20,10 +20,12 @@
 package org.apache.ftpserver.listener;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -38,7 +40,7 @@ import org.apache.mina.filter.firewall.Subnet;
  */
 public class ListenerFactory {
 
-    private InetAddress serverAddress;
+    private String serverAddress;
 
     private int port = 21;
 
@@ -82,6 +84,11 @@ public class ListenerFactory {
      * @return The created listener
      */
     public Listener createListener() {
+    	try{
+    		InetAddress.getByName(serverAddress);
+    	}catch(UnknownHostException e){
+    		throw new FtpServerConfigurationException("Unknown host",e);
+    	}
         return new NioListener(serverAddress, port, implicitSsl, ssl,
                 dataConnectionConfig, idleTimeout, blockedAddresses,
                 blockedSubnets);
@@ -136,7 +143,7 @@ public class ListenerFactory {
      * 
      * @return The local socket {@link InetAddress}, if set
      */
-    public InetAddress getServerAddress() {
+    public String getServerAddress()  {
         return serverAddress;
     }
 
@@ -147,7 +154,7 @@ public class ListenerFactory {
      * @param serverAddress
      *            The local socket {@link InetAddress}
      */
-    public void setServerAddress(InetAddress serverAddress) {
+    public void setServerAddress(String serverAddress) {
         this.serverAddress = serverAddress;
     }
 

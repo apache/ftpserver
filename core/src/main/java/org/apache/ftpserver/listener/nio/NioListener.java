@@ -83,7 +83,7 @@ public class NioListener extends AbstractListener {
     /**
      * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
      */
-    public NioListener(InetAddress serverAddress, int port,
+    public NioListener(String serverAddress, int port,
             boolean implicitSsl,
             SslConfiguration sslConfiguration,
             DataConnectionConfiguration dataConnectionConfig, 

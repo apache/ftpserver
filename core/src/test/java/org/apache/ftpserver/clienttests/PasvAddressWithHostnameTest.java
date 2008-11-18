@@ -43,7 +43,7 @@ public class PasvAddressWithHostnameTest extends ClientTestTemplate {
         
         DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
 
-        dccFactory.setPassiveExernalAddress(InetAddress.getByName("127.0.0.1"));
+        dccFactory.setPassiveExernalAddress("127.0.0.1");
 
         listenerFactory.setDataConnectionConfiguration(dccFactory.createDataConnectionConfiguration());
 

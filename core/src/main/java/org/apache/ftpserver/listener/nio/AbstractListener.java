@@ -40,7 +40,7 @@ import org.apache.mina.filter.firewall.Subnet;
  */
 public abstract class AbstractListener implements Listener {
 
-    private InetAddress serverAddress;
+    private String serverAddress;
 
     private int port = 21;
 
@@ -59,7 +59,7 @@ public abstract class AbstractListener implements Listener {
     /**
      * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
      */
-    public AbstractListener(InetAddress serverAddress, int port, boolean implicitSsl, 
+    public AbstractListener(String serverAddress, int port, boolean implicitSsl, 
             SslConfiguration sslConfiguration, DataConnectionConfiguration dataConnectionConfig,
             int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
         this.serverAddress = serverAddress;
@@ -103,7 +103,7 @@ public abstract class AbstractListener implements Listener {
     /**
      * {@inheritDoc}
      */
-    public InetAddress getServerAddress() {
+    public String getServerAddress() {
         return serverAddress;
     }
 

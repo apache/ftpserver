@@ -53,7 +53,7 @@ public interface DataConnectionConfiguration {
      * Get the active data connection local host.
      * @return The {@link InetAddress} for active connections
      */
-    InetAddress getActiveLocalAddress();
+    String getActiveLocalAddress();
 
     /**
      * Get the active data connection local port.
@@ -65,7 +65,7 @@ public interface DataConnectionConfiguration {
      * Get passive server address. null, if not set in the configuration.
      * @return The {@link InetAddress} used for passive connections
      */
-    InetAddress getPassiveAddress();
+    String getPassiveAddress();
 
     /**
      * Get the passive address that will be returned to clients on the PASV
@@ -74,7 +74,7 @@ public interface DataConnectionConfiguration {
      * @return The passive address to be returned to clients, null if not
      *         configured.
      */
-    InetAddress getPassiveExernalAddress();
+    String getPassiveExernalAddress();
 
     /**
      * Get the passive ports to be used for data connections. Ports can be

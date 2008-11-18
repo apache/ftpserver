@@ -122,7 +122,7 @@ public interface Listener {
      * 
      * @return The local socket {@link InetAddress}, if set
      */
-    InetAddress getServerAddress();
+    String getServerAddress();
 
     /**
      * Get configuration for data connections made within this listener

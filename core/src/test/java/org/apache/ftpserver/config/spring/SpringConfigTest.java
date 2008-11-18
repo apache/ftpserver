@@ -65,12 +65,12 @@ public class SpringConfigTest extends TestCase {
         assertNotNull(listener);
         assertTrue(listener instanceof NioListener);
         assertEquals(2222, ((NioListener) listener).getPort());
-        assertEquals(InetAddress.getByName("1.2.3.4"), ((NioListener) listener)
-                .getServerAddress());
+        assertEquals(InetAddress.getByName("1.2.3.4"), InetAddress.getByName(((NioListener) listener)
+                .getServerAddress()));
         assertEquals(true, ((NioListener) listener)
                 .getDataConnectionConfiguration().isActiveEnabled());
-        assertEquals(InetAddress.getByName("1.2.3.4"), ((NioListener) listener)
-                .getDataConnectionConfiguration().getActiveLocalAddress());
+        assertEquals(InetAddress.getByName("1.2.3.4"), InetAddress.getByName(((NioListener) listener)
+        		.getDataConnectionConfiguration().getActiveLocalAddress()) );
         assertEquals("123-125", ((NioListener) listener)
                 .getDataConnectionConfiguration().getPassivePorts());
 

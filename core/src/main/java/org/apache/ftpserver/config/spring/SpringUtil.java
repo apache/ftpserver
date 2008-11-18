@@ -255,5 +255,20 @@ public class SpringUtil {
         }
         return null;
     }
-
+    /**
+     * Return an attribute value after checking it is a valid {@link InetAddress}
+     * 
+     * @param parent
+     *            The element
+     * @param attrName
+     *            The attribute name
+     * @return The attribute string value.
+     */
+    public static String parseStringFromInetAddress(final Element parent,
+    		final String attrName){
+    	if ( parseInetAddress(parent, attrName)!=null){
+    		return parent.getAttribute(attrName);
+    	}
+    	return null;
+    }
 }

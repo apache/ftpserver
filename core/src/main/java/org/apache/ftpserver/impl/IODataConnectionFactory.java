@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
@@ -161,12 +162,18 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
         // open passive server socket and get parameters
         try {
-            DataConnectionConfiguration dataCfg = session.getListener()
+            
+        	DataConnectionConfiguration dataCfg = session.getListener()
                     .getDataConnectionConfiguration();
-            address = dataCfg.getPassiveAddress();
+        	
+        	String passiveAddress=dataCfg.getPassiveAddress();
+        	
+        	
 
-            if (address == null) {
+            if (passiveAddress == null) {
                 address = serverControlAddress;
+            }else{
+            	address = resolveAddress(dataCfg.getPassiveAddress());
             }
 
             if (secure) {
@@ -293,8 +300,8 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                         dataSoc = createSocket(ssl, address, port, null,
                                 localPort, false);
                     } else {
-                        InetAddress localAddr = dataConfig
-                                .getActiveLocalAddress();
+                        InetAddress localAddr = resolveAddress(dataConfig
+                                .getActiveLocalAddress());
                         dataSoc = createSocket(ssl, address, port, localAddr,
                                 localPort, false);
                     }
@@ -302,8 +309,8 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     if (localPort == 0) {
                         dataSoc = new Socket(address, port);
                     } else {
-                        InetAddress localAddr = dataConfig
-                                .getActiveLocalAddress();
+                        InetAddress localAddr =resolveAddress(dataConfig
+                                .getActiveLocalAddress());
                         dataSoc = new Socket(address, port, localAddr,
                                 localPort);
                     }
@@ -355,7 +362,17 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
         return ssoc;
     }
-
+    /*
+     *  (non-Javadoc)
+     *   Returns an InetAddress object from a hostname or IP address.
+     */
+    private InetAddress resolveAddress(String host) throws DataConnectionException{
+    	try{
+    		return InetAddress.getByName(host);
+    	}catch(UnknownHostException ex){
+    		throw new DataConnectionException(ex.getLocalizedMessage(),ex);
+    	}
+    }
     /*
      * (non-Javadoc)
      * 

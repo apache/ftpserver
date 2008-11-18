@@ -129,7 +129,7 @@ public class ListenerBeanDefinitionParser extends
                     element, "idle-timeout", 300));
         }
 
-        InetAddress localAddress = SpringUtil.parseInetAddress(element,
+        String localAddress = SpringUtil.parseStringFromInetAddress(element,
                 "local-address");
         if (localAddress != null) {
             factoryBuilder.addPropertyValue("serverAddress", localAddress);
@@ -275,24 +275,24 @@ public class ListenerBeanDefinitionParser extends
                         "ip-check", false));
                 dc.setActiveLocalPort(SpringUtil.parseInt(activeElm,
                         "local-port", 0));
-
-                InetAddress localAddress = SpringUtil.parseInetAddress(
+                
+                String localAddress = SpringUtil.parseStringFromInetAddress(
                         activeElm, "local-address");
                 if (localAddress != null) {
-                    dc.setActiveLocalAddress(localAddress);
+                	dc.setActiveLocalAddress(localAddress);
                 }
             }
 
             Element passiveElm = SpringUtil.getChildElement(element,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "passive");
             if (passiveElm != null) {
-                InetAddress address = SpringUtil.parseInetAddress(passiveElm,
+                String address = SpringUtil.parseStringFromInetAddress(passiveElm,
                         "address");
                 if (address != null) {
-                    dc.setPassiveAddress(address);
+                	dc.setPassiveAddress(address);
                 }
 
-                InetAddress externalAddress = SpringUtil.parseInetAddress(
+                String externalAddress = SpringUtil.parseStringFromInetAddress(
                         passiveElm, "external-address");
                 if (externalAddress != null) {
                     dc.setPassiveExernalAddress(externalAddress);
@@ -311,7 +311,6 @@ public class ListenerBeanDefinitionParser extends
                         .debug("SSL configuration found for the listener, falling back for that for the data connection");
                 dc.setSslConfiguration(listenerSslConfiguration);
             }
-
         }
 
         return dc.createDataConnectionConfiguration();

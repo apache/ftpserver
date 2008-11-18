@@ -20,9 +20,11 @@
 package org.apache.ftpserver.impl;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import org.apache.ftpserver.DataConnectionException;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
@@ -41,12 +43,12 @@ public class DefaultDataConnectionConfiguration implements
     private SslConfiguration ssl;
 
     private boolean activeEnabled;
-    private InetAddress activeLocalAddress;
+    private String activeLocalAddress;
     private int activeLocalPort;
     private boolean activeIpCheck;
     
-    private InetAddress passiveAddress;
-    private InetAddress passiveExternalAddress;
+    private String passiveAddress;
+    private String passiveExternalAddress;
     private PassivePorts passivePorts;
 
     /**
@@ -54,9 +56,9 @@ public class DefaultDataConnectionConfiguration implements
      */
     public DefaultDataConnectionConfiguration(int idleTime,
             SslConfiguration ssl, boolean activeEnabled, boolean activeIpCheck,
-            InetAddress activeLocalAddress, int activeLocalPort,
-            InetAddress passiveAddress, PassivePorts passivePorts,
-            InetAddress passiveExternalAddress) {
+            String activeLocalAddress, int activeLocalPort,
+            String passiveAddress, PassivePorts passivePorts,
+            String passiveExternalAddress) {
         this.idleTime = idleTime;
         this.ssl = ssl;
         this.activeEnabled = activeEnabled;
@@ -92,7 +94,7 @@ public class DefaultDataConnectionConfiguration implements
     /**
      * Get the local address for active mode data transfer.
      */
-    public InetAddress getActiveLocalAddress() {
+    public String getActiveLocalAddress() {
         return activeLocalAddress;
     }
 
@@ -106,16 +108,16 @@ public class DefaultDataConnectionConfiguration implements
     /**
      * Get passive host.
      */
-    public InetAddress getPassiveAddress() {
+    public String getPassiveAddress() {
         return passiveAddress;
     }
 
     /**
      * Get external passive host.
      */
-    public InetAddress getPassiveExernalAddress() {
-        return passiveExternalAddress;
-    }
+    public String getPassiveExernalAddress()  {
+    	return passiveExternalAddress;
+    	}
 
     /**
      * Get passive data port. Data port number zero (0) means that any available
