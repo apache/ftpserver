@@ -170,9 +170,6 @@ public class DefaultFtpHandler implements FtpHandler {
             } else {
                 LOG.warn("RequestHandler.service()", ex);
             }
-        } finally {
-            // clear the last reply so we're sure it's only there for one command
-            session.clearLastReply();
         }
 
     }

@@ -812,11 +812,4 @@ public class FtpIoSession implements IoSession {
     public FtpReply getLastReply() {
         return lastReply;
     }
-    
-    /**
-     * Clears the last reply
-     */
-    public void clearLastReply() {
-        lastReply = null;
-    }
 }
