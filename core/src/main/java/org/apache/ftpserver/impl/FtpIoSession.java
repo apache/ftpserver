@@ -31,6 +31,7 @@ import javax.net.ssl.SSLSession;
 import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpFile;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Structure;
 import org.apache.ftpserver.ftplet.User;
@@ -111,6 +112,11 @@ public class FtpIoSession implements IoSession {
     private IoSession wrappedSession;
 
     private FtpServerContext context;
+
+    /**
+     * Last reply that was sent to the client, if any. 
+     */
+    private FtpReply lastReply = null;
 
     /* Begin wrapped IoSession methods */
 
@@ -536,14 +542,18 @@ public class FtpIoSession implements IoSession {
      * @see IoSession#write(Object)
      */
     public WriteFuture write(Object message) {
-        return wrappedSession.write(message);
+        WriteFuture future = wrappedSession.write(message);
+        this.lastReply = (FtpReply) message;
+        return future;
     }
 
     /**
      * @see IoSession#write(Object, SocketAddress)
      */
     public WriteFuture write(Object message, SocketAddress destination) {
-        return wrappedSession.write(message, destination);
+        WriteFuture future = wrappedSession.write(message, destination);
+        this.lastReply = (FtpReply) message;
+        return future;
     }
 
     /* End wrapped IoSession methods */
@@ -776,9 +786,11 @@ public class FtpIoSession implements IoSession {
      * @param increment The number of bytes written
      */
     public void increaseWrittenDataBytes(int increment) {
-        if(wrappedSession instanceof AbstractIoSession ) {
-            ((AbstractIoSession)wrappedSession).increaseScheduledWriteBytes(increment);
-            ((AbstractIoSession)wrappedSession).increaseWrittenBytes(increment, System.currentTimeMillis());
+        if (wrappedSession instanceof AbstractIoSession) {
+            ((AbstractIoSession) wrappedSession)
+                    .increaseScheduledWriteBytes(increment);
+            ((AbstractIoSession) wrappedSession).increaseWrittenBytes(
+                    increment, System.currentTimeMillis());
         }
     }
 
@@ -787,8 +799,24 @@ public class FtpIoSession implements IoSession {
      * @param increment The number of bytes written
      */
     public void increaseReadDataBytes(int increment) {
-        if(wrappedSession instanceof AbstractIoSession ) {
-            ((AbstractIoSession)wrappedSession).increaseReadBytes(increment, System.currentTimeMillis());
+        if (wrappedSession instanceof AbstractIoSession) {
+            ((AbstractIoSession) wrappedSession).increaseReadBytes(increment,
+                    System.currentTimeMillis());
         }
+    }
+
+    /**
+     * Returns the last reply that was sent to the client. 
+     * @return the last reply that was sent to the client.
+     */
+    public FtpReply getLastReply() {
+        return lastReply;
+    }
+    
+    /**
+     * Clears the last reply
+     */
+    public void clearLastReply() {
+        lastReply = null;
     }
 }

@@ -75,9 +75,11 @@ public class DefaultFtplet implements Ftplet {
         }
     }
 
-    public FtpletResult afterCommand(FtpSession session, FtpRequest request)
+    public FtpletResult afterCommand(FtpSession session, FtpRequest request, FtpReply reply)
             throws FtpException, IOException {
 
+        // the reply is ignored for these callbacks
+        
         String command = request.getCommand().toUpperCase();
 
         if ("PASS".equals(command)) {

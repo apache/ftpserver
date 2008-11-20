@@ -98,28 +98,32 @@ public interface Ftplet {
             throws FtpException, IOException;
 
     /**
-     * Called by the ftplet container after a command has been executed by the
-     * server. The implementation should return based on the desired action to
-     * be taken by the server:
-     * <ul>
-     * <li>{@link FtpletResult#DEFAULT}: The server continues as normal</li>
-     * <li>{@link FtpletResult#NO_FTPLET}: The server does not call any more
-     * Ftplets before this command but continues as normal</li>
-     * <li>{@link FtpletResult#SKIP}: Same as {@link FtpletResult#DEFAULT}</li>
-     * <li>{@link FtpletResult#DISCONNECT}: The server will immediately
-     * disconnect the client.</li>
-     * <li>Ftplet throws exception: Same as {@link FtpletResult#DISCONNECT}</li>
-     * </ul>
-     * 
-     * @param session
-     *            The current session
-     * @param request
-     *            The current request
-     * @return The desired action to be performed by the server
-     * @throws FtpException
-     * @throws IOException
-     */
-    FtpletResult afterCommand(FtpSession session, FtpRequest request)
+	 * Called by the ftplet container after a command has been executed by the
+	 * server. The implementation should return based on the desired action to
+	 * be taken by the server:
+	 * <ul>
+	 * <li>{@link FtpletResult#DEFAULT}: The server continues as normal</li>
+	 * <li>{@link FtpletResult#NO_FTPLET}: The server does not call any more
+	 * Ftplets before this command but continues as normal</li>
+	 * <li>{@link FtpletResult#SKIP}: Same as {@link FtpletResult#DEFAULT}</li>
+	 * <li>{@link FtpletResult#DISCONNECT}: The server will immediately
+	 * disconnect the client.</li>
+	 * <li>Ftplet throws exception: Same as {@link FtpletResult#DISCONNECT}</li>
+	 * </ul>
+	 * 
+	 * @param session
+	 *            The current session
+	 * @param request
+	 *            The current request
+	 * @param reply
+	 *            the reply that was sent for this command. Implementations can
+	 *            use this to check the reply code and thus determine if the
+	 *            command was successfully processed or not.
+	 * @return The desired action to be performed by the server
+	 * @throws FtpException
+	 * @throws IOException
+	 */
+    FtpletResult afterCommand(FtpSession session, FtpRequest request, FtpReply reply)
             throws FtpException, IOException;
 
     /**

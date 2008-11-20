@@ -143,7 +143,7 @@ public class DefaultFtpHandler implements FtpHandler {
 
                 try {
                     ftpletRet = ftplets.afterCommand(session.getFtpletSession(),
-                            request);
+                            request, session.getLastReply());
                 } catch (Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletResult.DISCONNECT;
@@ -170,6 +170,9 @@ public class DefaultFtpHandler implements FtpHandler {
             } else {
                 LOG.warn("RequestHandler.service()", ex);
             }
+        } finally {
+            // clear the last reply so we're sure it's only there for one command
+            session.clearLastReply();
         }
 
     }

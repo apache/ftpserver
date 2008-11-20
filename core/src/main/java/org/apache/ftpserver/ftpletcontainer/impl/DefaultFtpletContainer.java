@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
@@ -137,12 +138,12 @@ public class DefaultFtpletContainer implements FtpletContainer {
         return retVal;
     }
 
-    public FtpletResult afterCommand(FtpSession session, FtpRequest request)
+    public FtpletResult afterCommand(FtpSession session, FtpRequest request, FtpReply reply)
             throws FtpException, IOException {
         FtpletResult retVal = FtpletResult.DEFAULT;
         for (Entry<String, Ftplet> entry : ftplets.entrySet()) {
 
-            retVal = entry.getValue().afterCommand(session, request);
+            retVal = entry.getValue().afterCommand(session, request, reply);
             if (retVal == null) {
                 retVal = FtpletResult.DEFAULT;
             }
