@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.ftpserver.command.CommandFactory;
@@ -117,7 +118,9 @@ public class FtpServerFactory {
      * 
      * @param ftplets
      *            Ftplets as a map with the name as the key and the Ftplet as
-     *            the value
+     *            the value. The Ftplet container will iterate over the map in the
+     *            order provided by the Map. If invocation order of Ftplets is of importance,
+     *            make sure to provide a ordered Map, for example {@link LinkedHashMap}. 
      * @throws IllegalStateException
      *             If a custom server context has been set
      */
