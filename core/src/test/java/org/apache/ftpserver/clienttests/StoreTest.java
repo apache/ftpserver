@@ -32,7 +32,12 @@ import org.apache.ftpserver.test.TestUtil;
 *
 */
 public class StoreTest extends ClientTestTemplate {
-    private static final String TESTDATA = "TESTDATA\r\nline2\r\n";
+    private static final String EOL = System.getProperty("line.separator");
+    private static final String CRLF = "\r\n";
+
+    
+    private static final String TESTDATA = "TESTDATA" + EOL + "line2" + EOL;
+    private static final String TESTDATA_CRLF = "TESTDATA" + CRLF + "line2" + CRLF;
 
     private static final String ENCODING = "UTF-8";
 
@@ -45,6 +50,7 @@ public class StoreTest extends ClientTestTemplate {
     private static final File TEST_DIR = new File(ROOT_DIR, "foo/bar");
 
     private static byte[] testData = null;
+    private static byte[] testDataCrLf = null;
 
     private static byte[] doubleTestData = null;
 
@@ -59,6 +65,7 @@ public class StoreTest extends ClientTestTemplate {
         super.setUp();
 
         testData = TESTDATA.getBytes(ENCODING);
+        testDataCrLf = TESTDATA_CRLF.getBytes(ENCODING);
         doubleTestData = (TESTDATA + TESTDATA).getBytes(ENCODING);
         oneAndAHalfTestData = ("TEST" + TESTDATA).getBytes(ENCODING);
 
@@ -75,6 +82,20 @@ public class StoreTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(testData, testFile);
     }
 
+    /**
+     * We should always store files with the local line endings (FTPSERVER-184) 
+     * 
+     */
+    public void testStoreWithCrLf() throws Exception {
+        File testFile = new File(ROOT_DIR, TEST_FILENAME);
+
+        assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(
+                testDataCrLf)));
+
+        assertTrue(testFile.exists());
+        TestUtil.assertFileEqual(testData, testFile);
+    }
+    
     public void testStoreWithLeadingSpace() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME_WITH_LEADING_SPACE);
 

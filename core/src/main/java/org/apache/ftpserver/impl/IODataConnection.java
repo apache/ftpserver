@@ -47,6 +47,8 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public class IODataConnection implements DataConnection {
 
+    private static final byte[] EOL = System.getProperty("line.separator").getBytes();
+    
     private FtpIoSession session;
 
     private Socket socket;
@@ -207,7 +209,7 @@ public class IODataConnection implements DataConnection {
                 defaultFtpSession = (DefaultFtpSession) session;
             }
 
-            boolean lastWasCR = false;
+            byte lastByte = 0;
             while (true) {
 
                 // if current rate exceeds the max rate, sleep for 50ms
@@ -253,16 +255,26 @@ public class IODataConnection implements DataConnection {
                 if (isAscii) {
                     for (int i = 0; i < count; ++i) {
                         byte b = buff[i];
-                        if (b == '\n' && !lastWasCR) {
-                            bos.write('\r');
-                        }
-
-                        if (b == '\r') {
-                            lastWasCR = true;
+                        if(isWrite) {
+                            if (b == '\n' && lastByte != '\r') {
+                                bos.write('\r');
+                            }
+    
+                            bos.write(b);
                         } else {
-                            lastWasCR = false;
+                            if(b == '\n') {
+                                // for reads, we should always get \r\n
+                                // so what we do here is to ignore \n bytes 
+                                // and on \r dump the system local line ending
+                            } else if(b == '\r') {
+                                bos.write(EOL);
+                            } else {
+                                // not a line ending, just output
+                                bos.write(b);
+                            }
                         }
-                        bos.write(b);
+                        // store this byte so that we can compare it for line endings
+                        lastByte = b;
                     }
                 } else {
                     bos.write(buff, 0, count);
