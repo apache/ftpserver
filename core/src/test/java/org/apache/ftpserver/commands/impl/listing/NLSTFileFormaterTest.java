@@ -121,6 +121,11 @@ public class NLSTFileFormaterTest extends TestCase {
         public boolean move(FtpFile destination) {
             return false;
         }
+
+        public void setLastModified(long time) {
+            // TODO Auto-generated method stub
+            
+        }
     }
 
     public void testSingleFile() {

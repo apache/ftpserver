@@ -39,6 +39,7 @@ import org.apache.ftpserver.command.impl.LANG;
 import org.apache.ftpserver.command.impl.LIST;
 import org.apache.ftpserver.command.impl.MD5;
 import org.apache.ftpserver.command.impl.MDTM;
+import org.apache.ftpserver.command.impl.MFMT;
 import org.apache.ftpserver.command.impl.MKD;
 import org.apache.ftpserver.command.impl.MLSD;
 import org.apache.ftpserver.command.impl.MLST;
@@ -95,6 +96,7 @@ public class CommandFactoryFactory {
         DEFAULT_COMMAND_MAP.put("LANG", new LANG());
         DEFAULT_COMMAND_MAP.put("LIST", new LIST());
         DEFAULT_COMMAND_MAP.put("MD5", new MD5());
+        DEFAULT_COMMAND_MAP.put("MFMT", new MFMT());
         DEFAULT_COMMAND_MAP.put("MMD5", new MD5());
         DEFAULT_COMMAND_MAP.put("MDTM", new MDTM());
         DEFAULT_COMMAND_MAP.put("MLST", new MLST());
