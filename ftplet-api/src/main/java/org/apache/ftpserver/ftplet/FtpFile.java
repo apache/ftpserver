@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.ftplet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -111,6 +112,12 @@ public interface FtpFile {
      */
     long getLastModified();
 
+    /**
+     * Set the last modified time stamp of a file
+     * @param time The last modified time, in milliseconds since the epoch. See {@link File#setLastModified(long)}.
+     */
+    void setLastModified(long time);
+    
     /**
      * Get file size.
      * @return The size of the {@link FtpFile} in bytes

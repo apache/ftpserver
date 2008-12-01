@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Defines methods that all ftplets must implement.
  * 
- * A ftplet is a small Java program that runs within a FTP server. Ftplets
+ * A ftplet is a small Java program that runs within an FTP server. Ftplets
  * receive and respond to requests from FTP clients.
  * 
  * This interface defines methods to initialize a ftplet, to service requests,
