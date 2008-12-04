@@ -189,8 +189,8 @@ public class NativeFtpFile implements FtpFile {
     /**
      * {@inheritDoc}
      */
-    public void setLastModified(long time) {
-        file.setLastModified(time);
+    public boolean setLastModified(long time) {
+        return file.setLastModified(time);
     }
     
     /**

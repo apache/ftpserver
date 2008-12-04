@@ -19,8 +19,13 @@
 
 package org.apache.ftpserver.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -35,6 +40,18 @@ public class DateUtils {
     private final static String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May",
             "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
+    
+    /*
+     * Creates the DateFormat object used to parse/format
+     * dates in FTP format.
+     */
+    private  final static DateFormat createFTPDateFormat(){
+        DateFormat df=new SimpleDateFormat("yyyyMMddHHmmss");
+        df.setLenient(false);
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return df;
+    }
+    
     /**
      * Get unix style date string.
      */
@@ -199,4 +216,15 @@ public class DateUtils {
         sb.append(milli);
         return sb.toString();
     }
+    /*
+     *  Parses a date in the format used by the FTP commands 
+     *  involving dates(MFMT, MDTM)
+     */
+    public final static Date parseFTPDate(String dateStr) throws ParseException{
+       // TODO: Here we could use a single DateFormat (in a thread-safe way)  
+       //  instead of one per call 
+        return createFTPDateFormat().parse(dateStr);
+        
+    }
+    
 }

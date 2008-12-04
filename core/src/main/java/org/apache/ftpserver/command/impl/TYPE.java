@@ -59,6 +59,17 @@ public class TYPE extends AbstractCommand {
         char type = 'A';
         if (request.hasArgument()) {
             type = request.getArgument().charAt(0);
+        }else{
+            // no type specified
+            session
+            .write(LocalizedFtpReply
+                    .translate(
+                            session,
+                            request,
+                            context,
+                            FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
+                            "TYPE", null));
+            return;
         }
 
         // set type

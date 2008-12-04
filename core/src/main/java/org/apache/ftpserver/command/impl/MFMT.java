@@ -20,11 +20,8 @@
 package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpFile;
@@ -33,6 +30,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
+import org.apache.ftpserver.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +54,6 @@ public class MFMT extends AbstractCommand {
             final FtpServerContext context, final FtpRequest request)
             throws IOException {
 
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         
         // reset state variables
         session.resetState();
@@ -75,7 +72,7 @@ public class MFMT extends AbstractCommand {
             return;
         }
         
-        String[] arguments = argument.split(" ");
+        String[] arguments = argument.split(" ",2);
 
         if(arguments.length != 2) {
             session
@@ -90,12 +87,10 @@ public class MFMT extends AbstractCommand {
         }
        
         String timestamp = arguments[0].trim();
-        
-        df.setLenient(false);
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        
+       
         try {
-            Date time = df.parse(timestamp);
+            
+            Date time = DateUtils.parseFTPDate(timestamp);
             
             String fileName = arguments[1].trim();
             
@@ -133,9 +128,17 @@ public class MFMT extends AbstractCommand {
                 return;
             }
 
+             // check if we can set date and retrieve the actual date stored for the file.
+             if (file.setLastModified(time.getTime())) {
+             //    timestamp=DateUtils.getFtpDate(time.getTime());
+             }
+             // we couldn't set the date.
+             else{
+                 session.write(LocalizedFtpReply.translate(session, request, context,
+                         FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "MFMT",
+                         fileName));
+             }
             // all checks okay, lets go
-            file.setLastModified(time.getTime());
-
             session
             .write(LocalizedFtpReply
                     .translate(
@@ -143,7 +146,7 @@ public class MFMT extends AbstractCommand {
                             request,
                             context,
                             FtpReply.REPLY_213_FILE_STATUS,
-                            "MFMT", "ModifyTime=" + timestamp + " " + fileName));
+                            "MFMT", "Modify=" + timestamp + "; " + fileName));
             return;
 
         } catch (ParseException e) {

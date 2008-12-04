@@ -116,7 +116,7 @@ public interface FtpFile {
      * Set the last modified time stamp of a file
      * @param time The last modified time, in milliseconds since the epoch. See {@link File#setLastModified(long)}.
      */
-    void setLastModified(long time);
+    boolean setLastModified(long time);
     
     /**
      * Get file size.

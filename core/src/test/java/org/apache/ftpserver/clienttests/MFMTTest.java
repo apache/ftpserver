@@ -40,6 +40,8 @@ public class MFMTTest extends ClientTestTemplate {
 
     private static final File TEST_FILE_IN_DIR1 = new File(TEST_DIR1,
             "test4.txt");
+    private static final File TEST_FILE_BLANK_SPACES=new File(ROOT_DIR,"my test.txt");
+    
 
     private static final Calendar EXPECTED_TIME = new GregorianCalendar(2002, 6, 17, 21, 7, 15);        
     static {
@@ -53,11 +55,11 @@ public class MFMTTest extends ClientTestTemplate {
         assertTrue(TEST_FILE1.createNewFile());
         assertTrue(TEST_DIR1.mkdir());
         assertTrue(TEST_FILE_IN_DIR1.createNewFile());
-        
+        assertTrue(TEST_FILE_BLANK_SPACES.createNewFile());
         
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
-
+   
     public void testNoArgument() throws Exception {
         // must return 500 or 501 errors
         assertEquals(501, client.sendCommand("MFMT"));
@@ -69,8 +71,8 @@ public class MFMTTest extends ClientTestTemplate {
     }
 
     public void testNoManyArguments() throws Exception {
-        // must return 500 or 501 errors
-        assertEquals(501, client.sendCommand("MFMT", "20020717210715 test1.txt too many"));
+        // must return 550 errors as a filename can contain blank spaces
+        assertEquals(550, client.sendCommand("MFMT", "20020717210715 test1.txt too many"));
     }
     
     public void testNonTimestampArgument() throws Exception {
@@ -126,6 +128,12 @@ public class MFMTTest extends ClientTestTemplate {
         assertEquals(213, client.sendCommand("MFMT", "20020717210715 dir1/test4.txt"));
         
         assertEquals(EXPECTED_TIME.getTimeInMillis(), TEST_FILE_IN_DIR1.lastModified());
+    }
+    @SuppressWarnings("deprecation")
+    public void testSetTimeFileWithSpaces() throws Exception{
+        assertEquals(213, client.sendCommand("MFMT", "20020717210715 my test.txt"));
+        
+        assertEquals(EXPECTED_TIME.getTimeInMillis(),TEST_FILE_BLANK_SPACES.lastModified());
     }
     
 }

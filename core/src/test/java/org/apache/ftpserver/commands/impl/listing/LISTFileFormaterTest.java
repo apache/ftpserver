@@ -130,9 +130,8 @@ public class LISTFileFormaterTest extends TestCase {
             return false;
         }
 
-        public void setLastModified(long time) {
-            // TODO Auto-generated method stub
-            
+        public boolean setLastModified(long time) {
+            return false;
         }
     }
 
