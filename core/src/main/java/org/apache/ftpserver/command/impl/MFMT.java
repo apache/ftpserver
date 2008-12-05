@@ -129,16 +129,15 @@ public class MFMT extends AbstractCommand {
             }
 
              // check if we can set date and retrieve the actual date stored for the file.
-             if (file.setLastModified(time.getTime())) {
-             //    timestamp=DateUtils.getFtpDate(time.getTime());
-             }
-             // we couldn't set the date.
-             else{
+             if (!file.setLastModified(time.getTime())) {
+                 // we couldn't set the date, possiblt the file was locked
                  session.write(LocalizedFtpReply.translate(session, request, context,
                          FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "MFMT",
                          fileName));
+                 return;
              }
-            // all checks okay, lets go
+
+             // all checks okay, lets go
             session
             .write(LocalizedFtpReply
                     .translate(
