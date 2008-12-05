@@ -146,7 +146,7 @@ public class MFMT extends AbstractCommand {
                             request,
                             context,
                             FtpReply.REPLY_213_FILE_STATUS,
-                            "MFMT", "Modify=" + timestamp + "; " + fileName));
+                            "MFMT", "ModifyTime=" + timestamp + "; " + fileName));
             return;
 
         } catch (ParseException e) {
