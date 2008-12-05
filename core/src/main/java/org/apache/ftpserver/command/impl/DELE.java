@@ -81,10 +81,17 @@ public class DELE extends AbstractCommand {
                     "DELE.invalid", fileName));
             return;
         }
-
+        
         // check file
         fileName = file.getAbsolutePath();
 
+        if (file.isDirectory()) {
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                    "DELE.invalid", fileName));
+            return;
+        }
+        
         if (!file.isRemovable()) {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,

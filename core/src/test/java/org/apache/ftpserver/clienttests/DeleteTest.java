@@ -90,10 +90,12 @@ public class DeleteTest extends ClientTestTemplate {
         TEST_DIR1.mkdirs();
 
         assertTrue(TEST_DIR1.exists());
+        
+        assertEquals(550, client.sendCommand("DELE " + TEST_DIR1.getName()));
 
-        assertTrue(client.deleteFile(TEST_DIR1.getName()));
+        assertFalse(client.deleteFile(TEST_DIR1.getName()));
 
-        assertFalse(TEST_DIR1.exists());
+        assertTrue(TEST_DIR1.exists());
     }
 
     public void testDeleteDirWithFile() throws Exception {
@@ -102,6 +104,8 @@ public class DeleteTest extends ClientTestTemplate {
 
         assertTrue(TEST_DIR1.exists());
         assertTrue(TEST_FILE_IN_DIR1.exists());
+
+        assertEquals(550, client.sendCommand("DELE " + TEST_DIR1.getName()));
 
         assertFalse(client.deleteFile(TEST_DIR1.getName()));
 
