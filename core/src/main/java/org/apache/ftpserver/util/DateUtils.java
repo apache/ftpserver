@@ -40,17 +40,21 @@ public class DateUtils {
     private final static String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May",
             "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-    
     /*
      * Creates the DateFormat object used to parse/format
      * dates in FTP format.
      */
-    private  final static DateFormat createFTPDateFormat(){
-        DateFormat df=new SimpleDateFormat("yyyyMMddHHmmss");
-        df.setLenient(false);
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df;
-    }
+    private static final ThreadLocal<DateFormat> FTP_DATE_FORMAT = new ThreadLocal<DateFormat>() {
+
+        @Override
+        protected DateFormat initialValue() {
+            DateFormat df=new SimpleDateFormat("yyyyMMddHHmmss");
+            df.setLenient(false);
+            df.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return df;
+        }
+        
+    };
     
     /**
      * Get unix style date string.
@@ -221,9 +225,7 @@ public class DateUtils {
      *  involving dates(MFMT, MDTM)
      */
     public final static Date parseFTPDate(String dateStr) throws ParseException{
-       // TODO: Here we could use a single DateFormat (in a thread-safe way)  
-       //  instead of one per call 
-        return createFTPDateFormat().parse(dateStr);
+        return FTP_DATE_FORMAT.get().parse(dateStr);
         
     }
     
