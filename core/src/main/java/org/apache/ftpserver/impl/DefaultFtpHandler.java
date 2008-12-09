@@ -29,6 +29,7 @@ import org.apache.ftpserver.ftplet.FtpletResult;
 import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.write.WriteToClosedSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,17 @@ public class DefaultFtpHandler implements FtpHandler {
 
     public void exceptionCaught(final FtpIoSession session,
             final Throwable cause) throws Exception {
-        LOG.error("Exception caught, closing session", cause);
+        if (cause instanceof WriteToClosedSessionException) {
+            WriteToClosedSessionException writeToClosedSessionException = 
+                (WriteToClosedSessionException) cause;
+            LOG.warn(
+                            "Client closed connection before all replies could be sent, last reply was {}",
+                            writeToClosedSessionException.getRequest());
+
+        } else {
+            LOG.error("Exception caught, closing session", cause);
+        }
+
         session.closeOnFlush().awaitUninterruptibly(10000);
     }
 
@@ -110,8 +121,9 @@ public class DefaultFtpHandler implements FtpHandler {
             // make sure the user is authenticated before he issues commands
             if (!session.isLoggedIn()
                     && !isCommandOkWithoutAuthentication(commandName)) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
-                        FtpReply.REPLY_530_NOT_LOGGED_IN, "permission", null));
+                session.write(LocalizedFtpReply.translate(session, request,
+                        context, FtpReply.REPLY_530_NOT_LOGGED_IN,
+                        "permission", null));
                 return;
             }
 
@@ -142,8 +154,9 @@ public class DefaultFtpHandler implements FtpHandler {
                 }
 
                 try {
-                    ftpletRet = ftplets.afterCommand(session.getFtpletSession(),
-                            request, session.getLastReply());
+                    ftpletRet = ftplets.afterCommand(
+                            session.getFtpletSession(), request, session
+                                    .getLastReply());
                 } catch (Exception e) {
                     LOG.debug("Ftplet container threw exception", e);
                     ftpletRet = FtpletResult.DISCONNECT;
@@ -154,14 +167,13 @@ public class DefaultFtpHandler implements FtpHandler {
                 }
             }
 
-
         } catch (Exception ex) {
 
             // send error reply
             try {
-                session.write(LocalizedFtpReply.translate(session, request, context,
-                        FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, null,
-                        null));
+                session.write(LocalizedFtpReply.translate(session, request,
+                        context, FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                        null, null));
             } catch (Exception ex1) {
             }
 
