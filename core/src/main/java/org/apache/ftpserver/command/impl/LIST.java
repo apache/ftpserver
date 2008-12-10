@@ -32,6 +32,7 @@ import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
@@ -76,6 +77,21 @@ public class LIST extends AbstractCommand {
             // reset state variables
             session.resetState();
 
+            // parse argument
+            ListArgument parsedArg = ListArgumentParser.parse(request
+                    .getArgument());
+
+            // checl that the directory or file exists
+            FtpFile file = session.getFileSystemView().getFile(parsedArg.getFile());
+            
+            if(!file.doesExist()) {
+                LOG.debug("Listing on a non-existing file");
+                session.write(LocalizedFtpReply.translate(session, request, context,
+                        FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "LIST",
+                        null));             
+                return;
+            }
+            
             // 24-10-2007 - added check if PORT or PASV is issued, see
             // https://issues.apache.org/jira/browse/FTPSERVER-110
             DataConnectionFactory connFactory = session.getDataConnection();
@@ -109,10 +125,6 @@ public class LIST extends AbstractCommand {
             boolean failure = false;
 
             try {
-                // parse argument
-                ListArgument parsedArg = ListArgumentParser.parse(request
-                        .getArgument());
-
                 dataConnection.transferToClient(session.getFtpletSession(), directoryLister.listFiles(
                         parsedArg, session.getFileSystemView(),
                         LIST_FILE_FORMATER));

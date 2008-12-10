@@ -93,6 +93,10 @@ public class ListTest extends ClientTestTemplate {
 
     }
 
+    public void testListFilesInNonExistingDir() throws Exception {
+        assertEquals(450, client.sendCommand("LIST", "nonexisting"));
+    }
+    
     public void testListFile() throws Exception {
 
         TEST_DIR1.mkdirs();
@@ -173,10 +177,8 @@ public class ListTest extends ClientTestTemplate {
     }
 
     public void testListFileNonExistingFile() throws Exception {
-
-        FTPFile[] files = client.listFiles("foo");
-
-        assertEquals(0, files.length);
+        TEST_DIR1.mkdirs();
+        assertEquals(450, client.sendCommand("LIST", TEST_DIR1.getName() + "/nonexisting"));
     }
 
     public void testListNames() throws Exception {
