@@ -293,7 +293,7 @@ public class NativeFtpFile implements FtpFile {
     public boolean mkdir() {
         boolean retVal = false;
         if (isWritable()) {
-            retVal = file.mkdirs();
+            retVal = file.mkdir();
         }
         return retVal;
     }

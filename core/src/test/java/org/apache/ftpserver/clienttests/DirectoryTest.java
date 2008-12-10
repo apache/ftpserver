@@ -62,15 +62,18 @@ public class DirectoryTest extends ClientTestTemplate {
         assertEquals(501, client.sendCommand("MKD foo:bar;foo"));
     }
 
+    /**
+     * FTPSERVER-233, we should not recursively create directories  
+     */
     public void testMkdirDouble() throws Exception {
         assertFalse(TEST_DIR1.exists());
         assertFalse(TEST_DIR_IN_DIR1.exists());
 
-        assertTrue(FTPReply.isPositiveCompletion(client.mkd(TEST_DIR1.getName()
+        assertFalse(FTPReply.isPositiveCompletion(client.mkd(TEST_DIR1.getName()
                 + '/' + TEST_DIR_IN_DIR1.getName())));
 
-        assertTrue(TEST_DIR1.exists());
-        assertTrue(TEST_DIR_IN_DIR1.exists());
+        assertFalse(TEST_DIR1.exists());
+        assertFalse(TEST_DIR_IN_DIR1.exists());
     }
 
     public void testMkdirDoubleFirstExists() throws Exception {
