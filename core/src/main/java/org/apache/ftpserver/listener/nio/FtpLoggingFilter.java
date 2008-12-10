@@ -21,7 +21,10 @@ package org.apache.ftpserver.listener.nio;
 
 import org.apache.mina.core.session.IoEventType;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.logging.LogLevel;
 import org.apache.mina.filter.logging.LoggingFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -35,18 +38,20 @@ public class FtpLoggingFilter extends LoggingFilter {
 
     private boolean maskPassword = true;
 
+    private final Logger logger;
+    
     /**
      * @see LoggingFilter#LoggingFilter()
      */
     public FtpLoggingFilter() {
-        super();
+        this(FtpLoggingFilter.class.getName());
     }
 
     /**
      * @see LoggingFilter#LoggingFilter(Class)
      */
     public FtpLoggingFilter(Class<?> clazz) {
-        super(clazz);
+        this(clazz.getName());
     }
 
     /**
@@ -54,6 +59,8 @@ public class FtpLoggingFilter extends LoggingFilter {
      */
     public FtpLoggingFilter(String name) {
         super(name);
+        
+        logger = LoggerFactory.getLogger(name);
     }
 
     /**
@@ -79,7 +86,7 @@ public class FtpLoggingFilter extends LoggingFilter {
             logMessage = request;
         }
 
-        log(IoEventType.MESSAGE_RECEIVED, "RECEIVED: {}", logMessage);
+        logger.info("RECEIVED: {}", logMessage);
         nextFilter.messageReceived(session, message);
     }
 

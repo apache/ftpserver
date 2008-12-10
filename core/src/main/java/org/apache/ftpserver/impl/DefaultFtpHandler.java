@@ -97,7 +97,7 @@ public class DefaultFtpHandler implements FtpHandler {
             LOG.error("Exception caught, closing session", cause);
         }
 
-        session.closeOnFlush().awaitUninterruptibly(10000);
+        session.close(false).awaitUninterruptibly(10000);
     }
 
     private boolean isCommandOkWithoutAuthentication(String command) {
@@ -138,7 +138,7 @@ public class DefaultFtpHandler implements FtpHandler {
                 ftpletRet = FtpletResult.DISCONNECT;
             }
             if (ftpletRet == FtpletResult.DISCONNECT) {
-                session.closeOnFlush().awaitUninterruptibly(10000);
+                session.close(false).awaitUninterruptibly(10000);
                 return;
             } else if (ftpletRet != FtpletResult.SKIP) {
 
@@ -162,7 +162,7 @@ public class DefaultFtpHandler implements FtpHandler {
                     ftpletRet = FtpletResult.DISCONNECT;
                 }
                 if (ftpletRet == FtpletResult.DISCONNECT) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
+                    session.close(false).awaitUninterruptibly(10000);
                     return;
                 }
             }
@@ -189,7 +189,7 @@ public class DefaultFtpHandler implements FtpHandler {
     public void sessionIdle(final FtpIoSession session, final IdleStatus status)
             throws Exception {
         LOG.info("Session idle, closing");
-        session.closeOnFlush().awaitUninterruptibly(10000);
+        session.close(false).awaitUninterruptibly(10000);
     }
 
     public void messageSent(final FtpIoSession session, final FtpReply reply)

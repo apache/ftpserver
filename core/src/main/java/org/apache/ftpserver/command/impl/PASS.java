@@ -197,7 +197,7 @@ public class PASS extends AbstractCommand {
                         .getMaxLoginFailures();
                 if (maxAllowedLoginFailues != 0
                         && session.getFailedLogins() >= maxAllowedLoginFailues) {
-                    session.closeOnFlush().awaitUninterruptibly(10000);
+                    session.close(false).awaitUninterruptibly(10000);
                 }
 
                 return;

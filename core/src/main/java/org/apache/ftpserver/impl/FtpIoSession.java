@@ -47,8 +47,8 @@ import org.apache.mina.core.session.AbstractIoSession;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.core.session.IoSessionConfig;
-import org.apache.mina.core.session.TrafficMask;
 import org.apache.mina.core.write.WriteRequest;
+import org.apache.mina.core.write.WriteRequestQueue;
 import org.apache.mina.filter.ssl.SslFilter;
 
 /**
@@ -132,13 +132,6 @@ public class FtpIoSession implements IoSession {
      */
     public CloseFuture close(boolean immediately) {
         return wrappedSession.close(immediately);
-    }
-
-    /**
-     * @see IoSession#closeOnFlush()
-     */
-    public CloseFuture closeOnFlush() {
-        return wrappedSession.closeOnFlush();
     }
 
     /**
@@ -370,13 +363,6 @@ public class FtpIoSession implements IoSession {
     }
 
     /**
-     * @see IoSession#getTrafficMask()
-     */
-    public TrafficMask getTrafficMask() {
-        return wrappedSession.getTrafficMask();
-    }
-
-    /**
      * @see IoSession#getTransportMetadata()
      */
     public TransportMetadata getTransportMetadata() {
@@ -515,13 +501,6 @@ public class FtpIoSession implements IoSession {
      */
     public Object setAttributeIfAbsent(Object key, Object value) {
         return wrappedSession.setAttributeIfAbsent(key, value);
-    }
-
-    /**
-     * @see IoSession#setTrafficMask(TrafficMask)
-     */
-    public void setTrafficMask(TrafficMask trafficMask) {
-        wrappedSession.setTrafficMask(trafficMask);
     }
 
     /**
@@ -811,5 +790,40 @@ public class FtpIoSession implements IoSession {
      */
     public FtpReply getLastReply() {
         return lastReply;
+    }
+
+    /**
+     * @see IoSession#getWriteRequestQueue()
+     */
+    public WriteRequestQueue getWriteRequestQueue() {
+        return wrappedSession.getWriteRequestQueue();
+    }
+
+    /**
+     * @see IoSession#isReadSuspended()
+     */
+    public boolean isReadSuspended() {
+        return wrappedSession.isReadSuspended();
+    }
+
+    /**
+     * @see IoSession#isWriteSuspended()
+     */
+    public boolean isWriteSuspended() {
+        return wrappedSession.isWriteSuspended();
+    }
+
+    /**
+     * @see IoSession#setCurrentWriteRequest(WriteRequest)
+     */
+    public void setCurrentWriteRequest(WriteRequest currentWriteRequest) {
+        wrappedSession.setCurrentWriteRequest(currentWriteRequest);
+    }
+
+    /**
+     * @see IoSession#updateThroughput(long, boolean)
+     */
+    public void updateThroughput(long currentTime, boolean force) {
+        wrappedSession.updateThroughput(currentTime, force);
     }
 }
