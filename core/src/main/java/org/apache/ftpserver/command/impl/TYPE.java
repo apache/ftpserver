@@ -56,7 +56,7 @@ public class TYPE extends AbstractCommand {
         session.resetState();
 
         // get type from argument
-        char type = 'A';
+        char type;
         if (request.hasArgument()) {
             type = request.getArgument().charAt(0);
         }else{
