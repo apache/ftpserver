@@ -517,4 +517,12 @@ public class NativeFtpFile implements FtpFile {
 
         return resArg;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if(obj != null && obj instanceof NativeFtpFile) {
+    		return this.file.equals(((NativeFtpFile) obj).file);
+    	}
+    	return false;
+    }
 }

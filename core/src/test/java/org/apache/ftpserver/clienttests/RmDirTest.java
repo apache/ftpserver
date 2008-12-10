@@ -16,21 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
 
 /**
-*
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
-*/
+ *
+ * @author The Apache MINA Project (dev@mina.apache.org)
+ * @version $Rev$, $Date$
+ *
+ */
 public class RmDirTest extends ClientTestTemplate {
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
 
+    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
     private static final File TEST_DIR_IN_DIR1 = new File(TEST_DIR1, "dir3");
+    private static final File TEST_CWD = new File(ROOT_DIR, "dir4");
 
     /*
      * (non-Javadoc)
@@ -52,8 +52,7 @@ public class RmDirTest extends ClientTestTemplate {
 
     public void testRmdirNestedDir() throws Exception {
         assertTrue(TEST_DIR_IN_DIR1.mkdirs());
-        assertTrue(client.removeDirectory(TEST_DIR1.getName() + "/"
-                + TEST_DIR_IN_DIR1.getName()));
+        assertTrue(client.removeDirectory(TEST_DIR1.getName() + "/" + TEST_DIR_IN_DIR1.getName()));
 
         assertTrue(TEST_DIR1.exists());
         assertFalse(TEST_DIR_IN_DIR1.exists());
@@ -84,5 +83,40 @@ public class RmDirTest extends ClientTestTemplate {
         assertFalse(client.removeDirectory(TEST_DIR1.getName()));
 
         assertTrue(TEST_DIR1.exists());
+    }
+
+    public void testRmdirCurrentWorkingDirectory() throws Exception {
+        assertTrue(TEST_CWD.mkdirs());
+
+        assertTrue(client.changeWorkingDirectory("/" + TEST_CWD.getName()));
+
+        assertEquals(450, client.sendCommand("RMD ."));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(false, client.removeDirectory("."));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(450, client.sendCommand("RMD " + "/" + TEST_CWD.getName()));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(false, client.removeDirectory("/" + TEST_CWD.getName()));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(450, client.sendCommand("RMD " + "../" + TEST_CWD.getName()));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(false, client.removeDirectory("../" + TEST_CWD.getName()));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(450, client.sendCommand("RMD " + "././."));
+        assertTrue(TEST_CWD.exists());
+
+        assertEquals(false, client.removeDirectory("././."));
+        assertTrue(TEST_CWD.exists());
+
+        // Test for case-insensitive servers. In case it is case sensitive we'll receive a 550 response
+        // so this test should  end successfully in both cases.
+        assertEquals(false, client.removeDirectory("/" + TEST_CWD.getName().toUpperCase()));
+        assertTrue(TEST_CWD.exists());
     }
 }

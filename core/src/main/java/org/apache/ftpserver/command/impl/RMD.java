@@ -82,20 +82,31 @@ public class RMD extends AbstractCommand {
             return;
         }
 
-        // check permission
         fileName = file.getAbsolutePath();
-        if (!file.isRemovable()) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
-                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "RMD.permission", fileName));
-            return;
-        }
 
-        // check file
+        // first let's make sure the path is a directory 
         if (!file.isDirectory()) {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
                     "RMD.invalid", fileName));
+            return;
+        }
+
+        // then make sure that the client did not request the deletion of 
+        // current working directory.   
+        FtpFile cwd = session.getFileSystemView().getWorkingDirectory();
+        if(file.equals(cwd)) {
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD.busy",
+                fileName));
+            return;
+        }
+        
+        // now check to see if the user have permission to delete this directory 
+        if (!file.isRemovable()) {
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                    FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
+                    "RMD.permission", fileName));
             return;
         }
 
@@ -115,6 +126,7 @@ public class RMD extends AbstractCommand {
             ftpStat.setRmdir(session, file);
 
         } else {
+        	 
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD",
                     fileName));
