@@ -76,11 +76,11 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         factory.setSslConfiguration(createSslConfiguration().createSslConfiguration());
 
-        DataConnectionConfigurationFactory dataConfig = new DataConnectionConfigurationFactory();
-        dataConfig.setSslConfiguration(createSslConfiguration().createSslConfiguration());
-
-        factory.setDataConnectionConfiguration(dataConfig.createDataConnectionConfiguration());
-
+//        DataConnectionConfigurationFactory dataConfig = new DataConnectionConfigurationFactory();
+//        dataConfig.setSslConfiguration(createSslConfiguration().createSslConfiguration());
+//
+//        factory.setDataConnectionConfiguration(dataConfig.createDataConnectionConfiguration());
+//
         server.addListener("default", factory.createListener());
         
         return server;

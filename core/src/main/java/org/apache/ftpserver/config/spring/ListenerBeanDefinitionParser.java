@@ -253,18 +253,9 @@ public class ListenerBeanDefinitionParser extends
         if (element != null) {
             // data con config element available
             SslConfiguration ssl = parseSsl(element);
-            if (ssl != null) {
-                LOG.debug("SSL configuration found for the data connection");
-                dc.setSslConfiguration(ssl);
-            } else {
-                // go look for the parent element SSL config
-                // find the listener element
-                if (listenerSslConfiguration != null) {
-                    LOG
-                            .debug("SSL configuration found for the listener, falling back for that for the data connection");
-                    dc.setSslConfiguration(listenerSslConfiguration);
-                }
-            }
+
+            LOG.debug("SSL configuration found for the data connection");
+            dc.setSslConfiguration(ssl);
 
             Element activeElm = SpringUtil.getChildElement(element,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "active");

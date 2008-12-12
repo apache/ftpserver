@@ -141,6 +141,19 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         requestTime = System.currentTimeMillis();
     }
 
+    private SslConfiguration getSslConfiguration() {
+        DataConnectionConfiguration dataCfg = session.getListener().getDataConnectionConfiguration();
+        
+        SslConfiguration configuration = dataCfg.getSslConfiguration();
+
+        // fall back if no configuration has been provided on the data connection config
+        if(configuration == null) {
+            configuration = session.getListener().getSslConfiguration();
+        }
+        
+        return configuration;
+    }
+    
     /**
      * Initiate a data connection in passive mode (server listening). It returns
      * the success flag.
@@ -162,7 +175,6 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
         // open passive server socket and get parameters
         try {
-            
         	DataConnectionConfiguration dataCfg = session.getListener()
                     .getDataConnectionConfiguration();
         	
@@ -181,7 +193,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                         .debug(
                                 "Opening SSL passive data connection on address \"{}\" and port {}",
                                 address, passivePort);
-                SslConfiguration ssl = dataCfg.getSslConfiguration();
+                SslConfiguration ssl = getSslConfiguration();
                 if (ssl == null) {
                     throw new DataConnectionException(
                             "Data connection SSL required but not configured.");
@@ -291,7 +303,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             if (!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if (secure) {
-                    SslConfiguration ssl = dataConfig.getSslConfiguration();
+                    SslConfiguration ssl = getSslConfiguration();
                     if (ssl == null) {
                         throw new FtpException(
                                 "Data connection SSL not configured");

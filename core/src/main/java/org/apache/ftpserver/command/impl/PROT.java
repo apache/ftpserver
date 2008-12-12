@@ -21,6 +21,7 @@ package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
 
+import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -29,6 +30,7 @@ import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
+import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -40,6 +42,19 @@ import org.apache.ftpserver.impl.ServerDataConnectionFactory;
  */
 public class PROT extends AbstractCommand {
 
+    private SslConfiguration getSslConfiguration(final FtpIoSession session) {
+        DataConnectionConfiguration dataCfg = session.getListener().getDataConnectionConfiguration();
+        
+        SslConfiguration configuration = dataCfg.getSslConfiguration();
+
+        // fall back if no configuration has been provided on the data connection config
+        if(configuration == null) {
+            configuration = session.getListener().getSslConfiguration();
+        }
+        
+        return configuration;
+    }
+    
     /**
      * Execute command.
      */
@@ -67,8 +82,7 @@ public class PROT extends AbstractCommand {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_200_COMMAND_OKAY, "PROT", null));
         } else if (arg.equals("P")) {
-            if (session.getListener().getDataConnectionConfiguration()
-                    .getSslConfiguration() == null) {
+            if (getSslConfiguration(session) == null) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         431, "PROT", null));
             } else {
