@@ -198,8 +198,12 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     throw new DataConnectionException(
                             "Data connection SSL required but not configured.");
                 }
-                servSoc = createSecureServerSocket(address, passivePort);
-                port = servSoc.getLocalPort();
+                
+                // this method does not actually create the SSL socket, due to a JVM bug 
+                // (https://issues.apache.org/jira/browse/FTPSERVER-241).
+                // Instead, it creates a regular
+                // ServerSocket that will be wrapped as a SSL socket in createDataSocket()
+                servSoc = new ServerSocket(passivePort, 0, address);
                 LOG
                         .debug(
                                 "SSL Passive data connection created on address \"{}\" and port {}",
@@ -210,12 +214,12 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                                 "Opening passive data connection on address \"{}\" and port {}",
                                 address, passivePort);
                 servSoc = new ServerSocket(passivePort, 0, address);
-                port = servSoc.getLocalPort();
                 LOG
                         .debug(
                                 "Passive data connection created on address \"{}\" and port {}",
                                 address, passivePort);
             }
+            port = servSoc.getLocalPort();
             servSoc.setSoTimeout(dataCfg.getIdleTime() * 1000);
 
             // set different state variables
@@ -230,24 +234,6 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     "Failed to initate passive data connection: "
                             + ex.getMessage(), ex);
         }
-    }
-
-    private ServerSocket createSecureServerSocket(
-            final InetAddress address2, final int passivePort)
-            throws IOException, GeneralSecurityException {
-        // this method does not actually create the SSL socket, due to a JVM bug 
-        // (https://issues.apache.org/jira/browse/FTPSERVER-241).
-        // Instead, it creates a regular
-        // ServerSocket that will be wrapped as a SSL socket in createDataSocket()
-        
-        ServerSocket internalServerSocket ;
-        if (address2 == null) {
-            internalServerSocket = new ServerSocket(passivePort);
-        } else {
-            internalServerSocket = new ServerSocket(passivePort, 100, address2);
-        }
-        
-        return internalServerSocket;
     }
 
     /*
@@ -318,6 +304,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 LOG.debug("Opening passive data connection");
 
                 if(secure) {
+                    // this is where we wrap the unsecured socket as a SSLSocket. This is 
+                    // due to the JVM bug described in FTPSERVER-241.
+                    
                     // get server socket factory
                     SslConfiguration ssl = getSslConfiguration();
 
@@ -354,9 +343,11 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             throw ex;
         }
         dataSoc.setSoTimeout(dataConfig.getIdleTime()*1000);
-        // Make sure we initate the SSL handshake, or we'll
+        
+        
+        // Make sure we initiate the SSL handshake, or we'll
         // get an error if we turn out not to send any data
-        // e.g. during the listing of an empty dir
+        // e.g. during the listing of an empty directory
         if (dataSoc instanceof SSLSocket) {
             ((SSLSocket) dataSoc).startHandshake();
         }
