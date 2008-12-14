@@ -198,7 +198,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     throw new DataConnectionException(
                             "Data connection SSL required but not configured.");
                 }
-                servSoc = createServerSocket(ssl, address, passivePort);
+                servSoc = createSecureServerSocket(address, passivePort);
                 port = servSoc.getLocalPort();
                 LOG
                         .debug(
@@ -232,35 +232,22 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
         }
     }
 
-    private ServerSocket createServerSocket(final SslConfiguration ssl,
+    private ServerSocket createSecureServerSocket(
             final InetAddress address2, final int passivePort)
             throws IOException, GeneralSecurityException {
-        // get server socket factory
-        SSLContext ctx = ssl.getSSLContext();
-        SSLServerSocketFactory ssocketFactory = ctx.getServerSocketFactory();
-
-        // create server socket
-        SSLServerSocket sslServerSocket = null;
+        // this method does not actually create the SSL socket, due to a JVM bug 
+        // (https://issues.apache.org/jira/browse/FTPSERVER-241).
+        // Instead, it creates a regular
+        // ServerSocket that will be wrapped as a SSL socket in createDataSocket()
+        
+        ServerSocket internalServerSocket ;
         if (address2 == null) {
-            sslServerSocket = (SSLServerSocket) ssocketFactory
-                    .createServerSocket(passivePort, 100);
+            internalServerSocket = new ServerSocket(passivePort);
         } else {
-            sslServerSocket = (SSLServerSocket) ssocketFactory
-                    .createServerSocket(passivePort, 100, address2);
+            internalServerSocket = new ServerSocket(passivePort, 100, address2);
         }
-
-        // initialize server socket
-        if (ssl.getClientAuth() == ClientAuth.NEED) {
-            sslServerSocket.setNeedClientAuth(true);
-        } else if (ssl.getClientAuth() == ClientAuth.WANT) {
-            sslServerSocket.setWantClientAuth(true);
-        }
-
-        if (ssl.getEnabledCipherSuites() != null) {
-            sslServerSocket
-                    .setEnabledCipherSuites(ssl.getEnabledCipherSuites());
-        }
-        return sslServerSocket;
+        
+        return internalServerSocket;
     }
 
     /*
@@ -329,7 +316,36 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 }
             } else {
                 LOG.debug("Opening passive data connection");
-                dataSoc = servSoc.accept();
+
+                if(secure) {
+                    // get server socket factory
+                    SslConfiguration ssl = getSslConfiguration();
+
+                    SSLContext ctx = ssl.getSSLContext();
+                    SSLSocketFactory ssocketFactory = ctx.getSocketFactory();
+                    
+                    Socket serverSocket = servSoc.accept();
+                    
+                    SSLSocket sslSocket = (SSLSocket) ssocketFactory.createSocket(serverSocket,
+                            serverSocket.getInetAddress().getHostName(), serverSocket.getPort(), false);
+                    sslSocket.setUseClientMode(false);
+                    
+                    // initialize server socket
+                    if (ssl.getClientAuth() == ClientAuth.NEED) {
+                        sslSocket.setNeedClientAuth(true);
+                    } else if (ssl.getClientAuth() == ClientAuth.WANT) {
+                        sslSocket.setWantClientAuth(true);
+                    }
+    
+                    if (ssl.getEnabledCipherSuites() != null) {
+                        sslSocket
+                                .setEnabledCipherSuites(ssl.getEnabledCipherSuites());
+                    }
+                    
+                    dataSoc = sslSocket;
+                } else {    
+                    dataSoc = servSoc.accept();
+                }
                 LOG.debug("Passive data connection opened");
             }
         } catch (Exception ex) {
