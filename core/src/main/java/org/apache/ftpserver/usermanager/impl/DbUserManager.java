@@ -358,11 +358,11 @@ public class DbUserManager extends AbstractUserManager {
                 ResultSet rs = null;
                 
                 try {
-                    rs = selectUserByName(user.getName());
+                    User userWithPassword = selectUserByName(user.getName());
                     
-                    if(rs.next()) {
+                    if(userWithPassword != null) {
                         // user exists, reuse password
-                        password = rs.getString(ATTR_PASSWORD);
+                        password = userWithPassword.getPassword();
                     }
                 } finally {
                     closeQuitely(rs);
@@ -452,7 +452,7 @@ public class DbUserManager extends AbstractUserManager {
     }
 
     
-    private ResultSet selectUserByName(String name) throws SQLException {
+    private BaseUser selectUserByName(String name) throws SQLException {
         // create sql query
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(ATTR_LOGIN, escapeString(name));
@@ -460,30 +460,18 @@ public class DbUserManager extends AbstractUserManager {
         LOG.info(sql);
 
         Statement stmt = null;
+        ResultSet rs = null;
         try {
             // execute query
             stmt = createConnection().createStatement();
-            return stmt.executeQuery(sql);
-        } finally {
-            closeQuitely(stmt);
-        }
-    }
-    
-    /**
-     * Get the user object. Fetch the row from the table.
-     */
-    public User getUserByName(String name) throws FtpException {
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            
-            rs = selectUserByName(name);
+            rs = stmt.executeQuery(sql);
 
             // populate user object
             BaseUser thisUser = null;
             if (rs.next()) {
                 thisUser = new BaseUser();
                 thisUser.setName(rs.getString(ATTR_LOGIN));
+                thisUser.setPassword(rs.getString(ATTR_PASSWORD));
                 thisUser.setHomeDirectory(rs.getString(ATTR_HOME));
                 thisUser.setEnabled(rs.getBoolean(ATTR_ENABLE));
                 thisUser.setMaxIdleTime(rs.getInt(ATTR_MAX_IDLE_TIME));
@@ -503,6 +491,30 @@ public class DbUserManager extends AbstractUserManager {
                 thisUser.setAuthorities(authorities);
             }
             return thisUser;
+        
+        } finally {
+            closeQuitely(rs);
+            closeQuitely(stmt);
+        }
+    }
+    
+    /**
+     * Get the user object. Fetch the row from the table.
+     */
+    public User getUserByName(String name) throws FtpException {
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            
+            BaseUser user = selectUserByName(name);
+            
+            if(user != null) {
+                // reset the password, not to be sent to API users
+                user.setPassword(null);
+            }
+            return user;
+
+
         } catch (SQLException ex) {
             LOG.error("DbUserManager.getUserByName()", ex);
             throw new FtpException("DbUserManager.getUserByName()", ex);
