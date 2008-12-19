@@ -254,8 +254,12 @@ public class ListenerBeanDefinitionParser extends
             // data con config element available
             SslConfiguration ssl = parseSsl(element);
 
-            LOG.debug("SSL configuration found for the data connection");
-            dc.setSslConfiguration(ssl);
+            if (ssl != null) {
+                LOG.debug("SSL configuration found for the data connection");
+                dc.setSslConfiguration(ssl);
+            }
+
+            dc.setIdleTime(SpringUtil.parseInt(element, "idle-timeout", dc.getIdleTime()));
 
             Element activeElm = SpringUtil.getChildElement(element,
                     FtpServerNamespaceHandler.FTPSERVER_NS, "active");

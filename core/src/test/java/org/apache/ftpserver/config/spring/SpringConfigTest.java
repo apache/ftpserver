@@ -67,6 +67,8 @@ public class SpringConfigTest extends TestCase {
         assertEquals(2222, ((NioListener) listener).getPort());
         assertEquals(InetAddress.getByName("1.2.3.4"), InetAddress.getByName(((NioListener) listener)
                 .getServerAddress()));
+        assertEquals(100, ((NioListener) listener)
+                .getDataConnectionConfiguration().getIdleTime());
         assertEquals(true, ((NioListener) listener)
                 .getDataConnectionConfiguration().isActiveEnabled());
         assertEquals(InetAddress.getByName("1.2.3.4"), InetAddress.getByName(((NioListener) listener)
