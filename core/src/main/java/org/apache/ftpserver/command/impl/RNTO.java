@@ -125,15 +125,17 @@ public class RNTO extends AbstractCommand {
                 return;
             }
 
+            // save away the old path
+            String logFrFileAbsolutePath = frFile.getAbsolutePath();
+            
             // now rename
             if (frFile.move(toFile)) {
                 session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO",
                         toFileStr));
 
-                LOG.info("File rename (" + session.getUser().getName() + ") "
-                        + frFile.getAbsolutePath() + " -> " + toFile.getAbsolutePath());
-
+                LOG.info("File rename from \"{}\" to \"{}\"", logFrFileAbsolutePath, 
+                        toFile.getAbsolutePath());
             } else {
                 session
                         .write(LocalizedFtpReply
