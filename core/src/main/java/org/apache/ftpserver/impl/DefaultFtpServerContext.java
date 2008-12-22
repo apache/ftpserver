@@ -195,6 +195,11 @@ public class DefaultFtpServerContext implements FtpServerContext {
             Listener listener = listenerIter.next();
             listener.stop();
         }
+        
+        // now tell Ftplets to destroy themselves
+        if(ftpletContainer != null) {
+            ftpletContainer.destroy();
+        }
     }
 
     public Listener getListener(String name) {
