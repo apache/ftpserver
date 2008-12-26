@@ -30,6 +30,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.impl.DefaultFtpServer;
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
@@ -196,6 +197,11 @@ public abstract class ClientTestTemplate extends TestCase {
         if (TEST_TMP_DIR.exists()) {
             IoUtils.delete(TEST_TMP_DIR);
         }
+    }
+    
+    protected FtpIoSession getActiveSession() {
+        return server.getListener("default").getActiveSessions().iterator()
+                .next();
     }
 
     /*

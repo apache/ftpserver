@@ -25,7 +25,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyStore;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
@@ -55,6 +57,9 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
     private static final File FTPSERVER_KEYSTORE = new File(TestUtil
             .getBaseDir(), "src/test/resources/ftpserver.jks");
 
+    protected KeyManager clientKeyManager;
+    protected TrustManager clientTrustManager;
+
     protected SslConfigurationFactory createSslConfiguration() {
         SslConfigurationFactory sslConfigFactory = new SslConfigurationFactory();
         sslConfigFactory.setKeystoreFile(FTPSERVER_KEYSTORE);
@@ -75,15 +80,16 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         factory.setImplicitSsl(useImplicit());
 
         factory.setSslConfiguration(createSslConfiguration().createSslConfiguration());
-
-//        DataConnectionConfigurationFactory dataConfig = new DataConnectionConfigurationFactory();
-//        dataConfig.setSslConfiguration(createSslConfiguration().createSslConfiguration());
-//
-//        factory.setDataConnectionConfiguration(dataConfig.createDataConnectionConfiguration());
-//
+        
+        factory.setDataConnectionConfiguration(createDataConnectionConfiguration().createDataConnectionConfiguration());
+        
         server.addListener("default", factory.createListener());
         
         return server;
+    }
+    
+    protected DataConnectionConfigurationFactory createDataConnectionConfiguration() {
+        return new DataConnectionConfigurationFactory();
     }
 
     protected boolean useImplicit() {
@@ -112,8 +118,12 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
                 .getInstance("SunX509");
 
         trustManagerFactory.init(store);
-        ftpsClient.setKeyManager(keyManagerFactory.getKeyManagers()[0]);
-        ftpsClient.setTrustManager(trustManagerFactory.getTrustManagers()[0]);
+        
+        clientKeyManager = keyManagerFactory.getKeyManagers()[0];
+        clientTrustManager = trustManagerFactory.getTrustManagers()[0];
+        
+        ftpsClient.setKeyManager(clientKeyManager);
+        ftpsClient.setTrustManager(clientTrustManager);
 
         String auth = getAuthValue();
         if (auth != null) {

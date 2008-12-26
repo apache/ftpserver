@@ -110,4 +110,9 @@ public interface DataConnectionConfiguration {
      * @return The {@link SslConfiguration}
      */
     SslConfiguration getSslConfiguration();
+    
+    /**
+     * @return True if SSL is mandatory for the data channel
+     */
+    boolean isImplicitSsl();
 }

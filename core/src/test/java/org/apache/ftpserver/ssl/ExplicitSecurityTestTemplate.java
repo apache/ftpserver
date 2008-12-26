@@ -25,7 +25,6 @@ import java.io.InputStream;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -36,21 +35,16 @@ import org.apache.ftpserver.util.IoUtils;
 */
 public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 
-    private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
+    protected static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
 
-    private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
+    protected static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
 
-    private static final byte[] TEST_DATA = "TESTDATA".getBytes();
+    protected static final byte[] TEST_DATA = "TESTDATA".getBytes();
 
     protected void setUp() throws Exception {
         super.setUp();
 
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-    }
-
-    private FtpIoSession getActiveSession() {
-        return server.getListener("default").getActiveSessions().iterator()
-                .next();
     }
 
     /**

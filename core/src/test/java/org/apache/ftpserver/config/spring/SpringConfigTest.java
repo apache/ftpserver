@@ -69,8 +69,11 @@ public class SpringConfigTest extends TestCase {
                 .getServerAddress()));
         assertEquals(100, ((NioListener) listener)
                 .getDataConnectionConfiguration().getIdleTime());
-        assertEquals(true, ((NioListener) listener)
+        assertTrue(((NioListener) listener)
                 .getDataConnectionConfiguration().isActiveEnabled());
+        assertTrue(((NioListener) listener)
+                .getDataConnectionConfiguration().isImplicitSsl());
+        
         assertEquals(InetAddress.getByName("1.2.3.4"), InetAddress.getByName(((NioListener) listener)
         		.getDataConnectionConfiguration().getActiveLocalAddress()) );
         assertEquals("123-125", ((NioListener) listener)

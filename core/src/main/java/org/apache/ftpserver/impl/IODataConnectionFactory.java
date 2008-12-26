@@ -28,8 +28,6 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -82,7 +80,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             final FtpIoSession session) {
         this.session = session;
         this.serverContext = serverContext;
-
+        if (session.getListener().getDataConnectionConfiguration().isImplicitSsl()) {
+            secure = true;
+        }
     }
 
     /**
@@ -276,6 +276,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
             if (!passive) {
                 int localPort = dataConfig.getActiveLocalPort();
                 if (secure) {
+                    LOG.debug("Opening secure active data connection");
                     SslConfiguration ssl = getSslConfiguration();
                     if (ssl == null) {
                         throw new FtpException(
@@ -291,6 +292,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                                 localPort, false);
                     }
                 } else {
+                    LOG.debug("Opening active data connection");
                     if (localPort == 0) {
                         dataSoc = new Socket(address, port);
                     } else {
@@ -301,9 +303,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     }
                 }
             } else {
-                LOG.debug("Opening passive data connection");
 
                 if(secure) {
+                    LOG.debug("Opening secure passive data connection");
                     // this is where we wrap the unsecured socket as a SSLSocket. This is 
                     // due to the JVM bug described in FTPSERVER-241.
                     
@@ -332,7 +334,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     }
                     
                     dataSoc = sslSocket;
-                } else {    
+                } else {
+                    LOG.debug("Opening passive data connection");
+                    
                     dataSoc = servSoc.accept();
                 }
                 LOG.debug("Passive data connection opened");

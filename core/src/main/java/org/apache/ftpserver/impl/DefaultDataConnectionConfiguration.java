@@ -19,12 +19,8 @@
 
 package org.apache.ftpserver.impl;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
-import org.apache.ftpserver.DataConnectionException;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
@@ -50,6 +46,8 @@ public class DefaultDataConnectionConfiguration implements
     private String passiveAddress;
     private String passiveExternalAddress;
     private PassivePorts passivePorts;
+    
+    private final boolean implicitSsl;
 
     /**
      * Internal constructor, do not use directly. Use {@link DataConnectionConfigurationFactory} instead.
@@ -58,7 +56,7 @@ public class DefaultDataConnectionConfiguration implements
             SslConfiguration ssl, boolean activeEnabled, boolean activeIpCheck,
             String activeLocalAddress, int activeLocalPort,
             String passiveAddress, PassivePorts passivePorts,
-            String passiveExternalAddress) {
+            String passiveExternalAddress, boolean implicitSsl) {
         this.idleTime = idleTime;
         this.ssl = ssl;
         this.activeEnabled = activeEnabled;
@@ -68,6 +66,7 @@ public class DefaultDataConnectionConfiguration implements
         this.passiveAddress = passiveAddress;
         this.passivePorts = passivePorts;
         this.passiveExternalAddress = passiveExternalAddress;
+        this.implicitSsl = implicitSsl;
     }
 
     /**
@@ -168,5 +167,12 @@ public class DefaultDataConnectionConfiguration implements
      */
     public SslConfiguration getSslConfiguration() {
         return ssl;
+    }
+
+    /**
+     * @see org.apache.ftpserver.DataConnectionConfiguration#isImplicitSsl()
+     */
+    public boolean isImplicitSsl() {
+        return implicitSsl;
     }
 }

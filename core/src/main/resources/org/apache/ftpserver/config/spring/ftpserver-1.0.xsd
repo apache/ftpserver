@@ -125,6 +125,7 @@
 							</xs:element>
 						</xs:sequence>
 						<xs:attribute name="idle-timeout" type="xs:int" />
+                        <xs:attribute name="implicit-ssl" type="xs:boolean" />
 					</xs:complexType>
 				</xs:element>
 				<xs:element minOccurs="0" name="blacklist" type="xs:string" />

@@ -251,6 +251,9 @@ public class ListenerBeanDefinitionParser extends
         DataConnectionConfigurationFactory dc = new DataConnectionConfigurationFactory();
 
         if (element != null) {
+            
+            dc.setImplicitSsl(SpringUtil.parseBoolean(element, "implicit-ssl", false));
+            
             // data con config element available
             SslConfiguration ssl = parseSsl(element);
 

@@ -38,7 +38,7 @@
                     <keystore file="src/test/resources/ftpserver.jks" password="password"/>
                 </ssl>
 
-				<data-connection idle-timeout="100">
+				<data-connection idle-timeout="100" implicit-ssl="true">
 					<active enabled="true" local-address="1.2.3.4"/>
 					<passive ports="123-125"/>
 				</data-connection>

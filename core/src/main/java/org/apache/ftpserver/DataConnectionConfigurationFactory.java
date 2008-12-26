@@ -46,6 +46,7 @@ public class DataConnectionConfigurationFactory {
     private String passiveAddress;
     private String passiveExternalAddress;
     private PassivePorts passivePorts = new PassivePorts(new int[] { 0 });
+    private boolean implicitSsl;
 
     /**
      * Default constructor
@@ -70,7 +71,7 @@ public class DataConnectionConfigurationFactory {
                 ssl, activeEnabled, activeIpCheck,
                 activeLocalAddress, activeLocalPort,
                 passiveAddress, passivePorts,
-                passiveExternalAddress);
+                passiveExternalAddress, implicitSsl);
     }
     /*
      * (Non-Javadoc)
@@ -284,5 +285,20 @@ public class DataConnectionConfigurationFactory {
      */
     public void setSslConfiguration(SslConfiguration ssl) {
         this.ssl = ssl;
+    }
+
+    /**
+     * @return True if ssl is mandatory for the data connection
+     */
+    public boolean isImplicitSsl() {
+        return implicitSsl;
+    }
+
+    /**
+     * Set whether ssl is required for the data connection
+     * @param sslMandatory True if ssl is mandatory for the data connection
+     */
+    public void setImplicitSsl(boolean implicitSsl) {
+        this.implicitSsl = implicitSsl;
     }
 }
