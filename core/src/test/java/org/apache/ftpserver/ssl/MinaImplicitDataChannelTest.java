@@ -47,9 +47,9 @@ public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
         return "SSL";
     }
 
-    protected DataConnectionConfigurationFactory createDataConnectionConfiguration() {
+    protected DataConnectionConfigurationFactory createDataConnectionConfigurationFactory() {
         DataConnectionConfigurationFactory result = super
-                .createDataConnectionConfiguration();
+                .createDataConnectionConfigurationFactory();
         result.setImplicitSsl(true);
         return result;
     }
@@ -96,7 +96,6 @@ public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
      */
     public void testStoreWithProtPInPassiveMode() throws Exception {
         secureClientDataConnection();
-        client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
 
         // Do not send PROT P

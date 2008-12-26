@@ -81,17 +81,11 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         factory.setSslConfiguration(createSslConfiguration().createSslConfiguration());
         
-        factory.setDataConnectionConfiguration(createDataConnectionConfiguration().createDataConnectionConfiguration());
-        
         server.addListener("default", factory.createListener());
         
         return server;
     }
     
-    protected DataConnectionConfigurationFactory createDataConnectionConfiguration() {
-        return new DataConnectionConfigurationFactory();
-    }
-
     protected boolean useImplicit() {
         return false;
     }

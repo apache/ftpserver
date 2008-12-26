@@ -28,6 +28,8 @@ import org.apache.commons.net.ProtocolCommandEvent;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.ftpserver.ConnectionConfigFactory;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.impl.FtpIoSession;
@@ -83,10 +85,18 @@ public abstract class ClientTestTemplate extends TestCase {
 
         FtpServerFactory serverFactory = new FtpServerFactory();
 
-        ListenerFactory factory = new ListenerFactory();
-        
-        factory.setPort(port);
-        serverFactory.addListener("default", factory.createListener());
+        serverFactory.setConnectionConfig(createConnectionConfigFactory()
+                .createConnectionConfig());
+
+        ListenerFactory listenerFactory = new ListenerFactory();
+
+        listenerFactory.setPort(port);
+
+        listenerFactory
+                .setDataConnectionConfiguration(createDataConnectionConfigurationFactory()
+                        .createDataConnectionConfiguration());
+
+        serverFactory.addListener("default", listenerFactory.createListener());
 
         PropertiesUserManagerFactory umFactory = new PropertiesUserManagerFactory();
         umFactory.setAdminName("admin");
@@ -96,6 +106,14 @@ public abstract class ClientTestTemplate extends TestCase {
         serverFactory.setUserManager(umFactory.createUserManager());
 
         return serverFactory;
+    }
+
+    protected ConnectionConfigFactory createConnectionConfigFactory() {
+        return new ConnectionConfigFactory();
+    }
+
+    protected DataConnectionConfigurationFactory createDataConnectionConfigurationFactory() {
+        return new DataConnectionConfigurationFactory();
     }
 
     /*
@@ -198,7 +216,7 @@ public abstract class ClientTestTemplate extends TestCase {
             IoUtils.delete(TEST_TMP_DIR);
         }
     }
-    
+
     protected FtpIoSession getActiveSession() {
         return server.getListener("default").getActiveSessions().iterator()
                 .next();

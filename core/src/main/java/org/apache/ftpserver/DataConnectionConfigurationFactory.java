@@ -49,18 +49,6 @@ public class DataConnectionConfigurationFactory {
     private boolean implicitSsl;
 
     /**
-     * Default constructor
-     */
-    public DataConnectionConfigurationFactory() {
-        try {
-            activeLocalAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new FtpServerConfigurationException(
-                    "Failed to resolve localhost", e);
-        }
-    }
-    
-    /**
      * Create a {@link DataConnectionConfiguration} instance based on the 
      * configuration on this factory
      * @return The {@link DataConnectionConfiguration} instance

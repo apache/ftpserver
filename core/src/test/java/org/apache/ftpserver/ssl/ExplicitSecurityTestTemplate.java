@@ -110,6 +110,8 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testStoreWithProtPInActiveMode() throws Exception {
+        client.setRemoteVerificationEnabled(false);
+        
         ((FTPSClient) client).execPROT("P");
         assertTrue(getActiveSession().getDataConnection().isSecure());
 
@@ -144,7 +146,6 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testListEmptyDir() throws Exception {
-        client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
 
         ((FTPSClient) client).execPROT("P");
@@ -157,7 +158,6 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testReceiveEmptyFile() throws Exception {
-        client.setRemoteVerificationEnabled(false);
         client.enterLocalPassiveMode();
 
         ((FTPSClient) client).execPROT("P");
