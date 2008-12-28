@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
@@ -39,7 +40,13 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 public class BindExceptionParallelTest extends ClientTestTemplate {
     private static final int NUMBER_OF_CLIENTS = 2;
     private List<FTPClient> clients;
+    
+    private int port = TestUtil.findFreePort(2020);
 
+    public BindExceptionParallelTest() throws IOException {
+        // default cstr
+    }
+    
     @Override
     protected FTPClient createFTPClient() throws Exception {
         FTPClient c = super.createFTPClient();
@@ -70,7 +77,7 @@ public class BindExceptionParallelTest extends ClientTestTemplate {
     @Override
     protected DataConnectionConfigurationFactory createDataConnectionConfigurationFactory() {
         DataConnectionConfigurationFactory factory = super.createDataConnectionConfigurationFactory();
-        factory.setActiveLocalPort(2020);
+        factory.setActiveLocalPort(port);
         factory.setActiveLocalAddress("localhost");
         return factory;
     }
