@@ -179,7 +179,7 @@ public class DataConnectionConfigurationFactory {
      * @return The passive address to be returned to clients, null if not
      *         configured.
      */
-    public String getPassiveExernalAddress() {
+    public String getPassiveExternalAddress() {
         return passiveExternalAddress;
     }
 
@@ -189,7 +189,7 @@ public class DataConnectionConfigurationFactory {
      * 
      * @param passiveExternalAddress The passive address to be returned to clients
      */
-    public void setPassiveExernalAddress(String passiveExternalAddress) {
+    public void setPassiveExternalAddress(String passiveExternalAddress) {
         this.passiveExternalAddress = passiveExternalAddress;
     }
     

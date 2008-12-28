@@ -293,7 +293,7 @@ public class ListenerBeanDefinitionParser extends
                 String externalAddress = SpringUtil.parseStringFromInetAddress(
                         passiveElm, "external-address");
                 if (externalAddress != null) {
-                    dc.setPassiveExernalAddress(externalAddress);
+                    dc.setPassiveExternalAddress(externalAddress);
                 }
 
                 String ports = SpringUtil.parseString(passiveElm, "ports");
