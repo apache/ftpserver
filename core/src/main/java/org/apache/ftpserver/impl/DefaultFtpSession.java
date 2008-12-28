@@ -19,10 +19,10 @@
 
 package org.apache.ftpserver.impl;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DataType;
@@ -237,6 +237,13 @@ public class DefaultFtpSession implements FtpSession {
      */
     public void increaseReadDataBytes(int increment) {
         ioSession.increaseReadDataBytes(increment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public UUID getSessionId() {
+        return ioSession.getSessionId();
     }
 
     

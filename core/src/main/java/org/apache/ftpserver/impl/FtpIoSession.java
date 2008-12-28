@@ -24,6 +24,7 @@ import java.net.SocketAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
@@ -68,6 +69,9 @@ public class FtpIoSession implements IoSession {
     private static final String ATTRIBUTE_USER_ARGUMENT = ATTRIBUTE_PREFIX
             + "user-argument";
 
+    private static final String ATTRIBUTE_SESSION_ID = ATTRIBUTE_PREFIX
+        + "session-id";
+    
     private static final String ATTRIBUTE_USER = ATTRIBUTE_PREFIX + "user";
 
     private static final String ATTRIBUTE_LANGUAGE = ATTRIBUTE_PREFIX
@@ -667,6 +671,18 @@ public class FtpIoSession implements IoSession {
 
     }
 
+    /**
+     * @see FtpSession#getSessionId()
+     */
+    public UUID getSessionId() {
+        synchronized (wrappedSession) {
+            if(!wrappedSession.containsAttribute(ATTRIBUTE_SESSION_ID)) {
+                wrappedSession.setAttribute(ATTRIBUTE_SESSION_ID, UUID.randomUUID());
+            }
+            return (UUID) wrappedSession.getAttribute(ATTRIBUTE_SESSION_ID);
+        }
+    }
+    
     public FtpIoSession(IoSession wrappedSession, FtpServerContext context) {
         this.wrappedSession = wrappedSession;
         this.context = context;

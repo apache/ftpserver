@@ -19,6 +19,8 @@
  */
 package org.apache.ftpserver.listener.nio;
 
+import java.util.UUID;
+
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.DefaultFtpRequest;
@@ -28,6 +30,7 @@ import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.logging.MdcInjectionFilter;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -74,7 +77,10 @@ public class FtpHandlerAdapter implements IoHandler {
 
     public void sessionCreated(IoSession session) throws Exception {
         FtpIoSession ftpSession = new FtpIoSession(session, context);
+        MdcInjectionFilter.setProperty(session, "session", ftpSession.getSessionId().toString());
+
         ftpHandler.sessionCreated(ftpSession);
+        
     }
 
     public void sessionIdle(IoSession session, IdleStatus status)

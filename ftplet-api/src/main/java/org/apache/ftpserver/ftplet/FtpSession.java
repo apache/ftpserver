@@ -23,6 +23,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.cert.Certificate;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Defines an client session with the FTP server. The session is born when the
@@ -193,4 +194,13 @@ public interface FtpSession {
      * @return true if the control socket is secured
      */
     boolean isSecure();
+
+    /**
+     * Get the unique ID for this session. This ID will be maintained for 
+     * the entire session and is also available to MDC logging using the "session"
+     * identifier. 
+     * @return The unique ID for this session
+     */
+    public UUID getSessionId();
+
 }
