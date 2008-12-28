@@ -37,7 +37,7 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 *
 */
 public class BindExceptionParallelTest extends ClientTestTemplate {
-    private static final int NUMBER_OF_CLIENTS = 10;
+    private static final int NUMBER_OF_CLIENTS = 2;
     private List<FTPClient> clients;
 
     @Override
