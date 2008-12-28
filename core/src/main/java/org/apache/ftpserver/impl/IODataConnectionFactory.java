@@ -19,14 +19,12 @@
 
 package org.apache.ftpserver.impl;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
