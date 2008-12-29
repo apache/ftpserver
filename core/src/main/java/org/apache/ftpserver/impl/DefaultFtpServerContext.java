@@ -189,17 +189,8 @@ public class DefaultFtpServerContext implements FtpServerContext {
      * Close all the components.
      */
     public void dispose() {
-
-        Iterator<Listener> listenerIter = listeners.values().iterator();
-        while (listenerIter.hasNext()) {
-            Listener listener = listenerIter.next();
-            listener.stop();
-        }
-        
-        // now tell Ftplets to destroy themselves
-        if(ftpletContainer != null) {
-            ftpletContainer.destroy();
-        }
+        listeners.clear();
+        ftpletContainer.getFtplets().clear();
     }
 
     public Listener getListener(String name) {

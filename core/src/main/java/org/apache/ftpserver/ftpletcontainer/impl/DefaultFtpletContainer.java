@@ -94,7 +94,6 @@ public class DefaultFtpletContainer implements FtpletContainer {
                 LOG.error(entry.getKey() + " :: FtpletHandler.destroy()", ex);
             }
         }
-        ftplets.clear();
     }
 
     /**

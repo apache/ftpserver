@@ -114,6 +114,9 @@ public class DefaultFtpServer implements FtpServer {
             listener.stop();
         }
 
+        // destroy the Ftplet container
+        serverContext.getFtpletContainer().destroy();
+
         // release server resources
         if (serverContext != null) {
             serverContext.dispose();
