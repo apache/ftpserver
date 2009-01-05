@@ -1,3 +1,0 @@
-* Renamed DataConnectionConfigurationFactory.setPassiveExernalAddress to DataConnectionConfigurationFactory.setPassiveExternalAddress
-* Updated to MINA 2.0.0-M4, including some changes to the IoSession, most notably the remove of traffic masks
-* Added FtpSession.getSessionId()
