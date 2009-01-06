@@ -617,7 +617,13 @@ public class FtpIoSession implements IoSession {
 
     public void setMaxIdleTime(int maxIdleTime) {
         setAttribute(ATTRIBUTE_MAX_IDLE_TIME, maxIdleTime);
-
+        
+        int listenerTimeout = getListener().getIdleTimeout();
+        
+        // the listener timeout should be the upper limit, unless set to unlimited
+        if(listenerTimeout <= 0 || maxIdleTime < listenerTimeout) {
+            wrappedSession.getConfig().setBothIdleTime(maxIdleTime);
+        }
     }
 
     public synchronized void increaseFailedLogins() {
