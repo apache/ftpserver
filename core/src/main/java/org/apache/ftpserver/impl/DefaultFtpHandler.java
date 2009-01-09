@@ -58,6 +58,13 @@ public class DefaultFtpHandler implements FtpHandler {
 
     public void sessionCreated(final FtpIoSession session) throws Exception {
         session.setListener(listener);
+        
+        ServerFtpStatistics stats = ((ServerFtpStatistics) context
+                .getFtpStatistics());
+
+        if (stats != null) {
+            stats.setOpenConnection(session);
+        }
     }
 
     public void sessionOpened(final FtpIoSession session) throws Exception {
@@ -83,6 +90,7 @@ public class DefaultFtpHandler implements FtpHandler {
 
         if (stats != null) {
             stats.setLogout(session);
+            stats.setCloseConnection(session);
         }
     }
 
