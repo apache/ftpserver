@@ -178,7 +178,7 @@ public class DefaultFtpStatistics implements ServerFtpStatistics {
      * Get total directory removed.
      */
     public int getTotalDirectoryRemoved() {
-        return mkdirCount.get();
+        return rmdirCount.get();
     }
 
     /**

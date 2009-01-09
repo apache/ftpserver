@@ -58,11 +58,20 @@ public class DefaultFtpHandler implements FtpHandler {
 
     public void sessionCreated(final FtpIoSession session) throws Exception {
         session.setListener(listener);
+        
+        ServerFtpStatistics stats = ((ServerFtpStatistics) context
+                .getFtpStatistics());
+
+        if (stats != null) {
+            stats.setOpenConnection(session);
+        }
     }
 
     public void sessionOpened(final FtpIoSession session) throws Exception {
         context.getFtpletContainer().onConnect(session.getFtpletSession());
 
+        session.updateLastAccessTime();
+        
         session.write(LocalizedFtpReply.translate(session, null, context,
                 FtpReply.REPLY_220_SERVICE_READY, null, null));
     }
@@ -81,6 +90,7 @@ public class DefaultFtpHandler implements FtpHandler {
 
         if (stats != null) {
             stats.setLogout(session);
+            stats.setCloseConnection(session);
         }
     }
 
@@ -114,6 +124,8 @@ public class DefaultFtpHandler implements FtpHandler {
     public void messageReceived(final FtpIoSession session,
             final FtpRequest request) throws Exception {
         try {
+            session.updateLastAccessTime();
+            
             String commandName = request.getCommand();
             CommandFactory commandFactory = context.getCommandFactory();
             Command command = commandFactory.getCommand(commandName);

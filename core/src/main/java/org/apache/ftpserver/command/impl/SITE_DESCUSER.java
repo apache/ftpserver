@@ -104,7 +104,7 @@ public class SITE_DESCUSER extends AbstractCommand {
         sb.append("homedirectory   : ").append(user.getHomeDirectory()).append(
                 "\n");
         sb.append("writepermission : ").append(
-                user.authorize(new WriteRequest())).append("\n");
+                user.authorize(new WriteRequest()) != null).append("\n");
         sb.append("enableflag      : ").append(user.getEnabled()).append("\n");
         sb.append("idletime        : ").append(user.getMaxIdleTime()).append(
                 "\n");
