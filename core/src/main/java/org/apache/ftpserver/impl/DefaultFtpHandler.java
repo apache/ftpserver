@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpletResult;
@@ -81,8 +82,17 @@ public class DefaultFtpHandler implements FtpHandler {
             context.getFtpletContainer().onDisconnect(
                     session.getFtpletSession());
         } catch (Exception e) {
-            // shallow the exception, we're closing down the session anyways
+            // swallow the exception, we're closing down the session anyways
             LOG.warn("Ftplet threw an exception on disconnect", e);
+        }
+        
+        FileSystemView fs = session.getFileSystemView();
+        if(fs != null) {
+            try  {
+                fs.dispose();
+            } catch (Exception e) {
+                LOG.warn("FileSystemView threw an exception on disposal", e);
+            }
         }
 
         ServerFtpStatistics stats = ((ServerFtpStatistics) context
