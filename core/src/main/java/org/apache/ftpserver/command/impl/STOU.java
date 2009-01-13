@@ -153,15 +153,19 @@ public class STOU extends AbstractCommand {
                 // transfer data
                 long transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
 
-                // log message
-                String userName = session.getUser().getName();
-                LOG.info("File upload : " + userName + " - " + fileName);
+                LOG.info("File uploaded {}", fileName);
 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics) context
                         .getFtpStatistics();
                 if (ftpStat != null) {
                     ftpStat.setUpload(session, file, transSz);
+                }
+                
+                // attempt to close the output stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(os != null) {
+                    os.close();
                 }
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
@@ -181,6 +185,7 @@ public class STOU extends AbstractCommand {
                                         FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN,
                                         "STOU", fileName));
             } finally {
+                // make sure we really close the output stream
                 IoUtils.close(os);
             }
 

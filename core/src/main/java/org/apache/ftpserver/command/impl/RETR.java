@@ -166,15 +166,19 @@ public class RETR extends AbstractCommand {
                 // transfer data
                 long transSz = dataConnection.transferToClient(session.getFtpletSession(), is);
 
-                // log message
-                String userName = session.getUser().getName();
-                LOG.info("File download : " + userName + " - " + fileName);
+                LOG.info("File downloaded {}", fileName);
 
                 // notify the statistics component
                 ServerFtpStatistics ftpStat = (ServerFtpStatistics) context
                         .getFtpStatistics();
                 if (ftpStat != null) {
                     ftpStat.setDownload(session, file, transSz);
+                }
+                
+                // attempt to close the input stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(is != null) {
+                    is.close();
                 }
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
@@ -194,6 +198,7 @@ public class RETR extends AbstractCommand {
                                         FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN,
                                         "RETR", fileName));
             } finally {
+                // make sure we really close the input stream
                 IoUtils.close(is);
             }
 
