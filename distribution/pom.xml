@@ -36,6 +36,7 @@
     <url>http://svn.apache.org/viewvc/mina/ftpserver/trunk/distribution</url>
   </scm>
   <build>
+    <finalName>apache-${project.artifactId}-${project.version}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
