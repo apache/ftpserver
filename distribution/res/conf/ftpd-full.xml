@@ -24,72 +24,75 @@
 		Use this section to define custom listeners, or to redefine the
 		default listener, aptly named "default"
 	-->
-	<listeners>
-		<nio-listener name="default" port="2222" implicit-ssl="true"
+    <listeners>
+	<nio-listener name="default" port="2222" implicit-ssl="true"
 			idle-timeout="60" local-address="1.2.3.4">
-			<ssl>
-				<keystore file="mykeystore.jks" password="secret"
+	    <ssl>
+		<keystore file="mykeystore.jks" password="secret"
 					key-password="otherSecret" />
-				<truststore file="mytruststore.jks" password="secret" />
-			</ssl>
-			<data-connection idle-timeout="60">
-				<active enabled="true" local-address="1.2.3.4" local-port="2323"
+		<truststore file="mytruststore.jks" password="secret" />
+	    </ssl>
+	    <data-connection idle-timeout="60">
+		<active enabled="true" local-address="1.2.3.4" local-port="2323"
 					ip-check="true" />
-				<passive ports="123-125" address="1.2.3.4" external-address="1.2.3.4" />
-			</data-connection>
-			<blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>
-		</nio-listener>
-	</listeners>
+		<passive ports="123-125" address="1.2.3.4" external-address="1.2.3.4" />
+	    </data-connection>
+	    <blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>
+	</nio-listener>
+    </listeners>
 	<!--
 		Use this section to define your Ftplets, they are configured like
 		regular Spring beans
 	-->
-	<ftplets>
-		<ftplet name="ftplet1">
-			<beans:bean class="org.apache.ftpserver.examples.MyFtplet">
-				<beans:property name="foo" value="123" />
-			</beans:bean>
-		</ftplet>
-	</ftplets>
+    <ftplets>
+	<ftplet name="ftplet1">
+	    <beans:bean class="org.apache.ftpserver.examples.MyFtplet">
+		<beans:property name="foo" value="123" />
+	    </beans:bean>
+	</ftplet>
+    </ftplets>
 	<!-- The user manager, choose one -->
-	<file-user-manager file="users.properties"
+    <file-user-manager file="users.properties"
 		encrypt-passwords="true" />
-	<db-user-manager>
-		<data-source>
-			<beans:bean class="some.datasoure.class" />
-		</data-source>
-		<insert-user>INSERT INTO FTP_USER (userid, userpassword,
+    <db-user-manager>
+	<data-source>
+	    <beans:bean class="some.datasoure.class" />
+	</data-source>
+	<insert-user>INSERT INTO FTP_USER (userid, userpassword,
 			homedirectory, enableflag, writepermission, idletime, uploadrate,
-			downloadrate) VALUES ('{userid}', '{userpassword}',
-			'{homedirectory}', '{enableflag}', '{writepermission}', {idletime},
-			{uploadrate}, {downloadrate})</insert-user>
-		<update-user>UPDATE FTP_USER SET
+			downloadrate) VALUES ('{userid}', '{userpassword}', '{homedirectory}',
+			'{enableflag}', '{writepermission}', {idletime}, {uploadrate},
+			{downloadrate})
+	</insert-user>
+	<update-user>UPDATE FTP_USER SET
 			userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate}
-			WHERE userid='{userid}'</update-user>
-		<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
-		</delete-user>
-		<select-user>SELECT userid, userpassword, homedirectory,
+			WHERE userid='{userid}'
+	</update-user>
+	<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
+	</delete-user>
+	<select-user>SELECT userid, userpassword, homedirectory,
 			enableflag, writepermission, idletime, uploadrate, downloadrate FROM
-			FTP_USER WHERE userid = '{userid}'</select-user>
-		<select-all-users>SELECT userid FROM FTP_USER ORDER BY userid
-		</select-all-users>
-		<is-admin>SELECT userid FROM FTP_USER WHERE userid='{userid}'
-			AND userid='admin'</is-admin>
-		<authenticate>SELECT userid from FTP_USER WHERE
-			userid='{userid}' AND userpassword='{userpassword}'</authenticate>
-	</db-user-manager>
+			FTP_USER WHERE userid = '{userid}'
+	</select-user>
+	<select-all-users>SELECT userid FROM FTP_USER ORDER BY userid
+	</select-all-users>
+	<is-admin>SELECT userid FROM FTP_USER WHERE userid='{userid}' AND
+			userid='admin'
+	</is-admin>
+	<authenticate>SELECT userpassword from FTP_USER WHERE userid='{userid}'</authenticate>
+    </db-user-manager>
 	<!-- The file system -->
-	<native-filesystem case-insensitive="false"
+    <native-filesystem case-insensitive="false"
 		create-home="true" />
 	<!--
 		Use this section to define custom commands. Custom commands can also
 		override already existing commands
 	-->
-	<commands use-default="false">
-		<command name="MYHELP">
-			<beans:bean class="org.apache.ftpserver.examples.MYHELP" />
-		</command>
-	</commands>
+    <commands use-default="false">
+	<command name="MYHELP">
+	    <beans:bean class="org.apache.ftpserver.examples.MYHELP" />
+	</command>
+    </commands>
 	<!-- Define the available languages -->
-	<messages languages="se, no ,da" />
+    <messages languages="se, no ,da" />
 </server>
