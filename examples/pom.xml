@@ -19,9 +19,9 @@
 
 <project>
   <parent>
-    <artifactId>apache</artifactId>
-    <groupId>org.apache</groupId>
-    <version>4</version>
+      <artifactId>ftpserver-parent</artifactId>
+      <groupId>org.apache.ftpserver</groupId>
+      <version>1.0.0-RC2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>r
