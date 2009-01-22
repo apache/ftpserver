@@ -63,9 +63,9 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
 
         manager.setDataSource(ds);
         manager
-                .setSqlUserInsert("INSERT INTO FTP_USER (userid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate, maxloginnumber, maxloginperip) VALUES ('{userid}', '{userpassword}', '{homedirectory}', '{enableflag}', '{writepermission}', {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");
+                .setSqlUserInsert("INSERT INTO FTP_USER (userid, userpassword, homedirectory, enableflag, writepermission, idletime, uploadrate, downloadrate, maxloginnumber, maxloginperip) VALUES ('{userid}', '{userpassword}', '{homedirectory}', {enableflag}, {writepermission}, {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");
         manager
-                .setSqlUserUpdate("UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate},maxloginnumber={maxloginnumber}, maxloginperip={maxloginperip} WHERE userid='{userid}'");
+                .setSqlUserUpdate("UPDATE FTP_USER SET userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag={enableflag},writepermission={writepermission},idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate},maxloginnumber={maxloginnumber}, maxloginperip={maxloginperip} WHERE userid='{userid}'");
         manager
                 .setSqlUserDelete("DELETE FROM FTP_USER WHERE userid = '{userid}'");
         manager

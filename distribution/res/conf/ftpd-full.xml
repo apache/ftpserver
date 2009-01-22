@@ -61,11 +61,11 @@
 	<insert-user>INSERT INTO FTP_USER (userid, userpassword,
 			homedirectory, enableflag, writepermission, idletime, uploadrate,
 			downloadrate) VALUES ('{userid}', '{userpassword}', '{homedirectory}',
-			'{enableflag}', '{writepermission}', {idletime}, {uploadrate},
+			{enableflag}, {writepermission}, {idletime}, {uploadrate},
 			{downloadrate})
 	</insert-user>
 	<update-user>UPDATE FTP_USER SET
-			userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag='{enableflag}',writepermission='{writepermission}',idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate}
+			userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag={enableflag},writepermission={writepermission},idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate}
 			WHERE userid='{userid}'
 	</update-user>
 	<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
