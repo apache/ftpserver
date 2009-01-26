@@ -45,10 +45,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
- * 
+ *
  * This is another database based user manager class. It has been tested in
  * MySQL and Oracle 8i database. The schema file is </code>res/ftp-db.sql</code>
- * 
+ *
  * All the user attributes are replaced during run-time. So we can use your
  * database schema. Then you need to modify the SQLs in the configuration file.
  *
@@ -92,7 +92,7 @@ public class DbUserManager extends AbstractUserManager {
         this.deleteUserStmt = deleteUserStmt;
         this.authenticateStmt = authenticateStmt;
         this.isAdminStmt = isAdminStmt;
-    
+
         try {
             // test the connection
             createConnection();
@@ -107,7 +107,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Retrive the data source used by the user manager
-     * 
+     *
      * @return The current data source
      */
     public DataSource getDataSource() {
@@ -116,7 +116,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Set the data source to be used by the user manager
-     * 
+     *
      * @param dataSource
      *            The data source to use
      */
@@ -126,7 +126,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL INSERT statement used to add a new user.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserInsert() {
@@ -136,7 +136,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL INSERT statement used to add a new user. All the dynamic
      * values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -146,7 +146,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL DELETE statement used to delete an existing user.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserDelete() {
@@ -156,7 +156,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL DELETE statement used to delete an existing user. All the
      * dynamic values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -166,7 +166,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL UPDATE statement used to update an existing user.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserUpdate() {
@@ -176,7 +176,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL UPDATE statement used to update an existing user. All the
      * dynamic values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -186,7 +186,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL SELECT statement used to select an existing user.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserSelect() {
@@ -196,7 +196,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL SELECT statement used to select an existing user. All the
      * dynamic values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -206,7 +206,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL SELECT statement used to select all user ids.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserSelectAll() {
@@ -216,7 +216,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL SELECT statement used to select all user ids. All the dynamic
      * values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -226,7 +226,7 @@ public class DbUserManager extends AbstractUserManager {
 
     /**
      * Get the SQL SELECT statement used to authenticate user.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserAuthenticate() {
@@ -236,7 +236,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL SELECT statement used to authenticate user. All the dynamic
      * values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
@@ -247,7 +247,7 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Get the SQL SELECT statement used to find whether an user is admin or
      * not.
-     * 
+     *
      * @return The SQL statement
      */
     public String getSqlUserAdmin() {
@@ -257,14 +257,14 @@ public class DbUserManager extends AbstractUserManager {
     /**
      * Set the SQL SELECT statement used to find whether an user is admin or
      * not. All the dynamic values will be replaced during runtime.
-     * 
+     *
      * @param sql
      *            The SQL statement
      */
     public void setSqlUserAdmin(String sql) {
         isAdminStmt = sql;
     }
-    
+
     /**
      * @return true if user with this login is administrator
      */
@@ -347,7 +347,7 @@ public class DbUserManager extends AbstractUserManager {
             // create sql query
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(ATTR_LOGIN, escapeString(user.getName()));
-            
+
             String password = null;
             if(user.getPassword() != null) {
                 // password provided, encrypt it and store the encrypted value
@@ -356,10 +356,10 @@ public class DbUserManager extends AbstractUserManager {
                 // password was not provided, either load from the existing user and store that again
                 // or store as null
                 ResultSet rs = null;
-                
+
                 try {
                     User userWithPassword = selectUserByName(user.getName());
-                    
+
                     if(userWithPassword != null) {
                         // user exists, reuse password
                         password = userWithPassword.getPassword();
@@ -370,7 +370,7 @@ public class DbUserManager extends AbstractUserManager {
             }
             map.put(ATTR_PASSWORD, escapeString(password));
 
-            
+
             String home = user.getHomeDirectory();
             if (home == null) {
                 home = "/";
@@ -456,8 +456,8 @@ public class DbUserManager extends AbstractUserManager {
             }
         }
     }
-    
-    private void closeQuitely(Connection con) {
+
+    protected void closeQuitely(Connection con) {
 	if (con != null) {
 	    try {
 		con.close();
@@ -466,7 +466,7 @@ public class DbUserManager extends AbstractUserManager {
 	    }
 	}
     }
-    
+
     private BaseUser selectUserByName(String name) throws SQLException {
         // create sql query
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -506,13 +506,13 @@ public class DbUserManager extends AbstractUserManager {
                 thisUser.setAuthorities(authorities);
             }
             return thisUser;
-        
+
         } finally {
             closeQuitely(rs);
             closeQuitely(stmt);
         }
     }
-    
+
     /**
      * Get the user object. Fetch the row from the table.
      */
@@ -520,9 +520,9 @@ public class DbUserManager extends AbstractUserManager {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            
+
             BaseUser user = selectUserByName(name);
-            
+
             if(user != null) {
                 // reset the password, not to be sent to API users
                 user.setPassword(null);
