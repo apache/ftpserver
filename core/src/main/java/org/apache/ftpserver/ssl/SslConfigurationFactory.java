@@ -53,7 +53,7 @@ public class SslConfigurationFactory {
 
     private String keystoreType = KeyStore.getDefaultType();
 
-    private String keystoreAlgorithm = "SunX509";
+    private String keystoreAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
 
     private File trustStoreFile;
 
@@ -61,7 +61,7 @@ public class SslConfigurationFactory {
 
     private String trustStoreType = KeyStore.getDefaultType();
 
-    private String trustStoreAlgorithm = "SunX509";
+    private String trustStoreAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 
     private String sslProtocol = "TLS";
 
