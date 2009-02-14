@@ -183,15 +183,20 @@ public class NioListener extends AbstractListener {
             } catch (IOException e) {
                 throw new FtpServerConfigurationException("Failed to bind to address " + address + ", check configuration", e);
             }
+            
+            updatePort();
     
-            // update the port to the real port bound by the listener
-            setPort(acceptor.getLocalAddress().getPort());
         } catch(RuntimeException e) {
             // clean up if we fail to start
             stop();
             
             throw e;
         }
+    }
+    
+    private void updatePort() {
+        // update the port to the real port bound by the listener
+        setPort(acceptor.getLocalAddress().getPort());
     }
 
     /**
@@ -242,6 +247,8 @@ public class NioListener extends AbstractListener {
                 LOG.debug("Resuming listener");
                 acceptor.bind(address);
                 LOG.debug("Listener resumed");
+                
+                updatePort();
             } catch (IOException e) {
                 LOG.error("Failed to resume listener", e);
             }

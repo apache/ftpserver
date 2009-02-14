@@ -45,7 +45,7 @@ public class DefaultFtpServerTest extends TestCase {
         FtpServerFactory serverFactory = new FtpServerFactory();
         
         ListenerFactory listenerFactory = new ListenerFactory();
-        listenerFactory.setPort(TestUtil.findFreePort());
+        listenerFactory.setPort(0);
         
         // let's create two listeners on the same port, second should not start
      
