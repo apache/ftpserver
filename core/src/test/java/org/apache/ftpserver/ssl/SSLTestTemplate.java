@@ -104,12 +104,12 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         // initialize key manager factory
         KeyManagerFactory keyManagerFactory = KeyManagerFactory
-                .getInstance("SunX509");
+                .getInstance(KeyManagerFactory.getDefaultAlgorithm());
         keyManagerFactory.init(store, KEYSTORE_PASSWORD.toCharArray());
 
         // initialize trust manager factory
         TrustManagerFactory trustManagerFactory = TrustManagerFactory
-                .getInstance("SunX509");
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
         trustManagerFactory.init(store);
         
@@ -122,6 +122,10 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         String auth = getAuthValue();
         if (auth != null) {
             ftpsClient.setAuthValue(auth);
+            
+            if(auth.equals("SSL")) {
+                ftpsClient.setEnabledProtocols(new String[]{"SSLv3"});
+            }
         }
         return ftpsClient;
     }
