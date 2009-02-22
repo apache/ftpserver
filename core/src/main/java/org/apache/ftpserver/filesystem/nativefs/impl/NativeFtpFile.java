@@ -496,7 +496,7 @@ public class NativeFtpFile implements FtpFile {
                 File[] matches = new File(resArg)
                         .listFiles(new NameEqualsFileFilter(tok, true));
 
-                if (matches.length > 0) {
+                if (matches != null && matches.length > 0) {
                     tok = matches[0].getName();
                 }
             }
