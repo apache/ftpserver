@@ -58,7 +58,7 @@ public class PasvTest extends ClientTestTemplate {
 
     public void testMultiplePasv() throws Exception {
         for (int i = 0; i < 5; i++) {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
             client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
             client.pasv();
 
@@ -84,11 +84,11 @@ public class PasvTest extends ClientTestTemplate {
 
             if (!ip.startsWith("0.")) {
                 try {
-                    client.connect(ip, port);
+                    client.connect(ip, getListenerPort());
                 } catch (FTPConnectionClosedException e) {
                     // try again
                     Thread.sleep(200);
-                    client.connect(ip, port);
+                    client.connect(ip, getListenerPort());
                 }
                 client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
                 client.pasv();

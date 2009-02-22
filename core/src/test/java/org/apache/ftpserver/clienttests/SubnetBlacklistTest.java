@@ -56,7 +56,7 @@ public class SubnetBlacklistTest extends ClientTestTemplate {
 
     public void testConnect() throws Exception {
         try {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
             fail("Must throw");
         } catch (FTPConnectionClosedException e) {
             // OK

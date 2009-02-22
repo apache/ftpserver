@@ -68,8 +68,6 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected DefaultFtpServer server;
 
-    protected int port = -1;
-
     protected FTPClient client;
 
     private static final File USERS_FILE = new File(TestUtil.getBaseDir(),
@@ -90,7 +88,7 @@ public abstract class ClientTestTemplate extends TestCase {
 
         ListenerFactory listenerFactory = new ListenerFactory();
 
-        listenerFactory.setPort(port);
+        listenerFactory.setPort(0);
 
         listenerFactory
                 .setDataConnectionConfiguration(createDataConnectionConfigurationFactory()
@@ -144,8 +142,6 @@ public abstract class ClientTestTemplate extends TestCase {
      * @throws Exception
      */
     protected void initServer() throws IOException, Exception {
-        initPort();
-
         // cast to internal class to get access to getters
         server = (DefaultFtpServer) createServer().createServer();
 
@@ -154,6 +150,10 @@ public abstract class ClientTestTemplate extends TestCase {
         }
     }
 
+    protected int getListenerPort() {
+        return server.getListener("default").getPort();
+    }
+    
     protected boolean isStartServer() {
         return true;
     }
@@ -186,29 +186,16 @@ public abstract class ClientTestTemplate extends TestCase {
 
     protected void doConnect() throws Exception {
         try {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
         } catch (FTPConnectionClosedException e) {
             // try again
             Thread.sleep(200);
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
         }
     }
 
     protected boolean isConnectClient() {
         return true;
-    }
-
-    /**
-     * Attempts to find a free port or fallback to a default
-     * 
-     * @throws IOException
-     * 
-     * @throws IOException
-     */
-    private void initPort() throws IOException {
-        if (port == -1) {
-            port = TestUtil.findFreePort();
-        }
     }
 
     protected void cleanTmpDirs() throws IOException {

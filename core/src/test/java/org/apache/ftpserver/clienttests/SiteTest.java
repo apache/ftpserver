@@ -81,7 +81,7 @@ public class SiteTest extends ClientTestTemplate {
         
         // let's generate some stats
         FTPClient client1 = new FTPClient();
-        client1.connect("localhost", port);
+        client1.connect("localhost", getListenerPort());
         
         assertTrue(client1.login(ADMIN_USERNAME, ADMIN_PASSWORD));
         assertTrue(client1.makeDirectory("foo"));
@@ -96,12 +96,12 @@ public class SiteTest extends ClientTestTemplate {
         client1.disconnect();
 
         FTPClient client2 = new FTPClient();
-        client2.connect("localhost", port);
+        client2.connect("localhost", getListenerPort());
 
         assertTrue(client2.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD));
         // done setting up stats
         
-        client.connect("localhost", port);
+        client.connect("localhost", getListenerPort());
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
 
         client.sendCommand("SITE STAT");

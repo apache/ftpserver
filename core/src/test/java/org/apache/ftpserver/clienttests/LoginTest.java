@@ -152,10 +152,10 @@ public class LoginTest extends ClientTestTemplate {
         FTPClient client4 = new FTPClient();
 
         try {
-            client1.connect("localhost", port);
-            client2.connect("localhost", port);
-            client3.connect("localhost", port);
-            client4.connect("localhost", port);
+            client1.connect("localhost", getListenerPort());
+            client2.connect("localhost", getListenerPort());
+            client3.connect("localhost", getListenerPort());
+            client4.connect("localhost", getListenerPort());
 
             assertTrue(client1.login(TESTUSER1_USERNAME, TESTUSER_PASSWORD));
             assertTrue(client2.login(TESTUSER1_USERNAME, TESTUSER_PASSWORD));

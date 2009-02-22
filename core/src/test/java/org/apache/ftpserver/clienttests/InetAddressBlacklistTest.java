@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 
 /**
@@ -56,7 +55,7 @@ public class InetAddressBlacklistTest extends ClientTestTemplate {
 
     public void testConnect() throws Exception {
         try {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
             fail("Must throw");
         } catch (FTPConnectionClosedException e) {
             // OK

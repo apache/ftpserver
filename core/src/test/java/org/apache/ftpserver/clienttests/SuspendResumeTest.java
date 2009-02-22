@@ -37,13 +37,13 @@ public class SuspendResumeTest extends ClientTestTemplate {
 
     public void testSuspendResumeServer() throws Exception {
         // connect should work as expected
-        client.connect("localhost", port);
+        client.connect("localhost", getListenerPort());
         client.disconnect();
         
         server.suspend();
 
         try {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
             fail("Must throw IOException");
         } catch(IOException e) {
             // OK
@@ -54,19 +54,19 @@ public class SuspendResumeTest extends ClientTestTemplate {
         server.resume();
 
         // connect should work again
-        client.connect("localhost", port);
+        client.connect("localhost", getListenerPort());
         client.disconnect();
     }
 
     public void testSuspendResumeListener() throws Exception {
         // connect should work as expected
-        client.connect("localhost", port);
+        client.connect("localhost", getListenerPort());
         client.disconnect();
         
         server.getListener("default").suspend();
 
         try {
-            client.connect("localhost", port);
+            client.connect("localhost", getListenerPort());
             fail("Must throw IOException");
         } catch(IOException e) {
             // OK
@@ -77,7 +77,7 @@ public class SuspendResumeTest extends ClientTestTemplate {
         server.getListener("default").resume();
 
         // connect should work again
-        client.connect("localhost", port);
+        client.connect("localhost", getListenerPort());
         client.disconnect();
     }
     
