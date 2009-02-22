@@ -23,10 +23,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.security.KeyStore;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
@@ -104,12 +107,12 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
 
         // initialize key manager factory
         KeyManagerFactory keyManagerFactory = KeyManagerFactory
-                .getInstance("SunX509");
+                .getInstance(KeyManagerFactory.getDefaultAlgorithm());
         keyManagerFactory.init(store, KEYSTORE_PASSWORD.toCharArray());
 
         // initialize trust manager factory
         TrustManagerFactory trustManagerFactory = TrustManagerFactory
-                .getInstance("SunX509");
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
         trustManagerFactory.init(store);
         
@@ -119,9 +122,15 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         ftpsClient.setKeyManager(clientKeyManager);
         ftpsClient.setTrustManager(clientTrustManager);
 
+        
         String auth = getAuthValue();
         if (auth != null) {
             ftpsClient.setAuthValue(auth);
+            
+            if(auth.equals("SSL")) {
+                // SSLv3 is disabled by default on the JBM JDK, therefore we need to enable it
+                ftpsClient.setEnabledProtocols(new String[]{"SSLv3"});
+            }
         }
         return ftpsClient;
     }

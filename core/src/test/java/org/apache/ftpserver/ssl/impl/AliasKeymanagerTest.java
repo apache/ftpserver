@@ -44,7 +44,7 @@ public class AliasKeymanagerTest extends TestCase {
                 "src/test/resources/keymanager-test.jks");
         ks.load(fis, "".toCharArray());
 
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(ks, "".toCharArray());
 
         km = kmf.getKeyManagers()[0];
