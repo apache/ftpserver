@@ -159,7 +159,9 @@ public abstract class ClientTestTemplate extends TestCase {
     }
 
     protected FTPClient createFTPClient() throws Exception {
-        return new FTPClient();
+        FTPClient client = new FTPClient();
+        client.setDefaultTimeout(10000);
+        return client;
     }
 
     /**
