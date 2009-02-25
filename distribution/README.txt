@@ -13,6 +13,10 @@ you write Java code to process FTP event notifications that we call the Ftplet
 API. Apache FtpServer provides an implementation of FTP server to support 
 this API. 
 
+
+Release history
+--------------------------------------------------------------------------------
+
 1.0.0
 --------------------------------
 This is the first major release of FtpServer and we now recommend this version
@@ -43,3 +47,11 @@ able to intercept any FTP command.
 1.0.0-M2
 --------------------------------
 This is the very first release of Apache FtpServer.
+
+
+Known issues
+--------------------------------------------------------------------------------
+* FtpServer.suspend() and Listener.suspend() might not work as expected on some 
+  platforms, e.g. Mac OS X (https://issues.apache.org/jira/browse/FTPSERVER-278)
+
+
