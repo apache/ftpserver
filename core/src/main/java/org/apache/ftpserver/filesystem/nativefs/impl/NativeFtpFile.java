@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class NativeFtpFile implements FtpFile {
 
     private final Logger LOG = LoggerFactory.getLogger(NativeFtpFile.class);
-    
+
     // the file name with respect to the user root.
     // The path separator character will be '/' and
     // it will always begin with '/'.
@@ -192,7 +192,7 @@ public class NativeFtpFile implements FtpFile {
     public boolean setLastModified(long time) {
         return file.setLastModified(time);
     }
-    
+
     /**
      * Check read permission.
      */
@@ -215,7 +215,7 @@ public class NativeFtpFile implements FtpFile {
             LOG.debug("Checking can write: " + file.canWrite());
             return file.canWrite();
         }
-        
+
         LOG.debug("Authorized");
         return true;
     }
@@ -224,7 +224,6 @@ public class NativeFtpFile implements FtpFile {
      * Has delete permission.
      */
     public boolean isRemovable() {
-
 
         // root cannot be deleted
         if ("/".equals(fileName)) {
@@ -235,25 +234,25 @@ public class NativeFtpFile implements FtpFile {
          * we will check if the parent file has write permission as most systems consider that a file can
          * be deleted when their parent directory is writable.
         */
-        String fullName=getAbsolutePath();
-        
+        String fullName = getAbsolutePath();
+
         // we check FTPServer's write permission for this file.
         if (user.authorize(new WriteRequest(fullName)) == null) {
             return false;
         }
         // In order to maintain consistency, when possible we delete the last '/' character in the String
-        int indexOfSlash=fullName.lastIndexOf('/');
+        int indexOfSlash = fullName.lastIndexOf('/');
         String parentFullName;
-        if (indexOfSlash==0){
-         parentFullName="/";
+        if (indexOfSlash == 0) {
+            parentFullName = "/";
+        } else {
+            parentFullName = fullName.substring(0, indexOfSlash);
         }
-        else{
-         parentFullName=fullName.substring(0,indexOfSlash);
-        }
-        
+
         // we check if the parent FileObject is writable.
-        NativeFtpFile parentObject=new NativeFtpFile(parentFullName,file.getAbsoluteFile().getParentFile(),user);
-        return parentObject.isWritable(); 
+        NativeFtpFile parentObject = new NativeFtpFile(parentFullName, file
+                .getAbsoluteFile().getParentFile(), user);
+        return parentObject.isWritable();
     }
 
     /**
@@ -517,12 +516,22 @@ public class NativeFtpFile implements FtpFile {
 
         return resArg;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-    	if(obj != null && obj instanceof NativeFtpFile) {
-    		return this.file.equals(((NativeFtpFile) obj).file);
-    	}
-    	return false;
+        if (obj != null && obj instanceof NativeFtpFile) {
+            File thisCanonicalFile;
+            File otherCanonicalFile;
+            try {
+                thisCanonicalFile = this.file.getCanonicalFile();
+                otherCanonicalFile = ((NativeFtpFile) obj).file
+                        .getCanonicalFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to get the canonical path", e);
+            }
+
+            return thisCanonicalFile.equals(otherCanonicalFile);
+        }
+        return false;
     }
 }
