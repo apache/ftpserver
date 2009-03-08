@@ -153,6 +153,12 @@ public class STOU extends AbstractCommand {
                 // transfer data
                 long transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
 
+                // attempt to close the output stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(os != null) {
+                    os.close();
+                }
+
                 LOG.info("File uploaded {}", fileName);
 
                 // notify the statistics component
@@ -162,11 +168,6 @@ public class STOU extends AbstractCommand {
                     ftpStat.setUpload(session, file, transSz);
                 }
                 
-                // attempt to close the output stream so that errors in 
-                // closing it will return an error to the client (FTPSERVER-119) 
-                if(os != null) {
-                    os.close();
-                }
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;

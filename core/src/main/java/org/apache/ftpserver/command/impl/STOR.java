@@ -146,6 +146,12 @@ public class STOR extends AbstractCommand {
                 outStream = file.createOutputStream(skipLen);
                 long transSz = dataConnection.transferFromClient(session.getFtpletSession(), outStream);
 
+                // attempt to close the output stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(outStream != null) {
+                    outStream.close();
+                }
+
                 LOG.info("File uploaded {}", fileName);
 
                 // notify the statistics component
@@ -153,11 +159,6 @@ public class STOR extends AbstractCommand {
                         .getFtpStatistics();
                 ftpStat.setUpload(session, file, transSz);
                 
-                // attempt to close the output stream so that errors in 
-                // closing it will return an error to the client (FTPSERVER-119) 
-                if(outStream != null) {
-                    outStream.close();
-                }
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;

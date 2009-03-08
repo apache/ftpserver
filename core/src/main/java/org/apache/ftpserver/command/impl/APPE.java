@@ -162,6 +162,12 @@ public class APPE extends AbstractCommand {
                 // transfer data
                 long transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
 
+                // attempt to close the output stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(os != null) {
+                    os.close();
+                }
+
                 LOG.info("File uploaded {}", fileName);
 
                 // notify the statistics component
@@ -169,11 +175,6 @@ public class APPE extends AbstractCommand {
                         .getFtpStatistics();
                 ftpStat.setUpload(session, file, transSz);
                 
-                // attempt to close the output stream so that errors in 
-                // closing it will return an error to the client (FTPSERVER-119) 
-                if(os != null) {
-                    os.close();
-                }
             } catch (SocketException e) {
                 LOG.debug("SocketException during file upload", e);
                 failure = true;

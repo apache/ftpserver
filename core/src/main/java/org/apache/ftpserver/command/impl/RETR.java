@@ -165,6 +165,11 @@ public class RETR extends AbstractCommand {
 
                 // transfer data
                 long transSz = dataConnection.transferToClient(session.getFtpletSession(), is);
+                // attempt to close the input stream so that errors in 
+                // closing it will return an error to the client (FTPSERVER-119) 
+                if(is != null) {
+                    is.close();
+                }
 
                 LOG.info("File downloaded {}", fileName);
 
@@ -175,11 +180,6 @@ public class RETR extends AbstractCommand {
                     ftpStat.setDownload(session, file, transSz);
                 }
                 
-                // attempt to close the input stream so that errors in 
-                // closing it will return an error to the client (FTPSERVER-119) 
-                if(is != null) {
-                    is.close();
-                }
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
