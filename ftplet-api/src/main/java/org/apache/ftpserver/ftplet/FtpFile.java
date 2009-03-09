@@ -149,7 +149,7 @@ public interface FtpFile {
      * List must be immutable.
      * @return The {@link List} of {@link FtpFile}s
      */
-    List<FtpFile> listFiles();
+    List<? extends FtpFile> listFiles();
 
     /**
      * Create output stream for writing. 

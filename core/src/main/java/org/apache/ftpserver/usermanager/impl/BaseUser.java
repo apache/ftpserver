@@ -58,7 +58,7 @@ public class BaseUser implements User {
 
     private boolean isEnabled = true;
 
-    private List<Authority> authorities = new ArrayList<Authority>();
+    private List<? extends Authority> authorities = new ArrayList<Authority>();
 
     /**
      * Default constructor.

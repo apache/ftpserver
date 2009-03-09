@@ -117,7 +117,7 @@ public abstract class FtpFileTestTemplate extends TestCase {
     public void testListFilesInOrder() {
         FtpFile root = createFileObject("/", USER);
 
-        List<FtpFile> files = root.listFiles();
+        List<? extends FtpFile> files = root.listFiles();
         assertEquals(3, files.size());
         assertEquals("dir1", files.get(0).getName());
         assertEquals("file1", files.get(1).getName());

@@ -46,14 +46,14 @@ public interface User {
      * 
      * @return All authorities
      */
-    List<Authority> getAuthorities();
+    List<? extends Authority> getAuthorities();
 
     /**
      * Get authorities of the specified type granted to this user
      * @param clazz The type of {@link Authority}
      * @return Authorities of the specified class
      */
-    List<Authority> getAuthorities(Class<? extends Authority> clazz);
+    List<? extends Authority> getAuthorities(Class<? extends Authority> clazz);
 
     /**
      * Authorize a {@link AuthorizationRequest} for this user
