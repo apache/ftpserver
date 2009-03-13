@@ -71,7 +71,8 @@
 	<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
 	</delete-user>
 	<select-user>SELECT userid, userpassword, homedirectory,
-			enableflag, writepermission, idletime, uploadrate, downloadrate FROM
+			enableflag, writepermission, idletime, uploadrate, downloadrate,
+			maxloginnumber, maxloginperip FROM
 			FTP_USER WHERE userid = '{userid}'
 	</select-user>
 	<select-all-users>SELECT userid FROM FTP_USER ORDER BY userid
