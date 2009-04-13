@@ -126,6 +126,10 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
             
         }
+        
+        public Object getPhysicalFile() {
+        	return "/short";
+        }
     }
 
     public void testSingleFile() {

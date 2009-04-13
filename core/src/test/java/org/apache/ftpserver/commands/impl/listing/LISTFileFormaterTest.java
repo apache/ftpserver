@@ -133,6 +133,10 @@ public class LISTFileFormaterTest extends TestCase {
         public boolean setLastModified(long time) {
             return false;
         }
+        
+        public Object getPhysicalFile() {
+        	return "/short";
+        }
     }
 
     public void testSingleFile() {

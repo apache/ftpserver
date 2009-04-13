@@ -130,6 +130,10 @@ public class MLSTFileFormaterTest extends TestCase {
            return false;
             
         }
+        
+        public Object getPhysicalFile() {
+        	return "/short";
+        }
     }
 
     public void testSingleFile() {
