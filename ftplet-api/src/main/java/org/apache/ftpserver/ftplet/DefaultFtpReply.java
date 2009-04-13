@@ -30,6 +30,11 @@ public class DefaultFtpReply implements FtpReply {
     private int code;
 
     private String message;
+    
+    /**
+     * time when this reply was sent.  
+     */
+    private long sentTime = 0L;
 
     private static final String CRLF = "\r\n";
 
@@ -41,6 +46,7 @@ public class DefaultFtpReply implements FtpReply {
     public DefaultFtpReply(final int code, final String message) {
         this.code = code;
         this.message = message;
+        this.sentTime = System.currentTimeMillis();
     }
 
     /**
@@ -57,6 +63,7 @@ public class DefaultFtpReply implements FtpReply {
             sb.append('\n');
         }
         this.message = sb.toString();
+        this.sentTime = System.currentTimeMillis();
     }
 
     /**
@@ -72,7 +79,15 @@ public class DefaultFtpReply implements FtpReply {
     public String getMessage() {
         return message;
     }
-
+    
+    public long getSentTime() {
+    	return sentTime;
+    }
+    
+    public boolean isPositive() {
+    	return code < 400;
+    }
+    
     /*
      * (non-Javadoc)
      * 

@@ -245,7 +245,16 @@ public interface FtpReply {
      * @return The reply message
      */
     String getMessage();
-
+    
+    /**
+     * Returns the timestamp (in milliseconds since the epoch time) when this 
+     * reply was sent. 
+     * 
+     * @return the timestamp (in milliseconds since the epoch time) when this 
+     * reply was sent.
+     */
+    long getSentTime();
+    
     /**
      * Must implement toString to format the reply as described in the RFC. Most
      * important is the handling of multi-line replies.
@@ -253,4 +262,11 @@ public interface FtpReply {
      * @return The formated reply
      */
     String toString();
+    
+    /**
+     * Tells whether or not this reply indicates a positive completion. 
+     * @return <code>true</code>, if this reply is a positive completion or 
+     * positive intermediate reply; <code>false</code>, otherwise.  
+     */
+    boolean isPositive();
 }

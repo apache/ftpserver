@@ -36,11 +36,22 @@ public class DefaultFtpRequest implements FtpRequest {
     private String command;
 
     private String argument;
+    
+    /**
+     * timestamp when this request was received
+     */
+    private long receivedTime = 0L;
 
     /**
      * Default constructor.
      */
     public DefaultFtpRequest(final String requestLine) {
+    	//Assuming we create the request as soon as we receive the command from 
+    	//the client, set the received time to current time. If we do a whole 
+    	//bunch of things after we receive the command from the client and 
+    	//before constructing this FtpRequest object, then this method is not 
+    	//going to be accurate and need to look for an alternative solution. 
+    	this.receivedTime = System.currentTimeMillis();
         parse(requestLine);
     }
 
@@ -95,6 +106,10 @@ public class DefaultFtpRequest implements FtpRequest {
      */
     public boolean hasArgument() {
         return getArgument() != null;
+    }
+    
+    public long getReceivedTime() {
+    	return receivedTime;
     }
 
     /*

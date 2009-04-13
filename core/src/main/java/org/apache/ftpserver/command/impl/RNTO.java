@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.impl.LocalizedFtpReply;
+import org.apache.ftpserver.impl.LocalizedRenameFtpReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,22 +60,22 @@ public class RNTO extends AbstractCommand {
             String toFileStr = request.getArgument();
             if (toFileStr == null) {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedRenameFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                                        "RNTO", null));
+                                        "RNTO", null, null, null));
                 return;
             }
 
             // get the "rename from" file object
             FtpFile frFile = session.getRenameFrom();
             if (frFile == null) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedRenameFtpReply.translate(session, request, context,
                         FtpReply.REPLY_503_BAD_SEQUENCE_OF_COMMANDS, "RNTO",
-                        null));
+                        null, null, null));
                 return;
             }
 
@@ -88,13 +88,13 @@ public class RNTO extends AbstractCommand {
             }
             if (toFile == null) {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedRenameFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
-                                        "RNTO.invalid", null));
+                                        "RNTO.invalid", null, frFile, toFile));
                 return;
             }
             toFileStr = toFile.getAbsolutePath();
@@ -102,26 +102,26 @@ public class RNTO extends AbstractCommand {
             // check permission
             if (!toFile.isWritable()) {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedRenameFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
-                                        "RNTO.permission", null));
+                                        "RNTO.permission", null, frFile, toFile));
                 return;
             }
 
-            // check file existance
+            // check file existence
             if (!frFile.doesExist()) {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedRenameFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
-                                        "RNTO.missing", null));
+                                        "RNTO.missing", null, frFile, toFile));
                 return;
             }
 
@@ -130,21 +130,21 @@ public class RNTO extends AbstractCommand {
             
             // now rename
             if (frFile.move(toFile)) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedRenameFtpReply.translate(session, request, context,
                         FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RNTO",
-                        toFileStr));
+                        toFileStr, frFile, toFile));
 
                 LOG.info("File rename from \"{}\" to \"{}\"", logFrFileAbsolutePath, 
                         toFile.getAbsolutePath());
             } else {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedRenameFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
-                                        "RNTO", toFileStr));
+                                        "RNTO", toFileStr, frFile, toFile));
             }
 
         } finally {

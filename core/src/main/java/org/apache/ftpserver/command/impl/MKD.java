@@ -29,6 +29,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
+import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.slf4j.Logger;
@@ -62,10 +63,13 @@ public class MKD extends AbstractCommand {
 
         // argument check
         String fileName = request.getArgument();
+        //TODO perhaps we do not need to check if the given argument contains 
+        //path separator. Windows allows to create a dir like "a;b". Why should 
+        //we restrict creation of such a folder?
         if (fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                    "MKD", null));
+                    "MKD", null, null));
             return;
         }
 
@@ -77,33 +81,33 @@ public class MKD extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if (file == null) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.invalid", fileName));
+                    "MKD.invalid", fileName, file));
             return;
         }
 
         // check permission
         fileName = file.getAbsolutePath();
         if (!file.isWritable()) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.permission", fileName));
+                    "MKD.permission", fileName, file));
             return;
         }
 
         // check file existance
         if (file.doesExist()) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.exists", fileName));
+                    "MKD.exists", fileName, file));
             return;
         }
 
         // now create directory
         if (file.mkdir()) {
-            session.write(LocalizedFtpReply.translate(session, request, context,
-                    FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+                    FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName, file));
 
             // write log message
             String userName = session.getUser().getName();
@@ -115,9 +119,9 @@ public class MKD extends AbstractCommand {
             ftpStat.setMkdir(session, file);
 
         } else {
-            session.write(LocalizedFtpReply.translate(session, request, context,
+            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD",
-                    fileName));
+                    fileName, file));
         }
     }
 }

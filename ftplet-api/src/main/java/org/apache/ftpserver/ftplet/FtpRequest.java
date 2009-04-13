@@ -51,4 +51,13 @@ public interface FtpRequest {
      * @return true if an argument is available
      */
     boolean hasArgument();
+    
+    /**
+     * Returns the timestamp (milliseconds since the epoch time) when this 
+     * request was received. 
+     * 
+     * @return the timestamp (milliseconds since the epoch time) when this 
+     * request was received.
+     */
+    long getReceivedTime();
 }

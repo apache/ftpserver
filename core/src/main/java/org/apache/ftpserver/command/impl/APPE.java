@@ -35,6 +35,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.IODataConnectionFactory;
+import org.apache.ftpserver.impl.LocalizedDataTransferFtpReply;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.util.IoUtils;
@@ -75,13 +76,13 @@ public class APPE extends AbstractCommand {
             String fileName = request.getArgument();
             if (fileName == null) {
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedDataTransferFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                                        "APPE", null));
+                                        "APPE", null, null));
                 return;
             }
 
@@ -107,26 +108,26 @@ public class APPE extends AbstractCommand {
                 LOG.debug("File system threw exception", e);
             }
             if (file == null) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "APPE.invalid", fileName));
+                        "APPE.invalid", fileName, null));
                 return;
             }
             fileName = file.getAbsolutePath();
 
             // check file existance
             if (file.doesExist() && !file.isFile()) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "APPE.invalid", fileName));
+                        "APPE.invalid", fileName, file));
                 return;
             }
 
             // check permission
             if (!file.isWritable()) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "APPE.permission", fileName));
+                        "APPE.permission", fileName, file));
                 return;
             }
 
@@ -139,15 +140,16 @@ public class APPE extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception when getting data input stream", e);
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "APPE",
-                        fileName));
+                        fileName, file));
                 return;
             }
 
             // get data from client
             boolean failure = false;
             OutputStream os = null;
+            long transSz = 0L;
             try {
 
                 // find offset
@@ -160,7 +162,7 @@ public class APPE extends AbstractCommand {
                 os = file.createOutputStream(offset);
 
                 // transfer data
-                long transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
+                transSz = dataConnection.transferFromClient(session.getFtpletSession(), os);
 
                 // attempt to close the output stream so that errors in 
                 // closing it will return an error to the client (FTPSERVER-119) 
@@ -178,20 +180,20 @@ public class APPE extends AbstractCommand {
             } catch (SocketException e) {
                 LOG.debug("SocketException during file upload", e);
                 failure = true;
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED,
-                        "APPE", fileName));
+                        "APPE", fileName, file));
             } catch (IOException e) {
                 LOG.debug("IOException during file upload", e);
                 failure = true;
                 session
-                        .write(LocalizedFtpReply
+                        .write(LocalizedDataTransferFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN,
-                                        "APPE", fileName));
+                                        "APPE", fileName, file));
             } finally {
                 // make sure we really close the output stream
                 IoUtils.close(os);
@@ -199,9 +201,9 @@ public class APPE extends AbstractCommand {
 
             // if data transfer ok - send transfer complete message
             if (!failure) {
-                session.write(LocalizedFtpReply.translate(session, request, context,
+                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
                         FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "APPE",
-                        fileName));
+                        fileName, file, transSz));
             }
         } finally {
             session.getDataConnection().closeDataConnection();

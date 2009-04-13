@@ -123,7 +123,16 @@ public interface FtpFile {
      * @return The size of the {@link FtpFile} in bytes
      */
     long getSize();
-
+    
+    /**
+     * Returns the physical location or path of the file. It is completely up to 
+     * the implementation to return appropriate value based on the file system 
+     * implementation.
+     *  
+     * @return the physical location or path of the file. 
+     */
+    Object getPhysicalFile();
+    
     /**
      * Create directory.
      * @return true if the operation was successful
