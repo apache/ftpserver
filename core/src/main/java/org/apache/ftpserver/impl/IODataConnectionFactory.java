@@ -360,6 +360,10 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
                     dataSoc = servSoc.accept();
                 }
+                DataConnectionConfiguration dataCfg = session.getListener()
+                    .getDataConnectionConfiguration();
+                
+                dataSoc.setSoTimeout(dataCfg.getIdleTime() * 1000);
                 LOG.debug("Passive data connection opened");
             }
         } catch (Exception ex) {

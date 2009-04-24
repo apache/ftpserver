@@ -35,6 +35,8 @@ import org.apache.ftpserver.ftplet.DataType;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
 import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -47,6 +49,10 @@ import org.apache.ftpserver.util.IoUtils;
  */
 public class IODataConnection implements DataConnection {
 
+    private final Logger LOG = LoggerFactory
+    .getLogger(IODataConnection.class);
+
+    
     private static final byte[] EOL = System.getProperty("line.separator").getBytes();
     
     private FtpIoSession session;
@@ -284,6 +290,14 @@ public class IODataConnection implements DataConnection {
 
                 notifyObserver();
             }
+        } catch(IOException e) {
+            LOG.warn("Exception during data transfer, closing data connection socket", e);
+            factory.closeDataConnection();
+            throw e;
+        } catch(RuntimeException e) {
+            LOG.warn("Exception during data transfer, closing data connection socket", e);
+            factory.closeDataConnection();
+            throw e;
         } finally {
             if (bos != null) {
                 bos.flush();
