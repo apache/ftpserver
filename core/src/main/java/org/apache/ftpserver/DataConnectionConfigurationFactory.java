@@ -25,6 +25,8 @@ import java.net.UnknownHostException;
 import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.impl.PassivePorts;
 import org.apache.ftpserver.ssl.SslConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data connection factory
@@ -34,6 +36,8 @@ import org.apache.ftpserver.ssl.SslConfiguration;
  */
 public class DataConnectionConfigurationFactory {
 
+    private Logger log = LoggerFactory.getLogger(DataConnectionConfigurationFactory.class);
+    
     // maximum idle time in seconds
     private int idleTime = 300;
     private SslConfiguration ssl;
@@ -212,6 +216,7 @@ public class DataConnectionConfigurationFactory {
             // no available free port - wait for the release notification
             if (dataPort == -1) {
                 try {
+                    log.info("We're waiting for a passive part, might be stuck");
                     wait();
                 } catch (InterruptedException ex) {
                 }
