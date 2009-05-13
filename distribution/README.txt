@@ -13,6 +13,10 @@ you write Java code to process FTP event notifications that we call the Ftplet
 API. Apache FtpServer provides an implementation of FTP server to support 
 this API. 
 
+1.0.1
+--------------------------------
+Bug fix release that fixes the important issues found since the 1.0.0 release. 
+
 1.0.0
 --------------------------------
 This is the first major release of FtpServer and we now recommend this version
