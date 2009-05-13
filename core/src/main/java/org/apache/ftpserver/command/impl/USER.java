@@ -34,6 +34,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -50,6 +52,8 @@ import org.apache.mina.filter.logging.MdcInjectionFilter;
  */
 public class USER extends AbstractCommand {
 
+    private final Logger LOG = LoggerFactory.getLogger(USER.class);
+    
     /**
      * Execute command.
      */
@@ -112,7 +116,14 @@ public class USER extends AbstractCommand {
             int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
             int maxAnonLogin = context.getConnectionConfig()
                     .getMaxAnonymousLogins();
+            if(maxAnonLogin == 0) {
+                LOG.debug("Currently {} anonymous users logged in, unlimited allowed", currAnonLogin);
+            } else {
+                LOG.debug("Currently {} out of {} anonymous users logged in", currAnonLogin, maxAnonLogin);
+            }
             if (anonymous && (currAnonLogin >= maxAnonLogin)) {
+                LOG.debug("Too many anonymous users logged in, user will be disconnected");
+
                 session
                         .write(LocalizedFtpReply
                                 .translate(
@@ -127,7 +138,16 @@ public class USER extends AbstractCommand {
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = context.getConnectionConfig().getMaxLogins();
+            
+            if(maxLogin == 0) {
+                LOG.debug("Currently {} users logged in, unlimited allowed", currLogin);
+            } else {
+                LOG.debug("Currently {} out of {} users logged in", currLogin, maxLogin);
+            }
+
             if (maxLogin != 0 && currLogin >= maxLogin) {
+                LOG.debug("Too many users logged in, user will be disconnected");
+
                 session
                         .write(LocalizedFtpReply
                                 .translate(
@@ -154,6 +174,7 @@ public class USER extends AbstractCommand {
                         stat.getCurrentUserLoginNumber(configUser, address) + 1);
 
                 if (configUser.authorize(loginRequest) == null) {
+                    LOG.debug("User logged in too many sessions, user will be disconnected");
                     session
                             .write(LocalizedFtpReply
                                     .translate(
@@ -182,6 +203,7 @@ public class USER extends AbstractCommand {
 
             // if not ok - close connection
             if (!success) {
+                LOG.debug("User failed to login, session will be closed");
                 session.close(false).awaitUninterruptibly(10000);
             }
         }

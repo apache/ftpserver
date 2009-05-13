@@ -27,6 +27,8 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -41,6 +43,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  */
 public class QUIT extends AbstractCommand {
 
+    private final Logger LOG = LoggerFactory.getLogger(QUIT.class);
+    
     /**
      * Execute command
      */
@@ -51,6 +55,7 @@ public class QUIT extends AbstractCommand {
         session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_221_CLOSING_CONTROL_CONNECTION, "QUIT", null));
 
+        LOG.debug("QUIT received, closing session");
         session.close(false).awaitUninterruptibly(10000);
         session.getDataConnection().closeDataConnection();
     }
