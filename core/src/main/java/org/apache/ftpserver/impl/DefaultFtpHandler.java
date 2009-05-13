@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
+import org.apache.ftpserver.ftplet.DataConnection;
+import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -69,21 +71,45 @@ public class DefaultFtpHandler implements FtpHandler {
     }
 
     public void sessionOpened(final FtpIoSession session) throws Exception {
-        context.getFtpletContainer().onConnect(session.getFtpletSession());
+        FtpletContainer ftplets = context.getFtpletContainer();
 
-        session.updateLastAccessTime();
-        
-        session.write(LocalizedFtpReply.translate(session, null, context,
-                FtpReply.REPLY_220_SERVICE_READY, null, null));
+        FtpletResult ftpletRet;
+        try {
+            ftpletRet = ftplets.onConnect(session.getFtpletSession());
+        } catch (Exception e) {
+            LOG.debug("Ftplet threw exception", e);
+            ftpletRet = FtpletResult.DISCONNECT;
+        }
+        if (ftpletRet == FtpletResult.DISCONNECT) {
+            LOG.debug("Ftplet returned DISCONNECT, session will be closed");
+            session.close(false).awaitUninterruptibly(10000);
+        } else {
+            session.updateLastAccessTime();
+            
+            session.write(LocalizedFtpReply.translate(session, null, context,
+                    FtpReply.REPLY_220_SERVICE_READY, null, null));
+        }
     }
 
     public void sessionClosed(final FtpIoSession session) throws Exception {
+        LOG.debug("Closing session");
         try {
             context.getFtpletContainer().onDisconnect(
                     session.getFtpletSession());
         } catch (Exception e) {
             // swallow the exception, we're closing down the session anyways
             LOG.warn("Ftplet threw an exception on disconnect", e);
+        }
+
+        // make sure we close the data connection if it happens to be open
+        try {
+            ServerDataConnectionFactory dc = session.getDataConnection(); 
+            if(dc != null) {
+                dc.closeDataConnection();
+            }
+        } catch (Exception e) {
+            // swallow the exception, we're closing down the session anyways
+            LOG.warn("Data connection threw an exception on disconnect", e);
         }
         
         FileSystemView fs = session.getFileSystemView();
@@ -101,7 +127,11 @@ public class DefaultFtpHandler implements FtpHandler {
         if (stats != null) {
             stats.setLogout(session);
             stats.setCloseConnection(session);
+            LOG.debug("Statistics login and connection count decreased due to session close");
+        } else {
+            LOG.warn("Statistics not available in session, can not decrease login and connection count");
         }
+        LOG.debug("Session closed");
     }
 
     public void exceptionCaught(final FtpIoSession session,
@@ -160,6 +190,7 @@ public class DefaultFtpHandler implements FtpHandler {
                 ftpletRet = FtpletResult.DISCONNECT;
             }
             if (ftpletRet == FtpletResult.DISCONNECT) {
+                LOG.debug("Ftplet returned DISCONNECT, session will be closed");
                 session.close(false).awaitUninterruptibly(10000);
                 return;
             } else if (ftpletRet != FtpletResult.SKIP) {
@@ -184,6 +215,8 @@ public class DefaultFtpHandler implements FtpHandler {
                     ftpletRet = FtpletResult.DISCONNECT;
                 }
                 if (ftpletRet == FtpletResult.DISCONNECT) {
+                    LOG.debug("Ftplet returned DISCONNECT, session will be closed");
+
                     session.close(false).awaitUninterruptibly(10000);
                     return;
                 }

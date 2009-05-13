@@ -103,7 +103,14 @@ public class PASS extends AbstractCommand {
                 int currAnonLogin = stat.getCurrentAnonymousLoginNumber();
                 int maxAnonLogin = context.getConnectionConfig()
                         .getMaxAnonymousLogins();
+                if(maxAnonLogin == 0) {
+                    LOG.debug("Currently {} anonymous users logged in, unlimited allowed", currAnonLogin);
+                } else {
+                    LOG.debug("Currently {} out of {} anonymous users logged in", currAnonLogin, maxAnonLogin);
+                }
+
                 if (currAnonLogin >= maxAnonLogin) {
+                    LOG.debug("Too many anonymous users logged in, user will be disconnected");
                     session
                             .write(LocalizedFtpReply
                                     .translate(
@@ -119,7 +126,13 @@ public class PASS extends AbstractCommand {
             // login limit check
             int currLogin = stat.getCurrentLoginNumber();
             int maxLogin = context.getConnectionConfig().getMaxLogins();
+            if(maxLogin == 0) {
+                LOG.debug("Currently {} users logged in, unlimited allowed", currLogin);
+            } else {
+                LOG.debug("Currently {} out of {} users logged in", currLogin, maxLogin);
+            }
             if (maxLogin != 0 && currLogin >= maxLogin) {
+                LOG.debug("Too many users logged in, user will be disconnected");
                 session
                         .write(LocalizedFtpReply
                                 .translate(
@@ -197,6 +210,8 @@ public class PASS extends AbstractCommand {
                         .getMaxLoginFailures();
                 if (maxAllowedLoginFailues != 0
                         && session.getFailedLogins() >= maxAllowedLoginFailues) {
+                    LOG.warn("User exceeded the number of allowed failed logins, session will be closed");
+
                     session.close(false).awaitUninterruptibly(10000);
                 }
 

@@ -87,6 +87,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /**
      * Close data socket.
+     * This method must be idempotent as we might call it multiple times during disconnect.
      */
     public synchronized void closeDataConnection() {
 
@@ -108,9 +109,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 LOG.warn("FtpDataConnection.closeDataSocket()", ex);
             }
 
-            FtpServerContext ctx = serverContext;
-
-            if (ctx != null) {
+            if (session != null) {
                 DataConnectionConfiguration dcc = session.getListener()
                         .getDataConnectionConfiguration();
                 if (dcc != null) {
