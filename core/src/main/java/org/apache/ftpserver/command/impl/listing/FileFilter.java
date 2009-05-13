@@ -27,9 +27,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * 
  * @see java.io.FileFilter
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FileFilter {
 
     /**

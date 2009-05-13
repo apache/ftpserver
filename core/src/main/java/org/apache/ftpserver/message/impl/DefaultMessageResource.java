@@ -50,9 +50,7 @@ import org.slf4j.LoggerFactory;
  * Custom Language Specific Messages -> Default Language Specific Messages ->
  * Custom Common Messages -> Default Common Messages -> null (not found)
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class DefaultMessageResource implements MessageResource {
 
     private final Logger LOG = LoggerFactory

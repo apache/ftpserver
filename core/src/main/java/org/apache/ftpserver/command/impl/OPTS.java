@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
  * This command shall cause the server use optional features for the command
  * specified.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class OPTS extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(OPTS.class);

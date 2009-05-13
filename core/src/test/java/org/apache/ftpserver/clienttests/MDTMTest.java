@@ -25,9 +25,7 @@ import java.util.Date;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class MDTMTest extends ClientTestTemplate {
     private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat(

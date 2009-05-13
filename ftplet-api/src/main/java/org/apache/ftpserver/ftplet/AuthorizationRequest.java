@@ -22,9 +22,7 @@ package org.apache.ftpserver.ftplet;
 /**
  * A request for authorization for a specific task, for example write access.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface AuthorizationRequest {
 
 }

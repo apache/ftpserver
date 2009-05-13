@@ -44,9 +44,7 @@ import org.apache.ftpserver.impl.ServerDataConnectionFactory;
  * response code for entering passive mode using an extended address MUST be
  * 229.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class EPSV extends AbstractCommand {
 
     /**

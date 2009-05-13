@@ -23,9 +23,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class SystTest extends ClientTestTemplate {
 

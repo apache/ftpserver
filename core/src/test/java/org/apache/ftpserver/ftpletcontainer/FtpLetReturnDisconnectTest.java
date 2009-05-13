@@ -40,9 +40,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class FtpLetReturnDisconnectTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();

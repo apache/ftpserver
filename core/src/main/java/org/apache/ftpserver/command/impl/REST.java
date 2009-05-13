@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
  * followed by the appropriate FTP service command which shall cause file
  * transfer to resume.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class REST extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(REST.class);

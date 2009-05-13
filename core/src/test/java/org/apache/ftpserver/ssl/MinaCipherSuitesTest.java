@@ -22,16 +22,10 @@ package org.apache.ftpserver.ssl;
 import javax.net.ssl.SSLHandshakeException;
 
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultFtpServerContext;
-import org.apache.ftpserver.impl.DefaultFtpServer;
-import org.apache.ftpserver.listener.nio.NioListener;
-import org.apache.ftpserver.ssl.impl.DefaultSslConfiguration;
 
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class MinaCipherSuitesTest extends SSLTestTemplate {

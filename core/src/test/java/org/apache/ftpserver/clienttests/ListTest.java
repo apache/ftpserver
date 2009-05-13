@@ -29,9 +29,7 @@ import org.apache.ftpserver.util.DateUtils;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class ListTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");

@@ -20,9 +20,7 @@ package org.apache.ftpserver.ssl;
  * Enumeration of possible levels of client authentication during an SSL
  * session.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public enum ClientAuth {
 
     /**

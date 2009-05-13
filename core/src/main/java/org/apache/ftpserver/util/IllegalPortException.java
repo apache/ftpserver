@@ -24,9 +24,7 @@ package org.apache.ftpserver.util;
  * 
  * Thrown if the provided string representation does not match a valid IP port
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class IllegalPortException extends IllegalArgumentException {
 
     private static final long serialVersionUID = -7771719692741419931L;

@@ -37,9 +37,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * This class encapsulates <code>java.util.Properties</code> to add java
  * primitives and some other java classes.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class BaseProperties extends Properties {
 
     private static final long serialVersionUID = 5572645129592131953L;

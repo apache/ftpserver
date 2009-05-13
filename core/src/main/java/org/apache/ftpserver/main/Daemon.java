@@ -31,9 +31,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * Invokes FtpServer as a daemon, running in the background. Used for example
  * for the Windows service.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class Daemon {
 
     private static final Logger LOG = LoggerFactory.getLogger(Daemon.class);

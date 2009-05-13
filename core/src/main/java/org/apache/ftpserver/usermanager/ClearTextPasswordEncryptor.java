@@ -26,9 +26,7 @@ package org.apache.ftpserver.usermanager;
  * Password encryptor that does no encryption, that is, keps the
  * password in clear text
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ClearTextPasswordEncryptor implements PasswordEncryptor {
 
     /**

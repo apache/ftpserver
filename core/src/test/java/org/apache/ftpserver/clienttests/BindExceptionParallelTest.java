@@ -33,9 +33,7 @@ import org.apache.ftpserver.test.TestUtil;
 *
 * From FTPSERVER-250
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class BindExceptionParallelTest extends ClientTestTemplate {
     private static final int NUMBER_OF_CLIENTS = 2;

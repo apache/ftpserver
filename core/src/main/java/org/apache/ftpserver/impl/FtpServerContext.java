@@ -34,9 +34,7 @@ import org.apache.ftpserver.message.MessageResource;
  * This is basically <code>org.apache.ftpserver.ftplet.FtpletContext</code> with
  * added connection manager, message resource functionalities.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FtpServerContext extends FtpletContext {
 
     ConnectionConfig getConnectionConfig();

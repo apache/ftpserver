@@ -32,9 +32,7 @@ import java.util.UUID;
  * attributes set by <code>setAttribute()</code> will be always available later
  * unless that attribute is removed or the client disconnects.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FtpSession {
 
     /**

@@ -23,9 +23,7 @@ package org.apache.ftpserver.command.impl.listing;
  * 
  * Contains the parsed argument for a list command (e.g. LIST or NLST)
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ListArgument {
 
     private String file;

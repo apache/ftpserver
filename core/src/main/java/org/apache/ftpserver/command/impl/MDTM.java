@@ -40,9 +40,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Returns the date and time of when a file was modified.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class MDTM extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MDTM.class);

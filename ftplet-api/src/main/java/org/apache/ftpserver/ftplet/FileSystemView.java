@@ -22,9 +22,7 @@ package org.apache.ftpserver.ftplet;
 /**
  * This is an abstraction over the user file system view.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FileSystemView {
 
     /**

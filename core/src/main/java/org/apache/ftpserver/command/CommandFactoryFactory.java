@@ -73,9 +73,7 @@ import org.apache.ftpserver.command.impl.USER;
 /**
  * Factory for {@link CommandFactory} instances
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class CommandFactoryFactory {
 
     private static final HashMap<String, Command> DEFAULT_COMMAND_MAP = new HashMap<String, Command>();

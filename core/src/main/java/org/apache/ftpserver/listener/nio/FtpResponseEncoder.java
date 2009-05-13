@@ -34,9 +34,7 @@ import org.apache.mina.filter.codec.demux.MessageEncoder;
  * 
  * A {@link MessageEncoder} that encodes {@link FtpReply}.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class FtpResponseEncoder extends ProtocolEncoderAdapter {
     private static final CharsetEncoder ENCODER = Charset.forName("UTF-8")
             .newEncoder();

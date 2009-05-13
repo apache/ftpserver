@@ -26,9 +26,7 @@ import org.apache.ftpserver.message.MessageResourceFactory;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class LangTest extends ClientTestTemplate {
 

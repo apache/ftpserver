@@ -25,9 +25,7 @@ import org.apache.ftpserver.ConnectionConfigFactory;
 /**
  * <strong>Internal class, do not use directly.</strong>
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- *
+ * @author The Apache MINA Project (dev@mina.apache.org) *
  */
 public class DefaultConnectionConfig implements ConnectionConfig {
 

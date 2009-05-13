@@ -25,9 +25,7 @@ import java.io.PrintWriter;
 /**
  * Ftplet exception class.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class FtpException extends Exception {
 
     private static final long serialVersionUID = -1328383839915898987L;

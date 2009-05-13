@@ -33,9 +33,7 @@ import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class FtpletsConfigTest extends SpringConfigTestTemplate {
 

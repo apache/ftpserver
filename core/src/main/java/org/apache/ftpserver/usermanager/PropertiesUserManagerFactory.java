@@ -28,9 +28,7 @@ import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
 /**
  * Factory for the properties file based <code>UserManager</code> implementation.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 689495 $, $Date: 2008-08-27 16:58:52 +0200 (Wed, 27 Aug 2008) $
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class PropertiesUserManagerFactory implements UserManagerFactory {
 
     private String adminName = "admin";

@@ -27,9 +27,7 @@ import java.security.NoSuchAlgorithmException;
  * 
  * String encryption utility methods.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class EncryptUtils {
 
     /**

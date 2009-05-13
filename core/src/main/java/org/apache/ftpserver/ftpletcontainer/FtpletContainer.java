@@ -28,9 +28,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
  * {@link Ftplet} interface and forward any events to the Ftplets hosted by the
  * container.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FtpletContainer extends Ftplet {
 
     /**

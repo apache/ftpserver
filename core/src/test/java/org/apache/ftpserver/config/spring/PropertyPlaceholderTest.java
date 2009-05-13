@@ -26,9 +26,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class PropertyPlaceholderTest extends TestCase {
 

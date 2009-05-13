@@ -40,9 +40,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * Current implementation does not do anything. As here data transfers are not
  * multi-threaded.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ABOR extends AbstractCommand {
 
     /**

@@ -44,9 +44,7 @@ import java.util.Random;
  * commons-io library we prefer to our own implementation to, using a external
  * library might cause additional constraints on users embedding FtpServer.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class IoUtils {
 
     /**

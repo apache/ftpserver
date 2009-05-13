@@ -43,9 +43,7 @@ import org.slf4j.LoggerFactory;
  * 
  * This class wraps native file object.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class NativeFtpFile implements FtpFile {
 
     private final Logger LOG = LoggerFactory.getLogger(NativeFtpFile.class);

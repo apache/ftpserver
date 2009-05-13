@@ -26,9 +26,7 @@ import java.util.Properties;
 /**
  * This is message resource interface.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface MessageResource {
 
     /**

@@ -26,9 +26,7 @@ import org.apache.ftpserver.usermanager.impl.WriteRequest;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class WritePermissionTest extends TestCase {
 

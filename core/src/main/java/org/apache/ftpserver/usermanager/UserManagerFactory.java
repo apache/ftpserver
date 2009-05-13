@@ -24,9 +24,7 @@ import org.apache.ftpserver.ftplet.UserManager;
 /**
  * Interface for user manager factories
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 689495 $, $Date: 2008-08-27 16:58:52 +0200 (Wed, 27 Aug 2008) $
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface UserManagerFactory {
     
     /**

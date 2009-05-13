@@ -39,9 +39,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Returns the size of the file in bytes.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class SIZE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SIZE.class);

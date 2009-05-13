@@ -31,9 +31,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Specialized @see {@link LoggingFilter} that optionally masks FTP passwords.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class FtpLoggingFilter extends LoggingFilter {
 
     private boolean maskPassword = true;

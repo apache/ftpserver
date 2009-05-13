@@ -43,9 +43,7 @@ import org.slf4j.LoggerFactory;
  * a directory (if the pathname is absolute) or as a subdirectory of the current
  * working directory (if the pathname is relative).
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class MKD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MKD.class);

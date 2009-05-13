@@ -27,9 +27,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * thread. <code>Server</code> implementation is used to create the server
  * socket and handle client connection.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 701885 $, $Date: 2008-10-05 22:51:37 +0200 (Sun, 05 Oct 2008) $
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FtpServer {
 
     /**

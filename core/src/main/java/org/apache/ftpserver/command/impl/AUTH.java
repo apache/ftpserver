@@ -40,9 +40,7 @@ import org.slf4j.LoggerFactory;
  * 
  * This server supports explicit SSL support.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class AUTH extends AbstractCommand {
 
     private static final String SSL_SESSION_FILTER_NAME = "sslSessionFilter";

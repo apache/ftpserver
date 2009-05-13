@@ -32,9 +32,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 @SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {

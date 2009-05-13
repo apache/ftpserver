@@ -38,9 +38,7 @@ import org.slf4j.LoggerFactory;
  * This command terminates a USER and if file transfer is not in progress, the
  * server closes the control connection.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class QUIT extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(QUIT.class);

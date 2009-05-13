@@ -27,9 +27,7 @@ import org.apache.ftpserver.FtpServerFactory;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class CustomMaxLoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";

@@ -25,9 +25,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * 
  * Selects files that are visible
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class VisibleFileFilter implements FileFilter {
 
     private FileFilter wrappedFilter;

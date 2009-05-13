@@ -24,9 +24,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 /**
  * Thrown if a data connection can not be established
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class DataConnectionException extends FtpException {
     private static final long serialVersionUID = -1328383839917648987L;
 

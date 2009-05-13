@@ -24,9 +24,7 @@ package org.apache.ftpserver.usermanager;
  * Strategy used for encrypting and matching encrypted passwords.
  * The purpose is to make the password encryption possible to extend.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface PasswordEncryptor {
 
     /**

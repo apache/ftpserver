@@ -30,9 +30,7 @@ import java.util.StringTokenizer;
  * Encodes and decodes socket addresses (IP and port) from and to the format
  * used with for example the PORT and PASV command
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class SocketAddressEncoder {
 
     private static int convertAndValidateNumber(String s) {

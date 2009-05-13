@@ -31,9 +31,7 @@ import org.apache.ftpserver.impl.FtpIoSession;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class MinaClientAuthTest extends SSLTestTemplate {
 

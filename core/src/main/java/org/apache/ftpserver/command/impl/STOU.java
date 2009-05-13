@@ -52,9 +52,7 @@ import org.slf4j.LoggerFactory;
  * 150 Transfer Started response must include the name generated, See RFC1123
  * section 4.1.2.9
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class STOU extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STOU.class);

@@ -47,9 +47,7 @@ import org.slf4j.LoggerFactory;
  * system. This command will normally be the first command transmitted by the
  * user after the control connections are made.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class USER extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(USER.class);

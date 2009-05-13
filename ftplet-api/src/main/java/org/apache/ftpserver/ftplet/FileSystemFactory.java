@@ -22,9 +22,7 @@ package org.apache.ftpserver.ftplet;
 /**
  * Factory for file system implementations - it returns the file system view for user.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public interface FileSystemFactory {
 
     /**

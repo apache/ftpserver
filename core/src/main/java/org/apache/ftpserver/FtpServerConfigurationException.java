@@ -23,9 +23,7 @@ package org.apache.ftpserver;
  * Exception used during startup to indicate that the configuration is not
  * correct.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class FtpServerConfigurationException extends RuntimeException {
 
     private static final long serialVersionUID = -1328432839915898987L;

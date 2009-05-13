@@ -28,9 +28,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * This class is the starting point for the FtpServer when it is started using
  * the command line mode.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class CommandLine {
 
     /**

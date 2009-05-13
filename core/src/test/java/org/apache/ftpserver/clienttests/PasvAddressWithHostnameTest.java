@@ -30,9 +30,7 @@ import org.apache.ftpserver.listener.ListenerFactory;
  * Test for external passive address configured as hostname rather than IP
  * address.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- *
+ * @author The Apache MINA Project (dev@mina.apache.org) *
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {
 

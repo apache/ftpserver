@@ -25,9 +25,7 @@ import org.apache.ftpserver.ftplet.FtpSession;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class TypeTest extends ClientTestTemplate {
 

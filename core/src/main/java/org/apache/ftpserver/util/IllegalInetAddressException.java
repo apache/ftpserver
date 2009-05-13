@@ -25,9 +25,7 @@ package org.apache.ftpserver.util;
  * Thrown if the provided string representation does not match a valid IP
  * address
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class IllegalInetAddressException extends IllegalArgumentException {
 
     private static final long serialVersionUID = -7771719692741419933L;

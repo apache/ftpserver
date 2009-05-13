@@ -22,9 +22,7 @@ package org.apache.ftpserver.ftplet;
 /**
  * Type safe enum for describing the structure
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public enum Structure {
 
     /**

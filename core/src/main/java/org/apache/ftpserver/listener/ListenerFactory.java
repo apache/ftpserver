@@ -34,9 +34,7 @@ import org.apache.mina.filter.firewall.Subnet;
  * Factory for listeners. Listeners themselves are immutable and must be 
  * created using this factory.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ListenerFactory {
 
     private String serverAddress;

@@ -23,9 +23,7 @@ package org.apache.ftpserver.command;
 /**
  * Common base class recommended for {@link Command} implementations
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public abstract class AbstractCommand implements Command {
 
 }

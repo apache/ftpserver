@@ -38,9 +38,7 @@ import org.slf4j.LoggerFactory;
  * 
  * The argument is a single Telnet character code specifying file structure.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class STRU extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STRU.class);

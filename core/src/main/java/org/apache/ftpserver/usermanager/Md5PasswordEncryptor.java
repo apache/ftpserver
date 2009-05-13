@@ -26,9 +26,7 @@ import org.apache.ftpserver.util.EncryptUtils;
  * Password encryptor that hashes the password using MD5. Please note that this form 
  * of encryption is sensitive to lookup attacks.
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class Md5PasswordEncryptor implements PasswordEncryptor {
 
     /**

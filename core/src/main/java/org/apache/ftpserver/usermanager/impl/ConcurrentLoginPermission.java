@@ -27,9 +27,7 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  * 
  * The max upload rate permission
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ConcurrentLoginPermission implements Authority {
 
     private int maxConcurrentLogins;

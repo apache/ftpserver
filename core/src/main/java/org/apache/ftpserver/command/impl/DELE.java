@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
  * This command causes the file specified in the pathname to be deleted at the
  * server site.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class DELE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(DELE.class);

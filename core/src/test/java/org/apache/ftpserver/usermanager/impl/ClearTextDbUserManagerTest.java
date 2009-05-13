@@ -29,9 +29,7 @@ import org.apache.ftpserver.usermanager.UserManagerFactory;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class ClearTextDbUserManagerTest extends DbUserManagerTest {
 

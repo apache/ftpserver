@@ -27,9 +27,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
-*
+* @author The Apache MINA Project (dev@mina.apache.org)*
 */
 public class LoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";

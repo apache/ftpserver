@@ -25,9 +25,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * 
  * Formats files according to the NLST specification
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class NLSTFileFormater implements FileFormater {
 
     private final static char[] NEWLINE = { '\r', '\n' };

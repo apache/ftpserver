@@ -112,9 +112,7 @@ import org.slf4j.LoggerFactory;
  * ftpserver.user.admin.uploadrate=0
  * ftpserver.user.admin.downloadrate=0
  * </pre>
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class PropertiesUserManager extends AbstractUserManager {
 
     private final Logger LOG = LoggerFactory

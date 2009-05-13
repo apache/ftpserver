@@ -36,9 +36,7 @@ import org.slf4j.LoggerFactory;
  * File system view based on native file system. Here the root directory will be
  * user virtual root (/).
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class NativeFileSystemView implements FileSystemView {
 
     private final Logger LOG = LoggerFactory

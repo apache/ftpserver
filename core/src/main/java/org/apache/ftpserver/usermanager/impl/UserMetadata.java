@@ -27,9 +27,7 @@ import java.security.cert.Certificate;
  * 
  * User metadata used during authentication
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class UserMetadata {
 
     private Certificate[] certificateChain;

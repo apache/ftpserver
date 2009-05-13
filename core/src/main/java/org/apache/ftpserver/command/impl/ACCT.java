@@ -36,9 +36,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * Acknowledges the ACCT (account) command with a 202 reply. The command however
  * is irrelevant to any workings.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * @author The Apache MINA Project (dev@mina.apache.org) */
 public class ACCT extends AbstractCommand {
 
     /**
