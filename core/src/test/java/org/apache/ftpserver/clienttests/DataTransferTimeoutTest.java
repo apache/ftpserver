@@ -33,7 +33,6 @@ import org.apache.ftpserver.test.TestUtil;
 * Test for FTPSERVER-170
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class DataTransferTimeoutTest extends ClientTestTemplate {

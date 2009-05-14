@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  * the new file pathname.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class RNFR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RNFR.class);

@@ -26,8 +26,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 /**
  * An implementation of <code>FileActionFtpReply</code>.
  * 
- * @author Sai Pullabhotla
- * @version $Revision: 1.1 $
+ * @author The Apache MINA Project (dev@mina.apache.org)
  * 
  */
 

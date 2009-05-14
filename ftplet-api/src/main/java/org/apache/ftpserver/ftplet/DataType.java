@@ -23,7 +23,6 @@ package org.apache.ftpserver.ftplet;
  * Type safe enum for describing the data type
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public enum DataType {
 

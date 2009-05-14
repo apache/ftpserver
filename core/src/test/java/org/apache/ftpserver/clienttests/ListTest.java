@@ -30,7 +30,6 @@ import org.apache.ftpserver.util.DateUtils;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class ListTest extends ClientTestTemplate {

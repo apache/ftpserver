@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * draft-twine-ftpmd5-00.txt.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class MD5 extends AbstractCommand {
 

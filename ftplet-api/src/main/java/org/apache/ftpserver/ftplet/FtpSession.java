@@ -33,7 +33,6 @@ import java.util.UUID;
  * unless that attribute is removed or the client disconnects.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface FtpSession {
 

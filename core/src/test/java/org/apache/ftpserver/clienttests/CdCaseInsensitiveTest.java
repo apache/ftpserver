@@ -25,7 +25,6 @@ import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class CdCaseInsensitiveTest extends CdTest {

@@ -27,7 +27,6 @@ import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class ConcurrentLoginPermissionTest extends TestCase {

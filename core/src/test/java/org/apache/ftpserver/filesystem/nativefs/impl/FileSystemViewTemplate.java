@@ -26,7 +26,6 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public abstract class FileSystemViewTemplate extends TestCase {

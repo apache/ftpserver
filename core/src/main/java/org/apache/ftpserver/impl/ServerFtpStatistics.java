@@ -29,8 +29,7 @@ import org.apache.ftpserver.ftplet.FtpStatistics;
  * added observer and setting values functionalities.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public interface ServerFtpStatistics extends FtpStatistics {
 
     /**

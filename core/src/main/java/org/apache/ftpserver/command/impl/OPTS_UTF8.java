@@ -37,8 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * command has no effect.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class OPTS_UTF8 extends AbstractCommand {
 
     /**

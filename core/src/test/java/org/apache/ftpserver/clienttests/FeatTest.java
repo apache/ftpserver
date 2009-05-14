@@ -22,7 +22,6 @@ package org.apache.ftpserver.clienttests;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class FeatTest extends ClientTestTemplate {

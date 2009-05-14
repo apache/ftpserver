@@ -34,7 +34,6 @@ import org.hsqldb.jdbc.jdbcDataSource;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class DbUserManagerTest extends UserManagerTestTemplate {

@@ -37,8 +37,7 @@ import org.apache.ftpserver.message.MessageResource;
  * the provided configuration. 
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 701885 $, $Date: 2008-10-05 22:51:37 +0200 (Sun, 05 Oct 2008) $
- */
+ * */
 public class FtpServerFactory {
 
     private DefaultFtpServerContext serverContext;

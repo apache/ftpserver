@@ -54,8 +54,7 @@ import org.slf4j.LoggerFactory;
  * return a stream of names of files and no other information.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class NLST extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(NLST.class);

@@ -25,7 +25,6 @@ package org.apache.ftpserver.util;
  * Thrown if the provided string representation does not match a valid IP port
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class IllegalPortException extends IllegalArgumentException {
 

@@ -29,7 +29,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * the command line mode.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class CommandLine {
 

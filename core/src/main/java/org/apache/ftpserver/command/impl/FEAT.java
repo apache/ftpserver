@@ -38,8 +38,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * PBSZ and PROT commands in the reply.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class FEAT extends AbstractCommand {
 
     public void execute(final FtpIoSession session,

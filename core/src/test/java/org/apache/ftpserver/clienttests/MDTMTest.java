@@ -26,7 +26,6 @@ import java.util.Date;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class MDTMTest extends ClientTestTemplate {

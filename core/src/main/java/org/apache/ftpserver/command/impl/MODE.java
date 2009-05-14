@@ -37,8 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * modes described in the Section on Transmission Modes.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class MODE extends AbstractCommand {
 
     /**

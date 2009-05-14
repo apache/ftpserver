@@ -32,7 +32,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * for the Windows service.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class Daemon {
 

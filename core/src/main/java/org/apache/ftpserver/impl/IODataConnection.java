@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
  * connection.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class IODataConnection implements DataConnection {
 

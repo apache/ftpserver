@@ -27,7 +27,6 @@ import java.io.IOException;
  * this class.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class DefaultFtplet implements Ftplet {
 

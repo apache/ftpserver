@@ -31,7 +31,6 @@ import java.util.StringTokenizer;
  * used with for example the PORT and PASV command
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class SocketAddressEncoder {
 

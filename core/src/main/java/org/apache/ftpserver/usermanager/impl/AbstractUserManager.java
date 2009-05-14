@@ -30,7 +30,6 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
  * Abstract common base type for {@link UserManager} implementations
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public abstract class AbstractUserManager implements UserManager {
 

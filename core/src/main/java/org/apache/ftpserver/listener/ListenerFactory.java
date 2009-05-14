@@ -35,7 +35,6 @@ import org.apache.mina.filter.firewall.Subnet;
  * created using this factory.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class ListenerFactory {
 

@@ -39,8 +39,7 @@ import org.slf4j.LoggerFactory;
  * server closes the control connection.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class QUIT extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(QUIT.class);

@@ -26,7 +26,6 @@ import java.io.PrintWriter;
  * Ftplet exception class.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class FtpException extends Exception {
 

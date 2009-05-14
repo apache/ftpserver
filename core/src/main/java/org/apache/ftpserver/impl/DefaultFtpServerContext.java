@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * FTP server configuration implementation. It holds all the components used.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class DefaultFtpServerContext implements FtpServerContext {
 

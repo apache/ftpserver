@@ -25,7 +25,6 @@ import java.util.Locale;
  * Condition that tests the OS type.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public final class OS {
     private static final String FAMILY_OS_400 = "os/400";

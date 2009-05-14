@@ -26,7 +26,6 @@ import org.apache.ftpserver.usermanager.impl.UserMetadata;
  * Class representing an anonymous authentication attempt
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class AnonymousAuthentication implements Authentication {
 

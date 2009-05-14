@@ -33,7 +33,6 @@ import org.apache.ftpserver.ftplet.FtpFile;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 @SuppressWarnings("deprecation")

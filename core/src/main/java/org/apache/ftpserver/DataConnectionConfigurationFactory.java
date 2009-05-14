@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
  * Data connection factory
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 701863 $, $Date: 2008-10-05 21:25:50 +0200 (Sun, 05 Oct 2008) $
- */
+ * */
 public class DataConnectionConfigurationFactory {
 
     private Logger log = LoggerFactory.getLogger(DataConnectionConfigurationFactory.class);

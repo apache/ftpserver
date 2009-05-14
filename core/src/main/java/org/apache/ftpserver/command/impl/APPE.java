@@ -54,8 +54,7 @@ import org.slf4j.LoggerFactory;
  * be created at the server site.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class APPE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(APPE.class);

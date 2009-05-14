@@ -38,7 +38,6 @@ import org.apache.ftpserver.ftplet.FtpException;
  * primitives and some other java classes.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class BaseProperties extends Properties {
 

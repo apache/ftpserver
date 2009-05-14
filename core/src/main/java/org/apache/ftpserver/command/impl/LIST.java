@@ -56,8 +56,7 @@ import org.slf4j.LoggerFactory;
  * data transfer is over the data connection.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class LIST extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(LIST.class);

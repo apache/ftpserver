@@ -29,7 +29,6 @@ import org.apache.ftpserver.test.TestUtil;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class I18NTest extends ClientTestTemplate {

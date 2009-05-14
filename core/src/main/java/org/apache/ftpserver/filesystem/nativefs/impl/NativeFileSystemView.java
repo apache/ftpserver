@@ -37,8 +37,7 @@ import org.slf4j.LoggerFactory;
  * user virtual root (/).
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class NativeFileSystemView implements FileSystemView {
 
     private final Logger LOG = LoggerFactory

@@ -34,7 +34,6 @@ import org.apache.mina.filter.firewall.Subnet;
  * requests and kicking off {@link FtpIoSession}s
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface Listener {
 

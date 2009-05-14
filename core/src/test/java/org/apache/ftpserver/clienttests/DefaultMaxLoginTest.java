@@ -26,7 +26,6 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class DefaultMaxLoginTest extends ClientTestTemplate {

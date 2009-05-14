@@ -23,7 +23,6 @@ package org.apache.ftpserver.ftplet;
  * Thrown if an authentication request fails
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class AuthenticationFailedException extends FtpException {
     private static final long serialVersionUID = -1328383839915898987L;

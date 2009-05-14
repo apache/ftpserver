@@ -23,7 +23,6 @@ package org.apache.ftpserver.ftplet;
  * Interface for a reply to an FTP request.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface FtpReply {
 

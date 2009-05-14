@@ -27,7 +27,6 @@ import org.apache.ftpserver.util.EncryptUtils;
  * of encryption is sensitive to lookup attacks.
  * 
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class Md5PasswordEncryptor implements PasswordEncryptor {
 

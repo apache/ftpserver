@@ -47,8 +47,7 @@ import org.slf4j.LoggerFactory;
  * host and port address this server is listening on.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class PASV extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(PASV.class);

@@ -55,8 +55,7 @@ import org.slf4j.LoggerFactory;
  * section 4.1.2.9
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class STOU extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STOU.class);

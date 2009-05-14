@@ -23,8 +23,7 @@ package org.apache.ftpserver.ftplet;
  * A more specific type of reply that is sent when a file is attempted to
  * rename. This reply is sent by the RNTO command.
  * 
- * @author Sai Pullabhotla
- * @version $Revision: 1.1 $
+ * @author The Apache MINA Project (dev@mina.apache.org)
  * 
  */
 

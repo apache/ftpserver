@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
  * Native file system factory. It uses the OS file system.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class NativeFileSystemFactory implements FileSystemFactory {
 
     private final Logger LOG = LoggerFactory

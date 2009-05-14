@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * PASV command.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class IODataConnectionFactory implements ServerDataConnectionFactory {
 

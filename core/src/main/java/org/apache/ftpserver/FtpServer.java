@@ -28,8 +28,7 @@ import org.apache.ftpserver.ftplet.FtpException;
  * socket and handle client connection.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 701885 $, $Date: 2008-10-05 22:51:37 +0200 (Sun, 05 Oct 2008) $
- */
+ * */
 public interface FtpServer {
 
     /**

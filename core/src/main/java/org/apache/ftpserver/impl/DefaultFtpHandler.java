@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
  * <strong>Internal class, do not use directly.</strong>
  * 
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  *
  */
 public class DefaultFtpHandler implements FtpHandler {

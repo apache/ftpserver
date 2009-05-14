@@ -36,7 +36,6 @@ import org.w3c.dom.Element;
  * Parses the FtpServer "commands" element into a Spring bean graph
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class CommandFactoryBeanDefinitionParser extends
         AbstractSingleBeanDefinitionParser {

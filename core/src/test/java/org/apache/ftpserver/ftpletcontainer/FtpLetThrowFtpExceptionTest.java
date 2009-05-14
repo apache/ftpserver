@@ -26,7 +26,6 @@ import org.apache.ftpserver.ftplet.FtpException;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class FtpLetThrowFtpExceptionTest extends FtpLetReturnDisconnectTest {

@@ -29,8 +29,7 @@ import org.apache.ftpserver.ssl.SslConfiguration;
  * Data connection configuration.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DefaultDataConnectionConfiguration implements
         DataConnectionConfiguration {
 

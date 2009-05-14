@@ -37,8 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * is irrelevant to any workings.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class ACCT extends AbstractCommand {
 
     /**

@@ -40,8 +40,7 @@ import org.apache.ftpserver.message.MessageResource;
  * information as a response.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class HELP extends AbstractCommand {
 
     /**

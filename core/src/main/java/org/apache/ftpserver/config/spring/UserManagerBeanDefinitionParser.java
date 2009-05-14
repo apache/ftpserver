@@ -37,7 +37,6 @@ import org.w3c.dom.Element;
  * Spring bean graph
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class UserManagerBeanDefinitionParser extends
         AbstractSingleBeanDefinitionParser {

@@ -31,7 +31,6 @@ import org.apache.ftpserver.command.impl.STOR;
  * 
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  *
  */
 public class DefaultCommandFactoryTest extends TestCase {

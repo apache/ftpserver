@@ -27,7 +27,6 @@ package org.apache.ftpserver.usermanager;
  * password in clear text
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class ClearTextPasswordEncryptor implements PasswordEncryptor {
 

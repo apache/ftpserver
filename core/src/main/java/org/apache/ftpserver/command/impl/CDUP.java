@@ -44,8 +44,7 @@ import org.slf4j.LoggerFactory;
  * codes shall be identical to the reply codes of CWD.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class CDUP extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(CDUP.class);

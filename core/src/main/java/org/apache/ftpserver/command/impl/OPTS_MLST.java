@@ -37,8 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * include in machine directory/file listings.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class OPTS_MLST extends AbstractCommand {
 
     private final static String[] AVAILABLE_TYPES = { "Size", "Modify", "Type",

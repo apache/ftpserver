@@ -35,8 +35,7 @@ import org.apache.ftpserver.message.MessageResource;
  * added connection manager, message resource functionalities.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public interface FtpServerContext extends FtpletContext {
 
     ConnectionConfig getConnectionConfig();

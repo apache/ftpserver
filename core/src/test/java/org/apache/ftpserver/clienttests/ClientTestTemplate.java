@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public abstract class ClientTestTemplate extends TestCase {

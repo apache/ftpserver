@@ -40,8 +40,7 @@ import org.slf4j.LoggerFactory;
  * channel.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev: 693604 $, $Date: 2008-09-09 22:55:19 +0200 (Tue, 09 Sep 2008) $
- */
+ * */
 public class SslConfigurationFactory {
 
     private final Logger LOG = LoggerFactory

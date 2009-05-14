@@ -39,8 +39,7 @@ import org.apache.ftpserver.ftplet.User;
  * counters and synchronization
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DefaultFtpStatistics implements ServerFtpStatistics {
 
     private StatisticsObserver observer = null;

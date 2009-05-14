@@ -45,7 +45,6 @@ import java.io.IOException;
  * exception, that particular connection will be disconnected.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface Ftplet {
 

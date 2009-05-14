@@ -26,7 +26,6 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {

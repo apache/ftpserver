@@ -23,7 +23,6 @@ package org.apache.ftpserver.ftplet;
  * FTP reply object.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class DefaultFtpReply implements FtpReply {
 

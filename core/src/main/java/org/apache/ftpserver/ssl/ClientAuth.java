@@ -21,7 +21,6 @@ package org.apache.ftpserver.ssl;
  * session.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public enum ClientAuth {
 

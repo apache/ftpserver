@@ -26,7 +26,6 @@ import java.util.StringTokenizer;
  * Parses a list argument (e.g. for LIST or NLST) into a {@link ListArgument}
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class ListArgumentParser {
 

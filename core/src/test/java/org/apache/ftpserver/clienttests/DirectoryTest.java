@@ -26,7 +26,6 @@ import org.apache.commons.net.ftp.FTPReply;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class DirectoryTest extends ClientTestTemplate {

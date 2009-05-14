@@ -44,8 +44,7 @@ import org.slf4j.LoggerFactory;
  * socket and handle client connection.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DefaultFtpServer implements FtpServer {
 
     private final Logger LOG = LoggerFactory.getLogger(DefaultFtpServer.class);

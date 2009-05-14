@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  * specified.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class OPTS extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(OPTS.class);

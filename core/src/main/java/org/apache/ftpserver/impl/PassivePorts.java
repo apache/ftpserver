@@ -31,7 +31,6 @@ import java.util.StringTokenizer;
  * of reserved passive ports.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class PassivePorts {
 

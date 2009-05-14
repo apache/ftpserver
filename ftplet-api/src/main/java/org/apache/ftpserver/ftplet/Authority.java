@@ -24,7 +24,6 @@ package org.apache.ftpserver.ftplet;
  * access or the number of concurrent logins
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface Authority {
 

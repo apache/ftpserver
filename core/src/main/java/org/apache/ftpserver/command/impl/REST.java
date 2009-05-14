@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  * transfer to resume.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class REST extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(REST.class);

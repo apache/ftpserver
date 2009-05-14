@@ -37,8 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * connection in the form of a reply.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class STAT extends AbstractCommand {
 
     /**

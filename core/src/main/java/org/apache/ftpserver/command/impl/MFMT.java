@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
  * http://www.omz13.com/downloads/draft-somers-ftp-mfxx-00.html#anchor8
  * </p>
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class MFMT extends AbstractCommand {
 

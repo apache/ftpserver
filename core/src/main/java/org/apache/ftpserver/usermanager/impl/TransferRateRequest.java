@@ -27,7 +27,6 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  * Request for getting the maximum allowed transfer rates for a user
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class TransferRateRequest implements AuthorizationRequest {
 

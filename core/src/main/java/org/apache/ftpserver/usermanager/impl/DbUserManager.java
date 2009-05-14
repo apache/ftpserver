@@ -53,8 +53,7 @@ import org.slf4j.LoggerFactory;
  * database schema. Then you need to modify the SQLs in the configuration file.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DbUserManager extends AbstractUserManager {
 
     private final Logger LOG = LoggerFactory.getLogger(DbUserManager.class);

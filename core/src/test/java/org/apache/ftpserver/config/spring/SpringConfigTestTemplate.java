@@ -28,7 +28,6 @@ import org.springframework.core.io.ByteArrayResource;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public abstract class SpringConfigTestTemplate extends TestCase {

@@ -36,7 +36,6 @@ import org.apache.ftpserver.util.DateUtils;
  * FTP reply translator.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class LocalizedFtpReply extends DefaultFtpReply {
 

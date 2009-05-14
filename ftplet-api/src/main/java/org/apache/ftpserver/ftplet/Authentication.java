@@ -24,7 +24,6 @@ package org.apache.ftpserver.ftplet;
  * username and password combination
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface Authentication {
 

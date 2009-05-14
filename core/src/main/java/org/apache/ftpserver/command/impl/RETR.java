@@ -55,8 +55,7 @@ import org.slf4j.LoggerFactory;
  * unaffected.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class RETR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RETR.class);

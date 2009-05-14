@@ -29,7 +29,6 @@ import org.apache.ftpserver.ftplet.DataConnectionFactory;
  * <strong>Internal class, do not use directly.</strong>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  *
  */
 public interface ServerDataConnectionFactory extends DataConnectionFactory {

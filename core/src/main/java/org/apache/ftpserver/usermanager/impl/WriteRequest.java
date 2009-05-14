@@ -27,7 +27,6 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  * Class representing a write request
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class WriteRequest implements AuthorizationRequest {
 

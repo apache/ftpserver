@@ -24,7 +24,6 @@ import org.apache.ftpserver.listener.nio.NioListener;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class ConnectTest extends ClientTestTemplate {

@@ -27,8 +27,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
  * FTP request object.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DefaultFtpRequest implements FtpRequest {
 
     private String line;

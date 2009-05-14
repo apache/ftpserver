@@ -40,7 +40,6 @@ import org.apache.ftpserver.ftplet.User;
  * FTP session
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class DefaultFtpSession implements FtpSession {
 

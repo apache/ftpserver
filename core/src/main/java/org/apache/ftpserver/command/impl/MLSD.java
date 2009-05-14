@@ -53,8 +53,7 @@ import org.slf4j.LoggerFactory;
  * working or default directory. The data transfer is over the data connection
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class MLSD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MLSD.class);

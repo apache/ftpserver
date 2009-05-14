@@ -30,7 +30,6 @@ import org.apache.ftpserver.listener.ListenerFactory;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class InetAddressBlacklistTest extends ClientTestTemplate {

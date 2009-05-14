@@ -41,8 +41,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * multi-threaded.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class ABOR extends AbstractCommand {
 
     /**

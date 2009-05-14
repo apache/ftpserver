@@ -39,8 +39,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * in the reply.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class PWD extends AbstractCommand {
 
     /**

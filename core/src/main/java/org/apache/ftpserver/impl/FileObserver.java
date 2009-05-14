@@ -27,8 +27,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * This is the file related activity observer.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public interface FileObserver {
 
     /**

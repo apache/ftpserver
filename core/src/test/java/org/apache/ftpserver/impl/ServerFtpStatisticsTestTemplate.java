@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public abstract class ServerFtpStatisticsTestTemplate extends TestCase {

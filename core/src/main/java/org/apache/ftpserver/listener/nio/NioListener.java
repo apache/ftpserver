@@ -62,7 +62,6 @@ import org.slf4j.LoggerFactory;
  * The default {@link Listener} implementation.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class NioListener extends AbstractListener {
 

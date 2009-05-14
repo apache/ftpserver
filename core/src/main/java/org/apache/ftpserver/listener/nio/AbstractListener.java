@@ -36,7 +36,6 @@ import org.apache.mina.filter.firewall.Subnet;
  * Common base class for listener implementations
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public abstract class AbstractListener implements Listener {
 

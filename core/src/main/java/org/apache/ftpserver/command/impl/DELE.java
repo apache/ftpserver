@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  * server site.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class DELE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(DELE.class);

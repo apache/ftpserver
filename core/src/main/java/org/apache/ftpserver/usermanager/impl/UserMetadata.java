@@ -28,7 +28,6 @@ import java.security.cert.Certificate;
  * User metadata used during authentication
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class UserMetadata {
 

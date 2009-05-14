@@ -45,8 +45,7 @@ import java.util.Random;
  * library might cause additional constraints on users embedding FtpServer.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class IoUtils {
 
     /**

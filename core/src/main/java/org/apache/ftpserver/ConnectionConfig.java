@@ -24,7 +24,6 @@ package org.apache.ftpserver;
  * 
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  *
  */
 public interface ConnectionConfig {

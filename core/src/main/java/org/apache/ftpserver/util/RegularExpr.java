@@ -26,8 +26,7 @@ package org.apache.ftpserver.util;
  * pattern characters.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class RegularExpr {
 
     private char[] pattern;

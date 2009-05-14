@@ -43,8 +43,7 @@ import org.apache.ftpserver.ftplet.User;
  * </ul>
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 
 public class BaseUser implements User {
 

@@ -26,7 +26,6 @@ import java.util.Date;
  * This interface holds all the ftp server statistical information.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface FtpStatistics {
 

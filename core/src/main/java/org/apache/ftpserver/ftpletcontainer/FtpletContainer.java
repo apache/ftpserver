@@ -29,7 +29,6 @@ import org.apache.ftpserver.ftplet.Ftplet;
  * container.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface FtpletContainer extends Ftplet {
 

@@ -26,7 +26,6 @@ package org.apache.ftpserver.util;
  * address
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class IllegalInetAddressException extends IllegalArgumentException {
 

@@ -24,8 +24,7 @@ package org.apache.ftpserver.ftplet;
  * data over the data connection. These commands include LIST, RETR, STOR, STOU
  * etc.
  * 
- * @author Sai Pullabhotla
- * @version $Revision: 1.1 $
+ * @author The Apache MINA Project (dev@mina.apache.org)
  * 
  */
 

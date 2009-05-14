@@ -39,8 +39,7 @@ import org.apache.ftpserver.util.DateUtils;
  * Show all statistics information.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class SITE_STAT extends AbstractCommand {
 
     /**

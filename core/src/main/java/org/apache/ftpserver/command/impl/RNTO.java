@@ -42,8 +42,7 @@ import org.slf4j.LoggerFactory;
  * a file to be renamed.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class RNTO extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RNTO.class);

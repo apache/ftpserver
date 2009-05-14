@@ -29,7 +29,6 @@ import org.springframework.beans.factory.FactoryBean;
  * FtpServer's custom XML tags to configure things.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  * @see ListenerFactory
  */
 public class ListenerFactoryBean extends ListenerFactory implements FactoryBean {

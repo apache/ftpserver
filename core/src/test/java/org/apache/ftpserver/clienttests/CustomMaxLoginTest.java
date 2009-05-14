@@ -28,7 +28,6 @@ import org.apache.ftpserver.FtpServerFactory;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class CustomMaxLoginTest extends ClientTestTemplate {

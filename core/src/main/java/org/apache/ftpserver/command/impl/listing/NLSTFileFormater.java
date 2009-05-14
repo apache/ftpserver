@@ -26,7 +26,6 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * Formats files according to the NLST specification
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class NLSTFileFormater implements FileFormater {
 

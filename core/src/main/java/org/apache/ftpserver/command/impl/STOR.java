@@ -54,8 +54,7 @@ import org.slf4j.LoggerFactory;
  * server site if the file specified in the pathname does not already exist.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class STOR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STOR.class);

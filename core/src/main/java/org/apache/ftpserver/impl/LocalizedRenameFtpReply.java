@@ -27,8 +27,7 @@ import org.apache.ftpserver.ftplet.RenameFtpReply;
  * An implementation of <code>RenameFtpReply</code> that is sent when a file
  * or directory is renamed.
  * 
- * @author Sai Pullabhotla
- * @version $Revision: 1.1 $
+ * @author The Apache MINA Project (dev@mina.apache.org)
  * 
  */
 

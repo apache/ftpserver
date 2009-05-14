@@ -28,7 +28,6 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  * The max upload rate permission
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class TransferRatePermission implements Authority {
 

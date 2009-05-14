@@ -31,7 +31,6 @@ import org.apache.mina.filter.firewall.Subnet;
 /**
 *
 * @author The Apache MINA Project (dev@mina.apache.org)
-* @version $Rev$, $Date$
 *
 */
 public class SubnetBlacklistTest extends ClientTestTemplate {

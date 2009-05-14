@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
  * user after the control connections are made.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class USER extends AbstractCommand {
 

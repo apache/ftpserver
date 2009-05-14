@@ -24,7 +24,6 @@ package org.apache.ftpserver;
  * correct.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public class FtpServerConfigurationException extends RuntimeException {
 

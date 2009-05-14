@@ -45,8 +45,7 @@ import org.apache.ftpserver.impl.ServerDataConnectionFactory;
  * 229.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
- */
+ * */
 public class EPSV extends AbstractCommand {
 
     /**

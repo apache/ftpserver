@@ -25,7 +25,6 @@ package org.apache.ftpserver.usermanager;
  * The purpose is to make the password encryption possible to extend.
  *
  * @author The Apache MINA Project (dev@mina.apache.org)
- * @version $Rev$, $Date$
  */
 public interface PasswordEncryptor {
 
