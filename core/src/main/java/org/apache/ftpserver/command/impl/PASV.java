@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
@@ -58,21 +57,19 @@ public class PASV extends AbstractCommand {
      * Execute command
      */
     public void execute(final FtpIoSession session,
-            final FtpServerContext context, final FtpRequest request)
-            throws IOException, FtpException {
+        final FtpServerContext context, final FtpRequest request)
+        throws IOException, FtpException {
 
         // reset state variables
         session.resetState();
 
         // set data connection
-         ServerDataConnectionFactory dataCon = session.getDataConnection();
-         String externalPassiveAddress = session.getListener()
-         .getDataConnectionConfiguration().getPassiveExernalAddress(); 
-        
+        ServerDataConnectionFactory dataCon = session.getDataConnection();
+        String externalPassiveAddress = getPassiveExternalAddress(session);
+
         try {
-        	
-        	InetSocketAddress dataConAddress = dataCon
-                    .initPassiveDataConnection();
+
+            InetSocketAddress dataConAddress = dataCon.initPassiveDataConnection();
 
             // get connection info
             InetAddress servAddr;
@@ -84,18 +81,16 @@ public class PASV extends AbstractCommand {
 
             // send connection info to client
             InetSocketAddress externalDataConAddress = new InetSocketAddress(
-                    servAddr, dataConAddress.getPort());
+                servAddr, dataConAddress.getPort());
 
-            String addrStr = SocketAddressEncoder
-                    .encode(externalDataConAddress);
+            String addrStr = SocketAddressEncoder.encode(externalDataConAddress);
             session.write(LocalizedFtpReply.translate(session, request, context,
-                    FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
+                FtpReply.REPLY_227_ENTERING_PASSIVE_MODE, "PASV", addrStr));
         } catch (DataConnectionException e) {
             LOG.warn("Failed to open passive data connection", e);
-            session
-                    .write(LocalizedFtpReply.translate(session, request, context,
-                            FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION,
-                            "PASV", null));
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION,
+                "PASV", null));
             return;
         }
 
@@ -104,11 +99,17 @@ public class PASV extends AbstractCommand {
      *  (non-Javadoc)
      *   Returns an InetAddress object from a hostname or IP address.
      */
-    private InetAddress resolveAddress(String host) throws DataConnectionException{
-    	try{
-    		return InetAddress.getByName(host);
-    	}catch(UnknownHostException ex){
-    		throw new DataConnectionException(ex.getLocalizedMessage(),ex);
-    	}
+
+    private InetAddress resolveAddress(String host) throws DataConnectionException {
+        try {
+            return InetAddress.getByName(host);
+        } catch (UnknownHostException ex) {
+            throw new DataConnectionException(ex.getLocalizedMessage(), ex);
+        }
+    }
+
+    protected String getPassiveExternalAddress(final FtpIoSession session) {
+        return session.getListener().getDataConnectionConfiguration().getPassiveExernalAddress();
+
     }
 }
