@@ -425,41 +425,27 @@ public class NativeFtpFile implements FtpFile {
             final String currDir, final String fileName,
             final boolean caseInsensitive) {
 
-        // get the starting directory
+        // normalize root dir
         String normalizedRootDir = normalizeSeparateChar(rootDir);
-        if (normalizedRootDir.charAt(normalizedRootDir.length() - 1) != '/') {
-            normalizedRootDir += '/';
-        }
+        normalizedRootDir = appendSlash(normalizedRootDir);
 
+        // normalize file name
         String normalizedFileName = normalizeSeparateChar(fileName);
-        String resArg;
-        String normalizedCurrDir = currDir;
+        String result;
+        
+        // if file name is relative, set resArg to root dir + curr dir
+        // if file name is absolute, set resArg to root dir
         if (normalizedFileName.charAt(0) != '/') {
-            if (normalizedCurrDir == null) {
-                normalizedCurrDir = "/";
-            }
-            if (normalizedCurrDir.length() == 0) {
-                normalizedCurrDir = "/";
-            }
+            // file name is relative
+            String normalizedCurrDir = normalize(currDir, "/");
 
-            normalizedCurrDir = normalizeSeparateChar(normalizedCurrDir);
-
-            if (normalizedCurrDir.charAt(0) != '/') {
-                normalizedCurrDir = '/' + normalizedCurrDir;
-            }
-            if (normalizedCurrDir.charAt(normalizedCurrDir.length() - 1) != '/') {
-                normalizedCurrDir += '/';
-            }
-
-            resArg = normalizedRootDir + normalizedCurrDir.substring(1);
+            result = normalizedRootDir + normalizedCurrDir.substring(1);
         } else {
-            resArg = normalizedRootDir;
+            result = normalizedRootDir;
         }
 
         // strip last '/'
-        if (resArg.charAt(resArg.length() - 1) == '/') {
-            resArg = resArg.substring(0, resArg.length() - 1);
-        }
+        result = trimTrailingSlash(result);
 
         // replace ., ~ and ..
         // in this loop resArg will never end with '/'
@@ -469,53 +455,98 @@ public class NativeFtpFile implements FtpFile {
 
             // . => current directory
             if (tok.equals(".")) {
-                continue;
-            }
-
-            // .. => parent directory (if not root)
-            if (tok.equals("..")) {
-                if (resArg.startsWith(normalizedRootDir)) {
-                    int slashIndex = resArg.lastIndexOf('/');
+                // ignore and move on
+            } else if (tok.equals("..")) {
+                // .. => parent directory (if not root)
+                if (result.startsWith(normalizedRootDir)) {
+                    int slashIndex = result.lastIndexOf('/');
                     if (slashIndex != -1) {
-                        resArg = resArg.substring(0, slashIndex);
+                        result = result.substring(0, slashIndex);
                     }
                 }
+            } else if (tok.equals("~")) {
+                // ~ => home directory (in this case the root directory)
+                result = trimTrailingSlash(normalizedRootDir);
                 continue;
-            }
-
-            // ~ => home directory (in this case the root directory)
-            if (tok.equals("~")) {
-                resArg = normalizedRootDir.substring(0, normalizedRootDir
-                        .length() - 1);
-                continue;
-            }
-
-            if (caseInsensitive) {
-                File[] matches = new File(resArg)
-                        .listFiles(new NameEqualsFileFilter(tok, true));
-
-                if (matches != null && matches.length > 0) {
-                    tok = matches[0].getName();
+            } else {
+                // token is normal directory name
+                
+                if(caseInsensitive) {
+                    // we're case insensitive, find a directory with the name, ignoring casing
+                    File[] matches = new File(result)
+                            .listFiles(new NameEqualsFileFilter(tok, true));
+    
+                    if (matches != null && matches.length > 0) {
+                        // found a file matching tok, replace tok for get the right casing
+                        tok = matches[0].getName();
+                    }
                 }
-            }
 
-            resArg = resArg + '/' + tok;
+                result = result + '/' + tok;
+    
+            }
         }
 
         // add last slash if necessary
-        if ((resArg.length()) + 1 == normalizedRootDir.length()) {
-            resArg += '/';
+        if ((result.length()) + 1 == normalizedRootDir.length()) {
+            result += '/';
         }
 
-        // final check
-        if (!resArg.regionMatches(0, normalizedRootDir, 0, normalizedRootDir
-                .length())) {
-            resArg = normalizedRootDir;
+        // make sure we did not end up above root dir
+        if (!result.startsWith(normalizedRootDir)) {
+            result = normalizedRootDir;
         }
 
-        return resArg;
+        return result;
     }
 
+    /**
+     * Append trailing slash ('/') if missing
+     */
+    private static String appendSlash(String path) {
+        if (path.charAt(path.length() - 1) != '/') {
+            return path + '/';
+        } else {
+            return path;
+        }
+    }
+    
+    /**
+     * Prepend leading slash ('/') if missing
+     */
+    private static String prependSlash(String path) {
+        if (path.charAt(0) != '/') {
+            return '/' + path;
+        } else {
+            return path;
+        }
+    }
+    
+    /**
+     * Trim trailing slash ('/') if existing
+     */
+    private static String trimTrailingSlash(String path) {
+        if (path.charAt(path.length() - 1) == '/') {
+            return path.substring(0, path.length() - 1);
+        } else {
+            return path;
+        }
+    }
+    
+    /**
+     * Normalize separator char, append and prepend slashes. Default to 
+     * defaultPath if null or empty
+     */
+    private static String normalize(String path, String defaultPath) {
+        if(path == null || path.trim().length() == 0) {
+            path = defaultPath;
+        }
+        
+        path = normalizeSeparateChar(path);
+        path = prependSlash(appendSlash(path));
+        return path;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof NativeFtpFile) {
@@ -526,7 +557,8 @@ public class NativeFtpFile implements FtpFile {
                 otherCanonicalFile = ((NativeFtpFile) obj).file
                         .getCanonicalFile();
             } catch (IOException e) {
-                throw new RuntimeException("Failed to get the canonical path", e);
+                throw new RuntimeException("Failed to get the canonical path",
+                        e);
             }
 
             return thisCanonicalFile.equals(otherCanonicalFile);
