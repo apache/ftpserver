@@ -59,14 +59,8 @@ public class NativeFtpFileTest extends FtpFileTestTemplate {
         FILE_MAPPINGS.put(" \t", TEST_FILE2_IN_DIR1);
     }
 
-    private static final String ROOT_DIR_PATH = ROOT_DIR.getAbsolutePath()
-            .replace(File.separatorChar, '/');
 
-    private static final String FULL_PATH = ROOT_DIR_PATH + "/"
-            + TEST_DIR1.getName() + "/" + TEST_FILE2_IN_DIR1.getName();
 
-    private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
-            + TEST_FILE2_IN_DIR1.getName();
 
     protected void setUp() throws Exception {
         initDirs();
@@ -79,75 +73,6 @@ public class NativeFtpFileTest extends FtpFileTestTemplate {
 
     protected FtpFile createFileObject(String fileName, User user) {
         return new NativeFtpFile(fileName, FILE_MAPPINGS.get(fileName), user);
-    }
-
-    public void testGetPhysicalName() {
-
-        assertEquals(FULL_PATH, NativeFtpFile.getPhysicalName(ROOT_DIR_PATH
-                + "/", "/" + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
-                .getName()));
-        assertEquals("No trailing slash on rootDir", FULL_PATH,
-                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH, "/"
-                        + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
-                        .getName()));
-        assertEquals("No leading slash on currDir", FULL_PATH,
-                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1
-                        .getName()
-                        + "/", TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("No trailing slash on currDir", FULL_PATH,
-                NativeFtpFile.getPhysicalName(ROOT_DIR_PATH + "/", "/"
-                        + TEST_DIR1.getName(), TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("No slashes on currDir", FULL_PATH, NativeFtpFile
-                .getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1.getName(),
-                        TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Backslashes in rootDir", FULL_PATH, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "/"
-                        + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
-                        .getName()));
-        assertEquals("Null currDir", FULL_PATH_NO_CURRDIR, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null,
-                        TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Empty currDir", FULL_PATH_NO_CURRDIR, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "",
-                        TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Absolute fileName in root", FULL_PATH_NO_CURRDIR,
-                NativeFtpFile.getPhysicalName(ROOT_DIR.getAbsolutePath()
-                        + "/", TEST_DIR1.getName(), "/"
-                        + TEST_FILE2_IN_DIR1.getName()));
-        assertEquals("Absolute fileName in dir1", FULL_PATH, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null, "/"
-                        + TEST_DIR1.getName() + "/"
-                        + TEST_FILE2_IN_DIR1.getName()));
-
-        assertEquals(". in currDir", FULL_PATH, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
-                        .getName()
-                        + "/./", "/" + TEST_DIR1.getName() + "/"
-                        + TEST_FILE2_IN_DIR1.getName()));
-
-    }
-
-    public void testGetPhysicalNameWithRelative() {
-        assertEquals(".. in fileName", FULL_PATH_NO_CURRDIR, NativeFtpFile
-                .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
-                        .getName(), "/../" + TEST_FILE2_IN_DIR1.getName()));
-        assertEquals(".. beyond rootDir", FULL_PATH_NO_CURRDIR,
-                NativeFtpFile.getPhysicalName(ROOT_DIR.getAbsolutePath(),
-                        TEST_DIR1.getName(), "/../../"
-                                + TEST_FILE2_IN_DIR1.getName()));
-    }
-
-    public void testGetPhysicalNameWithTilde() {
-        assertEquals(FULL_PATH_NO_CURRDIR, NativeFtpFile.getPhysicalName(
-                ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName(), "/~/"
-                        + TEST_FILE2_IN_DIR1.getName()));
-    }
-
-    public void testGetPhysicalNameCaseInsensitive() {
-        assertEquals(FULL_PATH, NativeFtpFile.getPhysicalName(ROOT_DIR
-                .getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1
-                .getName().toUpperCase(), true));
-
     }
 
     public void testConstructorWithNullFile() {
