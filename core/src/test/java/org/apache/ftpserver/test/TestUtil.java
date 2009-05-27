@@ -33,6 +33,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
@@ -209,14 +210,6 @@ public class TestUtil {
     }
 
     public static void assertArraysEqual(byte[] expected, byte[] actual) {
-        if (actual.length != expected.length) {
-            TestCase.fail("Arrays are of different length");
-        }
-
-        for (int i = 0; i < actual.length; i++) {
-            if (actual[i] != expected[i]) {
-                TestCase.fail("Arrays differ at position " + i);
-            }
-        }
+        TestCase.assertEquals(new String(Hex.encodeHex(expected)), new String(Hex.encodeHex(actual)));
     }
 }
