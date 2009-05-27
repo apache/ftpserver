@@ -270,7 +270,11 @@ public class IODataConnection implements DataConnection {
                             if(b == '\n') {
                                 // for reads, we should always get \r\n
                                 // so what we do here is to ignore \n bytes 
-                                // and on \r dump the system local line ending
+                                // and on \r dump the system local line ending.
+                                // Some clients won't transform new lines into \r\n so we make sure we don't delete new lines
+                                if (lastByte != '\r'){
+                                    bos.write(EOL);
+                                }
                             } else if(b == '\r') {
                                 bos.write(EOL);
                             } else {
