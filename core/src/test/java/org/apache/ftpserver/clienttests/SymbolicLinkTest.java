@@ -52,8 +52,13 @@ public class SymbolicLinkTest extends ClientTestTemplate {
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(ROOT_DIR);
         pb.redirectErrorStream(true);
-
-        Process process = pb.start();
+        Process process = null;
+        try{
+        process = pb.start();
+        }catch(IOException e){
+            testEnabled = false;
+            return;
+        }
         BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = out.readLine();
         while(line != null) {
