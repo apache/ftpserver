@@ -20,11 +20,13 @@
 package org.apache.ftpserver.impl;
 
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
@@ -33,6 +35,7 @@ import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.write.WriteToClosedSessionException;
+import org.apache.mina.filter.codec.ProtocolDecoderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,18 +138,29 @@ public class DefaultFtpHandler implements FtpHandler {
 
     public void exceptionCaught(final FtpIoSession session,
             final Throwable cause) throws Exception {
-        if (cause instanceof WriteToClosedSessionException) {
+        
+        if(cause instanceof ProtocolDecoderException &&
+                cause.getCause() instanceof MalformedInputException) {
+            // client probably sent something which is not UTF-8 and we failed to
+            // decode it
+            
+            LOG.warn(
+                    "Client sent command that could not be decoded: {}",
+                    ((ProtocolDecoderException)cause).getHexdump());
+            session.write(new DefaultFtpReply(FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "Invalid character in command"));
+        } else if (cause instanceof WriteToClosedSessionException) {
             WriteToClosedSessionException writeToClosedSessionException = 
                 (WriteToClosedSessionException) cause;
             LOG.warn(
                             "Client closed connection before all replies could be sent, last reply was {}",
                             writeToClosedSessionException.getRequest());
-
+            session.close(false).awaitUninterruptibly(10000);
         } else {
             LOG.error("Exception caught, closing session", cause);
+            session.close(false).awaitUninterruptibly(10000);
         }
 
-        session.close(false).awaitUninterruptibly(10000);
+
     }
 
     private boolean isCommandOkWithoutAuthentication(String command) {
