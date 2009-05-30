@@ -74,9 +74,7 @@ public class FtpLoggingFilter extends LoggingFilter {
         String logMessage;
         if (maskPassword) {
 
-            request = request.trim().toUpperCase();
-
-            if (request.startsWith("PASS ")) {
+            if (request.trim().toUpperCase().startsWith("PASS ")) {
                 logMessage = "PASS *****";
             } else {
                 logMessage = request;
