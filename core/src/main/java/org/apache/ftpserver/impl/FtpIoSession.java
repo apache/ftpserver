@@ -620,7 +620,11 @@ public class FtpIoSession implements IoSession {
         int listenerTimeout = getListener().getIdleTimeout();
         
         // the listener timeout should be the upper limit, unless set to unlimited
-        if(listenerTimeout <= 0 || maxIdleTime < listenerTimeout) {
+        // if the user limit is set to be unlimited, use the listener value is the threshold 
+        //     (already used as the default for all sessions)
+        // else, if the user limit is less than the listener idle time, use the user limit 
+        if(listenerTimeout <= 0 || 
+                (maxIdleTime > 0 && maxIdleTime < listenerTimeout)) {
             wrappedSession.getConfig().setBothIdleTime(maxIdleTime);
         }
     }
