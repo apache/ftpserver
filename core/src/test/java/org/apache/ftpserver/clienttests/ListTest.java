@@ -180,34 +180,6 @@ public class ListTest extends ClientTestTemplate {
         assertEquals(450, client.sendCommand("LIST", TEST_DIR1.getName() + "/nonexisting"));
     }
 
-    public void testListNames() throws Exception {
-        TEST_FILE1.createNewFile();
-        TEST_FILE2.createNewFile();
-        TEST_DIR1.mkdirs();
-        TEST_DIR2.mkdirs();
-
-        String[] files = client.listNames();
-
-        assertEquals(4, files.length);
-
-        TestUtil.assertInArrays(TEST_FILE1.getName(), files);
-        TestUtil.assertInArrays(TEST_FILE2.getName(), files);
-        TestUtil.assertInArrays(TEST_DIR1.getName(), files);
-        TestUtil.assertInArrays(TEST_DIR2.getName(), files);
-    }
-
-    public void testListName() throws Exception {
-        TEST_FILE1.createNewFile();
-        TEST_FILE2.createNewFile();
-        TEST_DIR1.mkdirs();
-
-        String[] files = client.listNames(TEST_FILE2.getName());
-
-        assertEquals(1, files.length);
-
-        TestUtil.assertInArrays(TEST_FILE2.getName(), files);
-    }
-
     public void testMLST() throws Exception {
         TEST_FILE1.createNewFile();
 
