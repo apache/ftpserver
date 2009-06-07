@@ -166,6 +166,9 @@ public class PassivePorts {
         this.checkIfBound = checkIfBound;
     }
 
+    /**
+     * Checks that the port of not bound by another application
+     */
     private boolean checkPortUnbound(int port) {
         // is this check disabled?
         if(!checkIfBound) {
@@ -183,7 +186,7 @@ public class PassivePorts {
             ss.setReuseAddress(true);
             return true;
         } catch (IOException e) {
-            // port probably in used, check next
+            // port probably in use, check next
             return false;
         } finally {
             if(ss != null) {
