@@ -48,7 +48,7 @@ public class DataConnectionConfigurationFactory {
     
     private String passiveAddress;
     private String passiveExternalAddress;
-    private PassivePorts passivePorts = new PassivePorts(new int[] { 0 });
+    private PassivePorts passivePorts = new PassivePorts(new int[] { 0 }, true);
     private boolean implicitSsl;
 
     /**
@@ -249,7 +249,7 @@ public class DataConnectionConfigurationFactory {
      * @param passivePorts The passive ports string
      */
     public void setPassivePorts(String passivePorts) {
-        this.passivePorts = new PassivePorts(passivePorts);
+        this.passivePorts = new PassivePorts(passivePorts, true);
     }
 
     

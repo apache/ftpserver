@@ -29,21 +29,21 @@ import junit.framework.TestCase;
 public class PassivePortsTest extends TestCase {
 
     public void testParseSingleValue() {
-        PassivePorts ports = new PassivePorts("123");
+        PassivePorts ports = new PassivePorts("123", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(-1, ports.reserveNextPort());
     }
 
     public void testParseMaxValue() {
-        PassivePorts ports = new PassivePorts("65535");
+        PassivePorts ports = new PassivePorts("65535", false);
 
         assertEquals(65535, ports.reserveNextPort());
         assertEquals(-1, ports.reserveNextPort());
     }
 
     public void testParseMinValue() {
-        PassivePorts ports = new PassivePorts("0");
+        PassivePorts ports = new PassivePorts("0", false);
 
         assertEquals(0, ports.reserveNextPort());
         assertEquals(0, ports.reserveNextPort());
@@ -54,7 +54,7 @@ public class PassivePortsTest extends TestCase {
 
     public void testParseTooLargeValue() {
         try {
-            new PassivePorts("65536");
+            new PassivePorts("65536", false);
             fail("Must fail due to too high port number");
         } catch (IllegalArgumentException e) {
             // ok
@@ -63,7 +63,7 @@ public class PassivePortsTest extends TestCase {
 
     public void testParseNonNumericValue() {
         try {
-            new PassivePorts("foo");
+            new PassivePorts("foo", false);
             fail("Must fail due to non numerical port number");
         } catch (IllegalArgumentException e) {
             // ok
@@ -71,7 +71,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseListOfValues() {
-        PassivePorts ports = new PassivePorts("123, 456,\t\n789");
+        PassivePorts ports = new PassivePorts("123, 456,\t\n789", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(456, ports.reserveNextPort());
@@ -80,7 +80,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseListOfValuesOrder() {
-        PassivePorts ports = new PassivePorts("123, 789, 456");
+        PassivePorts ports = new PassivePorts("123, 789, 456", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(789, ports.reserveNextPort());
@@ -89,7 +89,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseListOfValuesDuplicate() {
-        PassivePorts ports = new PassivePorts("123, 789, 456, 789");
+        PassivePorts ports = new PassivePorts("123, 789, 456, 789", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(789, ports.reserveNextPort());
@@ -98,7 +98,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseSimpleRange() {
-        PassivePorts ports = new PassivePorts("123-125");
+        PassivePorts ports = new PassivePorts("123-125", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(124, ports.reserveNextPort());
@@ -107,7 +107,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseMultipleRanges() {
-        PassivePorts ports = new PassivePorts("123-125, 127-128, 130-132");
+        PassivePorts ports = new PassivePorts("123-125, 127-128, 130-132", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(124, ports.reserveNextPort());
@@ -121,7 +121,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseMixedRangeAndSingle() {
-        PassivePorts ports = new PassivePorts("123-125, 126, 128-129");
+        PassivePorts ports = new PassivePorts("123-125, 126, 128-129", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(124, ports.reserveNextPort());
@@ -133,7 +133,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOverlapingRanges() {
-        PassivePorts ports = new PassivePorts("123-125, 124-126");
+        PassivePorts ports = new PassivePorts("123-125, 124-126", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(124, ports.reserveNextPort());
@@ -143,7 +143,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOverlapingRangesorder() {
-        PassivePorts ports = new PassivePorts("124-126, 123-125");
+        PassivePorts ports = new PassivePorts("124-126, 123-125", false);
 
         assertEquals(124, ports.reserveNextPort());
         assertEquals(125, ports.reserveNextPort());
@@ -153,7 +153,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOpenLowerRange() {
-        PassivePorts ports = new PassivePorts("9, -3");
+        PassivePorts ports = new PassivePorts("9, -3", false);
 
         assertEquals(9, ports.reserveNextPort());
         assertEquals(1, ports.reserveNextPort());
@@ -163,7 +163,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOpenUpperRange() {
-        PassivePorts ports = new PassivePorts("65533-");
+        PassivePorts ports = new PassivePorts("65533-", false);
 
         assertEquals(65533, ports.reserveNextPort());
         assertEquals(65534, ports.reserveNextPort());
@@ -172,7 +172,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOpenUpperRange3() {
-        PassivePorts ports = new PassivePorts("65533-, 65532-");
+        PassivePorts ports = new PassivePorts("65533-, 65532-", false);
 
         assertEquals(65533, ports.reserveNextPort());
         assertEquals(65534, ports.reserveNextPort());
@@ -182,7 +182,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseOpenUpperRange2() {
-        PassivePorts ports = new PassivePorts("65533-, 1");
+        PassivePorts ports = new PassivePorts("65533-, 1", false);
 
         assertEquals(65533, ports.reserveNextPort());
         assertEquals(65534, ports.reserveNextPort());
@@ -192,7 +192,7 @@ public class PassivePortsTest extends TestCase {
     }
 
     public void testParseRelease() {
-        PassivePorts ports = new PassivePorts("123, 456,789");
+        PassivePorts ports = new PassivePorts("123, 456,789", false);
 
         assertEquals(123, ports.reserveNextPort());
         assertEquals(456, ports.reserveNextPort());

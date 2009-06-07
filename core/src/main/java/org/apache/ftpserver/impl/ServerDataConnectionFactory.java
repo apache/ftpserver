@@ -39,7 +39,7 @@ public interface ServerDataConnectionFactory extends DataConnectionFactory {
     void initActiveDataConnection(InetSocketAddress address);
 
     /**
-     * Initate the passive data connection.
+     * Initiate the passive data connection.
      * 
      * @return The {@link InetSocketAddress} on which the data connection if
      *         bound.

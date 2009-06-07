@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.impl;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,8 @@ public class PassivePorts {
 
     private String passivePortsString;
 
+    private boolean checkIfBound;
+    
     /**
      * Parse a string containing passive ports
      * 
@@ -145,13 +149,13 @@ public class PassivePorts {
         }
     }
 
-    public PassivePorts(final String passivePorts) {
-        this(parse(passivePorts));
+    public PassivePorts(final String passivePorts, boolean checkIfBound) {
+        this(parse(passivePorts), checkIfBound);
 
         this.passivePortsString = passivePorts;
     }
 
-    public PassivePorts(final int[] passivePorts) {
+    public PassivePorts(final int[] passivePorts, boolean checkIfBound) {
         if (passivePorts != null) {
             this.passivePorts = passivePorts.clone();
         } else {
@@ -159,12 +163,44 @@ public class PassivePorts {
         }
 
         reservedPorts = new boolean[passivePorts.length];
+        this.checkIfBound = checkIfBound;
     }
 
+    private boolean checkPortUnbound(int port) {
+        // is this check disabled?
+        if(!checkIfBound) {
+            return true;
+        }
+        
+        // if using 0 port, it will always be available
+        if(port == 0) {
+            return true;
+        }
+        
+        ServerSocket ss = null;
+        try {
+            ss = new ServerSocket(port);
+            ss.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+            // port probably in used, check next
+            return false;
+        } finally {
+            if(ss != null) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    // could not close, check next
+                    return false;
+                }
+            }
+        }
+    }
+    
     public int reserveNextPort() {
         // search for a free port
         for (int i = 0; i < passivePorts.length; i++) {
-            if (!reservedPorts[i]) {
+            if (!reservedPorts[i] && checkPortUnbound(passivePorts[i])) {
                 if (passivePorts[i] != 0) {
                     reservedPorts[i] = true;
                 }

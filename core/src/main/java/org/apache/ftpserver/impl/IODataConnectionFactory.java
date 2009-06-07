@@ -154,8 +154,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
     }
 
     /**
-     * Initiate a data connection in passive mode (server listening). It returns
-     * the success flag.
+     * Initiate a data connection in passive mode (server listening). 
      */
     public synchronized InetSocketAddress initPassiveDataConnection()
             throws DataConnectionException {
