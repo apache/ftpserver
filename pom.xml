@@ -150,7 +150,7 @@
       <dependency>
         <groupId>org.apache.mina</groupId>
         <artifactId>mina-core</artifactId>
-        <version>2.0.0-M4</version>
+        <version>2.0.0-M6</version>
         <exclusions>
             <exclusion>
                 <groupId>org.easymock</groupId>
@@ -160,7 +160,7 @@
                 <groupId>org.easymock</groupId>
                 <artifactId>easymockclassextension</artifactId>
             </exclusion>
-	</exclusions>
+	      </exclusions>
       </dependency>
 
     <dependency>
@@ -172,8 +172,8 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
             </exclusion>
-	</exclusions>
-    </dependency>
+	      </exclusions>
+      </dependency>
 
 
       <!-- Logging -->
