@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ftpserver.FtpServer;
 
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class FtpServerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 5539642787624981705L;
