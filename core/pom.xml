@@ -69,21 +69,22 @@
 							org.apache.ftpserver.config.spring;version=${pom.version},
 							org.apache.ftpserver.filesystem.nativefs;version=${pom.version},
 							org.apache.ftpserver.ftpletcontainer;version=${pom.version},
-							org.apache.ftpserver.listener;version=${pom.version}, 
+							org.apache.ftpserver.listener;version=${pom.version},
 							org.apache.ftpserver.main;version=${pom.version},
 							org.apache.ftpserver.message;version=${pom.version},
 							org.apache.ftpserver.ssl;version=${pom.version},
 							org.apache.ftpserver.usermanager;version=${pom.version}
 						</Export-Package>
 						<Private-Package> org.apache.ftpserver.command.impl,
-						    org.apache.ftpserver.command.impl.listing,
+							org.apache.ftpserver.command.impl.listing,
 							org.apache.ftpserver.filesystem.nativefs.impl,
 							org.apache.ftpserver.ftpletcontainer.impl,
 							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
 							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
 							org.apache.ftpserver.usermanager.impl,
-							org.apache.ftpserver.util</Private-Package>
- 						<Import-Package>
+							org.apache.ftpserver.util
+						</Private-Package>
+						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.xml;resolution:=optional;version="2.5",
@@ -94,6 +95,23 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-1</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+						<configuration>
+							<outputFile>${project.build.outputDirectory}/org/apache/ftpserver/ftpserver.properties</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rat-maven-plugin</artifactId>
@@ -124,8 +142,8 @@
 			<artifactId>spring-context</artifactId>
 			<optional>true</optional>
 		</dependency>
-    
-    <!-- Use as Spring uses JCL -->
+
+		<!-- Use as Spring uses JCL -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
@@ -133,7 +151,7 @@
 		</dependency>
 
 
-    <!-- Test dependencies -->
+		<!-- Test dependencies -->
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
