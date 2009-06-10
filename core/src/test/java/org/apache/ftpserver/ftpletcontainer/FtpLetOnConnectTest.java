@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.ftpletcontainer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
@@ -31,16 +29,13 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletResult;
-import org.apache.ftpserver.impl.DefaultFtpServer;
-import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class FtpLetOnConnectTest extends ClientTestTemplate {

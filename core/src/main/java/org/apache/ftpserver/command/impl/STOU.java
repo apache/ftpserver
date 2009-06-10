@@ -27,7 +27,6 @@ import java.net.SocketException;
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.DataConnection;
 import org.apache.ftpserver.ftplet.DataConnectionFactory;
-import org.apache.ftpserver.ftplet.DataTransferFtpReply;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -38,7 +37,6 @@ import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.IODataConnectionFactory;
 import org.apache.ftpserver.impl.LocalizedDataTransferFtpReply;
-import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.util.IoUtils;
 import org.slf4j.Logger;
@@ -54,8 +52,8 @@ import org.slf4j.LoggerFactory;
  * 150 Transfer Started response must include the name generated, See RFC1123
  * section 4.1.2.9
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class STOU extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STOU.class);

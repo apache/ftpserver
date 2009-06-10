@@ -24,8 +24,6 @@ import java.nio.charset.MalformedInputException;
 
 import org.apache.ftpserver.command.Command;
 import org.apache.ftpserver.command.CommandFactory;
-import org.apache.ftpserver.ftplet.DataConnection;
-import org.apache.ftpserver.ftplet.DataConnectionFactory;
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -42,7 +40,7 @@ import org.slf4j.LoggerFactory;
 /**
  * <strong>Internal class, do not use directly.</strong>
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  *
  */
 public class DefaultFtpHandler implements FtpHandler {

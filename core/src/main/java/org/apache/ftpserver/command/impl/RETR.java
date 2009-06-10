@@ -54,8 +54,8 @@ import org.slf4j.LoggerFactory;
  * connection. The status and contents of the file at the server site shall be
  * unaffected.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class RETR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RETR.class);

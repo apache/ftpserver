@@ -27,8 +27,8 @@ import org.apache.ftpserver.message.impl.DefaultMessageResource;
 /**
  * Factory for creating message resource implementation
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class MessageResourceFactory {
 
     private List<String> languages;

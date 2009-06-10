@@ -26,7 +26,7 @@ import org.apache.ftpserver.util.DateUtils;
  * 
  * Formats files according to the MLST specification
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class MLSTFileFormater implements FileFormater {
 

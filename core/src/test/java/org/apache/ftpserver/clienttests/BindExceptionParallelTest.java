@@ -33,7 +33,7 @@ import org.apache.ftpserver.test.TestUtil;
 *
 * From FTPSERVER-250
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class BindExceptionParallelTest extends ClientTestTemplate {

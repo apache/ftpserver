@@ -27,8 +27,8 @@ import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.ftpletcontainer.impl.DefaultFtpletContainer;
-import org.apache.ftpserver.impl.DefaultFtpServerContext;
 import org.apache.ftpserver.impl.DefaultFtpServer;
+import org.apache.ftpserver.impl.DefaultFtpServerContext;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.message.MessageResource;
 
@@ -36,8 +36,8 @@ import org.apache.ftpserver.message.MessageResource;
  * This is the starting point of all the servers. Creates server instances based on 
  * the provided configuration. 
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class FtpServerFactory {
 
     private DefaultFtpServerContext serverContext;

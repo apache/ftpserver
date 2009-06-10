@@ -22,14 +22,11 @@ package org.apache.ftpserver.clienttests;
 import java.io.File;
 
 import org.apache.commons.net.ftp.FTPClientConfig;
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
-import org.apache.ftpserver.util.DateUtils;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class NLSTTest extends ClientTestTemplate {

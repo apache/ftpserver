@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * This is the file abstraction used by the server.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public interface FtpFile {
 

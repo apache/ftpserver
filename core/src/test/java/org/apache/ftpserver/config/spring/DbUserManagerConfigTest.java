@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.config.spring;
 
-import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.apache.ftpserver.usermanager.impl.DbUserManager;
@@ -27,7 +26,7 @@ import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class DbUserManagerConfigTest extends SpringConfigTestTemplate {

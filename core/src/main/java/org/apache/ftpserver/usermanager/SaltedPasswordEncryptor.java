@@ -31,7 +31,7 @@ import org.apache.ftpserver.util.EncryptUtils;
  * The algorithm is based on the principles described in
  * http://www.jasypt.org/howtoencryptuserpasswords.html
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class SaltedPasswordEncryptor implements PasswordEncryptor {
 

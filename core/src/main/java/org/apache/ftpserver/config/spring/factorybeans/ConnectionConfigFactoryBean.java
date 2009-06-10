@@ -28,7 +28,7 @@ import org.springframework.beans.factory.FactoryBean;
  * making it easier to use Spring's standard &lt;bean&gt; tag instead of 
  * FtpServer's custom XML tags to configure things.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * @see ConnectionConfigFactory
  */
 public class ConnectionConfigFactoryBean extends ConnectionConfigFactory implements FactoryBean {

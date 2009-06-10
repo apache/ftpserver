@@ -19,18 +19,15 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.net.InetAddress;
-
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.listener.ListenerFactory;
 
 /**
  * Test for external passive address configured as hostname rather than IP
  * address.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  *
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {

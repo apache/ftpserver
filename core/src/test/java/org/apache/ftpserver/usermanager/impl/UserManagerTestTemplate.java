@@ -31,17 +31,10 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.UserManagerFactory;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
-import org.apache.ftpserver.usermanager.impl.BaseUser;
-import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
-import org.apache.ftpserver.usermanager.impl.ConcurrentLoginRequest;
-import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
-import org.apache.ftpserver.usermanager.impl.TransferRateRequest;
-import org.apache.ftpserver.usermanager.impl.WritePermission;
-import org.apache.ftpserver.usermanager.impl.WriteRequest;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public abstract class UserManagerTestTemplate extends TestCase {

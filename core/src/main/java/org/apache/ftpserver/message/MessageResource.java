@@ -21,13 +21,12 @@ package org.apache.ftpserver.message;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * This is message resource interface.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface MessageResource {
 
     /**

@@ -33,7 +33,7 @@ import org.apache.mina.filter.firewall.Subnet;
  * Interface for the component responsible for waiting for incoming socket
  * requests and kicking off {@link FtpIoSession}s
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public interface Listener {
 

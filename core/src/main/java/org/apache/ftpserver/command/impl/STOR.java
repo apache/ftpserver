@@ -53,8 +53,8 @@ import org.slf4j.LoggerFactory;
  * shall be replaced by the data being transferred. A new file is created at the
  * server site if the file specified in the pathname does not already exist.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class STOR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(STOR.class);

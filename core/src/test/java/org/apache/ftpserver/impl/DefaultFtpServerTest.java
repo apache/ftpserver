@@ -19,21 +19,19 @@
 
 package org.apache.ftpserver.impl;
 
-import java.io.IOException;
 import java.net.BindException;
+
+import junit.framework.TestCase;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.test.TestUtil;
-
-import junit.framework.TestCase;
 
 /**
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  *
  */
 public class DefaultFtpServerTest extends TestCase {

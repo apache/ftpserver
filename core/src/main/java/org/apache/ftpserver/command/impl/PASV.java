@@ -68,8 +68,8 @@ import org.slf4j.LoggerFactory;
  * code to overwrite when reimplementing PASV command can be easily located. 
  * 
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class PASV extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(PASV.class);

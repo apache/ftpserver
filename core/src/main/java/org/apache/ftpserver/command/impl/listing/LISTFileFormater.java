@@ -28,7 +28,7 @@ import org.apache.ftpserver.util.DateUtils;
  * 
  * Formats files according to the LIST specification
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class LISTFileFormater implements FileFormater {
 

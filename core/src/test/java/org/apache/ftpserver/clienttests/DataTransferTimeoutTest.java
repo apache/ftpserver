@@ -20,19 +20,16 @@
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
 * Test for FTPSERVER-170
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class DataTransferTimeoutTest extends ClientTestTemplate {

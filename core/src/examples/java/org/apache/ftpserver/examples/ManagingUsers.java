@@ -1,4 +1,3 @@
-package org.apache.ftpserver.examples;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,15 +17,18 @@ package org.apache.ftpserver.examples;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.ftpserver.examples;
 
-import java.io.File;
-
-import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
 
+import java.io.File;
+
+/*
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class ManagingUsers {
 
     public static void main(String[] args) throws Exception {

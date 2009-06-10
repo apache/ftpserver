@@ -37,8 +37,8 @@ import org.apache.ftpserver.ssl.SslConfiguration;
  * 
  * Data channel protection level.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class PROT extends AbstractCommand {
 
     private SslConfiguration getSslConfiguration(final FtpIoSession session) {

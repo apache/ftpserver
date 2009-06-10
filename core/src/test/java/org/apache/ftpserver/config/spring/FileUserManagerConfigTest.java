@@ -21,7 +21,6 @@ package org.apache.ftpserver.config.spring;
 
 import java.io.File;
 
-import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
@@ -30,7 +29,7 @@ import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class FileUserManagerConfigTest extends SpringConfigTestTemplate {

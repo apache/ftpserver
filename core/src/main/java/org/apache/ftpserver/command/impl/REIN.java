@@ -36,8 +36,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * This command flushes a USER, without affecting transfers in progress. The
  * server state should otherwise be as when the user first connects.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class REIN extends AbstractCommand {
 
     /**

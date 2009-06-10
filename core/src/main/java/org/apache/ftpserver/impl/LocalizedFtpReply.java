@@ -19,23 +19,15 @@
 
 package org.apache.ftpserver.impl;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-
 import org.apache.ftpserver.ftplet.DefaultFtpReply;
-import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpRequest;
-import org.apache.ftpserver.ftplet.FtpStatistics;
-import org.apache.ftpserver.message.MessageResource;
-import org.apache.ftpserver.util.DateUtils;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
  * 
  * FTP reply translator.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class LocalizedFtpReply extends DefaultFtpReply {
 

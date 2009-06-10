@@ -21,7 +21,6 @@ package org.apache.ftpserver.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * 
  * FTP server configuration implementation. It holds all the components used.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class DefaultFtpServerContext implements FtpServerContext {
 

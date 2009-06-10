@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
  * systems having different syntaxes for naming the parent directory. The reply
  * codes shall be identical to the reply codes of CWD.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class CDUP extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(CDUP.class);

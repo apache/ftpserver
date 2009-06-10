@@ -27,6 +27,9 @@ import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 
+/*
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class EmbeddingFtpServer {
 
     public static void main(String[] args) throws Exception {

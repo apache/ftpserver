@@ -35,12 +35,11 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletResult;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class FtpLetReturnDisconnectTest extends ClientTestTemplate {

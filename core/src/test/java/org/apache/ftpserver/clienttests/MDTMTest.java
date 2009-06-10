@@ -25,7 +25,7 @@ import java.util.Date;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class MDTMTest extends ClientTestTemplate {

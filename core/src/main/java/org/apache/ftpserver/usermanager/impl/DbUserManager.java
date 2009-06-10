@@ -52,8 +52,8 @@ import org.slf4j.LoggerFactory;
  * All the user attributes are replaced during run-time. So we can use your
  * database schema. Then you need to modify the SQLs in the configuration file.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DbUserManager extends AbstractUserManager {
 
     private final Logger LOG = LoggerFactory.getLogger(DbUserManager.class);

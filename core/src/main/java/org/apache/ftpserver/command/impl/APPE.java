@@ -53,8 +53,8 @@ import org.slf4j.LoggerFactory;
  * be appended to that file; otherwise the file specified in the pathname shall
  * be created at the server site.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class APPE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(APPE.class);

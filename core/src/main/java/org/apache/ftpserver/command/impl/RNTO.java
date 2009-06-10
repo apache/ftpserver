@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  * immediately preceding "rename from" command. Together the two commands cause
  * a file to be renamed.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class RNTO extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RNTO.class);

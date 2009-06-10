@@ -30,7 +30,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
-import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +43,8 @@ import org.slf4j.LoggerFactory;
  * a directory (if the pathname is absolute) or as a subdirectory of the current
  * working directory (if the pathname is relative).
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class MKD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MKD.class);

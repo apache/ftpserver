@@ -19,21 +19,14 @@
 
 package org.apache.ftpserver.config.spring;
 
-import java.io.File;
 import java.util.Map;
 
-import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.ftplet.Ftplet;
-import org.apache.ftpserver.ftpletcontainer.FtpletContainer;
 import org.apache.ftpserver.impl.DefaultFtpServer;
-import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
-import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
-import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class FtpletsConfigTest extends SpringConfigTestTemplate {

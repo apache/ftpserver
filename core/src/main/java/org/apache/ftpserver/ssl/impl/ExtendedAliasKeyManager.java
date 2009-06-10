@@ -34,7 +34,7 @@ import javax.net.ssl.X509ExtendedKeyManager;
  * 
  * Based of org.apache.tomcat.util.net.jsse.JSSEKeyManager.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
 

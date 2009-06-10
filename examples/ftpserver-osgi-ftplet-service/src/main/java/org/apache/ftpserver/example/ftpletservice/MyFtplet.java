@@ -27,6 +27,9 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.FtpletResult;
 
+/*
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class MyFtplet extends DefaultFtplet {
 
     @Override

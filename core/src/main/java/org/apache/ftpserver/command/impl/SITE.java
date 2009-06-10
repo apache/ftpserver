@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
  * 
  * Handle SITE command.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SITE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE.class);

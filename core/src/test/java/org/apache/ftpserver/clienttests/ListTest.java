@@ -29,7 +29,7 @@ import org.apache.ftpserver.util.DateUtils;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class ListTest extends ClientTestTemplate {

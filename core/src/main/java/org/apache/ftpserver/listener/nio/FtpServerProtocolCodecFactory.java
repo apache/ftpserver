@@ -32,7 +32,7 @@ import org.apache.mina.filter.codec.textline.TextLineDecoder;
  * 
  * Factory for creating decoders and encoders
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class FtpServerProtocolCodecFactory implements ProtocolCodecFactory {
     private ProtocolDecoder decoder = new TextLineDecoder(Charset

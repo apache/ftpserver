@@ -35,8 +35,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * 
  * This command is used to find out the type of operating system at the server.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SYST extends AbstractCommand {
 
     /**

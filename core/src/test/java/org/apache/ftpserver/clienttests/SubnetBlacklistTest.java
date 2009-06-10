@@ -30,7 +30,7 @@ import org.apache.mina.filter.firewall.Subnet;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class SubnetBlacklistTest extends ClientTestTemplate {

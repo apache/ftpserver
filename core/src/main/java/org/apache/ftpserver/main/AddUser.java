@@ -39,7 +39,7 @@ import org.apache.ftpserver.usermanager.impl.WritePermission;
 /**
  * Used to add users to the user manager for a particular FtpServer configuration
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class AddUser extends CommandLine {
 

@@ -31,7 +31,7 @@ import org.apache.mina.core.session.IoSession;
 /**
  * <strong>Internal class, do not use directly.</strong>
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  *
  */
 public interface FtpHandler {

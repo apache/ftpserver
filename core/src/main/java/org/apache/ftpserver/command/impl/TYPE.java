@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
  * 
  * The argument specifies the representation type.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
- * */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class TYPE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(TYPE.class);

@@ -33,7 +33,7 @@ import org.apache.ftpserver.util.DateUtils;
  * A utility class for returning translated messages. The utility method,
  * <code>translateMessage</code> also expands any variables in the message.
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * 
  */
 

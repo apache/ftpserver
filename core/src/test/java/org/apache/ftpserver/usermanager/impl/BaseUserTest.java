@@ -26,11 +26,10 @@ import junit.framework.TestCase;
 
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
-import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class BaseUserTest extends TestCase {

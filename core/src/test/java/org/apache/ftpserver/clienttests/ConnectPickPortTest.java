@@ -20,13 +20,12 @@
 package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.listener.nio.NioListener;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class ConnectPickPortTest extends ClientTestTemplate {

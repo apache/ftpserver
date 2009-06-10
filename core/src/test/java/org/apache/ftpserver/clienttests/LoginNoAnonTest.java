@@ -21,11 +21,10 @@ package org.apache.ftpserver.clienttests;
 
 import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultConnectionConfig;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
 public class LoginNoAnonTest extends ClientTestTemplate {

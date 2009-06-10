@@ -23,7 +23,7 @@ package org.apache.ftpserver.ftplet;
  * A more specific type of FtpReply that is sent for commands that act on a
  * single file or directory such as MKD, DELE, RMD etc.
  * 
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * 
  */
 

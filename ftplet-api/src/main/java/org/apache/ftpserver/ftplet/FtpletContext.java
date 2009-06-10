@@ -24,7 +24,7 @@ package org.apache.ftpserver.ftplet;
  * information to a ftplet during initialization. The configuration information
  * contains initialization parameters.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public interface FtpletContext {
 

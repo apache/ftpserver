@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * Returns the MD5 value for a file or multiple files according to
  * draft-twine-ftpmd5-00.txt.
  *
- * @author The Apache MINA Project (dev@mina.apache.org)
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class MD5 extends AbstractCommand {
 
