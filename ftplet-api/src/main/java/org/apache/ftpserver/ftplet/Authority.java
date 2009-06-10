@@ -23,7 +23,8 @@ package org.apache.ftpserver.ftplet;
  * Interface for an authority granted to the user, typical example is write
  * access or the number of concurrent logins
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface Authority {
 
     /**

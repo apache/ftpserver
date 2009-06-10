@@ -25,7 +25,8 @@ package org.apache.ftpserver.util;
  * This is a simplified regular character mattching class. Supports *?^[]-
  * pattern characters.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class RegularExpr {
 
     private char[] pattern;

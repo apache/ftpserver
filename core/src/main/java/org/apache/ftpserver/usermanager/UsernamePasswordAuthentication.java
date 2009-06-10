@@ -26,7 +26,8 @@ import org.apache.ftpserver.usermanager.impl.UserMetadata;
  * Class representing a normal authentication attempt using username and
  * password
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class UsernamePasswordAuthentication implements Authentication {
 
     private String username;

@@ -25,7 +25,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * 
  * Interface for formating output based on a {@link FtpFile}
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface FileFormater {
 
     /**

@@ -34,7 +34,8 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
 
 /**
-* @author The Apache MINA Project (dev@mina.apache.org) */
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
 
     protected void setUp() throws Exception {

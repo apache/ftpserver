@@ -24,7 +24,8 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 /**
  * Registration point for FtpServer bean defintion parsers
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class FtpServerNamespaceHandler extends NamespaceHandlerSupport {
 
     /**

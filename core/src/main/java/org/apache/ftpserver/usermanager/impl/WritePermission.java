@@ -27,7 +27,8 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  * 
  * Class representing a write permission
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class WritePermission implements Authority {
 
     private String permissionRoot;

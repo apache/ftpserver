@@ -42,7 +42,8 @@ import org.w3c.dom.Element;
 /**
  * Parses the FtpServer "server" element into a Spring bean graph
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class ServerBeanDefinitionParser extends
         AbstractSingleBeanDefinitionParser {
 

@@ -44,7 +44,8 @@ import java.io.IOException;
  * FtpletEnum.DEFAULT will be assumed. If any ftplet callback method throws
  * exception, that particular connection will be disconnected.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface Ftplet {
 
     /**

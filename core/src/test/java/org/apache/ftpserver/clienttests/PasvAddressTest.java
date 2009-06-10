@@ -31,7 +31,7 @@ import org.apache.ftpserver.util.SocketAddressEncoder;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class PasvAddressTest extends ClientTestTemplate {
 

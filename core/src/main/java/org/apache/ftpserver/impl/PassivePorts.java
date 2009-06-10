@@ -32,7 +32,8 @@ import java.util.StringTokenizer;
  * Provides support for parsing a passive ports string as well as keeping track
  * of reserved passive ports.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class PassivePorts {
 
     private static final int MAX_PORT = 65535;

@@ -34,7 +34,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DecoderTest extends ClientTestTemplate {
     private String dump = "4C 49 53 54 20 61 62 63 64 AE 2E 0D 0A".replace(" ", "");

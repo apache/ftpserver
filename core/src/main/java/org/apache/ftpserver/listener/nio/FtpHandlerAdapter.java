@@ -19,8 +19,6 @@
  */
 package org.apache.ftpserver.listener.nio;
 
-import java.util.UUID;
-
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.DefaultFtpRequest;
@@ -37,7 +35,7 @@ import org.apache.mina.filter.logging.MdcInjectionFilter;
  * 
  * Adapter between MINA handler and the {@link FtpHandler} interface
  *
- * @author The Apache MINA Project (dev@mina.apache.org) *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class FtpHandlerAdapter implements IoHandler {
     private FtpServerContext context;

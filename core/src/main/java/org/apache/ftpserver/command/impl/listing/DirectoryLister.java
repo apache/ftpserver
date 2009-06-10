@@ -32,7 +32,8 @@ import org.apache.ftpserver.ftplet.FtpFile;
  * 
  * This class prints file listing.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DirectoryLister {
 
     private String traverseFiles(final List<FtpFile> files,

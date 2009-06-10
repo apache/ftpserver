@@ -45,7 +45,8 @@ import org.slf4j.LoggerFactory;
  * We can get the FTP data connection using this class. It uses either PORT or
  * PASV command.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     private final Logger LOG = LoggerFactory

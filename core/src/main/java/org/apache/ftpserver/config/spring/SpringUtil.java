@@ -37,7 +37,8 @@ import org.w3c.dom.NodeList;
 /**
  * Various util methods for the Spring config parsing and configuration
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SpringUtil {
 
     /**

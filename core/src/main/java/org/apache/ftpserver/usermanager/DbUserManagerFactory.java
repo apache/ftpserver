@@ -28,7 +28,8 @@ import org.apache.ftpserver.usermanager.impl.DbUserManager;
 /**
  * Factory for database backed {@link UserManager} instances.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DbUserManagerFactory implements UserManagerFactory {
 
     private String adminName = "admin";

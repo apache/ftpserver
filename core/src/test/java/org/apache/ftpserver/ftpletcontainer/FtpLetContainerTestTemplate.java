@@ -40,6 +40,9 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.impl.DefaultFtpRequest;
 import org.apache.ftpserver.impl.DefaultFtpSession;
 
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     private final List<String> calls = new ArrayList<String>();

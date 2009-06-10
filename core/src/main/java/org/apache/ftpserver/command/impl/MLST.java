@@ -43,7 +43,8 @@ import org.slf4j.LoggerFactory;
  * 
  * Returns info on the file over the control connection.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class MLST extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MLST.class);

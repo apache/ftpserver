@@ -38,7 +38,8 @@ import org.apache.ftpserver.ftplet.User;
  * TODO revisit concurrency, right now we're a bit over zealous with both Atomic*
  * counters and synchronization
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DefaultFtpStatistics implements ServerFtpStatistics {
 
     private StatisticsObserver observer = null;

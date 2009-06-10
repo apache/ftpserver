@@ -52,7 +52,8 @@ import org.slf4j.LoggerFactory;
  * files in the specified directory. A null argument implies the user's current
  * working or default directory. The data transfer is over the data connection
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class MLSD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MLSD.class);

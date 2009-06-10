@@ -23,7 +23,8 @@ package org.apache.ftpserver.ftplet;
  * Represents a type of authentication request, typically anonymous or a
  * username and password combination
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface Authentication {
 
 }

@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
-import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -35,7 +34,8 @@ import org.apache.mina.filter.firewall.Subnet;
  * 
  * Common base class for listener implementations
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public abstract class AbstractListener implements Listener {
 
     private String serverAddress;

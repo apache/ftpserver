@@ -26,7 +26,8 @@ import org.apache.ftpserver.util.RegularExpr;
  * 
  * Selects files which short name matches a regular expression
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class RegexFileFilter implements FileFilter {
 
     private RegularExpr regex;

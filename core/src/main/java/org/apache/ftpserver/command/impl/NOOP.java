@@ -37,7 +37,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * This command does not affect any parameters or previously entered commands.
  * It specifies no action other than that the server send an OK reply.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class NOOP extends AbstractCommand {
 
     /**

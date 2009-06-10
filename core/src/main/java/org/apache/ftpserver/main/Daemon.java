@@ -22,7 +22,6 @@ package org.apache.ftpserver.main;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -31,7 +30,8 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * Invokes FtpServer as a daemon, running in the background. Used for example
  * for the Windows service.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class Daemon {
 
     private static final Logger LOG = LoggerFactory.getLogger(Daemon.class);

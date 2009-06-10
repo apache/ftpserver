@@ -26,7 +26,7 @@ import org.apache.ftpserver.command.impl.listing.ListArgumentParser;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ListArgumentParserTest extends TestCase {
 

@@ -19,17 +19,17 @@
 
 package org.apache.ftpserver.clienttests;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.ftpserver.DataConnectionConfigurationFactory;
-
 import java.io.IOException;
 import java.util.Arrays;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 
 /**
 *
 * From FTPSERVER-250
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class BindExceptionSerialTest extends ClientTestTemplate {
     @Override

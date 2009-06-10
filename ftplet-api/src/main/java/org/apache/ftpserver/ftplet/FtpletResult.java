@@ -24,7 +24,8 @@ package org.apache.ftpserver.ftplet;
  * 
  * DEFAULT < NO_FTPLET < SKIP < DISCONNECT
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public enum FtpletResult {
 
     /**

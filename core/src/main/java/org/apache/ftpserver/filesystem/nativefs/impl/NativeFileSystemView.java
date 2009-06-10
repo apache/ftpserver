@@ -26,7 +26,6 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,8 @@ import org.slf4j.LoggerFactory;
  * File system view based on native file system. Here the root directory will be
  * user virtual root (/).
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class NativeFileSystemView implements FileSystemView {
 
     private final Logger LOG = LoggerFactory

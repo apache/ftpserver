@@ -32,7 +32,8 @@ import java.util.TimeZone;
  * 
  * Standard date related utility methods.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DateUtils {
 
     private final static String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May",

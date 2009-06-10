@@ -22,7 +22,8 @@ package org.apache.ftpserver.ftplet;
 /**
  * One FtpRequest made by the client.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface FtpRequest {
 
     /**

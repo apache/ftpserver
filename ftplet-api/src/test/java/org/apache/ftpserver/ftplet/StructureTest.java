@@ -23,7 +23,8 @@ import junit.framework.TestCase;
 
 /**
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class StructureTest extends TestCase {
     public void testParseF() {
         assertSame(Structure.FILE, Structure.parseArgument('F'));

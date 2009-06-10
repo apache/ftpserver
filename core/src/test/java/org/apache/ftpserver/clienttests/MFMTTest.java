@@ -20,16 +20,13 @@
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class MFMTTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");

@@ -41,7 +41,8 @@ import org.slf4j.LoggerFactory;
  * This command must be immediately followed by a "rename to" command specifying
  * the new file pathname.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class RNFR extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(RNFR.class);

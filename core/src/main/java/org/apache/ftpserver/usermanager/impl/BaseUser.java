@@ -42,7 +42,8 @@ import org.apache.ftpserver.ftplet.User;
  * <li>downloadrate</li>
  * </ul>
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 
 public class BaseUser implements User {
 

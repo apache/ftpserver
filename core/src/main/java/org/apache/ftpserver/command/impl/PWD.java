@@ -38,7 +38,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * This command causes the name of the current working directory to be returned
  * in the reply.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class PWD extends AbstractCommand {
 
     /**

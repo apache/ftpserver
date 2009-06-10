@@ -31,7 +31,8 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * A command used primarily for overriding already installed commands when one
  * wants to disable the command.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class NotSupportedCommand extends AbstractCommand {
 
     /**

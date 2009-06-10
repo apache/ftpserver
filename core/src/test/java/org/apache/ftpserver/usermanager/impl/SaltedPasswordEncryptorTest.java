@@ -25,7 +25,7 @@ import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SaltedPasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
 

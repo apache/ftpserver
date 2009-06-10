@@ -40,7 +40,8 @@ import org.slf4j.LoggerFactory;
  * Specified in the following document:
  * http://www.omz13.com/downloads/draft-somers-ftp-mfxx-00.html#anchor8
  * </p>
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class MFMT extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MFMT.class);

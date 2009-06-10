@@ -43,7 +43,8 @@ import org.apache.mina.core.session.IoSession;
  * 
  * Sends the list of all the connected users.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SITE_WHO extends AbstractCommand {
 
     /**

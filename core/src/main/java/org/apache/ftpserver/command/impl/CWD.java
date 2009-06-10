@@ -42,7 +42,8 @@ import org.slf4j.LoggerFactory;
  * Transfer parameters are similarly unchanged. The argument is a pathname
  * specifying a directory.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class CWD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(CWD.class);

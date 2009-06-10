@@ -36,7 +36,8 @@ import org.apache.ftpserver.impl.FtpServerContext;
  * 
  * Displays the FTP server timezone in RFC 822 format.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SITE_ZONE extends AbstractCommand {
 
     private final static SimpleDateFormat TIMEZONE_FMT = new SimpleDateFormat(

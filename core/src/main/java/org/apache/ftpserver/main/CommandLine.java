@@ -21,14 +21,14 @@ package org.apache.ftpserver.main;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  * This class is the starting point for the FtpServer when it is started using
  * the command line mode.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class CommandLine {
 
     /**

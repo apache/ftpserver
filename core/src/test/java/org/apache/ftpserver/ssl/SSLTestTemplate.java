@@ -31,19 +31,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.clienttests.ClientTestTemplate;
-import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
-import org.apache.ftpserver.impl.DefaultFtpServerContext;
-import org.apache.ftpserver.impl.DefaultFtpServer;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author The Apache MINA Project (dev@mina.apache.org)*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class SSLTestTemplate extends ClientTestTemplate {
 

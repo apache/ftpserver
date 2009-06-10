@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
  * An active open data connection, used for transfering data over the data
  * connection.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class IODataConnection implements DataConnection {
 
     private final Logger LOG = LoggerFactory

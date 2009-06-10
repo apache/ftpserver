@@ -23,9 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +48,8 @@ import org.slf4j.LoggerFactory;
  * Custom Language Specific Messages -> Default Language Specific Messages ->
  * Custom Common Messages -> Default Common Messages -> null (not found)
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DefaultMessageResource implements MessageResource {
 
     private final Logger LOG = LoggerFactory

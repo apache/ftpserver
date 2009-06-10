@@ -1,5 +1,3 @@
-package org.apache.ftpserver.examples;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,6 +17,8 @@ package org.apache.ftpserver.examples;
  * under the License.
  */
 
+package org.apache.ftpserver.examples;
+
 import java.io.File;
 
 import org.apache.ftpserver.FtpServer;
@@ -27,6 +27,9 @@ import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class EmbeddingFtpServer {
 
     public static void main(String[] args) throws Exception {

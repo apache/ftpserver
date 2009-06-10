@@ -26,7 +26,8 @@ import java.io.IOException;
  * just an empty implementation. You can derive your ftplet implementation from
  * this class.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class DefaultFtplet implements Ftplet {
 
     public void init(FtpletContext ftpletContext) throws FtpException {

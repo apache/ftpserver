@@ -41,7 +41,8 @@ import org.slf4j.LoggerFactory;
  * 
  * This SITE command returns the specified user information.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public class SITE_DESCUSER extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE_DESCUSER.class);

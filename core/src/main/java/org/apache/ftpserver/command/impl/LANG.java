@@ -38,7 +38,8 @@ import org.apache.ftpserver.message.MessageResource;
  * process to determine in which language to present server greetings and the
  * textual part of command responses.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class LANG extends AbstractCommand {
 
     /**

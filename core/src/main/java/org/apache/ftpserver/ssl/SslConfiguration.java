@@ -26,7 +26,8 @@ import javax.net.ssl.SSLContext;
 /**
  * SSL configuration
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public interface SslConfiguration {
 
     /**

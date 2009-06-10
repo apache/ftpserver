@@ -47,7 +47,8 @@ import org.slf4j.LoggerFactory;
  * upon receipt of a transfer command. The response to this command includes the
  * host and port address this server is listening on.
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
+ */
 public class PASV extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(PASV.class);

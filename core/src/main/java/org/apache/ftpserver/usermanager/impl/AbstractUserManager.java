@@ -29,7 +29,8 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
  * 
  * Abstract common base type for {@link UserManager} implementations
  *
- * @author The Apache MINA Project (dev@mina.apache.org) */
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ */
 public abstract class AbstractUserManager implements UserManager {
 
     public static final String ATTR_LOGIN = "userid";
