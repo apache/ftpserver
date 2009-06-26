@@ -442,10 +442,17 @@
       <name>Dummy to avoid accidental deploys</name>
       <url/>
     </repository>
+    <snapshotRepository>
+      <id>apache.snapshots.https</id>
+      <name>Apache Development Snapshot Repository</name>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
   </distributionManagement>
 
   <properties>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
+    <ftpserver.version>${pom.version}</ftpserver.version>
   </properties>
 </project>
