@@ -215,7 +215,7 @@ public class DataConnectionConfigurationFactory {
             // no available free port - wait for the release notification
             if (dataPort == -1) {
                 try {
-                    log.info("We're waiting for a passive part, might be stuck");
+                    log.info("We're waiting for a passive port, might be stuck");
                     wait();
                 } catch (InterruptedException ex) {
                 }
