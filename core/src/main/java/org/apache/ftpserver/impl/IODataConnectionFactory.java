@@ -335,7 +335,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
                     SSLSocket sslSocket = (SSLSocket) ssocketFactory
                             .createSocket(serverSocket, serverSocket
-                                    .getInetAddress().getHostName(),
+                                    .getInetAddress().getHostAddress(),
                                     serverSocket.getPort(), true);
                     sslSocket.setUseClientMode(false);
 
