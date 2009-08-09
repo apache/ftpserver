@@ -22,6 +22,7 @@ package org.apache.ftpserver.ssl;
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * SSL configuration
@@ -29,6 +30,17 @@ import javax.net.ssl.SSLContext;
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public interface SslConfiguration {
+	
+	/**
+	 * Returns the socket factory that can be used to create sockets using 
+	 * 		   this <code>SslConfiguration</code>. 
+	 * @return the socket factory that can be used to create sockets using this 
+	 * 		   <code>SslConfiguration</code>.
+	 * @throws GeneralSecurityException if any error occurs while creating the 
+	 *         socket factory.  
+	 * 		    
+	 */
+	SSLSocketFactory getSocketFactory() throws GeneralSecurityException;
 
     /**
      * Return the SSL context for this configuration

@@ -279,8 +279,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     }
 
                     // get socket factory
-                    SSLContext ctx = ssl.getSSLContext();
-                    SSLSocketFactory socFactory = ctx.getSocketFactory();
+                    SSLSocketFactory socFactory = ssl.getSocketFactory();
 
                     // create socket
                     SSLSocket ssoc = (SSLSocket) socFactory.createSocket();
@@ -328,8 +327,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                                 "Data connection SSL not configured");
                     }
 
-                    SSLContext ctx = ssl.getSSLContext();
-                    SSLSocketFactory ssocketFactory = ctx.getSocketFactory();
+                    SSLSocketFactory ssocketFactory = ssl.getSocketFactory();
 
                     Socket serverSocket = servSoc.accept();
 
