@@ -120,6 +120,7 @@
 								<xs:complexType>
 									<xs:attribute name="address" />
 									<xs:attribute name="external-address" />
+									<xs:attribute name="ip-check" type="xs:boolean" />
 									<xs:attribute name="ports" />
 								</xs:complexType>
 							</xs:element>

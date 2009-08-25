@@ -355,6 +355,22 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
                     dataSoc = servSoc.accept();
                 }
+                
+                if (dataConfig.isPassiveIpCheck()) {
+					// Let's make sure we got the connection from the same
+					// client that we are expecting
+					InetAddress remoteAddress = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
+					InetAddress dataSocketAddress = dataSoc.getInetAddress();
+					if (!dataSocketAddress.equals(remoteAddress)) {
+						LOG.warn("Passive IP Check failed. Closing data connection from "
+							+ dataSocketAddress
+							+ " as it does not match the expected address "
+							+ remoteAddress);
+						closeDataConnection();
+						return null;
+					}
+				}
+                
                 DataConnectionConfiguration dataCfg = session.getListener()
                     .getDataConnectionConfiguration();
                 

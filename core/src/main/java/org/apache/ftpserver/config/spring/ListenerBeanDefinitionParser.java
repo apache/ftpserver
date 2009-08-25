@@ -299,6 +299,8 @@ public class ListenerBeanDefinitionParser extends
                 if (ports != null) {
                     dc.setPassivePorts(ports);
                 }
+                dc.setPassiveIpCheck(SpringUtil.parseBoolean(passiveElm,
+                    "ip-check", false));
             }
         } else {
             // no data conn config element, do we still have SSL config from the

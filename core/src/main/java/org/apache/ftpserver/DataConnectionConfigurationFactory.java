@@ -49,6 +49,7 @@ public class DataConnectionConfigurationFactory {
     private String passiveAddress;
     private String passiveExternalAddress;
     private PassivePorts passivePorts = new PassivePorts(new int[] { 0 }, true);
+    private boolean passiveIpCheck = false;
     private boolean implicitSsl;
 
     /**
@@ -62,7 +63,7 @@ public class DataConnectionConfigurationFactory {
                 ssl, activeEnabled, activeIpCheck,
                 activeLocalAddress, activeLocalPort,
                 passiveAddress, passivePorts,
-                passiveExternalAddress, implicitSsl);
+                passiveExternalAddress, passiveIpCheck, implicitSsl);
     }
     /*
      * (Non-Javadoc)
@@ -195,6 +196,32 @@ public class DataConnectionConfigurationFactory {
     public void setPassiveExternalAddress(String passiveExternalAddress) {
         this.passiveExternalAddress = passiveExternalAddress;
     }
+    
+    /**
+	 * Tells whether or not IP address check is performed when accepting a
+	 * passive data connection.
+	 * 
+	 * @return <code>true</code>, if the IP address checking is enabled;
+	 *         <code>false</code>, otherwise. A value of <code>true</code> means
+	 *         that site to site transfers are disabled. In other words, a
+	 *         passive data connection MUST be made from the same IP address
+	 *         that issued the PASV command.
+	 */
+	public boolean isPassiveIpCheck() {
+		return passiveIpCheck;
+	}
+	
+	/**
+	 * Sets whether or not IP check is performed before accepting a passive data
+	 * connection.
+	 * 
+	 * @param passiveIpCheck
+	 *            whether or not IP check is performed before accepting a
+	 *            passive data connection.
+	 */
+	public void setPassiveIpCheck(boolean passiveIpCheck) {
+		this.passiveIpCheck = passiveIpCheck;
+	}
     
     /**
      * Get passive data port. Data port number zero (0) means that any available

@@ -77,6 +77,8 @@ public class SpringConfigTest extends TestCase {
         		.getDataConnectionConfiguration().getActiveLocalAddress()) );
         assertEquals("123-125", ((NioListener) listener)
                 .getDataConnectionConfiguration().getPassivePorts());
+        assertEquals(false, ((NioListener) listener)
+                .getDataConnectionConfiguration().isPassiveIpCheck());
 
         List<Subnet> subnets = ((NioListener) listener).getBlockedSubnets();
         assertEquals(3, subnets.size());
