@@ -48,7 +48,7 @@ public class LocalizedFileActionFtpReply extends LocalizedFtpReply implements
 	 * @param file
 	 *            the file or directory the data transfer is related to
 	 */
-	protected LocalizedFileActionFtpReply(int code, String message, FtpFile file) {
+	public LocalizedFileActionFtpReply(int code, String message, FtpFile file) {
 		super(code, message);
 		this.file = file;
 	}

@@ -56,7 +56,7 @@ public class LocalizedRenameFtpReply extends LocalizedFtpReply implements
 	 * @param to
 	 *            the new file
 	 */
-	protected LocalizedRenameFtpReply(int code, String message, FtpFile from,
+	public LocalizedRenameFtpReply(int code, String message, FtpFile from,
 		FtpFile to) {
 		super(code, message);
 		this.from = from;

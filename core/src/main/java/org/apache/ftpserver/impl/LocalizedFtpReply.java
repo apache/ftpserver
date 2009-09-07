@@ -40,9 +40,14 @@ public class LocalizedFtpReply extends DefaultFtpReply {
     }
 
     /**
-     * Private constructor, only allow creating through factory method
-     */
-    protected LocalizedFtpReply(int code, String message) {
+	 * Creates a new instance of <code>LocalizedFtpReply</code>.
+	 * 
+	 * @param code
+	 *            the reply code
+	 * @param message
+	 *            the reply text
+	 */
+    public LocalizedFtpReply(int code, String message) {
         super(code, message);
     }
 }

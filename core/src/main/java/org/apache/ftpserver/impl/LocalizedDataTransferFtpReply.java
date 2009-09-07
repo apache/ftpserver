@@ -56,7 +56,7 @@ public class LocalizedDataTransferFtpReply extends LocalizedFtpReply implements
 	 * @param bytesTransferred
 	 *            the number of bytes transferred
 	 */
-	protected LocalizedDataTransferFtpReply(int code, String message,
+	public LocalizedDataTransferFtpReply(int code, String message,
 		FtpFile file, long bytesTransferred) {
 		super(code, message);
 		this.file = file;
