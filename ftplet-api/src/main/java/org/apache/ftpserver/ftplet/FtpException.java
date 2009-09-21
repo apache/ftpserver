@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.ftplet;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
 
 /**
  * Ftplet exception class.
@@ -30,8 +28,6 @@ import java.io.PrintWriter;
 public class FtpException extends Exception {
 
     private static final long serialVersionUID = -1328383839915898987L;
-
-    private Throwable throwable = null;
 
     /**
      * Default constructor.
@@ -59,7 +55,6 @@ public class FtpException extends Exception {
      */
     public FtpException(Throwable th) {
         super(th.getMessage());
-        throwable = th;
     }
 
     /**
@@ -72,47 +67,14 @@ public class FtpException extends Exception {
      */
     public FtpException(String msg, Throwable th) {
         super(msg);
-        throwable = th;
     }
 
     /**
      * Get the root cause.
      * @return The root cause
+     * @deprecated Use {@link Exception#getCause()} instead
      */
     public Throwable getRootCause() {
-        return throwable;
-    }
-
-    /**
-     * Print stack trace.
-     */
-    public void printStackTrace(PrintWriter pw) {
-        if (throwable == null) {
-            super.printStackTrace(pw);
-        } else {
-            throwable.printStackTrace(pw);
-        }
-    }
-
-    /**
-     * Print stack trace.
-     */
-    public void printStackTrace(PrintStream ps) {
-        if (throwable == null) {
-            super.printStackTrace(ps);
-        } else {
-            throwable.printStackTrace(ps);
-        }
-    }
-
-    /**
-     * Print stack trace.
-     */
-    public void printStackTrace() {
-        if (throwable == null) {
-            super.printStackTrace();
-        } else {
-            throwable.printStackTrace();
-        }
+        return getCause();
     }
 }

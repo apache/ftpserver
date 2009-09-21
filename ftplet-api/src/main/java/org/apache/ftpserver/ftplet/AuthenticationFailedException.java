@@ -65,6 +65,6 @@ public class AuthenticationFailedException extends FtpException {
      *            The original cause
      */
     public AuthenticationFailedException(String msg, Throwable th) {
-        super(msg);
+        super(msg, th);
     }
 }

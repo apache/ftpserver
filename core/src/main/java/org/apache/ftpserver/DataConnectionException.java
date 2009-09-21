@@ -66,6 +66,6 @@ public class DataConnectionException extends FtpException {
      *            the original cause
      */
     public DataConnectionException(final String msg, final Throwable th) {
-        super(msg);
+        super(msg, th);
     }
 }
