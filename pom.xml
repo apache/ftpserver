@@ -268,6 +268,7 @@
         <version>2.5.1</version>
         <configuration>
           <downloadSources>true</downloadSources>
+          <projectNameTemplate>[artifactId]-1.0.x</projectNameTemplate>
         </configuration>
       </plugin>
 
@@ -343,6 +344,11 @@
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
         </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.0.2</version>
       </plugin>
     </plugins>
   </build>
