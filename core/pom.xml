@@ -50,7 +50,7 @@
 			<testResource>
 				<directory>src/test/resources</directory>
 				<includes>
-					<include>*.properties</include>
+					<include>**/*.properties</include>
 				</includes>
 			</testResource>
 		</testResources>
