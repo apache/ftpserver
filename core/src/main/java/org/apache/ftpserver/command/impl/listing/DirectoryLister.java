@@ -75,7 +75,7 @@ public class DirectoryLister {
         List<? extends FtpFile> files = listFiles(fileSystemView, argument.getFile());
         if (files != null) {
             FileFilter filter = null;
-            if ((argument.hasOption('a'))) {
+            if (!argument.hasOption('a')) {
                 filter = new VisibleFileFilter();
             }
             if (argument.getPattern() != null) {
