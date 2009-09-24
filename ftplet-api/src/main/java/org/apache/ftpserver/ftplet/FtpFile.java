@@ -106,7 +106,7 @@ public interface FtpFile {
     int getLinkCount();
 
     /**
-     * Get last modified time.
+     * Get last modified time in UTC.
      * @return The timestamp of the last modified time for the {@link FtpFile}
      */
     long getLastModified();
