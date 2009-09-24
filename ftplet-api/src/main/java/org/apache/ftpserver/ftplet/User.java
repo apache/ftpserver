@@ -78,7 +78,7 @@ public interface User {
     boolean getEnabled();
 
     /**
-     * gGet the user home directory
+     * Get the user home directory
      * @return The path to the home directory for the user
      */
     String getHomeDirectory();
