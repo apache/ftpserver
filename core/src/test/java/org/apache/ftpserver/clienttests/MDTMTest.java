@@ -21,7 +21,9 @@ package org.apache.ftpserver.clienttests;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
 *
@@ -31,7 +33,10 @@ import java.util.Date;
 public class MDTMTest extends ClientTestTemplate {
     private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat(
             "yyyyMMddHHmmss.SSS");
-
+    static {
+        FTP_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+    
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
 
     private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
@@ -51,11 +56,15 @@ public class MDTMTest extends ClientTestTemplate {
         assertFalse(TEST_FILE1.exists());
         assertTrue(TEST_FILE1.createNewFile());
 
-        Date expected = new Date(TEST_FILE1.lastModified());
+        Calendar expected = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        expected.clear();
+        expected.setTimeInMillis(TEST_FILE1.lastModified());
         assertEquals(213, client.sendCommand("MDTM " + TEST_FILE1.getName()));
 
-        Date actual = FTP_DATE_FORMAT.parse(client.getReplyString()
-                .substring(4).trim());
+        Calendar actual = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        actual.clear();
+        actual.setTime(FTP_DATE_FORMAT.parse(client.getReplyString()
+                .substring(4).trim()));
         assertEquals(expected, actual);
     }
 

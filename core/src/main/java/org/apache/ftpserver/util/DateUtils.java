@@ -36,6 +36,8 @@ import java.util.TimeZone;
  */
 public class DateUtils {
 
+    private static final TimeZone TIME_ZONE_UTC = TimeZone.getTimeZone("UTC");
+
     private final static String[] MONTHS = { "Jan", "Feb", "Mar", "Apr", "May",
             "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
@@ -64,7 +66,7 @@ public class DateUtils {
         }
 
         StringBuffer sb = new StringBuffer(16);
-        Calendar cal = new GregorianCalendar();
+        Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
         cal.setTimeInMillis(millis);
 
         // month
@@ -112,7 +114,7 @@ public class DateUtils {
      */
     public final static String getISO8601Date(long millis) {
         StringBuffer sb = new StringBuffer(19);
-        Calendar cal = new GregorianCalendar();
+        Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
         cal.setTimeInMillis(millis);
 
         // year
@@ -166,8 +168,9 @@ public class DateUtils {
      */
     public final static String getFtpDate(long millis) {
         StringBuffer sb = new StringBuffer(20);
-        Calendar cal = new GregorianCalendar();
+        Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
         cal.setTimeInMillis(millis);
+        
 
         // year
         sb.append(cal.get(Calendar.YEAR));

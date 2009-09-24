@@ -22,8 +22,9 @@ package org.apache.ftpserver.commands.impl.listing;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
@@ -38,7 +39,11 @@ import org.apache.ftpserver.ftplet.FtpFile;
 @SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {
 
-    private static final Date LAST_MODIFIED_IN_2005 = new Date(105, 1, 2, 3, 4);
+    private static final Calendar LAST_MODIFIED_IN_2005 = Calendar.getInstance(TimeZone.getTimeZone("GMT")); 
+    static {
+        LAST_MODIFIED_IN_2005.clear();
+        LAST_MODIFIED_IN_2005.set(2005, Calendar.JANUARY, 2, 3, 4, 5);
+    }
 
     private static final FtpFile TEST_FILE = new MockFileObject();
 
@@ -70,7 +75,7 @@ public class MLSTFileFormaterTest extends TestCase {
         }
 
         public long getLastModified() {
-            return LAST_MODIFIED_IN_2005.getTime();
+            return LAST_MODIFIED_IN_2005.getTimeInMillis();
         }
 
         public int getLinkCount() {
@@ -136,7 +141,8 @@ public class MLSTFileFormaterTest extends TestCase {
     }
 
     public void testSingleFile() {
-        assertEquals("Size=13;Modify=20050202030400.000;Type=file; short\r\n",
+        // time should be in UTC
+        assertEquals("Size=13;Modify=20050102030405.000;Type=file; short\r\n",
                 formater.format(TEST_FILE));
     }
 
@@ -156,8 +162,8 @@ public class MLSTFileFormaterTest extends TestCase {
 
         };
 
-        assertEquals("Size=0;Modify=20050202030400.000;Type=dir; short\r\n",
+        // time should be in UTC
+        assertEquals("Size=0;Modify=20050102030405.000;Type=dir; short\r\n",
                 formater.format(dir));
     }
-
 }
