@@ -29,8 +29,7 @@ import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 

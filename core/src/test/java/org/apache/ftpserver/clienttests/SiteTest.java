@@ -28,8 +28,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SiteTest extends ClientTestTemplate {
 

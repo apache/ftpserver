@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * 
  * This server supports explicit SSL support.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class AUTH extends AbstractCommand {
 

@@ -27,8 +27,7 @@ import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class NativeFileSystemViewTest extends FileSystemViewTemplate {
 
@@ -38,22 +37,10 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
 
     private static final File TEST_DIR1 = new File(ROOT_DIR, DIR1_NAME);
 
-    private static final File TEST_FILE2_IN_DIR1 = new File(TEST_DIR1, "file2");
-    
-    private static final String ROOT_DIR_PATH = ROOT_DIR.getAbsolutePath()
-            .replace(File.separatorChar, '/');
-
-    private static final String FULL_PATH = ROOT_DIR_PATH + "/"
-            + TEST_DIR1.getName() + "/" + TEST_FILE2_IN_DIR1.getName();
-
-    private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
-            + TEST_FILE2_IN_DIR1.getName();
-
     protected void setUp() throws Exception {
         initDirs();
 
         TEST_DIR1.mkdirs();
-        TEST_FILE2_IN_DIR1.createNewFile();
 
         user.setHomeDirectory(ROOT_DIR.getAbsolutePath());
     }
@@ -80,82 +67,6 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
         } catch (IllegalArgumentException e) {
             // OK
         }
-    }
-
-    public void testGetPhysicalName() throws FtpException {
-        NativeFileSystemView view = new NativeFileSystemView(user);
-
-        assertEquals(FULL_PATH, view.getPhysicalName(ROOT_DIR_PATH + "/", "/"
-                + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1.getName(), false));
-        
-        assertEquals("No trailing slash on rootDir", FULL_PATH, view
-                .getPhysicalName(ROOT_DIR_PATH,
-                        "/" + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
-                                .getName(), false));
-        
-        assertEquals("No leading slash on currDir", FULL_PATH,
-                view.getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1
-                        .getName()
-                        + "/", TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("No trailing slash on currDir", FULL_PATH,
-                view.getPhysicalName(ROOT_DIR_PATH + "/", "/"
-                        + TEST_DIR1.getName(), TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("No slashes on currDir", FULL_PATH, view
-                .getPhysicalName(ROOT_DIR_PATH + "/", TEST_DIR1.getName(),
-                        TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("Backslashes in rootDir", FULL_PATH, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "/"
-                        + TEST_DIR1.getName() + "/", TEST_FILE2_IN_DIR1
-                        .getName(), false));
-        assertEquals("Null currDir", FULL_PATH_NO_CURRDIR, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null,
-                        TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("Empty currDir", FULL_PATH_NO_CURRDIR, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", "",
-                        TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("Absolute fileName in root", FULL_PATH_NO_CURRDIR,
-                view
-                        .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/",
-                                TEST_DIR1.getName(), "/"
-                                        + TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals("Absolute fileName in dir1", FULL_PATH, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath() + "/", null, "/"
-                        + TEST_DIR1.getName() + "/"
-                        + TEST_FILE2_IN_DIR1.getName(), false));
-
-        assertEquals(". in currDir", FULL_PATH, view.getPhysicalName(
-                ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName() + "/./", "/"
-                        + TEST_DIR1.getName() + "/"
-                        + TEST_FILE2_IN_DIR1.getName(), false));
-
-    }
-
-    public void testGetPhysicalNameWithRelative() throws FtpException {
-        NativeFileSystemView view = new NativeFileSystemView(user);
-        
-        assertEquals(".. in fileName", FULL_PATH_NO_CURRDIR, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
-                        .getName(), "/../" + TEST_FILE2_IN_DIR1.getName(), false));
-        assertEquals(".. beyond rootDir", FULL_PATH_NO_CURRDIR, view
-                .getPhysicalName(ROOT_DIR.getAbsolutePath(), TEST_DIR1
-                        .getName(), "/../../" + TEST_FILE2_IN_DIR1.getName(), false));
-    }
-
-    public void testGetPhysicalNameWithTilde() throws FtpException {
-        NativeFileSystemView view = new NativeFileSystemView(user);
-        
-        assertEquals(FULL_PATH_NO_CURRDIR, view.getPhysicalName(
-                ROOT_DIR.getAbsolutePath(), TEST_DIR1.getName(), "/~/"
-                        + TEST_FILE2_IN_DIR1.getName(), false));
-    }
-
-    public void testGetPhysicalNameCaseInsensitive() throws FtpException {
-        NativeFileSystemView view = new NativeFileSystemView(user);
-        
-        assertEquals(FULL_PATH, view.getPhysicalName(ROOT_DIR
-                .getAbsolutePath(), TEST_DIR1.getName(), TEST_FILE2_IN_DIR1
-                .getName().toUpperCase(), true));
-
     }
 
     /*

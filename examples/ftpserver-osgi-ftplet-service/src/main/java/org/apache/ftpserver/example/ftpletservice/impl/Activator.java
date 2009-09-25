@@ -27,9 +27,9 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-/*
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- */
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class Activator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {

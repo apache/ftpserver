@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * The argument field is a Telnet string specifying the user's password. This
  * command must be immediately preceded by the user name command.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class PASS extends AbstractCommand {
 

@@ -23,8 +23,7 @@ import java.io.File;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DeleteTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");

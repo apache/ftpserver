@@ -37,7 +37,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * a server supports the FEAT command then it MUST advertise supported AUTH,
  * PBSZ and PROT commands in the reply.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class FEAT extends AbstractCommand {
 

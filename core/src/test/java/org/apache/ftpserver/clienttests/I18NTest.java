@@ -28,8 +28,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class I18NTest extends ClientTestTemplate {
 

@@ -34,7 +34,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * 
  * Protection buffer size.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class PBSZ extends AbstractCommand {
 

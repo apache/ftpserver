@@ -32,8 +32,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 @SuppressWarnings("deprecation")
 public class LISTFileFormaterTest extends TestCase {
@@ -131,10 +130,6 @@ public class LISTFileFormaterTest extends TestCase {
 
         public boolean setLastModified(long time) {
             return false;
-        }
-        
-        public Object getPhysicalFile() {
-        	return "/short";
         }
     }
 

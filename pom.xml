@@ -28,7 +28,7 @@
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer Parent</name>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <url>http://mina.apache.org/ftpserver</url>
   <issueManagement>
     <system>Jira</system>
@@ -160,7 +160,7 @@
                 <groupId>org.easymock</groupId>
                 <artifactId>easymockclassextension</artifactId>
             </exclusion>
-	</exclusions>
+	      </exclusions>
       </dependency>
 
     <dependency>
@@ -172,8 +172,8 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
             </exclusion>
-	</exclusions>
-    </dependency>
+	      </exclusions>
+      </dependency>
 
 
       <!-- Logging -->
@@ -268,6 +268,7 @@
         <version>2.5.1</version>
         <configuration>
           <downloadSources>true</downloadSources>
+          <projectNameTemplate>[artifactId]-1.0.x</projectNameTemplate>
         </configuration>
       </plugin>
 
@@ -344,7 +345,6 @@
           </archive>
         </configuration>
       </plugin>
-      
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
@@ -448,17 +448,10 @@
       <name>Dummy to avoid accidental deploys</name>
       <url/>
     </repository>
-    <snapshotRepository>
-      <id>apache.snapshots.https</id>
-      <name>Apache Development Snapshot Repository</name>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
   </distributionManagement>
 
   <properties>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
-    <ftpserver.version>${pom.version}</ftpserver.version>
   </properties>
 </project>

@@ -28,11 +28,11 @@ import org.apache.ftpserver.FtpServerConfigurationException;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.test.TestUtil;
 
 /**
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class DefaultFtpServerTest extends TestCase {
 
@@ -42,7 +42,7 @@ public class DefaultFtpServerTest extends TestCase {
         FtpServerFactory serverFactory = new FtpServerFactory();
         
         ListenerFactory listenerFactory = new ListenerFactory();
-        listenerFactory.setPort(0);
+        listenerFactory.setPort(TestUtil.findFreePort());
         
         // let's create two listeners on the same port, second should not start
      

@@ -26,8 +26,7 @@ import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DbUserManagerConfigTest extends SpringConfigTestTemplate {
 

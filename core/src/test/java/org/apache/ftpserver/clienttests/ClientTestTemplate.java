@@ -43,8 +43,7 @@ import org.slf4j.LoggerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class ClientTestTemplate extends TestCase {
 

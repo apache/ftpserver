@@ -36,7 +36,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * Client-Server listing negotation. Instruct the server what listing types to
  * include in machine directory/file listings.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class OPTS_MLST extends AbstractCommand {
 

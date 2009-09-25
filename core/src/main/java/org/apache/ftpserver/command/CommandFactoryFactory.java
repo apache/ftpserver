@@ -73,7 +73,7 @@ import org.apache.ftpserver.command.impl.USER;
 /**
  * Factory for {@link CommandFactory} instances
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class CommandFactoryFactory {
 

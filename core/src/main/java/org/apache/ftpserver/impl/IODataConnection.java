@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
- * 
+ *
  * An active open data connection, used for transfering data over the data
  * connection.
  *
@@ -51,9 +51,9 @@ public class IODataConnection implements DataConnection {
     private final Logger LOG = LoggerFactory
     .getLogger(IODataConnection.class);
 
-    
+
     private static final byte[] EOL = System.getProperty("line.separator").getBytes();
-    
+
     private FtpIoSession session;
 
     private Socket socket;
@@ -117,7 +117,7 @@ public class IODataConnection implements DataConnection {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @seeorg.apache.ftpserver.FtpDataConnection2#transferFromClient(java.io.
      * OutputStream)
      */
@@ -141,7 +141,7 @@ public class IODataConnection implements DataConnection {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.io.InputStream
      * )
@@ -166,7 +166,7 @@ public class IODataConnection implements DataConnection {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.ftpserver.FtpDataConnection2#transferToClient(java.lang.String
      * )
@@ -264,16 +264,16 @@ public class IODataConnection implements DataConnection {
                             if (b == '\n' && lastByte != '\r') {
                                 bos.write('\r');
                             }
-    
+
                             bos.write(b);
                         } else {
                             if(b == '\n') {
                                 // for reads, we should always get \r\n
-                                // so what we do here is to ignore \n bytes 
-                                // and on \r dump the system local line ending.
+                                // so what we do here is to ignore \n bytes
+                                // and on \r dump the system local line ending
                                 // Some clients won't transform new lines into \r\n so we make sure we don't delete new lines
-                                if (lastByte != '\r'){
-                                    bos.write(EOL);
+								if (lastByte != '\r'){
+								    bos.write(EOL);
                                 }
                             } else if(b == '\r') {
                                 bos.write(EOL);

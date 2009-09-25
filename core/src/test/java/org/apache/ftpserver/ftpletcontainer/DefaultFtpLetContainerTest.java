@@ -26,8 +26,7 @@ import org.apache.ftpserver.ftpletcontainer.impl.DefaultFtpletContainer;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DefaultFtpLetContainerTest extends FtpLetContainerTestTemplate {
 

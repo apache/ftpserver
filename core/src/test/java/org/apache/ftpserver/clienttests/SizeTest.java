@@ -26,8 +26,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SizeTest extends ClientTestTemplate {
     protected static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");

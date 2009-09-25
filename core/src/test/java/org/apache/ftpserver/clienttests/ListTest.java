@@ -29,8 +29,7 @@ import org.apache.ftpserver.util.DateUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ListTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
@@ -178,6 +177,34 @@ public class ListTest extends ClientTestTemplate {
     public void testListFileNonExistingFile() throws Exception {
         TEST_DIR1.mkdirs();
         assertEquals(450, client.sendCommand("LIST", TEST_DIR1.getName() + "/nonexisting"));
+    }
+
+    public void testListNames() throws Exception {
+        TEST_FILE1.createNewFile();
+        TEST_FILE2.createNewFile();
+        TEST_DIR1.mkdirs();
+        TEST_DIR2.mkdirs();
+
+        String[] files = client.listNames();
+
+        assertEquals(4, files.length);
+
+        TestUtil.assertInArrays(TEST_FILE1.getName(), files);
+        TestUtil.assertInArrays(TEST_FILE2.getName(), files);
+        TestUtil.assertInArrays(TEST_DIR1.getName(), files);
+        TestUtil.assertInArrays(TEST_DIR2.getName(), files);
+    }
+
+    public void testListName() throws Exception {
+        TEST_FILE1.createNewFile();
+        TEST_FILE2.createNewFile();
+        TEST_DIR1.mkdirs();
+
+        String[] files = client.listNames(TEST_FILE2.getName());
+
+        assertEquals(1, files.length);
+
+        TestUtil.assertInArrays(TEST_FILE2.getName(), files);
     }
 
     public void testMLST() throws Exception {

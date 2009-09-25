@@ -30,8 +30,7 @@ import org.apache.mina.filter.firewall.Subnet;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SubnetBlacklistTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {

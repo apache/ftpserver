@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * 
  * EPRT<space><d><net-prt><d><net-addr><d><tcp-port><d>
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class EPRT extends AbstractCommand {
 

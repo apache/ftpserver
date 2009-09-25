@@ -33,8 +33,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class BasePropertiesTest extends TestCase {
 
@@ -448,7 +447,7 @@ public class BasePropertiesTest extends TestCase {
         BaseProperties props = new BaseProperties();
         props.setProperty("a1", "1.2.3.4");
         props.setProperty("a2", "localhost");
-        props.setProperty("a4", "1.2.3.4.5.6.7.8.9");
+        props.setProperty("a4", "1.2.3.4.5");
 
         assertEquals(a1, props.getInetAddress("a1"));
         assertEquals(a2, props.getInetAddress("a2"));

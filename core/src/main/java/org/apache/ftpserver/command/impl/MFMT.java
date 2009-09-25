@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * Specified in the following document:
  * http://www.omz13.com/downloads/draft-somers-ftp-mfxx-00.html#anchor8
  * </p>
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class MFMT extends AbstractCommand {
 

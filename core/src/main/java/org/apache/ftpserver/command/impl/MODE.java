@@ -36,7 +36,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * The argument is a single Telnet character code specifying the data transfer
  * modes described in the Section on Transmission Modes.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class MODE extends AbstractCommand {
 
