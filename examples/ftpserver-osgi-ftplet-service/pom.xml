@@ -19,7 +19,7 @@
 	<parent>
 		<artifactId>ftpserver-parent</artifactId>
 		<groupId>org.apache.ftpserver</groupId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.3</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -27,7 +27,7 @@
 	<artifactId>ftpserver-osgi-ftplet-service</artifactId>
 	<name>FtpServer OSGi Ftplet service example</name>
 	<packaging>bundle</packaging>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.ftpserver</groupId>
