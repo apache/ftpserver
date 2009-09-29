@@ -20,6 +20,7 @@
 package org.apache.ftpserver.clienttests;
 
 import java.io.File;
+import java.util.Calendar;
 
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
@@ -112,6 +113,14 @@ public class ListTest extends ClientTestTemplate {
         assertEquals("user", file.getUser());
         assertTrue(file.isFile());
         assertFalse(file.isDirectory());
+        
+        Calendar expectedTimestamp = Calendar.getInstance();
+        expectedTimestamp.setTimeInMillis(TEST_FILE1.lastModified());
+        // server does not supply seconds and milliseconds
+        expectedTimestamp.clear(Calendar.SECOND);
+        expectedTimestamp.clear(Calendar.MILLISECOND);
+        
+        assertEquals(expectedTimestamp, file.getTimestamp());
     }
 
     public void testListFileNoArgument() throws Exception {

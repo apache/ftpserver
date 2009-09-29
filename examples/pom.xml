@@ -21,14 +21,14 @@
   <parent>
       <artifactId>ftpserver-parent</artifactId>
       <groupId>org.apache.ftpserver</groupId>
-      <version>1.0.3</version>
+      <version>1.0.4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.ftpserver</groupId>r
   <artifactId>ftpserver-examples</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer Examples</name>
-  <version>1.0.3</version>
+  <version>1.0.4-SNAPSHOT</version>
   <modules>
     <module>ftpserver-example-spring-war</module>
     <module>ftpserver-osgi-ftplet-service</module>

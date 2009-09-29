@@ -66,7 +66,7 @@ public class DateUtils {
         }
 
         StringBuffer sb = new StringBuffer(16);
-        Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
+        Calendar cal = new GregorianCalendar();
         cal.setTimeInMillis(millis);
 
         // month
@@ -114,7 +114,7 @@ public class DateUtils {
      */
     public final static String getISO8601Date(long millis) {
         StringBuffer sb = new StringBuffer(19);
-        Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
+        Calendar cal = new GregorianCalendar();
         cal.setTimeInMillis(millis);
 
         // year
@@ -168,6 +168,8 @@ public class DateUtils {
      */
     public final static String getFtpDate(long millis) {
         StringBuffer sb = new StringBuffer(20);
+        
+        // MLST should use UTC
         Calendar cal = new GregorianCalendar(TIME_ZONE_UTC);
         cal.setTimeInMillis(millis);
         
