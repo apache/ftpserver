@@ -67,6 +67,10 @@ public class DefaultFtpServer implements FtpServer {
      * @throws FtpException 
      */
     public void start() throws FtpException {
+        if (serverContext == null) {
+            // we have already been stopped, can not be restarted
+            throw new IllegalStateException("FtpServer has been stopped. Restart is not supported");
+        }
 
         List<Listener> startedListeners = new ArrayList<Listener>();
         
@@ -99,7 +103,8 @@ public class DefaultFtpServer implements FtpServer {
     }
 
     /**
-     * Stop the server. Stop the listener thread.
+     * Stop the server. Stopping the server will close completely and 
+     * it not supported to restart using {@link #start()}.
      */
     public void stop() {
         if (serverContext == null) {
