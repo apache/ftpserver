@@ -73,7 +73,7 @@ public class EPRT extends AbstractCommand {
                 .getDataConnectionConfiguration();
         if (!dataCfg.isActiveEnabled()) {
             session.write(LocalizedFtpReply.translate(session, request, context,
-                    510, "EPRT.disabled", null));
+            		FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT.disabled", null));
             return;
         }
 
@@ -88,7 +88,7 @@ public class EPRT extends AbstractCommand {
         } catch (Exception ex) {
             LOG.debug("Exception parsing host and port: " + arg, ex);
             session.write(LocalizedFtpReply.translate(session, request, context,
-                    510, "EPRT", null));
+            		FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT", null));
             return;
         }
 
@@ -104,7 +104,7 @@ public class EPRT extends AbstractCommand {
                                     session,
                                     request,
                                     context,
-                                    FtpReply.REPLY_553_REQUESTED_ACTION_NOT_TAKEN_FILE_NAME_NOT_ALLOWED,
+                                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                                     "EPRT.host", null));
             return;
         }
@@ -116,7 +116,7 @@ public class EPRT extends AbstractCommand {
                         .getRemoteAddress()).getAddress();
                 if (!dataAddr.equals(clientAddr)) {
                     session.write(LocalizedFtpReply.translate(session, request,
-                            context, 510, "EPRT.mismatch", null));
+                            context, FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS, "EPRT.mismatch", null));
                     return;
                 }
             }
@@ -134,7 +134,7 @@ public class EPRT extends AbstractCommand {
                                     session,
                                     request,
                                     context,
-                                    FtpReply.REPLY_552_REQUESTED_FILE_ACTION_ABORTED_EXCEEDED_STORAGE,
+                                    FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                                     "EPRT.invalid", null));
             return;
         }
