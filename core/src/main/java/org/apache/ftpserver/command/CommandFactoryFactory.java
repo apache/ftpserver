@@ -61,6 +61,11 @@ import org.apache.ftpserver.command.impl.RMD;
 import org.apache.ftpserver.command.impl.RNFR;
 import org.apache.ftpserver.command.impl.RNTO;
 import org.apache.ftpserver.command.impl.SITE;
+import org.apache.ftpserver.command.impl.SITE_DESCUSER;
+import org.apache.ftpserver.command.impl.SITE_HELP;
+import org.apache.ftpserver.command.impl.SITE_STAT;
+import org.apache.ftpserver.command.impl.SITE_WHO;
+import org.apache.ftpserver.command.impl.SITE_ZONE;
 import org.apache.ftpserver.command.impl.SIZE;
 import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.command.impl.STOR;
@@ -120,6 +125,12 @@ public class CommandFactoryFactory {
         DEFAULT_COMMAND_MAP.put("RNTO", new RNTO());
         DEFAULT_COMMAND_MAP.put("SITE", new SITE());
         DEFAULT_COMMAND_MAP.put("SIZE", new SIZE());
+        DEFAULT_COMMAND_MAP.put("SITE_DESCUSER", new SITE_DESCUSER());
+        DEFAULT_COMMAND_MAP.put("SITE_HELP", new SITE_HELP());
+        DEFAULT_COMMAND_MAP.put("SITE_STAT", new SITE_STAT());
+        DEFAULT_COMMAND_MAP.put("SITE_WHO", new SITE_WHO());
+        DEFAULT_COMMAND_MAP.put("SITE_ZONE", new SITE_ZONE());
+
         DEFAULT_COMMAND_MAP.put("STAT", new STAT());
         DEFAULT_COMMAND_MAP.put("STOR", new STOR());
         DEFAULT_COMMAND_MAP.put("STOU", new STOU());

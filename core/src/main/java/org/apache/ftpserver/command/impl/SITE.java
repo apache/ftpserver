@@ -44,9 +44,6 @@ public class SITE extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(SITE.class);
 
-    private static final HashMap<String, Command> COMMAND_MAP = new HashMap<String, Command>(
-            16);
-
     /**
      * Execute command.
      */
@@ -74,7 +71,7 @@ public class SITE extends AbstractCommand {
 
         // call appropriate command method
         String siteRequest = "SITE_" + argument;
-        Command command = (Command) COMMAND_MAP.get(siteRequest);
+        Command command = context.getCommandFactory().getCommand(siteRequest);
         try {
             if (command != null) {
                 command.execute(session, context, request);
@@ -92,19 +89,5 @@ public class SITE extends AbstractCommand {
                     "SITE", null));
         }
 
-    }
-
-    // initialize all the SITE command handlers
-    static {
-        COMMAND_MAP.put("SITE_DESCUSER",
-                new org.apache.ftpserver.command.impl.SITE_DESCUSER());
-        COMMAND_MAP.put("SITE_HELP",
-                new org.apache.ftpserver.command.impl.SITE_HELP());
-        COMMAND_MAP.put("SITE_STAT",
-                new org.apache.ftpserver.command.impl.SITE_STAT());
-        COMMAND_MAP
-                .put("SITE_WHO", new org.apache.ftpserver.command.impl.SITE_WHO());
-        COMMAND_MAP.put("SITE_ZONE",
-                new org.apache.ftpserver.command.impl.SITE_ZONE());
     }
 }
