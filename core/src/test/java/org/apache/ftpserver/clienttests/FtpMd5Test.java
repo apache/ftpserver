@@ -191,6 +191,9 @@ public class FtpMd5Test extends ClientTestTemplate {
             int hashStart = token.lastIndexOf(' ');
 
             String fileName = token.substring(0, hashStart).trim();
+            if(fileName.startsWith("\"") && fileName.endsWith("\"")) {
+            	fileName = fileName.substring(1, fileName.length() - 1);
+            }
             String hash = token.substring(hashStart).trim();
 
             result.put(fileName, hash);
