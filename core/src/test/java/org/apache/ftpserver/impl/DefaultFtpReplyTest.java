@@ -71,4 +71,11 @@ public class DefaultFtpReplyTest extends TestCase {
 
         assertEquals("123-foo\r\n bar\r\n123 baz\r\n", response.toString());
     }
+
+    public void testMultipleLinesToStringNumberFirst() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\n234bar\nbaz");
+
+        assertEquals("123-foo\r\n  234bar\r\n123 baz\r\n", response.toString());
+    }
+
 }

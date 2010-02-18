@@ -106,6 +106,9 @@ public class DefaultFtpReply implements FtpReply {
                     sb.append(" ");
                 }
 
+                if(line.length() > 0 && Character.isDigit(line.charAt(0))) {
+                	sb.append("  ");
+                }
                 sb.append(line);
                 sb.append(CRLF);
             }
