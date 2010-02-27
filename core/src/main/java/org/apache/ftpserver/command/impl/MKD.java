@@ -61,10 +61,7 @@ public class MKD extends AbstractCommand {
 
         // argument check
         String fileName = request.getArgument();
-        //TODO perhaps we do not need to check if the given argument contains 
-        //path separator. Windows allows to create a dir like "a;b". Why should 
-        //we restrict creation of such a folder?
-        if (fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
+        if (fileName == null) {
             session.write(LocalizedFileActionFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "MKD", null, null));
