@@ -56,10 +56,6 @@ public class DirectoryTest extends ClientTestTemplate {
         assertEquals(501, client.sendCommand("MKD"));
     }
 
-    public void testMkdirInValidDirectoryName() throws Exception {
-        assertEquals(501, client.sendCommand("MKD foo:bar;foo"));
-    }
-
     /**
      * FTPSERVER-233, we should not recursively create directories  
      */

@@ -61,7 +61,7 @@ public class MKD extends AbstractCommand {
 
         // argument check
         String fileName = request.getArgument();
-        if (fileName == null || fileName.indexOf(File.pathSeparatorChar) > -1) {
+        if (fileName == null) {
             session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
                     "MKD", null));
