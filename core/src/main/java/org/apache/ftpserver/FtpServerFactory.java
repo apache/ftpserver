@@ -36,7 +36,7 @@ import org.apache.ftpserver.message.MessageResource;
  * This is the starting point of all the servers. Creates server instances based on 
  * the provided configuration. 
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class FtpServerFactory {
 

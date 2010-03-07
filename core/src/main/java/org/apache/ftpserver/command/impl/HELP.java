@@ -39,7 +39,7 @@ import org.apache.ftpserver.message.MessageResource;
  * may take an argument (e.g., any command name) and return more specific
  * information as a response.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class HELP extends AbstractCommand {
 

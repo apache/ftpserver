@@ -26,9 +26,9 @@ import org.apache.ftpserver.FtpServer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-/*
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- */
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class FtpServerListener implements ServletContextListener {
 
     public static final String FTPSERVER_CONTEXT_NAME = "org.apache.ftpserver";

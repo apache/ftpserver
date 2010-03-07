@@ -26,7 +26,7 @@ import org.apache.ftpserver.ssl.SslConfiguration;
 /**
  * Data connection configuration interface.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public interface DataConnectionConfiguration {
 
@@ -91,18 +91,6 @@ public interface DataConnectionConfiguration {
      * @return The passive ports string
      */
     String getPassivePorts();
-    
-    /**
-	 * Tells whether or not IP address check is performed when accepting a
-	 * passive data connection.
-	 * 
-	 * @return <code>true</code>, if the IP address checking is enabled;
-	 *         <code>false</code>, otherwise. A value of <code>true</code> means
-	 *         that site to site transfers are disabled. In other words, a
-	 *         passive data connection MUST be made from the same IP address
-	 *         that issued the PASV command.
-	 */
-	boolean isPassiveIpCheck();
 
     /**
      * Request a passive port. Will block until a port is available

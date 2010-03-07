@@ -29,8 +29,7 @@ import org.apache.ftpserver.listener.ListenerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class InetAddressBlacklistTest extends ClientTestTemplate {
     protected FtpServerFactory createServer() throws Exception {

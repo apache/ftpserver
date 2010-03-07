@@ -29,8 +29,7 @@ import org.apache.ftpserver.usermanager.impl.PropertiesUserManager;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FileUserManagerConfigTest extends SpringConfigTestTemplate {
 

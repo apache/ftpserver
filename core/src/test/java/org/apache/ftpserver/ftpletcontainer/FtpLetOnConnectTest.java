@@ -35,8 +35,7 @@ import org.apache.ftpserver.ftplet.FtpletResult;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FtpLetOnConnectTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();

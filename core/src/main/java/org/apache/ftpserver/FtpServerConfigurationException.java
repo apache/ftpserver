@@ -23,7 +23,7 @@ package org.apache.ftpserver;
  * Exception used during startup to indicate that the configuration is not
  * correct.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class FtpServerConfigurationException extends RuntimeException {
 

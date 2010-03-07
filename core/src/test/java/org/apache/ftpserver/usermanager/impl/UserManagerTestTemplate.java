@@ -34,8 +34,7 @@ import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class UserManagerTestTemplate extends TestCase {
 

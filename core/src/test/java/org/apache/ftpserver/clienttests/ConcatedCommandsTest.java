@@ -24,8 +24,7 @@ import org.apache.commons.net.ftp.FTPReply;
 /**
  * Tests that commands sent simultaniously are handled correctly.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class ConcatedCommandsTest extends ClientTestTemplate {
 

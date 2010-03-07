@@ -26,8 +26,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class RetrieveTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";

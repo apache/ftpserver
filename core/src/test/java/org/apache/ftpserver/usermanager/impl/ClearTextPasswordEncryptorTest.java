@@ -26,8 +26,7 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ClearTextPasswordEncryptorTest extends TestCase {
 

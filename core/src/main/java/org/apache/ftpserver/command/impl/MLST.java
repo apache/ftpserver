@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Returns info on the file over the control connection.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class MLST extends AbstractCommand {
 

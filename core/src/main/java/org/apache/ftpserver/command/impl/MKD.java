@@ -29,7 +29,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * a directory (if the pathname is absolute) or as a subdirectory of the current
  * working directory (if the pathname is relative).
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class MKD extends AbstractCommand {
 
@@ -62,9 +62,9 @@ public class MKD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if (fileName == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                    "MKD", null, null));
+                    "MKD", null));
             return;
         }
 
@@ -76,33 +76,33 @@ public class MKD extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if (file == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.invalid", fileName, file));
+                    "MKD.invalid", fileName));
             return;
         }
 
         // check permission
         fileName = file.getAbsolutePath();
         if (!file.isWritable()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.permission", fileName, file));
+                    "MKD.permission", fileName));
             return;
         }
 
         // check file existance
         if (file.doesExist()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "MKD.exists", fileName, file));
+                    "MKD.exists", fileName));
             return;
         }
 
         // now create directory
         if (file.mkdir()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
-                    FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName, file));
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                    FtpReply.REPLY_257_PATHNAME_CREATED, "MKD", fileName));
 
             // write log message
             String userName = session.getUser().getName();
@@ -114,9 +114,9 @@ public class MKD extends AbstractCommand {
             ftpStat.setMkdir(session, file);
 
         } else {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN, "MKD",
-                    fileName, file));
+                    fileName));
         }
     }
 }

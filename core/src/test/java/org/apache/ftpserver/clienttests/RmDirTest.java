@@ -22,8 +22,7 @@ import java.io.File;
 
 /**
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class RmDirTest extends ClientTestTemplate {
 

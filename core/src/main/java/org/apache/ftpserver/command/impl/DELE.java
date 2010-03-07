@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * This command causes the file specified in the pathname to be deleted at the
  * server site.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class DELE extends AbstractCommand {
 
@@ -60,9 +60,9 @@ public class DELE extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if (fileName == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                    "DELE", null, null));
+                    "DELE", null));
             return;
         }
 
@@ -75,9 +75,9 @@ public class DELE extends AbstractCommand {
             LOG.debug("Could not get file " + fileName, ex);
         }
         if (file == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "DELE.invalid", fileName, null));
+                    "DELE.invalid", fileName));
             return;
         }
         
@@ -85,24 +85,24 @@ public class DELE extends AbstractCommand {
         fileName = file.getAbsolutePath();
 
         if (file.isDirectory()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "DELE.invalid", fileName, file));
+                    "DELE.invalid", fileName));
             return;
         }
         
         if (!file.isRemovable()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
-                    "DELE.permission", fileName, file));
+                    "DELE.permission", fileName));
             return;
         }
 
         // now delete
         if (file.delete()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "DELE",
-                    fileName, file));
+                    fileName));
 
             // log message
             String userName = session.getUser().getName();
@@ -114,9 +114,9 @@ public class DELE extends AbstractCommand {
                     .getFtpStatistics();
             ftpStat.setDelete(session, file);
         } else {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "DELE",
-                    fileName, file));
+                    fileName));
         }
     }
 

@@ -242,7 +242,9 @@ public class IoUtils {
     }
 
     public final static void delete(File file) throws IOException {
-        if (file.isDirectory()) {
+        if (!file.exists()) {
+            return;
+        } else if (file.isDirectory()) {
             deleteDir(file);
         } else {
             deleteFile(file);

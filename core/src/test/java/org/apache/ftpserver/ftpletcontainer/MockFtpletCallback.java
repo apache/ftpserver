@@ -30,8 +30,7 @@ import org.apache.ftpserver.ftplet.FtpletResult;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class MockFtpletCallback extends DefaultFtplet {
 

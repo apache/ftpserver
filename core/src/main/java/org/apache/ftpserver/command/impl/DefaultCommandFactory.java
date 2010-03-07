@@ -34,7 +34,7 @@ import org.apache.ftpserver.command.CommandFactoryFactory;
  *
  * <strong><strong>Internal class, do not use directly.</strong></strong>
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class DefaultCommandFactory implements CommandFactory {
 

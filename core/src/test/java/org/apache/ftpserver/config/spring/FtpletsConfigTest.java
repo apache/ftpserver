@@ -26,8 +26,7 @@ import org.apache.ftpserver.impl.DefaultFtpServer;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FtpletsConfigTest extends SpringConfigTestTemplate {
 

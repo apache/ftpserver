@@ -33,8 +33,7 @@ import org.apache.mina.filter.firewall.Subnet;
 /**
  * Used for testing creation of custom listeners from Spring config
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class MyCustomListener implements Listener {
 

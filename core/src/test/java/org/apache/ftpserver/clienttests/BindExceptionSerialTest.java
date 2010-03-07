@@ -29,8 +29,7 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 *
 * From FTPSERVER-250
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class BindExceptionSerialTest extends ClientTestTemplate {
     @Override

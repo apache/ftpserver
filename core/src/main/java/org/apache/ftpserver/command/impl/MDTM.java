@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Returns the date and time of when a file was modified.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class MDTM extends AbstractCommand {
 

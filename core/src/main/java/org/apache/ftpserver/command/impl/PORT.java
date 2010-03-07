@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  * 
  * where h1 is the high order 8 bits of the internet host address.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class PORT extends AbstractCommand {
 

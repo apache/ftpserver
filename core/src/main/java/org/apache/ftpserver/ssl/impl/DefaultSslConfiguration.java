@@ -24,7 +24,6 @@ import java.security.GeneralSecurityException;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 
@@ -56,19 +55,13 @@ public class DefaultSslConfiguration implements SslConfiguration {
     private String keyAlias;
 
     private String[] enabledCipherSuites;
-    
-    private SSLContext sslContext = null;
-    
-    private SSLSocketFactory socketFactory = null;
-    
+
     /**
      * Internal constructor, do not use directly. Instead, use {@link SslConfigurationFactory}
-     * @throws GeneralSecurityException 
      */
     public DefaultSslConfiguration(KeyManagerFactory keyManagerFactory,
             TrustManagerFactory trustManagerFactory, ClientAuth clientAuthReqd,
-            String sslProtocol, String[] enabledCipherSuites, String keyAlias) 
-    		throws GeneralSecurityException {
+            String sslProtocol, String[] enabledCipherSuites, String keyAlias) {
         super();
         this.clientAuth = clientAuthReqd;
         this.enabledCipherSuites = enabledCipherSuites;
@@ -76,11 +69,6 @@ public class DefaultSslConfiguration implements SslConfiguration {
         this.keyManagerFactory = keyManagerFactory;
         this.sslProtocol = sslProtocol;
         this.trustManagerFactory = trustManagerFactory;
-        initialize();
-    }
-    
-    public SSLSocketFactory getSocketFactory() throws GeneralSecurityException {
-    	return socketFactory;
     }
 
     /**
@@ -88,9 +76,35 @@ public class DefaultSslConfiguration implements SslConfiguration {
      */
     public SSLContext getSSLContext(String protocol)
             throws GeneralSecurityException {
-		return sslContext;
+
+        // null value check
+        if (protocol == null) {
+            protocol = sslProtocol;
+        }
+
+        KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+
+        // wrap key managers to allow us to control their behavior
+        // (FTPSERVER-93)
+        for (int i = 0; i < keyManagers.length; i++) {
+            if (ClassUtils.extendsClass(keyManagers[i].getClass(),
+                    "javax.net.ssl.X509ExtendedKeyManager")) {
+                keyManagers[i] = new ExtendedAliasKeyManager(keyManagers[i],
+                        keyAlias);
+            } else if (keyManagers[i] instanceof X509KeyManager) {
+                keyManagers[i] = new AliasKeyManager(keyManagers[i], keyAlias);
+            }
+        }
+
+        // create SSLContext
+        // TODO revisit if we need caching of contexts.
+        SSLContext ctx = SSLContext.getInstance(protocol);
+
+        ctx.init(keyManagers, trustManagerFactory.getTrustManagers(), null);
+
+        return ctx;
     }
-    
+
     /**
      * @see SslConfiguration#getClientAuth()
      */
@@ -114,27 +128,5 @@ public class DefaultSslConfiguration implements SslConfiguration {
         } else {
             return null;
         }
-    }
-    
-    private void initialize() throws GeneralSecurityException {
-        KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
-
-        // wrap key managers to allow us to control their behavior
-        // (FTPSERVER-93)
-        for (int i = 0; i < keyManagers.length; i++) {
-            if (ClassUtils.extendsClass(keyManagers[i].getClass(),
-                    "javax.net.ssl.X509ExtendedKeyManager")) {
-                keyManagers[i] = new ExtendedAliasKeyManager(keyManagers[i],
-                        keyAlias);
-            } else if (keyManagers[i] instanceof X509KeyManager) {
-                keyManagers[i] = new AliasKeyManager(keyManagers[i], keyAlias);
-            }
-        }
-
-        // create and initialize the SSLContext
-        sslContext = SSLContext.getInstance(sslProtocol);
-        sslContext.init(keyManagers, trustManagerFactory.getTrustManagers(), null);
-        //Create the socket factory
-        socketFactory = sslContext.getSocketFactory();
     }
 }
