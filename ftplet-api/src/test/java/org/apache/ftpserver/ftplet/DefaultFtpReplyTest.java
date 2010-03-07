@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.ftpserver.impl;
+package org.apache.ftpserver.ftplet;
 
 import junit.framework.TestCase;
 
@@ -25,7 +25,8 @@ import org.apache.ftpserver.ftplet.DefaultFtpReply;
 
 /**
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ *
  */
 public class DefaultFtpReplyTest extends TestCase {
 
@@ -72,10 +73,28 @@ public class DefaultFtpReplyTest extends TestCase {
         assertEquals("123-foo\r\n bar\r\n123 baz\r\n", response.toString());
     }
 
-    public void testMultipleLinesToStringNumberFirst() {
+    public void testMultipleLinesToStringThreeNumbers() {
         DefaultFtpReply response = new DefaultFtpReply(123, "foo\n234bar\nbaz");
 
         assertEquals("123-foo\r\n  234bar\r\n123 baz\r\n", response.toString());
+    }
+
+    public void testMultipleLinesToStringThreeNumbersOnFirstLine() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "234foo\nbar\nbaz");
+
+        assertEquals("123-234foo\r\nbar\r\n123 baz\r\n", response.toString());
+    }
+
+    public void testMultipleLinesToStringThreeNumbersOnLastLine() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\nbar\n234baz");
+
+        assertEquals("123-foo\r\nbar\r\n123 234baz\r\n", response.toString());
+    }
+
+    public void testMultipleLinesToStringSingleNumberOnLine() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo\n2bar\nbaz");
+
+        assertEquals("123-foo\r\n2bar\r\n123 baz\r\n", response.toString());
     }
 
 }
