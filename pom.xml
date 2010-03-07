@@ -150,17 +150,7 @@
       <dependency>
         <groupId>org.apache.mina</groupId>
         <artifactId>mina-core</artifactId>
-        <version>2.0.0-M6</version>
-        <exclusions>
-            <exclusion>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymockclassextension</artifactId>
-            </exclusion>
-	</exclusions>
+        <version>2.0.0-RC1</version>
       </dependency>
 
     <dependency>
