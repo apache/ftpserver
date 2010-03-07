@@ -19,6 +19,7 @@
 
 package org.apache.ftpserver.ftplet;
 
+
 /**
  * FTP reply object.
  *
@@ -87,6 +88,10 @@ public class DefaultFtpReply implements FtpReply {
     	return code < 400;
     }
     
+    private boolean isDigit(char c) {
+    	return c >= 48 && c <= 57;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -121,7 +126,15 @@ public class DefaultFtpReply implements FtpReply {
                     sb.append(" ");
                 }
 
-                if(line.length() > 0 && Character.isDigit(line.charAt(0))) {
+                // "If an intermediary line begins with a 3-digit number, the Server
+                // must pad the front  to avoid confusion.
+                if(i > 0 
+                		&& i + 1 < lines.length 
+                		&& line.length() > 2 
+                		&& isDigit(line.charAt(0))
+                		&& isDigit(line.charAt(1))
+                		&& isDigit(line.charAt(2))
+                	) {
                 	sb.append("  ");
                 }
                 sb.append(line);
