@@ -24,7 +24,7 @@
     <version>4</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.ftpserver</groupId>r
+  <groupId>org.apache.ftpserver</groupId>
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer Parent</name>
