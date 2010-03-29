@@ -129,25 +129,7 @@ public class DefaultDataConnectionConfiguration implements
      * port will be used.
      */
     public synchronized int requestPassivePort() {
-        int dataPort = -1;
-        int loopTimes = 2;
-        Thread currThread = Thread.currentThread();
-
-        while ((dataPort == -1) && (--loopTimes >= 0)
-                && (!currThread.isInterrupted())) {
-
-            // search for a free port
-            dataPort = passivePorts.reserveNextPort();
-
-            // no available free port - wait for the release notification
-            if (dataPort == -1) {
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                }
-            }
-        }
-        return dataPort;
+    	return passivePorts.reserveNextPort();
     }
 
     /**
@@ -164,8 +146,6 @@ public class DefaultDataConnectionConfiguration implements
      */
     public synchronized void releasePassivePort(final int port) {
         passivePorts.releasePort(port);
-
-        notify();
     }
 
     /**
