@@ -99,6 +99,24 @@
 		</xs:complexType>
 	</xs:element>
 
+	<!-- Element used to configure the IP Filtering -->
+	<xs:element name="ip-filter">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="allow" />
+								<xs:enumeration value="deny" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
 	<!-- Element used to define the default, NIO based listener -->
 	<xs:element name="nio-listener">
 		<xs:complexType>
@@ -130,6 +148,7 @@
 					</xs:complexType>
 				</xs:element>
 				<xs:element minOccurs="0" name="blacklist" type="xs:string" />
+				<xs:element ref="ip-filter" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 			<xs:attribute name="name" use="required" type="xs:string" />
 			<xs:attribute name="local-address" />
