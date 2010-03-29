@@ -30,6 +30,7 @@ import org.apache.ftpserver.command.impl.HELP;
 import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 import org.apache.ftpserver.impl.DefaultFtpServer;
+import org.apache.ftpserver.ipfilter.DefaultIpFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
@@ -38,7 +39,7 @@ import org.springframework.core.io.FileSystemResource;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
 */
 public class SpringConfigTest extends TestCase {
 
@@ -77,15 +78,11 @@ public class SpringConfigTest extends TestCase {
         assertEquals("123-125", ((NioListener) listener)
                 .getDataConnectionConfiguration().getPassivePorts());
 
-        List<Subnet> subnets = ((NioListener) listener).getBlockedSubnets();
-        assertEquals(3, subnets.size());
-        assertEquals(new Subnet(InetAddress.getByName("1.2.3.0"), 16), subnets
-                .get(0));
-        assertEquals(new Subnet(InetAddress.getByName("1.2.4.0"), 16), subnets
-                .get(1));
-        assertEquals(new Subnet(InetAddress.getByName("1.2.3.4"), 32), subnets
-                .get(2));
-
+        DefaultIpFilter filter = (DefaultIpFilter) listener.getIpFilter();
+        assertEquals(3, filter.size());
+        assertTrue(filter.contains(new Subnet(InetAddress.getByName("1.2.3.0"), 16)));
+        assertTrue(filter.contains(new Subnet(InetAddress.getByName("1.2.4.0"), 16)));
+        assertTrue(filter.contains(new Subnet(InetAddress.getByName("1.2.3.4"), 32)));
         listener = listeners.get("listener1");
         assertNotNull(listener);
         assertTrue(listener instanceof MyCustomListener);

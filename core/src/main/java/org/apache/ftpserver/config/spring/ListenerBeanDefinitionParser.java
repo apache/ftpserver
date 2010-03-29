@@ -21,11 +21,12 @@ package org.apache.ftpserver.config.spring;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.ipfilter.DefaultIpFilter;
+import org.apache.ftpserver.ipfilter.IpFilterType;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
@@ -57,45 +58,6 @@ public class ListenerBeanDefinitionParser extends
     @Override
     protected Class<?> getBeanClass(final Element element) {
         return null;
-    }
-
-    /**
-     * Parse CIDR notations into MINA {@link Subnet}s. TODO: move to Mina
-     */
-    private Subnet parseSubnet(final String subnet) {
-        if (subnet == null) {
-            throw new NullPointerException("subnet can not be null");
-        }
-
-        String[] tokens = subnet.split("/");
-
-        String ipString;
-        String maskString;
-        if (tokens.length == 2) {
-            ipString = tokens[0];
-            maskString = tokens[1];
-        } else if (tokens.length == 1) {
-            ipString = tokens[0];
-            maskString = "32";
-        } else {
-            throw new IllegalArgumentException("Illegal subnet format: "
-                    + subnet);
-        }
-
-        InetAddress address;
-        try {
-            address = InetAddress.getByName(ipString);
-        } catch (UnknownHostException e) {
-            throw new IllegalArgumentException("Illegal IP address in subnet: "
-                    + subnet);
-        }
-
-        int mask = Integer.parseInt(maskString);
-        if (mask < 0 || mask > 32) {
-            throw new IllegalArgumentException("Mask must be in the range 0-32");
-        }
-
-        return new Subnet(address, mask);
     }
 
     /**
@@ -138,16 +100,30 @@ public class ListenerBeanDefinitionParser extends
 
         Element blacklistElm = SpringUtil.getChildElement(element,
                 FtpServerNamespaceHandler.FTPSERVER_NS, "blacklist");
-        if (blacklistElm != null
-                && StringUtils.hasText(blacklistElm.getTextContent())) {
-            String[] blocks = blacklistElm.getTextContent().split("[\\s,]+");
-            List<Subnet> subnets = new ArrayList<Subnet>();
-
-            for (String block : blocks) {
-                subnets.add(parseSubnet(block));
-            }
-
-            factoryBuilder.addPropertyValue("blockedSubnets", subnets);
+        if (blacklistElm != null) {
+        	LOG.warn("Element 'blacklist' is deprecated, and may be removed in a future release. Please use 'ip-filter' instead. ");
+        	try {
+				DefaultIpFilter ipFilter = new DefaultIpFilter(IpFilterType.DENY, blacklistElm.getTextContent());
+	            factoryBuilder.addPropertyValue("ipFilter", ipFilter);
+			}
+			catch (UnknownHostException e) {
+				throw new IllegalArgumentException("Invalid IP address or subnet in the 'blacklist' element", e);
+			}
+        }
+        
+        Element ipFilterElement = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "ip-filter");
+        if(ipFilterElement != null) {
+        	if(blacklistElm != null) {
+        		throw new FtpServerConfigurationException("Element 'ipFilter' may not be used when 'blacklist' element is specified. ");
+        	}
+        	String filterType = ipFilterElement.getAttribute("type");
+        	try {
+				DefaultIpFilter ipFilter = new DefaultIpFilter(IpFilterType.parse(filterType), ipFilterElement.getTextContent());
+	            factoryBuilder.addPropertyValue("ipFilter", ipFilter);
+			}
+			catch (UnknownHostException e) {
+				throw new IllegalArgumentException("Invalid IP address or subnet in the 'ip-filter' element");
+			}
         }
         
         BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();

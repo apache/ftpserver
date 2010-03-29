@@ -37,6 +37,8 @@ import org.apache.ftpserver.impl.DefaultFtpHandler;
 import org.apache.ftpserver.impl.FtpHandler;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
+import org.apache.ftpserver.ipfilter.IpFilter;
+import org.apache.ftpserver.ipfilter.MinaIpFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.ClientAuth;
@@ -80,8 +82,10 @@ public class NioListener extends AbstractListener {
     private FtpServerContext context;
 
     /**
+     * @deprecated Use the constructor with IpFilter instead. 
      * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
      */
+    @Deprecated
     public NioListener(String serverAddress, int port,
             boolean implicitSsl,
             SslConfiguration sslConfiguration,
@@ -89,27 +93,18 @@ public class NioListener extends AbstractListener {
             int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
         super(serverAddress, port, implicitSsl, sslConfiguration, dataConnectionConfig, 
                 idleTimeout, blockedAddresses, blockedSubnets);   
-        
-        updateBlacklistFilter();
     }
 
-    private void updateBlacklistFilter() {
-        if (acceptor != null) {
-            BlacklistFilter filter = (BlacklistFilter) acceptor
-                    .getFilterChain().get("ipFilter");
-
-            if (filter != null) {
-                if (getBlockedAddresses() != null) {
-                    filter.setBlacklist(getBlockedAddresses());
-                } else if (getBlockedSubnets() != null) {
-                    filter.setSubnetBlacklist(getBlockedSubnets());
-                } else {
-                    // an empty list clears the blocked addresses
-                    filter.setSubnetBlacklist(new ArrayList<Subnet>());
-                }
-
-            }
-        }
+    /**
+     * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
+     */
+    public NioListener(String serverAddress, int port,
+            boolean implicitSsl,
+            SslConfiguration sslConfiguration,
+            DataConnectionConfiguration dataConnectionConfig, 
+            int idleTimeout, IpFilter ipFilter) {
+        super(serverAddress, port, implicitSsl, sslConfiguration, dataConnectionConfig, 
+                idleTimeout, ipFilter);   
     }
 
     /**
@@ -141,9 +136,11 @@ public class NioListener extends AbstractListener {
     
             acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
     
-            // add and update the blacklist filter
-            acceptor.getFilterChain().addLast("ipFilter", new BlacklistFilter());
-            updateBlacklistFilter();
+            IpFilter ipFilter = getIpFilter();
+            if(ipFilter != null) {
+            // 	add and IP filter to the filter chain. 
+            	acceptor.getFilterChain().addLast("ipFilter", new MinaIpFilter(ipFilter));
+            }
     
             acceptor.getFilterChain().addLast("threadPool",
                     new ExecutorFilter(filterExecutor));
