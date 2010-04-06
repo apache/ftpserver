@@ -59,4 +59,13 @@ public interface ConnectionConfig {
      * @return true if anonymous logins are enabled
      */
     boolean isAnonymousLoginEnabled();
+    
+    /**
+     * Returns the maximum number of threads the server is allowed to create for
+     * processing client requests.
+     * 
+     * @return the maximum number of threads the server is allowed to create for
+     *         processing client requests.
+     */
+    int getMaxThreads();
 }

@@ -20,6 +20,7 @@
 package org.apache.ftpserver.impl;
 
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.command.CommandFactory;
@@ -63,4 +64,10 @@ public interface FtpServerContext extends FtpletContext {
      * Release all components.
      */
     void dispose();
+    
+    /**
+     * Returns the thread pool executor for this context.  
+     * @return the thread pool executor for this context.
+     */
+    ThreadPoolExecutor getThreadPoolExecutor();
 }

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
-import org.apache.mina.filter.firewall.BlacklistFilter;
 import org.apache.mina.filter.firewall.Subnet;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
@@ -74,8 +72,6 @@ public class NioListener extends AbstractListener {
     private InetSocketAddress address;
 
     boolean suspended = false;
-
-    private ExecutorService filterExecutor = new OrderedThreadPoolExecutor();
 
     private FtpHandler handler = new DefaultFtpHandler();
 
@@ -143,7 +139,7 @@ public class NioListener extends AbstractListener {
             }
     
             acceptor.getFilterChain().addLast("threadPool",
-                    new ExecutorFilter(filterExecutor));
+                    new ExecutorFilter(context.getThreadPoolExecutor()));
             acceptor.getFilterChain().addLast("codec",
                     new ProtocolCodecFilter(new FtpServerProtocolCodecFactory()));
             acceptor.getFilterChain().addLast("mdcFilter2", mdcFilter);
@@ -205,17 +201,6 @@ public class NioListener extends AbstractListener {
             acceptor.dispose();
             acceptor = null;
         }
-
-        if (filterExecutor != null) {
-            filterExecutor.shutdown();
-            try {
-                filterExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-            } finally {
-                // TODO: how to handle?
-            }
-        }
-        
         context = null;
     }
 
