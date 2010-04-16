@@ -19,18 +19,16 @@
 
 package org.apache.ftpserver.config.spring;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.ipfilter.DefaultIpFilter;
 import org.apache.ftpserver.ipfilter.IpFilterType;
+import org.apache.ftpserver.ipfilter.RemoteIpFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.ssl.SslConfigurationFactory;
-import org.apache.mina.filter.firewall.Subnet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -101,29 +99,37 @@ public class ListenerBeanDefinitionParser extends
         Element blacklistElm = SpringUtil.getChildElement(element,
                 FtpServerNamespaceHandler.FTPSERVER_NS, "blacklist");
         if (blacklistElm != null) {
-        	LOG.warn("Element 'blacklist' is deprecated, and may be removed in a future release. Please use 'ip-filter' instead. ");
-        	try {
-				DefaultIpFilter ipFilter = new DefaultIpFilter(IpFilterType.DENY, blacklistElm.getTextContent());
-	            factoryBuilder.addPropertyValue("ipFilter", ipFilter);
-			}
-			catch (UnknownHostException e) {
-				throw new IllegalArgumentException("Invalid IP address or subnet in the 'blacklist' element", e);
-			}
+            LOG
+                    .warn("Element 'blacklist' is deprecated, and may be removed in a future release. Please use 'remote-ip-filter' instead. ");
+            try {
+                RemoteIpFilter remoteIpFilter = new RemoteIpFilter(IpFilterType.DENY,
+                        blacklistElm.getTextContent());
+                factoryBuilder.addPropertyValue("sessionFilter", remoteIpFilter);
+            } catch (UnknownHostException e) {
+                throw new IllegalArgumentException(
+                        "Invalid IP address or subnet in the 'blacklist' element",
+                        e);
+            }
         }
-        
-        Element ipFilterElement = SpringUtil.getChildElement(element, FtpServerNamespaceHandler.FTPSERVER_NS, "ip-filter");
-        if(ipFilterElement != null) {
-        	if(blacklistElm != null) {
-        		throw new FtpServerConfigurationException("Element 'ipFilter' may not be used when 'blacklist' element is specified. ");
-        	}
-        	String filterType = ipFilterElement.getAttribute("type");
-        	try {
-				DefaultIpFilter ipFilter = new DefaultIpFilter(IpFilterType.parse(filterType), ipFilterElement.getTextContent());
-	            factoryBuilder.addPropertyValue("ipFilter", ipFilter);
-			}
-			catch (UnknownHostException e) {
-				throw new IllegalArgumentException("Invalid IP address or subnet in the 'ip-filter' element");
-			}
+
+        Element remoteIpFilterElement = SpringUtil.getChildElement(element,
+                FtpServerNamespaceHandler.FTPSERVER_NS, "remote-ip-filter");
+        if (remoteIpFilterElement != null) {
+            if (blacklistElm != null) {
+                throw new FtpServerConfigurationException(
+                        "Element 'remote-ip-filter' may not be used when 'blacklist' element is specified. ");
+            }
+            String filterType = remoteIpFilterElement.getAttribute("type");
+            try {
+                RemoteIpFilter remoteIpFilter = new RemoteIpFilter(IpFilterType
+                        .parse(filterType), remoteIpFilterElement
+                        .getTextContent());
+                factoryBuilder
+                        .addPropertyValue("sessionFilter", remoteIpFilter);
+            } catch (UnknownHostException e) {
+                throw new IllegalArgumentException(
+                        "Invalid IP address or subnet in the 'remote-ip-filter' element");
+            }
         }
         
         BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();

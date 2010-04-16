@@ -26,7 +26,7 @@ import java.util.Set;
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.ipfilter.IpFilter;
+import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
 
@@ -139,36 +139,36 @@ public interface Listener {
     int getIdleTimeout();
 
     /**
-	 * @deprecated Replaced by IpFilter. Retrieves the {@link InetAddress} for
-	 *             which this listener blocks connections.
-	 * 
-	 * @return The list of {@link InetAddress}es. This method returns a valid
-	 *         list if and only if there is an <code>IpFilter</code> set, and,
-	 *         if it is an instance of <code>DefaultIpFilter</code> and it is of
-	 *         type <code>IpFilterType.DENY</code>. This functionality is
-	 *         provided for backward compatibility purpose only.
-	 */
-	@Deprecated
-	List<InetAddress> getBlockedAddresses();
+     * @deprecated Replaced by IpFilter. Retrieves the {@link InetAddress} for
+     *             which this listener blocks connections.
+     * 
+     * @return The list of {@link InetAddress}es. This method returns a valid
+     *         list if and only if there is an <code>IpFilter</code> set, and,
+     *         if it is an instance of <code>DefaultIpFilter</code> and it is of
+     *         type <code>IpFilterType.DENY</code>. This functionality is
+     *         provided for backward compatibility purpose only.
+     */
+    @Deprecated
+    List<InetAddress> getBlockedAddresses();
 
     /**
-     * @deprecated Replaced by IpFilter. 
-     * Retrieves the {@link Subnet}s for this listener blocks connections. 
+     * @deprecated Replaced by IpFilter. Retrieves the {@link Subnet}s for this
+     *             listener blocks connections.
      * 
-     * @return The list of {@link Subnet}s. This method returns a valid
-	 *         list if and only if there is an <code>IpFilter</code> set, and,
-	 *         if it is an instance of <code>DefaultIpFilter</code> and it is of
-	 *         type <code>IpFilterType.DENY</code>. This functionality is
-	 *         provided for backward compatibility purpose only.
+     * @return The list of {@link Subnet}s. This method returns a valid list if
+     *         and only if there is an <code>IpFilter</code> set, and, if it is
+     *         an instance of <code>DefaultIpFilter</code> and it is of type
+     *         <code>IpFilterType.DENY</code>. This functionality is provided
+     *         for backward compatibility purpose only.
      */
     List<Subnet> getBlockedSubnets();
-    
+
     /**
-	 * Returns the IP filter associated with this listener. May return
-	 * <code>null</code>.
-	 * 
-	 * @return the IP filter associated with this listener. May return
-	 *         <code>null</code>.
-	 */
-	IpFilter getIpFilter();
+     * Returns the <code>SessionFilter</code> associated with this listener. May
+     * return <code>null</code>.
+     * 
+     * @return the <code>SessionFilter</code> associated with this listener. May
+     *         return <code>null</code>.
+     */
+    SessionFilter getSessionFilter();
 }

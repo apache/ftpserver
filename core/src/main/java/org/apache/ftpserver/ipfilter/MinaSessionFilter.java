@@ -19,25 +19,40 @@
 
 package org.apache.ftpserver.ipfilter;
 
-import java.net.InetAddress;
+import org.apache.mina.core.filterchain.IoFilterAdapter;
+import org.apache.mina.core.session.IoSession;
 
 /**
- * The interface for filtering connections based on the client's IP address.
+ * A wrapper for <code>SessionFilter</code> so it can be added to the MINA
+ * filter chain.
  * 
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * 
  */
 
-public interface IpFilter {
+public class MinaSessionFilter extends IoFilterAdapter {
 
-	/**
-	 * Tells whether or not the given IP address is accepted by this filter.
-	 * 
-	 * @param address
-	 *            the IP address to check
-	 * @return <code>true</code>, if the given IP address is accepted by this
-	 *         filter; <code>false</code>, otherwise.
-	 */
-	public boolean accept(InetAddress address);
+    /**
+     * The actual (or wrapped) <code>SessionFilter</code> used by this filter.
+     */
+    private SessionFilter filter = null;
 
+    /**
+     * Creates a new instance of <code>MinaSessionFilter</code>.
+     * 
+     * @param filter
+     *            the filter
+     */
+    public MinaSessionFilter(SessionFilter filter) {
+        this.filter = filter;
+    }
+
+    @Override
+    public void sessionCreated(NextFilter nextFilter, IoSession session) {
+        if (!filter.accept(session)) {
+            session.close(true);
+        } else {
+            nextFilter.sessionCreated(session);
+        }
+    }
 }
