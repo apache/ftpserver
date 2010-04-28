@@ -69,6 +69,7 @@
 							org.apache.ftpserver.config.spring;version=${pom.version},
 							org.apache.ftpserver.filesystem.nativefs;version=${pom.version},
 							org.apache.ftpserver.ftpletcontainer;version=${pom.version},
+							org.apache.ftpserver.ipfilter;version=${pom.version},
 							org.apache.ftpserver.listener;version=${pom.version},
 							org.apache.ftpserver.main;version=${pom.version},
 							org.apache.ftpserver.message;version=${pom.version},
