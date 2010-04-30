@@ -64,16 +64,16 @@
 					<instructions>
 						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
-						<Export-Package> org.apache.ftpserver;version=${pom.version},
-							org.apache.ftpserver.command;version=${pom.version},
-							org.apache.ftpserver.config.spring;version=${pom.version},
-							org.apache.ftpserver.filesystem.nativefs;version=${pom.version},
-							org.apache.ftpserver.ftpletcontainer;version=${pom.version},
-							org.apache.ftpserver.listener;version=${pom.version}, 
-							org.apache.ftpserver.main;version=${pom.version},
-							org.apache.ftpserver.message;version=${pom.version},
-							org.apache.ftpserver.ssl;version=${pom.version},
-							org.apache.ftpserver.usermanager;version=${pom.version}
+						<Export-Package> org.apache.ftpserver;version=${project.version},
+							org.apache.ftpserver.command;version=${project.version},
+							org.apache.ftpserver.config.spring;version=${project.version},
+							org.apache.ftpserver.filesystem.nativefs;version=${project.version},
+							org.apache.ftpserver.ftpletcontainer;version=${project.version},
+							org.apache.ftpserver.listener;version=${project.version}, 
+							org.apache.ftpserver.main;version=${project.version},
+							org.apache.ftpserver.message;version=${project.version},
+							org.apache.ftpserver.ssl;version=${project.version},
+							org.apache.ftpserver.usermanager;version=${project.version}
 						</Export-Package>
 						<Private-Package> org.apache.ftpserver.command.impl,
 						    org.apache.ftpserver.command.impl.listing,
@@ -108,7 +108,7 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>${groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>ftplet-api</artifactId>
 		</dependency>
 		<dependency>

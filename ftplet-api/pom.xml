@@ -52,7 +52,7 @@
 					<instructions>
 						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
-						<Export-Package> org.apache.ftpserver.ftplet;version=${pom.version}</Export-Package>
+						<Export-Package> org.apache.ftpserver.ftplet;version=${project.version}</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

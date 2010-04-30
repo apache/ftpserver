@@ -136,15 +136,15 @@
     <dependencies>
       <!-- Submodules -->
       <dependency>
-        <groupId>${groupId}</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>ftplet-api</artifactId>
-        <version>${pom.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>${groupId}</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>ftpserver-core</artifactId>
-        <version>${pom.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
