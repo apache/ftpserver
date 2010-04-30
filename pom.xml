@@ -139,15 +139,15 @@
     <dependencies>
       <!-- Submodules -->
       <dependency>
-        <groupId>${groupId}</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>ftplet-api</artifactId>
-        <version>${pom.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>${groupId}</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>ftpserver-core</artifactId>
-        <version>${pom.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
@@ -452,6 +452,6 @@
   <properties>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
-    <ftpserver.version>${pom.version}</ftpserver.version>
+    <ftpserver.version>${project.version}</ftpserver.version>
   </properties>
 </project>
