@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.ftpserver.ftplet.FtpStatistics;
 
 /**
 *
@@ -116,6 +117,16 @@ public class LoginTest extends ClientTestTemplate {
 
     public void testLoginUnknownUser() throws Exception {
         assertFalse(client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD));
+    }
+
+    public void testLoginCount() throws Exception {
+    	FtpStatistics stats = server.getServerContext().getFtpStatistics();
+    	 assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+    	 int n =stats.getCurrentLoginNumber();
+    	 assertEquals(1,n );
+    	 client.rein();
+    	 client.logout();
+    	 assertEquals(0, stats.getCurrentLoginNumber());
     }
 
     /*
