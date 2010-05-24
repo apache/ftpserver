@@ -1,3 +1,4 @@
+package org.apache.ftpserver.examples;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -17,18 +18,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.ftpserver.examples;
-
-import org.apache.ftpserver.ftplet.UserManager;
-import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
-import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 import java.io.File;
 
-/*
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- */
+import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
+import org.apache.ftpserver.usermanager.UserFactory;
+
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class ManagingUsers {
 
     public static void main(String[] args) throws Exception {
@@ -36,12 +37,12 @@ public class ManagingUsers {
         userManagerFactory.setFile(new File("myusers.properties"));
         userManagerFactory.setPasswordEncryptor(new SaltedPasswordEncryptor());
         UserManager um = userManagerFactory.createUserManager();
-        
-        BaseUser user = new BaseUser();
-        user.setName("myNewUser");
-        user.setPassword("secret");
-        user.setHomeDirectory("ftproot");
-        
+
+        UserFactory userFact = new UserFactory();
+        userFact.setName("myNewUser");
+        userFact.setPassword("secret");
+        userFact.setHomeDirectory("ftproot");
+        User user = userFact.createUser();
         um.save(user);
     }
 }
