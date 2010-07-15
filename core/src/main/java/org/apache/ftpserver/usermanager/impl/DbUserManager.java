@@ -92,15 +92,18 @@ public class DbUserManager extends AbstractUserManager {
         this.authenticateStmt = authenticateStmt;
         this.isAdminStmt = isAdminStmt;
 
-        try {
-            // test the connection
-            createConnection();
-
-            LOG.info("Database connection opened.");
-        } catch (SQLException ex) {
-            LOG.error("Failed to open connection to user database", ex);
-            throw new FtpServerConfigurationException(
-                    "Failed to open connection to user database", ex);
+        Connection con = null; 
+        try { 
+                // test the connection 
+                con = createConnection(); 
+                
+                LOG.info("Database connection opened."); 
+        } catch (SQLException ex) { 
+                LOG.error("Failed to open connection to user database", ex); 
+                throw new FtpServerConfigurationException( 
+                "Failed to open connection to user database", ex); 
+        } finally{ 
+                closeQuitely(con); 
         }
     }
 
