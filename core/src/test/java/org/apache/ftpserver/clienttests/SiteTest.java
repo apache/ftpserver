@@ -103,6 +103,14 @@ public class SiteTest extends ClientTestTemplate {
         client.connect("localhost", getListenerPort());
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
 
+        if(server.getServerContext().getFtpStatistics().getCurrentLoginNumber() != 2) {
+            // wait until both clients have been logged in
+            Thread.sleep(2000);
+            if(server.getServerContext().getFtpStatistics().getCurrentLoginNumber() != 2) {
+                Thread.sleep(5000);
+            }
+        }
+        
         client.sendCommand("SITE STAT");
         String[] siteReplies = client.getReplyString().split("\r\n");
 
