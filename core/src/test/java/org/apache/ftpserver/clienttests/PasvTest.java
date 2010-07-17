@@ -92,7 +92,7 @@ public class PasvTest extends ClientTestTemplate {
                 client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
                 client.pasv();
 
-                assertTrue(client.getReplyString().indexOf(ftpIp) > -1);
+                assertTrue("Can't find " + ftpIp + " in " + client.getReplyString(), client.getReplyString().indexOf(ftpIp) > -1);
 
                 client.quit();
                 client.disconnect();
