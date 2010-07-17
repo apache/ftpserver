@@ -19,6 +19,8 @@
 
 package org.apache.ftpserver.clienttests;
 
+import java.util.Random;
+
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
@@ -44,7 +46,7 @@ public class PasvTest extends ClientTestTemplate {
         
         DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
 
-        int passivePort = TestUtil.findFreePort(12444);
+        int passivePort = TestUtil.findFreePort(12000 + new Random().nextInt(20000));
         
         dccFactory.setPassivePorts(passivePort + "-" + passivePort);
         
