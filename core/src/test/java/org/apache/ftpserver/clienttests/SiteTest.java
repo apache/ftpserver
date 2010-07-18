@@ -100,6 +100,9 @@ public class SiteTest extends ClientTestTemplate {
         assertTrue(client2.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD));
         // done setting up stats
         
+        // send a command to verify that we are correctly logged in
+        assertTrue(FTPReply.isPositiveCompletion(client2.noop()));
+        
         client.connect("localhost", getListenerPort());
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
 
