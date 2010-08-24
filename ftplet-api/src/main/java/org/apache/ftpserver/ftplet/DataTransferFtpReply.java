@@ -28,18 +28,7 @@ package org.apache.ftpserver.ftplet;
  * 
  */
 
-public interface DataTransferFtpReply extends FtpReply {
-
-	/**
-	 * Returns the file that was transferred (uploaded, downloaded or the
-	 * directory that was listed).
-	 * 
-	 * @return the file that was transferred (uploaded, downloaded or the
-	 *         directory that was listed). May return <code>null</code>, if
-	 *         the file information is not available because the request was bad
-	 *         or any other reason.
-	 */
-	FtpFile getFile();
+public interface DataTransferFtpReply extends FileActionFtpReply {
 
 	/**
 	 * Returns the number of bytes transferred.
