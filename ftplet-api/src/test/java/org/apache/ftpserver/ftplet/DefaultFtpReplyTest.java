@@ -35,7 +35,19 @@ public class DefaultFtpReplyTest extends TestCase {
 
         assertEquals("123 foo bar\r\n", response.toString());
     }
+    
+    public void testSingleLineWithTrailingLineFeedToString() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo bar\n");
 
+        assertEquals("123 foo bar\r\n", response.toString());
+    }
+
+    public void testCarriageReturnToString() {
+        DefaultFtpReply response = new DefaultFtpReply(123, "foo \rbar\r\n");
+
+        assertEquals("123 foo bar\r\n", response.toString());
+    }
+    
     public void testNullToString() {
         DefaultFtpReply response = new DefaultFtpReply(123, (String) null);
 

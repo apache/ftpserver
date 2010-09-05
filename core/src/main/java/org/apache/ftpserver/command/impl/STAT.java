@@ -22,6 +22,13 @@ package org.apache.ftpserver.command.impl;
 import java.io.IOException;
 
 import org.apache.ftpserver.command.AbstractCommand;
+import org.apache.ftpserver.command.impl.listing.DirectoryLister;
+import org.apache.ftpserver.command.impl.listing.LISTFileFormater;
+import org.apache.ftpserver.command.impl.listing.ListArgument;
+import org.apache.ftpserver.command.impl.listing.ListArgumentParser;
+import org.apache.ftpserver.ftplet.DefaultFtpReply;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
@@ -40,6 +47,10 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  */
 public class STAT extends AbstractCommand {
 
+    private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
+
+    private DirectoryLister directoryLister = new DirectoryLister();
+    
     /**
      * Execute command
      */
@@ -50,9 +61,43 @@ public class STAT extends AbstractCommand {
         // reset state variables
         session.resetState();
 
-        // write the status info
-        session.write(LocalizedFtpReply.translate(session, request, context,
-                FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null));
+        if(request.getArgument() != null) {
+            ListArgument parsedArg = ListArgumentParser.parse(request.getArgument());
+
+            // check that the directory or file exists
+            FtpFile file = null;
+            try {
+                file = session.getFileSystemView().getFile(parsedArg.getFile());
+                if(!file.doesExist()) {
+                    session.write(LocalizedFtpReply.translate(session, request, context,
+                            FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "LIST",
+                            null));             
+                    return;
+                }
+                
+                String dirList = directoryLister.listFiles(parsedArg, 
+                        session.getFileSystemView(), LIST_FILE_FORMATER);
+
+                session
+                .write(new DefaultFtpReply(
+                                FtpReply.REPLY_200_COMMAND_OKAY,
+                                dirList));
+
+            } catch (FtpException e) {
+                session.write(LocalizedFtpReply
+                        .translate(
+                                session,
+                                request,
+                                context,
+                                FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
+                                "STAT", null));
+            }
+        
+        } else {
+            // write the status info
+            session.write(LocalizedFtpReply.translate(session, request, context,
+                    FtpReply.REPLY_211_SYSTEM_STATUS_REPLY, "STAT", null));
+        }
     }
 
 }
