@@ -59,8 +59,8 @@ public class ConnectionConfigFactory {
     }
 
     /**
-     * The maximum number of time an anonymous user can fail to login before getting disconnected
-     * @return The maximum number of failer login attempts
+     * The maximum number of anonymous logins the server would allow at any given time
+     * @return The maximum number of anonymous logins
      */
     public int getMaxAnonymousLogins() {
         return maxAnonymousLogins;
@@ -108,8 +108,8 @@ public class ConnectionConfigFactory {
     }
 
     /**
-     * Sets the maximum number of time an anonymous user can fail to login before getting disconnected
-     * @param maxAnonymousLogins The maximum number of failer login attempts
+     * Sets the maximum number of anonymous logins the server would allow at any given time
+     * @param maxAnonymousLogins The maximum number of anonymous logins
      */
     public void setMaxAnonymousLogins(final int maxAnonymousLogins) {
         this.maxAnonymousLogins = maxAnonymousLogins;
