@@ -106,14 +106,23 @@ public class DefaultFtpReply implements FtpReply {
 
         StringBuffer sb = new StringBuffer();
 
+        // remove any carriage returns
+        notNullMessage = notNullMessage.replace("\r", "");
+        
+        // remove trailing line feeds
+        if(notNullMessage.endsWith("\n")) {
+            notNullMessage = notNullMessage.substring(0, notNullMessage.length() - 1);
+        }
+        
+        String[] lines = notNullMessage.split("\n");
+
         // no newline
-        if (notNullMessage.indexOf('\n') == -1) {
+        if (lines.length == 1) {
             sb.append(code);
             sb.append(" ");
             sb.append(notNullMessage);
             sb.append(CRLF);
         } else {
-            String[] lines = notNullMessage.split("\n");
 
             sb.append(code);
             sb.append("-");
