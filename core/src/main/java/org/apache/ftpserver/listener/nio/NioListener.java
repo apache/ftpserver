@@ -245,6 +245,8 @@ public class NioListener extends AbstractListener {
                 LOG.debug("Listener resumed");
                 
                 updatePort();
+                
+                suspended = false;
             } catch (IOException e) {
                 LOG.error("Failed to resume listener", e);
             }
