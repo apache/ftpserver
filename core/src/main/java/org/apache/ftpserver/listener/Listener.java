@@ -59,7 +59,7 @@ public interface Listener {
     /**
      * Checks if the listener is currently started.
      * 
-     * @return True if the listener is started
+     * @return False if the listener is started
      */
     boolean isStopped();
 
