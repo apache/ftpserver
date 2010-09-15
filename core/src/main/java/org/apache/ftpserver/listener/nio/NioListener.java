@@ -111,6 +111,11 @@ public class NioListener extends AbstractListener {
      * @see Listener#start(FtpServerContext)
      */
     public synchronized void start(FtpServerContext context) {
+        if(!isStopped()) {
+            // listener already started, don't allow
+            throw new IllegalStateException("Listener already started");
+        }
+        
         try {
             
             this.context = context;
