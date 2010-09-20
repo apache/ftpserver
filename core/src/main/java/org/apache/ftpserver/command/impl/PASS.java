@@ -180,6 +180,19 @@ public class PASS extends AbstractCommand {
             int oldMaxIdleTime = session.getMaxIdleTime();
 
             if (authenticatedUser != null) {
+                if(!authenticatedUser.getEnabled()) {
+                    session
+                    .write(LocalizedFtpReply
+                            .translate(
+                                    session,
+                                    request,
+                                    context,
+                                    FtpReply.REPLY_530_NOT_LOGGED_IN,
+                                    "PASS", null));
+                    return;
+                }
+
+                
                 session.setUser(authenticatedUser);
                 session.setUserArgument(null);
                 session.setMaxIdleTime(authenticatedUser.getMaxIdleTime());
