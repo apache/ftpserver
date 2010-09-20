@@ -49,6 +49,10 @@ public class LoginTest extends ClientTestTemplate {
         assertFalse(client.login(null, null));
     }
 
+    public void testLoginDisabledUser() throws Exception {
+        assertFalse(client.login("testuser4", "password"));
+    }
+    
     public void testLoginWithAccount() throws Exception {
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
 
