@@ -38,6 +38,8 @@ public class ConnectionConfigFactory {
 
     private int loginFailureDelay = 500;
 
+    private int maxThreads = 0;
+
     /**
      * Create a connection configuration instances based on the configuration on this factory
      * @return The {@link ConnectionConfig} instance
@@ -45,9 +47,9 @@ public class ConnectionConfigFactory {
     public ConnectionConfig createConnectionConfig() {
         return new DefaultConnectionConfig(anonymousLoginEnabled,
                 loginFailureDelay, maxLogins, maxAnonymousLogins,
-                maxLoginFailures);
+                maxLoginFailures, maxThreads);
     }
-    
+
     /**
      * The delay in number of milliseconds between login failures. Important to 
      * make brute force attacks harder.
@@ -97,6 +99,29 @@ public class ConnectionConfigFactory {
 
     public void setMaxLogins(final int maxLogins) {
         this.maxLogins = maxLogins;
+    }
+
+    /**
+     * Returns the maximum number of threads the server is allowed to create for
+     * processing client requests.
+     * 
+     * @return the maximum number of threads the server is allowed to create for
+     *         processing client requests.
+     */
+    public int getMaxThreads() {
+        return maxThreads;
+    }
+
+    /**
+     * Sets the maximum number of threads the server is allowed to create for
+     * processing client requests.
+     * 
+     * @param maxThreads
+     *            the maximum number of threads the server is allowed to create
+     *            for processing client requests.
+     */
+    public void setMaxThreads(int maxThreads) {
+        this.maxThreads = maxThreads;
     }
 
     /**

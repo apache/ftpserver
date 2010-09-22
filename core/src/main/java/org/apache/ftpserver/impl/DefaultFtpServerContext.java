@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.ConnectionConfig;
 import org.apache.ftpserver.ConnectionConfigFactory;
@@ -45,6 +47,7 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +81,12 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     private static final List<Authority> ADMIN_AUTHORITIES = new ArrayList<Authority>();
     private static final List<Authority> ANON_AUTHORITIES = new ArrayList<Authority>();
+    
+    /**
+     * The thread pool executor to be used by the server using this context
+     */
+    private ThreadPoolExecutor threadPoolExecutor = null;
+    
     static {
         ADMIN_AUTHORITIES.add(new WritePermission());
         
@@ -189,6 +198,16 @@ public class DefaultFtpServerContext implements FtpServerContext {
     public void dispose() {
         listeners.clear();
         ftpletContainer.getFtplets().clear();
+        if (threadPoolExecutor != null) {
+            LOG.debug("Shutting down the thread pool executor");
+            threadPoolExecutor.shutdown();
+            try {
+                threadPoolExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+            } finally {
+                // TODO: how to handle?
+            }
+        }
     }
 
     public Listener getListener(String name) {
@@ -241,5 +260,23 @@ public class DefaultFtpServerContext implements FtpServerContext {
 
     public void setConnectionConfig(ConnectionConfig connectionConfig) {
         this.connectionConfig = connectionConfig;
+    }
+    
+    public synchronized ThreadPoolExecutor getThreadPoolExecutor() {
+        if(threadPoolExecutor == null) {
+            int maxThreads = connectionConfig.getMaxThreads();
+            if(maxThreads < 1) {
+                int maxLogins = connectionConfig.getMaxLogins();
+                if(maxLogins > 0) {
+                    maxThreads = maxLogins;
+                }
+                else {
+                    maxThreads = 16;
+                }
+            }
+            LOG.debug("Intializing shared thread pool executor with max threads of {}", maxThreads);
+            threadPoolExecutor = new OrderedThreadPoolExecutor(maxThreads);
+        }
+        return threadPoolExecutor;
     }
 }

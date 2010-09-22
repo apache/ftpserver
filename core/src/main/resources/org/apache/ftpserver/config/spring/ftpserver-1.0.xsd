@@ -52,6 +52,7 @@
 			<xs:attribute name="anon-enabled" type="xs:boolean" />
 			<xs:attribute name="max-login-failures" type="xs:int" />
 			<xs:attribute name="login-failure-delay" type="xs:int" />
+			<xs:attribute name="max-threads" type="xs:int" />
 		</xs:complexType>
 	</xs:element>
 

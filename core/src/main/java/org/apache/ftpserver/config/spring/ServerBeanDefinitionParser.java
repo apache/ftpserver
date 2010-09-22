@@ -118,6 +118,10 @@ public class ServerBeanDefinitionParser extends
             connectionConfig.setMaxLogins(SpringUtil.parseInt(element,
                     "max-logins"));
         }
+        if (StringUtils.hasText(element.getAttribute("max-threads"))) {
+            connectionConfig.setMaxThreads(SpringUtil.parseInt(element,
+                    "max-threads"));
+        }
         if (StringUtils.hasText(element.getAttribute("max-anon-logins"))) {
             connectionConfig.setMaxAnonymousLogins(SpringUtil.parseInt(element,
                     "max-anon-logins"));
