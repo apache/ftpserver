@@ -69,6 +69,7 @@
 							org.apache.ftpserver.config.spring;version=${project.version},
 							org.apache.ftpserver.filesystem.nativefs;version=${project.version},
 							org.apache.ftpserver.ftpletcontainer;version=${project.version},
+							org.apache.ftpserver.ipfilter;version=${project.version}, 
 							org.apache.ftpserver.listener;version=${project.version}, 
 							org.apache.ftpserver.main;version=${project.version},
 							org.apache.ftpserver.message;version=${project.version},
@@ -82,7 +83,9 @@
 							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
 							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
 							org.apache.ftpserver.usermanager.impl,
-							org.apache.ftpserver.util</Private-Package>
+							org.apache.ftpserver.util,
+							org.apache.ftpserver.*
+						</Private-Package>
  						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
