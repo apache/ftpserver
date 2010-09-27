@@ -86,7 +86,8 @@
 							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
 							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
 							org.apache.ftpserver.usermanager.impl,
-							org.apache.ftpserver.util
+							org.apache.ftpserver.util,
+							org.apache.ftpserver.*
 						</Private-Package>
 						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
