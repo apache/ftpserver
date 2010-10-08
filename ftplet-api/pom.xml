@@ -53,7 +53,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName> ${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
 						<Export-Package> org.apache.ftpserver.ftplet;version=${project.version}</Export-Package>
 					</instructions>

@@ -52,7 +52,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName> ${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
 						<Export-Package> org.apache.ftpserver.example.ftpletservice</Export-Package>
 						<Private-Package> org.apache.ftpserver.example.ftpletservice.impl</Private-Package>
