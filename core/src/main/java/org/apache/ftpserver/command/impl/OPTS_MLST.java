@@ -95,7 +95,7 @@ public class OPTS_MLST extends AbstractCommand {
         for (int i = 0; i < types.length; ++i) {
             boolean bMatch = false;
             for (int j = 0; j < AVAILABLE_TYPES.length; ++j) {
-                if (AVAILABLE_TYPES[j].equals(types[i])) {
+                if (AVAILABLE_TYPES[j].equalsIgnoreCase(types[i])) {
                     bMatch = true;
                     break;
                 }
