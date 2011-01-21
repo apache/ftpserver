@@ -244,6 +244,21 @@ public class ListTest extends ClientTestTemplate {
                 + TEST_FILE1.getName(), reply[1]);
     }
 
+    public void testOPTSMLSTCaseInsensitive() throws Exception {
+        TEST_FILE1.createNewFile();
+        
+        assertTrue(FTPReply.isPositiveCompletion(client
+                .sendCommand("OPTS MLST size;Modify")));
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST "
+                + TEST_FILE1.getName())));
+        
+        String[] reply = client.getReplyString().split("\\r\\n");
+        
+        assertEquals("Size=0;Modify="
+                + DateUtils.getFtpDate(TEST_FILE1.lastModified()) + "; "
+                + TEST_FILE1.getName(), reply[1]);
+    }
+
     public void testOPTSMLSTInvalidType() throws Exception {
         TEST_FILE1.createNewFile();
 
