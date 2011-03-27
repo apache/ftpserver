@@ -40,7 +40,7 @@ public class LISTFileFormater implements FileFormater {
      * @see FileFormater#format(FtpFile)
      */
     public String format(FtpFile file) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(getPermission(file));
         sb.append(DELIM);
         sb.append(DELIM);
@@ -99,8 +99,8 @@ public class LISTFileFormater implements FileFormater {
     }
 
     /*
-     * public String format(FileObject[] files) { StringBuffer sb = new
-     * StringBuffer();
+     * public String format(FileObject[] files) { StringBuilder sb = new
+     * StringBuilder();
      * 
      * for (int i = 0; i < files.length; i++) { sb.append(format(files[i]));
      * sb.append(NEWLINE); } return sb.toString(); }

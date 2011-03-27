@@ -89,7 +89,7 @@ public class MD5 extends AbstractCommand {
             fileNames = new String[] { argument };
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < fileNames.length; i++) {
             String fileName = fileNames[i].trim();
 

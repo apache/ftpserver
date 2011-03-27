@@ -51,7 +51,7 @@ public class MLSTFileFormater implements FileFormater {
      * @see FileFormater#format(FtpFile)
      */
     public String format(FtpFile file) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < selectedTypes.length; ++i) {
             String type = selectedTypes[i];

@@ -227,17 +227,17 @@ public class PassivePorts {
     public String toString() {
         if (passivePortsString != null) {
             return passivePortsString;
-        } else {
-            StringBuffer sb = new StringBuffer();
-
-            for (int port : passivePorts) {
-                sb.append(port);
-                sb.append(",");
-            }
-            // remove the last ,
-            sb.deleteCharAt(sb.length() - 1);
-            return sb.toString();
         }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int port : passivePorts) {
+            sb.append(port);
+            sb.append(",");
+        }
+        // remove the last ,
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
     }
 
 }

@@ -53,7 +53,7 @@ public class SocketAddressEncoder {
             throw new IllegalInetAddressException("Illegal amount of tokens");
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         try {
             sb.append(convertAndValidateNumber(st.nextToken()));
             sb.append('.');
