@@ -46,8 +46,8 @@ public class ListArgumentParser {
         // find options and file name (may have regular expression)
         if (argument != null) {
             argument = argument.trim();
-            StringBuffer optionsSb = new StringBuffer(4);
-            StringBuffer fileSb = new StringBuffer(16);
+            StringBuilder optionsSb = new StringBuilder(4);
+            StringBuilder fileSb = new StringBuilder(16);
             StringTokenizer st = new StringTokenizer(argument, " ", true);
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();

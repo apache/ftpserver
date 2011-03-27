@@ -35,7 +35,7 @@ public class StringUtils {
      */
     public final static String replaceString(String source, String oldStr,
             String newStr) {
-        StringBuffer sb = new StringBuffer(source.length());
+        StringBuilder sb = new StringBuilder(source.length());
         int sind = 0;
         int cind = 0;
         while ((cind = source.indexOf(oldStr, sind)) != -1) {
@@ -62,7 +62,7 @@ public class StringUtils {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(source.substring(startIndex, openIndex));
         while (true) {
             String intStr = source.substring(openIndex + 1, closeIndex);
@@ -102,7 +102,7 @@ public class StringUtils {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(source.substring(startIndex, openIndex));
         while (true) {
             String key = source.substring(openIndex + 1, closeIndex);
@@ -140,7 +140,7 @@ public class StringUtils {
     public final static String formatHtml(String source, boolean bReplaceNl,
             boolean bReplaceTag, boolean bReplaceQuote) {
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int len = source.length();
         for (int i = 0; i < len; i++) {
             char c = source.charAt(i);
@@ -204,7 +204,7 @@ public class StringUtils {
         }
 
         int padLength = totalLength - srcLength;
-        StringBuffer sb = new StringBuffer(padLength);
+        StringBuilder sb = new StringBuilder(padLength);
         for (int i = 0; i < padLength; ++i) {
             sb.append(padChar);
         }
@@ -220,11 +220,11 @@ public class StringUtils {
      * Get hex string from byte array
      */
     public final static String toHexString(byte[] res) {
-        StringBuffer sb = new StringBuffer(res.length << 1);
+        StringBuilder sb = new StringBuilder(res.length << 1);
         for (int i = 0; i < res.length; i++) {
             String digit = Integer.toHexString(0xFF & res[i]);
             if (digit.length() == 1) {
-                digit = '0' + digit;
+                sb.append('0');
             }
             sb.append(digit);
         }

@@ -63,7 +63,7 @@ public class SITE_STAT extends AbstractCommand {
 
         // get statistics information
         FtpStatistics stat = context.getFtpStatistics();
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append('\n');
         sb.append("Start Time               : ").append(
                 DateUtils.getISO8601Date(stat.getStartTime().getTime()))

@@ -67,7 +67,7 @@ public class SITE_WHO extends AbstractCommand {
         }
 
         // print all the connected user information
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         Map<Long, IoSession> sessions = session.getService()
                 .getManagedSessions();

@@ -96,7 +96,7 @@ public class SITE_DESCUSER extends AbstractCommand {
         }
 
         // send the user information
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         sb.append("\n");
         sb.append("userid          : ").append(user.getName()).append("\n");
         sb.append("userpassword    : ********\n");

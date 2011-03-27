@@ -149,7 +149,7 @@ public class FtpReplyTranslator {
 			return str;
 		}
 
-		StringBuffer sb = new StringBuffer(128);
+		StringBuilder sb = new StringBuilder(128);
 		sb.append(str.substring(startIndex, openIndex));
 		while (true) {
 			String varName = str.substring(openIndex + 1, closeIndex);

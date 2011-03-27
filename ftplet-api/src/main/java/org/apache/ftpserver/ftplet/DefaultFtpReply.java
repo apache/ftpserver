@@ -57,7 +57,7 @@ public class DefaultFtpReply implements FtpReply {
     public DefaultFtpReply(final int code, final String[] message) {
         this.code = code;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < message.length; i++) {
             sb.append(message[i]);
             sb.append('\n');
@@ -104,7 +104,7 @@ public class DefaultFtpReply implements FtpReply {
             notNullMessage = "";
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         // remove any carriage returns
         notNullMessage = notNullMessage.replace("\r", "");

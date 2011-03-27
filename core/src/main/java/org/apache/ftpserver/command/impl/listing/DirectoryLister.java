@@ -38,7 +38,7 @@ public class DirectoryLister {
 
     private String traverseFiles(final List<? extends FtpFile> files,
             final FileFilter filter, final FileFormater formater) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append(traverseFiles(files, filter, formater, true));
         sb.append(traverseFiles(files, filter, formater, false));
@@ -49,7 +49,7 @@ public class DirectoryLister {
     private String traverseFiles(final List<? extends FtpFile> files,
             final FileFilter filter, final FileFormater formater,
             boolean matchDirs) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (FtpFile file : files) {
             if (file == null) {
                 continue;
@@ -69,7 +69,7 @@ public class DirectoryLister {
             final FileSystemView fileSystemView, final FileFormater formater)
             throws IOException {
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         // get all the file objects
         List<? extends FtpFile> files = listFiles(fileSystemView, argument.getFile());

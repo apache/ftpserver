@@ -685,7 +685,7 @@ public class DbUserManager extends AbstractUserManager {
             return input;
         }
 
-        StringBuffer valBuf = new StringBuffer(input);
+        StringBuilder valBuf = new StringBuilder(input);
         for (int i = 0; i < valBuf.length(); i++) {
             char ch = valBuf.charAt(i);
             if (ch == '\'' || ch == '\\' || ch == '$' || ch == '^' || ch == '['
