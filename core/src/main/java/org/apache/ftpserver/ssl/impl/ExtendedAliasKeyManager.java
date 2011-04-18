@@ -38,20 +38,18 @@ import javax.net.ssl.X509ExtendedKeyManager;
  */
 public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
 
-    private X509ExtendedKeyManager delegate;
+    private final X509ExtendedKeyManager delegate;
 
-    private String serverKeyAlias;
+    private final String serverKeyAlias;
 
     /**
      * Constructor.
      * 
      * @param mgr
      *            The X509KeyManager used as a delegate
-     * @param keyStore
-     * @param serverKeyAlias
+     * @param keyAlias
      *            The alias name of the server's keypair and supporting
      *            certificate chain
-     * @param keyAlias
      */
     public ExtendedAliasKeyManager(KeyManager mgr, String keyAlias) {
         this.delegate = (X509ExtendedKeyManager) mgr;
@@ -188,13 +186,12 @@ public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
      * @param issuers
      *            The list of acceptable CA issuer subject names, or null if it
      *            does not matter which issuers are used (ignored)
-     * @param socket
-     *            The socket to be used for this connection. This parameter can
-     *            be null, in which case this method will return the most
-     *            generic alias to use (ignored)
+     * @param engine
+     *            The engine to be used for this connection.
      * @return The alias name for the desired key, or null if there are no
      *         matches
      */
+    @Override
     public String chooseEngineClientAlias(String[] keyType,
             Principal[] issuers, SSLEngine engine) {
         return delegate.chooseEngineClientAlias(keyType, issuers, engine);
@@ -209,13 +206,12 @@ public final class ExtendedAliasKeyManager extends X509ExtendedKeyManager {
      * @param issuers
      *            The list of acceptable CA issuer subject names, or null if it
      *            does not matter which issuers are used (ignored)
-     * @param socket
-     *            The socket to be used for this connection. This parameter can
-     *            be null, in which case this method will return the most
-     *            generic alias to use (ignored)
+     * @param engine
+     *            The engine to be used for this connection.
      * 
      * @return Alias name for the desired key
      */
+    @Override
     public String chooseEngineServerAlias(String keyType, Principal[] issuers,
             SSLEngine engine) {
 
