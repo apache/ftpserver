@@ -51,11 +51,11 @@ public class NativeFtpFile implements FtpFile {
     // the file name with respect to the user root.
     // The path separator character will be '/' and
     // it will always begin with '/'.
-    private String fileName;
+    private final String fileName;
 
-    private File file;
+    private final File file;
 
-    private User user;
+    private final User user;
 
     /**
      * Constructor, internal do not use directly.

@@ -45,21 +45,21 @@ import org.apache.ftpserver.util.ClassUtils;
  */
 public class DefaultSslConfiguration implements SslConfiguration {
 
-    private KeyManagerFactory keyManagerFactory;
+    private final KeyManagerFactory keyManagerFactory;
 
-    private TrustManagerFactory trustManagerFactory;
+    private final TrustManagerFactory trustManagerFactory;
 
     private String sslProtocol = "TLS";
 
-    private ClientAuth clientAuth = ClientAuth.NONE;
+    private final ClientAuth clientAuth;// = ClientAuth.NONE;
 
-    private String keyAlias;
+    private final String keyAlias;
 
-    private String[] enabledCipherSuites;
+    private final String[] enabledCipherSuites;
     
-    private SSLContext sslContext = null;
+    private final SSLContext sslContext;
     
-    private SSLSocketFactory socketFactory = null;
+    private final SSLSocketFactory socketFactory;
     
     /**
      * Internal constructor, do not use directly. Instead, use {@link SslConfigurationFactory}
@@ -76,7 +76,8 @@ public class DefaultSslConfiguration implements SslConfiguration {
         this.keyManagerFactory = keyManagerFactory;
         this.sslProtocol = sslProtocol;
         this.trustManagerFactory = trustManagerFactory;
-        initialize();
+        this.sslContext = initContext();
+        this.socketFactory = sslContext.getSocketFactory();
     }
     
     public SSLSocketFactory getSocketFactory() throws GeneralSecurityException {
@@ -116,7 +117,7 @@ public class DefaultSslConfiguration implements SslConfiguration {
         }
     }
     
-    private void initialize() throws GeneralSecurityException {
+    private SSLContext initContext() throws GeneralSecurityException {
         KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 
         // wrap key managers to allow us to control their behavior
@@ -132,9 +133,9 @@ public class DefaultSslConfiguration implements SslConfiguration {
         }
 
         // create and initialize the SSLContext
-        sslContext = SSLContext.getInstance(sslProtocol);
-        sslContext.init(keyManagers, trustManagerFactory.getTrustManagers(), null);
+        SSLContext ctx = SSLContext.getInstance(sslProtocol);
+        ctx.init(keyManagers, trustManagerFactory.getTrustManagers(), null);
         //Create the socket factory
-        socketFactory = sslContext.getSocketFactory();
+        return ctx;
     }
 }

@@ -30,16 +30,16 @@ import org.apache.ftpserver.ftplet.FtpRequest;
  */
 public class DefaultFtpRequest implements FtpRequest {
 
-    private String line;
+    private final String line;
 
-    private String command;
+    private final String command;
 
-    private String argument;
+    private final String argument;
     
     /**
      * timestamp when this request was received
      */
-    private long receivedTime = 0L;
+    private final long receivedTime;
 
     /**
      * Default constructor.
@@ -51,32 +51,37 @@ public class DefaultFtpRequest implements FtpRequest {
     	//before constructing this FtpRequest object, then this method is not 
     	//going to be accurate and need to look for an alternative solution. 
     	this.receivedTime = System.currentTimeMillis();
-        parse(requestLine);
+        line = requestLine.trim();
+        int spInd = line.indexOf(' ');
+        command = parseCmd(line, spInd);
+        argument = parseArg(line, spInd);
     }
 
     /**
      * Parse the ftp command line.
      */
-    private void parse(final String lineToParse) {
-
-        // parse request
-        line = lineToParse.trim();
-        command = null;
-        argument = null;
-        int spInd = line.indexOf(' ');
+    private String parseCmd(final String lineToParse, int spInd) {
+        String cmd = null;
         if (spInd != -1) {
-            argument = line.substring(spInd + 1);
-            if (argument.equals("")) {
-                argument = null;
-            }
-            command = line.substring(0, spInd).toUpperCase();
+            cmd = line.substring(0, spInd).toUpperCase();
         } else {
-            command = line.toUpperCase();
+            cmd = line.toUpperCase();
         }
+        if ((cmd.length() > 0) && (cmd.charAt(0) == 'X')) {
+            cmd = cmd.substring(1);
+        }
+        return cmd;
+    }
 
-        if ((command.length() > 0) && (command.charAt(0) == 'X')) {
-            command = command.substring(1);
+    private String parseArg(final String lineToParse, int spInd) {
+        String arg = null;
+        if (spInd != -1) {
+            arg = line.substring(spInd + 1);
+            if (arg.equals("")) {
+                arg = null;
+            }
         }
+        return arg;
     }
 
     /**

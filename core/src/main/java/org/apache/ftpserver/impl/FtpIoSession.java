@@ -96,8 +96,8 @@ public class FtpIoSession implements IoSession {
 	    + "last-access-time";
     private static final String ATTRIBUTE_CACHED_REMOTE_ADDRESS = ATTRIBUTE_PREFIX
 	    + "cached-remote-address";
-    private IoSession wrappedSession;
-    private FtpServerContext context;
+    private final IoSession wrappedSession;
+    private final FtpServerContext context;
     /**
      * Last reply that was sent to the client, if any.
      */

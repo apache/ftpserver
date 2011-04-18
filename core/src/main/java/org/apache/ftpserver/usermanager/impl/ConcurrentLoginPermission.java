@@ -31,9 +31,9 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  */
 public class ConcurrentLoginPermission implements Authority {
 
-    private int maxConcurrentLogins;
+    private final int maxConcurrentLogins;
 
-    private int maxConcurrentLoginsPerIP;
+    private final int maxConcurrentLoginsPerIP;
 
     public ConcurrentLoginPermission(int maxConcurrentLogins,
             int maxConcurrentLoginsPerIP) {

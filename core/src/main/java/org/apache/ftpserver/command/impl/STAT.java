@@ -50,7 +50,7 @@ public class STAT extends AbstractCommand {
 
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
 
-    private DirectoryLister directoryLister = new DirectoryLister();
+    private final DirectoryLister directoryLister = new DirectoryLister();
     
     /**
      * Execute command

@@ -37,12 +37,12 @@ public class LocalizedRenameFtpReply extends LocalizedFtpReply implements
 	/**
 	 * The from file
 	 */
-	private FtpFile from = null;
+	private final FtpFile from;
 
 	/**
 	 * The to file
 	 */
-	private FtpFile to = null;
+	private final FtpFile to;
 
 	/**
 	 * Creates a new instance of <code>LocalizedRenameFtpReply</code>.

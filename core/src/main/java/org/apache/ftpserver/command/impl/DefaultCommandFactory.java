@@ -38,6 +38,10 @@ import org.apache.ftpserver.command.CommandFactoryFactory;
  */
 public class DefaultCommandFactory implements CommandFactory {
 
+    public DefaultCommandFactory() {
+        this(new HashMap<String, Command>());
+    }
+
     /**
      * Internal constructor, use {@link CommandFactoryFactory} instead
      */
@@ -45,7 +49,7 @@ public class DefaultCommandFactory implements CommandFactory {
         this.commandMap = commandMap;
     }
 
-    private Map<String, Command> commandMap = new HashMap<String, Command>();
+    private final Map<String, Command> commandMap;
 
     /**
      * Get command. Returns null if not found.

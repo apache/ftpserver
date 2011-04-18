@@ -30,9 +30,9 @@ import org.apache.ftpserver.util.RegularExpr;
  */
 public class RegexFileFilter implements FileFilter {
 
-    private RegularExpr regex;
+    private final RegularExpr regex;
 
-    private FileFilter wrappedFilter;
+    private final FileFilter wrappedFilter;
 
     /**
      * Constructor with a regular expression
@@ -41,7 +41,7 @@ public class RegexFileFilter implements FileFilter {
      *            The regular expression to select by
      */
     public RegexFileFilter(String regex) {
-        this.regex = new RegularExpr(regex);
+        this(regex, null);
     }
 
     /**
@@ -53,8 +53,7 @@ public class RegexFileFilter implements FileFilter {
      *            The {@link FileFilter} to wrap
      */
     public RegexFileFilter(String regex, FileFilter wrappedFilter) {
-        this(regex);
-
+        this.regex = new RegularExpr(regex);
         this.wrappedFilter = wrappedFilter;
     }
 

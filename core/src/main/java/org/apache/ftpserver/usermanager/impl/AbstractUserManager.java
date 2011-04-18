@@ -53,10 +53,13 @@ public abstract class AbstractUserManager implements UserManager {
 
     public static final String ATTR_MAX_LOGIN_PER_IP = "maxloginperip";
 
-    private String adminName;
+    private final String adminName;
     
-    private PasswordEncryptor passwordEncryptor = new Md5PasswordEncryptor();
+    private final PasswordEncryptor passwordEncryptor;
 
+    public AbstractUserManager() {
+        this(null,  new Md5PasswordEncryptor());
+    }
 
     /**
      * Internal constructor, do not use directly

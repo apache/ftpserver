@@ -54,11 +54,11 @@ public class IODataConnection implements DataConnection {
     
     private static final byte[] EOL = System.getProperty("line.separator").getBytes();
     
-    private FtpIoSession session;
+    private final FtpIoSession session;
 
-    private Socket socket;
+    private final Socket socket;
 
-    private ServerDataConnectionFactory factory;
+    private final ServerDataConnectionFactory factory;
 
     public IODataConnection(final Socket socket, final FtpIoSession session,
             final ServerDataConnectionFactory factory) {

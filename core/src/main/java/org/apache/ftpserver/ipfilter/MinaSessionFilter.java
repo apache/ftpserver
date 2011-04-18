@@ -35,7 +35,7 @@ public class MinaSessionFilter extends IoFilterAdapter {
     /**
      * The actual (or wrapped) <code>SessionFilter</code> used by this filter.
      */
-    private SessionFilter filter = null;
+    private final SessionFilter filter;
 
     /**
      * Creates a new instance of <code>MinaSessionFilter</code>.

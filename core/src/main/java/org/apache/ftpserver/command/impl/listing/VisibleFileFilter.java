@@ -29,13 +29,13 @@ import org.apache.ftpserver.ftplet.FtpFile;
  */
 public class VisibleFileFilter implements FileFilter {
 
-    private FileFilter wrappedFilter;
+    private final FileFilter wrappedFilter;
 
     /**
      * Default constructor
      */
     public VisibleFileFilter() {
-        // default cstr
+        this(null);
     }
 
     /**

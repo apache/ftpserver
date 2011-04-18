@@ -30,9 +30,9 @@ import org.apache.ftpserver.ftplet.AuthorizationRequest;
  */
 public class ConcurrentLoginRequest implements AuthorizationRequest {
 
-    private int concurrentLogins;
+    private final int concurrentLogins;
 
-    private int concurrentLoginsFromThisIP;
+    private final int concurrentLoginsFromThisIP;
 
     private int maxConcurrentLogins = 0;
 

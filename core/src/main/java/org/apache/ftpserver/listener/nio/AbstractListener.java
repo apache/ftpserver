@@ -40,23 +40,23 @@ import org.apache.mina.filter.firewall.Subnet;
  */
 public abstract class AbstractListener implements Listener {
 
-    private String serverAddress;
+    private final String serverAddress;
 
     private int port = 21;
 
-    private SslConfiguration ssl;
+    private final SslConfiguration ssl;
 
-    private boolean implicitSsl = false;
+    private final boolean implicitSsl;
     
-    private int idleTimeout;
+    private final int idleTimeout;
     
-    private List<InetAddress> blockedAddresses;
+    private final List<InetAddress> blockedAddresses;
 
-    private List<Subnet> blockedSubnets;
+    private final List<Subnet> blockedSubnets;
 
-    private SessionFilter sessionFilter = null;
+    private final SessionFilter sessionFilter;
 
-    private DataConnectionConfiguration dataConnectionConfig;
+    private final DataConnectionConfiguration dataConnectionConfig;
 
     /**
      * @deprecated Use the constructor with IpFilter instead. 
@@ -66,8 +66,13 @@ public abstract class AbstractListener implements Listener {
     public AbstractListener(String serverAddress, int port, boolean implicitSsl, 
             SslConfiguration sslConfiguration, DataConnectionConfiguration dataConnectionConfig,
             int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
-    	this(serverAddress, port, implicitSsl, sslConfiguration, 
-    		dataConnectionConfig, idleTimeout, createBlackListFilter(blockedAddresses, blockedSubnets));
+        this.serverAddress = serverAddress;
+        this.port = port;
+        this.implicitSsl = implicitSsl;
+        this.dataConnectionConfig = dataConnectionConfig;
+        this.ssl = sslConfiguration;
+        this.idleTimeout = idleTimeout;
+        this.sessionFilter = createBlackListFilter(blockedAddresses, blockedSubnets);
     	this.blockedAddresses = blockedAddresses;
     	this.blockedSubnets = blockedSubnets;
     }
@@ -86,6 +91,8 @@ public abstract class AbstractListener implements Listener {
         this.ssl = sslConfiguration;
         this.idleTimeout = idleTimeout;
         this.sessionFilter = sessionFilter;
+        this.blockedAddresses = null;
+        this.blockedSubnets = null;
     }
     
     /**

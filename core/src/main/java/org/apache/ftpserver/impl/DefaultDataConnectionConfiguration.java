@@ -34,18 +34,18 @@ public class DefaultDataConnectionConfiguration implements
         DataConnectionConfiguration {
 
     // maximum idle time in seconds
-    private int idleTime;
-    private SslConfiguration ssl;
+    private final int idleTime;
+    private final SslConfiguration ssl;
 
-    private boolean activeEnabled;
-    private String activeLocalAddress;
-    private int activeLocalPort;
-    private boolean activeIpCheck;
+    private final boolean activeEnabled;
+    private final String activeLocalAddress;
+    private final int activeLocalPort;
+    private final boolean activeIpCheck;
     
-    private String passiveAddress;
-    private String passiveExternalAddress;
-    private PassivePorts passivePorts;
-    private boolean passiveIpCheck;
+    private final String passiveAddress;
+    private final String passiveExternalAddress;
+    private final PassivePorts passivePorts;
+    private final boolean passiveIpCheck;
     
     private final boolean implicitSsl;
 

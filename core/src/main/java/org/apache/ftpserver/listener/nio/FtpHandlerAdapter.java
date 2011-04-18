@@ -39,7 +39,7 @@ import org.apache.mina.filter.logging.MdcInjectionFilter;
  *
  */
 public class FtpHandlerAdapter implements IoHandler {
-    private FtpServerContext context;
+    private final FtpServerContext context;
 
     private FtpHandler ftpHandler;
 

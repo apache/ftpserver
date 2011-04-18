@@ -58,7 +58,7 @@ public class MLSD extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(MLSD.class);
 
-    private DirectoryLister directoryLister = new DirectoryLister();
+    private final DirectoryLister directoryLister = new DirectoryLister();
 
     /**
      * Execute command.

@@ -40,9 +40,9 @@ import javax.net.ssl.X509KeyManager;
  */
 public final class AliasKeyManager implements X509KeyManager {
 
-    private X509KeyManager delegate;
+    private final X509KeyManager delegate;
 
-    private String serverKeyAlias;
+    private final String serverKeyAlias;
 
     /**
      * Constructor.

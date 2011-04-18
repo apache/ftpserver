@@ -51,11 +51,11 @@ public class NativeFileSystemView implements FileSystemView {
     // It is always with respect to the root directory.
     private String currDir;
 
-    private User user;
+    private final User user;
 
     // private boolean writePermission;
 
-    private boolean caseInsensitive = false;
+    private final boolean caseInsensitive;
 
     /**
      * Constructor - internal do not use directly, use {@link NativeFileSystemFactory} instead

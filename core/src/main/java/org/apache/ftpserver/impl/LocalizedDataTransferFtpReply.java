@@ -36,13 +36,13 @@ public class LocalizedDataTransferFtpReply extends LocalizedFtpReply implements
 	/**
 	 * The file or directory that data transfer is related to.
 	 */
-	private FtpFile file = null;
+	private final FtpFile file;
 
 	/**
 	 * total number of bytes transferred (bytes sent to the client or receivved
 	 * from the client)
 	 */
-	private long bytesTransferred = 0L;
+	private final long bytesTransferred;
 
 	/**
 	 * Creates a new instance of <code>LocalizedFileTransferReply</code>.

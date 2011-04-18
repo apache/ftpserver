@@ -36,7 +36,7 @@ public class LocalizedFileActionFtpReply extends LocalizedFtpReply implements
 	/**
 	 * The file or directory that data transfer is related to.
 	 */
-	private FtpFile file = null;
+	private final FtpFile file;
 
 	/**
 	 * Creates a new instance of <code>LocalizedFileTransferReply</code>.

@@ -30,17 +30,21 @@ import org.apache.ftpserver.ConnectionConfigFactory;
  */
 public class DefaultConnectionConfig implements ConnectionConfig {
 
-    private int maxLogins = 10;
+    private final int maxLogins;
 
-    private boolean anonymousLoginEnabled = true;
+    private final boolean anonymousLoginEnabled;
 
-    private int maxAnonymousLogins = 10;
+    private final int maxAnonymousLogins;
 
-    private int maxLoginFailures = 3;
+    private final int maxLoginFailures;
 
-    private int loginFailureDelay = 500;
+    private final int loginFailureDelay;
     
-    private int maxThreads = 0;
+    private final int maxThreads;
+
+    public DefaultConnectionConfig() {
+        this(true, 500, 10, 10, 3, 0);
+    }
 
     /**
      * Internal constructor, do not use directly. Use {@link ConnectionConfigFactory} instead
