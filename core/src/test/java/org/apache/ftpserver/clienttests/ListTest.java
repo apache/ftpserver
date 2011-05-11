@@ -259,13 +259,51 @@ public class ListTest extends ClientTestTemplate {
                 + TEST_FILE1.getName(), reply[1]);
     }
 
-    public void testOPTSMLSTInvalidType() throws Exception {
+    /**
+     * "Facts requested that are not
+     * supported, or that are inappropriate to the file or directory being
+     * listed should simply be omitted from the MLSx output."
+     * 
+     * http://tools.ietf.org/html/rfc3659#section-7.9
+     */
+    public void testOPTSMLSTUnknownFact() throws Exception {
         TEST_FILE1.createNewFile();
 
-        assertTrue(FTPReply.isNegativePermanent(client
+        assertTrue(FTPReply.isPositiveCompletion(client
                 .sendCommand("OPTS MLST Foo;Size")));
+        
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST "
+                + TEST_FILE1.getName())));
+        
+        String[] reply = client.getReplyString().split("\\r\\n");
+        
+        assertEquals("Size=0; "
+                + TEST_FILE1.getName(), reply[1]);
     }
 
+    /**
+     * "Facts requested that are not
+     * supported, or that are inappropriate to the file or directory being
+     * listed should simply be omitted from the MLSx output."
+     * 
+     * http://tools.ietf.org/html/rfc3659#section-7.9
+     */
+    public void testOPTSMLSTNoFacts() throws Exception {
+        TEST_FILE1.createNewFile();
+
+        assertTrue(FTPReply.isPositiveCompletion(client
+                .sendCommand("OPTS MLST")));
+        
+        assertTrue(FTPReply.isPositiveCompletion(client.sendCommand("MLST "
+                + TEST_FILE1.getName())));
+        
+        String[] reply = client.getReplyString().split("\\r\\n");
+        
+        assertEquals(" "
+                + TEST_FILE1.getName(), reply[1]);
+    }
+
+    
     private FTPFile getFile(FTPFile[] files, String name) {
         for (int i = 0; i < files.length; i++) {
             FTPFile file = files[i];
