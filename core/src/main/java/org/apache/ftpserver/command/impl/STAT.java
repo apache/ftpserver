@@ -80,7 +80,7 @@ public class STAT extends AbstractCommand {
 
                 session
                 .write(new DefaultFtpReply(
-                                FtpReply.REPLY_200_COMMAND_OKAY,
+                                FtpReply.REPLY_211_SYSTEM_STATUS_REPLY,
                                 dirList));
 
             } catch (FtpException e) {
