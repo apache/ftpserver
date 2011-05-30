@@ -79,10 +79,17 @@ public class STAT extends AbstractCommand {
                 String dirList = directoryLister.listFiles(parsedArg, 
                         session.getFileSystemView(), LIST_FILE_FORMATER);
 
+                int replyCode;
+                if(file.isDirectory()) {
+                	replyCode = FtpReply.REPLY_212_DIRECTORY_STATUS;
+                } else {
+                	replyCode = FtpReply.REPLY_213_FILE_STATUS;
+                }
+                
                 session
                 .write(new LocalizedFileActionFtpReply(
-                                FtpReply.REPLY_211_SYSTEM_STATUS_REPLY,
-                                dirList, file));
+                		replyCode,
+                        dirList, file));
 
             } catch (FtpException e) {
                 session
