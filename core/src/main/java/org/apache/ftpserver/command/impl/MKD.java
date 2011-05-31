@@ -19,7 +19,6 @@
 
 package org.apache.ftpserver.command.impl;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.ftpserver.command.AbstractCommand;

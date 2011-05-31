@@ -20,7 +20,6 @@
 package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.command.Command;

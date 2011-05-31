@@ -50,7 +50,7 @@ import org.apache.mina.core.session.IoSessionConfig;
 import org.apache.mina.core.write.WriteRequest;
 import org.apache.mina.core.write.WriteRequestQueue;
 import org.apache.mina.filter.ssl.SslFilter;
-import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 
 /**
