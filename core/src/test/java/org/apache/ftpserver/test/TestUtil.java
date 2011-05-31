@@ -123,11 +123,11 @@ public class TestUtil {
 
         List<String> hostIps = new ArrayList<String>();
         while (nifs.hasMoreElements()) {
-            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
+            NetworkInterface nif = nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
 
             while (ips.hasMoreElements()) {
-                InetAddress ip = (InetAddress) ips.nextElement();
+                InetAddress ip = ips.nextElement();
                 if (ip instanceof java.net.Inet4Address) {
                     hostIps.add(ip.getHostAddress());
                 } else {
@@ -144,11 +144,11 @@ public class TestUtil {
                 .getNetworkInterfaces();
 
         while (nifs.hasMoreElements()) {
-            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
+            NetworkInterface nif = nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
 
             while (ips.hasMoreElements()) {
-                InetAddress ip = (InetAddress) ips.nextElement();
+                InetAddress ip = ips.nextElement();
                 if (ip instanceof java.net.Inet4Address
                         && !ip.isLoopbackAddress()) {
                     return ip;
