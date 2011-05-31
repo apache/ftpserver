@@ -53,11 +53,11 @@ public class FileSystemBeanDefinitionParser extends
             final BeanDefinitionBuilder builder) {
         if (StringUtils.hasText(element.getAttribute("case-insensitive"))) {
             builder.addPropertyValue("caseInsensitive", Boolean
-                    .parseBoolean(element.getAttribute("case-insensitive")));
+                    .valueOf(element.getAttribute("case-insensitive")));
         }
         if (StringUtils.hasText(element.getAttribute("create-home"))) {
             builder.addPropertyValue("createHome", Boolean
-                    .parseBoolean(element.getAttribute("create-home")));
+                    .valueOf(element.getAttribute("create-home")));
         }
     }
 }

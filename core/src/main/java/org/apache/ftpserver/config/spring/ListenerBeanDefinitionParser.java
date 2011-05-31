@@ -69,7 +69,7 @@ public class ListenerBeanDefinitionParser extends
         BeanDefinitionBuilder factoryBuilder = BeanDefinitionBuilder.genericBeanDefinition(ListenerFactory.class);
 
         if (StringUtils.hasText(element.getAttribute("port"))) {
-            factoryBuilder.addPropertyValue("port", Integer.parseInt(element
+            factoryBuilder.addPropertyValue("port", Integer.valueOf(element
                     .getAttribute("port")));
         }
 
