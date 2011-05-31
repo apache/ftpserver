@@ -55,14 +55,7 @@ public class BindExceptionSerialTest extends ClientTestTemplate {
     }
 
     public void testSerialExecution() throws Exception {
-        try {
-            System.out.println("-- call one");
-            System.out.println(Arrays.asList(client.listFiles()));
-            System.out.println("-- call two");
-            System.out.println(Arrays.asList(client.listFiles()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail();
-        }
+        assertNotNull(client.listFiles());
+        assertNotNull(client.listFiles());
     }
 }
