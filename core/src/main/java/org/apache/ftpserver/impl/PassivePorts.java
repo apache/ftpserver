@@ -55,7 +55,7 @@ public class PassivePorts {
      *            123,124,125) or ranges of ports, including open ended ranges
      *            (e.g. 123-125, 30000-, -1023). Combinations for single ports
      *            and ranges is also supported.
-     * @return An instance of {@link PassivePorts} based on the parsed string
+     * @return An int[] array based on the parsed string
      * @throws IllegalArgumentException
      *             If any of of the ports in the string is invalid (e.g. not an
      *             integer or too large for a port number)
