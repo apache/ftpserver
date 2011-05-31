@@ -126,8 +126,7 @@ public class NioListener extends AbstractListener {
             acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
                     getIdleTimeout());
             // Decrease the default receiver buffer size
-            ((SocketSessionConfig) acceptor.getSessionConfig())
-                    .setReceiveBufferSize(512);
+            acceptor.getSessionConfig().setReceiveBufferSize(512);
     
             MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
     

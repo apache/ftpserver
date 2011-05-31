@@ -78,7 +78,7 @@ public class OPTS extends AbstractCommand {
 
         // call appropriate command method
         String optsRequest = "OPTS_" + argument;
-        Command command = (Command) COMMAND_MAP.get(optsRequest);
+        Command command = COMMAND_MAP.get(optsRequest);
         try {
             if (command != null) {
                 command.execute(session, context, request);
