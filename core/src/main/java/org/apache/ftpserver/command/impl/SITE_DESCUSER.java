@@ -86,7 +86,6 @@ public class SITE_DESCUSER extends AbstractCommand {
             }
         } catch (FtpException ex) {
             LOG.debug("Exception trying to get user from user manager", ex);
-            user = null;
         }
         if (user == null) {
             session.write(LocalizedFtpReply.translate(session, request, context,
