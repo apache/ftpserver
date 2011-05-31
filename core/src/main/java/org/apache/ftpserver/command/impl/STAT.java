@@ -26,7 +26,6 @@ import org.apache.ftpserver.command.impl.listing.DirectoryLister;
 import org.apache.ftpserver.command.impl.listing.LISTFileFormater;
 import org.apache.ftpserver.command.impl.listing.ListArgument;
 import org.apache.ftpserver.command.impl.listing.ListArgumentParser;
-import org.apache.ftpserver.ftplet.DefaultFtpReply;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FtpReply;
@@ -85,11 +84,10 @@ public class STAT extends AbstractCommand {
                 	replyCode = FtpReply.REPLY_213_FILE_STATUS;
                 }
                 
-                session
-                .write(new DefaultFtpReply(
-                		replyCode,
+                session.write(LocalizedFtpReply.translate(session, request, context,
+                		replyCode, "STAT",
                         dirList));
-
+                
             } catch (FtpException e) {
                 session.write(LocalizedFtpReply
                         .translate(
