@@ -432,6 +432,10 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }
 
+    /**
+     * @throws FtpException 
+     * @throws IOException  
+     */
     protected void throwException() throws FtpException, IOException {
         // do not throw, we want to check the result of return values
     }
