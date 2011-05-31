@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 */
 public class StatTest extends ClientTestTemplate {
 
-    private static final String PATTERN = "^21\\d[-\\s]-rw-------\\s\\s\\s1\\suser\\sgroup\\s{12}0\\s[A-Za-z0-9\\s]{6}\\s\\d\\d:\\d\\d\\stest\\d.txt$";
+    private static final String PATTERN = "^-rw-------\\s\\s\\s1\\suser\\sgroup\\s{12}0\\s[A-Za-z0-9\\s]{6}\\s\\d\\d:\\d\\d\\stest\\d.txt$";
     
     private static final File TEST_DIR = new File(ROOT_DIR, "test");
     private static final File TEST_FILE1 = new File(TEST_DIR, "test1.txt");
@@ -45,9 +45,8 @@ public class StatTest extends ClientTestTemplate {
 
         assertEquals(212, client.stat(TEST_DIR.getName()));
         String[] reply = client.getReplyString().split("\r\n");
-
-        assertTrue(reply[0], Pattern.matches(PATTERN, reply[0]));
         assertTrue(reply[1], Pattern.matches(PATTERN, reply[1]));
+        assertTrue(reply[2], Pattern.matches(PATTERN, reply[2]));
     }
 
     public void testStatFile() throws Exception {
@@ -59,7 +58,7 @@ public class StatTest extends ClientTestTemplate {
         assertEquals(213, client.stat(TEST_DIR.getName() + "/" + TEST_FILE1.getName()));
         String[] reply = client.getReplyString().split("\r\n");
 
-        assertTrue(reply[0], Pattern.matches(PATTERN, reply[0]));
+        assertTrue(reply[1], Pattern.matches(PATTERN, reply[1]));
     }
 
     public void testStat() throws Exception {

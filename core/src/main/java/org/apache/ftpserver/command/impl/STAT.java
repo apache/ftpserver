@@ -86,11 +86,10 @@ public class STAT extends AbstractCommand {
                 	replyCode = FtpReply.REPLY_213_FILE_STATUS;
                 }
                 
-                session
-                .write(new LocalizedFileActionFtpReply(
-                		replyCode,
+                session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+                		replyCode, "STAT",
                         dirList, file));
-
+                
             } catch (FtpException e) {
                 session
                 .write(LocalizedFileActionFtpReply
