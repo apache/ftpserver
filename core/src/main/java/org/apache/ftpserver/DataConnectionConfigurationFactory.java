@@ -315,7 +315,7 @@ public class DataConnectionConfigurationFactory {
 
     /**
      * Set whether ssl is required for the data connection
-     * @param sslMandatory True if ssl is mandatory for the data connection
+     * @param implicitSsl True if ssl is mandatory for the data connection
      */
     public void setImplicitSsl(boolean implicitSsl) {
         this.implicitSsl = implicitSsl;

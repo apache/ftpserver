@@ -49,8 +49,8 @@ public interface FtpHandler {
 
     /**
      * Invoked when a connection has been opened. This method is invoked after
-     * {@link #sessionCreated(IoSession)}. The biggest difference from
-     * {@link #sessionCreated(IoSession)} is that it's invoked from other thread
+     * {@link #sessionCreated(FtpIoSession)}. The biggest difference from
+     * {@link #sessionCreated(FtpIoSession)} is that it's invoked from other thread
      * than an I/O processor thread once thread modesl is configured properly.
      */
     void sessionOpened(FtpIoSession session) throws Exception;

@@ -49,11 +49,9 @@ public final class AliasKeyManager implements X509KeyManager {
      * 
      * @param mgr
      *            The X509KeyManager used as a delegate
-     * @param keyStore
-     * @param serverKeyAlias
+     * @param keyAlias
      *            The alias name of the server's keypair and supporting
      *            certificate chain
-     * @param keyAlias
      */
     public AliasKeyManager(KeyManager mgr, String keyAlias) {
         this.delegate = (X509KeyManager) mgr;

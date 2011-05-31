@@ -61,7 +61,7 @@ public class FtpLoggingFilter extends LoggingFilter {
     }
 
     /**
-     * @see LoggingFilter#messageReceived(org.apache.mina.core.IoFilter.NextFilter,
+     * @see LoggingFilter#messageReceived(org.apache.mina.core.filterchain.IoFilter.NextFilter,
      *      IoSession, Object)
      */
     @Override

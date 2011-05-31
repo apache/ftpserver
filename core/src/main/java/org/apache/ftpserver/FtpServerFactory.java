@@ -44,8 +44,6 @@ public class FtpServerFactory {
 
     /**
      * Creates a server with the default configuration
-     * 
-     * @throws Exception
      */
     public FtpServerFactory() {
         serverContext = new DefaultFtpServerContext();
@@ -224,11 +222,6 @@ public class FtpServerFactory {
      * Set the message resource to be used with this server
      * @param connectionConfig The {@link ConnectionConfig} to be used
      *  by servers created by this factory
-     * 
-     * @param messageResource
-     *            The {@link MessageResource}
-     * @throws IllegalStateException
-     *             If a custom server context has been set
      */
     public void setConnectionConfig(final ConnectionConfig connectionConfig) {
         serverContext.setConnectionConfig(connectionConfig);

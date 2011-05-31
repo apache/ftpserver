@@ -270,11 +270,10 @@ public class ListenerFactory {
     }
 
     /**
-     * @deprecated Replaced by the IpFilter.    
      * Sets the {@link Subnet}s that listeners created by this factory will block from connecting
      * @param blockedSubnets 
      *  The list of {@link Subnet}s
-     * @param blockedAddresses
+     * @deprecated Replaced by the IpFilter.    
      */
     @Deprecated
     public void setBlockedSubnets(List<Subnet> blockedSubnets) {
