@@ -73,7 +73,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
         }
     }
     
-    public void testAddAndGetFtplet() throws FtpException {
+    public void testAddAndGetFtplet() {
         MockFtplet ftplet1 = new MockFtplet();
         MockFtplet ftplet2 = new MockFtplet();
 
