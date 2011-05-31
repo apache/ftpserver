@@ -19,14 +19,11 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.net.ServerSocket;
-
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPConnectionClosedException;
 
 
 /**
