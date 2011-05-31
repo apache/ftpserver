@@ -40,6 +40,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
 
     protected static final byte[] TEST_DATA = "TESTDATA".getBytes();
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

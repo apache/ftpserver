@@ -35,6 +35,7 @@ public class SaltedPasswordEncryptorTest extends ClearTextPasswordEncryptorTest 
         return new SaltedPasswordEncryptor();
     }
 
+    @Override
     public void testMatches() {
         PasswordEncryptor encryptor = createPasswordEncryptor();
         

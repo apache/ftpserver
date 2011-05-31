@@ -33,6 +33,7 @@ import org.apache.ftpserver.listener.ListenerFactory;
 *
 */
 public class InetAddressBlacklistTest extends ClientTestTemplate {
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -48,6 +49,7 @@ public class InetAddressBlacklistTest extends ClientTestTemplate {
         return server;
     }
 
+    @Override
     protected boolean isConnectClient() {
         return false;
     }

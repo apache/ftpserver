@@ -36,6 +36,7 @@ public class AliasKeymanagerTest extends TestCase {
 
     private KeyManager km;
 
+    @Override
     protected void setUp() throws Exception {
         KeyStore ks = KeyStore.getInstance("JKS");
 

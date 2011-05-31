@@ -40,6 +40,7 @@ public class ActiveModeReplyTest extends ClientTestTemplate {
 
     private static byte[] testData;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

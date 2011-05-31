@@ -35,6 +35,7 @@ public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
         return new Md5PasswordEncryptor();
     }
 
+    @Override
     public void testMatches() {
         PasswordEncryptor encryptor = createPasswordEncryptor();
         

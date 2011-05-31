@@ -26,6 +26,7 @@ package org.apache.ftpserver.ssl;
 */
 public class MinaImplicitSSLTest extends ImplicitSecurityTestTemplate {
 
+    @Override
     protected String getAuthValue() {
         return "SSL";
     }

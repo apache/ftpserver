@@ -34,12 +34,14 @@ import org.apache.ftpserver.usermanager.UserManagerFactory;
 */
 public class ClearTextDbUserManagerTest extends DbUserManagerTest {
 
+    @Override
     protected File getInitSqlScript() {
         return new File(TestUtil.getBaseDir(),
             "src/test/resources/dbusermanagertest-cleartext-hsql.sql");  
     }
 
 
+    @Override
     protected UserManagerFactory createUserManagerFactory() throws FtpException {
         DbUserManagerFactory manager = (DbUserManagerFactory) super.createUserManagerFactory();
         manager.setPasswordEncryptor(new ClearTextPasswordEncryptor());

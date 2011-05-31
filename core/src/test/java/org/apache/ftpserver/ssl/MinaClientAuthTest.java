@@ -36,6 +36,7 @@ import org.apache.ftpserver.impl.FtpIoSession;
 */
 public class MinaClientAuthTest extends SSLTestTemplate {
 
+    @Override
     protected FTPSClient createFTPClient() throws Exception {
         FTPSClient client = new FTPSClient(useImplicit());
         client.setNeedClientAuth(true);
@@ -54,10 +55,12 @@ public class MinaClientAuthTest extends SSLTestTemplate {
         return client;
     }
 
+    @Override
     protected String getAuthValue() {
         return "TLS";
     }
 
+    @Override
     protected String getClientAuth() {
         return "true";
     }

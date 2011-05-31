@@ -34,6 +34,7 @@ import org.apache.ftpserver.test.TestUtil;
 */
 public class PasvTest extends ClientTestTemplate {
 
+    @Override
     protected boolean isConnectClient() {
         return false;
     }

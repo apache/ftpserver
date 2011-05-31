@@ -144,14 +144,17 @@ public class LISTFileFormaterTest extends TestCase {
 
     public void testSingleDir() {
         FtpFile dir = new MockFileObject() {
+            @Override
             public int getLinkCount() {
                 return 3;
             }
 
+            @Override
             public boolean isDirectory() {
                 return true;
             }
 
+            @Override
             public boolean isFile() {
                 return false;
             }

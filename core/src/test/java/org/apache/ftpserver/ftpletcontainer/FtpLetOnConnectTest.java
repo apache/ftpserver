@@ -56,6 +56,7 @@ public class FtpLetOnConnectTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
 
@@ -64,6 +65,7 @@ public class FtpLetOnConnectTest extends ClientTestTemplate {
         initServer();
     }
 
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -76,6 +78,7 @@ public class FtpLetOnConnectTest extends ClientTestTemplate {
 
     public void testDisconnectOnConnect() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 return mockReturnValue;
@@ -94,6 +97,7 @@ public class FtpLetOnConnectTest extends ClientTestTemplate {
 
     public void testExceptionOnConnect() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 throw new FtpException();
@@ -110,6 +114,7 @@ public class FtpLetOnConnectTest extends ClientTestTemplate {
         }
     }
 
+    @Override
     protected void doConnect() throws Exception {
         client.connect("localhost", getListenerPort());
     }

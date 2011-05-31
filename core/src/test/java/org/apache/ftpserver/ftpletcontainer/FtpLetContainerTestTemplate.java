@@ -47,6 +47,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     private final List<String> calls = new ArrayList<String>();
 
+    @Override
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
         MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
@@ -110,6 +111,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
     
     public void testOnConnect() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -117,6 +119,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -139,6 +142,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDisconnect() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onDisconnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -146,6 +150,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onDisconnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -168,6 +173,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnLogin() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -175,6 +181,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -198,6 +205,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDeleteStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -205,6 +213,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -228,6 +237,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDeleteEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -235,6 +245,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -258,6 +269,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -265,6 +277,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -288,6 +301,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -295,6 +309,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -318,6 +333,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDownloadStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -325,6 +341,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -348,6 +365,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnDownloadEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -355,6 +373,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -378,6 +397,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRmdirStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -385,6 +405,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -408,6 +429,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRmdirEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -415,6 +437,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -438,6 +461,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnMkdirStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -445,6 +469,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -468,6 +493,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnMkdirEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -475,6 +501,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -498,6 +525,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnAppendStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -505,6 +533,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -528,6 +557,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnAppendEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -535,6 +565,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -558,6 +589,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadUniqueStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -565,6 +597,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -588,6 +621,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnUploadUniqueEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -595,6 +629,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -618,6 +653,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRenameStart() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -625,6 +661,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -648,6 +685,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnRenameEnd() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -655,6 +693,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -678,6 +717,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
 
     public void testOnSite() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -685,6 +725,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -711,6 +752,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
      */
     public void testFtpletCallOrder1() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -718,6 +760,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");
@@ -743,6 +786,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
      */
     public void testFtpletCallOrder2() throws FtpException, IOException {
         MockFtplet ftplet1 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet1");
@@ -750,6 +794,7 @@ public abstract class FtpLetContainerTestTemplate extends TestCase {
             }
         };
         MockFtplet ftplet2 = new MockFtplet() {
+            @Override
             public FtpletResult onConnect(FtpSession session)
                     throws FtpException, IOException {
                 calls.add("ftplet2");

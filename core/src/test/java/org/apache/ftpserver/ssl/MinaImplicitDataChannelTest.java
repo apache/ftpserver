@@ -38,14 +38,17 @@ import org.apache.ftpserver.impl.ServerDataConnectionFactory;
  */
 public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
 
+    @Override
     protected String getAuthValue() {
         return "SSL";
     }
 
+    @Override
     protected DataConnectionConfigurationFactory createDataConnectionConfigurationFactory() {
         DataConnectionConfigurationFactory result = super
                 .createDataConnectionConfigurationFactory();
@@ -53,6 +56,7 @@ public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
         return result;
     }
 
+    @Override
     protected boolean useImplicit() {
         return true;
     }
@@ -93,6 +97,7 @@ public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
      * use implicit SSL for the data connection, without sending PROT P. 
      * In this case in active mode.
      */
+    @Override
     public void testStoreWithProtPInPassiveMode() throws Exception {
         secureClientDataConnection();
         client.enterLocalPassiveMode();

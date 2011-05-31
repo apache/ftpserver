@@ -48,6 +48,7 @@ public abstract class FtpFileTestTemplate extends TestCase {
     protected static final User USER = new BaseUser() {
         private static final long serialVersionUID = 4906315989316879758L;
 
+        @Override
         public AuthorizationRequest authorize(AuthorizationRequest request) {
             return request;
         }

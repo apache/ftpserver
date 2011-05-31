@@ -62,6 +62,7 @@ public class NativeFtpFileTest extends FtpFileTestTemplate {
 
 
 
+    @Override
     protected void setUp() throws Exception {
         initDirs();
 
@@ -71,6 +72,7 @@ public class NativeFtpFileTest extends FtpFileTestTemplate {
         TEST_FILE3.createNewFile();
     }
 
+    @Override
     protected FtpFile createFileObject(String fileName, User user) {
         return new NativeFtpFile(fileName, FILE_MAPPINGS.get(fileName), user);
     }
@@ -100,6 +102,7 @@ public class NativeFtpFileTest extends FtpFileTestTemplate {
     	assertTrue(physicalFile.delete());
     }
 
+    @Override
     protected void tearDown() throws Exception {
         cleanTmpDirs();
     }

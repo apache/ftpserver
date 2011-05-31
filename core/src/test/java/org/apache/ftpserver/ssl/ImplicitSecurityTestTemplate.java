@@ -27,6 +27,7 @@ package org.apache.ftpserver.ssl;
 public abstract class ImplicitSecurityTestTemplate extends
         ExplicitSecurityTestTemplate {
 
+    @Override
     protected boolean useImplicit() {
         return true;
     }

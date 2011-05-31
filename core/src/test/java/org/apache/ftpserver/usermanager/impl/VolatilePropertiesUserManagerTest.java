@@ -35,6 +35,7 @@ import org.apache.ftpserver.usermanager.UserManagerFactory;
 */
 public class VolatilePropertiesUserManagerTest extends UserManagerTestTemplate {
     
+    @Override
     protected UserManagerFactory createUserManagerFactory() throws FtpException {
         PropertiesUserManagerFactory um = new PropertiesUserManagerFactory();
         
@@ -45,6 +46,7 @@ public class VolatilePropertiesUserManagerTest extends UserManagerTestTemplate {
         return um;
     }
     
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         
@@ -81,6 +83,7 @@ public class VolatilePropertiesUserManagerTest extends UserManagerTestTemplate {
     }
 
     // we do not save persistent in this case so this test is disabled
+    @Override
     public void testSavePersistent() {
         
     }

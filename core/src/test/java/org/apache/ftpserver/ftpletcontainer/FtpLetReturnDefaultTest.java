@@ -50,13 +50,14 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
 
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
+    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
 
     /*
      * (non-Javadoc)
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
         MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
@@ -69,6 +70,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     }
 
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -82,6 +84,7 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
+            @Override
             public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 assertNotNull(session.getUserArgument());

@@ -37,6 +37,7 @@ public class IpFilterTest extends ClientTestTemplate {
 
     private RemoteIpFilter filter = new RemoteIpFilter(IpFilterType.DENY);
 
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -48,6 +49,7 @@ public class IpFilterTest extends ClientTestTemplate {
         return server;
     }
 
+    @Override
     protected boolean isConnectClient() {
         return false;
     }

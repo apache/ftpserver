@@ -49,6 +49,7 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
     private static final String FULL_PATH_NO_CURRDIR = ROOT_DIR_PATH + "/"
             + TEST_FILE2_IN_DIR1.getName();
 
+    @Override
     protected void setUp() throws Exception {
         initDirs();
 
@@ -163,6 +164,7 @@ public class NativeFileSystemViewTest extends FileSystemViewTemplate {
      * 
      * @see junit.framework.TestCase#tearDown()
      */
+    @Override
     protected void tearDown() throws Exception {
         cleanTmpDirs();
     }

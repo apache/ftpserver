@@ -35,6 +35,7 @@ public class CustomMaxLoginTest extends ClientTestTemplate {
 
     private static final String UNKNOWN_PASSWORD = "bar";
 
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

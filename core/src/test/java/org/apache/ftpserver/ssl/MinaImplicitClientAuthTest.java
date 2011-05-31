@@ -26,6 +26,7 @@ package org.apache.ftpserver.ssl;
 */
 public class MinaImplicitClientAuthTest extends MinaClientAuthTest {
 
+    @Override
     protected boolean useImplicit() {
         return true;
     }

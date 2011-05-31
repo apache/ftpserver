@@ -27,6 +27,7 @@ import java.io.IOException;
 *
 */
 public class FtpLetThrowIOExceptionTest extends FtpLetThrowFtpExceptionTest {
+    @Override
     protected void throwException() throws IOException {
         throw new IOException();
     }

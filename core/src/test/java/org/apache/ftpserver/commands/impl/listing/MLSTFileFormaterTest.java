@@ -148,14 +148,17 @@ public class MLSTFileFormaterTest extends TestCase {
 
     public void testSingleDir() {
         FtpFile dir = new MockFileObject() {
+            @Override
             public boolean isDirectory() {
                 return true;
             }
 
+            @Override
             public boolean isFile() {
                 return false;
             }
 
+            @Override
             public long getSize() {
                 return 0;
             }

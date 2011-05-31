@@ -66,6 +66,7 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return sslConfigFactory;
     }
     
+    @Override
     protected FtpServerFactory createServer() throws Exception {
         assertTrue(FTPSERVER_KEYSTORE.exists());
 
@@ -89,6 +90,7 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return "false";
     }
 
+    @Override
     protected FTPSClient createFTPClient() throws Exception {
         FTPSClient ftpsClient = new FTPSClient(useImplicit());
 

@@ -118,6 +118,7 @@ public abstract class ClientTestTemplate extends TestCase {
      * 
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         initDirs();
 
@@ -215,6 +216,7 @@ public abstract class ClientTestTemplate extends TestCase {
      * 
      * @see junit.framework.TestCase#tearDown()
      */
+    @Override
     protected void tearDown() throws Exception {
         if (isConnectClient()) {
             try {

@@ -30,6 +30,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 */
 public class FtpLetThrowFtpExceptionTest extends FtpLetReturnDisconnectTest {
 
+    @Override
     protected void throwException() throws FtpException, IOException {
         throw new FtpException();
     }

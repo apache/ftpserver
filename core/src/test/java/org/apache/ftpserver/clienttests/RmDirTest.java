@@ -36,6 +36,7 @@ public class RmDirTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
