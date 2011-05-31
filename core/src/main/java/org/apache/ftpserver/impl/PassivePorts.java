@@ -38,6 +38,8 @@ public class PassivePorts {
 
     private static final int MAX_PORT = 65535;
 
+    private static final Integer MAX_PORT_INTEGER = Integer.valueOf(MAX_PORT);
+
     private int[] passivePorts;
 
     private boolean[] reservedPorts;
@@ -64,18 +66,18 @@ public class PassivePorts {
         List<Integer> passivePortsList = new ArrayList<Integer>();
 
         boolean inRange = false;
-        Integer lastPort = 1;
+        Integer lastPort = Integer.valueOf(1);
         StringTokenizer st = new StringTokenizer(portsString, ",;-", true);
         while (st.hasMoreTokens()) {
             String token = st.nextToken().trim();
 
             if (",".equals(token) || ";".equals(token)) {
                 if (inRange) {
-                    fillRange(passivePortsList, lastPort, MAX_PORT);
+                    fillRange(passivePortsList, lastPort, MAX_PORT_INTEGER);
                 }
 
                 // reset state
-                lastPort = 1;
+                lastPort = Integer.valueOf(1);
                 inRange = false;
             } else if ("-".equals(token)) {
                 inRange = true;
@@ -100,7 +102,7 @@ public class PassivePorts {
         }
 
         if (inRange) {
-            fillRange(passivePortsList, lastPort, MAX_PORT);
+            fillRange(passivePortsList, lastPort, MAX_PORT_INTEGER);
         }
 
         int[] passivePorts = new int[passivePortsList.size()];
@@ -123,7 +125,7 @@ public class PassivePorts {
     private static void fillRange(final List<Integer> passivePortsList,
             final Integer beginPort, final Integer endPort) {
         for (int i = beginPort.intValue(); i <= endPort.intValue(); i++) {
-            addPort(passivePortsList, i);
+            addPort(passivePortsList, Integer.valueOf(i));
         }
     }
 
