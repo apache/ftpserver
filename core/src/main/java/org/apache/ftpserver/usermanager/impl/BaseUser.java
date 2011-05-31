@@ -169,6 +169,7 @@ public class BaseUser implements User {
     /**
      * String representation.
      */
+    @Override
     public String toString() {
         return name;
     }

@@ -170,6 +170,7 @@ public class AddUser extends CommandLine {
     /**
      * Print the usage message.
      */
+    @Override
     protected void usage() {
         System.err.println("Usage: java " + AddUser.class.getName() + " [OPTION] [CONFIGFILE]");
         System.err

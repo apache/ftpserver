@@ -361,6 +361,7 @@ public class NativeFtpFile implements FtpFile {
         // The IBM jre needs to have both the stream and the random access file
         // objects closed to actually close the file
         return new FileOutputStream(raf.getFD()) {
+            @Override
             public void close() throws IOException {
                 super.close();
                 raf.close();
@@ -385,6 +386,7 @@ public class NativeFtpFile implements FtpFile {
         // The IBM jre needs to have both the stream and the random access file
         // objects closed to actually close the file
         return new FileInputStream(raf.getFD()) {
+            @Override
             public void close() throws IOException {
                 super.close();
                 raf.close();

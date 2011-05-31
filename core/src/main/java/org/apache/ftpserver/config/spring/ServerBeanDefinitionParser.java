@@ -50,6 +50,7 @@ public class ServerBeanDefinitionParser extends
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Class<? extends FtpServer> getBeanClass(final Element element) {
         return null;
     }
