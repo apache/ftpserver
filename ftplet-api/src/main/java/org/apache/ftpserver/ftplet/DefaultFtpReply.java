@@ -97,6 +97,7 @@ public class DefaultFtpReply implements FtpReply {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         int code = getCode();
         String notNullMessage = getMessage();
