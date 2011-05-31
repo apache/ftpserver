@@ -70,13 +70,13 @@ public class ServerBeanDefinitionParser extends
             String childName = childElm.getLocalName();
 
             if ("listeners".equals(childName)) {
-                Map listeners = parseListeners(childElm, parserContext, builder);
+                Map<?, ?> listeners = parseListeners(childElm, parserContext, builder);
 
                 if (listeners.size() > 0) {
                     factoryBuilder.addPropertyValue("listeners", listeners);
                 }
             } else if ("ftplets".equals(childName)) {
-                Map ftplets = parseFtplets(childElm, parserContext, builder);
+                Map<?, ?> ftplets = parseFtplets(childElm, parserContext, builder);
                 factoryBuilder.addPropertyValue("ftplets", ftplets);
             } else if ("file-user-manager".equals(childName)
                     || "db-user-manager".equals(childName)) {
@@ -185,7 +185,7 @@ public class ServerBeanDefinitionParser extends
     /**
      * Parse the "ftplets" element
      */
-    private Map parseFtplets(final Element childElm,
+    private Map<?, ?> parseFtplets(final Element childElm,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
 
@@ -193,7 +193,7 @@ public class ServerBeanDefinitionParser extends
 
         if(childs.size() > 0 && childs.get(0).getLocalName().equals("map")) {
             // using a beans:map element
-            return (Map) parserContext.getDelegate().parseMapElement(
+            return parserContext.getDelegate().parseMapElement(
                     childs.get(0),
                     builder.getBeanDefinition());
         } else {
@@ -213,7 +213,7 @@ public class ServerBeanDefinitionParser extends
      * Parse listeners elements
      */
     @SuppressWarnings("unchecked")
-    private Map parseListeners(final Element listenersElm,
+    private Map<?, ?> parseListeners(final Element listenersElm,
             final ParserContext parserContext,
             final BeanDefinitionBuilder builder) {
         ManagedMap listeners = new ManagedMap();
