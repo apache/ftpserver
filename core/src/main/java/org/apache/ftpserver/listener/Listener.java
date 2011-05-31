@@ -161,6 +161,7 @@ public interface Listener {
      *         <code>IpFilterType.DENY</code>. This functionality is provided
      *         for backward compatibility purpose only.
      */
+    @Deprecated
     List<Subnet> getBlockedSubnets();
 
     /**
