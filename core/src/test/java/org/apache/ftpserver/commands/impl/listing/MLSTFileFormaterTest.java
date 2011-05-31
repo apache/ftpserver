@@ -36,7 +36,6 @@ import org.apache.ftpserver.ftplet.FtpFile;
 * @author <a href="http://mina.apache.org">Apache MINA Project</a>
 *
 */
-@SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {
 
     private static final Calendar LAST_MODIFIED_IN_2005 = Calendar.getInstance(TimeZone.getTimeZone("GMT")); 
