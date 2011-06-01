@@ -51,6 +51,12 @@ public class TestUtil {
         if (basedir != null) {
             return new File(basedir);
         } else {
+            // Are we using Eclipse based on parent directory?
+            File core = new File("core");
+            File check = new File(core,"src");
+            if (check.isDirectory()) {
+                return core;
+            }
             return new File(".");
         }
     }
