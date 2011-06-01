@@ -202,4 +202,12 @@ public class PassivePortsTest extends TestCase {
         assertEquals(-1, ports.reserveNextPort());
     }
 
+    public void testNullPorts() {
+    	try {
+    		new PassivePorts((int[])null, false);
+    		fail("Must throw NPE");
+    	} catch(NullPointerException e) {
+    		// ok
+    	}
+    }
 }

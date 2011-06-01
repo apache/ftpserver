@@ -156,11 +156,11 @@ public class PassivePorts {
     }
 
     public PassivePorts(final int[] passivePorts, boolean checkIfBound) {
-        if (passivePorts != null) {
-            this.passivePorts = passivePorts.clone();
-        } else {
-            this.passivePorts = null;
-        }
+    	if(passivePorts == null) {
+    		throw new NullPointerException("passivePorts can not be null");
+    	}
+    	
+        this.passivePorts = passivePorts.clone();
 
         reservedPorts = new boolean[passivePorts.length];
         this.checkIfBound = checkIfBound;
