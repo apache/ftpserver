@@ -183,11 +183,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>oro</groupId>
-			<artifactId>oro</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>test</scope>
