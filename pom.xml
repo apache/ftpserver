@@ -262,7 +262,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.0-beta-7</version>
         <configuration>
-          <tagBase>https://svn.apache.org/repos/asf/mina/sandbox/ftpserver/tags/</tagBase>
+          <tagBase>https://svn.apache.org/repos/asf/mina/ftpserver/tags/</tagBase>
         </configuration>
       </plugin>
 
