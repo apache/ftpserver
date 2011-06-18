@@ -68,10 +68,5 @@ public class PasvUsedPortTest extends ClientTestTemplate {
 
         // close blocking socket
         ss.close();
-        
-        client.connect("localhost", getListenerPort());
-        client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
-        client.pasv();
-        assertEquals("227 Entering Passive Mode (127,0,0,1,48,156)", client.getReplyString().trim());
     }
 }

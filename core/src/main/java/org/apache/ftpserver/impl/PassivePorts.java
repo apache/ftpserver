@@ -22,9 +22,14 @@ package org.apache.ftpserver.impl;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
@@ -36,16 +41,22 @@ import java.util.StringTokenizer;
  */
 public class PassivePorts {
 
+    private Logger log = LoggerFactory.getLogger(PassivePorts.class);
+
     private static final int MAX_PORT = 65535;
 
-    private int[] passivePorts;
+    private static final Integer MAX_PORT_INTEGER = Integer.valueOf(MAX_PORT);
 
-    private boolean[] reservedPorts;
+    private List<Integer> freeList;
+
+    private Set<Integer> usedList;
+
+    private Random r = new Random();
 
     private String passivePortsString;
 
     private boolean checkIfBound;
-    
+
     /**
      * Parse a string containing passive ports
      * 
@@ -55,27 +66,27 @@ public class PassivePorts {
      *            123,124,125) or ranges of ports, including open ended ranges
      *            (e.g. 123-125, 30000-, -1023). Combinations for single ports
      *            and ranges is also supported.
-     * @return An instance of {@link PassivePorts} based on the parsed string
+     * @return A list of Integer objects, based on the parsed string
      * @throws IllegalArgumentException
      *             If any of of the ports in the string is invalid (e.g. not an
      *             integer or too large for a port number)
      */
-    private static int[] parse(final String portsString) {
-        List<Integer> passivePortsList = new ArrayList<Integer>();
+    private static Set<Integer> parse(final String portsString) {
+        Set<Integer> passivePortsList = new HashSet<Integer>();
 
         boolean inRange = false;
-        Integer lastPort = 1;
+        Integer lastPort = Integer.valueOf(1);
         StringTokenizer st = new StringTokenizer(portsString, ",;-", true);
         while (st.hasMoreTokens()) {
             String token = st.nextToken().trim();
 
             if (",".equals(token) || ";".equals(token)) {
                 if (inRange) {
-                    fillRange(passivePortsList, lastPort, MAX_PORT);
+                    fillRange(passivePortsList, lastPort, MAX_PORT_INTEGER);
                 }
 
                 // reset state
-                lastPort = 1;
+                lastPort = Integer.valueOf(1);
                 inRange = false;
             } else if ("-".equals(token)) {
                 inRange = true;
@@ -84,7 +95,7 @@ public class PassivePorts {
             } else {
                 Integer port = Integer.valueOf(token);
 
-                verifyPort(port.intValue());
+                verifyPort(port);
 
                 if (inRange) {
                     // add all numbers from last int
@@ -100,41 +111,26 @@ public class PassivePorts {
         }
 
         if (inRange) {
-            fillRange(passivePortsList, lastPort, MAX_PORT);
+            fillRange(passivePortsList, lastPort, MAX_PORT_INTEGER);
         }
 
-        int[] passivePorts = new int[passivePortsList.size()];
-
-        Iterator<Integer> iter = passivePortsList.iterator();
-
-        int counter = 0;
-        while (iter.hasNext()) {
-            Integer port = iter.next();
-            passivePorts[counter] = port.intValue();
-            counter++;
-        }
-
-        return passivePorts;
+        return passivePortsList;
     }
 
     /**
      * Fill a range of ports
      */
-    private static void fillRange(final List<Integer> passivePortsList,
-            final Integer beginPort, final Integer endPort) {
-        for (int i = beginPort.intValue(); i <= endPort.intValue(); i++) {
-            addPort(passivePortsList, i);
+    private static void fillRange(final Set<Integer> passivePortsList, final Integer beginPort, final Integer endPort) {
+        for (int i = beginPort; i <= endPort; i++) {
+            addPort(passivePortsList, Integer.valueOf(i));
         }
     }
 
     /**
      * Add a single port if not already in list
      */
-    private static void addPort(final List<Integer> passivePortsList,
-            final Integer rangePort) {
-        if (!passivePortsList.contains(rangePort)) {
-            passivePortsList.add(rangePort);
-        }
+    private static void addPort(final Set<Integer> passivePortsList, final Integer port) {
+        passivePortsList.add(port);
     }
 
     /**
@@ -142,8 +138,7 @@ public class PassivePorts {
      */
     private static void verifyPort(final int port) {
         if (port < 0) {
-            throw new IllegalArgumentException("Port can not be negative: "
-                    + port);
+            throw new IllegalArgumentException("Port can not be negative: " + port);
         } else if (port > MAX_PORT) {
             throw new IllegalArgumentException("Port too large: " + port);
         }
@@ -155,14 +150,17 @@ public class PassivePorts {
         this.passivePortsString = passivePorts;
     }
 
-    public PassivePorts(final int[] passivePorts, boolean checkIfBound) {
-    	if(passivePorts == null) {
-    		throw new NullPointerException("passivePorts can not be null");
-    	}
-    	
-        this.passivePorts = passivePorts.clone();
+    public PassivePorts(Set<Integer> passivePorts, boolean checkIfBound) {
+        if (passivePorts == null) {
+            throw new NullPointerException("passivePorts can not be null");
+        } else if(passivePorts.isEmpty()) {
+        	passivePorts = new HashSet<Integer>();
+        	passivePorts.add(0);
+        }
 
-        reservedPorts = new boolean[passivePorts.length];
+        this.freeList = new ArrayList<Integer>(passivePorts);
+        this.usedList = new HashSet<Integer>(passivePorts.size());
+
         this.checkIfBound = checkIfBound;
     }
 
@@ -171,15 +169,15 @@ public class PassivePorts {
      */
     private boolean checkPortUnbound(int port) {
         // is this check disabled?
-        if(!checkIfBound) {
+        if (!checkIfBound) {
             return true;
         }
-        
+
         // if using 0 port, it will always be available
-        if(port == 0) {
+        if (port == 0) {
             return true;
         }
-        
+
         ServerSocket ss = null;
         try {
             ss = new ServerSocket(port);
@@ -189,7 +187,7 @@ public class PassivePorts {
             // port probably in use, check next
             return false;
         } finally {
-            if(ss != null) {
+            if (ss != null) {
                 try {
                     ss.close();
                 } catch (IOException e) {
@@ -199,27 +197,49 @@ public class PassivePorts {
             }
         }
     }
-    
-    public int reserveNextPort() {
-        // search for a free port
-        for (int i = 0; i < passivePorts.length; i++) {
-            if (!reservedPorts[i] && checkPortUnbound(passivePorts[i])) {
-                if (passivePorts[i] != 0) {
-                    reservedPorts[i] = true;
-                }
-                return passivePorts[i];
+
+    public synchronized int reserveNextPort() {
+    	// create a copy of the free ports, so that we can keep track of the tested ports
+    	List<Integer> freeCopy = new ArrayList<Integer>(freeList);
+    	
+        // Loop until we have found a port, or exhausted all available ports
+        while (freeCopy.size() > 0) {
+            // Otherwise, pick one at random
+            int i = r.nextInt(freeCopy.size());
+            Integer ret = freeCopy.get(i);
+
+            if (ret == 0) {
+                // "Any" port should not be removed from our free list,
+                // nor added to the used list
+                return 0;
+
+            } else if (checkPortUnbound(ret)) {
+                // Not used by someone else, so lets reserve it and return it
+                freeList.remove(i);
+                usedList.add(ret);
+                return ret;
+
+            } else {
+            	freeCopy.remove(i);
+                // log port unavailable, but left in pool
+                log.warn("Passive port in use by another process: " + ret);
             }
         }
 
         return -1;
     }
 
-    public void releasePort(final int port) {
-        for (int i = 0; i < passivePorts.length; i++) {
-            if (passivePorts[i] == port) {
-                reservedPorts[i] = false;
-                break;
-            }
+    public synchronized void releasePort(final int port) {
+        if (port == 0) {
+            // Ignore port 0 being released,
+            // since its not put on the used list
+
+        } else if (usedList.remove(port)) {
+            freeList.add(port);
+
+        } else {
+            // log attempt to release unused port
+            log.warn("Releasing unreserved passive port: " + port);
         }
     }
 
@@ -231,7 +251,7 @@ public class PassivePorts {
 
         StringBuilder sb = new StringBuilder();
 
-        for (int port : passivePorts) {
+        for (Integer port : freeList) {
             sb.append(port);
             sb.append(",");
         }

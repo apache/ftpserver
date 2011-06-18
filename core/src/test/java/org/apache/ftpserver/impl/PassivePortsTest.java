@@ -19,11 +19,18 @@
 
 package org.apache.ftpserver.impl;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>
+*
 */
 public class PassivePortsTest extends TestCase {
 
@@ -68,146 +75,109 @@ public class PassivePortsTest extends TestCase {
             // ok
         }
     }
+    
+    private void assertContains( List<Integer> valid, Integer testVal ){
+        if( !valid.remove(testVal) ){
+            throw new AssertionFailedError( "Did not find "+testVal+" in valid list "+valid );
+        }
+    }
+    
+    private void assertReserveAll(String portString, int... validPorts) {
+    	PassivePorts ports = new PassivePorts(portString, false);
+    	
+        List<Integer> valid = valid(validPorts);
 
-    public void testParseListOfValues() {
-        PassivePorts ports = new PassivePorts("123, 456,\t\n789", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(456, ports.reserveNextPort());
-        assertEquals(789, ports.reserveNextPort());
+        int len = valid.size();
+        for(int i = 0; i<len; i++) {
+        	assertContains(valid, ports.reserveNextPort());
+        }
         assertEquals(-1, ports.reserveNextPort());
+        assertTrue(valid.isEmpty());
+
+    }
+    
+    private List<Integer> valid(int... ints) {
+        List<Integer> valid = new ArrayList<Integer>();
+        for(int i : ints) {
+        	valid.add(i);
+        }
+        return valid;
     }
 
-    public void testParseListOfValuesOrder() {
-        PassivePorts ports = new PassivePorts("123, 789, 456", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(789, ports.reserveNextPort());
-        assertEquals(456, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+    public void testParseListOfValues() {
+        assertReserveAll("123, 456,\t\n789", 123, 456, 789);
     }
 
     public void testParseListOfValuesDuplicate() {
-        PassivePorts ports = new PassivePorts("123, 789, 456, 789", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(789, ports.reserveNextPort());
-        assertEquals(456, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("123, 789, 456, 789", 123, 456, 789);
     }
 
     public void testParseSimpleRange() {
-        PassivePorts ports = new PassivePorts("123-125", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(124, ports.reserveNextPort());
-        assertEquals(125, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("123-125", 123, 124, 125);
     }
 
     public void testParseMultipleRanges() {
-        PassivePorts ports = new PassivePorts("123-125, 127-128, 130-132", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(124, ports.reserveNextPort());
-        assertEquals(125, ports.reserveNextPort());
-        assertEquals(127, ports.reserveNextPort());
-        assertEquals(128, ports.reserveNextPort());
-        assertEquals(130, ports.reserveNextPort());
-        assertEquals(131, ports.reserveNextPort());
-        assertEquals(132, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("123-125, 127-128, 130-132", 123, 124, 125, 127, 128, 130, 131, 132);
     }
 
     public void testParseMixedRangeAndSingle() {
-        PassivePorts ports = new PassivePorts("123-125, 126, 128-129", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(124, ports.reserveNextPort());
-        assertEquals(125, ports.reserveNextPort());
-        assertEquals(126, ports.reserveNextPort());
-        assertEquals(128, ports.reserveNextPort());
-        assertEquals(129, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("123-125, 126, 128-129", 123, 124, 125, 126, 128, 129);
     }
 
     public void testParseOverlapingRanges() {
-        PassivePorts ports = new PassivePorts("123-125, 124-126", false);
-
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(124, ports.reserveNextPort());
-        assertEquals(125, ports.reserveNextPort());
-        assertEquals(126, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("123-125, 124-126", 123, 124, 125, 126);
     }
 
     public void testParseOverlapingRangesorder() {
-        PassivePorts ports = new PassivePorts("124-126, 123-125", false);
-
-        assertEquals(124, ports.reserveNextPort());
-        assertEquals(125, ports.reserveNextPort());
-        assertEquals(126, ports.reserveNextPort());
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("124-126, 123-125", 123, 124, 125, 126);
     }
 
     public void testParseOpenLowerRange() {
-        PassivePorts ports = new PassivePorts("9, -3", false);
-
-        assertEquals(9, ports.reserveNextPort());
-        assertEquals(1, ports.reserveNextPort());
-        assertEquals(2, ports.reserveNextPort());
-        assertEquals(3, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("9, -3", 1, 2, 3, 9);
     }
 
     public void testParseOpenUpperRange() {
-        PassivePorts ports = new PassivePorts("65533-", false);
-
-        assertEquals(65533, ports.reserveNextPort());
-        assertEquals(65534, ports.reserveNextPort());
-        assertEquals(65535, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("65533-", 65533, 65534, 65535);
     }
 
     public void testParseOpenUpperRange3() {
-        PassivePorts ports = new PassivePorts("65533-, 65532-", false);
-
-        assertEquals(65533, ports.reserveNextPort());
-        assertEquals(65534, ports.reserveNextPort());
-        assertEquals(65535, ports.reserveNextPort());
-        assertEquals(65532, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("65533-, 65532-", 65532, 65533, 65534, 65535);
     }
 
     public void testParseOpenUpperRange2() {
-        PassivePorts ports = new PassivePorts("65533-, 1", false);
-
-        assertEquals(65533, ports.reserveNextPort());
-        assertEquals(65534, ports.reserveNextPort());
-        assertEquals(65535, ports.reserveNextPort());
-        assertEquals(1, ports.reserveNextPort());
-        assertEquals(-1, ports.reserveNextPort());
+        assertReserveAll("65533-, 1", 1, 65533, 65534, 65535);
     }
+    
+    public void testReserveNextPortBound() throws IOException {
+    	ServerSocket ss = new ServerSocket(0);
+    	
+        PassivePorts ports = new PassivePorts(Integer.toString(ss.getLocalPort()), true);
+
+        assertEquals(-1, ports.reserveNextPort());
+        
+        ss.close();
+        
+        assertEquals(ss.getLocalPort(), ports.reserveNextPort());
+    }
+
 
     public void testParseRelease() {
         PassivePorts ports = new PassivePorts("123, 456,789", false);
 
-        assertEquals(123, ports.reserveNextPort());
-        assertEquals(456, ports.reserveNextPort());
-        ports.releasePort(456);
-        assertEquals(456, ports.reserveNextPort());
+        List<Integer> valid = valid(123, 456, 789);
 
-        assertEquals(789, ports.reserveNextPort());
+        assertContains(valid, ports.reserveNextPort());
+
+        int port = ports.reserveNextPort();
+        assertContains(valid, port);
+        ports.releasePort(port);
+        valid.add(port);
+        assertContains(valid, ports.reserveNextPort());
+        
+        assertContains(valid, ports.reserveNextPort());
+
         assertEquals(-1, ports.reserveNextPort());
+        assertEquals(0, valid.size());
     }
 
-    public void testNullPorts() {
-    	try {
-    		new PassivePorts((int[])null, false);
-    		fail("Must throw NPE");
-    	} catch(NullPointerException e) {
-    		// ok
-    	}
-    }
 }
