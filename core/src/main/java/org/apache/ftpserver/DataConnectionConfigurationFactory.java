@@ -21,6 +21,7 @@ package org.apache.ftpserver;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collections;
 
 import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.impl.PassivePorts;
@@ -48,7 +49,7 @@ public class DataConnectionConfigurationFactory {
     
     private String passiveAddress;
     private String passiveExternalAddress;
-    private PassivePorts passivePorts = new PassivePorts(new int[] { 0 }, true);
+    private PassivePorts passivePorts = new PassivePorts(Collections.<Integer>emptySet(), true);
     private boolean passiveIpCheck = false;
     private boolean implicitSsl;
 
