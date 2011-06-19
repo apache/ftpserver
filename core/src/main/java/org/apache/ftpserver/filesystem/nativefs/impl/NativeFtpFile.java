@@ -394,10 +394,6 @@ public class NativeFtpFile implements FtpFile {
         };
     }
 
-
-
-
-    
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof NativeFtpFile) {
@@ -416,4 +412,14 @@ public class NativeFtpFile implements FtpFile {
         }
         return false;
     }
+    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		try {
+			return prime  + ((file == null) ? 0 : file.getCanonicalFile().hashCode());
+		} catch (IOException e) {
+			return prime;
+		}
+	}
 }
