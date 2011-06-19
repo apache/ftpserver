@@ -415,11 +415,10 @@ public class NativeFtpFile implements FtpFile {
     
 	@Override
 	public int hashCode() {
-		final int prime = 31;
 		try {
-			return prime  + ((file == null) ? 0 : file.getCanonicalFile().hashCode());
+			return file.getCanonicalFile().hashCode();
 		} catch (IOException e) {
-			return prime;
+			return 0;
 		}
 	}
 }
