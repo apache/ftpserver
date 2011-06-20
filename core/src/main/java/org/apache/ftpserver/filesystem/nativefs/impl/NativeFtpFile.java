@@ -396,7 +396,7 @@ public class NativeFtpFile implements FtpFile {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof NativeFtpFile) {
+        if (obj instanceof NativeFtpFile) {
             File thisCanonicalFile;
             File otherCanonicalFile;
             try {
