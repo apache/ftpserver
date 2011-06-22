@@ -394,21 +394,25 @@ public class NativeFtpFile implements FtpFile {
         };
     }
 
+    /**
+     * Implements equals by comparing getCanonicalPath() for the underlying file instabnce.
+     * Ignores the fileName and User fields
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof NativeFtpFile) {
-            File thisCanonicalFile;
-            File otherCanonicalFile;
+            String thisCanonicalPath;
+            String otherCanonicalPath;
             try {
-                thisCanonicalFile = this.file.getCanonicalFile();
-                otherCanonicalFile = ((NativeFtpFile) obj).file
-                        .getCanonicalFile();
+                thisCanonicalPath = this.file.getCanonicalPath();
+                otherCanonicalPath = ((NativeFtpFile) obj).file
+                        .getCanonicalPath();
             } catch (IOException e) {
                 throw new RuntimeException("Failed to get the canonical path",
                         e);
             }
 
-            return thisCanonicalFile.equals(otherCanonicalFile);
+            return thisCanonicalPath.equals(otherCanonicalPath);
         }
         return false;
     }
@@ -416,7 +420,7 @@ public class NativeFtpFile implements FtpFile {
 	@Override
 	public int hashCode() {
 		try {
-			return file.getCanonicalFile().hashCode();
+			return file.getCanonicalPath().hashCode();
 		} catch (IOException e) {
 			return 0;
 		}
