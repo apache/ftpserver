@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.FtpServerFactory;
@@ -34,6 +36,7 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ftplet.FtpletResult;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
@@ -83,12 +86,13 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     }
 
     public void testLogin() throws Exception {
+    	final LinkedBlockingQueue<User> loggedInUser = new LinkedBlockingQueue<User>();
+    	
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
-                assertNotNull(session.getUserArgument());
-
+                loggedInUser.add(session.getUser());
+                
                 return super.onLogin(session, request);
             }
 
@@ -96,6 +100,8 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
         MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
 
         assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+
+        assertNotNull(loggedInUser.poll(2000, TimeUnit.MILLISECONDS));
     }
 
     public void testDelete() throws Exception {
