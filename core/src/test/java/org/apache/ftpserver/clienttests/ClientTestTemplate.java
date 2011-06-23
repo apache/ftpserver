@@ -227,7 +227,12 @@ public abstract class ClientTestTemplate extends TestCase {
         }
 
         if (server != null) {
-            server.stop();
+        	try {
+        		server.stop();
+        	} catch(NullPointerException e) {
+        		// a bug in the IBM JVM might cause Thread.interrupt() to throw an NPE
+        		// see http://www-01.ibm.com/support/docview.wss?uid=swg1IZ52037&wv=1
+        	}
         }
 
         cleanTmpDirs();
