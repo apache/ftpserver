@@ -25,9 +25,9 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 
-/*
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- */
+/**
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class MockUserManager implements UserManager {
 
     public User authenticate(Authentication authentication)

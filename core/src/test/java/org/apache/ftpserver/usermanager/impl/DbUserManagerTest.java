@@ -33,8 +33,7 @@ import org.hsqldb.jdbc.jdbcDataSource;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DbUserManagerTest extends UserManagerTestTemplate {
 
@@ -57,7 +56,6 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
         stm.execute(ddl);
     }
 
-    @Override
     protected UserManagerFactory createUserManagerFactory() throws FtpException {
         DbUserManagerFactory manager = new DbUserManagerFactory();
 
@@ -86,7 +84,6 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
      * 
      * @see junit.framework.TestCase#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         ds = new jdbcDataSource();
         ds.setDatabase("jdbc:hsqldb:mem:ftpd");
@@ -98,7 +95,6 @@ public class DbUserManagerTest extends UserManagerTestTemplate {
         super.setUp();
     }
 
-    @Override
     protected void tearDown() throws Exception {
         Statement stm = conn.createStatement();
         stm.execute("SHUTDOWN");

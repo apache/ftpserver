@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.ipfilter.SessionFilter;
+import org.apache.ftpserver.ipfilter.IpFilter;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
@@ -57,9 +57,9 @@ public class ListenerFactory {
     private List<Subnet> blockedSubnets;
     
     /**
-     * The Session filter
+     * The IP filter
      */
-    private SessionFilter sessionFilter = null;
+    private IpFilter ipFilter = null;
 
     /**
      * Default constructor
@@ -79,11 +79,10 @@ public class ListenerFactory {
         implicitSsl = listener.isImplicitSsl();
         dataConnectionConfig = listener.getDataConnectionConfiguration();
         idleTimeout = listener.getIdleTimeout();
-        // TODO remove the next two lines if and when we remove the deprecated
-        // methods.
+        //TODO remove the next two lines if and when we remove the deprecated methods. 
         blockedAddresses = listener.getBlockedAddresses();
         blockedSubnets = listener.getBlockedSubnets();
-        this.sessionFilter = listener.getSessionFilter();
+        this.ipFilter = listener.getIpFilter();
     }
 
     /**
@@ -91,26 +90,25 @@ public class ListenerFactory {
      * @return The created listener
      */
     public Listener createListener() {
-        try {
-            InetAddress.getByName(serverAddress);
-        } catch (UnknownHostException e) {
-            throw new FtpServerConfigurationException("Unknown host", e);
-        }
-        // Deal with the old style black list and new session Filter here.
-        if (sessionFilter != null) {
-            if (blockedAddresses != null || blockedSubnets != null) {
-                throw new IllegalStateException(
-                        "Usage of SessionFilter in combination with blockedAddesses/subnets is not supported. ");
-            }
-        }
-        if (blockedAddresses != null || blockedSubnets != null) {
+    	try{
+    		InetAddress.getByName(serverAddress);
+    	}catch(UnknownHostException e){
+    		throw new FtpServerConfigurationException("Unknown host",e);
+    	}
+    	//Deal with the old style black list and new IP Filter here. 
+    	if(ipFilter != null) {
+    		 if(blockedAddresses != null || blockedSubnets != null) {
+    			 throw new IllegalStateException("Usage of IPFilter in combination with blockedAddesses/subnets is not supported. ");
+    		 }
+    	}
+    	if(blockedAddresses != null || blockedSubnets != null) {
             return new NioListener(serverAddress, port, implicitSsl, ssl,
-                    dataConnectionConfig, idleTimeout, blockedAddresses,
-                    blockedSubnets);
-        } else {
-            return new NioListener(serverAddress, port, implicitSsl, ssl,
-                    dataConnectionConfig, idleTimeout, sessionFilter);
-        }
+                dataConnectionConfig, idleTimeout, blockedAddresses, blockedSubnets);
+    	}
+    	else {
+	        return new NioListener(serverAddress, port, implicitSsl, ssl,
+	        	dataConnectionConfig, idleTimeout, ipFilter);
+    	}
     }
 
     /**
@@ -270,10 +268,11 @@ public class ListenerFactory {
     }
 
     /**
+     * @deprecated Replaced by the IpFilter.    
      * Sets the {@link Subnet}s that listeners created by this factory will block from connecting
      * @param blockedSubnets 
      *  The list of {@link Subnet}s
-     * @deprecated Replaced by the IpFilter.    
+     * @param blockedAddresses
      */
     @Deprecated
     public void setBlockedSubnets(List<Subnet> blockedSubnets) {
@@ -281,23 +280,22 @@ public class ListenerFactory {
     }
     
     /**
-     * Returns the currently configured <code>SessionFilter</code>, if any.
-     * 
-     * @return the currently configured <code>SessionFilter</code>, if any.
-     *         Returns <code>null</code>, if no <code>SessionFilter</code> is
-     *         configured.
-     */
-    public SessionFilter getSessionFilter() {
-        return sessionFilter;
-    }
+	 * Returns the currently configured IP filter, if any.
+	 * 
+	 * @return the currently configured IP filter, if any. Returns
+	 *         <code>null</code>, if no IP filter is configured.
+	 */
+	public IpFilter getIpFilter() {
+		return ipFilter;
+	}
 
-    /**
-     * Sets the session filter to the given filter.
-     * 
-     * @param sessionFilter
-     *            the session filter.
-     */
-    public void setSessionFilter(SessionFilter sessionFilter) {
-        this.sessionFilter = sessionFilter;
-    }
+	/**
+	 * Sets the IP filter to the given filter.
+	 * 
+	 * @param ipFilter
+	 *            the IP filter.
+	 */
+	public void setIpFilter(IpFilter ipFilter) {
+		this.ipFilter = ipFilter;
+	}
 }

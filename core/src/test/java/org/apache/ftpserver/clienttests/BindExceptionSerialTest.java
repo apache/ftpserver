@@ -29,8 +29,7 @@ import org.apache.ftpserver.DataConnectionConfigurationFactory;
 *
 * From FTPSERVER-250
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class BindExceptionSerialTest extends ClientTestTemplate {
     @Override
@@ -55,7 +54,14 @@ public class BindExceptionSerialTest extends ClientTestTemplate {
     }
 
     public void testSerialExecution() throws Exception {
-        assertNotNull(client.listFiles());
-        assertNotNull(client.listFiles());
+        try {
+            System.out.println("-- call one");
+            System.out.println(Arrays.asList(client.listFiles()));
+            System.out.println("-- call two");
+            System.out.println(Arrays.asList(client.listFiles()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 }

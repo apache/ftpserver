@@ -25,7 +25,6 @@ import org.apache.ftpserver.impl.DefaultConnectionConfig;
  * Factory for creating connection configurations
  *
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
  */
 public class ConnectionConfigFactory {
 

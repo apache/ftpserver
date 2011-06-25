@@ -31,9 +31,9 @@ import java.io.FileFilter;
  */
 public class NameEqualsFileFilter implements FileFilter {
 
-    private final String nameToMatch;
+    private String nameToMatch;
 
-    private final boolean caseInsensitive;
+    private boolean caseInsensitive = false;
 
     /**
      * Constructor

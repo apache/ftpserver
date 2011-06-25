@@ -35,11 +35,10 @@ import org.apache.mina.filter.logging.MdcInjectionFilter;
  * 
  * Adapter between MINA handler and the {@link FtpHandler} interface
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class FtpHandlerAdapter implements IoHandler {
-    private final FtpServerContext context;
+    private FtpServerContext context;
 
     private FtpHandler ftpHandler;
 

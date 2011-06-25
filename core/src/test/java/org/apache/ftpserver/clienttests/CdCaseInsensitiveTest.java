@@ -24,11 +24,9 @@ import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class CdCaseInsensitiveTest extends CdTest {
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

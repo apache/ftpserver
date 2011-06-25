@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * This command shall cause the server use optional features for the command
  * specified.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class OPTS extends AbstractCommand {
 
@@ -78,7 +78,7 @@ public class OPTS extends AbstractCommand {
 
         // call appropriate command method
         String optsRequest = "OPTS_" + argument;
-        Command command = COMMAND_MAP.get(optsRequest);
+        Command command = (Command) COMMAND_MAP.get(optsRequest);
         try {
             if (command != null) {
                 command.execute(session, context, request);

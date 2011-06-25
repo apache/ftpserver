@@ -34,42 +34,39 @@ public class DefaultDataConnectionConfiguration implements
         DataConnectionConfiguration {
 
     // maximum idle time in seconds
-    private final int idleTime;
-    private final SslConfiguration ssl;
+    private int idleTime;
+    private SslConfiguration ssl;
 
-    private final boolean activeEnabled;
-    private final String activeLocalAddress;
-    private final int activeLocalPort;
-    private final boolean activeIpCheck;
+    private boolean activeEnabled;
+    private String activeLocalAddress;
+    private int activeLocalPort;
+    private boolean activeIpCheck;
     
-    private final String passiveAddress;
-    private final String passiveExternalAddress;
-    private final PassivePorts passivePorts;
-    private final boolean passiveIpCheck;
+    private String passiveAddress;
+    private String passiveExternalAddress;
+    private PassivePorts passivePorts;
     
     private final boolean implicitSsl;
 
     /**
-	 * Internal constructor, do not use directly. Use
-	 * {@link DataConnectionConfigurationFactory} instead.
-	 */
-	public DefaultDataConnectionConfiguration(int idleTime,
-		SslConfiguration ssl, boolean activeEnabled, boolean activeIpCheck,
-		String activeLocalAddress, int activeLocalPort, String passiveAddress,
-		PassivePorts passivePorts, String passiveExternalAddress,
-		boolean passiveIpCheck, boolean implicitSsl) {
-		this.idleTime = idleTime;
-		this.ssl = ssl;
-		this.activeEnabled = activeEnabled;
-		this.activeIpCheck = activeIpCheck;
-		this.activeLocalAddress = activeLocalAddress;
-		this.activeLocalPort = activeLocalPort;
-		this.passiveAddress = passiveAddress;
-		this.passivePorts = passivePorts;
-		this.passiveExternalAddress = passiveExternalAddress;
-		this.passiveIpCheck = passiveIpCheck;
-		this.implicitSsl = implicitSsl;
-	}
+     * Internal constructor, do not use directly. Use {@link DataConnectionConfigurationFactory} instead.
+     */
+    public DefaultDataConnectionConfiguration(int idleTime,
+            SslConfiguration ssl, boolean activeEnabled, boolean activeIpCheck,
+            String activeLocalAddress, int activeLocalPort,
+            String passiveAddress, PassivePorts passivePorts,
+            String passiveExternalAddress, boolean implicitSsl) {
+        this.idleTime = idleTime;
+        this.ssl = ssl;
+        this.activeEnabled = activeEnabled;
+        this.activeIpCheck = activeIpCheck;
+        this.activeLocalAddress = activeLocalAddress;
+        this.activeLocalPort = activeLocalPort;
+        this.passiveAddress = passiveAddress;
+        this.passivePorts = passivePorts;
+        this.passiveExternalAddress = passiveExternalAddress;
+        this.implicitSsl = implicitSsl;
+    }
 
     /**
      * Get the maximum idle time in seconds.
@@ -118,12 +115,8 @@ public class DefaultDataConnectionConfiguration implements
      */
     public String getPassiveExernalAddress()  {
     	return passiveExternalAddress;
-    }
-    
-	public boolean isPassiveIpCheck() {
-		return passiveIpCheck;
-	}
-	
+    	}
+
     /**
      * Get passive data port. Data port number zero (0) means that any available
      * port will be used.

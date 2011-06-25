@@ -19,8 +19,6 @@
 
 package org.apache.ftpserver.clienttests;
 
-import java.util.Random;
-
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
@@ -29,12 +27,10 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class PasvTest extends ClientTestTemplate {
 
-    @Override
     protected boolean isConnectClient() {
         return false;
     }
@@ -47,7 +43,7 @@ public class PasvTest extends ClientTestTemplate {
         
         DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
 
-        int passivePort = TestUtil.findFreePort(12000 + new Random().nextInt(20000));
+        int passivePort = TestUtil.findFreePort(12444);
         
         dccFactory.setPassivePorts(passivePort + "-" + passivePort);
         
@@ -95,7 +91,7 @@ public class PasvTest extends ClientTestTemplate {
                 client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
                 client.pasv();
 
-                assertTrue("Can't find " + ftpIp + " in " + client.getReplyString(), client.getReplyString().indexOf(ftpIp) > -1);
+                assertTrue(client.getReplyString().indexOf(ftpIp) > -1);
 
                 client.quit();
                 client.disconnect();

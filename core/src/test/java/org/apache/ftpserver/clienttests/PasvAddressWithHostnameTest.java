@@ -27,12 +27,10 @@ import org.apache.ftpserver.listener.ListenerFactory;
  * Test for external passive address configured as hostname rather than IP
  * address.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class PasvAddressWithHostnameTest extends ClientTestTemplate {
 
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

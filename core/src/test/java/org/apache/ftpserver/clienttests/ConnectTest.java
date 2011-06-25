@@ -23,8 +23,7 @@ import org.apache.ftpserver.listener.nio.NioListener;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ConnectTest extends ClientTestTemplate {
 

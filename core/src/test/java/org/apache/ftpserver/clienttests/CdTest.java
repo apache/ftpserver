@@ -23,8 +23,7 @@ import java.io.File;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class CdTest extends ClientTestTemplate {
     protected static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
@@ -41,7 +40,6 @@ public class CdTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

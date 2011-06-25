@@ -26,8 +26,7 @@ import org.apache.ftpserver.message.MessageResourceFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class LangTest extends ClientTestTemplate {
 
@@ -36,7 +35,6 @@ public class LangTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -52,7 +50,6 @@ public class LangTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

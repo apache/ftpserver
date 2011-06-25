@@ -57,7 +57,7 @@ public class BaseUser implements User {
 
     private boolean isEnabled = true;
 
-    private List<? extends Authority> authorities = new ArrayList<Authority>();
+    private List<Authority> authorities = new ArrayList<Authority>();
 
     /**
      * Default constructor.
@@ -169,7 +169,6 @@ public class BaseUser implements User {
     /**
      * String representation.
      */
-    @Override
     public String toString() {
         return name;
     }

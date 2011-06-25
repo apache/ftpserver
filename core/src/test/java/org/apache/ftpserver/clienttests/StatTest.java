@@ -45,6 +45,7 @@ public class StatTest extends ClientTestTemplate {
 
         assertEquals(212, client.stat(TEST_DIR.getName()));
         String[] reply = client.getReplyString().split("\r\n");
+
         assertTrue(reply[1], Pattern.matches(PATTERN, reply[1]));
         assertTrue(reply[2], Pattern.matches(PATTERN, reply[2]));
     }

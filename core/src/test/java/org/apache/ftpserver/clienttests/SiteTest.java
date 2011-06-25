@@ -28,8 +28,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SiteTest extends ClientTestTemplate {
 
@@ -100,40 +99,30 @@ public class SiteTest extends ClientTestTemplate {
         assertTrue(client2.login(ANONYMOUS_USERNAME, ANONYMOUS_PASSWORD));
         // done setting up stats
         
-        // send a command to verify that we are correctly logged in
-        assertTrue(FTPReply.isPositiveCompletion(client2.noop()));
-        
         client.connect("localhost", getListenerPort());
-        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+        client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
 
-        if(server.getServerContext().getFtpStatistics().getCurrentLoginNumber() != 2) {
-            // wait until both clients have been logged in
-            Thread.sleep(2000);
-            if(server.getServerContext().getFtpStatistics().getCurrentLoginNumber() != 2) {
-                Thread.sleep(5000);
-            }
-        }
-        
         client.sendCommand("SITE STAT");
         String[] siteReplies = client.getReplyString().split("\r\n");
 
         assertEquals("200-", siteReplies[0]);
         
         String pattern = "Start Time               : " + TIMESTAMP_PATTERN; 
-        assertTrue(siteReplies[1], Pattern.matches(pattern, siteReplies[1]));
-        assertTrue(siteReplies[2], Pattern.matches("File Upload Number       : 2", siteReplies[2]));
-        assertTrue(siteReplies[3], Pattern.matches("File Download Number     : 1", siteReplies[3]));
-        assertTrue(siteReplies[4], Pattern.matches("File Delete Number       : 1", siteReplies[4]));
-        assertTrue(siteReplies[5], Pattern.matches("File Upload Bytes        : 16", siteReplies[5]));
-        assertTrue(siteReplies[6], Pattern.matches("File Download Bytes      : 8", siteReplies[6]));
-        assertTrue(siteReplies[7], Pattern.matches("Directory Create Number  : 2", siteReplies[7]));
-        assertTrue(siteReplies[8], Pattern.matches("Directory Remove Number  : 1", siteReplies[8]));
-        //assertTrue(siteReplies[9], Pattern.matches("Current Logins           : 2", siteReplies[9]));
-        assertTrue(siteReplies[10], Pattern.matches("Total Logins             : 3", siteReplies[10]));
-        assertTrue(siteReplies[11], Pattern.matches("Current Anonymous Logins : 1", siteReplies[11]));
-        assertTrue(siteReplies[12], Pattern.matches("Total Anonymous Logins   : 1", siteReplies[12]));
-        assertTrue(siteReplies[13], Pattern.matches("Current Connections      : 2", siteReplies[13]));
-        assertTrue(siteReplies[14], Pattern.matches("200 Total Connections        : 3", siteReplies[14]));
+        assertTrue(Pattern.matches(pattern, siteReplies[1]));
+
+        assertTrue(Pattern.matches("File Upload Number       : 2", siteReplies[2]));
+        assertTrue(Pattern.matches("File Download Number     : 1", siteReplies[3]));
+        assertTrue(Pattern.matches("File Delete Number       : 1", siteReplies[4]));
+        assertTrue(Pattern.matches("File Upload Bytes        : 16", siteReplies[5]));
+        assertTrue(Pattern.matches("File Download Bytes      : 8", siteReplies[6]));
+        assertTrue(Pattern.matches("Directory Create Number  : 2", siteReplies[7]));
+        assertTrue(Pattern.matches("Directory Remove Number  : 1", siteReplies[8]));
+        assertTrue(Pattern.matches("Current Logins           : 2", siteReplies[9]));
+        assertTrue(Pattern.matches("Total Logins             : 3", siteReplies[10]));
+        assertTrue(Pattern.matches("Current Anonymous Logins : 1", siteReplies[11]));
+        assertTrue(Pattern.matches("Total Anonymous Logins   : 1", siteReplies[12]));
+        assertTrue(Pattern.matches("Current Connections      : 2", siteReplies[13]));
+        assertTrue(Pattern.matches("200 Total Connections        : 3", siteReplies[14]));
     }
 
     

@@ -30,11 +30,9 @@ import org.apache.mina.filter.firewall.Subnet;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SubnetBlacklistTest extends ClientTestTemplate {
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -50,7 +48,6 @@ public class SubnetBlacklistTest extends ClientTestTemplate {
         return server;
     }
 
-    @Override
     protected boolean isConnectClient() {
         return false;
     }

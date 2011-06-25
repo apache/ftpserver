@@ -16,38 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.apache.ftpserver.clienttests;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.test.TestUtil;
 
 /**
- *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
- */
+*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
+*/
 public class StoreTest extends ClientTestTemplate {
-
     private static final String EOL = System.getProperty("line.separator");
     private static final String CRLF = "\r\n";
-    private static final String LF = "\n";
+
+    
     private static final String TESTDATA = "TESTDATA" + EOL + "line2" + EOL;
     private static final String TESTDATA_CRLF = "TESTDATA" + CRLF + "line2" + CRLF;
-    private static final String TESTDATA_LF = "TESTDATA" + LF + "line2" + LF;
+
     private static final String ENCODING = "UTF-8";
+
     private static final String TEST_FILENAME = "test.txt";
+
     private static final String TEST_FILENAME_WITH_LEADING_SPACE = " leading.txt";
+
     private static final int SKIP_LEN = 4;
+
     private static final File TEST_DIR = new File(ROOT_DIR, "foo/bar");
+
     private static byte[] testData = null;
     private static byte[] testDataCrLf = null;
-    private static byte[] testDataLf = null;
+
     private static byte[] doubleTestData = null;
+
     private static byte[] oneAndAHalfTestData = null;
 
     /*
@@ -55,13 +59,11 @@ public class StoreTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         testData = TESTDATA.getBytes(ENCODING);
         testDataCrLf = TESTDATA_CRLF.getBytes(ENCODING);
-        testDataLf = TESTDATA_LF.getBytes(ENCODING);
         doubleTestData = (TESTDATA + TESTDATA).getBytes(ENCODING);
         oneAndAHalfTestData = ("TEST" + TESTDATA).getBytes(ENCODING);
 
@@ -91,25 +93,7 @@ public class StoreTest extends ClientTestTemplate {
         assertTrue(testFile.exists());
         TestUtil.assertFileEqual(testData, testFile);
     }
-
-    /**
-     * We should always store files with the local line endings (FTPSERVER-184)
-     *
-     */
-    public void testStoreWithLf() throws Exception {
-        File testFile = new File(ROOT_DIR, TEST_FILENAME);
-        // We set the client to binary mode while we inform the server that we want to use ASCII mode
-        // This way, we can test FTPSERVER-306 in the cases where the FTPClient does not transform line separators to \r\n
-        client.setFileType(FTP.BINARY_FILE_TYPE);
-        assertTrue(FTPReply.isPositiveCompletion(client.type(FTP.ASCII_FILE_TYPE)));
-        
-        assertTrue(client.storeFile(TEST_FILENAME, new ByteArrayInputStream(
-                testDataLf)));
-
-        assertTrue(testFile.exists());
-        TestUtil.assertFileEqual(testData, testFile);
-    }
-
+    
     public void testStoreWithLeadingSpace() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME_WITH_LEADING_SPACE);
 
@@ -130,6 +114,7 @@ public class StoreTest extends ClientTestTemplate {
      * testStoreInValidFileName() throws Exception { assertEquals(550
      * ,client.sendCommand("STOR foo:bar;foo")); }
      */
+
     public void testStoreWithRestart() throws Exception {
         File testFile = new File(ROOT_DIR, TEST_FILENAME);
         TestUtil.writeDataToFile(testFile, testData);
@@ -333,4 +318,5 @@ public class StoreTest extends ClientTestTemplate {
         assertTrue(testFile.exists());
         TestUtil.assertFileEqual(testData, testFile);
     }
+
 }

@@ -29,8 +29,7 @@ import org.apache.ftpserver.listener.ListenerFactory;
 *
 * Test for FTPSERVER-170
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class DataTransferTimeoutTest extends ClientTestTemplate {
     private static final String TEST_FILENAME = "test.txt";
@@ -55,7 +54,6 @@ public class DataTransferTimeoutTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

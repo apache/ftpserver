@@ -74,7 +74,6 @@ public class FtpException extends Exception {
      * @return The root cause
      * @deprecated Use {@link Exception#getCause()} instead
      */
-    @Deprecated
     public Throwable getRootCause() {
         return getCause();
     }

@@ -33,9 +33,9 @@ import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
+@SuppressWarnings("deprecation")
 public class MLSTFileFormaterTest extends TestCase {
 
     private static final Calendar LAST_MODIFIED_IN_2005 = Calendar.getInstance(TimeZone.getTimeZone("GMT")); 
@@ -133,10 +133,6 @@ public class MLSTFileFormaterTest extends TestCase {
            return false;
             
         }
-        
-        public Object getPhysicalFile() {
-        	return "/short";
-        }
     }
 
     public void testSingleFile() {
@@ -147,17 +143,14 @@ public class MLSTFileFormaterTest extends TestCase {
 
     public void testSingleDir() {
         FtpFile dir = new MockFileObject() {
-            @Override
             public boolean isDirectory() {
                 return true;
             }
 
-            @Override
             public boolean isFile() {
                 return false;
             }
 
-            @Override
             public long getSize() {
                 return 0;
             }

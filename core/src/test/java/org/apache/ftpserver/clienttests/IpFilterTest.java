@@ -23,10 +23,11 @@ import java.net.InetAddress;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.ipfilter.DefaultIpFilter;
 import org.apache.ftpserver.ipfilter.IpFilterType;
-import org.apache.ftpserver.ipfilter.RemoteIpFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.mina.filter.firewall.Subnet;
+import org.springframework.context.annotation.FilterType;
 
 /**
 *
@@ -34,22 +35,20 @@ import org.apache.mina.filter.firewall.Subnet;
 *
 */
 public class IpFilterTest extends ClientTestTemplate {
-
-    private RemoteIpFilter filter = new RemoteIpFilter(IpFilterType.DENY);
-
-    @Override
+	
+	private DefaultIpFilter filter = new DefaultIpFilter(IpFilterType.DENY);
+	
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
         ListenerFactory factory = new ListenerFactory(server.getListener("default"));
 
-        factory.setSessionFilter(filter);
+        factory.setIpFilter(filter);
         server.addListener("default", factory.createListener());
         
         return server;
     }
 
-    @Override
     protected boolean isConnectClient() {
         return false;
     }

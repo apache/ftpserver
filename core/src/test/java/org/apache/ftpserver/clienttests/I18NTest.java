@@ -28,8 +28,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class I18NTest extends ClientTestTemplate {
 
@@ -44,7 +43,6 @@ public class I18NTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -53,7 +51,6 @@ public class I18NTest extends ClientTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
-    @Override
     protected FTPClient createFTPClient() throws Exception {
         FTPClient client = new FTPClient();
         client.setControlEncoding("UTF-8");

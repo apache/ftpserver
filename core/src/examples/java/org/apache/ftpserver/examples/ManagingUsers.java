@@ -26,6 +26,7 @@ import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.SaltedPasswordEncryptor;
 import org.apache.ftpserver.usermanager.UserFactory;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
 * @author <a href="http://mina.apache.org">Apache MINA Project</a>*
@@ -37,7 +38,7 @@ public class ManagingUsers {
         userManagerFactory.setFile(new File("myusers.properties"));
         userManagerFactory.setPasswordEncryptor(new SaltedPasswordEncryptor());
         UserManager um = userManagerFactory.createUserManager();
-
+        
         UserFactory userFact = new UserFactory();
         userFact.setName("myNewUser");
         userFact.setPassword("secret");

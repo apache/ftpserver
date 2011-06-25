@@ -40,8 +40,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FtpLetReturnSkipTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();
@@ -52,7 +51,7 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
 
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
 
     protected FtpletResult mockReturnValue = FtpletResult.SKIP;
 
@@ -61,7 +60,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
 
@@ -72,7 +70,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         connectClient();
     }
 
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -85,7 +82,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testLogin() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onLogin(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -101,7 +97,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onDeleteStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
 
@@ -123,7 +118,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDeleteEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -141,7 +135,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onMkdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
 
@@ -160,7 +153,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringMkdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -176,7 +168,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onRmdirStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -198,7 +189,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRmdirEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -216,7 +206,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringSite() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onSite(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 session
@@ -236,7 +225,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onRenameStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session
@@ -260,7 +248,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringRenameEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -280,7 +267,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onDownloadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -301,7 +287,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringDownloadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onDownloadEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 throwException();
@@ -320,7 +305,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onAppendStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -342,7 +326,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringAppendEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -361,7 +344,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onUploadStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -381,7 +363,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
                     throws FtpException, IOException {
                 throwException();
@@ -398,7 +379,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadUniqueStart() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onUploadUniqueStart(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 session.write(new DefaultFtpReply(
@@ -417,7 +397,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
 
     public void testExceptionDuringUploadUniqueEnd() throws Exception {
         MockFtplet.callback = new MockFtpletCallback() {
-            @Override
             public FtpletResult onUploadUniqueEnd(FtpSession session,
                     FtpRequest request) throws FtpException, IOException {
                 throwException();
@@ -432,10 +411,6 @@ public class FtpLetReturnSkipTest extends ClientTestTemplate {
         TestUtil.assertFileEqual(TESTDATA, ROOT_DIR.listFiles()[0]);
     }
 
-    /**
-     * @throws FtpException 
-     * @throws IOException  
-     */
     protected void throwException() throws FtpException, IOException {
         // do not throw, we want to check the result of return values
     }

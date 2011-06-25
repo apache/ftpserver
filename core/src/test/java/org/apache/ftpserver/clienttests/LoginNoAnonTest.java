@@ -24,8 +24,7 @@ import org.apache.ftpserver.FtpServerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class LoginNoAnonTest extends ClientTestTemplate {
 
@@ -34,7 +33,6 @@ public class LoginNoAnonTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#createConfig()
      */
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

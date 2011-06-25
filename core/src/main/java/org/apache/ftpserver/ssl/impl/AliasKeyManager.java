@@ -40,18 +40,20 @@ import javax.net.ssl.X509KeyManager;
  */
 public final class AliasKeyManager implements X509KeyManager {
 
-    private final X509KeyManager delegate;
+    private X509KeyManager delegate;
 
-    private final String serverKeyAlias;
+    private String serverKeyAlias;
 
     /**
      * Constructor.
      * 
      * @param mgr
      *            The X509KeyManager used as a delegate
-     * @param keyAlias
+     * @param keyStore
+     * @param serverKeyAlias
      *            The alias name of the server's keypair and supporting
      *            certificate chain
+     * @param keyAlias
      */
     public AliasKeyManager(KeyManager mgr, String keyAlias) {
         this.delegate = (X509KeyManager) mgr;

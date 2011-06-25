@@ -49,10 +49,9 @@ public class DefaultFtpletContainer implements FtpletContainer {
     private final Logger LOG = LoggerFactory
             .getLogger(DefaultFtpletContainer.class);
 
-    private final Map<String, Ftplet> ftplets ;
+    private Map<String, Ftplet> ftplets = new ConcurrentHashMap<String, Ftplet>();
 
     public DefaultFtpletContainer() {
-        this(new ConcurrentHashMap<String, Ftplet>());
     }
     
     public DefaultFtpletContainer(Map<String, Ftplet> ftplets) {

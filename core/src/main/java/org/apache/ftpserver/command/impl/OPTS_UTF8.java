@@ -36,7 +36,7 @@ import org.apache.ftpserver.impl.LocalizedFtpReply;
  * UTF-8 and back. Note that the servers default encoding is UTF-8. So this
  * command has no effect.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class OPTS_UTF8 extends AbstractCommand {
 

@@ -35,8 +35,7 @@ import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class PropertiesUserManagerTest extends UserManagerTestTemplate {
 
@@ -68,7 +67,6 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         fos.close();
     }
 
-    @Override
     protected UserManagerFactory createUserManagerFactory() throws FtpException {
         PropertiesUserManagerFactory um = new PropertiesUserManagerFactory();
         um.setFile(USERS_FILE);
@@ -77,7 +75,6 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         return um;
     }
 
-    @Override
     protected void setUp() throws Exception {
 
         TEST_DIR.mkdirs();
@@ -87,7 +84,6 @@ public class PropertiesUserManagerTest extends UserManagerTestTemplate {
         super.setUp();
     }
 
-    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
 

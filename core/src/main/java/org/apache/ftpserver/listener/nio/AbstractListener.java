@@ -23,9 +23,9 @@ import java.net.InetAddress;
 import java.util.List;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
+import org.apache.ftpserver.ipfilter.DefaultIpFilter;
+import org.apache.ftpserver.ipfilter.IpFilter;
 import org.apache.ftpserver.ipfilter.IpFilterType;
-import org.apache.ftpserver.ipfilter.RemoteIpFilter;
-import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.SslConfiguration;
@@ -40,23 +40,23 @@ import org.apache.mina.filter.firewall.Subnet;
  */
 public abstract class AbstractListener implements Listener {
 
-    private final String serverAddress;
+    private String serverAddress;
 
     private int port = 21;
 
-    private final SslConfiguration ssl;
+    private SslConfiguration ssl;
 
-    private final boolean implicitSsl;
+    private boolean implicitSsl = false;
     
-    private final int idleTimeout;
+    private int idleTimeout;
     
-    private final List<InetAddress> blockedAddresses;
+    private List<InetAddress> blockedAddresses;
 
-    private final List<Subnet> blockedSubnets;
+    private List<Subnet> blockedSubnets;
+    
+    private IpFilter ipFilter = null;
 
-    private final SessionFilter sessionFilter;
-
-    private final DataConnectionConfiguration dataConnectionConfig;
+    private DataConnectionConfiguration dataConnectionConfig;
 
     /**
      * @deprecated Use the constructor with IpFilter instead. 
@@ -66,13 +66,8 @@ public abstract class AbstractListener implements Listener {
     public AbstractListener(String serverAddress, int port, boolean implicitSsl, 
             SslConfiguration sslConfiguration, DataConnectionConfiguration dataConnectionConfig,
             int idleTimeout, List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
-        this.serverAddress = serverAddress;
-        this.port = port;
-        this.implicitSsl = implicitSsl;
-        this.dataConnectionConfig = dataConnectionConfig;
-        this.ssl = sslConfiguration;
-        this.idleTimeout = idleTimeout;
-        this.sessionFilter = createBlackListFilter(blockedAddresses, blockedSubnets);
+    	this(serverAddress, port, implicitSsl, sslConfiguration, 
+    		dataConnectionConfig, idleTimeout, createBlackListFilter(blockedAddresses, blockedSubnets));
     	this.blockedAddresses = blockedAddresses;
     	this.blockedSubnets = blockedSubnets;
     }
@@ -80,50 +75,42 @@ public abstract class AbstractListener implements Listener {
     /**
      * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
      */
-    public AbstractListener(String serverAddress, int port,
-            boolean implicitSsl, SslConfiguration sslConfiguration,
-            DataConnectionConfiguration dataConnectionConfig, int idleTimeout,
-            SessionFilter sessionFilter) {
+    public AbstractListener(String serverAddress, int port, boolean implicitSsl, 
+            SslConfiguration sslConfiguration, DataConnectionConfiguration dataConnectionConfig,
+            int idleTimeout, IpFilter ipFilter) {
         this.serverAddress = serverAddress;
         this.port = port;
         this.implicitSsl = implicitSsl;
         this.dataConnectionConfig = dataConnectionConfig;
         this.ssl = sslConfiguration;
         this.idleTimeout = idleTimeout;
-        this.sessionFilter = sessionFilter;
-        this.blockedAddresses = null;
-        this.blockedSubnets = null;
+        this.ipFilter = ipFilter;
     }
     
     /**
-     * Creates a SessionFilter that blacklists the given IP addresses and/or
-     * Subnets.
-     * 
-     * @param blockedAddresses
-     *            the addresses to block
-     * @param blockedSubnets
-     *            the subnets to block
-     * @return a SessionFilter that blacklists the given IP addresses and/or
-     *         Subnets.
+     * Creates an IpFilter that blacklists the given IP addresses and/or Subnets. 
+     * @param blockedAddresses the addresses to block
+     * @param blockedSubnets the subnets to block
+     * @return an IpFilter that blacklists the given IP addresses and/or Subnets.
      */
-    private static SessionFilter createBlackListFilter(
-            List<InetAddress> blockedAddresses, List<Subnet> blockedSubnets) {
-        if (blockedAddresses == null && blockedSubnets == null) {
-            return null;
-        }
-        // Initialize the IP filter with Deny type
-        RemoteIpFilter ipFilter = new RemoteIpFilter(IpFilterType.DENY);
-        if (blockedSubnets != null) {
-            ipFilter.addAll(blockedSubnets);
-        }
-        if (blockedAddresses != null) {
-            for (InetAddress address : blockedAddresses) {
-                ipFilter.add(new Subnet(address, 32));
-            }
-        }
-        return ipFilter;
+    private static IpFilter createBlackListFilter(List<InetAddress> blockedAddresses, 
+    	List<Subnet> blockedSubnets) {
+    	if(blockedAddresses == null && blockedSubnets == null) {
+    		return null;
+    	}
+		//Initialize the IP filter with Deny type
+		DefaultIpFilter ipFilter = new DefaultIpFilter(IpFilterType.DENY);
+		if(blockedSubnets != null) {
+			ipFilter.addAll(blockedSubnets);
+		}
+		if(blockedAddresses != null) {
+			for(InetAddress address:blockedAddresses) {
+				ipFilter.add(new Subnet(address, 32));
+			}
+		}
+		return ipFilter;
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -194,8 +181,8 @@ public abstract class AbstractListener implements Listener {
     public List<Subnet> getBlockedSubnets() {
         return blockedSubnets;
     }
-
-    public SessionFilter getSessionFilter() {
-        return sessionFilter;
+    
+    public IpFilter getIpFilter() {
+    	return ipFilter;
     }
 }

@@ -30,136 +30,113 @@ import org.apache.ftpserver.ftplet.FtpletResult;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class MockFtpletCallback extends DefaultFtplet {
 
     public static FtpletResult returnValue;
 
-    @Override
     public void destroy() {
     }
 
-    @Override
     public void init(FtpletContext ftpletContext) throws FtpException {
     }
 
-    @Override
     public FtpletResult onAppendEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onAppendStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onConnect(FtpSession session) throws FtpException,
             IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onDeleteEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onDeleteStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onDisconnect(FtpSession session) throws FtpException,
             IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onDownloadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onDownloadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onLogin(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onMkdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onMkdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onRenameEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onRenameStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onRmdirEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onRmdirStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onSite(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onUploadEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onUploadStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onUploadUniqueEnd(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;
     }
 
-    @Override
     public FtpletResult onUploadUniqueStart(FtpSession session, FtpRequest request)
             throws FtpException, IOException {
         return returnValue;

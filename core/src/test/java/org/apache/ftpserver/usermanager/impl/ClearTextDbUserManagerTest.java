@@ -29,19 +29,16 @@ import org.apache.ftpserver.usermanager.UserManagerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ClearTextDbUserManagerTest extends DbUserManagerTest {
 
-    @Override
     protected File getInitSqlScript() {
         return new File(TestUtil.getBaseDir(),
             "src/test/resources/dbusermanagertest-cleartext-hsql.sql");  
     }
 
 
-    @Override
     protected UserManagerFactory createUserManagerFactory() throws FtpException {
         DbUserManagerFactory manager = (DbUserManagerFactory) super.createUserManagerFactory();
         manager.setPasswordEncryptor(new ClearTextPasswordEncryptor());

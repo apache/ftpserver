@@ -17,10 +17,7 @@
  specific language governing permissions and limitations
  under the License. -->  
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project>
   <parent>
     <artifactId>apache</artifactId>
     <groupId>org.apache</groupId>
@@ -31,7 +28,7 @@
   <artifactId>ftpserver-parent</artifactId>
   <packaging>pom</packaging>
   <name>Apache FtpServer Parent</name>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>
   <url>http://mina.apache.org/ftpserver</url>
   <issueManagement>
     <system>Jira</system>
@@ -154,6 +151,16 @@
         <groupId>org.apache.mina</groupId>
         <artifactId>mina-core</artifactId>
         <version>2.0.4</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymockclassextension</artifactId>
+            </exclusion>
+	      </exclusions>
       </dependency>
 
     <dependency>
@@ -165,8 +172,8 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
             </exclusion>
-	</exclusions>
-    </dependency>
+	      </exclusions>
+      </dependency>
 
 
       <!-- Logging -->
@@ -186,7 +193,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.2</version>
+        <version>3.8.2</version>
       </dependency>
  
       <dependency>
@@ -247,7 +254,7 @@
 
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.8.1</version>
+        <version>2.4.3</version>
       </plugin>
 
       <plugin>
@@ -255,6 +262,7 @@
         <version>2.5.1</version>
         <configuration>
           <downloadSources>true</downloadSources>
+          <projectNameTemplate>[artifactId]-1.0.x</projectNameTemplate>
         </configuration>
       </plugin>
 
@@ -262,7 +270,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.0-beta-7</version>
         <configuration>
-          <tagBase>https://svn.apache.org/repos/asf/mina/ftpserver/tags/</tagBase>
+          <tagBase>https://svn.apache.org/repos/asf/mina/sandbox/ftpserver/tags/</tagBase>
         </configuration>
       </plugin>
 
@@ -331,7 +339,6 @@
           </archive>
         </configuration>
       </plugin>
-      
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
@@ -435,18 +442,10 @@
       <name>Dummy to avoid accidental deploys</name>
       <url/>
     </repository>
-    <snapshotRepository>
-      <id>apache.snapshots.https</id>
-      <name>Apache Development Snapshot Repository</name>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
   </distributionManagement>
 
   <properties>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
-    <ftpserver.version>${project.version}</ftpserver.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

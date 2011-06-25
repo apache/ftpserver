@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
@@ -51,11 +52,11 @@ public class NativeFtpFile implements FtpFile {
     // the file name with respect to the user root.
     // The path separator character will be '/' and
     // it will always begin with '/'.
-    private final String fileName;
+    private String fileName;
 
-    private final File file;
+    private File file;
 
-    private final User user;
+    private User user;
 
     /**
      * Constructor, internal do not use directly.
@@ -395,6 +396,129 @@ public class NativeFtpFile implements FtpFile {
     }
 
     /**
+     * Normalize separate character. Separate character should be '/' always.
+     */
+    public final static String normalizeSeparateChar(final String pathName) {
+        String normalizedPathName = pathName.replace(File.separatorChar, '/');
+        normalizedPathName = normalizedPathName.replace('\\', '/');
+        return normalizedPathName;
+    }
+
+    /**
+     * Get the physical canonical file name. It works like
+     * File.getCanonicalPath().
+     * 
+     * @param rootDir
+     *            The root directory.
+     * @param currDir
+     *            The current directory. It will always be with respect to the
+     *            root directory.
+     * @param fileName
+     *            The input file name.
+     * @return The return string will always begin with the root directory. It
+     *         will never be null.
+     */
+    public final static String getPhysicalName(final String rootDir,
+            final String currDir, final String fileName) {
+        return getPhysicalName(rootDir, currDir, fileName, false);
+    }
+
+    public final static String getPhysicalName(final String rootDir,
+            final String currDir, final String fileName,
+            final boolean caseInsensitive) {
+
+        // get the starting directory
+        String normalizedRootDir = normalizeSeparateChar(rootDir);
+        if (normalizedRootDir.charAt(normalizedRootDir.length() - 1) != '/') {
+            normalizedRootDir += '/';
+        }
+
+        String normalizedFileName = normalizeSeparateChar(fileName);
+        String resArg;
+        String normalizedCurrDir = currDir;
+        if (normalizedFileName.charAt(0) != '/') {
+            if (normalizedCurrDir == null) {
+                normalizedCurrDir = "/";
+            }
+            if (normalizedCurrDir.length() == 0) {
+                normalizedCurrDir = "/";
+            }
+
+            normalizedCurrDir = normalizeSeparateChar(normalizedCurrDir);
+
+            if (normalizedCurrDir.charAt(0) != '/') {
+                normalizedCurrDir = '/' + normalizedCurrDir;
+            }
+            if (normalizedCurrDir.charAt(normalizedCurrDir.length() - 1) != '/') {
+                normalizedCurrDir += '/';
+            }
+
+            resArg = normalizedRootDir + normalizedCurrDir.substring(1);
+        } else {
+            resArg = normalizedRootDir;
+        }
+
+        // strip last '/'
+        if (resArg.charAt(resArg.length() - 1) == '/') {
+            resArg = resArg.substring(0, resArg.length() - 1);
+        }
+
+        // replace ., ~ and ..
+        // in this loop resArg will never end with '/'
+        StringTokenizer st = new StringTokenizer(normalizedFileName, "/");
+        while (st.hasMoreTokens()) {
+            String tok = st.nextToken();
+
+            // . => current directory
+            if (tok.equals(".")) {
+                continue;
+            }
+
+            // .. => parent directory (if not root)
+            if (tok.equals("..")) {
+                if (resArg.startsWith(normalizedRootDir)) {
+                    int slashIndex = resArg.lastIndexOf('/');
+                    if (slashIndex != -1) {
+                        resArg = resArg.substring(0, slashIndex);
+                    }
+                }
+                continue;
+            }
+
+            // ~ => home directory (in this case the root directory)
+            if (tok.equals("~")) {
+                resArg = normalizedRootDir.substring(0, normalizedRootDir
+                        .length() - 1);
+                continue;
+            }
+
+            if (caseInsensitive) {
+                File[] matches = new File(resArg)
+                        .listFiles(new NameEqualsFileFilter(tok, true));
+
+                if (matches != null && matches.length > 0) {
+                    tok = matches[0].getName();
+                }
+            }
+
+            resArg = resArg + '/' + tok;
+        }
+
+        // add last slash if necessary
+        if ((resArg.length()) + 1 == normalizedRootDir.length()) {
+            resArg += '/';
+        }
+
+        // final check
+        if (!resArg.regionMatches(0, normalizedRootDir, 0, normalizedRootDir
+                .length())) {
+            resArg = normalizedRootDir;
+        }
+
+        return resArg;
+    }
+
+    /**
      * Implements equals by comparing getCanonicalPath() for the underlying file instabnce.
      * Ignores the fileName and User fields
      */
@@ -408,15 +532,15 @@ public class NativeFtpFile implements FtpFile {
                 otherCanonicalPath = ((NativeFtpFile) obj).file
                         .getCanonicalPath();
             } catch (IOException e) {
-                throw new RuntimeException("Failed to get the canonical path",
-                        e);
+                throw new RuntimeException("Failed to get the canonical path", e);
             }
 
             return thisCanonicalPath.equals(otherCanonicalPath);
         }
         return false;
     }
-    
+
+
 	@Override
 	public int hashCode() {
 		try {

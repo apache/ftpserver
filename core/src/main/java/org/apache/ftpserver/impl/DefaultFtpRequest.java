@@ -30,58 +30,42 @@ import org.apache.ftpserver.ftplet.FtpRequest;
  */
 public class DefaultFtpRequest implements FtpRequest {
 
-    private final String line;
+    private String line;
 
-    private final String command;
+    private String command;
 
-    private final String argument;
-    
-    /**
-     * timestamp when this request was received
-     */
-    private final long receivedTime;
+    private String argument;
 
     /**
      * Default constructor.
      */
     public DefaultFtpRequest(final String requestLine) {
-    	//Assuming we create the request as soon as we receive the command from 
-    	//the client, set the received time to current time. If we do a whole 
-    	//bunch of things after we receive the command from the client and 
-    	//before constructing this FtpRequest object, then this method is not 
-    	//going to be accurate and need to look for an alternative solution. 
-    	this.receivedTime = System.currentTimeMillis();
-        line = requestLine.trim();
-        int spInd = line.indexOf(' ');
-        command = parseCmd(line, spInd);
-        argument = parseArg(line, spInd);
+        parse(requestLine);
     }
 
     /**
      * Parse the ftp command line.
      */
-    private String parseCmd(final String lineToParse, int spInd) {
-        String cmd = null;
-        if (spInd != -1) {
-            cmd = line.substring(0, spInd).toUpperCase();
-        } else {
-            cmd = line.toUpperCase();
-        }
-        if ((cmd.length() > 0) && (cmd.charAt(0) == 'X')) {
-            cmd = cmd.substring(1);
-        }
-        return cmd;
-    }
+    private void parse(final String lineToParse) {
 
-    private String parseArg(final String lineToParse, int spInd) {
-        String arg = null;
+        // parse request
+        line = lineToParse.trim();
+        command = null;
+        argument = null;
+        int spInd = line.indexOf(' ');
         if (spInd != -1) {
-            arg = line.substring(spInd + 1);
-            if (arg.equals("")) {
-                arg = null;
+            argument = line.substring(spInd + 1);
+            if (argument.equals("")) {
+                argument = null;
             }
+            command = line.substring(0, spInd).toUpperCase();
+        } else {
+            command = line.toUpperCase();
         }
-        return arg;
+
+        if ((command.length() > 0) && (command.charAt(0) == 'X')) {
+            command = command.substring(1);
+        }
     }
 
     /**
@@ -111,17 +95,12 @@ public class DefaultFtpRequest implements FtpRequest {
     public boolean hasArgument() {
         return getArgument() != null;
     }
-    
-    public long getReceivedTime() {
-    	return receivedTime;
-    }
 
     /*
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
      */
-    @Override
     public String toString() {
         return getRequestLine();
     }

@@ -24,7 +24,6 @@ package org.apache.ftpserver;
  * 
  *
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
  */
 public interface ConnectionConfig {
 

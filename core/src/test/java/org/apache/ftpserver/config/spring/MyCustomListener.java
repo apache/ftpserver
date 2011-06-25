@@ -26,7 +26,7 @@ import java.util.Set;
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.ipfilter.SessionFilter;
+import org.apache.ftpserver.ipfilter.IpFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.mina.filter.firewall.Subnet;
@@ -34,8 +34,7 @@ import org.apache.mina.filter.firewall.Subnet;
 /**
  * Used for testing creation of custom listeners from Spring config
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
- *
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> *
  */
 public class MyCustomListener implements Listener {
 
@@ -105,8 +104,8 @@ public class MyCustomListener implements Listener {
         return null;
     }
 
-    public SessionFilter getSessionFilter() {
-        return null;
-    }
+	public IpFilter getIpFilter() {
+		return null;
+	}
 
 }

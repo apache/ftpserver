@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * descriptor; a null argument implies the current directory. The server will
  * return a stream of names of files and no other information.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class NLST extends AbstractCommand {
 
@@ -63,7 +63,7 @@ public class NLST extends AbstractCommand {
 
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
 
-    private final DirectoryLister directoryLister = new DirectoryLister();
+    private DirectoryLister directoryLister = new DirectoryLister();
 
     /**
      * Execute command

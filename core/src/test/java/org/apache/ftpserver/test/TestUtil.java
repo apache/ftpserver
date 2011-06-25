@@ -33,13 +33,11 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class TestUtil {
 
@@ -51,12 +49,6 @@ public class TestUtil {
         if (basedir != null) {
             return new File(basedir);
         } else {
-            // Are we using Eclipse based on parent directory?
-            File core = new File("core");
-            File check = new File(core,"src");
-            if (check.isDirectory()) {
-                return core;
-            }
             return new File(".");
         }
     }
@@ -129,11 +121,11 @@ public class TestUtil {
 
         List<String> hostIps = new ArrayList<String>();
         while (nifs.hasMoreElements()) {
-            NetworkInterface nif = nifs.nextElement();
+            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
 
             while (ips.hasMoreElements()) {
-                InetAddress ip = ips.nextElement();
+                InetAddress ip = (InetAddress) ips.nextElement();
                 if (ip instanceof java.net.Inet4Address) {
                     hostIps.add(ip.getHostAddress());
                 } else {
@@ -150,11 +142,11 @@ public class TestUtil {
                 .getNetworkInterfaces();
 
         while (nifs.hasMoreElements()) {
-            NetworkInterface nif = nifs.nextElement();
+            NetworkInterface nif = (NetworkInterface) nifs.nextElement();
             Enumeration<InetAddress> ips = nif.getInetAddresses();
 
             while (ips.hasMoreElements()) {
-                InetAddress ip = ips.nextElement();
+                InetAddress ip = (InetAddress) ips.nextElement();
                 if (ip instanceof java.net.Inet4Address
                         && !ip.isLoopbackAddress()) {
                     return ip;
@@ -216,6 +208,14 @@ public class TestUtil {
     }
 
     public static void assertArraysEqual(byte[] expected, byte[] actual) {
-        TestCase.assertEquals(new String(Hex.encodeHex(expected)), new String(Hex.encodeHex(actual)));
+        if (actual.length != expected.length) {
+            TestCase.fail("Arrays are of different length");
+        }
+
+        for (int i = 0; i < actual.length; i++) {
+            if (actual[i] != expected[i]) {
+                TestCase.fail("Arrays differ at position " + i);
+            }
+        }
     }
 }

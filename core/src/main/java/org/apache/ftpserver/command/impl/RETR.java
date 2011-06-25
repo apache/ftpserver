@@ -37,7 +37,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.IODataConnectionFactory;
-import org.apache.ftpserver.impl.LocalizedDataTransferFtpReply;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.util.IoUtils;
@@ -75,12 +74,14 @@ public class RETR extends AbstractCommand {
             // argument check
             String fileName = request.getArgument();
             if (fileName == null) {
-                session.write(LocalizedDataTransferFtpReply.translate(
+                session
+                        .write(LocalizedFtpReply
+                                .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                                        "RETR", null, null));
+                                        "RETR", null));
                 return;
             }
 
@@ -92,42 +93,39 @@ public class RETR extends AbstractCommand {
                 LOG.debug("Exception getting file object", ex);
             }
             if (file == null) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "RETR.missing", fileName, file));
+                        "RETR.missing", fileName));
                 return;
             }
             fileName = file.getAbsolutePath();
 
             // check file existance
             if (!file.doesExist()) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "RETR.missing", fileName, file));
+                        "RETR.missing", fileName));
                 return;
             }
 
             // check valid file
             if (!file.isFile()) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "RETR.invalid", fileName, file));
+                        "RETR.invalid", fileName));
                 return;
             }
 
             // check permission
             if (!file.isReadable()) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                        "RETR.permission", fileName, file));
+                        "RETR.permission", fileName));
                 return;
             }
 
             // 24-10-2007 - added check if PORT or PASV is issued, see
             // https://issues.apache.org/jira/browse/FTPSERVER-110
-            //TODO move this block of code into the super class. Also, it makes 
-            //sense to have this as the first check before checking everything 
-            //else such as the file and its permissions.  
             DataConnectionFactory connFactory = session.getDataConnection();
             if (connFactory instanceof IODataConnectionFactory) {
                 InetAddress address = ((IODataConnectionFactory) connFactory)
@@ -153,20 +151,19 @@ public class RETR extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "RETR",
-                        null, file));
+                        null));
                 return;
             }
 
-            long transSz = 0L;
             try {
 
                 // open streams
                 is = openInputStream(session, file, skipLen);
 
                 // transfer data
-                transSz = dataConnection.transferToClient(session.getFtpletSession(), is);
+                long transSz = dataConnection.transferToClient(session.getFtpletSession(), is);
                 // attempt to close the input stream so that errors in 
                 // closing it will return an error to the client (FTPSERVER-119) 
                 if(is != null) {
@@ -185,20 +182,20 @@ public class RETR extends AbstractCommand {
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during data transfer", ex);
                 failure = true;
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED,
-                        "RETR", fileName, file, transSz));
+                        "RETR", fileName));
             } catch (IOException ex) {
                 LOG.debug("IOException during data transfer", ex);
                 failure = true;
                 session
-                        .write(LocalizedDataTransferFtpReply
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN,
-                                        "RETR", fileName, file, transSz));
+                                        "RETR", fileName));
             } finally {
                 // make sure we really close the input stream
                 IoUtils.close(is);
@@ -206,9 +203,9 @@ public class RETR extends AbstractCommand {
 
             // if data transfer ok - send transfer complete message
             if (!failure) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "RETR",
-                        fileName, file, transSz));
+                        fileName));
 
             }
         } finally {

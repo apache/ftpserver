@@ -38,7 +38,6 @@ import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.IODataConnectionFactory;
-import org.apache.ftpserver.impl.LocalizedDataTransferFtpReply;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ import org.slf4j.LoggerFactory;
  * A null argument implies the user's current working or default directory. The
  * data transfer is over the data connection.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class LIST extends AbstractCommand {
 
@@ -63,7 +62,7 @@ public class LIST extends AbstractCommand {
 
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
 
-    private final DirectoryLister directoryLister = new DirectoryLister();
+    private DirectoryLister directoryLister = new DirectoryLister();
 
     /**
      * Execute command.
@@ -86,9 +85,9 @@ public class LIST extends AbstractCommand {
             
             if(!file.doesExist()) {
                 LOG.debug("Listing on a non-existing file");
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "LIST",
-                        null, file));             
+                        null));             
                 return;
             }
             
@@ -115,53 +114,54 @@ public class LIST extends AbstractCommand {
                 dataConnection = session.getDataConnection().openConnection();
             } catch (Exception e) {
                 LOG.debug("Exception getting the output data stream", e);
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_425_CANT_OPEN_DATA_CONNECTION, "LIST",
-                        null, file));
+                        null));
                 return;
             }
 
             // transfer listing data
             boolean failure = false;
-            String dirList = directoryLister.listFiles(parsedArg, 
-            	session.getFileSystemView(), LIST_FILE_FORMATER);
+
             try {
-                dataConnection.transferToClient(session.getFtpletSession(), dirList);
+                dataConnection.transferToClient(session.getFtpletSession(), directoryLister.listFiles(
+                        parsedArg, session.getFileSystemView(),
+                        LIST_FILE_FORMATER));
             } catch (SocketException ex) {
                 LOG.debug("Socket exception during list transfer", ex);
                 failure = true;
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_426_CONNECTION_CLOSED_TRANSFER_ABORTED,
-                        "LIST", null, file));
+                        "LIST", null));
             } catch (IOException ex) {
                 LOG.debug("IOException during list transfer", ex);
                 failure = true;
                 session
-                        .write(LocalizedDataTransferFtpReply
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_551_REQUESTED_ACTION_ABORTED_PAGE_TYPE_UNKNOWN,
-                                        "LIST", null, file));
+                                        "LIST", null));
             } catch (IllegalArgumentException e) {
                 LOG.debug("Illegal list syntax: " + request.getArgument(), e);
                 // if listing syntax error - send message
                 session
-                        .write(LocalizedDataTransferFtpReply
+                        .write(LocalizedFtpReply
                                 .translate(
                                         session,
                                         request,
                                         context,
                                         FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                                        "LIST", null, file));
+                                        "LIST", null));
             }
 
             // if data transfer ok - send transfer complete message
             if (!failure) {
-                session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                         FtpReply.REPLY_226_CLOSING_DATA_CONNECTION, "LIST",
-                        null, file, dirList.length()));
+                        null));
             }
         } finally {
             session.getDataConnection().closeDataConnection();

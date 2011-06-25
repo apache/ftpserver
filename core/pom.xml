@@ -13,20 +13,17 @@
 		the specific language governing permissions and limitations under the
 		License.
 	-->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project>
 	<parent>
 		<artifactId>ftpserver-parent</artifactId>
 		<groupId>org.apache.ftpserver</groupId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.0.6-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.ftpserver</groupId>
 	<artifactId>ftpserver-core</artifactId>
 	<name>Apache FtpServer Core</name>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.0.6-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<scm>
 		<connection>
@@ -53,7 +50,7 @@
 			<testResource>
 				<directory>src/test/resources</directory>
 				<includes>
-					<include>**/*.properties</include>
+					<include>*.properties</include>
 				</includes>
 			</testResource>
 		</testResources>
@@ -65,22 +62,22 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName> ${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName> ${artifactId}</Bundle-SymbolicName>
 						<Bundle-Vendor>The Apache Software Foundation</Bundle-Vendor>
 						<Export-Package> org.apache.ftpserver;version=${project.version},
 							org.apache.ftpserver.command;version=${project.version},
 							org.apache.ftpserver.config.spring;version=${project.version},
 							org.apache.ftpserver.filesystem.nativefs;version=${project.version},
 							org.apache.ftpserver.ftpletcontainer;version=${project.version},
-							org.apache.ftpserver.ipfilter;version=${project.version},
-							org.apache.ftpserver.listener;version=${project.version},
+							org.apache.ftpserver.ipfilter;version=${project.version}, 
+							org.apache.ftpserver.listener;version=${project.version}, 
 							org.apache.ftpserver.main;version=${project.version},
 							org.apache.ftpserver.message;version=${project.version},
 							org.apache.ftpserver.ssl;version=${project.version},
 							org.apache.ftpserver.usermanager;version=${project.version}
 						</Export-Package>
 						<Private-Package> org.apache.ftpserver.command.impl,
-							org.apache.ftpserver.command.impl.listing,
+						    org.apache.ftpserver.command.impl.listing,
 							org.apache.ftpserver.filesystem.nativefs.impl,
 							org.apache.ftpserver.ftpletcontainer.impl,
 							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
@@ -89,7 +86,7 @@
 							org.apache.ftpserver.util,
 							org.apache.ftpserver.*
 						</Private-Package>
-						<Import-Package>
+ 						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.xml;resolution:=optional;version="2.5",
@@ -100,23 +97,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-1</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>write-project-properties</goal>
-						</goals>
-						<configuration>
-							<outputFile>${project.build.outputDirectory}/org/apache/ftpserver/ftpserver.properties</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rat-maven-plugin</artifactId>
@@ -147,8 +127,8 @@
 			<artifactId>spring-context</artifactId>
 			<optional>true</optional>
 		</dependency>
-
-		<!-- Use as Spring uses JCL -->
+    
+    <!-- Use as Spring uses JCL -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
@@ -156,7 +136,7 @@
 		</dependency>
 
 
-		<!-- Test dependencies -->
+    <!-- Test dependencies -->
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>

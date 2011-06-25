@@ -29,11 +29,9 @@ import org.apache.ftpserver.listener.ListenerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class InetAddressBlacklistTest extends ClientTestTemplate {
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 
@@ -49,7 +47,6 @@ public class InetAddressBlacklistTest extends ClientTestTemplate {
         return server;
     }
 
-    @Override
     protected boolean isConnectClient() {
         return false;
     }

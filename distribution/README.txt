@@ -1,5 +1,5 @@
 The Apache FtpServer project team is proud to announce the release of 
-Apache FtpServer, version 1.0.0
+Apache FtpServer, version 1.0.4
 
 The Apache FTP Server is a 100% pure Java FTP server. It's designed to be 
 a complete and portable FTP server engine solution based on currently 
@@ -12,6 +12,34 @@ It is also a FTP application platform. We have developed a Java API to let
 you write Java code to process FTP event notifications that we call the Ftplet 
 API. Apache FtpServer provides an implementation of FTP server to support 
 this API. 
+
+1.0.6
+--------------------------------
+Bug fix release which closes 19 issues since the 1.0.5 release, for example an overhaul of the passive port reservation handling. See full change log at: https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12315314
+
+1.0.5
+--------------------------------
+Bug fix release that fixes important issues found since the 1.0.4 release. 
+See full change log at https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12314821
+
+1.0.4
+--------------------------------
+Bug fix release that fixes important issues found since the 1.0.3 release. 
+See full change log at https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12314283
+
+1.0.3
+--------------------------------
+Bug fix release that fixes important issues found since the 1.0.2 release. 
+See full change log at https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12314039
+
+1.0.2
+--------------------------------
+Bug fix release that fixes important issues found since the 1.0.1 release. 
+See full change log at https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12313952
+
+1.0.1
+--------------------------------
+Bug fix release that fixes important issues found since the 1.0.0 release. https://issues.apache.org/jira/browse/FTPSERVER/fixforversion/12313619
 
 1.0.0
 --------------------------------

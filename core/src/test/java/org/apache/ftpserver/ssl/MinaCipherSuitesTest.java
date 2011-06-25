@@ -30,17 +30,14 @@ import org.apache.commons.net.ftp.FTPSClient;
 */
 public class MinaCipherSuitesTest extends SSLTestTemplate {
 
-    @Override
     protected String getAuthValue() {
         return "TLS";
     }
 
-    @Override
     protected boolean useImplicit() {
         return true;
     }
 
-    @Override
     protected SslConfigurationFactory createSslConfiguration() {
         SslConfigurationFactory sslConfigFactory = super.createSslConfiguration();
 
@@ -50,12 +47,10 @@ public class MinaCipherSuitesTest extends SSLTestTemplate {
         return sslConfigFactory;
     }
     
-    @Override
     protected FTPSClient createFTPClient() throws Exception {
         return new FTPSClient(true);
     }
 
-    @Override
     protected boolean isConnectClient() {
         return false;
     }

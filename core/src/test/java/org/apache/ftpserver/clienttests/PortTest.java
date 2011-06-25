@@ -28,7 +28,6 @@ import java.net.InetAddress;
 */
 public class PortTest extends ClientTestTemplate {
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

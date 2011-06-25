@@ -32,8 +32,6 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.impl.LocalizedDataTransferFtpReply;
-import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
 import org.apache.ftpserver.impl.LocalizedFtpReply;
 
 /**
@@ -50,7 +48,7 @@ public class STAT extends AbstractCommand {
 
     private static final LISTFileFormater LIST_FILE_FORMATER = new LISTFileFormater();
 
-    private final DirectoryLister directoryLister = new DirectoryLister();
+    private DirectoryLister directoryLister = new DirectoryLister();
     
     /**
      * Execute command
@@ -70,15 +68,15 @@ public class STAT extends AbstractCommand {
             try {
                 file = session.getFileSystemView().getFile(parsedArg.getFile());
                 if(!file.doesExist()) {
-                    session.write(LocalizedDataTransferFtpReply.translate(session, request, context,
+                    session.write(LocalizedFtpReply.translate(session, request, context,
                             FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "LIST",
-                            null, file));             
+                            null));             
                     return;
                 }
                 
                 String dirList = directoryLister.listFiles(parsedArg, 
                         session.getFileSystemView(), LIST_FILE_FORMATER);
-
+                
                 int replyCode;
                 if(file.isDirectory()) {
                 	replyCode = FtpReply.REPLY_212_DIRECTORY_STATUS;
@@ -86,19 +84,18 @@ public class STAT extends AbstractCommand {
                 	replyCode = FtpReply.REPLY_213_FILE_STATUS;
                 }
                 
-                session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+                session.write(LocalizedFtpReply.translate(session, request, context,
                 		replyCode, "STAT",
-                        dirList, file));
+                        dirList));
                 
             } catch (FtpException e) {
-                session
-                .write(LocalizedFileActionFtpReply
+                session.write(LocalizedFtpReply
                         .translate(
                                 session,
                                 request,
                                 context,
                                 FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN,
-                                "STAT", null, file));
+                                "STAT", null));
             }
         
         } else {

@@ -28,7 +28,7 @@ import org.apache.ftpserver.ftplet.FtpReply;
 import org.apache.ftpserver.ftplet.FtpRequest;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.impl.LocalizedFileActionFtpReply;
+import org.apache.ftpserver.impl.LocalizedFtpReply;
 import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +61,9 @@ public class RMD extends AbstractCommand {
         // argument check
         String fileName = request.getArgument();
         if (fileName == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_501_SYNTAX_ERROR_IN_PARAMETERS_OR_ARGUMENTS,
-                    "RMD", null, null));
+                    "RMD", null));
             return;
         }
 
@@ -75,9 +75,9 @@ public class RMD extends AbstractCommand {
             LOG.debug("Exception getting file object", ex);
         }
         if (file == null) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "RMD.permission", fileName, file));
+                    "RMD.permission", fileName));
             return;
         }
 
@@ -85,9 +85,9 @@ public class RMD extends AbstractCommand {
 
         // first let's make sure the path is a directory 
         if (!file.isDirectory()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "RMD.invalid", fileName, file));
+                    "RMD.invalid", fileName));
             return;
         }
 
@@ -95,25 +95,25 @@ public class RMD extends AbstractCommand {
         // current working directory.   
         FtpFile cwd = session.getFileSystemView().getWorkingDirectory();
         if(file.equals(cwd)) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                 FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD.busy",
-                fileName, file));
+                fileName));
             return;
         }
         
         // now check to see if the user have permission to delete this directory 
         if (!file.isRemovable()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_550_REQUESTED_ACTION_NOT_TAKEN,
-                    "RMD.permission", fileName, file));
+                    "RMD.permission", fileName));
             return;
         }
 
         // now delete directory
         if (file.delete()) {
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_250_REQUESTED_FILE_ACTION_OKAY, "RMD",
-                    fileName, file));
+                    fileName));
 
             // write log message
             String userName = session.getUser().getName();
@@ -126,9 +126,9 @@ public class RMD extends AbstractCommand {
 
         } else {
         	 
-            session.write(LocalizedFileActionFtpReply.translate(session, request, context,
+            session.write(LocalizedFtpReply.translate(session, request, context,
                     FtpReply.REPLY_450_REQUESTED_FILE_ACTION_NOT_TAKEN, "RMD",
-                    fileName, file));
+                    fileName));
         }
     }
 }

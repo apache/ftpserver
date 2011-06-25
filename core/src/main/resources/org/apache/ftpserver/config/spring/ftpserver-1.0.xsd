@@ -100,8 +100,8 @@
 		</xs:complexType>
 	</xs:element>
 
-	<!-- Element used to configure the remote IP Filtering -->
-	<xs:element name="remote-ip-filter">
+	<!-- Element used to configure the IP Filtering -->
+	<xs:element name="ip-filter">
 		<xs:complexType>
 			<xs:simpleContent>
 				<xs:extension base="xs:string">
@@ -139,7 +139,6 @@
 								<xs:complexType>
 									<xs:attribute name="address" />
 									<xs:attribute name="external-address" />
-									<xs:attribute name="ip-check" type="xs:boolean" />
 									<xs:attribute name="ports" />
 								</xs:complexType>
 							</xs:element>
@@ -149,7 +148,7 @@
 					</xs:complexType>
 				</xs:element>
 				<xs:element minOccurs="0" name="blacklist" type="xs:string" />
-				<xs:element ref="remote-ip-filter" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="ip-filter" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 			<xs:attribute name="name" use="required" type="xs:string" />
 			<xs:attribute name="local-address" />

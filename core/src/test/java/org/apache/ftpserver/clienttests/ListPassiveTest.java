@@ -21,8 +21,7 @@ package org.apache.ftpserver.clienttests;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ListPassiveTest extends ListTest {
     /*
@@ -30,7 +29,6 @@ public class ListPassiveTest extends ListTest {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

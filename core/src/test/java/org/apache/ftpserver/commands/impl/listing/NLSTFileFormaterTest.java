@@ -31,8 +31,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class NLSTFileFormaterTest extends TestCase {
 
@@ -125,10 +124,6 @@ public class NLSTFileFormaterTest extends TestCase {
             return false;
             
         }
-        
-        public Object getPhysicalFile() {
-        	return "/short";
-        }
     }
 
     public void testSingleFile() {
@@ -137,12 +132,10 @@ public class NLSTFileFormaterTest extends TestCase {
 
     public void testSingleDir() {
         FtpFile dir = new MockFileObject() {
-            @Override
             public boolean isDirectory() {
                 return true;
             }
 
-            @Override
             public boolean isFile() {
                 return false;
             }

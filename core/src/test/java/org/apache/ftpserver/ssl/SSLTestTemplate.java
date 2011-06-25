@@ -39,8 +39,7 @@ import org.apache.ftpserver.util.IoUtils;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class SSLTestTemplate extends ClientTestTemplate {
 
@@ -66,7 +65,6 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return sslConfigFactory;
     }
     
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         assertTrue(FTPSERVER_KEYSTORE.exists());
 
@@ -90,7 +88,6 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         return "false";
     }
 
-    @Override
     protected FTPSClient createFTPClient() throws Exception {
         FTPSClient ftpsClient = new FTPSClient(useImplicit());
 
@@ -116,13 +113,11 @@ public abstract class SSLTestTemplate extends ClientTestTemplate {
         ftpsClient.setKeyManager(clientKeyManager);
         ftpsClient.setTrustManager(clientTrustManager);
 
-        
         String auth = getAuthValue();
         if (auth != null) {
             ftpsClient.setAuthValue(auth);
             
             if(auth.equals("SSL")) {
-                // SSLv3 is disabled by default on the JBM JDK, therefore we need to enable it
                 ftpsClient.setEnabledProtocols(new String[]{"SSLv3"});
             }
         }

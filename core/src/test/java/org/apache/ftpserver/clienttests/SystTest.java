@@ -23,8 +23,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class SystTest extends ClientTestTemplate {
 
@@ -33,7 +32,6 @@ public class SystTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

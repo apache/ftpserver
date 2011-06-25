@@ -33,7 +33,7 @@ import org.apache.ftpserver.ftplet.Ftplet;
 public interface FtpletContainer extends Ftplet {
 
     /**
-     * Retrieve the {@link Ftplet} identified by the name (as provided in the
+     * Retrive the {@link Ftplet} identified by the name (as provided in the
      * {@link #addFtplet(String, Ftplet)} method.
      * 
      * @param name

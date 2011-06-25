@@ -29,7 +29,7 @@ import org.apache.ftpserver.impl.FtpServerContext;
 /**
  * This interface encapsulates all the FTP commands.
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public interface Command {
 

@@ -43,7 +43,7 @@ import org.apache.ftpserver.ftplet.User;
  */
 public class DefaultFtpSession implements FtpSession {
 
-    private final FtpIoSession ioSession;
+    private FtpIoSession ioSession;
 
     /**
      * Default constructor.

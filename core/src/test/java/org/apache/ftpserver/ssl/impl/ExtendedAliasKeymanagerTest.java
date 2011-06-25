@@ -29,14 +29,12 @@ import junit.framework.TestCase;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class ExtendedAliasKeymanagerTest extends TestCase {
 
     private KeyManager km;
 
-    @Override
     protected void setUp() throws Exception {
         KeyStore ks = KeyStore.getInstance("JKS");
 

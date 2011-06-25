@@ -30,11 +30,6 @@ public class DefaultFtpReply implements FtpReply {
     private int code;
 
     private String message;
-    
-    /**
-     * time when this reply was sent.  
-     */
-    private long sentTime = 0L;
 
     private static final String CRLF = "\r\n";
 
@@ -46,7 +41,6 @@ public class DefaultFtpReply implements FtpReply {
     public DefaultFtpReply(final int code, final String message) {
         this.code = code;
         this.message = message;
-        this.sentTime = System.currentTimeMillis();
     }
 
     /**
@@ -57,13 +51,12 @@ public class DefaultFtpReply implements FtpReply {
     public DefaultFtpReply(final int code, final String[] message) {
         this.code = code;
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         for (int i = 0; i < message.length; i++) {
             sb.append(message[i]);
             sb.append('\n');
         }
         this.message = sb.toString();
-        this.sentTime = System.currentTimeMillis();
     }
 
     /**
@@ -79,15 +72,7 @@ public class DefaultFtpReply implements FtpReply {
     public String getMessage() {
         return message;
     }
-    
-    public long getSentTime() {
-    	return sentTime;
-    }
-    
-    public boolean isPositive() {
-    	return code < 400;
-    }
-    
+
     private boolean isDigit(char c) {
     	return c >= 48 && c <= 57;
     }
@@ -97,7 +82,6 @@ public class DefaultFtpReply implements FtpReply {
      * 
      * @see java.lang.Object#toString()
      */
-    @Override
     public String toString() {
         int code = getCode();
         String notNullMessage = getMessage();
@@ -105,7 +89,7 @@ public class DefaultFtpReply implements FtpReply {
             notNullMessage = "";
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
 
         // remove any carriage returns
         notNullMessage = notNullMessage.replace("\r", "");

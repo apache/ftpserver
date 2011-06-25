@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.FtpServerConfigurationException;
@@ -34,8 +36,8 @@ import org.apache.ftpserver.impl.DefaultFtpHandler;
 import org.apache.ftpserver.impl.FtpHandler;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
-import org.apache.ftpserver.ipfilter.MinaSessionFilter;
-import org.apache.ftpserver.ipfilter.SessionFilter;
+import org.apache.ftpserver.ipfilter.IpFilter;
+import org.apache.ftpserver.ipfilter.MinaIpFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.ssl.ClientAuth;
@@ -44,10 +46,12 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
+import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
 import org.apache.mina.filter.firewall.Subnet;
 import org.apache.mina.filter.logging.MdcInjectionFilter;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.apache.mina.transport.socket.SocketAcceptor;
+import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,12 +94,13 @@ public class NioListener extends AbstractListener {
     /**
      * Constructor for internal use, do not use directly. Instead use {@link ListenerFactory}
      */
-    public NioListener(String serverAddress, int port, boolean implicitSsl,
+    public NioListener(String serverAddress, int port,
+            boolean implicitSsl,
             SslConfiguration sslConfiguration,
-            DataConnectionConfiguration dataConnectionConfig, int idleTimeout,
-            SessionFilter sessionFilter) {
-        super(serverAddress, port, implicitSsl, sslConfiguration,
-                dataConnectionConfig, idleTimeout, sessionFilter);
+            DataConnectionConfiguration dataConnectionConfig, 
+            int idleTimeout, IpFilter ipFilter) {
+        super(serverAddress, port, implicitSsl, sslConfiguration, dataConnectionConfig, 
+                idleTimeout, ipFilter);   
     }
 
     /**
@@ -125,17 +130,17 @@ public class NioListener extends AbstractListener {
             acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,
                     getIdleTimeout());
             // Decrease the default receiver buffer size
-            acceptor.getSessionConfig().setReceiveBufferSize(512);
+            ((SocketSessionConfig) acceptor.getSessionConfig())
+                    .setReceiveBufferSize(512);
     
             MdcInjectionFilter mdcFilter = new MdcInjectionFilter();
     
             acceptor.getFilterChain().addLast("mdcFilter", mdcFilter);
-
-            SessionFilter sessionFilter = getSessionFilter();
-            if (sessionFilter != null) {
-                // add and IP filter to the filter chain.
-                acceptor.getFilterChain().addLast("sessionFilter",
-                        new MinaSessionFilter(sessionFilter));
+    
+            IpFilter ipFilter = getIpFilter();
+            if(ipFilter != null) {
+            // 	add and IP filter to the filter chain. 
+            	acceptor.getFilterChain().addLast("ipFilter", new MinaIpFilter(ipFilter));
             }
     
             acceptor.getFilterChain().addLast("threadPool",

@@ -30,7 +30,7 @@ import org.apache.ftpserver.command.impl.HELP;
 import org.apache.ftpserver.command.impl.STAT;
 import org.apache.ftpserver.filesystem.nativefs.NativeFileSystemFactory;
 import org.apache.ftpserver.impl.DefaultFtpServer;
-import org.apache.ftpserver.ipfilter.RemoteIpFilter;
+import org.apache.ftpserver.ipfilter.DefaultIpFilter;
 import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.nio.NioListener;
 import org.apache.mina.filter.firewall.Subnet;
@@ -40,7 +40,6 @@ import org.springframework.core.io.FileSystemResource;
 /**
 *
 * @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
 */
 public class SpringConfigTest extends TestCase {
 
@@ -78,10 +77,8 @@ public class SpringConfigTest extends TestCase {
         		.getDataConnectionConfiguration().getActiveLocalAddress()) );
         assertEquals("123-125", ((NioListener) listener)
                 .getDataConnectionConfiguration().getPassivePorts());
-        assertEquals(false, ((NioListener) listener)
-                .getDataConnectionConfiguration().isPassiveIpCheck());
-        
-        RemoteIpFilter filter = (RemoteIpFilter) listener.getSessionFilter();
+
+        DefaultIpFilter filter = (DefaultIpFilter) listener.getIpFilter();
         assertEquals(3, filter.size());
         assertTrue(filter.contains(new Subnet(InetAddress.getByName("1.2.3.0"), 16)));
         assertTrue(filter.contains(new Subnet(InetAddress.getByName("1.2.4.0"), 16)));

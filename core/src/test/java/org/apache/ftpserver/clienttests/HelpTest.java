@@ -21,8 +21,7 @@ package org.apache.ftpserver.clienttests;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class HelpTest extends ClientTestTemplate {
 
@@ -31,7 +30,6 @@ public class HelpTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

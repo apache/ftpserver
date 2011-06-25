@@ -23,12 +23,10 @@ import java.io.IOException;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FtpLetThrowRuntimeExceptionTest extends
         FtpLetThrowFtpExceptionTest {
-    @Override
     protected void throwException() throws IOException {
         throw new IOException();
     }

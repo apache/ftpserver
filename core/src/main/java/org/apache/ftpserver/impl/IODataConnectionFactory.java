@@ -26,6 +26,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -40,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <strong>Internal class, do not use directly.</strong>
- * 
+ *
  * We can get the FTP data connection using this class. It uses either PORT or
  * PASV command.
  *
@@ -194,7 +195,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                             "Data connection SSL required but not configured.");
                 }
 
-                // this method does not actually create the SSL socket, due to a JVM bug 
+                // this method does not actually create the SSL socket, due to a JVM bug
                 // (https://issues.apache.org/jira/browse/FTPSERVER-241).
                 // Instead, it creates a regular
                 // ServerSocket that will be wrapped as a SSL socket in createDataSocket()
@@ -233,7 +234,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#getInetAddress()
      */
     public InetAddress getInetAddress() {
@@ -242,7 +243,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#getPort()
      */
     public int getPort() {
@@ -251,7 +252,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.ftpserver.FtpDataConnectionFactory2#openConnection()
      */
     public DataConnection openConnection() throws Exception {
@@ -278,7 +279,8 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                     }
 
                     // get socket factory
-                    SSLSocketFactory socFactory = ssl.getSocketFactory();
+                    SSLContext ctx = ssl.getSSLContext();
+                    SSLSocketFactory socFactory = ctx.getSocketFactory();
 
                     // create socket
                     SSLSocket ssoc = (SSLSocket) socFactory.createSocket();
@@ -302,10 +304,10 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
                 // if no local address has been configured, make sure we use the same as the client connects from
                 if(localAddr == null) {
                     localAddr = ((InetSocketAddress)session.getLocalAddress()).getAddress();
-                }       
+                }
 
                 SocketAddress localSocketAddress = new InetSocketAddress(localAddr, dataConfig.getActiveLocalPort());
-                
+
                 LOG.debug("Binding active data connection to {}", localSocketAddress);
                 dataSoc.bind(localSocketAddress);
 
@@ -314,25 +316,26 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
                 if (secure) {
                     LOG.debug("Opening secure passive data connection");
-                    // this is where we wrap the unsecured socket as a SSLSocket. This is 
+                    // this is where we wrap the unsecured socket as a SSLSocket. This is
                     // due to the JVM bug described in FTPSERVER-241.
 
                     // get server socket factory
                     SslConfiguration ssl = getSslConfiguration();
-                    
+
                     // we've already checked this, but let's do it again
                     if (ssl == null) {
                         throw new FtpException(
                                 "Data connection SSL not configured");
                     }
 
-                    SSLSocketFactory ssocketFactory = ssl.getSocketFactory();
+                    SSLContext ctx = ssl.getSSLContext();
+                    SSLSocketFactory ssocketFactory = ctx.getSocketFactory();
 
                     Socket serverSocket = servSoc.accept();
 
                     SSLSocket sslSocket = (SSLSocket) ssocketFactory
                             .createSocket(serverSocket, serverSocket
-                                    .getInetAddress().getHostAddress(),
+                                    .getInetAddress().getHostName(),
                                     serverSocket.getPort(), true);
                     sslSocket.setUseClientMode(false);
 
@@ -354,25 +357,9 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
                     dataSoc = servSoc.accept();
                 }
-                
-                if (dataConfig.isPassiveIpCheck()) {
-					// Let's make sure we got the connection from the same
-					// client that we are expecting
-					InetAddress remoteAddress = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
-					InetAddress dataSocketAddress = dataSoc.getInetAddress();
-					if (!dataSocketAddress.equals(remoteAddress)) {
-						LOG.warn("Passive IP Check failed. Closing data connection from "
-							+ dataSocketAddress
-							+ " as it does not match the expected address "
-							+ remoteAddress);
-						closeDataConnection();
-						return null;
-					}
-				}
-                
                 DataConnectionConfiguration dataCfg = session.getListener()
                     .getDataConnectionConfiguration();
-                
+
                 dataSoc.setSoTimeout(dataCfg.getIdleTime() * 1000);
                 LOG.debug("Passive data connection opened");
             }
@@ -412,7 +399,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.ftpserver.DataConnectionFactory#isSecure()
      */
     public boolean isSecure() {
@@ -428,7 +415,7 @@ public class IODataConnectionFactory implements ServerDataConnectionFactory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.ftpserver.DataConnectionFactory#isZipMode()
      */
     public boolean isZipMode() {

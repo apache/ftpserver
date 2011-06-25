@@ -27,8 +27,7 @@ import java.util.TimeZone;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class MDTMTest extends ClientTestTemplate {
     private static final SimpleDateFormat FTP_DATE_FORMAT = new SimpleDateFormat(
@@ -46,7 +45,6 @@ public class MDTMTest extends ClientTestTemplate {
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 

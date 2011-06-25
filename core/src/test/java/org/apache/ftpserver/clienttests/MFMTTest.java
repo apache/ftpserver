@@ -26,8 +26,7 @@ import java.util.TimeZone;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class MFMTTest extends ClientTestTemplate {
     private static final File TEST_FILE1 = new File(ROOT_DIR, "test1.txt");
@@ -45,7 +44,6 @@ public class MFMTTest extends ClientTestTemplate {
     }
 
     
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -112,6 +110,7 @@ public class MFMTTest extends ClientTestTemplate {
         assertTrue(result.contains(" MFMT\r\n"));
     }
 
+    @SuppressWarnings("deprecation")
     public void testSetTime() throws Exception {
         
         assertEquals(213, client.sendCommand("MFMT", "20020717210715 test1.txt"));
@@ -119,12 +118,13 @@ public class MFMTTest extends ClientTestTemplate {
         assertEquals(EXPECTED_TIME.getTimeInMillis(),TEST_FILE1.lastModified());
     }
     
+    @SuppressWarnings("deprecation")
     public void testSetTimeFullPath() throws Exception {
         assertEquals(213, client.sendCommand("MFMT", "20020717210715 dir1/test4.txt"));
         
         assertEquals(EXPECTED_TIME.getTimeInMillis(), TEST_FILE_IN_DIR1.lastModified());
     }
-
+    @SuppressWarnings("deprecation")
     public void testSetTimeFileWithSpaces() throws Exception{
         assertEquals(213, client.sendCommand("MFMT", "20020717210715 my test.txt"));
         

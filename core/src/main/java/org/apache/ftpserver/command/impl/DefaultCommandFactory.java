@@ -34,13 +34,9 @@ import org.apache.ftpserver.command.CommandFactoryFactory;
  *
  * <strong><strong>Internal class, do not use directly.</strong></strong>
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class DefaultCommandFactory implements CommandFactory {
-
-    public DefaultCommandFactory() {
-        this(new HashMap<String, Command>());
-    }
 
     /**
      * Internal constructor, use {@link CommandFactoryFactory} instead
@@ -49,7 +45,7 @@ public class DefaultCommandFactory implements CommandFactory {
         this.commandMap = commandMap;
     }
 
-    private final Map<String, Command> commandMap;
+    private Map<String, Command> commandMap = new HashMap<String, Command>();
 
     /**
      * Get command. Returns null if not found.

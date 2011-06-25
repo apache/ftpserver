@@ -63,7 +63,6 @@ public class DirectoryListerTest extends TestCase {
 
     private FileSystemView fileSystemView;
 
-    @Override
     protected void setUp() throws Exception {
         BaseUser baseUser = new BaseUser();
         baseUser.setHomeDirectory(ROOT_DIR.getAbsolutePath());
@@ -95,7 +94,6 @@ public class DirectoryListerTest extends TestCase {
      * 
      * @see junit.framework.TestCase#tearDown()
      */
-    @Override
     protected void tearDown() throws Exception {
         if (TEST_TMP_DIR.exists()) {
             IoUtils.delete(TEST_TMP_DIR);

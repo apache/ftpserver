@@ -73,7 +73,7 @@ public class CommandFactoryBeanDefinitionParser extends
 
         if (StringUtils.hasText(element.getAttribute("use-default"))) {
             factoryBuilder.addPropertyValue("useDefaultCommands", Boolean
-                    .valueOf(element.getAttribute("use-default")));
+                    .parseBoolean(element.getAttribute("use-default")));
         }
         
         BeanDefinition factoryDefinition = factoryBuilder.getBeanDefinition();

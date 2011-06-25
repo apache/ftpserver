@@ -32,8 +32,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 @SuppressWarnings("deprecation")
 public class LISTFileFormaterTest extends TestCase {
@@ -132,10 +131,6 @@ public class LISTFileFormaterTest extends TestCase {
         public boolean setLastModified(long time) {
             return false;
         }
-        
-        public Object getPhysicalFile() {
-        	return "/short";
-        }
     }
 
     public void testSingleFile() {
@@ -144,17 +139,14 @@ public class LISTFileFormaterTest extends TestCase {
 
     public void testSingleDir() {
         FtpFile dir = new MockFileObject() {
-            @Override
             public int getLinkCount() {
                 return 3;
             }
 
-            @Override
             public boolean isDirectory() {
                 return true;
             }
 
-            @Override
             public boolean isFile() {
                 return false;
             }

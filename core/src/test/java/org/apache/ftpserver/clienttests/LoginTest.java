@@ -28,8 +28,7 @@ import org.apache.ftpserver.ftplet.FtpStatistics;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class LoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";
@@ -90,8 +89,8 @@ public class LoginTest extends ClientTestTemplate {
     }
 
     public void testREIN() throws Exception {
-        assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
-        assertTrue(FTPReply.isPositiveCompletion(client.rein()));
+    	assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
+    	assertTrue(FTPReply.isPositiveCompletion(client.rein()));
         assertTrue(client.login(TESTUSER1_USERNAME, TESTUSER_PASSWORD));
     }
 
@@ -122,7 +121,6 @@ public class LoginTest extends ClientTestTemplate {
     public void testLoginUnknownUser() throws Exception {
         assertFalse(client.login(UNKNOWN_USERNAME, UNKNOWN_PASSWORD));
     }
-
     public void testLoginCount() throws Exception {
     	FtpStatistics stats = server.getServerContext().getFtpStatistics();
     	 assertTrue(client.login(ADMIN_USERNAME, ADMIN_PASSWORD));
@@ -130,7 +128,7 @@ public class LoginTest extends ClientTestTemplate {
     	 assertEquals(1,n );
     	 client.rein();
     	 client.logout();
-    	 assertEquals(0, stats.getCurrentLoginNumber());
+    	 assertEquals(0, stats.getCurrentLoginNumber());  	
     }
 
     /*

@@ -24,15 +24,13 @@ import org.apache.ftpserver.FtpServerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class UnlimitedMaxLoginTest extends ClientTestTemplate {
     private static final String UNKNOWN_USERNAME = "foo";
 
     private static final String UNKNOWN_PASSWORD = "bar";
 
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

@@ -43,8 +43,7 @@ import org.slf4j.LoggerFactory;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class ClientTestTemplate extends TestCase {
 
@@ -118,7 +117,6 @@ public abstract class ClientTestTemplate extends TestCase {
      * 
      * @see junit.framework.TestCase#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         initDirs();
 
@@ -216,7 +214,6 @@ public abstract class ClientTestTemplate extends TestCase {
      * 
      * @see junit.framework.TestCase#tearDown()
      */
-    @Override
     protected void tearDown() throws Exception {
         if (isConnectClient()) {
             try {

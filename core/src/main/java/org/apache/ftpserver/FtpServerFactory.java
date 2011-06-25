@@ -36,7 +36,7 @@ import org.apache.ftpserver.message.MessageResource;
  * This is the starting point of all the servers. Creates server instances based on 
  * the provided configuration. 
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class FtpServerFactory {
 
@@ -44,6 +44,8 @@ public class FtpServerFactory {
 
     /**
      * Creates a server with the default configuration
+     * 
+     * @throws Exception
      */
     public FtpServerFactory() {
         serverContext = new DefaultFtpServerContext();
@@ -222,6 +224,11 @@ public class FtpServerFactory {
      * Set the message resource to be used with this server
      * @param connectionConfig The {@link ConnectionConfig} to be used
      *  by servers created by this factory
+     * 
+     * @param messageResource
+     *            The {@link MessageResource}
+     * @throws IllegalStateException
+     *             If a custom server context has been set
      */
     public void setConnectionConfig(final ConnectionConfig connectionConfig) {
         serverContext.setConnectionConfig(connectionConfig);

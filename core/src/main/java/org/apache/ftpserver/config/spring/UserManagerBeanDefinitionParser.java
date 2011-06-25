@@ -52,7 +52,7 @@ public class UserManagerBeanDefinitionParser extends
             final BeanDefinitionBuilder builder) {
 
 
-        Class<?> factoryClass;
+        Class factoryClass;
         if (element.getLocalName().equals("file-user-manager")) {
             factoryClass = PropertiesUserManagerFactory.class;
         } else {

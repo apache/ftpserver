@@ -41,8 +41,7 @@ import org.apache.ftpserver.test.TestUtil;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class FtpLetReturnDefaultTest extends ClientTestTemplate {
     private static final byte[] TESTDATA = "TESTDATA".getBytes();
@@ -53,14 +52,13 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     private static final File TEST_FILE2 = new File(ROOT_DIR, "test2.txt");
 
-    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");
+    private static final File TEST_DIR1 = new File(ROOT_DIR, "dir1");;
 
     /*
      * (non-Javadoc)
      * 
      * @see org.apache.ftpserver.clienttests.ClientTestTemplate#setUp()
      */
-    @Override
     protected void setUp() throws Exception {
         MockFtplet.callback = new MockFtpletCallback();
         MockFtpletCallback.returnValue = FtpletResult.DEFAULT;
@@ -73,7 +71,6 @@ public class FtpLetReturnDefaultTest extends ClientTestTemplate {
 
     }
 
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

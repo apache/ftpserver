@@ -27,8 +27,7 @@ import org.springframework.core.io.ByteArrayResource;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class SpringConfigTestTemplate extends TestCase {
 

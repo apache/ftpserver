@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Data connection factory
  *
- * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @author <a href="http://mina.apache.org">Apache MINA Project</a> 
  */
 public class DataConnectionConfigurationFactory {
 
@@ -50,7 +50,6 @@ public class DataConnectionConfigurationFactory {
     private String passiveAddress;
     private String passiveExternalAddress;
     private PassivePorts passivePorts = new PassivePorts(Collections.<Integer>emptySet(), true);
-    private boolean passiveIpCheck = false;
     private boolean implicitSsl;
 
     /**
@@ -64,7 +63,7 @@ public class DataConnectionConfigurationFactory {
                 ssl, activeEnabled, activeIpCheck,
                 activeLocalAddress, activeLocalPort,
                 passiveAddress, passivePorts,
-                passiveExternalAddress, passiveIpCheck, implicitSsl);
+                passiveExternalAddress, implicitSsl);
     }
     /*
      * (Non-Javadoc)
@@ -199,32 +198,6 @@ public class DataConnectionConfigurationFactory {
     }
     
     /**
-	 * Tells whether or not IP address check is performed when accepting a
-	 * passive data connection.
-	 * 
-	 * @return <code>true</code>, if the IP address checking is enabled;
-	 *         <code>false</code>, otherwise. A value of <code>true</code> means
-	 *         that site to site transfers are disabled. In other words, a
-	 *         passive data connection MUST be made from the same IP address
-	 *         that issued the PASV command.
-	 */
-	public boolean isPassiveIpCheck() {
-		return passiveIpCheck;
-	}
-	
-	/**
-	 * Sets whether or not IP check is performed before accepting a passive data
-	 * connection.
-	 * 
-	 * @param passiveIpCheck
-	 *            whether or not IP check is performed before accepting a
-	 *            passive data connection.
-	 */
-	public void setPassiveIpCheck(boolean passiveIpCheck) {
-		this.passiveIpCheck = passiveIpCheck;
-	}
-    
-    /**
      * Get passive data port. Data port number zero (0) means that any available
      * port will be used.
      * @return A passive port to use
@@ -243,7 +216,7 @@ public class DataConnectionConfigurationFactory {
             // no available free port - wait for the release notification
             if (dataPort == -1) {
                 try {
-                    log.info("We're waiting for a passive port, might be stuck");
+                    log.info("Out of passive ports, waiting for one to be released. Might be stuck");
                     wait();
                 } catch (InterruptedException ex) {
                 }
@@ -316,7 +289,7 @@ public class DataConnectionConfigurationFactory {
 
     /**
      * Set whether ssl is required for the data connection
-     * @param implicitSsl True if ssl is mandatory for the data connection
+     * @param sslMandatory True if ssl is mandatory for the data connection
      */
     public void setImplicitSsl(boolean implicitSsl) {
         this.implicitSsl = implicitSsl;

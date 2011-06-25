@@ -64,7 +64,6 @@ public class DecoderTest extends ClientTestTemplate {
         }
     }
     
-    @Override
     protected FTPClient createFTPClient() throws Exception {
         FTPClient client = new MyFTPClient();
         client.setDefaultTimeout(10000);

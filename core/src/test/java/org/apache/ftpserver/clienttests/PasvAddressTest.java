@@ -31,14 +31,12 @@ import org.apache.ftpserver.util.SocketAddressEncoder;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class PasvAddressTest extends ClientTestTemplate {
 
     private String passiveAddress;
 
-    @Override
     protected FtpServerFactory createServer() throws Exception {
         FtpServerFactory server = super.createServer();
 

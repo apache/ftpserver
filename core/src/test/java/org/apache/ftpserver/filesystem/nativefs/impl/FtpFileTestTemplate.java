@@ -30,8 +30,7 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public abstract class FtpFileTestTemplate extends TestCase {
 
@@ -48,7 +47,6 @@ public abstract class FtpFileTestTemplate extends TestCase {
     protected static final User USER = new BaseUser() {
         private static final long serialVersionUID = 4906315989316879758L;
 
-        @Override
         public AuthorizationRequest authorize(AuthorizationRequest request) {
             return request;
         }
@@ -117,7 +115,7 @@ public abstract class FtpFileTestTemplate extends TestCase {
     public void testListFilesInOrder() {
         FtpFile root = createFileObject("/", USER);
 
-        List<? extends FtpFile> files = root.listFiles();
+        List<FtpFile> files = root.listFiles();
         assertEquals(3, files.size());
         assertEquals("dir1", files.get(0).getName());
         assertEquals("file1", files.get(1).getName());

@@ -19,40 +19,25 @@
 
 package org.apache.ftpserver.ipfilter;
 
+import java.net.InetAddress;
+
 /**
- * Defines various types of IP Filters.
+ * The interface for filtering connections based on the client's IP address.
  * 
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * 
  */
-public enum IpFilterType {
+
+public interface IpFilter {
 
 	/**
-	 * filter type that allows a set of predefined IP addresses, also known as a
-	 * white list.
-	 */
-	ALLOW,
-
-	/**
-	 * filter type that blocks a set of predefined IP addresses, also known as a
-	 * black list.
-	 */
-	DENY;
-
-	/**
-	 * Parses the given string into its equivalent enum.
+	 * Tells whether or not the given IP address is accepted by this filter.
 	 * 
-	 * @param value
-	 *            the string value to parse.
-	 * @return the equivalent enum
+	 * @param address
+	 *            the IP address to check
+	 * @return <code>true</code>, if the given IP address is accepted by this
+	 *         filter; <code>false</code>, otherwise.
 	 */
-	public static IpFilterType parse(String value) {
-		for (IpFilterType type : values()) {
-			if (type.name().equalsIgnoreCase(value)) {
-				return type;
-			}
-		}
-		throw new IllegalArgumentException("Invalid IpFilterType: " + value);
-	}
+	public boolean accept(InetAddress address);
 
 }

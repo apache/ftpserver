@@ -27,11 +27,11 @@ package org.apache.ftpserver.command.impl.listing;
  */
 public class ListArgument {
 
-    private final String file;
+    private String file;
 
-    private final String pattern;
+    private String pattern;
 
-    private final char[] options;
+    private char[] options;
 
     /**
      * @param file

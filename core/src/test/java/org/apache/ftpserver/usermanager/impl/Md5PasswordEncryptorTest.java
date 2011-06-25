@@ -25,8 +25,7 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
 
 /**
 *
-* @author <a href="http://mina.apache.org">Apache MINA Project</a>
-*
+* @author <a href="http://mina.apache.org">Apache MINA Project</a>*
 */
 public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
 
@@ -35,7 +34,6 @@ public class Md5PasswordEncryptorTest extends ClearTextPasswordEncryptorTest {
         return new Md5PasswordEncryptor();
     }
 
-    @Override
     public void testMatches() {
         PasswordEncryptor encryptor = createPasswordEncryptor();
         

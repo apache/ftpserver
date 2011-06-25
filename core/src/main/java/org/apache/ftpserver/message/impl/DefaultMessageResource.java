@@ -57,9 +57,9 @@ public class DefaultMessageResource implements MessageResource {
 
     private final static String RESOURCE_PATH = "org/apache/ftpserver/message/";
 
-    private final List<String> languages;
+    private List<String> languages;
 
-    private final Map<String, PropertiesPair> messages;
+    private Map<String, PropertiesPair> messages;
 
     /**
      * Internal constructor, do not use directly. Use {@link MessageResourceFactory} instead.
@@ -68,8 +68,6 @@ public class DefaultMessageResource implements MessageResource {
             File customMessageDirectory) {
         if(languages != null) {
             this.languages = Collections.unmodifiableList(languages);
-        } else {
-            this.languages = null;
         }
 
         // populate different properties
