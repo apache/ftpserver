@@ -47,7 +47,7 @@ public class PassivePorts {
 
     private static final Integer MAX_PORT_INTEGER = Integer.valueOf(MAX_PORT);
 
-    private List<Integer> freeList;
+    private Set<Integer> freeList;
 
     private Set<Integer> usedList;
 
@@ -158,7 +158,7 @@ public class PassivePorts {
         	passivePorts.add(0);
         }
 
-        this.freeList = new ArrayList<Integer>(passivePorts);
+        this.freeList = new HashSet<Integer>(passivePorts);
         this.usedList = new HashSet<Integer>(passivePorts.size());
 
         this.checkIfBound = checkIfBound;
@@ -215,12 +215,12 @@ public class PassivePorts {
 
             } else if (checkPortUnbound(ret)) {
                 // Not used by someone else, so lets reserve it and return it
-                freeList.remove(i);
+                freeList.remove(ret);
                 usedList.add(ret);
                 return ret;
 
             } else {
-            	freeCopy.remove(i);
+            	freeCopy.remove(ret);
                 // log port unavailable, but left in pool
                 log.warn("Passive port in use by another process: " + ret);
             }
