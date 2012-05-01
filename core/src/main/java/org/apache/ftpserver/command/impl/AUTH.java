@@ -50,7 +50,7 @@ public class AUTH extends AbstractCommand {
 
     private final Logger LOG = LoggerFactory.getLogger(AUTH.class);
 
-    private static final List<String> VALID_AUTH_TYPES = Arrays.asList("SSL", "TLS");
+    private static final List<String> VALID_AUTH_TYPES = Arrays.asList("SSL", "TLS", "TLS-C", "TLS-P");
 
     /**
      * Execute command
@@ -100,6 +100,12 @@ public class AUTH extends AbstractCommand {
         // check parameter
         String authType = request.getArgument().toUpperCase();
         if (VALID_AUTH_TYPES.contains(authType)) {
+            if(authType.equals("TLS-C")) {
+                authType = "TLS";
+            } else if(authType.equals("TLS-P")) {
+                authType = "SSL";
+            }
+
             try {
                 secureSession(session, authType);
                 session.write(LocalizedFtpReply.translate(session, request, context,
@@ -141,6 +147,9 @@ public class AUTH extends AbstractCommand {
             session.getFilterChain().addFirst(SSL_SESSION_FILTER_NAME,
                     sslFilter);
 
+            if("SSL".equals(type)) {
+                session.getDataConnection().setSecure(true);
+            }
         } else {
             throw new FtpException("Socket factory SSL not configured");
         }

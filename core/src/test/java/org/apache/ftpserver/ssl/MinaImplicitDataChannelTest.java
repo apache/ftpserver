@@ -57,6 +57,10 @@ public class MinaImplicitDataChannelTest extends ImplicitSecurityTestTemplate {
         return true;
     }
 
+    protected boolean expectDataConnectionSecure() {
+        return true;
+    }
+
     /**
      * Simple test that the {@link ServerDataConnectionFactory#isSecure()} 
      * works as expected

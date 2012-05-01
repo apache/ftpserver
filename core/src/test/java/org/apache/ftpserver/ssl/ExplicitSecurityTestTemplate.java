@@ -45,12 +45,19 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
         client.login(ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
+    protected boolean expectDataConnectionSecure() {
+        return getAuthValue().equals("SSL") && !useImplicit();
+    }
+
     /**
      * Tests that we can send command over the command channel. This is, in fact
      * already tested by login in setup but an explicit test is good anyways.
      */
     public void testCommandChannel() throws Exception {
         assertTrue(getActiveSession().isSecure());
+
+        assertEquals(expectDataConnectionSecure(), getActiveSession().getDataConnection().isSecure());
+
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
     }
 
