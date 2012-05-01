@@ -21,6 +21,8 @@ package org.apache.ftpserver.command.impl;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.ftpserver.command.AbstractCommand;
 import org.apache.ftpserver.ftplet.FtpException;
@@ -47,6 +49,8 @@ public class AUTH extends AbstractCommand {
     private static final String SSL_SESSION_FILTER_NAME = "sslSessionFilter";
 
     private final Logger LOG = LoggerFactory.getLogger(AUTH.class);
+
+    private static final List<String> VALID_AUTH_TYPES = Arrays.asList("SSL", "TLS");
 
     /**
      * Execute command
@@ -95,22 +99,11 @@ public class AUTH extends AbstractCommand {
 
         // check parameter
         String authType = request.getArgument().toUpperCase();
-        if (authType.equals("SSL")) {
+        if (VALID_AUTH_TYPES.contains(authType)) {
             try {
-                secureSession(session, "SSL");
+                secureSession(session, authType);
                 session.write(LocalizedFtpReply.translate(session, request, context,
-                        234, "AUTH.SSL", null));
-            } catch (FtpException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                LOG.warn("AUTH.execute()", ex);
-                throw new FtpException("AUTH.execute()", ex);
-            }
-        } else if (authType.equals("TLS")) {
-            try {
-                secureSession(session, "TLS");
-                session.write(LocalizedFtpReply.translate(session, request, context,
-                        234, "AUTH.TLS", null));
+                        234, "AUTH." + authType, null));
             } catch (FtpException ex) {
                 throw ex;
             } catch (Exception ex) {
