@@ -79,16 +79,6 @@
 							org.apache.ftpserver.ssl;version=${project.version},
 							org.apache.ftpserver.usermanager;version=${project.version}
 						</Export-Package>
-						<Private-Package> org.apache.ftpserver.command.impl,
-							org.apache.ftpserver.command.impl.listing,
-							org.apache.ftpserver.filesystem.nativefs.impl,
-							org.apache.ftpserver.ftpletcontainer.impl,
-							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
-							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
-							org.apache.ftpserver.usermanager.impl,
-							org.apache.ftpserver.util,
-							org.apache.ftpserver.*
-						</Private-Package>
 						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
