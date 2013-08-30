@@ -410,6 +410,17 @@
     </profile>
   </profiles>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>docprocess-dx-snapshots</id>
+            <url>http://dev.doc-process.com/nexus/content/repositories/dx-snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>docprocess-dx-releases</id>
+            <url>http://dev.doc-process.com/nexus/content/repositories/dx-releases</url>
+        </repository>
+    </distributionManagement>
+
   <modules>
     <module>ftplet-api</module>
     <module>core</module>
