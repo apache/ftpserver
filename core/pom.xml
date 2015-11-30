@@ -17,13 +17,13 @@
 	<parent>
 		<artifactId>ftpserver-parent</artifactId>
 		<groupId>org.apache.ftpserver</groupId>
-		<version>1.0.6</version>
+		<version>1.0.6-osgi</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.ftpserver</groupId>
 	<artifactId>ftpserver-core</artifactId>
 	<name>Apache FtpServer Core</name>
-	<version>1.0.6</version>
+	<version>1.0.6-osgi</version>
 	<packaging>bundle</packaging>
 	<scm>
 		<connection>
@@ -74,18 +74,12 @@
 							org.apache.ftpserver.main;version=${project.version},
 							org.apache.ftpserver.message;version=${project.version},
 							org.apache.ftpserver.ssl;version=${project.version},
-							org.apache.ftpserver.usermanager;version=${project.version}
+							org.apache.ftpserver.usermanager;version=${project.version},
+							org.apache.ftpserver.usermanager.impl;version=${project.version},
+							org.apache.ftpserver.impl;version=${project.version},
+							org.apache.ftpserver.command.impl;version=${project.version},
+							org.apache.ftpserver.command.impl.listing;version=${project.version}
 						</Export-Package>
-						<Private-Package> org.apache.ftpserver.command.impl,
-						    org.apache.ftpserver.command.impl.listing,
-							org.apache.ftpserver.filesystem.nativefs.impl,
-							org.apache.ftpserver.ftpletcontainer.impl,
-							org.apache.ftpserver.impl, org.apache.ftpserver.listener.nio,
-							org.apache.ftpserver.message.impl, org.apache.ftpserver.ssl.impl,
-							org.apache.ftpserver.usermanager.impl,
-							org.apache.ftpserver.util,
-							org.apache.ftpserver.*
-						</Private-Package>
  						<Import-Package>
 							org.springframework.beans.factory.config;resolution:=optional;version="2.5",
 							org.springframework.beans.factory.support;resolution:=optional;version="2.5",
@@ -93,6 +87,7 @@
 							org.springframework.context.support;resolution:=optional;version="2.5",
 							org.springframework.util;resolution:=optional;version="2.5",
 							org.springframework.util.xml;resolution:=optional;version="2.5",
+							org.apache.mina.*;version="[2.0.0,2.0.8)",
 							*</Import-Package>
 					</instructions>
 				</configuration>
