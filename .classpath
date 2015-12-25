@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="core/src/examples/java"/>
+	<classpathentry kind="src" path="core/src/main/java"/>
+	<classpathentry kind="src" path="core/src/test/java"/>
+	<classpathentry kind="src" path="examples/ftpserver-example-spring-war/src/main/java"/>
+	<classpathentry kind="src" path="examples/ftpserver-osgi-ftplet-service/src/main/java"/>
+	<classpathentry kind="src" path="examples/ftpserver-osgi-spring-service/src/main/java"/>
+	<classpathentry kind="src" path="ftplet-api/src/main/java"/>
+	<classpathentry kind="src" path="ftplet-api/src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

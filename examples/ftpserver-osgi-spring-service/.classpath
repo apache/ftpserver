@@ -1,0 +1,11 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/java"/>
+  <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
+  <classpathentry kind="src" path="target/maven-shared-archive-resources" excluding="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="src" path="/ftplet-api"/>
+  <classpathentry kind="src" path="/ftpserver-core"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/mina/mina-core/2.0.9/mina-core-2.0.9.jar" sourcepath="M2_REPO/org/apache/mina/mina-core/2.0.9/mina-core-2.0.9-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.6/slf4j-api-1.6.6.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.6.6/slf4j-api-1.6.6-sources.jar"/>
+</classpath>

@@ -71,6 +71,10 @@ public class FtpHandlerAdapter implements IoHandler {
         FtpIoSession ftpSession = new FtpIoSession(session, context);
         ftpHandler.sessionClosed(ftpSession);
     }
+    public void inputClosed(IoSession session) throws Exception {
+        FtpIoSession ftpSession = new FtpIoSession(session, context);
+        ftpHandler.sessionClosed(ftpSession);
+    }
 
     public void sessionCreated(IoSession session) throws Exception {
         FtpIoSession ftpSession = new FtpIoSession(session, context);

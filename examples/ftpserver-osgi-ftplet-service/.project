@@ -1,0 +1,15 @@
+<projectDescription>
+  <name>ftpserver-osgi-ftplet-service</name>
+  <comment>Simple example where an Ftplet is published as a OSGi service. Another bundle, using the white-board pattern can locate this and plug it into a running server.</comment>
+  <projects>
+    <project>ftplet-api</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
