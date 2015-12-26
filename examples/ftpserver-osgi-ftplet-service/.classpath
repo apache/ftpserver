@@ -1,8 +1,0 @@
-<classpath>
-  <classpathentry kind="src" path="src/main/java"/>
-  <classpathentry kind="src" path="target/maven-shared-archive-resources" excluding="**/*.java"/>
-  <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="src" path="/ftplet-api"/>
-  <classpathentry kind="var" path="M2_REPO/org/osgi/osgi_R4_core/1.0/osgi_R4_core-1.0.jar"/>
-</classpath>
