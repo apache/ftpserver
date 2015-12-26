@@ -770,7 +770,7 @@ public class FtpIoSession implements IoSession {
      *
      * @return true if the control socket is secured
      */
-    public boolean isSecure() {
+    public boolean isSecured() {
 	return getFilterChain().contains(SslFilter.class);
     }
 

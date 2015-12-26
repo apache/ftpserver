@@ -56,7 +56,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
      * already tested by login in setup but an explicit test is good anyways.
      */
     public void testCommandChannel() throws Exception {
-        assertTrue(getActiveSession().isSecure());
+        assertTrue(getActiveSession().isSecured());
 
         assertEquals(expectDataConnectionSecure(), getActiveSession().getDataConnection().isSecure());
 
@@ -64,7 +64,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testReissueAuth() throws Exception {
-        assertTrue(getActiveSession().isSecure());
+        assertTrue(getActiveSession().isSecured());
         assertTrue(FTPReply.isPositiveCompletion(client.noop()));
 
         // we do not accept reissued AUTH or AUTH on implicitly secured socket
@@ -72,7 +72,7 @@ public abstract class ExplicitSecurityTestTemplate extends SSLTestTemplate {
     }
 
     public void testIsSecure() {
-        assertTrue(getActiveSession().isSecure());
+        assertTrue(getActiveSession().isSecured());
     }
 
     public void testStoreWithProtPInPassiveMode() throws Exception {
