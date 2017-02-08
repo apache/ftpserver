@@ -44,8 +44,9 @@ public class DefaultDataConnectionConfiguration implements
     
     private String passiveAddress;
     private String passiveExternalAddress;
-    private PassivePorts passivePorts;
-    
+    //private PassivePorts passivePorts;
+    private PassivePortResolver passivePortResolver;
+
     private final boolean implicitSsl;
 
     /**
@@ -54,7 +55,7 @@ public class DefaultDataConnectionConfiguration implements
     public DefaultDataConnectionConfiguration(int idleTime,
             SslConfiguration ssl, boolean activeEnabled, boolean activeIpCheck,
             String activeLocalAddress, int activeLocalPort,
-            String passiveAddress, PassivePorts passivePorts,
+            String passiveAddress, PassivePortResolver passivePortsResolver,
             String passiveExternalAddress, boolean implicitSsl) {
         this.idleTime = idleTime;
         this.ssl = ssl;
@@ -63,7 +64,7 @@ public class DefaultDataConnectionConfiguration implements
         this.activeLocalAddress = activeLocalAddress;
         this.activeLocalPort = activeLocalPort;
         this.passiveAddress = passiveAddress;
-        this.passivePorts = passivePorts;
+        this.passivePortResolver = passivePortsResolver;
         this.passiveExternalAddress = passiveExternalAddress;
         this.implicitSsl = implicitSsl;
     }
@@ -121,8 +122,8 @@ public class DefaultDataConnectionConfiguration implements
      * Get passive data port. Data port number zero (0) means that any available
      * port will be used.
      */
-    public synchronized int requestPassivePort() {
-    	return passivePorts.reserveNextPort();
+    public synchronized int requestPassivePort(FtpIoSession session) {
+    	return passivePortResolver.requestPassivePort(session);
     }
 
     /**
@@ -131,14 +132,14 @@ public class DefaultDataConnectionConfiguration implements
      * @return The String of passive ports
      */
     public String getPassivePorts() {
-        return passivePorts.toString();
+        return passivePortResolver.toString();
     }
 
     /**
      * Release data port
      */
-    public synchronized void releasePassivePort(final int port) {
-        passivePorts.releasePort(port);
+    public synchronized void releasePassivePort(final FtpIoSession session, final int port) {
+        passivePortResolver.releasePassivePort(session,port);
     }
 
     /**

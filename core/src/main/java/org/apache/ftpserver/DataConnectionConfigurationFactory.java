@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 
 import org.apache.ftpserver.impl.DefaultDataConnectionConfiguration;
+import org.apache.ftpserver.impl.PassivePortResolver;
 import org.apache.ftpserver.impl.PassivePorts;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.slf4j.Logger;
@@ -49,7 +50,8 @@ public class DataConnectionConfigurationFactory {
     
     private String passiveAddress;
     private String passiveExternalAddress;
-    private PassivePorts passivePorts = new PassivePorts(Collections.<Integer>emptySet(), true);
+    //private PassivePorts passivePorts = new PassivePorts(Collections.<Integer>emptySet(), true);
+    private PassivePortResolver passivePortResolver;
     private boolean implicitSsl;
 
     /**
@@ -62,7 +64,7 @@ public class DataConnectionConfigurationFactory {
         return new DefaultDataConnectionConfiguration(idleTime,
                 ssl, activeEnabled, activeIpCheck,
                 activeLocalAddress, activeLocalPort,
-                passiveAddress, passivePorts,
+                passiveAddress, passivePortResolver,
                 passiveExternalAddress, implicitSsl);
     }
     /*
@@ -196,72 +198,13 @@ public class DataConnectionConfigurationFactory {
     public void setPassiveExternalAddress(String passiveExternalAddress) {
         this.passiveExternalAddress = passiveExternalAddress;
     }
-    
-    /**
-     * Get passive data port. Data port number zero (0) means that any available
-     * port will be used.
-     * @return A passive port to use
-     */
-    public synchronized int requestPassivePort() {
-        int dataPort = -1;
-        int loopTimes = 2;
-        Thread currThread = Thread.currentThread();
 
-        while ((dataPort == -1) && (--loopTimes >= 0)
-                && (!currThread.isInterrupted())) {
-
-            // search for a free port
-            dataPort = passivePorts.reserveNextPort();
-
-            // no available free port - wait for the release notification
-            if (dataPort == -1) {
-                try {
-                    log.info("Out of passive ports, waiting for one to be released. Might be stuck");
-                    wait();
-                } catch (InterruptedException ex) {
-                }
-            }
-        }
-        return dataPort;
+    public PassivePortResolver getPassivePortResolver() {
+        return passivePortResolver;
     }
 
-    /**
-     * Retrieve the passive ports configured for this data connection
-     * 
-     * @return The String of passive ports
-     */
-    public String getPassivePorts() {
-        return passivePorts.toString();
-    }
-
-    /**
-     * Set the passive ports to be used for data connections. Ports can be
-     * defined as single ports, closed or open ranges. Multiple definitions can
-     * be separated by commas, for example:
-     * <ul>
-     * <li>2300 : only use port 2300 as the passive port</li>
-     * <li>2300-2399 : use all ports in the range</li>
-     * <li>2300- : use all ports larger than 2300</li>
-     * <li>2300, 2305, 2400- : use 2300 or 2305 or any port larger than 2400</li>
-     * </ul>
-     * 
-     * Defaults to using any available port
-     * 
-     * @param passivePorts The passive ports string
-     */
-    public void setPassivePorts(String passivePorts) {
-        this.passivePorts = new PassivePorts(passivePorts, true);
-    }
-
-    
-    /**
-     * Release data port
-     * @param port The port to release
-     */
-    public synchronized void releasePassivePort(final int port) {
-        passivePorts.releasePort(port);
-
-        notify();
+    public void setPassivePortResolver(PassivePortResolver passivePortResolver) {
+        this.passivePortResolver = passivePortResolver;
     }
 
     /**

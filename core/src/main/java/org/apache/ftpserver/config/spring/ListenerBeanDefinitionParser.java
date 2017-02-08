@@ -273,7 +273,7 @@ public class ListenerBeanDefinitionParser extends
 
                 String ports = SpringUtil.parseString(passiveElm, "ports");
                 if (ports != null) {
-                    dc.setPassivePorts(ports);
+                    throw new IllegalStateException("Data Connection Bean Definition Not Supported");
                 }
             }
         } else {

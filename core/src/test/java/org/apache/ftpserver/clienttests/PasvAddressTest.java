@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.SingleRangePassivePortResolver;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.ftpserver.util.SocketAddressEncoder;
@@ -46,7 +47,8 @@ public class PasvAddressTest extends ClientTestTemplate {
         
         passiveAddress = TestUtil.findNonLocalhostIp().getHostAddress();
         dccFactory.setPassiveAddress(passiveAddress);
-        dccFactory.setPassivePorts("12347");
+
+        dccFactory.setPassivePortResolver(SingleRangePassivePortResolver.buildFromRange(String.valueOf("12347")));
         DataConnectionConfiguration dcc=dccFactory.createDataConnectionConfiguration();
         
         listenerFactory.setDataConnectionConfiguration(dcc);

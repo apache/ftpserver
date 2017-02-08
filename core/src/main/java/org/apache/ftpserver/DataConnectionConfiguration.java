@@ -21,6 +21,7 @@ package org.apache.ftpserver;
 
 import java.net.InetAddress;
 
+import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.ssl.SslConfiguration;
 
 /**
@@ -96,13 +97,13 @@ public interface DataConnectionConfiguration {
      * Request a passive port. Will block until a port is available
      * @return A free passive part
      */
-    int requestPassivePort();
+    int requestPassivePort(FtpIoSession session);
 
     /**
      * Release passive port.
      * @param port The port to be released
      */
-    void releasePassivePort(int port);
+    void releasePassivePort(FtpIoSession session, int port);
 
     /**
      * Get SSL configuration for this data connection.

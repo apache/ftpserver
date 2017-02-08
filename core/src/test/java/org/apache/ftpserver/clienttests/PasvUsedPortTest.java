@@ -23,6 +23,7 @@ import java.net.ServerSocket;
 
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.SingleRangePassivePortResolver;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 
@@ -46,7 +47,8 @@ public class PasvUsedPortTest extends ClientTestTemplate {
 
         passivePort = TestUtil.findFreePort(12444);
 
-        dccFactory.setPassivePorts(passivePort + "-" + (passivePort + 1));
+
+        dccFactory.setPassivePortResolver(SingleRangePassivePortResolver.buildFromRange(passivePort + "-" + (passivePort + 1)));
 
         listenerFactory.setDataConnectionConfiguration(dccFactory
                 .createDataConnectionConfiguration());

@@ -23,6 +23,9 @@ import java.net.ServerSocket;
 
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.impl.PassivePortResolver;
+import org.apache.ftpserver.impl.PassivePorts;
+import org.apache.ftpserver.impl.SingleRangePassivePortResolver;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.test.TestUtil;
 import org.apache.commons.net.ftp.FTPClient;
@@ -49,7 +52,7 @@ public class PasvPortUnavailableTest extends ClientTestTemplate {
 
         passivePort = TestUtil.findFreePort(12444);
 
-        dccFactory.setPassivePorts(String.valueOf(passivePort));
+        dccFactory.setPassivePortResolver(SingleRangePassivePortResolver.buildFromRange(String.valueOf(passivePort)));
 
         listenerFactory.setDataConnectionConfiguration(dccFactory
                 .createDataConnectionConfiguration());
