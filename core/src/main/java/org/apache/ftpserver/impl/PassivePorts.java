@@ -269,7 +269,7 @@ public class PassivePorts {
     }
 
     public String stats() {
-        return String.format("Free Ports %i and Used Ports %i");
+        return "Free Ports " + freePorts() + " and Used Ports " + usedPorts();
     }
 
 }
